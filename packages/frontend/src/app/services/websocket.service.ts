@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { UtilService } from "./util.service";
 import { GRIP_WS_URL } from "../../environments/environment";
+import { trpcClient } from "../utils/trpcClient";
+import { TRPCClientError } from "@trpc/client";
 
 @Injectable({
   providedIn: "root",
@@ -55,9 +57,30 @@ export class WebsocketService {
     this.connection?.send(JSON.stringify(msg));
   }
 
+  async triggerReconnect() {
+    try {
+      this.connection?.close();
+    } catch (e) {
+      console.warn(e);
+    }
+    this.connect();
+  }
+
   // Connection
-  private connect() {
+  private async connect() {
     if (!this.utilService.isLoggedIn()) return this.queueReconnect();
+
+    try {
+      await trpcClient.users.validateSession.query();
+    } catch (e) {
+      if (e instanceof TRPCClientError) {
+        if (e.data?.httpStatus === 401) {
+          // We break the reconnect loop until the next auth
+          return;
+        }
+      }
+      return this.queueReconnect();
+    }
 
     let prot = "ws";
     if ((window.location.href as any).indexOf("https") > -1) prot = "wss";
@@ -90,12 +113,12 @@ export class WebsocketService {
     };
   }
 
-  public queueReconnect() {
+  private queueReconnect() {
     const RECONNECT_TIMEOUT_WAIT = 2000 + Math.floor(Math.random() * 5000); // Time to wait before attempting reconnect in MS
 
     if (this.reconnectTimeout) return;
 
-    this.reconnectTimeout = setTimeout(() => {
+    this.reconnectTimeout = setTimeout(async () => {
       this.connect();
       this.reconnectTimeout = undefined;
     }, RECONNECT_TIMEOUT_WAIT);

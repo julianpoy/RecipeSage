@@ -23,6 +23,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SignInWithGoogleComponent } from "../../components/sign-in-with-google/sign-in-with-google.component";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
+import { WebsocketService } from "../../services/websocket.service";
 
 @Component({
   selector: "page-auth",
@@ -63,6 +64,7 @@ export class AuthPage {
     private messagingService: MessagingService,
     private capabilitiesService: CapabilitiesService,
     private swCommunicationService: SwCommunicationService,
+    private websocketService: WebsocketService,
     private alertCtrl: AlertController,
     private route: ActivatedRoute,
     private trpcService: TRPCService,
@@ -193,6 +195,7 @@ export class AuthPage {
     this.swCommunicationService.triggerFullCacheSync();
 
     this.capabilitiesService.updateCapabilities();
+    this.websocketService.triggerReconnect();
 
     if (
       "Notification" in window &&
@@ -215,6 +218,7 @@ export class AuthPage {
     this.swCommunicationService.triggerFullCacheSync();
 
     this.capabilitiesService.updateCapabilities();
+    this.websocketService.triggerReconnect();
 
     if (
       "Notification" in window &&
