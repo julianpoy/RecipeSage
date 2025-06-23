@@ -229,6 +229,7 @@ ion-button.button-outline {
 }
 
 /* Must be added globally, since iframe is loaded outside of the context of Angular CSS encapsulation */
+.gsi-container div,
 .gsi-container iframe {
   /* Center the "continue as XYZ" button */
   margin-left: auto !important;
