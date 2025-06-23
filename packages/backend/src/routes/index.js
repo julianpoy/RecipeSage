@@ -8,7 +8,7 @@ router.get("/", function (req, res) {
   res.render("index", { version: process.env.VERSION });
 });
 
-const MIN_SUPPORTED_FRONTEND_VERSION = ">=2.0.0";
+const MIN_SUPPORTED_FRONTEND_VERSION = ">=3.0.0";
 router.get("/versioncheck", (req, res) => {
   let supported = false;
   if (req.query.version) {
