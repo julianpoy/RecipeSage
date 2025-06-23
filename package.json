@@ -40,7 +40,7 @@
     "@sentry/browser": "^9.30.0",
     "@sentry/node": "^9.30.0",
     "@sentry/profiling-node": "^9.30.0",
-    "@trpc/client": "^11.4.1",
+    "@trpc/client": "^11.4.2",
     "@trpc/server": "^11.0.2",
     "axios": "^1.8.4",
     "body-parser": "~2.2.0",
