@@ -951,7 +951,7 @@
     "pages.import.uploading.hint": "Voortgang bestandsupload",
     "pages.import.textFiles": "Importeer van tekstbestanden",
     "pages.import.urls": "Importeer een lijst met URLs",
-    "pages.import.csv": "Importeer van CSV (PlanToEat & anderen)",
+    "pages.import.csv": "Importeren van CSV (PlanToEat, MyRecipeBox & anderen)",
     "pages.import.fileTooLarge": "Dit bestand is te groot om rechtstreeks te uploaden.",
     "pages.import.upload": "Uploaden en importeren",
     "pages.import.upload.ignoreWarning": "Alsnog uploaden en importeren",
@@ -982,5 +982,13 @@
     "pages.importPepperplate.password.helperText": "Het wachtwoord voor je Pepperplate account",
     "pages.importUrls.title": "Importeer Recepten van een lijst met URL's",
     "pages.importUrls.urls": "Recept URL's",
-    "pages.importUrls.urls.helperText": "Elke URL moet op een eigen regel staan. Alleen URL's die beginnen met http:// en https:// worden ondersteund."
+    "pages.importUrls.urls.helperText": "Elke URL moet op een eigen regel staan. Alleen URL's die beginnen met http:// en https:// worden ondersteund.",
+    "pages.import.pdfs": "Importeren van PDFs",
+    "pages.import.images": "Importeren van afbeeldingen",
+    "pages.aboutDetails.title": "Meer over mij & RecipeSage",
+    "pages.aboutDetails.1.title": "Een beetje over mij",
+    "pages.aboutDetails.1.1": "Ik ben een softwareontwikkelaar uit Noord-Carolina. Ik werk veel aan open-sourcecode en veel van mijn tijd gaat naar kleine projecten.",
+    "pages.aboutDetails.1.2": "RecipeSage is een van mijn hobby's, en ik werk eraan in mijn vrije tijd naast veel andere projecten. Het is niet mijn baan en ik verdien er geen inkomen uit, maar ik werk er met erg veel plezier aan.",
+    "pages.aboutDetails.2.title": "Waarom RecipeSage?",
+    "pages.aboutDetails.2.1": "Ik heb RecipeSage gemaakt om recepten voor mij en mijn familie te beheren. Na het uitproberen van een aantal programma's online, leek het me beter om een programma te maken dat precies zou werken als ik, mijn moeder, mijn vriendin (nu vrouw!), en mijn sibling zou willen."
 }
