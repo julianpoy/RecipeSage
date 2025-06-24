@@ -1,8 +1,16 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { MealName, MealPlanItem } from "../../../services/meal-plan.service";
+import { MealName } from "../../../services/meal-plan.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CalendarItemComponent } from "../calendar-item/calendar-item.component";
+
+const mealNameToI18n = {
+  [MealName.Breakfast]: "components.mealCalendar.breakfast",
+  [MealName.Lunch]: "components.mealCalendar.lunch",
+  [MealName.Dinner]: "components.mealCalendar.dinner",
+  [MealName.Snacks]: "components.mealCalendar.snacks",
+  [MealName.Other]: "components.mealCalendar.other",
+} satisfies Record<MealName, string>;
 
 @Component({
   selector: "meal-group",
@@ -35,5 +43,9 @@ export class MealGroupComponent {
   dragEnd(_: any, mealItem: any) {
     this.mealItemsDragging[mealItem.id] = false;
     this.itemDragEnd.emit();
+  }
+
+  mealNameToI18n(mealName: MealName) {
+    return mealNameToI18n[mealName];
   }
 }

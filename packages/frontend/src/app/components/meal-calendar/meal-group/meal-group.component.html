@@ -1,6 +1,6 @@
 <div class="group" *ngFor="let mealName of mealItems.meals">
   <span class="meal-title" *ngIf="mealItems.itemsByMeal[mealName].length > 0">{{
-    mealName
+    mealNameToI18n(mealName) | translate
   }}</span>
   <calendar-item
     *ngFor="let mealItem of mealItems.itemsByMeal[mealName]"

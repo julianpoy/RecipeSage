@@ -998,6 +998,11 @@
   "components.mealCalendar.meals": "Meals For This Day",
   "components.mealCalendar.selectDay": "Select a day to see meals for that day.",
   "components.mealCalendar.noMeals": "There are no meals scheduled for this day.",
+  "components.mealCalendar.breakfast": "Breakfast",
+  "components.mealCalendar.lunch": "Lunch",
+  "components.mealCalendar.dinner": "Dinner",
+  "components.mealCalendar.snack": "Snack",
+  "components.mealCalendar.other": "Other",
 
   "components.multiImageUpload.add": "Click to Add Image",
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
