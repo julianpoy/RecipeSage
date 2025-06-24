@@ -40,7 +40,7 @@ services:
       - ./.credentials:/app/.credentials
     ports:
       - "3000:3000"
-    command: ./scripts/watchandrun.sh 'node node_modules/ts-node/dist/bin.js --swc --project packages/backend/tsconfig.json -r packages/backend/src/tracing.ts packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/express ./packages/prisma
+    command: ./scripts/watchandrun.sh 'node node_modules/ts-node/dist/bin.js --swc --project packages/backend/tsconfig.json -r packages/backend/src/tracing.ts packages/backend/src/bin/www.ts' ./packages/backend ./packages/trpc ./packages/util ./packages/express ./packages/prisma
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
