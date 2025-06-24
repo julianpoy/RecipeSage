@@ -24,14 +24,11 @@ const log: Prisma.LogDefinition[] = [
     level: "warn",
     emit: "stdout",
   },
-];
-
-if (process.env.NODE_ENV === "development") {
-  log.push({
+  {
     level: "query",
     emit: "event",
-  });
-}
+  },
+];
 
 const _prisma = new PrismaClient({
   log,
