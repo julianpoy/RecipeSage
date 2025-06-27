@@ -945,7 +945,7 @@
     "pages.import.processing": "Behandling og import af opskrifter...",
     "pages.import.textFiles": "Import fra tekstfiler",
     "pages.import.urls": "Importer fra en liste af URL'er",
-    "pages.import.csv": "Import fra CSV (PlanToEat og andre)",
+    "pages.import.csv": "Import fra CSV (PlanToEat, MyRecipeBox og andre)",
     "pages.import.upload": "Upload og import",
     "pages.import.upload.ignoreWarning": "Upload og import alligevel",
     "pages.import.filePicker.file": "{{fileName}} Valgt",
@@ -1018,5 +1018,10 @@
     "pages.import.enex": "Import fra Evernote-fil",
     "pages.contribute.manage": "Klik her for at administrere et eksisterende abonnement",
     "pages.importEnex.title": "Importer opskrifter fra Evernote (enex)-fil",
-    "pages.importEnex.description": "Dette vil importere opskrifter fra en Evernote-eksport (ender på .enex) til din RecipeSage-konto. Se brugervejledningen for at finde ud af, hvordan du opretter en fil i det rigtige format, der kan importeres her. Overvej at bidrage, hvis din fil indeholder et stort antal opskrifter eller billeder."
+    "pages.importEnex.description": "Dette vil importere opskrifter fra en Evernote-eksport (ender på .enex) til din RecipeSage-konto. Se brugervejledningen for at finde ud af, hvordan du opretter en fil i det rigtige format, der kan importeres her. Overvej at bidrage, hvis din fil indeholder et stort antal opskrifter eller billeder.",
+    "components.mealCalendar.breakfast": "Morgenmad",
+    "components.mealCalendar.lunch": "Frokost",
+    "components.mealCalendar.dinner": "Middag",
+    "components.mealCalendar.snack": "Snack",
+    "components.mealCalendar.other": "Andet"
 }
