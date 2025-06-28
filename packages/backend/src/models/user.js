@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 export const UserInit = (sequelize, DataTypes) => {
-  let currentPasswordVersion = 2;
+  const currentPasswordVersion = 2;
 
   const User = sequelize.define(
     "User",
@@ -179,7 +179,7 @@ export const UserInit = (sequelize, DataTypes) => {
   };
 
   User.prototype.updatePassword = function (password, transaction) {
-    let data = User.generateHashedPassword(password);
+    const data = User.generateHashedPassword(password);
 
     this.passwordHash = data.hash;
     this.passwordSalt = data.salt;
@@ -190,7 +190,7 @@ export const UserInit = (sequelize, DataTypes) => {
 
   User.prototype.validatePassword = function (password, transaction) {
     return new Promise((resolve) => {
-      let isValid = User.validateHashedPassword(
+      const isValid = User.validateHashedPassword(
         password,
         this.passwordHash,
         this.passwordSalt,

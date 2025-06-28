@@ -108,7 +108,7 @@ export const pepperplateHandler = defineHandler(
 
       let pepperplateRecipes = [];
       let syncToken;
-      // eslint-disable-next-line no-constant-condition
+
       while (true) {
         const syncResponse = await fetch(
           "http://www.pepperplate.com/services/syncmanager5.asmx",

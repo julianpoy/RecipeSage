@@ -5,7 +5,7 @@ import {
 import { JobStatus } from "@prisma/client";
 import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
 import { prisma } from "@recipesage/prisma";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { z } from "zod";
 import {
   clipUrl,

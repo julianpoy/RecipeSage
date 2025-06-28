@@ -1,9 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "allowJs": true,
-    "module": "commonjs"
-  },
-  "include": ["src/**/*.ts"]
+  "compilerOptions": {},
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

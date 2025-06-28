@@ -1,7 +1,7 @@
 import { JobStatus, type Job } from "@prisma/client";
 import { prisma, type JobMeta } from "@recipesage/prisma";
 import { metrics } from "../metrics";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { getImportJobResultCode } from "./getImportJobResultCode";
 
 export class ImportNoRecipesError extends Error {

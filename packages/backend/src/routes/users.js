@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import cors from "cors";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import moment from "moment";
 
 // DB
@@ -625,17 +625,17 @@ router.post(
     if (process.env.DISABLE_REGISTRATION === "true")
       throw new Error("Registration is disabled");
 
-    let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+    const sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
     const token = await sequelize.transaction(async (transaction) => {
       if (!UtilService.validateEmail(sanitizedEmail)) {
-        let e = new Error("Email is not valid!");
+        const e = new Error("Email is not valid!");
         e.status = 412;
         throw e;
       }
 
       if (!UtilService.validatePassword(req.body.password)) {
-        let e = new Error("Password is not valid!");
+        const e = new Error("Password is not valid!");
         e.status = 411;
         throw e;
       }
@@ -649,12 +649,12 @@ router.post(
       });
 
       if (user) {
-        let e = new Error("Account with that email address already exists!");
+        const e = new Error("Account with that email address already exists!");
         e.status = 406;
         throw e;
       }
 
-      let hashedPasswordData = User.generateHashedPassword(req.body.password);
+      const hashedPasswordData = User.generateHashedPassword(req.body.password);
 
       const newUser = await User.create(
         {
@@ -693,8 +693,8 @@ router.post(
   "/forgot",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
-    let standardStatus = 200;
-    let standardResponse = {
+    const standardStatus = 200;
+    const standardResponse = {
       msg: "",
     };
 
@@ -765,7 +765,7 @@ router.put(
       }
 
       if (req.body.email) {
-        let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+        const sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
         if (!UtilService.validateEmail(sanitizedEmail)) {
           throw PreconditionFailed("Email is not valid!");

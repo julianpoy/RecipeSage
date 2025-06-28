@@ -23,14 +23,14 @@ export const dispatchImportNotification = (user, status, reason) => {
     return;
   }
 
-  let type = "import:pepperplate:" + event;
+  const type = "import:pepperplate:" + event;
 
   const message = {
     type,
     reason: reason || "status",
   };
 
-  let sendQueues = [];
+  const sendQueues = [];
   if (user.fcmTokens) {
     sendQueues.push(
       FirebaseService.sendMessages(
@@ -88,7 +88,7 @@ export const dispatchMessageNotification = (user, fullMessage) => {
     };
   }
 
-  let sendQueues = [];
+  const sendQueues = [];
   if (user.fcmTokens) {
     const notification = {
       type: "messages:new",
@@ -116,7 +116,7 @@ export const findFilesByRegex = (searchPath, regex) => {
   }
 
   return fs.readdirSync(searchPath).reduce((acc, subPath) => {
-    let newPath = path.join(searchPath, subPath);
+    const newPath = path.join(searchPath, subPath);
 
     if (newPath.match(regex)) {
       return [newPath, ...acc];
@@ -132,7 +132,7 @@ export const findFilesByRegex = (searchPath, regex) => {
 export const sanitizeEmail = (email) => (email || "").trim().toLowerCase();
 
 // Very liberal email regex. Don't want to reject valid user emails.
-let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const validateEmail = (email) => emailRegex.test(email);
 
 export const validatePassword = (password) =>
@@ -152,7 +152,7 @@ export const gunzip = (buf) => {
 export const executeInChunks = async (cbs, chunkSize) => {
   if (chunkSize < 1) return Promise.resolve();
 
-  let chunks = [];
+  const chunks = [];
   for (let i = 0; i < cbs.length; i += chunkSize) {
     chunks.push(cbs.slice(i, i + chunkSize));
   }

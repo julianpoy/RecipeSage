@@ -9,7 +9,7 @@ import {
 } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
 
-interface UserPrivate {
+export interface UserPrivate {
   createdAt: Date;
   updatedAt: Date;
   subscriptions: {

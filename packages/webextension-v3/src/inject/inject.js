@@ -1,5 +1,5 @@
 import { clipRecipe } from "@julianpoy/recipe-clipper/dist/recipe-clipper.mjs";
-var extensionContainerId = "recipeSageBrowserExtensionRootContainer";
+const extensionContainerId = "recipeSageBrowserExtensionRootContainer";
 
 if (window[extensionContainerId]) {
   // Looks like a popup already exists. Try to trigger it
@@ -23,18 +23,18 @@ if (window[extensionContainerId]) {
     });
   };
 
-  let shadowRootContainer = document.createElement("div");
+  const shadowRootContainer = document.createElement("div");
   shadowRootContainer.id = extensionContainerId;
-  let shadowRoot = shadowRootContainer.attachShadow({ mode: "closed" });
+  const shadowRoot = shadowRootContainer.attachShadow({ mode: "closed" });
   document.body.appendChild(shadowRootContainer);
 
-  let styles = document.createElement("link");
+  const styles = document.createElement("link");
   styles.href = chrome.runtime.getURL("inject/clipTool.css");
   styles.rel = "stylesheet";
   styles.type = "text/css";
   shadowRoot.appendChild(styles);
 
-  let ionIcons = document.createElement("link");
+  const ionIcons = document.createElement("link");
   ionIcons.href = "https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css";
   ionIcons.rel = "stylesheet";
   ionIcons.type = "text/css";
@@ -50,7 +50,7 @@ if (window[extensionContainerId]) {
       autoSnipPendingContainer.className = "rs-autoSnipPendingContainer";
       shadowRoot.appendChild(autoSnipPendingContainer);
 
-      let autoSnipPending = document.createElement("div");
+      const autoSnipPending = document.createElement("div");
       autoSnipPending.className = "autoSnipPending";
       autoSnipPending.innerText = "Grabbing Recipe Content...";
       autoSnipPendingContainer.appendChild(autoSnipPending);
@@ -78,7 +78,7 @@ if (window[extensionContainerId]) {
         }, 250);
       }
 
-      let snippersByField = {};
+      const snippersByField = {};
 
       let container;
       let currentSnip = {
@@ -93,24 +93,24 @@ if (window[extensionContainerId]) {
         chrome.storage.local.set(preferences, cb);
       };
 
-      let setField = (field, val) => {
+      const setField = (field, val) => {
         currentSnip[field] = val;
         isDirty = true;
       };
 
-      let snip = (field, formatCb) => {
-        var selectedText = window.getSelection().toString();
+      const snip = (field, formatCb) => {
+        let selectedText = window.getSelection().toString();
         if (formatCb) selectedText = formatCb(selectedText); // Allow for interstitial formatting
         setField(field, selectedText);
         return selectedText;
       };
 
-      let hide = () => {
+      const hide = () => {
         isDirty = false;
         if (container) container.style.display = "none";
       };
 
-      let show = () => {
+      const show = () => {
         if (!container) init();
         // Wait for DOM paint
         setTimeout(() => {
@@ -118,7 +118,7 @@ if (window[extensionContainerId]) {
         });
       };
 
-      let moveTo = (top, left) => {
+      const moveTo = (top, left) => {
         if (left < 0) {
           container.style.left = "0px";
         } else if (left + container.offsetWidth > window.innerWidth) {
@@ -140,10 +140,10 @@ if (window[extensionContainerId]) {
         }
       };
 
-      let pos = {};
-      let moveDrag = (e) => {
-        let diffX = e.clientX - pos.lastX;
-        let diffY = e.clientY - pos.lastY;
+      const pos = {};
+      const moveDrag = (e) => {
+        const diffX = e.clientX - pos.lastX;
+        const diffY = e.clientY - pos.lastY;
 
         moveTo(container.offsetTop + diffY, container.offsetLeft + diffX);
 
@@ -151,19 +151,19 @@ if (window[extensionContainerId]) {
         pos.lastY = e.clientY;
       };
 
-      let stopDrag = () => {
+      const stopDrag = () => {
         window.removeEventListener("mouseup", stopDrag);
         window.removeEventListener("mousemove", moveDrag);
       };
 
-      let startDrag = (e) => {
+      const startDrag = (e) => {
         window.addEventListener("mouseup", stopDrag);
         window.addEventListener("mousemove", moveDrag);
         pos.lastX = e.clientX;
         pos.lastY = e.clientY;
       };
 
-      let init = () => {
+      const init = () => {
         container = document.createElement("div");
         container.className = "rs-chrome-container";
         container.style.display = "none";
@@ -172,53 +172,53 @@ if (window[extensionContainerId]) {
           moveTo(container.offsetTop, container.offsetLeft);
         shadowRoot.appendChild(container);
 
-        let headline = document.createElement("div");
+        const headline = document.createElement("div");
         headline.className = "headline";
         container.appendChild(headline);
 
-        let leftHeadline = document.createElement("div");
+        const leftHeadline = document.createElement("div");
         leftHeadline.className = "headline-left";
         headline.appendChild(leftHeadline);
 
-        let moveButton = document.createElement("i");
+        const moveButton = document.createElement("i");
         moveButton.className = "icon ion-md-move";
         leftHeadline.appendChild(moveButton);
 
-        let logoLink = document.createElement("a");
+        const logoLink = document.createElement("a");
         logoLink.href = "https://recipesage.com";
         logoLink.target = "_blank";
         logoLink.onmousedown = (e) => e.stopPropagation();
         leftHeadline.appendChild(logoLink);
 
-        let logo = document.createElement("img");
+        const logo = document.createElement("img");
         logo.src = chrome.runtime.getURL("images/recipesage-black-trimmed.png");
         logo.className = "logo";
         logo.draggable = false;
         logoLink.appendChild(logo);
 
-        let closeButton = document.createElement("button");
+        const closeButton = document.createElement("button");
         closeButton.innerText = "CLOSE";
         closeButton.onclick = hide;
         closeButton.onmousedown = (e) => e.stopPropagation();
         closeButton.className = "close clear";
         headline.appendChild(closeButton);
 
-        let tipContainer = document.createElement("div");
+        const tipContainer = document.createElement("div");
         tipContainer.className = "tip";
         tipContainer.onmousedown = (e) => e.stopPropagation();
         container.appendChild(tipContainer);
 
-        let tipText = document.createElement("a");
+        const tipText = document.createElement("a");
         tipText.innerText = "Open Tutorial";
         tipText.href = "https://docs.recipesage.com";
         tipText.target = "_blank";
         tipContainer.appendChild(tipText);
 
-        let preferencesContainer = document.createElement("div");
+        const preferencesContainer = document.createElement("div");
         preferencesContainer.className = "preferences-container";
         tipContainer.appendChild(preferencesContainer);
 
-        let autoSnipToggle = document.createElement("input");
+        const autoSnipToggle = document.createElement("input");
         autoSnipToggle.className = "enable-autosnip";
         autoSnipToggle.checked = !preferences.disableAutoSnip;
         autoSnipToggle.type = "checkbox";
@@ -233,7 +233,7 @@ if (window[extensionContainerId]) {
         };
         preferencesContainer.appendChild(autoSnipToggle);
 
-        let autoSnipToggleLabel = document.createElement("span");
+        const autoSnipToggleLabel = document.createElement("span");
         autoSnipToggleLabel.innerText = "Enable Auto Field Detection";
         autoSnipToggleLabel.className = "enable-autosnip-label";
         preferencesContainer.appendChild(autoSnipToggleLabel);
@@ -277,7 +277,7 @@ if (window[extensionContainerId]) {
         );
         createSnipper("Notes", "notes", true, currentSnip.notes);
 
-        let save = document.createElement("button");
+        const save = document.createElement("button");
         save.innerText = "Save";
         save.onclick = submit;
         save.onmousedown = (e) => e.stopPropagation();
@@ -287,7 +287,7 @@ if (window[extensionContainerId]) {
         window.addEventListener("beforeunload", function (e) {
           if (!isDirty) return undefined;
 
-          var confirmationMessage = `You've made changes in the RecipeSage editor.
+          const confirmationMessage = `You've made changes in the RecipeSage editor.
           If you leave before saving, your changes will be lost.`;
 
           (e || window.event).returnValue = confirmationMessage; //Gecko + IE
@@ -295,7 +295,7 @@ if (window[extensionContainerId]) {
         });
       };
 
-      let createSnipper = (
+      const createSnipper = (
         title,
         field,
         isTextArea,
@@ -303,24 +303,24 @@ if (window[extensionContainerId]) {
         disableSnip,
         formatCb,
       ) => {
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         label.onmousedown = (e) => e.stopPropagation();
         container.appendChild(label);
 
         if (!disableSnip) {
-          let button = document.createElement("button");
+          const button = document.createElement("button");
           button.className = "icon-button";
           button.onclick = () => {
             input.value = snip(field, formatCb);
           };
           label.appendChild(button);
 
-          let buttonIcon = document.createElement("i");
+          const buttonIcon = document.createElement("i");
           buttonIcon.className = "icon ion-md-cut";
           button.appendChild(buttonIcon);
         }
 
-        let input = document.createElement(isTextArea ? "textarea" : "input");
+        const input = document.createElement(isTextArea ? "textarea" : "input");
         input.placeholder = title;
         if (initialValue)
           input.value = isTextArea
@@ -331,7 +331,7 @@ if (window[extensionContainerId]) {
         };
         label.appendChild(input);
 
-        let snipper = {
+        const snipper = {
           input: input,
           label: label,
         };
@@ -354,14 +354,14 @@ if (window[extensionContainerId]) {
       // =========== Alerts ============
 
       let alertShadowRootContainer, alertContainer;
-      let initAlert = () => {
+      const initAlert = () => {
         alertShadowRootContainer = document.createElement("div");
-        let shadowRoot = alertShadowRootContainer.attachShadow({
+        const shadowRoot = alertShadowRootContainer.attachShadow({
           mode: "closed",
         });
         document.body.appendChild(alertShadowRootContainer);
 
-        let alertStyles = document.createElement("link");
+        const alertStyles = document.createElement("link");
         alertStyles.href = chrome.runtime.getURL("inject/alert.css");
         alertStyles.rel = "stylesheet";
         alertStyles.type = "text/css";
@@ -381,30 +381,30 @@ if (window[extensionContainerId]) {
       };
 
       let alertTimeout;
-      let displayAlert = (title, body, hideAfter, bodyLink) => {
+      const displayAlert = (title, body, hideAfter, bodyLink) => {
         if (alertShadowRootContainer || alertContainer) destroyAlert();
 
         initAlert();
 
-        let headline = document.createElement("div");
+        const headline = document.createElement("div");
         headline.className = "headline";
         alertContainer.appendChild(headline);
 
-        let alertImg = document.createElement("img");
+        const alertImg = document.createElement("img");
         alertImg.src = chrome.runtime.getURL(
           "icons/android-chrome-512x512.png",
         );
         headline.appendChild(alertImg);
 
-        let alertTitle = document.createElement("h3");
+        const alertTitle = document.createElement("h3");
         alertTitle.innerText = title;
         headline.appendChild(alertTitle);
 
-        let alertBody = document.createElement("span");
+        const alertBody = document.createElement("span");
         if (!bodyLink) {
           alertBody.innerText = body;
         } else {
-          let alertBodyLink = document.createElement("a");
+          const alertBodyLink = document.createElement("a");
           alertBodyLink.target = "_blank";
           alertBodyLink.href = bodyLink;
           alertBodyLink.innerText = body;
@@ -423,7 +423,7 @@ if (window[extensionContainerId]) {
         });
       };
 
-      let submit = async () => {
+      const submit = async () => {
         try {
           const token = await fetchToken();
 

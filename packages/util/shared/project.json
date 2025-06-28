@@ -1,9 +1,37 @@
 {
   "name": "util-shared",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/util/shared/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/util/shared/src/index.ts",
+        "outputPath": "dist/packages/util/shared",
+        "outputFileName": "main.js",
+        "tsConfig": "packages/util/shared/tsconfig.lib.json",
+        "declaration": true,
+        "assets": [
+          {
+            "glob": "packages/util/shared/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "platform": "node"
+      },
+      "configurations": {
+        "development": {
+          "minify": false
+        },
+        "production": {
+          "minify": true
+        }
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

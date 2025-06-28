@@ -1,6 +1,6 @@
 import { prisma, SessionDTO } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
