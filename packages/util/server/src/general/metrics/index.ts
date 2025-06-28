@@ -17,7 +17,7 @@ export const metrics = {
     name: "api_request",
     help: "Every time a request hits the app",
     labelNames: ["method", "path", "status_code"],
-    buckets: [0.05, 0.1, 0.3, 0.7, 2, 5], // Each of these is tracked in seconds
+    buckets: [0.05, 0.1, 0.3, 0.7, 2, 5, 15, 30], // Each of these is tracked in seconds
   }),
 
   userCreated: new client.Counter({
