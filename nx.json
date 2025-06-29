@@ -40,7 +40,7 @@
   "neverConnectToCloud": true,
   "defaultBase": "master",
   "s3": {
-    "region": "us-east-1",
+    "region": "us-west-2",
     "bucket": "recipesage-nx-cache",
     "forcePathStyle": true,
     "localMode": "no-cache",
