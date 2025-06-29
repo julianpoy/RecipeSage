@@ -109,7 +109,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1902.13",
-    "@angular-devkit/build-angular": "19.2.13",
+    "@angular-devkit/build-angular": "20.0.4",
     "@angular-devkit/core": "19.2.13",
     "@angular-devkit/schematics": "19.2.13",
     "@angular-eslint/builder": "19.4.0",
