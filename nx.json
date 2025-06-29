@@ -37,6 +37,13 @@
   "tui": {
     "enabled": false
   },
-  "nxCloudId": "6860c042c5098e0eb794180f",
-  "defaultBase": "master"
+  "neverConnectToCloud": true,
+  "defaultBase": "master",
+  "s3": {
+    "region": "us-east-1",
+    "bucket": "recipesage-nx-cache",
+    "forcePathStyle": true,
+    "localMode": "no-cache",
+    "ciMode": "read-write"
+  }
 }
