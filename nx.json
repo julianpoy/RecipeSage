@@ -37,8 +37,6 @@
   "tui": {
     "enabled": false
   },
-  "useDaemonProcess": false,
-  "neverConnectToCloud": true,
-  "useInferencePlugins": false,
+  "nxCloudId": "6860c042c5098e0eb794180f",
   "defaultBase": "master"
 }
