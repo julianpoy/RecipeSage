@@ -5,7 +5,6 @@ import workerpool from "workerpool";
 import fetch from "node-fetch";
 import * as Sentry from "@sentry/node";
 import he from "he";
-import url from "url";
 import { dedent } from "ts-dedent";
 import puppeteer, { Browser } from "puppeteer-core";
 import { fetchURL } from "./fetch";
@@ -72,7 +71,7 @@ const clipRecipeUrlWithPuppeteer = async (
     const chromeLaunchArgs = ["--disable-web-security"];
 
     if (process.env.CLIP_PROXY_URL) {
-      const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
+      const proxyUrl = new URL(process.env.CLIP_PROXY_URL);
       chromeLaunchArgs.push(`--proxy-server="https=${proxyUrl.host}"`);
     }
 
