@@ -77,7 +77,7 @@
     "node-fetch": "^2.6.7",
     "openai": "^4.91.1",
     "p-debounce": "^4.0.0",
-    "p-limit": "^3.1.0",
+    "p-limit": "^6.2.0",
     "p-throttle": "^7.0.0",
     "pdfmake": "^0.2.18",
     "pg": "8.14.1",
