@@ -12,12 +12,15 @@ const LOW_RES_IMG_CONVERSION_WIDTH = 200;
 const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
 const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
+const WRITE_IMAGE_URL_TIMEOUT_SECONDS = 15;
 export const writeImageURL = async (
   objectType: ObjectTypes,
   url: string,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const response = await fetchURL(url);
+  const response = await fetchURL(url, {
+    timeout: WRITE_IMAGE_URL_TIMEOUT_SECONDS * 1000,
+  });
   if (response.status !== 200)
     throw new Error(`Could not fetch image: ${response.status}`);
   const buffer = await response.buffer();
