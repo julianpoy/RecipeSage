@@ -240,9 +240,7 @@ export const clipUrl = async (
   });
 
   const response = await fetchURL(url, {
-    requestConfig: {
-      timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
-    },
+    timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
   });
 
   const htmlDocument = await response.text();

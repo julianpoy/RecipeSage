@@ -115,7 +115,9 @@ const recipeToSchema = async (
       if (process.env.NODE_ENV === "selfhost" && imageUrl.startsWith("/")) {
         buffer = await fs.promises.readFile(imageUrl);
       } else {
-        const response = await fetchURL(imageUrl);
+        const response = await fetchURL(imageUrl, {
+          timeout: 15 * 1000,
+        });
         buffer = await response.buffer();
       }
 
