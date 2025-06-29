@@ -9,37 +9,34 @@
       "cache": true
     },
     "lint": {
-      "inputs": ["default"],
+      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
       "cache": true
     },
     "typecheck": {
       "inputs": ["default", "^default"],
       "cache": true
     },
-    "@nx/jest:jest": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
-      "cache": true,
-      "options": {
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
-    },
     "@nx/eslint:lint": {
-      "inputs": ["default"],
+      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
       "cache": true
+    },
+    "@nx/vite:test": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    },
+    "@nx/vite:build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"]
     }
   },
   "workspaceLayout": {
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "useDaemonProcess": false,
-  "neverConnectToCloud": true,
-  "useInferencePlugins": false,
+  "tui": {
+    "enabled": false
+  },
+  "nxCloudId": "6860c042c5098e0eb794180f",
   "defaultBase": "master"
 }

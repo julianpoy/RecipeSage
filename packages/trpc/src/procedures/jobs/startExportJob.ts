@@ -1,4 +1,4 @@
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { JobMeta, prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import {

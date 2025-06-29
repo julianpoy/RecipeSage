@@ -231,7 +231,6 @@ export class MealCalendarComponent {
           items: [],
           meals: Object.values(MealName),
         });
-        console.log(dayData, year, month, day);
         dayData.itemsByMeal[
           item.meal as keyof typeof dayData.itemsByMeal
         ]?.push(item);

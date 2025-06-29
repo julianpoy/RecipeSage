@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 const router = express.Router();
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import Joi from "joi";
 
 // DB

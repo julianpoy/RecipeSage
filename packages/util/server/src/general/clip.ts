@@ -3,7 +3,7 @@
 import { join } from "path";
 import workerpool from "workerpool";
 import fetch from "node-fetch";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import he from "he";
 import url from "url";
 import { dedent } from "ts-dedent";

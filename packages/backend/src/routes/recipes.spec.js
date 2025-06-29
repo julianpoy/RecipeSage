@@ -34,8 +34,6 @@ describe("recipes", () => {
 
       const session = await createSession(user.id);
 
-      const initialCount = await Recipe.count();
-
       const payload = {
         title: randomString(20),
         description: randomString(20),
@@ -65,8 +63,12 @@ describe("recipes", () => {
               expect(recipe).not.toBeNull();
             })
             .then(async () => {
-              const count = await Recipe.count();
-              expect(count).toBe(initialCount + 1);
+              const count = await Recipe.count({
+                where: {
+                  userId: user.id,
+                },
+              });
+              expect(count).toBe(1);
             }),
         );
     });
@@ -75,8 +77,6 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
-
-      const initialCount = await Recipe.count();
 
       const payload = {
         title: randomString(20),
@@ -97,8 +97,12 @@ describe("recipes", () => {
               expect(recipe).not.toBeNull();
             })
             .then(async () => {
-              const count = await Recipe.count();
-              expect(count).toBe(initialCount + 1);
+              const count = await Recipe.count({
+                where: {
+                  userId: user.id,
+                },
+              });
+              expect(count).toBe(1);
             }),
         );
     });
@@ -107,8 +111,6 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
-
-      const initialCount = await Recipe.count();
 
       const payload = {
         description: randomString(20),
@@ -129,8 +131,12 @@ describe("recipes", () => {
         .send(payload)
         .expect(superjsonResult(412))
         .then(async () => {
-          const count = await Recipe.count();
-          expect(count).toBe(initialCount);
+          const count = await Recipe.count({
+            where: {
+              userId: user.id,
+            },
+          });
+          expect(count).toBe(0);
         });
     });
 
@@ -138,8 +144,6 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
-
-      const initialCount = await Recipe.count();
 
       const payload = {
         title: "",
@@ -161,14 +165,16 @@ describe("recipes", () => {
         .send(payload)
         .expect(superjsonResult(412))
         .then(async () => {
-          const count = await Recipe.count();
-          expect(count).toBe(initialCount);
+          const count = await Recipe.count({
+            where: {
+              userId: user.id,
+            },
+          });
+          expect(count).toBe(0);
         });
     });
 
     it("rejects invalid token", async () => {
-      const initialCount = await Recipe.count();
-
       const payload = {
         title: randomString(20),
         description: randomString(20),
@@ -187,11 +193,7 @@ describe("recipes", () => {
         .post("/recipes")
         .send(payload)
         .query({ token: "invalid" })
-        .expect(superjsonResult(401))
-        .then(async () => {
-          const count = await Recipe.count();
-          expect(count).toBe(initialCount);
-        });
+        .expect(superjsonResult(401));
     });
   });
 

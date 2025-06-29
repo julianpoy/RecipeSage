@@ -8,7 +8,7 @@ export const validateSession = function (types, optional) {
       if (optional) return next();
 
       // Throw unauthorized without pinging DB
-      let e = new Error("Session is not valid!");
+      const e = new Error("Session is not valid!");
       e.status = 401;
       return next(e);
     }

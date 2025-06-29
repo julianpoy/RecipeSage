@@ -117,16 +117,18 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
-      const initialCount = await Label.count();
-
       await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
         .expect(superjsonResult(500));
 
-      const count = await Label.count();
-      expect(count).toBe(initialCount);
+      const count = await Label.count({
+        where: {
+          userId: user.id,
+        },
+      });
+      expect(count).toBe(0);
     });
 
     it("requires valid session", async () => {

@@ -16,7 +16,6 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "target": "ES2022",
-    "typeRoots": ["node_modules/@types"],
     "lib": ["esnext", "dom"],
     "paths": {
       "@recipesage/express": ["packages/express/src/index.ts"],

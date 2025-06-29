@@ -14,7 +14,7 @@ import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
 import { userHasCapability } from "../capabilities";
 import { Capabilities } from "@recipesage/util/shared";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { Converter } from "showdown";
 import { StandardizedRecipeImportEntry } from "../db";
 const showdown = new Converter({

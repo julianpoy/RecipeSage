@@ -9,7 +9,7 @@ import {
   validatePasswordHash,
 } from "@recipesage/util/server/general";
 import { indexRecipes } from "@recipesage/util/server/search";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 export const login = publicProcedure
   .input(

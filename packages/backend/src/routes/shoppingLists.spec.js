@@ -28,7 +28,6 @@ describe("shopping Lists", () => {
   it("succeeds with no collaborators", async () => {
     const user = await createUser();
     const session = await createSession(user.id);
-    const initialCount = await ShoppingList.count();
 
     const payload = {
       title: randomString(20),
@@ -48,15 +47,18 @@ describe("shopping Lists", () => {
 
     expect(shoppingList).not.toBeNull();
 
-    const count = await ShoppingList.count();
-    expect(count).toBe(initialCount + 1);
+    const count = await ShoppingList.count({
+      where: {
+        userId: user.id,
+      },
+    });
+    expect(count).toBe(1);
   });
 
   it("succeeds with collaborators", async () => {
     const user = await createUser();
     const user2 = await createUser();
     const session = await createSession(user.id);
-    const initialCount = await ShoppingList.count();
 
     const payload = {
       title: randomString(20),
@@ -77,14 +79,17 @@ describe("shopping Lists", () => {
 
     expect(shoppingList).not.toBeNull();
 
-    const count = await ShoppingList.count();
-    expect(count).toBe(initialCount + 1);
+    const count = await ShoppingList.count({
+      where: {
+        userId: user.id,
+      },
+    });
+    expect(count).toBe(1);
   });
 
   it("rejects if no title is present", async () => {
     const user = await createUser();
     const session = await createSession(user.id);
-    const initialCount = await ShoppingList.count();
 
     const payload = {};
 
@@ -94,13 +99,15 @@ describe("shopping Lists", () => {
       .send(payload)
       .expect(superjsonResult(412));
 
-    const count = await ShoppingList.count();
-    expect(count).toBe(initialCount);
+    const count = await ShoppingList.count({
+      where: {
+        userId: user.id,
+      },
+    });
+    expect(count).toBe(0);
   });
 
   it("reject invalid token", async () => {
-    const initialCount = await ShoppingList.count();
-
     const payload = {
       title: randomString(20),
     };
@@ -110,9 +117,6 @@ describe("shopping Lists", () => {
       .query({ token: "invalid" })
       .send(payload)
       .expect(superjsonResult(401));
-
-    const count = await ShoppingList.count();
-    expect(count).toBe(initialCount);
   });
 
   it("return Shoppinglist", async () => {

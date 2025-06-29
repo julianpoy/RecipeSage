@@ -99,7 +99,7 @@ export const groupShoppingListItems = (items) => {
 
   // Load map of groups by ingredientName into array of objects
   const result = [];
-  for (let [ingredientName, items] of Object.entries(itemGrouper)) {
+  for (const [ingredientName, items] of Object.entries(itemGrouper)) {
     const measurements = items.map((item) =>
       getMeasurementsForIngredient(item.title),
     );

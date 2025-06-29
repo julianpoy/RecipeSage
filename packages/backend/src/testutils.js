@@ -1,5 +1,4 @@
 import { v4 as uuid } from "uuid";
-import { expect } from "@jest/globals";
 
 import {
   User,
@@ -22,9 +21,9 @@ export const cleanup = async () => {
 };
 
 export function randomString(len) {
-  let chars = "abcdefghijklmnopqrstuvwxyz";
+  const chars = "abcdefghijklmnopqrstuvwxyz";
 
-  let str = [];
+  const str = [];
   for (let i = 0; i < len; i++)
     str.push(chars.charAt(Math.floor(Math.random() * (chars.length - 1))));
 

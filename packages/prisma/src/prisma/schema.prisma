@@ -278,6 +278,7 @@ model ShoppingListItem {
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([recipeId], map: "shopping_list_items_recipe_id")
+  @@index([mealPlanItemId], map: "shopping_list_items_meal_plan_item_id")
   @@index([shoppingListId], map: "shopping_list_items_shopping_list_id")
   @@map("ShoppingListItems")
 }

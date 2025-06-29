@@ -4,6 +4,28 @@
   "sourceRoot": "packages/backend/src",
   "projectType": "application",
   "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/backend",
+        "format": ["esm"],
+        "bundle": true,
+        "minify": false,
+        "external": ["@sentry/profiling-node"],
+        "main": "packages/backend/src/app.ts",
+        "tsConfig": "packages/backend/tsconfig.app.json",
+        "assets": ["packages/backend/src/assets"],
+        "generatePackageJson": true,
+        "esbuildConfig": "packages/backend/esbuild.config.ts"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
     "start": {
       "executor": "nx:run-commands",
       "options": {
@@ -25,11 +47,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "packages/backend/jest.config.ts",
-        "runInBand": true
+        "reportsDirectory": "../../coverage/packages/backend"
       }
     }
   }

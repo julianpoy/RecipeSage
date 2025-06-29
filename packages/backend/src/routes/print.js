@@ -27,11 +27,11 @@ import { BadRequest } from "../utils/errors.js";
 router.get(
   "/",
   wrapRequestWithErrorHandler(async (req, res) => {
-    let originalModifiers = req.query.modifiers
+    const originalModifiers = req.query.modifiers
       ? req.query.modifiers.split(",")
       : [];
 
-    let mappedModifiers = {
+    const mappedModifiers = {
       titleImage:
         originalModifiers.indexOf("noimage") === -1 &&
         req.query.template != "compact",
@@ -41,7 +41,7 @@ router.get(
         req.query.template == "halfsheet",
     };
 
-    let modifierQuery = Object.keys(mappedModifiers)
+    const modifierQuery = Object.keys(mappedModifiers)
       .filter((m) => mappedModifiers[m])
       .map((modifier) => `&${modifier}=true`)
       .join("");
