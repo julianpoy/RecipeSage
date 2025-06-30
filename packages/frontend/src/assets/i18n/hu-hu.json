@@ -939,7 +939,7 @@
     "components.messaging.notificationPermission.header": "Értesítési engedélyek szükségesek",
     "pages.home.exportSelected.processing.message": "Dolgozunk azon, hogy ezeket a recepteket letölthetővé tegyük. Ez eltarthat néhány percig. Az export a beállításokon belül az export oldalról lesz letölthető.",
     "pages.editRecipe.clipText": "Automatikus kitöltés szövegből",
-    "pages.import.csv": "Importálás CSV-ből (PlanToEat és mások)",
+    "pages.import.csv": "Importálás CSV-ből (PlanToEat, MyRecipeBox és mások)",
     "pages.import.fileTypeWarning": "Figyelem! Ez a fájltípus nem végződik a következőkkel: {{ acceptableFiletypes }}. Lehet, hogy nem fog működni.",
     "pages.assistant.welcome.documentation": "Kérem, olvassa el az asszisztens dokumentációját",
     "components.selectMultipleItems.noSelected": "Nincs kiválasztott elem",
@@ -1018,5 +1018,10 @@
     "pages.importEnex.description": "Ez a művelet Evernote exportból (.enex kiterjesztésű) importál recepteket a RecipeSage fiókjába. Kérem, tekintse meg a felhasználói útmutatót, hogy hogyan hozhat létre egy fájlt a megfelelő formátumban, amely itt importálható. Kérem, fontolja meg a hozzájárulást, ha a fájlja nagyszámú receptet vagy képet tartalmaz.",
     "pages.import.enex": "Importálás Evernote fájlból",
     "pages.importEnex.title": "Receptek importálása Evernote (enex) fájlból",
-    "pages.contribute.manage": "Meglévő előfizetés kezeléséhez kattintson ide"
+    "pages.contribute.manage": "Meglévő előfizetés kezeléséhez kattintson ide",
+    "components.mealCalendar.other": "Egyéb",
+    "components.mealCalendar.breakfast": "Reggeli",
+    "components.mealCalendar.lunch": "Ebéd",
+    "components.mealCalendar.dinner": "Vacsora",
+    "components.mealCalendar.snack": "Nassolnivaló"
 }
