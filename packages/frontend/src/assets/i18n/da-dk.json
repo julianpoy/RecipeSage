@@ -581,7 +581,6 @@
     "pages.shoppingListIgnoreModal.description": "Varer, der er anført her, udelukkes automatisk, når du tilføjer en opskrift til en indkøbsliste. Dette er især praktisk til ingredienser som salt, som du sandsynligvis ikke har brug for at tilføje, hver gang du tilføjer en vare til en indkøbsliste.",
     "pages.shoppingList.nullState.1": "Der er ingen varer på denne indkøbsliste.",
     "pages.shoppingList.removeMultiple.message": "Dette vil slette disse elementer permanent fra listen.",
-    "pages.shoppingListPopover.edit": "Rediger ingredienskategorier",
     "pages.shoppingListPopover.showAddedBy": "Vis tilføjet af",
     "pages.shoppingListPopover.removeAll.message": "Dette vil permanent slette alle varer fra denne liste. Denne handling er irreversibel.",
     "pages.addFriendModal.open": "Åben profil",

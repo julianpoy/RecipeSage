@@ -677,7 +677,6 @@
     "pages.shoppingListPopover.showTitle": "Afficher le titre de la recette",
     "pages.shoppingListPopover.showAddedOn": "Afficher Ajoutée le",
     "pages.shoppingListPopover.preferDelete": "Supprimer lors de la complétion",
-    "pages.shoppingListPopover.edit": "Modifier les catégories d'ingrédients",
     "pages.shoppingListPopover.print": "Imprimer",
     "pages.shoppingListPopover.delete": "Supprimer la liste",
     "pages.shoppingListPopover.removeAll.header": "Confirmer la suppression",
