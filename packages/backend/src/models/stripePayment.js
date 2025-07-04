@@ -22,7 +22,6 @@ export const StripePaymentInit = (sequelize, DataTypes) => {
       paymentIntentId: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
       },
       subscriptionId: {
         type: DataTypes.STRING,
