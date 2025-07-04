@@ -1,4 +1,4 @@
-import { Component, type AfterViewInit } from "@angular/core";
+import { Component, type AfterViewInit, inject } from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -26,25 +26,23 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanPopoverPage implements AfterViewInit {
+  private popoverCtrl = inject(PopoverController);
+  private modalCtrl = inject(ModalController);
+  private translate = inject(TranslateService);
+  private navCtrl = inject(NavController);
+  private preferencesService = inject(PreferencesService);
+  private userService = inject(UserService);
+  private loadingService = inject(LoadingService);
+  private trpcService = inject(TRPCService);
+  private alertCtrl = inject(AlertController);
+
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
   isOwner: boolean = false;
   loading: boolean = true;
 
   mealPlanId: any; // From nav params
-  mealPlan: any; // From nav params
-
-  constructor(
-    private popoverCtrl: PopoverController,
-    private modalCtrl: ModalController,
-    private translate: TranslateService,
-    private navCtrl: NavController,
-    private preferencesService: PreferencesService,
-    private userService: UserService,
-    private loadingService: LoadingService,
-    private trpcService: TRPCService,
-    private alertCtrl: AlertController,
-  ) {}
+  mealPlan: any;
 
   ngAfterViewInit() {
     this.loading = true;

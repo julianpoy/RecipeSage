@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -20,21 +20,21 @@ import { SelectUserComponent } from "../../../components/select-user/select-user
   imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class NewMessageModalPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  modalCtrl = inject(ModalController);
+  toastCtrl = inject(ToastController);
+  trpcService = inject(TRPCService);
+  utilService = inject(UtilService);
+  messagingService = inject(MessagingService);
+
   @Input() initialRecipientId?: string;
   recipientId?: string;
   recipientInfo?: UserPublic;
 
   message = "";
 
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public modalCtrl: ModalController,
-    public toastCtrl: ToastController,
-    public trpcService: TRPCService,
-    public utilService: UtilService,
-    public messagingService: MessagingService,
-  ) {
+  constructor() {
     setTimeout(() => {
       if (this.initialRecipientId) {
         this.setSelectedUser(this.initialRecipientId);

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -21,19 +21,19 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class ShoppingListsPage {
+  navCtrl = inject(NavController);
+  modalCtrl = inject(ModalController);
+  toastCtrl = inject(ToastController);
+  shoppingListService = inject(ShoppingListService);
+  websocketService = inject(WebsocketService);
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+
   shoppingLists: any = [];
 
   initialLoadComplete = false;
 
-  constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public toastCtrl: ToastController,
-    public shoppingListService: ShoppingListService,
-    public websocketService: WebsocketService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-  ) {
+  constructor() {
     this.websocketService.register(
       "shoppingList:received",
       () => {

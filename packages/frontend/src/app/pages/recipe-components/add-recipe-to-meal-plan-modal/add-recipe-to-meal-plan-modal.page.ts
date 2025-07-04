@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
@@ -18,6 +18,12 @@ import { SelectMealComponent } from "../../../components/select-meal/select-meal
   imports: [...SHARED_UI_IMPORTS, MealCalendarComponent, SelectMealComponent],
 })
 export class AddRecipeToMealPlanModalPage {
+  private translate = inject(TranslateService);
+  private trpcService = inject(TRPCService);
+  private loadingService = inject(LoadingService);
+  private toastCtrl = inject(ToastController);
+  private modalCtrl = inject(ModalController);
+
   @Input() recipe: any;
 
   mealPlans?: MealPlanSummary[];
@@ -29,14 +35,6 @@ export class AddRecipeToMealPlanModalPage {
   @Input() reference?: string;
 
   selectedDays: string[] = [];
-
-  constructor(
-    private translate: TranslateService,
-    private trpcService: TRPCService,
-    private loadingService: LoadingService,
-    private toastCtrl: ToastController,
-    private modalCtrl: ModalController,
-  ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();

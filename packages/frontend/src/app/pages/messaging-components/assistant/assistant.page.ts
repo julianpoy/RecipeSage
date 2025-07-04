@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, ToastController } from "@ionic/angular";
 
@@ -24,6 +24,17 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, LogoIconComponent, NullStateComponent],
 })
 export class AssistantPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  route = inject(ActivatedRoute);
+  events = inject(EventService);
+  toastCtrl = inject(ToastController);
+  loadingService = inject(LoadingService);
+  websocketService = inject(WebsocketService);
+  utilService = inject(UtilService);
+  messagingService = inject(MessagingService);
+  trpcService = inject(TRPCService);
+
   @ViewChild("content", { static: true }) content: any;
 
   maxMessageLength = 1500;
@@ -42,19 +53,6 @@ export class AssistantPage {
   isViewLoaded = true;
 
   selectedChatIdx = -1;
-
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public route: ActivatedRoute,
-    public events: EventService,
-    public toastCtrl: ToastController,
-    public loadingService: LoadingService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public messagingService: MessagingService,
-    public trpcService: TRPCService,
-  ) {}
 
   ionViewWillEnter() {
     this.isViewLoaded = true;

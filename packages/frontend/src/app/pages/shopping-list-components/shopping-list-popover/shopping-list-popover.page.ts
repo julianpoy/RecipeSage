@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -23,24 +23,22 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListPopoverPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  utilService = inject(UtilService);
+  preferencesService = inject(PreferencesService);
+  loadingService = inject(LoadingService);
+  shoppingListService = inject(ShoppingListService);
+  toastCtrl = inject(ToastController);
+  popoverCtrl = inject(PopoverController);
+  alertCtrl = inject(AlertController);
+  modalCtrl = inject(ModalController);
+
   @Input() shoppingListId: any;
   @Input() shoppingList: any;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
-
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public toastCtrl: ToastController,
-    public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-  ) {}
 
   savePreferences() {
     this.preferencesService.save();

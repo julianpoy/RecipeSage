@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   type AfterViewInit,
+  inject,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -17,6 +18,8 @@ const LAST_USED_MEAL_VAR = "lastUsedMeal";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectMealComponent implements AfterViewInit {
+  private translate = inject(TranslateService);
+
   @Input() meal = "";
   @Output() mealChange = new EventEmitter();
 
@@ -42,8 +45,6 @@ export class SelectMealComponent implements AfterViewInit {
       key: "other",
     },
   ];
-
-  constructor(private translate: TranslateService) {}
 
   ngAfterViewInit() {
     if (!this.meal) {

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -6,13 +6,13 @@ import { TranslateService } from "@ngx-translate/core";
   providedIn: "root",
 })
 export class UnsavedChangesService {
+  private router = inject(Router);
+  private translate = inject(TranslateService);
+
   private pendingChanges = false;
   public unsavedChangesMessage = "";
 
-  constructor(
-    private router: Router,
-    private translate: TranslateService,
-  ) {
+  constructor() {
     this.translate
       .get("services.unsavedChanges.message")
       .toPromise()

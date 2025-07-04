@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
@@ -20,6 +20,9 @@ import { MealGroupComponent } from "./meal-group/meal-group.component";
   imports: [...SHARED_UI_IMPORTS, MealGroupComponent],
 })
 export class MealCalendarComponent {
+  utilService = inject(UtilService);
+  preferencesService = inject(PreferencesService);
+
   private _mealPlanItems!: MealPlanItemSummary[];
 
   @Input({
@@ -85,10 +88,7 @@ export class MealCalendarComponent {
     return this._selectedDays;
   }
 
-  constructor(
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-  ) {
+  constructor() {
     setTimeout(() => {
       this.mealsByDateChange.emit(this.mealsByDate);
       this.selectedDaysChange.emit(this.selectedDays);

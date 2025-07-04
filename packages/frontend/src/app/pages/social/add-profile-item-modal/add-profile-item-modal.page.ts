@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
 import { Recipe } from "../../../services/recipe.service";
@@ -14,6 +14,8 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
   imports: [...SHARED_UI_IMPORTS, SelectLabelComponent, SelectRecipeComponent],
 })
 export class AddProfileItemModalPage {
+  private modalCtrl = inject(ModalController);
+
   itemType = null;
 
   itemVisibility = null;
@@ -26,8 +28,6 @@ export class AddProfileItemModalPage {
 
   selectedRecipe?: Recipe;
   selectedLabel?: Label;
-
-  constructor(private modalCtrl: ModalController) {}
 
   onItemTypeChange(event: any) {
     this.itemType = event.detail.value;

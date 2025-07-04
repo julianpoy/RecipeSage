@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpService } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 
@@ -62,7 +62,7 @@ export interface MealPlanItem {
   providedIn: "root",
 })
 export class MealPlanService {
-  constructor(private httpService: HttpService) {}
+  private httpService = inject(HttpService);
 
   fetch(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MealPlans>({

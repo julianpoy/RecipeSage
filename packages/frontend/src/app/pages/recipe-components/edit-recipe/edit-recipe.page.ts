@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FilePicker } from "@capawesome/capacitor-file-picker";
 import {
@@ -52,6 +52,22 @@ import { MultiImageUploadComponent } from "../../../components/multi-image-uploa
   ],
 })
 export class EditRecipePage {
+  private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+  private navCtrl = inject(NavController);
+  private toastCtrl = inject(ToastController);
+  private alertCtrl = inject(AlertController);
+  private popoverCtrl = inject(PopoverController);
+  private trpcService = inject(TRPCService);
+  private unsavedChangesService = inject(UnsavedChangesService);
+  private loadingCtrl = inject(LoadingController);
+  private loadingService = inject(LoadingService);
+  private recipeService = inject(RecipeService);
+  private imageService = inject(ImageService);
+  private capabilitiesService = inject(CapabilitiesService);
+  private events = inject(EventService);
+  private featureFlagService = inject(FeatureFlagService);
+
   defaultBackHref: string;
 
   recipeId?: string;
@@ -78,23 +94,7 @@ export class EditRecipePage {
 
   isAutoclipPopoverOpen = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private translate: TranslateService,
-    private navCtrl: NavController,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private popoverCtrl: PopoverController,
-    private trpcService: TRPCService,
-    private unsavedChangesService: UnsavedChangesService,
-    private loadingCtrl: LoadingController,
-    private loadingService: LoadingService,
-    private recipeService: RecipeService,
-    private imageService: ImageService,
-    private capabilitiesService: CapabilitiesService,
-    private events: EventService,
-    private featureFlagService: FeatureFlagService,
-  ) {
+  constructor() {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
     if (recipeId === "new") {

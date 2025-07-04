@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ModalController, ToastController } from "@ionic/angular";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
@@ -18,20 +18,18 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
   ],
 })
 export class NewShoppingListItemModalPage {
+  modalCtrl = inject(ModalController);
+  utilService = inject(UtilService);
+  recipeService = inject(RecipeService);
+  loadingService = inject(LoadingService);
+  toastCtrl = inject(ToastController);
+
   inputType = "items";
 
   itemFields: any = [{}];
 
   selectedRecipe: any;
   selectedIngredients: ParsedIngredient[] = [];
-
-  constructor(
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public toastCtrl: ToastController,
-  ) {}
 
   inputTypeChanged(event: any) {
     this.inputType = event.detail.value;

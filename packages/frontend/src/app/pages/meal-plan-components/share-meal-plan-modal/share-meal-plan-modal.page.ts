@@ -1,5 +1,5 @@
 import { MealPlanService } from "~/services/meal-plan.service";
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
@@ -11,17 +11,15 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
   imports: [...SHARED_UI_IMPORTS, CopyWithWebshareComponent],
 })
 export class ShareMealPlanModalPage {
+  private modalCtrl = inject(ModalController);
+  private mealPlanService = inject(MealPlanService);
+
   @Input({
     required: true,
   })
   mealPlanId!: string;
 
   icalURL = "";
-
-  constructor(
-    private modalCtrl: ModalController,
-    private mealPlanService: MealPlanService,
-  ) {}
 
   ionViewWillEnter() {
     this.icalURL = this.mealPlanService.getICalUrl(this.mealPlanId);

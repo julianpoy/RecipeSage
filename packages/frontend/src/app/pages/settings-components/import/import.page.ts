@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NavController } from "@ionic/angular";
 import * as Sentry from "@sentry/browser";
 
@@ -48,6 +48,10 @@ type ImportFormat =
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportPage {
+  private navCtrl = inject(NavController);
+  private trpcService = inject(TRPCService);
+  private utilService = inject(UtilService);
+
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
   /**
@@ -56,12 +60,6 @@ export class ImportPage {
   showJobs = 5;
   importJobs: JobSummary[] = [];
   jobPollInterval?: NodeJS.Timeout;
-
-  constructor(
-    private navCtrl: NavController,
-    private trpcService: TRPCService,
-    private utilService: UtilService,
-  ) {}
 
   ionViewWillEnter() {
     this.setupJobStatusPoll();

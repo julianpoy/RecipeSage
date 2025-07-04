@@ -1,5 +1,5 @@
 import { AlertController } from "@ionic/angular";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { HttpService, UploadProgressHandler } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
@@ -11,13 +11,11 @@ import { TranslateService } from "@ngx-translate/core";
   providedIn: "root",
 })
 export class ImportService {
-  constructor(
-    private alertCtrl: AlertController,
-    private events: EventService,
-    private httpService: HttpService,
-    private utilService: UtilService,
-    private translate: TranslateService,
-  ) {}
+  private alertCtrl = inject(AlertController);
+  private events = inject(EventService);
+  private httpService = inject(HttpService);
+  private utilService = inject(UtilService);
+  private translate = inject(TranslateService);
 
   getImportLabel() {
     const date = new Date();

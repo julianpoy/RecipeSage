@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
@@ -14,6 +14,10 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectIngredientsComponent {
+  private modalCtrl = inject(ModalController);
+  private recipeService = inject(RecipeService);
+  private preferencesService = inject(PreferencesService);
+
   allSelected = true;
   ingredientBinders: { [index: number]: boolean } = {};
   scaledIngredients: ParsedIngredient[] = [];
@@ -45,12 +49,6 @@ export class SelectIngredientsComponent {
     this.scale = val;
     this.applyScale();
   }
-
-  constructor(
-    private modalCtrl: ModalController,
-    private recipeService: RecipeService,
-    private preferencesService: PreferencesService,
-  ) {}
 
   async changeScale() {
     const modal = await this.modalCtrl.create({

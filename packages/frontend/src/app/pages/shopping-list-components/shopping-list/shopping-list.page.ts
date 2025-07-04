@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -40,6 +40,20 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   ],
 })
 export class ShoppingListPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  loadingService = inject(LoadingService);
+  shoppingListService = inject(ShoppingListService);
+  websocketService = inject(WebsocketService);
+  utilService = inject(UtilService);
+  preferencesService = inject(PreferencesService);
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  alertCtrl = inject(AlertController);
+  popoverCtrl = inject(PopoverController);
+  route = inject(ActivatedRoute);
+  private titleService = inject(Title);
+
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
 
   shoppingListId: string;
@@ -64,21 +78,7 @@ export class ShoppingListPage {
 
   reference = "0";
 
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public alertCtrl: AlertController,
-    public popoverCtrl: PopoverController,
-    public route: ActivatedRoute,
-    private titleService: Title,
-  ) {
+  constructor() {
     const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
     if (shoppingListId) {
       this.shoppingListId = shoppingListId;

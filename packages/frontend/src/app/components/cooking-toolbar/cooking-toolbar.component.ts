@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -13,12 +13,10 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class CookingToolbarComponent {
-  constructor(
-    private navCtrl: NavController,
-    private alertCtrl: AlertController,
-    private translate: TranslateService,
-    public cookingToolbarService: CookingToolbarService,
-  ) {}
+  private navCtrl = inject(NavController);
+  private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
+  cookingToolbarService = inject(CookingToolbarService);
 
   openRecipe(recipeId: string) {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipeId));

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from "@angular/core";
+import { Component, Output, EventEmitter, Input, inject } from "@angular/core";
 
 import { LoadingService } from "~/services/loading.service";
 import { TRPCService } from "../../services/trpc.service";
@@ -14,6 +14,9 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectUserComponent {
+  private trpcService = inject(TRPCService);
+  private loadingService = inject(LoadingService);
+
   @Input() selectedUser?: UserPublic;
   @Input() enableSelectedMode = true;
   @Output() selectedUserChange = new EventEmitter<UserPublic>();
@@ -31,11 +34,6 @@ export class SelectUserComponent {
     this._searchText = val;
     this.searchInputChange.emit(val);
   }
-
-  constructor(
-    private trpcService: TRPCService,
-    private loadingService: LoadingService,
-  ) {}
 
   onSearchInputChange(event: any) {
     this.searchText = event.detail.value || "";

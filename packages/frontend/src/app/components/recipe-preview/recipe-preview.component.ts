@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
@@ -9,6 +9,8 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class RecipePreviewComponent {
+  sanitizer = inject(DomSanitizer);
+
   @Input() selected: boolean = false;
   @Input() landscape: boolean = false;
 
@@ -27,8 +29,6 @@ export class RecipePreviewComponent {
   description!: string;
 
   @Output() previewClick = new EventEmitter();
-
-  constructor(public sanitizer: DomSanitizer) {}
 
   onClick(event: Event) {
     this.previewClick.emit(event);

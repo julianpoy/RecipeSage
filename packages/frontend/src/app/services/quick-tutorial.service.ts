@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -45,10 +45,8 @@ const TUTORIAL_LOCALSTORAGE_KEY = "seenQuickTutorialOptions";
   providedIn: "root",
 })
 export class QuickTutorialService {
-  constructor(
-    private alertCtrl: AlertController,
-    private translate: TranslateService,
-  ) {}
+  private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
 
   private fetchSeenTutorials(): QuickTutorialOptions[] {
     try {

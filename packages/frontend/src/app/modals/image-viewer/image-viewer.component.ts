@@ -4,6 +4,7 @@ import {
   ElementRef,
   Input,
   ViewChild,
+  inject,
 } from "@angular/core";
 import { IonicSlides, ModalController } from "@ionic/angular";
 import { SwiperContainer } from "swiper/element";
@@ -18,6 +19,8 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ImageViewerComponent {
+  private modalCtrl = inject(ModalController);
+
   @Input({
     required: true,
   })
@@ -28,8 +31,6 @@ export class ImageViewerComponent {
   slideNum = 0;
 
   swiperModules = [IonicSlides];
-
-  constructor(private modalCtrl: ModalController) {}
 
   ionViewWillEnter() {
     const swiper = this.getSwiperInstance();

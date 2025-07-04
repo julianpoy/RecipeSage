@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { SW_BROADCAST_CHANNEL_NAME } from "../utils/SW_BROADCAST_CHANNEL_NAME";
 import { TranslateService } from "@ngx-translate/core";
@@ -9,7 +9,7 @@ const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
   providedIn: "root",
 })
 export class SwCommunicationService {
-  constructor(private translate: TranslateService) {}
+  private translate = inject(TranslateService);
 
   async triggerFullCacheSync(notify = false) {
     let notification:

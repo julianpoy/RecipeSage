@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -13,12 +19,12 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class LegalPage implements AfterViewInit {
+  route = inject(ActivatedRoute);
+
   isSelfHost = IS_SELFHOST;
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
   @ViewChild("content") content?: any;
-
-  constructor(public route: ActivatedRoute) {}
 
   ngAfterViewInit() {
     const scrollToSection = this.route.snapshot.queryParamMap.get("scrollTo");

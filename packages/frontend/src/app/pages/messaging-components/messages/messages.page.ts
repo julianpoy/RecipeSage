@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -21,20 +21,20 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class MessagesPage {
+  navCtrl = inject(NavController);
+  events = inject(EventService);
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  websocketService = inject(WebsocketService);
+  messagingService = inject(MessagingService);
+
   loading = true;
 
   threads: any = [];
 
-  constructor(
-    public navCtrl: NavController,
-    public events: EventService,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public websocketService: WebsocketService,
-    public messagingService: MessagingService,
-  ) {
+  constructor() {
     this.messagingService.requestNotifications();
 
     this.websocketService.register(

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -29,24 +29,22 @@ import { SelfhostWarningItemComponent } from "../../../components/selfhost-warni
   ],
 })
 export class PeoplePage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  toastCtrl = inject(ToastController);
+  alertCtrl = inject(AlertController);
+  modalCtrl = inject(ModalController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  recipeService = inject(RecipeService);
+  userService = inject(UserService);
+
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   isSelfHost = IS_SELFHOST;
 
   friendships?: any;
   accountInfo?: User;
   myProfile?: UserProfile;
-
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public recipeService: RecipeService,
-    public userService: UserService,
-  ) {}
 
   ionViewWillEnter() {
     this.load();

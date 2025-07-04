@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "~/services/util.service";
@@ -12,7 +12,7 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class NotFoundPage {
-  constructor(private navCtrl: NavController) {}
+  private navCtrl = inject(NavController);
 
   goToContact() {
     this.navCtrl.navigateForward(RouteMap.ContactPage.getPath());

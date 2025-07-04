@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ModalController, AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { AppRouter } from "@recipesage/trpc";
@@ -17,6 +17,10 @@ export interface ErrorHandlers {
   providedIn: "root",
 })
 export class HttpErrorHandlerService {
+  private modalCtrl = inject(ModalController);
+  private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
+
   isAuthOpen: boolean = false; // Track auth modal so we don't open multiple stacks
   defaultErrorHandlers = {
     0: () => this.presentAlert("generic.error", "errors.offline"),
@@ -28,12 +32,6 @@ export class HttpErrorHandlerService {
       ),
   };
   isErrorAlertOpen = false;
-
-  constructor(
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
-    private translate: TranslateService,
-  ) {}
 
   async promptForAuth() {
     if (this.isAuthOpen) return;

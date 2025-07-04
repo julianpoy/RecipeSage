@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 
 import { UtilService } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -10,6 +10,8 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListItemComponent {
+  private utilService = inject(UtilService);
+
   @Input({
     required: true,
   })
@@ -31,8 +33,6 @@ export class ShoppingListItemComponent {
   })
   ownerName!: string;
   @Output() completeToggle = new EventEmitter<null>();
-
-  constructor(private utilService: UtilService) {}
 
   onComplete() {
     this.completeToggle.emit();

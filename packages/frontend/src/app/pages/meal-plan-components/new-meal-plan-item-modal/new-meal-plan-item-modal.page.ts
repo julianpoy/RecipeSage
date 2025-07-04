@@ -1,4 +1,4 @@
-import { Input, Component } from "@angular/core";
+import { Input, Component, inject } from "@angular/core";
 import dayjs from "dayjs";
 import {
   NavController,
@@ -19,21 +19,19 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
   imports: [...SHARED_UI_IMPORTS, SelectMealComponent, SelectRecipeComponent],
 })
 export class NewMealPlanItemModalPage {
+  navCtrl = inject(NavController);
+  modalCtrl = inject(ModalController);
+  recipeService = inject(RecipeService);
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  toastCtrl = inject(ToastController);
+
   @Input() isEditing = false;
   @Input() inputType = "recipe";
   @Input() recipe?: Recipe;
   @Input() title: string = "";
   @Input() meal?: string;
   @Input() scheduledDate = dayjs().format("YYYY-MM-DD");
-
-  constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public toastCtrl: ToastController,
-  ) {}
 
   scheduledDateChange(event: any) {
     this.scheduledDate = dayjs(event.target.value).format("YYYY-MM-DD");

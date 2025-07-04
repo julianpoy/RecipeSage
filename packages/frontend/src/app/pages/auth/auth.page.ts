@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -38,6 +38,20 @@ import { WebsocketService } from "../../services/websocket.service";
   ],
 })
 export class AuthPage {
+  private events = inject(EventService);
+  private translate = inject(TranslateService);
+  private modalCtrl = inject(ModalController);
+  private navCtrl = inject(NavController);
+  private utilService = inject(UtilService);
+  private loadingService = inject(LoadingService);
+  private messagingService = inject(MessagingService);
+  private capabilitiesService = inject(CapabilitiesService);
+  private swCommunicationService = inject(SwCommunicationService);
+  private websocketService = inject(WebsocketService);
+  private alertCtrl = inject(AlertController);
+  private route = inject(ActivatedRoute);
+  private trpcService = inject(TRPCService);
+
   @Input() startWithRegister?: boolean;
 
   showLogin = false;
@@ -54,21 +68,7 @@ export class AuthPage {
 
   revealPassword = false;
 
-  constructor(
-    private events: EventService,
-    private translate: TranslateService,
-    private modalCtrl: ModalController,
-    private navCtrl: NavController,
-    private utilService: UtilService,
-    private loadingService: LoadingService,
-    private messagingService: MessagingService,
-    private capabilitiesService: CapabilitiesService,
-    private swCommunicationService: SwCommunicationService,
-    private websocketService: WebsocketService,
-    private alertCtrl: AlertController,
-    private route: ActivatedRoute,
-    private trpcService: TRPCService,
-  ) {
+  constructor() {
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
     } else {

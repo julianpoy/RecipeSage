@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   ToastController,
@@ -33,6 +33,17 @@ import { SelfhostWarningItemComponent } from "../../../components/selfhost-warni
   ],
 })
 export class ProfilePage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  route = inject(ActivatedRoute);
+  toastCtrl = inject(ToastController);
+  alertCtrl = inject(AlertController);
+  modalCtrl = inject(ModalController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  recipeService = inject(RecipeService);
+  userService = inject(UserService);
+
   defaultBackHref: string = RouteMap.SocialPage.getPath();
   isSelfHost = IS_SELFHOST;
 
@@ -41,18 +52,7 @@ export class ProfilePage {
 
   myProfile?: UserProfile;
 
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public route: ActivatedRoute,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public recipeService: RecipeService,
-    public userService: UserService,
-  ) {
+  constructor() {
     const handle = this.route.snapshot.paramMap.get("handle")?.substring(1);
 
     if (!handle) {

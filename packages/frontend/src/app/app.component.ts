@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   ActivatedRoute,
   Router,
@@ -58,6 +58,27 @@ interface NavPage {
   imports: [...SHARED_UI_IMPORTS, CookingToolbarComponent, NgxLoadingBar],
 })
 export class AppComponent {
+  private translate = inject(TranslateService);
+  private navCtrl = inject(NavController);
+  private route = inject(ActivatedRoute);
+  private trpcService = inject(TRPCService);
+  private router = inject(Router);
+  private platform = inject(Platform);
+  private menuCtrl = inject(MenuController);
+  private events = inject(EventService);
+  private toastCtrl = inject(ToastController);
+  private alertCtrl = inject(AlertController);
+  private utilService = inject(UtilService);
+  private recipeService = inject(RecipeService);
+  private messagingService = inject(MessagingService);
+  private websocketService = inject(WebsocketService);
+  private userService = inject(UserService);
+  private preferencesService = inject(PreferencesService);
+  private featureFlagService = inject(FeatureFlagService);
+  private titleService = inject(Title);
+  cookingToolbarService = inject(CookingToolbarService);
+  private versionCheckService = inject(VersionCheckService);
+
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
 
@@ -82,28 +103,7 @@ export class AppComponent {
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
-  constructor(
-    private translate: TranslateService,
-    private navCtrl: NavController,
-    private route: ActivatedRoute,
-    private trpcService: TRPCService,
-    private router: Router,
-    private platform: Platform,
-    private menuCtrl: MenuController,
-    private events: EventService,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private utilService: UtilService,
-    private recipeService: RecipeService,
-    private messagingService: MessagingService,
-    private websocketService: WebsocketService,
-    private userService: UserService,
-    private preferencesService: PreferencesService,
-    private featureFlagService: FeatureFlagService,
-    private titleService: Title,
-    public cookingToolbarService: CookingToolbarService, // Required by template
-    private versionCheckService: VersionCheckService,
-  ) {
+  constructor() {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
     const language = languagePref || this.utilService.getAppBrowserLang();

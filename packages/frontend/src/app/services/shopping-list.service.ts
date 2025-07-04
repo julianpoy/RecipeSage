@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import { EventService } from "./event.service";
@@ -51,11 +51,9 @@ export interface ShoppingListItem {
   providedIn: "root",
 })
 export class ShoppingListService {
-  constructor(
-    public events: EventService,
-    public utilService: UtilService,
-    public httpService: HttpService,
-  ) {}
+  events = inject(EventService);
+  utilService = inject(UtilService);
+  httpService = inject(HttpService);
 
   fetch(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<ShoppingLists>({

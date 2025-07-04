@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -20,6 +20,16 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ManageLabelModalPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  loadingService = inject(LoadingService);
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  alertCtrl = inject(AlertController);
+  utilService = inject(UtilService);
+  labelService = inject(LabelService);
+  recipeService = inject(RecipeService);
+
   @Input({
     required: true,
   })
@@ -27,17 +37,9 @@ export class ManageLabelModalPage {
 
   createdAt?: string;
 
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public loadingService: LoadingService,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public alertCtrl: AlertController,
-    public utilService: UtilService,
-    public labelService: LabelService,
-    public recipeService: RecipeService,
-  ) {
+  constructor() {
+    const utilService = this.utilService;
+
     setTimeout(() => {
       this.createdAt = utilService.formatDate(this.label.createdAt);
     });

@@ -1,5 +1,5 @@
 import { TRPCClientError } from "@trpc/client";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {
   ErrorHandlers,
   HttpErrorHandlerService,
@@ -10,9 +10,9 @@ import { trpcClient } from "../utils/trpcClient";
   providedIn: "root",
 })
 export class TRPCService {
-  public trpc = trpcClient;
+  private httpErrorHandler = inject(HttpErrorHandlerService);
 
-  constructor(private httpErrorHandler: HttpErrorHandlerService) {}
+  public trpc = trpcClient;
 
   async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
     return result.catch((e) => {

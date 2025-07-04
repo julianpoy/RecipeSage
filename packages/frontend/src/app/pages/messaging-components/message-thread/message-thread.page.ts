@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, ViewChild, ChangeDetectorRef, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, ToastController } from "@ionic/angular";
 
@@ -19,6 +19,17 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class MessageThreadPage {
+  private changeDetector = inject(ChangeDetectorRef);
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  route = inject(ActivatedRoute);
+  events = inject(EventService);
+  toastCtrl = inject(ToastController);
+  loadingService = inject(LoadingService);
+  websocketService = inject(WebsocketService);
+  utilService = inject(UtilService);
+  messagingService = inject(MessagingService);
+
   defaultBackHref: string = RouteMap.MessagesPage.getPath();
 
   @ViewChild("content", { static: true }) content: any;
@@ -39,18 +50,9 @@ export class MessageThreadPage {
 
   selectedChatIdx = -1;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public route: ActivatedRoute,
-    public events: EventService,
-    public toastCtrl: ToastController,
-    public loadingService: LoadingService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public messagingService: MessagingService,
-  ) {
+  constructor() {
+    const events = this.events;
+
     const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
     if (!otherUserId) {
       this.navCtrl.navigateBack(this.defaultBackHref);

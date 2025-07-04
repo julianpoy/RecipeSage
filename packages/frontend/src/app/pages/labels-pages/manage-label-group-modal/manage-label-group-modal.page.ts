@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -26,6 +26,17 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS, SelectMultipleItemsComponent],
 })
 export class ManageLabelGroupModalPage {
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private loadingService = inject(LoadingService);
+  private toastCtrl = inject(ToastController);
+  private modalCtrl = inject(ModalController);
+  private alertCtrl = inject(AlertController);
+  private utilService = inject(UtilService);
+  private labelService = inject(LabelService);
+  private recipeService = inject(RecipeService);
+  private trpcService = inject(TRPCService);
+
   @Input({
     required: true,
   })
@@ -37,19 +48,6 @@ export class ManageLabelGroupModalPage {
   selectedLabels: LabelSummary[] = [];
 
   warnWhenNotPresent: boolean = false;
-
-  constructor(
-    private navCtrl: NavController,
-    private translate: TranslateService,
-    private loadingService: LoadingService,
-    private toastCtrl: ToastController,
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
-    private utilService: UtilService,
-    private labelService: LabelService,
-    private recipeService: RecipeService,
-    private trpcService: TRPCService,
-  ) {}
 
   async ionViewWillEnter() {
     this.title = this.labelGroup.title;

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Label, LabelService } from "~/services/label.service";
@@ -12,6 +12,12 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectLabelComponent {
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  labelService = inject(LabelService);
+  toastCtrl = inject(ToastController);
+  navCtrl = inject(NavController);
+
   searchText = "";
 
   _selectedLabel?: Label;
@@ -30,13 +36,7 @@ export class SelectLabelComponent {
   labels: Label[] = [];
   results: Label[] = [];
 
-  constructor(
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public labelService: LabelService,
-    public toastCtrl: ToastController,
-    public navCtrl: NavController,
-  ) {
+  constructor() {
     this.load();
   }
 

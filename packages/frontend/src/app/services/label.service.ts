@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import { EventName, EventService } from "./event.service";
@@ -19,12 +19,10 @@ export interface Label {
   providedIn: "root",
 })
 export class LabelService {
-  constructor(
-    public events: EventService,
-    public utilService: UtilService,
-    public httpService: HttpService,
-    public httpErrorHandlerService: HttpErrorHandlerService,
-  ) {}
+  events = inject(EventService);
+  utilService = inject(UtilService);
+  httpService = inject(HttpService);
+  httpErrorHandlerService = inject(HttpErrorHandlerService);
 
   fetch(
     params?: {

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -30,6 +30,13 @@ const BILLING_PORTAL_URL =
   ],
 })
 export class ContributePage {
+  capabilitiesService = inject(CapabilitiesService);
+  private trpcService = inject(TRPCService);
+  private featureFlagService = inject(FeatureFlagService);
+  private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
+  private toastCtrl = inject(ToastController);
+
   billingPortalUrl = BILLING_PORTAL_URL;
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
@@ -41,14 +48,7 @@ export class ContributePage {
   enableAssistant =
     this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
 
-  constructor(
-    public capabilitiesService: CapabilitiesService,
-    private trpcService: TRPCService,
-    private featureFlagService: FeatureFlagService,
-    private translate: TranslateService,
-    private utilService: UtilService,
-    private toastCtrl: ToastController,
-  ) {
+  constructor() {
     if (IS_SELFHOST) {
       window.alert(
         "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",

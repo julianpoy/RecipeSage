@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { UtilService } from "./util.service";
 import { GRIP_WS_URL } from "../../environments/environment";
 import { trpcClient } from "../utils/trpcClient";
@@ -8,6 +8,8 @@ import { TRPCClientError } from "@trpc/client";
   providedIn: "root",
 })
 export class WebsocketService {
+  utilService = inject(UtilService);
+
   connection: WebSocket | undefined;
   reconnectTimeout: NodeJS.Timeout | undefined;
 
@@ -19,7 +21,7 @@ export class WebsocketService {
     }[]
   > = {};
 
-  constructor(public utilService: UtilService) {
+  constructor() {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
