@@ -100,7 +100,7 @@ app.use(
     verify: (req, res, buf) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;
-      if (url.startsWith("/payments/stripe/webhooks")) {
+      if (url.startsWith("/payments/stripe/webhook")) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (req as any).rawBody = buf.toString();
       }

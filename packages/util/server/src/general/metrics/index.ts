@@ -114,6 +114,12 @@ export const metrics = {
     help: "Image was converted to text",
     labelNames: [],
   }),
+
+  stripeWebhookSuccess: new client.Counter({
+    name: "stripe_webhook_success",
+    help: "A webhook was successfully handled",
+    labelNames: ["eventType"],
+  }),
 };
 
 // Collect default system metrics (such as memory/cpu usage)

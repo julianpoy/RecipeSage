@@ -4,7 +4,7 @@ import {
   capabilitiesForUser as _capabilitiesForUser,
   capabilitiesForSubscription as _capabilitiesForSubscription,
   userHasCapability as _userHasCapability,
-  SubscriptionModels as _SubscriptionModels,
+  SubscriptionModelName as _SubscriptionModels,
   SUBSCRIPTION_MODELS,
 } from "@recipesage/util/server/capabilities";
 import { Capabilities as _Capabilities } from "@recipesage/util/shared";
@@ -30,10 +30,9 @@ export const extend = async (userId, subscriptionName, transaction) => {
     transaction,
   });
   if (existingSubscription) {
-    const expires = moment(existingSubscription.expires || undefined).add(
-      renewalLength,
-      "days",
-    );
+    const expires = moment
+      .max([moment(existingSubscription.expires || undefined), moment()])
+      .add(renewalLength, "days");
 
     await UserSubscription.update(
       { expires },

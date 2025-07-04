@@ -309,6 +309,18 @@ model ShoppingList {
   @@map("ShoppingLists")
 }
 
+model StripeEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  stripeId  String   @unique @db.VarChar(255)
+  userId    String?  @db.Uuid
+  blob      Json
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("StripeEvents")
+}
+
 model StripePayment {
   id              String   @id @default(uuid()) @db.Uuid
   userId          String?  @db.Uuid
@@ -387,7 +399,8 @@ model User {
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
   profileImages             UserProfileImage[]
-  Job                       Job[]
+  jobs                      Job[]
+  stripeEvents              StripeEvent[]
 
   @@map("Users")
 }
