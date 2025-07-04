@@ -150,5 +150,17 @@
     "pages.homepopover.options.selectMultipleRecipes": "複数のレシピを選択",
     "pages.homepopover.labelShared": "共有",
     "pages.homepopover.labelSharedCollection": "他のユーザーが所有するラベルには「共有」と表示されます",
-    "pages.homepopover.labelNull": "ラベルがありません。レシピ詳細ページでラベルを作成できます。"
+    "pages.homepopover.labelNull": "ラベルがありません。レシピ詳細ページでラベルを作成できます。",
+    "components.mealCalendar.breakfast": "朝食",
+    "components.messaging.notificationPermission.message": "連絡先からメッセージが送信された際に通知するためには、通知アクセスが必要です。このポップアップを閉じた後、通知アクセスを有効にするよう求められます。",
+    "components.multiImageUpload.add": "画像を追加",
+    "components.multiImageUpload.imageLimit": "画像は10枚まで添付できます。",
+    "components.multiImageUpload.imageError": "選択した画像の処理にエラーが発生しました。",
+    "components.messaging.notificationPermission.header": "通知権限が必要です",
+    "components.selectCollaborators.title": "共同作業者",
+    "components.mealCalendar.lunch": "昼食",
+    "components.mealCalendar.dinner": "夕食",
+    "components.mealCalendar.snack": "軽食",
+    "components.mealCalendar.other": "その他",
+    "components.selectCollaborators.placeholder": "メールアドレスによる共同作業者の追加"
 }
