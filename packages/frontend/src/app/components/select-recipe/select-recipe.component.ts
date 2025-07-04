@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Recipe, RecipeService } from "~/services/recipe.service";
@@ -12,6 +12,12 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectRecipeComponent {
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  recipeService = inject(RecipeService);
+  toastCtrl = inject(ToastController);
+  navCtrl = inject(NavController);
+
   searchTimeout?: NodeJS.Timeout;
   searchText = "";
   searching = false;
@@ -31,14 +37,6 @@ export class SelectRecipeComponent {
   @Output() selectedRecipeChange = new EventEmitter();
 
   recipes: Recipe[] = [];
-
-  constructor(
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public recipeService: RecipeService,
-    public toastCtrl: ToastController,
-    public navCtrl: NavController,
-  ) {}
 
   async search(text: string) {
     const loading = this.loadingService.start();

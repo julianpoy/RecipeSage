@@ -6,6 +6,7 @@ import {
   ElementRef,
   ViewChild,
   type AfterViewInit,
+  inject,
 } from "@angular/core";
 import { TRPCService } from "../../services/trpc.service";
 import {
@@ -26,6 +27,8 @@ const getGoogleRef = () => {
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SignInWithGoogleComponent implements AfterViewInit {
+  private trpcService = inject(TRPCService);
+
   // Can be use to hide the button and only use for prompting
   @Input() showButton = true;
   @Input() autoPrompt = false;
@@ -34,8 +37,6 @@ export class SignInWithGoogleComponent implements AfterViewInit {
 
   @ViewChild("googleButtonContainer", { static: true })
   googleButtonContainer!: ElementRef<HTMLDivElement>;
-
-  constructor(private trpcService: TRPCService) {}
 
   ngAfterViewInit() {
     if (IS_SELFHOST) return;

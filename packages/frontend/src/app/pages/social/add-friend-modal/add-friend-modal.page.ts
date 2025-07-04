@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -20,17 +20,15 @@ import { SelectUserComponent } from "../../../components/select-user/select-user
   imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class AddFriendModalPage {
-  recipientId?: string;
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private toastCtrl = inject(ToastController);
+  private alertCtrl = inject(AlertController);
+  private loadingService = inject(LoadingService);
+  private userService = inject(UserService);
+  private modalCtrl = inject(ModalController);
 
-  constructor(
-    private navCtrl: NavController,
-    private translate: TranslateService,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private loadingService: LoadingService,
-    private userService: UserService,
-    private modalCtrl: ModalController,
-  ) {}
+  recipientId?: string;
 
   cancel() {
     this.modalCtrl.dismiss();

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -38,6 +38,18 @@ import { MultiImageUploadComponent } from "../../../components/multi-image-uploa
   ],
 })
 export class MyProfilePage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  toastCtrl = inject(ToastController);
+  alertCtrl = inject(AlertController);
+  modalCtrl = inject(ModalController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  unsavedChangesService = inject(UnsavedChangesService);
+  imageService = inject(ImageService);
+  recipeService = inject(RecipeService);
+  userService = inject(UserService);
+
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
   revealNameInput: boolean = false;
@@ -52,19 +64,7 @@ export class MyProfilePage {
 
   updatedProfileFields: Partial<UserProfile> = {};
 
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public unsavedChangesService: UnsavedChangesService,
-    public imageService: ImageService,
-    public recipeService: RecipeService,
-    public userService: UserService,
-  ) {
+  constructor() {
     this.load().then(() => {
       this.checkProfileEnabled();
     });

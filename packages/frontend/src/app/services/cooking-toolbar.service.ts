@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 
 import {
@@ -19,9 +19,11 @@ export interface PinnedRecipe {
   providedIn: "root",
 })
 export class CookingToolbarService {
+  private quickTutorialService = inject(QuickTutorialService);
+
   pinnedRecipes: PinnedRecipe[] = [];
 
-  constructor(private quickTutorialService: QuickTutorialService) {
+  constructor() {
     try {
       const savedValue = localStorage.getItem(COOKING_TOOLBAR_LOCALSTORAGE_KEY);
       if (savedValue) {

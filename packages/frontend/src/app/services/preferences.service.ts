@@ -1,4 +1,4 @@
-import { Injectable, Injector } from "@angular/core";
+import { Injectable, Injector, inject } from "@angular/core";
 import {
   AppPreferenceTypes,
   AppTheme,
@@ -26,6 +26,10 @@ const PREFERENCE_LOCALSTORAGE_KEY = "preferences";
   providedIn: "root",
 })
 export class PreferencesService {
+  private trpcService = inject(TRPCService);
+  private injector = inject(Injector);
+  private translate = inject(TranslateService);
+
   // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
     preferencesVersion: 0,
@@ -68,11 +72,7 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
   };
 
-  constructor(
-    private trpcService: TRPCService,
-    private injector: Injector,
-    private translate: TranslateService,
-  ) {
+  constructor() {
     this.load();
   }
 

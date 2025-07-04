@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "~/services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -14,19 +14,17 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportPepperplatePage {
+  private loadingService = inject(LoadingService);
+  private importService = inject(ImportService);
+  private utilService = inject(UtilService);
+  private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
+  private navCtrl = inject(NavController);
+
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   username: string = "";
   password: string = "";
-
-  constructor(
-    private loadingService: LoadingService,
-    private importService: ImportService,
-    private utilService: UtilService,
-    private alertCtrl: AlertController,
-    private translate: TranslateService,
-    private navCtrl: NavController,
-  ) {}
 
   async alertIncorrectCredentials() {
     const header = await this.translate

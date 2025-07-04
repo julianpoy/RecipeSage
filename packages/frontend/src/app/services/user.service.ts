@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import {
@@ -75,7 +75,7 @@ export interface Capabilities {
   providedIn: "root",
 })
 export class UserService {
-  constructor(private httpService: HttpService) {}
+  private httpService = inject(HttpService);
 
   register(
     payload: {

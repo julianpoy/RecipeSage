@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Label, LabelService } from "~/services/label.service";
@@ -19,6 +19,12 @@ export interface SelectableItem {
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectMultipleItemsComponent<T extends SelectableItem> {
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  labelService = inject(LabelService);
+  toastCtrl = inject(ToastController);
+  navCtrl = inject(NavController);
+
   searchText = "";
 
   @Input() enableCreateNew = false;
@@ -57,14 +63,6 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
 
   searchFocused = false;
   searchFocusTimeout: NodeJS.Timeout | null = null;
-
-  constructor(
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public labelService: LabelService,
-    public toastCtrl: ToastController,
-    public navCtrl: NavController,
-  ) {}
 
   populateInitialResults() {
     this.searchResults = this.getUnselectedItems();

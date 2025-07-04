@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -22,17 +22,17 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class MealPlansPage {
+  private navCtrl = inject(NavController);
+  private modalCtrl = inject(ModalController);
+  private trpcService = inject(TRPCService);
+  private websocketService = inject(WebsocketService);
+  private loadingService = inject(LoadingService);
+  private utilService = inject(UtilService);
+
   me?: UserPublic;
   mealPlans?: MealPlanSummary[] = [];
 
-  constructor(
-    private navCtrl: NavController,
-    private modalCtrl: ModalController,
-    private trpcService: TRPCService,
-    private websocketService: WebsocketService,
-    private loadingService: LoadingService,
-    private utilService: UtilService,
-  ) {
+  constructor() {
     this.websocketService.register(
       "mealPlan:received",
       () => {

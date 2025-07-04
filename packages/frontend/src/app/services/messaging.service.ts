@@ -7,7 +7,7 @@ import {
   onMessage,
 } from "firebase/messaging";
 
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { AlertController } from "@ionic/angular";
 
@@ -69,19 +69,19 @@ export interface MessageThread {
   providedIn: "root",
 })
 export class MessagingService {
+  private events = inject(EventService);
+  private translate = inject(TranslateService);
+  private httpService = inject(HttpService);
+  private userService = inject(UserService);
+  private alertCtrl = inject(AlertController);
+
   private messaging: Messaging | null = null;
   private fcmToken: any;
 
   private _isFCMSupported: boolean = false;
   private isFCMSupportedPromise: Promise<boolean> | undefined;
 
-  constructor(
-    private events: EventService,
-    private translate: TranslateService,
-    private httpService: HttpService,
-    private userService: UserService,
-    private alertCtrl: AlertController,
-  ) {
+  constructor() {
     this.updateFCMSupported();
 
     const onSWRegsitration = async () => {

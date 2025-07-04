@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { API_BASE_URL } from "../../environments/environment";
@@ -43,12 +43,12 @@ const REQUEST_TIMEOUT_FALLBACK = 10 * 60 * 1000; // 10 minutes
   providedIn: "root",
 })
 export class HttpService {
+  private httpErrorHandlerService = inject(HttpErrorHandlerService);
+  private utilService = inject(UtilService);
+
   axiosClient: AxiosInstance;
 
-  constructor(
-    private httpErrorHandlerService: HttpErrorHandlerService,
-    private utilService: UtilService,
-  ) {
+  constructor() {
     this.axiosClient = axios.create({
       timeout: REQUEST_TIMEOUT_FALLBACK,
       headers: {

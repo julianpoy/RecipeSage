@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import {
   AppTheme,
@@ -324,9 +324,11 @@ const rtlLanguages = [SupportedLanguages.HE];
   providedIn: "root",
 })
 export class UtilService {
+  private translate = inject(TranslateService);
+
   memoizedFormattedDates: Map<string, string> = new Map();
 
-  constructor(private translate: TranslateService) {
+  constructor() {
     setInterval(
       () => {
         this.memoizedFormattedDates.clear();

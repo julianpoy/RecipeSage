@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -38,6 +38,22 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SettingsPage {
+  private events = inject(EventService);
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private alertCtrl = inject(AlertController);
+  private modalCtrl = inject(ModalController);
+  private utilService = inject(UtilService);
+  private swCommunicationService = inject(SwCommunicationService);
+  private preferencesService = inject(PreferencesService);
+  private featureFlagService = inject(FeatureFlagService);
+  private quickTutorialService = inject(QuickTutorialService);
+  private messagingService = inject(MessagingService);
+  private userService = inject(UserService);
+  private recipeCompletionTrackerService = inject(
+    RecipeCompletionTrackerService,
+  );
+
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
@@ -54,21 +70,7 @@ export class SettingsPage {
   fontSize = this.preferences[GlobalPreferenceKey.FontSize];
   isLoggedIn: boolean = false;
 
-  constructor(
-    private events: EventService,
-    private navCtrl: NavController,
-    private translate: TranslateService,
-    private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
-    private utilService: UtilService,
-    private swCommunicationService: SwCommunicationService,
-    private preferencesService: PreferencesService,
-    private featureFlagService: FeatureFlagService,
-    private quickTutorialService: QuickTutorialService,
-    private messagingService: MessagingService,
-    private userService: UserService,
-    private recipeCompletionTrackerService: RecipeCompletionTrackerService,
-  ) {
+  constructor() {
     try {
       this.showSplitPaneOption = screen.width >= 1200;
     } catch (e) {

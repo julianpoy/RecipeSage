@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   ModalController,
   ToastController,
@@ -21,19 +21,17 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListIgnoreModalPage {
-  preferenceKey = ShoppingListPreferenceKey;
+  modalCtrl = inject(ModalController);
+  navCtrl = inject(NavController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  shoppingListService = inject(ShoppingListService);
+  messagingService = inject(MessagingService);
+  userService = inject(UserService);
+  toastCtrl = inject(ToastController);
+  preferencesService = inject(PreferencesService);
 
-  constructor(
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public messagingService: MessagingService,
-    public userService: UserService,
-    public toastCtrl: ToastController,
-    public preferencesService: PreferencesService,
-  ) {}
+  preferenceKey = ShoppingListPreferenceKey;
 
   async save() {
     this.preferencesService.save();

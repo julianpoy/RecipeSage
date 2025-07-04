@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "~/services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -15,6 +15,12 @@ const MAX_FILE_SIZE_MB = 1000;
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportLivingcookbookPage {
+  private importService = inject(ImportService);
+  private utilService = inject(UtilService);
+  private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
+  private navCtrl = inject(NavController);
+
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   file?: File;
@@ -25,14 +31,6 @@ export class ImportLivingcookbookPage {
     includeStockRecipes: false,
     includeTechniques: false,
   };
-
-  constructor(
-    private importService: ImportService,
-    private utilService: UtilService,
-    private alertCtrl: AlertController,
-    private translate: TranslateService,
-    private navCtrl: NavController,
-  ) {}
 
   setFile(event: any) {
     const files = (event.srcElement || event.target).files;

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -31,6 +31,15 @@ import { RecipePreviewComponent } from "../../components/recipe-preview/recipe-p
   ],
 })
 export class ShareModalPage {
+  navCtrl = inject(NavController);
+  toastCtrl = inject(ToastController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  messagingService = inject(MessagingService);
+  recipeService = inject(RecipeService);
+  userService = inject(UserService);
+  modalCtrl = inject(ModalController);
+
   @Input({
     required: true,
   })
@@ -60,16 +69,7 @@ export class ShareModalPage {
   recipeEmbedURL?: string;
   recipeEmbedCode?: string;
 
-  constructor(
-    public navCtrl: NavController,
-    public toastCtrl: ToastController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public messagingService: MessagingService,
-    public recipeService: RecipeService,
-    public userService: UserService,
-    public modalCtrl: ModalController,
-  ) {
+  constructor() {
     setTimeout(() => {
       this.recipeURL =
         `${window.location.protocol}//${window.location.host}` +

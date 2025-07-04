@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { AlertController } from "@ionic/angular";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
@@ -7,11 +7,9 @@ import { HttpService } from "./http.service";
   providedIn: "root",
 })
 export class VersionCheckService {
-  constructor(
-    private utilService: UtilService,
-    private httpService: HttpService,
-    private alertCtrl: AlertController,
-  ) {}
+  private utilService = inject(UtilService);
+  private httpService = inject(HttpService);
+  private alertCtrl = inject(AlertController);
 
   async checkVersion() {
     const version = (window as any).version;

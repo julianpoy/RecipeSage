@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import {
@@ -47,6 +47,19 @@ const TILE_PADD = 20;
   ],
 })
 export class HomePage {
+  private navCtrl = inject(NavController);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private events = inject(EventService);
+  private translate = inject(TranslateService);
+  private popoverCtrl = inject(PopoverController);
+  private loadingService = inject(LoadingService);
+  private alertCtrl = inject(AlertController);
+  private preferencesService = inject(PreferencesService);
+  private websocketService = inject(WebsocketService);
+  private trpcService = inject(TRPCService);
+  private utilService = inject(UtilService);
+
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   showBack: boolean = false;
 
@@ -121,20 +134,7 @@ export class HomePage {
     },
   });
 
-  constructor(
-    private navCtrl: NavController,
-    private route: ActivatedRoute,
-    private router: Router,
-    private events: EventService,
-    private translate: TranslateService,
-    private popoverCtrl: PopoverController,
-    private loadingService: LoadingService,
-    private alertCtrl: AlertController,
-    private preferencesService: PreferencesService,
-    private websocketService: WebsocketService,
-    private trpcService: TRPCService,
-    private utilService: UtilService,
-  ) {
+  constructor() {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
 

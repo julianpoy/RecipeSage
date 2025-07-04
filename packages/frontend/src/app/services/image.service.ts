@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { HttpService } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
@@ -12,7 +12,7 @@ export interface Image {
   providedIn: "root",
 })
 export class ImageService {
-  constructor(private httpService: HttpService) {}
+  private httpService = inject(HttpService);
 
   create(file: File, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
