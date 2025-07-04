@@ -8,7 +8,7 @@ const mealNameToI18n = {
   [MealName.Breakfast]: "components.mealCalendar.breakfast",
   [MealName.Lunch]: "components.mealCalendar.lunch",
   [MealName.Dinner]: "components.mealCalendar.dinner",
-  [MealName.Snacks]: "components.mealCalendar.snacks",
+  [MealName.Snacks]: "components.mealCalendar.snack",
   [MealName.Other]: "components.mealCalendar.other",
 } satisfies Record<MealName, string>;
 
