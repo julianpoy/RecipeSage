@@ -37,7 +37,7 @@
         >
           <div
             *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
-            class="shopping-list-item"
+            class="shopping-list-group"
           >
             <shopping-list-group
               [group]="group"
@@ -51,30 +51,47 @@
           </div>
         </collapsible-category>
       </div>
-    </div>
-
-    <ion-reorder-group disabled="!editMode" (ionItemReorder)="drop($event)">
-      <collapsible-category
-        *ngFor="let categoryTitle of categoryTitles"
-        [categoryTitle]="categoryTitle"
-        [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
-        (toggleCollapse)="onToggleCollapse($event)"
-      >
-        <ion-reorder
-          *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
-          class="draggable-shopping-list-group"
+      <div *ngIf="editMode" class="drag-drop-container">
+        <div
+          *ngFor="let categoryTitle of categoryTitles"
+          class="drop-zone-category"
+          [attr.data-category]="categoryTitle"
+          (drop)="onDrop($event, categoryTitle)"
+          (dragover)="onDragOver($event)"
+          (dragenter)="onDragEnter($event)"
+          (dragleave)="onDragLeave($event)"
         >
-          <draggable-shopping-list-group
-            [group]="group"
+          <collapsible-category
             [categoryTitle]="categoryTitle"
-            [groupTitleExpanded]="groupTitleExpanded"
-            [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
-            [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-            [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
-          ></draggable-shopping-list-group>
-        </ion-reorder>
-      </collapsible-category>
-    </ion-reorder-group>
+            [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+            (toggleCollapse)="onToggleCollapse($event)"
+          >
+            <div
+              *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
+              class="draggable-shopping-list-group"
+              draggable="true"
+              [attr.data-item-id]="group.id"
+              [attr.data-source-category]="categoryTitle"
+              (dragstart)="onDragStart($event, group, categoryTitle)"
+              (dragend)="onDragEnd($event)"
+            >
+              <ion-icon
+                name="reorder-three-outline"
+                class="drag-handle"
+              ></ion-icon>
+              <draggable-shopping-list-group
+                [group]="group"
+                [categoryTitle]="categoryTitle"
+                [groupTitleExpanded]="groupTitleExpanded"
+                [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+                [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+                [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+              ></draggable-shopping-list-group>
+            </div>
+          </collapsible-category>
+        </div>
+      </div>
+    </div>
     <div
       *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]"
     >
@@ -114,26 +131,44 @@
           </div>
         </collapsible-category>
       </div>
-      <ion-reorder-group disabled="!editMode" (ionItemReorder)="drop($event)">
-        <collapsible-category
+      <div *ngIf="editMode" class="drag-drop-container">
+        <div
           *ngFor="let categoryTitle of categoryTitles"
-          [categoryTitle]="categoryTitle"
-          [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
-          (toggleCollapse)="onToggleCollapse($event)"
+          class="drop-zone-category"
+          [attr.data-category]="categoryTitle"
+          (drop)="onDrop($event, categoryTitle)"
+          (dragover)="onDragOver($event)"
+          (dragenter)="onDragEnter($event)"
+          (dragleave)="onDragLeave($event)"
         >
-          <ion-reorder
-            *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
-            class="draggable-shopping-list-item"
+          <collapsible-category
+            [categoryTitle]="categoryTitle"
+            [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+            (toggleCollapse)="onToggleCollapse($event)"
           >
-            <draggable-shopping-list-item
-              [title]="item.title"
-              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
-            ></draggable-shopping-list-item>
-          </ion-reorder>
-        </collapsible-category>
-      </ion-reorder-group>
+            <div
+              *ngFor="let item of itemsByCategoryTitle[categoryTitle]; trackBy: trackByItemId"
+              class="draggable-shopping-list-item"
+              draggable="true"
+              [attr.data-item-id]="item.id"
+              [attr.data-source-category]="categoryTitle"
+              (dragstart)="onDragStart($event, item, categoryTitle)"
+              (dragend)="onDragEnd($event)"
+            >
+              <ion-icon
+                name="reorder-three-outline"
+                class="drag-handle"
+              ></ion-icon>
+              <draggable-shopping-list-item
+                [title]="item.title"
+                [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+                [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+                [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+              ></draggable-shopping-list-item>
+            </div>
+          </collapsible-category>
+        </div>
+      </div>
       <div
         *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
       >

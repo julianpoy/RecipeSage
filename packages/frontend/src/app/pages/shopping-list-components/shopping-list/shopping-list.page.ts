@@ -8,16 +8,15 @@ import {
   AlertController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import {
-  CdkDropList,
-  CdkDragDrop,
-  DragDropModule,
-} from "@angular/cdk/drag-drop";
+
+import { addIcons } from "ionicons";
+import { reorderThreeOutline } from "ionicons/icons";
 
 import { LoadingService } from "~/services/loading.service";
-import {
+import { ShoppingListService } from "~/services/shopping-list.service";
+
+import type {
   ShoppingList,
-  ShoppingListService,
   ShoppingListItem,
 } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
@@ -30,7 +29,9 @@ import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/ne
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { CollapsibleCategoryComponent } from "../../../components/collapsable-category-component/collapsible-category.component";
 import { DraggableShoppingListItemComponent } from "../../../components/draggable-shopping-list-item/draggable-shopping-list-item.component";
+import { DraggableShoppingListGroupComponent } from "../../../components/draggable-shopping-list-group/draggable-shopping-list-group.component";
 import { ShoppingListItemComponent } from "../../../components/shopping-list-item/shopping-list-item.component";
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
@@ -42,16 +43,15 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [
     ...SHARED_UI_IMPORTS,
     DraggableShoppingListItemComponent,
+    DraggableShoppingListGroupComponent,
     ShoppingListItemComponent,
     ShoppingListGroupComponent,
     NullStateComponent,
-    DragDropModule,
+    CollapsibleCategoryComponent,
   ],
 })
 export class ShoppingListPage {
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
-
-  @ViewChildren(CdkDropList) dropLists!: QueryList<CdkDropList>;
 
   shoppingListId: string;
   list?: ShoppingList;
@@ -74,6 +74,10 @@ export class ShoppingListPage {
   initialLoadComplete = false;
   editMode = false;
   reference = "0";
+
+  draggedItem: any = null;
+  draggedFromCategory: string = "";
+  dragOverCategory: string = "";
 
   constructor(
     public navCtrl: NavController,
@@ -111,6 +115,9 @@ export class ShoppingListPage {
       },
       this,
     );
+    addIcons({
+      "reorder-three-outline": reorderThreeOutline,
+    });
   }
 
   ionViewWillEnter() {
@@ -379,9 +386,6 @@ export class ShoppingListPage {
 
     if (data && data.editMode !== undefined) {
       this.editMode = data.editMode;
-      if (this.editMode) {
-        this.setupDropListConnections();
-      }
     }
 
     const loading = this.loadingService.start();
@@ -395,36 +399,126 @@ export class ShoppingListPage {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
   }
 
-  setupDropListConnections() {
-    if (!this.dropLists || this.dropLists.length === 0) {
-      console.warn("No drop lists found.");
+  // add track method to improve performance
+  trackByItemId(index: number, item: any): any {
+    return item.id;
+  }
+
+  onDragStart(event: DragEvent, item: any, categoryTitle: string): void {
+    this.draggedItem = item;
+    this.draggedFromCategory = categoryTitle;
+    event.dataTransfer!.setData(
+      "text/plain",
+      JSON.stringify({
+        itemId: item.id,
+        sourceCategory: categoryTitle,
+      }),
+    );
+
+    event.dataTransfer!.effectAllowed = "move";
+
+    const element = event.target as HTMLElement;
+    element.classList.add("dragging");
+  }
+
+  onDragEnd(event: DragEvent): void {
+    // Clean up visual feedback
+    const element = event.target as HTMLElement;
+    element.classList.remove("dragging");
+
+    // Clear drag over effects
+    document.querySelectorAll(".drag-over").forEach((el) => {
+      el.classList.remove("drag-over");
+    });
+
+    this.draggedItem = null;
+    this.draggedFromCategory = "";
+    this.dragOverCategory = "";
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault(); // Allow drop
+    event.dataTransfer!.dropEffect = "move";
+  }
+
+  onDragEnter(event: DragEvent): void {
+    event.preventDefault();
+    const categoryElement = event.currentTarget as HTMLElement;
+    const targetCategory = categoryElement.getAttribute("data-category");
+
+    if (targetCategory && targetCategory !== this.draggedFromCategory) {
+      categoryElement.classList.add("drag-over");
+      this.dragOverCategory = targetCategory;
+    }
+  }
+
+  onDragLeave(event: DragEvent): void {
+    const categoryElement = event.currentTarget as HTMLElement;
+    const rect = categoryElement.getBoundingClientRect();
+    const x = event.clientX;
+    const y = event.clientY;
+
+    // Only remove drag-over if we're actually leaving the element
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      categoryElement.classList.remove("drag-over");
+    }
+  }
+
+  onDrop(event: DragEvent, targetCategory: string): void {
+    event.preventDefault();
+
+    // Remove visual feedback
+    const categoryElement = event.currentTarget as HTMLElement;
+    categoryElement.classList.remove("drag-over");
+
+    // Get drag data
+    const dragData = JSON.parse(event.dataTransfer!.getData("text/plain"));
+    const sourceCategory = dragData.sourceCategory;
+    const itemId = dragData.itemId;
+
+    // Don't do anything if dropped in same category
+    if (sourceCategory === targetCategory) {
       return;
     }
 
-    const dropListArray = this.dropLists.toArray();
+    // Find the item
+    const item = this.itemsByCategoryTitle[sourceCategory].find(
+      (i: any) => i.id === itemId,
+    );
+    if (!item) {
+      return;
+    }
 
-    this.dropLists.forEach((dropList) => {
-      // Connect each list to all others
-      dropList.connectedTo = dropListArray.filter((list) => list !== dropList);
-    });
+    // Move item between categories
+    this.moveItemBetweenCategories(item, sourceCategory, targetCategory);
   }
 
-  drop(event: CdkDragDrop<any>) {
-    const fromCategory =
-      event.previousContainer.element.nativeElement.dataset.categoryTitle;
-    const toCategory =
-      event.container.element.nativeElement.dataset.categoryTitle;
-
-    if (fromCategory && toCategory && fromCategory !== toCategory) {
-      const fromCategoryItems =
-        this.itemsByCategoryTitle[fromCategory as string];
-      const toCategoryItems =
-        this.itemsByCategoryTitle[toCategory as string] || [];
-      const draggedItem = fromCategoryItems[event.previousIndex];
-      draggedItem.categoryTitle = toCategory;
-      this.saveChanges(draggedItem);
-      this.setupDropListConnections();
+  moveItemBetweenCategories(
+    item: any,
+    fromCategory: string,
+    toCategory: string,
+  ): void {
+    // Remove from source category
+    const fromIndex = this.itemsByCategoryTitle[fromCategory].findIndex(
+      (i: any) => i.id === item.id,
+    );
+    if (fromIndex > -1) {
+      this.itemsByCategoryTitle[fromCategory].splice(fromIndex, 1);
     }
+
+    // Add to target category
+    if (!this.itemsByCategoryTitle[toCategory]) {
+      this.itemsByCategoryTitle[toCategory] = [];
+    }
+    this.itemsByCategoryTitle[toCategory].push(item);
+
+    item.categoryTitle = toCategory;
+
+    // Call your existing update logic here
+    this.updateItemArrays();
+
+    // Optionally trigger save/sync
+    this.saveChanges(item);
   }
 
   updateItemArrays() {

@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "collapsible-category",
   templateUrl: "./collapsible-category.component.html",
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class CollapsibleCategoryComponent {
   @Input() categoryTitle: string = "";
