@@ -1,0 +1,17 @@
+<ion-item class="draggable-shopping-list-item">
+  <div class="ion-checkbox-label ion-text-wrap">
+    {{ title }}
+    <p *ngIf="recipeTitle">
+      {{ "components.shoppingListItem.recipe" | translate }}
+      <span>{{ recipeTitle }}</span>
+    </p>
+    <p *ngIf="createdAt">
+      {{ "components.shoppingListItem.added" | translate }}
+      <span>{{ formatItemCreationDate(createdAt) }}</span>
+    </p>
+    <p *ngIf="ownerName">
+      {{ "components.shoppingListItem.addedBy" | translate }}
+      <span>{{ ownerName }}</span>
+    </p>
+  </div>
+</ion-item>
