@@ -87,15 +87,11 @@ router.post(
           stripeEmail,
         );
 
-        const amountPaid = session.display_items
-          .map((item) => item.amount)
-          .reduce((a, b) => a + b);
-
         await sequelize.transaction(async (transaction) => {
           await StripePayment.create(
             {
               userId: user ? user.id : null,
-              amountPaid,
+              amountPaid: session.amount_total,
               customerId: session.customer,
               customerEmail: stripeEmail || (user || {}).email || null,
               paymentIntentId: session.payment_intent,

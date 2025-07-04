@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
 }
 
@@ -314,7 +314,7 @@ model StripePayment {
   amountPaid      Int
   customerId      String   @db.VarChar(255)
   customerEmail   String?  @db.VarChar(255)
-  paymentIntentId String   @unique @db.VarChar(255)
+  paymentIntentId String?  @unique @db.VarChar(255)
   subscriptionId  String?  @db.VarChar(255)
   invoiceBlob     Json
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
