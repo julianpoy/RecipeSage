@@ -16,10 +16,12 @@ import { labelGroupsRouter } from "./procedures/labelGroups/labelGroupsRouter";
 import { jobsRouter } from "./procedures/jobs/jobsRouter";
 import { mlRouter } from "./procedures/ml/mlRouter";
 import { assistantRouter } from "./procedures/assistant/assistantRouter";
+import { paymentsRouter } from "./procedures/payments/paymentsRouter";
 
 const appRouter = router({
   labelGroups: labelGroupsRouter,
   labels: labelsRouter,
+  payments: paymentsRouter,
   recipes: recipesRouter,
   mealPlans: mealPlansRouter,
   shoppingLists: shoppingListsRouter,

@@ -1,7 +1,7 @@
-import { SUBSCRIPTION_MODELS, SubscriptionModels } from "./constants";
+import { SUBSCRIPTION_MODELS, SubscriptionModelName } from "./constants";
 
 export const capabilitiesForSubscription = (
-  subscriptionName: SubscriptionModels,
+  subscriptionName: SubscriptionModelName,
 ) => {
   return SUBSCRIPTION_MODELS[subscriptionName].capabilities;
 };

@@ -4,7 +4,7 @@ import { userPublic } from "@recipesage/prisma";
 import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   capabilitiesForSubscription,
-  SubscriptionModels,
+  SubscriptionModelName,
   subscriptionsForUser,
 } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
@@ -40,7 +40,7 @@ export const getMe = publicProcedure.query(
       return {
         expires: subscription.expires,
         capabilities: capabilitiesForSubscription(
-          subscription.name as SubscriptionModels,
+          subscription.name as SubscriptionModelName,
         ),
       };
     });
