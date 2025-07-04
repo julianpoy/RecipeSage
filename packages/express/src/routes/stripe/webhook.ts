@@ -54,7 +54,18 @@ export const webhookHandler = defineHandler(
       };
     }
 
-    // One-time payments. Allow invoice payment_succeeded to handle subscription payments
+    // Allow invoice payment_succeeded to handle subscription payments
+    if (
+      event.type === "checkout.session.completed" &&
+      event.data.object.mode === "subscription"
+    ) {
+      return {
+        statusCode: 200,
+        data: "Not handled",
+      };
+    }
+
+    // One-time payments
     if (
       event.type === "checkout.session.completed" &&
       event.data.object.mode !== "subscription"
@@ -80,7 +91,7 @@ export const webhookHandler = defineHandler(
         });
 
         assert(typeof session.amount_total === "number");
-        assert(typeof session.customer === "number");
+        assert(typeof session.customer === "string");
         assert(typeof session.payment_intent === "string");
 
         await tx.stripePayment.create({

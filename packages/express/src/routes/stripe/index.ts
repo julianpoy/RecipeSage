@@ -3,6 +3,6 @@ import { webhookHandler } from "./webhook";
 
 const router = express.Router();
 
-router.get("/webhook", ...webhookHandler);
+router.post("/webhook", ...webhookHandler);
 
 export { router as stripeHandler };

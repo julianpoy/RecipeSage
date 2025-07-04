@@ -48,6 +48,7 @@ export async function createRecurringPYOSession(args: {
     line_items: [
       {
         price: price.id,
+        quantity: 1,
       },
     ],
   });
