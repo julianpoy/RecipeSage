@@ -162,5 +162,12 @@
     "components.mealCalendar.dinner": "夕食",
     "components.mealCalendar.snack": "軽食",
     "components.mealCalendar.other": "その他",
-    "components.selectCollaborators.placeholder": "メールアドレスによる共同作業者の追加"
+    "components.selectCollaborators.placeholder": "メールアドレスによる共同作業者の追加",
+    "components.selectCollaborators.invalidEmail": "有効なメールアドレスを入力し、Enterキーを押してください。",
+    "components.selectIngredients.title": "追加したい材料を選択してください。",
+    "components.selectCollaborators.notFound": "ユーザーが見つかりません",
+    "components.selectCollaborators.notFoundError": "そのメールアドレスのユーザーが見つかりませんでした。",
+    "components.selectCollaborators.added": "既に追加済み",
+    "components.selectCollaborators.add": "クリックして追加",
+    "components.selectCollaborators.searching": "検索中..."
 }
