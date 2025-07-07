@@ -2,6 +2,7 @@ export * from "./assistantMessageSummary";
 export * from "./jobSummary";
 export * from "./labelGroupSummary";
 export * from "./labelSummary";
+export * from "./mealOptionSummary";
 export * from "./mealPlanSummary";
 export * from "./mealPlanSummaryWithItems";
 export * from "./mealPlanItemSummary";

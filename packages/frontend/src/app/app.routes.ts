@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 
-import { RouteMap } from "./services/util.service";
 import { DefaultPageGuardService } from "./services/default-page-guard.service";
 import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.service";
+import { RouteMap } from "./services/util.service";
 
 export const appRoutes: Routes = [
   {
@@ -25,6 +25,14 @@ export const appRoutes: Routes = [
     path: RouteMap.LabelsPage.path,
     loadComponent: () =>
       import("./pages/labels-pages/labels/labels.page").then(
+        (m) => m.LabelsPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.MealOptionsPage.path,
+    loadComponent: () =>
+      import("./pages/meal-options-pages/meal-options/labels.page").then(
         (m) => m.LabelsPage,
       ),
     canDeactivate: [UnsavedChangesGuardService],

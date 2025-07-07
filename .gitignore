@@ -27,6 +27,10 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# IDE - Cursor
+.cursor
+.history
+
 # misc
 /.sass-cache
 /connect.lock

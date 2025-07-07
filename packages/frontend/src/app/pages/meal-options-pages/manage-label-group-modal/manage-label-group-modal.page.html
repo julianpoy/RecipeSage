@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-title>
+      {{ 'pages.manageLabelGroupModal.title' | translate }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-input
+      labelPlacement="stacked"
+      label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
+      placeholder="{{ 'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate }}"
+      helperText="{{ 'pages.manageLabelGroupModal.groupTitleHint' | translate }}"
+      (ionInput)="title = $event.detail.value || ''"
+      [value]="title"
+    ></ion-input>
+  </ion-item>
+
+  <br />
+  <br />
+
+  <ion-item lines="none">
+    <ion-toggle [checked]="warnWhenNotPresent" (ionChange)="warnToggle($event)">
+      Warn me when I do not add
+      <ion-label>
+        <p class="ion-text-wrap">
+          When enabled, you will be warned if saving a recipe without a label in
+          this category attached
+        </p>
+      </ion-label>
+    </ion-toggle>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label>
+      {{ 'pages.manageLabelGroupModal.labels' | translate }}
+      <p class="ion-text-wrap">
+        {{ 'pages.manageLabelGroupModal.labelsHint' | translate }}
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <select-multiple-items
+    [selectedItems]="mapLabelsToSelectableItems(selectedLabels)"
+    [items]="mapLabelsToSelectableItems(ungroupedLabels)"
+    (selectedItemsChange)="selectedLabelsChange($event)"
+    noSelectedItemsText="{{ 'pages.manageLabelGroupModal.labels.noSelectedItems' | translate }}"
+    noItemsText="{{ 'pages.manageLabelGroupModal.labels.noItems' | translate }}"
+    searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
+  ></select-multiple-items>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button (click)="save()" [disabled]="!title.length" expand="block">
+    {{ 'generic.save' | translate }}
+  </ion-button>
+  <ion-button color="danger" (click)="delete()" expand="block">
+    {{ 'generic.delete' | translate }}
+  </ion-button>
+</ion-footer>
