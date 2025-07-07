@@ -1,3 +1,6 @@
+import * as Sentry from "@sentry/browser";
+import { DBSchema, IDBPDatabase, openDB } from "idb";
+
 import {
   AssistantMessageSummary,
   JobSummary,
@@ -10,8 +13,6 @@ import {
   ShoppingListSummaryWithItems,
   UserPublic,
 } from "@recipesage/prisma";
-import * as Sentry from "@sentry/browser";
-import { DBSchema, IDBPDatabase, openDB } from "idb";
 import { trpcClient as trpc } from "../trpcClient";
 import { localDBMigration_1 } from "./migrations/localDBMigration_1";
 import { localDBMigration_2 } from "./migrations/localDBMigration_2";

@@ -16,6 +16,7 @@
     "pages.app.nav.newrecipe": "Создать рецепт",
     "pages.app.nav.shopping": "Список покупок",
     "pages.app.nav.meals": "Планы питания",
+    "pages.app.nav.mealOptions": "Manage Meal Options",
     "pages.app.nav.settings": "Настройки",
     "pages.welcome.selfhostTitle": "РецептSage на собственном хостинге!",
     "pages.welcome.selfhostSubtitle": "Неофициальная локальная версия RecipeSage.com, бесплатного хранилища рецептов, планировщика питания и органайзера списков покупок для Web, iOS и Android",

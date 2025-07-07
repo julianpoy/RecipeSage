@@ -1,47 +1,41 @@
 import { Component, inject } from "@angular/core";
-import {
-  ActivatedRoute,
-  Router,
-  NavigationEnd,
-  RouterOutlet,
-} from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { NgxLoadingBar } from "@ngx-loading-bar/core";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
-import { NgxLoadingBar } from "@ngx-loading-bar/core";
 
 import {
-  Platform,
-  MenuController,
-  ToastController,
   AlertController,
+  MenuController,
   NavController,
-  IonicModule,
+  Platform,
+  ToastController,
 } from "@ionic/angular";
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { MessagingService } from "~/services/messaging.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { UserService } from "~/services/user.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { Title } from "@angular/platform-browser";
 import {
   GlobalPreferenceKey,
   SupportedLanguages,
 } from "@recipesage/util/shared";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { EventName, EventService } from "~/services/event.service";
+import { MessagingService } from "~/services/messaging.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { RecipeService } from "~/services/recipe.service";
+import { UserService } from "~/services/user.service";
+import { AuthType, RouteMap, UtilService } from "~/services/util.service";
+import { WebsocketService } from "~/services/websocket.service";
+import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
+import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import {
   FeatureFlagKeys,
   FeatureFlagService,
 } from "./services/feature-flag.service";
-import { Title } from "@angular/platform-browser";
 import { TRPCService } from "./services/trpc.service";
-import { appIdbStorageManager } from "./utils/appIdbStorageManager";
-import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
-import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
+import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 
 const SW_UPDATE_CHECK_INTERVAL_MINUTES = 5;
 
@@ -300,6 +294,7 @@ export class AppComponent {
 
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
+    const mealOptions = "Meal Options"; // TODO: await this.translate.get("pages.app.nav.mealOptions").toPromise()
     const people = await this.translate.get("pages.app.nav.people").toPromise();
     const assistant = await this.translate
       .get("pages.app.nav.assistant")
@@ -408,6 +403,15 @@ export class AppComponent {
           title: labels,
           icon: "pricetag",
           url: RouteMap.LabelsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
+          id: "mealOptions",
+          title: mealOptions,
+          icon: "calendar",
+          url: RouteMap.MealOptionsPage.getPath(),
         },
       ],
       [

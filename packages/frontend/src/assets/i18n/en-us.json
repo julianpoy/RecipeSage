@@ -10,6 +10,7 @@
   "pages.app.nav.about": "About & Support",
   "pages.app.nav.home": "My Recipes",
   "pages.app.nav.labels": "Manage Labels",
+  "pages.app.nav.mealOptions": "Manage Meal Options",
   "pages.app.nav.people": "People & Profile",
   "pages.app.nav.assistant": "Cooking Assistant",
   "pages.app.nav.messages": "Messages",
@@ -18,7 +19,6 @@
   "pages.app.nav.shopping": "Shopping Lists",
   "pages.app.nav.meals": "Meal Plans",
   "pages.app.nav.settings": "Settings",
-
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
   "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of RecipeSage.com, a free recipe keeper, meal planner, and shopping list organizer for Web, iOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",

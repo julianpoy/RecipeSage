@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 
+import { RouteMap } from "./services/util.service";
 import { DefaultPageGuardService } from "./services/default-page-guard.service";
 import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.service";
-import { RouteMap } from "./services/util.service";
 
 export const appRoutes: Routes = [
   {
