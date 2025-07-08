@@ -36,6 +36,7 @@ export class ShoppingListPopoverPage {
 
   @Input() shoppingListId: any;
   @Input() shoppingList: any;
+  @Input() editMode: boolean = false;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
@@ -47,7 +48,7 @@ export class ShoppingListPopoverPage {
   }
 
   dismiss() {
-    this.popoverCtrl.dismiss();
+    this.popoverCtrl.dismiss({ editMode: this.editMode });
   }
 
   print() {
@@ -153,6 +154,11 @@ export class ShoppingListPopoverPage {
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
+  }
+
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    this.dismiss();
   }
 
   async updateList(): Promise<void> {

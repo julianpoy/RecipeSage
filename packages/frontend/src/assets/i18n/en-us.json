@@ -866,6 +866,7 @@
   "pages.shoppingListPopover.actions.title": "Actions",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.update": "Edit/Rename List",
+  "pages.shoppingListPopover.edit": "Edit Ingredient Categories",
   "pages.shoppingListPopover.dangerZone.title": "Danger Zone",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",

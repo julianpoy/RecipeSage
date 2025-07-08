@@ -27,3 +27,77 @@ ion-list-header {
 .delete-recipe:hover {
   color: var(--ion-color-danger);
 }
+
+.drag-drop-container {
+  width: 100%;
+}
+
+.drop-zone-category {
+  min-height: 60px;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.drop-zone-category.drag-over {
+  background-color: var(--ion-color-primary-tint, #4c8dff);
+  border: 2px dashed var(--ion-color-primary, #3880ff);
+}
+
+.draggable-shopping-list-item {
+  cursor: grab;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  user-select: none;
+}
+
+.draggable-shopping-list-item:active {
+  cursor: grabbing;
+}
+
+.draggable-shopping-list-item.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+  z-index: 1000;
+}
+
+.draggable-shopping-list-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.drag-handle {
+  color: var(--ion-color-medium);
+  font-size: 24px;
+  cursor: grab;
+  padding: 8px;
+  margin-left: 8px;
+  margin-right: 4px;
+  flex-shrink: 0;
+  order: -1;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.draggable-shopping-list-group,
+.draggable-shopping-list-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+draggable-shopping-list-group,
+draggable-shopping-list-item {
+  flex: 1;
+}
+
+/* Mobile touch improvements */
+@media (hover: none) {
+  .draggable-shopping-list-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
