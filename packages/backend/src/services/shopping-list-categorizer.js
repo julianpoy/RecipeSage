@@ -7,6 +7,7 @@ import {
   parseUnit,
   getTitleForIngredient,
   getMeasurementsForIngredient,
+  formattedCategoryTitles,
 } from "@recipesage/util/shared";
 
 let ingredientsList = [];
@@ -29,18 +30,6 @@ const init = async () => {
   itemTitles = Object.keys(itemCategories).sort((a, b) => b.length - a.length);
 };
 init();
-
-const formattedCategoryTitles = {
-  produce: "Produce",
-  dairy: "Dairy",
-  meat: "Meats",
-  bakery: "Baked Goods",
-  grocery: "Grocery Items",
-  liquor: "Liquor",
-  seafood: "Seafood",
-  nonfood: "Non-Food and Household",
-  deli: "Deli",
-};
 
 export const getCategoryTitle = (itemTitle) => {
   itemTitle = itemTitle.toLowerCase();

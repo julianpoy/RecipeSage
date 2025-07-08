@@ -195,6 +195,7 @@ export class ShoppingListPage {
     } = getShoppingListItemGroupings(
       items as any,
       this.preferences[ShoppingListPreferenceKey.SortBy],
+      this.editMode,
     );
 
     this.items = sortedItems;
@@ -207,6 +208,7 @@ export class ShoppingListPage {
     const { items: sortedCompletedItems } = getShoppingListItemGroupings(
       completedItems as any,
       this.preferences[ShoppingListPreferenceKey.SortBy],
+      this.editMode,
     );
 
     this.completedItems = sortedCompletedItems;
@@ -532,6 +534,7 @@ export class ShoppingListPage {
     } = getShoppingListItemGroupings(
       this.items,
       this.preferences[ShoppingListPreferenceKey.SortBy],
+      this.editMode,
     );
 
     this.items = sortedItems;
