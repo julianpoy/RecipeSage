@@ -1,4 +1,4 @@
-FROM node:22.14-alpine
+FROM node:24.2-alpine
 
 WORKDIR /app
 
@@ -20,8 +20,6 @@ COPY package-lock.json package-lock.json
 COPY package.json package.json
 RUN npm ci
 
-COPY jest.config.ts jest.config.ts
-COPY jest.preset.js jest.preset.js
 COPY .prettierignore .prettierignore
 COPY .prettierrc.json .prettierrc.json
 COPY .nvmrc .nvmrc

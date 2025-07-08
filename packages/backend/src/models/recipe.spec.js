@@ -21,7 +21,7 @@ describe("recipe", () => {
     let findTitleSpy;
 
     beforeAll(() => {
-      findTitleSpy = jest
+      findTitleSpy = vi
         .spyOn(Recipe, "_findTitle")
         .mockResolvedValue(undefined);
     });
@@ -117,7 +117,7 @@ describe("recipe", () => {
     let shareSpy;
 
     beforeAll(() => {
-      shareSpy = jest
+      shareSpy = vi
         .spyOn(Recipe.prototype, "share")
         .mockResolvedValue(undefined);
     });
@@ -149,7 +149,7 @@ describe("recipe", () => {
     let findTitleSpy;
 
     beforeAll(() => {
-      findTitleSpy = jest
+      findTitleSpy = vi
         .spyOn(Recipe, "findTitle")
         .mockImplementation((_, __, title) => Promise.resolve(title));
     });
@@ -159,13 +159,12 @@ describe("recipe", () => {
     });
 
     describe("shares recipe to recipient", () => {
-      let user1, user2, recipe, sharedRecipe, initialCount;
+      let user1, user2, recipe, sharedRecipe;
 
       beforeAll(async () => {
         user1 = await createUser();
         user2 = await createUser();
         recipe = await createRecipe(user1.id);
-        initialCount = await Recipe.count();
 
         await sequelize.transaction(async (t) => {
           sharedRecipe = await recipe.share(user2.id, t);
@@ -175,11 +174,21 @@ describe("recipe", () => {
       it("creates a new recipe", async () => {
         expect(recipe.id).not.toBe(sharedRecipe.id);
 
-        const count = await Recipe.count();
+        const user1Count = await Recipe.count({
+          where: {
+            userId: user1.id,
+          },
+        });
+        const user2Count = await Recipe.count({
+          where: {
+            userId: user2.id,
+          },
+        });
         const original = await Recipe.findByPk(recipe.id);
         const shared = await Recipe.findByPk(sharedRecipe.id);
 
-        expect(count).toBe(initialCount + 1);
+        expect(user1Count).toBe(1);
+        expect(user2Count).toBe(1);
         expect(original).not.toBeNull();
         expect(shared).not.toBeNull();
       });

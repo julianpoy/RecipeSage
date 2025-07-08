@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "~/services/util.service";
@@ -12,9 +12,9 @@ import { SocialLinksComponent } from "../../../components/social-links/social-li
   imports: [...SHARED_UI_IMPORTS, SocialLinksComponent],
 })
 export class AboutDetailsPage {
-  defaultBackHref: string = RouteMap.AboutPage.getPath();
+  private navCtrl = inject(NavController);
 
-  constructor(private navCtrl: NavController) {}
+  defaultBackHref: string = RouteMap.AboutPage.getPath();
 
   goToDonate() {
     this.navCtrl.navigateForward(RouteMap.ContributePage.getPath());

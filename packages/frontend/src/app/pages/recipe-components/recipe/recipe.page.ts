@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -57,6 +57,25 @@ import { RatingComponent } from "../../../components/rating/rating.component";
   imports: [...SHARED_UI_IMPORTS, RatingComponent],
 })
 export class RecipePage {
+  navCtrl = inject(NavController);
+  alertCtrl = inject(AlertController);
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  popoverCtrl = inject(PopoverController);
+  loadingService = inject(LoadingService);
+  preferencesService = inject(PreferencesService);
+  wakeLockService = inject(WakeLockService);
+  recipeCompletionTrackerService = inject(RecipeCompletionTrackerService);
+  route = inject(ActivatedRoute);
+  utilService = inject(UtilService);
+  recipeService = inject(RecipeService);
+  labelService = inject(LabelService);
+  cookingToolbarService = inject(CookingToolbarService);
+  capabilitiesService = inject(CapabilitiesService);
+  translate = inject(TranslateService);
+  trpcService = inject(TRPCService);
+  private titleService = inject(Title);
+
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
   wakeLockRequest: null | {
@@ -82,26 +101,7 @@ export class RecipePage {
 
   isLoggedIn: boolean = !!localStorage.getItem("token");
 
-  constructor(
-    public navCtrl: NavController,
-    public alertCtrl: AlertController,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public popoverCtrl: PopoverController,
-    public loadingService: LoadingService,
-    public preferencesService: PreferencesService,
-    public wakeLockService: WakeLockService,
-    public recipeCompletionTrackerService: RecipeCompletionTrackerService,
-    public route: ActivatedRoute,
-    public utilService: UtilService,
-    public recipeService: RecipeService,
-    public labelService: LabelService,
-    public cookingToolbarService: CookingToolbarService,
-    public capabilitiesService: CapabilitiesService,
-    public translate: TranslateService,
-    public trpcService: TRPCService,
-    private titleService: Title,
-  ) {
+  constructor() {
     this.updateIsLoggedIn();
 
     const recipeId = this.route.snapshot.paramMap.get("recipeId");

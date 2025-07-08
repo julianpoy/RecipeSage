@@ -1,4 +1,4 @@
-import { Input, Component } from "@angular/core";
+import { Input, Component, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -28,6 +28,15 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanItemDetailsModalPage {
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private modalCtrl = inject(ModalController);
+  private alertCtrl = inject(AlertController);
+  private trpcService = inject(TRPCService);
+  cookingToolbarService = inject(CookingToolbarService);
+  private recipeService = inject(RecipeService);
+  private loadingService = inject(LoadingService);
+
   @Input({
     required: true,
   })
@@ -36,17 +45,6 @@ export class MealPlanItemDetailsModalPage {
     required: true,
   })
   mealItem!: MealPlanItemSummary;
-
-  constructor(
-    private navCtrl: NavController,
-    private translate: TranslateService,
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
-    private trpcService: TRPCService,
-    public cookingToolbarService: CookingToolbarService,
-    private recipeService: RecipeService,
-    private loadingService: LoadingService,
-  ) {}
 
   openRecipe() {
     if (!this.mealItem.recipe) return;

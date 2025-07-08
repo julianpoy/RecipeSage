@@ -1,8 +1,9 @@
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { JobMeta, prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import {
   exportDataAsync,
+  metrics,
   throttleDropPromise,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
@@ -29,6 +30,8 @@ export const startExportJob = publicProcedure
   .mutation(async ({ input, ctx }) => {
     const session = ctx.session;
     validateTrpcSession(session);
+
+    const timer = metrics.jobFinished.startTimer();
 
     const job = await prisma.job.create({
       data: {
@@ -89,6 +92,13 @@ export const startExportJob = publicProcedure
             } satisfies JobMeta,
           },
         });
+
+        metrics.jobFinished.observe(
+          {
+            job_type: "export",
+          },
+          timer(),
+        );
       })
       .catch(async (e) => {
         await prisma.job.update({
@@ -101,6 +111,13 @@ export const startExportJob = publicProcedure
           },
         });
 
+        metrics.jobFailed.observe(
+          {
+            job_type: "export",
+          },
+          timer(),
+        );
+
         Sentry.captureException(e, {
           extra: {
             jobId: job.id,
@@ -108,6 +125,8 @@ export const startExportJob = publicProcedure
         });
         console.error(e);
       });
+
+    metrics.jobStarted.inc();
 
     return {
       jobId: job.id,

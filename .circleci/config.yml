@@ -19,7 +19,7 @@ jobs:
   build_and_test:
     resource_class: large
     docker:
-      - image: cimg/node:22.14
+      - image: cimg/node:24.2
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -55,7 +55,7 @@ jobs:
           command: npx prisma migrate dev
       - run:
           name: start api
-          command: npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www
+          command: npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www.ts
           background: true
       - run:
           name: wait for api
@@ -69,7 +69,7 @@ jobs:
   push_backend:
     resource_class: large
     docker:
-      - image: cimg/node:22.14
+      - image: cimg/node:24.2
     steps:
       - checkout
       - setup_remote_docker:
@@ -84,7 +84,7 @@ jobs:
   push_backend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:22.14
+      - image: cimg/node:24.2
     steps:
       - checkout
       - setup_remote_docker:
@@ -102,7 +102,7 @@ jobs:
   push_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:22.14
+      - image: cimg/node:24.2
     steps:
       - checkout
       - aws-cli/setup
@@ -112,7 +112,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build frontend)
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build frontend --skip-nx-cache)
           environment:
             ENVIRONMENT: production
       - run:
@@ -127,7 +127,7 @@ jobs:
   push_frontend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:22.14
+      - image: cimg/node:24.2
     steps:
       - checkout
       - aws-cli/setup
@@ -143,7 +143,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build:selfhost frontend)
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build:selfhost frontend --skip-nx-cache)
           environment:
             ENVIRONMENT: production
       - run:

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
+import { Component, Input, EventEmitter, Output, inject } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
@@ -19,6 +19,8 @@ export type ResettableSelectGroupedOptions = Record<
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ResettableSelectPopoverPage {
+  private popoverCtrl = inject(PopoverController);
+
   resetToggled = false; // Stores current state of reset all checkbox
 
   message?: string;
@@ -41,8 +43,6 @@ export class ResettableSelectPopoverPage {
   nullMessage!: string;
 
   @Output() selectedValueChange = new EventEmitter();
-
-  constructor(private popoverCtrl: PopoverController) {}
 
   getSelectedValues() {
     const selectedValues = new Set<string>();

@@ -1,4 +1,4 @@
-import { Input, Component } from "@angular/core";
+import { Input, Component, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -20,6 +20,16 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanBulkPinModalPage {
+  navCtrl = inject(NavController);
+  modalCtrl = inject(ModalController);
+  alertCtrl = inject(AlertController);
+  mealPlanService = inject(MealPlanService);
+  cookingToolbarService = inject(CookingToolbarService);
+  recipeService = inject(RecipeService);
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  toastCtrl = inject(ToastController);
+
   @Input({
     required: true,
   })
@@ -28,17 +38,7 @@ export class MealPlanBulkPinModalPage {
   allSelected = true;
   recipeIdSelectionMap: Record<string, boolean> = {};
 
-  constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public alertCtrl: AlertController,
-    public mealPlanService: MealPlanService,
-    public cookingToolbarService: CookingToolbarService,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public toastCtrl: ToastController,
-  ) {
+  constructor() {
     setTimeout(() => {
       this.selectAllRecipes();
     });

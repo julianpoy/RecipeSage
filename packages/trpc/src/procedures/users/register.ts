@@ -1,12 +1,13 @@
 import { prisma, SessionDTO } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
   SessionType,
   generatePasswordHash,
   generateSession,
+  metrics,
   sanitizeUserEmail,
   sendWelcomeEmail,
 } from "@recipesage/util/server/general";
@@ -81,6 +82,10 @@ export const register = publicProcedure
       ccAddresses: [],
     }).catch((err) => {
       Sentry.captureException(err);
+    });
+
+    metrics.userCreated.inc({
+      auth_type: "password",
     });
 
     return sessionDTO;

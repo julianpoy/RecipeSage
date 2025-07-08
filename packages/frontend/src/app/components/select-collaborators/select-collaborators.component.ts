@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   type AfterViewInit,
+  inject,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -24,21 +25,19 @@ import { SelectUserComponent } from "../select-user/select-user.component";
   imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  userService = inject(UserService);
+  trpcService = inject(TRPCService);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  messagingService = inject(MessagingService);
+  translate = inject(TranslateService);
+
   @Input() selectedCollaboratorIds: string[] = [];
   @Output() selectedCollaboratorIdsChanged = new EventEmitter<string[]>();
 
   userProfilesById: Map<string, UserPublic> = new Map();
-
-  constructor(
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public userService: UserService,
-    public trpcService: TRPCService,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public messagingService: MessagingService,
-    public translate: TranslateService,
-  ) {}
 
   ngAfterViewInit() {
     this.loadUserProfiles();

@@ -1,5 +1,5 @@
 import { capabilitiesForSubscription } from "./capabilitiesForSubscription";
-import { SubscriptionModels } from "./constants";
+import { SubscriptionModelName } from "./constants";
 import { subscriptionsForUser } from "./subscriptionsForUser";
 import { Capabilities } from "@recipesage/util/shared";
 
@@ -9,7 +9,7 @@ export const capabilitiesForUser = async (userId: string) => {
   return activeSubscriptions.reduce<Capabilities[]>(
     (acc, activeSubscription) => {
       const capabilities = capabilitiesForSubscription(
-        activeSubscription.name as SubscriptionModels,
+        activeSubscription.name as SubscriptionModelName,
       );
       return [...acc, ...capabilities];
     },

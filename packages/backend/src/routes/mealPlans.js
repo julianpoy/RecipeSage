@@ -182,7 +182,7 @@ router.post(
       mealPlanId: mealPlan.id,
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const broadcastPayload = {
       mealPlanId: mealPlan.id,
@@ -300,7 +300,7 @@ router.delete(
       },
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const deletedItemBroadcast = {
       mealPlanId: mealPlan.id,
@@ -382,7 +382,7 @@ router.put(
       return mealPlan;
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const updateBroadcast = {
       mealPlanId: mealPlan.id,
@@ -460,7 +460,7 @@ router.post(
       return mealPlan;
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const updateBroadcast = {
       mealPlanId: mealPlan.id,
@@ -536,7 +536,7 @@ router.delete(
       return mealPlan;
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const updateBroadcast = {
       mealPlanId: mealPlan.id,

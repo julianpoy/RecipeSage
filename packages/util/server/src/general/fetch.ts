@@ -20,10 +20,22 @@ export const fetchURL = (
   destURL: string,
   options?: {
     requestConfig?: Partial<RequestInit>;
+    timeout?: number;
   },
 ) => {
+  const controller = new AbortController();
+  if (options?.timeout) {
+    setTimeout(() => {
+      if (controller.signal.aborted) {
+        return;
+      }
+      controller.abort();
+    }, options.timeout);
+  }
+
   const fetchOpts: RequestInit = {
     method: "GET",
+    signal: controller.signal,
     ...options?.requestConfig,
     headers: {
       "User-Agent":

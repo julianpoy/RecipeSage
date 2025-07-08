@@ -1,10 +1,10 @@
 import { admin } from "./firebase-admin";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 // DB
 import { FCMToken } from "../models/index.js";
 
-let invalidFcmTokenErrors = ["messaging/registration-token-not-registered"];
+const invalidFcmTokenErrors = ["messaging/registration-token-not-registered"];
 
 export const sendMessages = (tokens, payload) => {
   return Promise.all(

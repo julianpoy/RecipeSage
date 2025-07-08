@@ -969,7 +969,7 @@
     "pages.import.jobCreated.message": "Ваши данные импортируются в вашу учетную запись. Вы можете отслеживать статус импорта на странице импорта. Данные появятся в вашей учетной записи только после завершения импорта.",
     "pages.importCookmate.description": "Это импортирует файл Cookmate (оканчивается на .mcb) в вашу учетную запись RecipeSage. Если у вас есть проблемы с импортом, пожалуйста, обратитесь к руководству пользователя. Пожалуйста, рассмотрите возможность участия, если ваш файл содержит большое количество рецептов или изображений.",
     "pages.export.jobs.subtitle": "Экспорт продолжит выполнение, даже если вы закрыли приложение после запуска",
-    "pages.import.csv": "Импорт из CSV (PlanToEat и другие)",
+    "pages.import.csv": "Импорт из CSV (PlanToEat, MyRecipeBox и другие)",
     "pages.import.fileTooLarge.contact": "Пожалуйста, свяжитесь со мной, чтобы импортировать вашу базу данных вручную.",
     "pages.importPepperplate.incorrectCredentials.message": "Похоже, имя пользователя или пароль, которые вы ввели для Pepperplate, неверны.",
     "pages.import.fileTypeWarning": "Внимание! Этот тип файла не заканчивается на: {{ acceptableFiletypes }}. Он может не работать.",
@@ -1018,5 +1018,10 @@
     "pages.importEnex.description": "Это позволит импортировать рецепты из экспортированного файла Evernote (заканчивается на .enex) в вашу учетную запись RecipeSage. Пожалуйста, обратитесь к руководству пользователя, чтобы узнать, как создать файл в правильном формате для импорта сюда. Если ваш файл содержит большое количество рецептов или изображений, пожалуйста, рассмотрите возможность внесения вклада.",
     "pages.import.enex": "Импорт из файла Evernote",
     "pages.importEnex.title": "Импорт рецептов из файла Evernote (enex)",
-    "pages.contribute.manage": "Чтобы управлять существующей подпиской, нажмите здесь"
+    "pages.contribute.manage": "Чтобы управлять существующей подпиской, нажмите здесь",
+    "components.mealCalendar.breakfast": "Завтрак",
+    "components.mealCalendar.lunch": "Обед",
+    "components.mealCalendar.dinner": "Ужин",
+    "components.mealCalendar.snack": "Перекус",
+    "components.mealCalendar.other": "Другое"
 }

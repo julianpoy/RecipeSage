@@ -179,9 +179,7 @@
       <p *ngIf="!capabilitySubscriptions['highResImages']?.enabled">
         {{ 'pages.account.bonus.notEnabled' | translate }}
       </p>
-      <p
-        *ngIf="capabilitySubscriptions['highResImages'] && capabilitySubscriptions['highResImages'].expired !== null"
-      >
+      <p *ngIf="capabilitySubscriptions['highResImages']">
         <span
           *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['highResImages'].expired"
         >
@@ -189,7 +187,7 @@
           capabilitySubscriptions['highResImages'].expires} }}
         </span>
         <span
-          *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['highResImages'].expired"
+          *ngIf="capabilitySubscriptions['highResImages'].expires && !capabilitySubscriptions['highResImages'].expired"
         >
           {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
           capabilitySubscriptions['highResImages'].expires} }}
@@ -225,7 +223,7 @@
           capabilitySubscriptions['multipleImages'].expires} }}
         </span>
         <span
-          *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].expired"
+          *ngIf="capabilitySubscriptions['multipleImages'].expires && !capabilitySubscriptions['multipleImages'].expired"
         >
           {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
           capabilitySubscriptions['multipleImages'].expires} }}
@@ -261,7 +259,7 @@
           capabilitySubscriptions['assistantMoreMessages'].expires} }}
         </span>
         <span
-          *ngIf="capabilitySubscriptions['assistantMoreMessages'].expires && capabilitySubscriptions['assistantMoreMessages'].expired"
+          *ngIf="capabilitySubscriptions['assistantMoreMessages'].expires && !capabilitySubscriptions['assistantMoreMessages'].expired"
         >
           {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
           capabilitySubscriptions['assistantMoreMessages'].expires} }}

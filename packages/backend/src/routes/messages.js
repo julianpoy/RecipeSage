@@ -112,7 +112,7 @@ router.post(
         transaction,
       });
 
-      let m = fullMessage.toJSON();
+      const m = fullMessage.toJSON();
 
       if (m.recipe && m.originalRecipe) {
         m.recipe = UtilService.sortRecipeImages(m.recipe);
@@ -203,7 +203,7 @@ router.get(
 
     const conversations = [];
     for (const userId in conversationsByUser) {
-      let conversation = conversationsByUser[userId];
+      const conversation = conversationsByUser[userId];
 
       if (req.query.limit && conversation.messageCount > req.query.limit) {
         conversation.messages.splice(
@@ -288,7 +288,7 @@ router.get(
     res.status(200).json(
       messages
         .map(function (message) {
-          let m = message.toJSON();
+          const m = message.toJSON();
 
           if (m.toUser.id === res.locals.session.userId) {
             m.otherUser = m.fromUser;

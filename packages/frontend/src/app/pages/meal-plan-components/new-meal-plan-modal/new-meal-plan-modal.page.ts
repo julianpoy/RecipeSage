@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NavController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
@@ -14,16 +14,14 @@ import { SelectCollaboratorsComponent } from "../../../components/select-collabo
   imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class NewMealPlanModalPage {
+  private navCtrl = inject(NavController);
+  private modalCtrl = inject(ModalController);
+  private loadingService = inject(LoadingService);
+  private trpcService = inject(TRPCService);
+
   mealPlanTitle = "";
 
   selectedCollaboratorIds: any = [];
-
-  constructor(
-    private navCtrl: NavController,
-    private modalCtrl: ModalController,
-    private loadingService: LoadingService,
-    private trpcService: TRPCService,
-  ) {}
 
   async save() {
     const loading = this.loadingService.start();

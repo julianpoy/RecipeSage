@@ -79,7 +79,7 @@ describe("utils", () => {
 
   describe("findFilesByRegex", () => {
     it("returns an array of file paths for test image img1.png", () => {
-      let files = findFilesByRegex(
+      const files = findFilesByRegex(
         path.join(__dirname, "../test/exampleFiles"),
         new RegExp(/img1\.png/, "i"),
       );
@@ -88,7 +88,7 @@ describe("utils", () => {
     });
 
     it("returns an array of file paths for test image img1.png recursive", () => {
-      let files = findFilesByRegex(
+      const files = findFilesByRegex(
         path.join(__dirname, "../test"),
         new RegExp(/img1\.png/, "i"),
       );
@@ -97,7 +97,7 @@ describe("utils", () => {
     });
 
     it("returns empty array when it finds no files", () => {
-      let files = findFilesByRegex(
+      const files = findFilesByRegex(
         path.join(__dirname, "../test"),
         new RegExp("doesnotexist"),
       );

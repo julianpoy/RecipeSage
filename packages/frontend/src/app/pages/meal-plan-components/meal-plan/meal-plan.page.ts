@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -35,6 +35,21 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS, MealCalendarComponent],
 })
 export class MealPlanPage {
+  route = inject(ActivatedRoute);
+  translate = inject(TranslateService);
+  navCtrl = inject(NavController);
+  loadingService = inject(LoadingService);
+  trpcService = inject(TRPCService);
+  shoppingListService = inject(ShoppingListService);
+  websocketService = inject(WebsocketService);
+  utilService = inject(UtilService);
+  preferencesService = inject(PreferencesService);
+  toastCtrl = inject(ToastController);
+  modalCtrl = inject(ModalController);
+  popoverCtrl = inject(PopoverController);
+  alertCtrl = inject(AlertController);
+  private titleService = inject(Title);
+
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
 
   calendarMode: string = window.innerWidth > 600 ? "full" : "split";
@@ -67,22 +82,7 @@ export class MealPlanPage {
   @ViewChild(MealCalendarComponent, { static: true })
   mealPlanCalendar?: MealCalendarComponent;
 
-  constructor(
-    public route: ActivatedRoute,
-    public translate: TranslateService,
-    public navCtrl: NavController,
-    public loadingService: LoadingService,
-    public trpcService: TRPCService,
-    public shoppingListService: ShoppingListService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController,
-    private titleService: Title,
-  ) {
+  constructor() {
     const mealPlanId = this.route.snapshot.paramMap.get("mealPlanId");
     if (!mealPlanId) {
       this.navCtrl.navigateBack(this.defaultBackHref);

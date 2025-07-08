@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -30,6 +30,18 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class LabelsPage {
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private popoverCtrl = inject(PopoverController);
+  private loadingService = inject(LoadingService);
+  private alertCtrl = inject(AlertController);
+  private modalCtrl = inject(ModalController);
+  private toastCtrl = inject(ToastController);
+  private labelService = inject(LabelService);
+  private utilService = inject(UtilService);
+  private preferencesService = inject(PreferencesService);
+  private trpcService = inject(TRPCService);
+
   preferences = this.preferencesService.preferences;
   preferenceKeys = ManageLabelsPreferenceKey;
 
@@ -39,20 +51,6 @@ export class LabelsPage {
   loading = true;
   selectedLabelIds: string[] = [];
   selectionMode = false;
-
-  constructor(
-    private navCtrl: NavController,
-    private translate: TranslateService,
-    private popoverCtrl: PopoverController,
-    private loadingService: LoadingService,
-    private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
-    private toastCtrl: ToastController,
-    private labelService: LabelService,
-    private utilService: UtilService,
-    private preferencesService: PreferencesService,
-    private trpcService: TRPCService,
-  ) {}
 
   ionViewWillEnter() {
     this.clearSelectedLabels();

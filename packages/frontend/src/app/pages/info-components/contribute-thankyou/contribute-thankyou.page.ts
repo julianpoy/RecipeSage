@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 
 import { RouteMap } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
@@ -12,10 +12,12 @@ import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.compo
   imports: [...SHARED_UI_IMPORTS, LogoIconComponent],
 })
 export class ContributeThankYouPage {
+  private capabilitiesService = inject(CapabilitiesService);
+
   defaultBackHref: string = RouteMap.AboutPage.getPath();
   accountPath: string = RouteMap.AccountPage.getPath();
 
-  constructor(private capabilitiesService: CapabilitiesService) {
+  constructor() {
     this.capabilitiesService.updateCapabilities();
   }
 }

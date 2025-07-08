@@ -4,6 +4,34 @@
   "sourceRoot": "packages/trpc/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/trpc/src/index.ts",
+        "outputPath": "dist/packages/trpc",
+        "outputFileName": "main.js",
+        "tsConfig": "packages/trpc/tsconfig.lib.json",
+        "declaration": true,
+        "assets": [
+          {
+            "glob": "packages/trpc/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "platform": "node"
+      },
+      "configurations": {
+        "development": {
+          "minify": false
+        },
+        "production": {
+          "minify": true
+        }
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
@@ -18,11 +46,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "packages/trpc/jest.config.ts",
-        "runInBand": true
+        "reportsDirectory": "../../coverage/packages/trpc"
       }
     }
   }

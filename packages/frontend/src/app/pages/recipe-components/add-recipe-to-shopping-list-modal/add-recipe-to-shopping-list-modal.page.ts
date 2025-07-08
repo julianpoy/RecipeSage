@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -25,6 +25,16 @@ import { SelectIngredientsComponent } from "../../../components/select-ingredien
   imports: [...SHARED_UI_IMPORTS, SelectIngredientsComponent],
 })
 export class AddRecipeToShoppingListModalPage {
+  navCtrl = inject(NavController);
+  translate = inject(TranslateService);
+  shoppingListService = inject(ShoppingListService);
+  recipeService = inject(RecipeService);
+  loadingService = inject(LoadingService);
+  utilService = inject(UtilService);
+  toastCtrl = inject(ToastController);
+  alertCtrl = inject(AlertController);
+  modalCtrl = inject(ModalController);
+
   @Input({
     required: true,
   })
@@ -38,18 +48,6 @@ export class AddRecipeToShoppingListModalPage {
   destinationShoppingList: any;
 
   @Input() reference: any;
-
-  constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public shoppingListService: ShoppingListService,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-  ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();

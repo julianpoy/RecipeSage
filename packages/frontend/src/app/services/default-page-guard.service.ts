@@ -1,13 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { NavController } from "@ionic/angular";
 import { UtilService, RouteMap } from "./util.service";
 
 @Injectable()
 export class DefaultPageGuardService {
-  constructor(
-    private navCtrl: NavController,
-    private utilService: UtilService,
-  ) {}
+  private navCtrl = inject(NavController);
+  private utilService = inject(UtilService);
 
   canActivate() {
     const isLoggedIn = this.utilService.isLoggedIn();

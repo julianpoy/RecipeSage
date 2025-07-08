@@ -1,5 +1,5 @@
 import "./services/sentry-init.js";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 import fs from "fs-extra";
 import extract from "extract-zip";
@@ -18,7 +18,7 @@ import * as Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
 import { writeImageFile, ObjectTypes } from "@recipesage/util/server/storage";
 
-let runConfig = {
+const runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
   labels: process.argv[4],
@@ -45,7 +45,7 @@ const exit = (status) => {
   process.exit(status);
 };
 
-let tablesNeeded = [
+const tablesNeeded = [
   "t_cookbook",
   // "t_cookbookchapter",
   // "t_cookbookchapterassocation",
@@ -89,9 +89,9 @@ let tablesNeeded = [
   // "t_recipemedia" //2x unused (or barely used)
 ];
 
-let zipPath = runConfig.path;
-let extractPath = zipPath + "-extract";
-let tableMap = {};
+const zipPath = runConfig.path;
+const extractPath = zipPath + "-extract";
+const tableMap = {};
 
 const cleanup = () => {
   fs.removeSync(zipPath);
@@ -107,7 +107,7 @@ async function main() {
 
     fs.unlinkSync(zipPath);
 
-    let potentialDbPaths = await UtilService.findFilesByRegex(
+    const potentialDbPaths = await UtilService.findFilesByRegex(
       extractPath,
       /\.mdb/i,
     );
@@ -152,9 +152,9 @@ async function main() {
       tableMap[tableName] = json;
     }
 
-    let labelMap = {};
+    const labelMap = {};
 
-    let pendingRecipes = [];
+    const pendingRecipes = [];
 
     tableMap.t_recipe = (tableMap.t_recipe || []).filter(
       (lcbRecipe) =>
@@ -162,12 +162,12 @@ async function main() {
         (runConfig.includeStockRecipes || !!lcbRecipe.modifieddate),
     );
 
-    let lcbImagesById = (tableMap.t_image || []).reduce((acc, image) => {
+    const lcbImagesById = (tableMap.t_image || []).reduce((acc, image) => {
       acc[image.imageid] = image;
       return acc;
     }, {});
 
-    let lcbImagesByRecipeId = (tableMap.t_recipeimage || []).reduce(
+    const lcbImagesByRecipeId = (tableMap.t_recipeimage || []).reduce(
       (acc, recipeImage) => {
         try {
           acc[recipeImage.recipeid] = acc[recipeImage.recipeid] || [];
@@ -183,7 +183,7 @@ async function main() {
       {},
     );
 
-    let lcbTechniquesById = (tableMap.t_technique || []).reduce(
+    const lcbTechniquesById = (tableMap.t_technique || []).reduce(
       (acc, technique) => {
         acc[technique.techniqueid] = technique;
         return acc;
@@ -191,7 +191,7 @@ async function main() {
       {},
     );
 
-    let lcbTechniquesByRecipeId = (tableMap.t_recipetechnique || []).reduce(
+    const lcbTechniquesByRecipeId = (tableMap.t_recipetechnique || []).reduce(
       (acc, lcbRecipeTechnique) => {
         try {
           acc[lcbRecipeTechnique.recipeid] =
@@ -207,7 +207,7 @@ async function main() {
       {},
     );
 
-    let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce(
+    const lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce(
       (acc, lcbIngredient) => {
         acc[lcbIngredient.recipeid] = acc[lcbIngredient.recipeid] || [];
         acc[lcbIngredient.recipeid].push(lcbIngredient);
@@ -216,7 +216,7 @@ async function main() {
       {},
     );
 
-    let lcbInstructionsByRecipeId = (tableMap.t_recipeprocedure || []).reduce(
+    const lcbInstructionsByRecipeId = (tableMap.t_recipeprocedure || []).reduce(
       (acc, lcbInstruction) => {
         acc[lcbInstruction.recipeid] = acc[lcbInstruction.recipeid] || [];
         acc[lcbInstruction.recipeid].push(lcbInstruction);
@@ -225,7 +225,7 @@ async function main() {
       {},
     );
 
-    let lcbTipsByRecipeId = (tableMap.t_recipetip || []).reduce(
+    const lcbTipsByRecipeId = (tableMap.t_recipetip || []).reduce(
       (acc, lcbTip) => {
         acc[lcbTip.recipeid] = acc[lcbTip.recipeid] || [];
         acc[lcbTip.recipeid].push(lcbTip);
@@ -234,7 +234,7 @@ async function main() {
       {},
     );
 
-    let lcbAuthorNotesByRecipeId = (tableMap.t_authornote || []).reduce(
+    const lcbAuthorNotesByRecipeId = (tableMap.t_authornote || []).reduce(
       (acc, lcbAuthorNote) => {
         acc[lcbAuthorNote.recipeid] = acc[lcbAuthorNote.recipeid] || [];
         acc[lcbAuthorNote.recipeid].push(lcbAuthorNote);
@@ -243,7 +243,7 @@ async function main() {
       {},
     );
 
-    let lcbCookbooksById = (tableMap.t_cookbook || []).reduce(
+    const lcbCookbooksById = (tableMap.t_cookbook || []).reduce(
       (acc, lcbCookbook) => {
         acc[lcbCookbook.cookbookid] = acc[lcbCookbook.cookbookid] || [];
         acc[lcbCookbook.cookbookid].push(lcbCookbook);
@@ -253,7 +253,7 @@ async function main() {
     );
 
     await sequelize.transaction(async (t) => {
-      let recipesWithImages = runConfig.excludeImages
+      const recipesWithImages = runConfig.excludeImages
         ? []
         : tableMap.t_recipe
             .map((lcbRecipe) => {
@@ -267,10 +267,9 @@ async function main() {
             })
             .filter((e) => e.imageFileNames.length > 0);
 
-      let i,
-        chunkedRecipesWithImages = [],
-        chunk = 50;
-      for (i = 0; i < recipesWithImages.length; i += chunk) {
+      const chunk = 50;
+      const chunkedRecipesWithImages = [];
+      for (let i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }
 
@@ -280,7 +279,7 @@ async function main() {
             lcbRecipeChunk.map(async (lcbRecipe) => {
               await Promise.all(
                 lcbRecipe.imageFileNames.map((imageFileName) => {
-                  let possibleImageFiles = UtilService.findFilesByRegex(
+                  const possibleImageFiles = UtilService.findFilesByRegex(
                     extractPath,
                     new RegExp(`(${imageFileName})$`, "i"),
                   );
@@ -309,9 +308,11 @@ async function main() {
 
       await Promise.all(
         tableMap.t_recipe.map(async (lcbRecipe) => {
-          let images = lcbRecipe.images || [];
+          const images = lcbRecipe.images || [];
 
-          let ingredients = (lcbIngredientsByRecipeId[lcbRecipe.recipeid] || [])
+          const ingredients = (
+            lcbIngredientsByRecipeId[lcbRecipe.recipeid] || []
+          )
             .filter((lcbIngredient) => lcbIngredient)
             .sort((a, b) => a.ingredientindex > b.ingredientindex)
             .map(
@@ -322,7 +323,7 @@ async function main() {
             )
             .join("\r\n");
 
-          let instructions = (
+          const instructions = (
             lcbInstructionsByRecipeId[lcbRecipe.recipeid] || []
           )
             .filter(
@@ -332,12 +333,14 @@ async function main() {
             .map((lcbProcedure) => lcbProcedure.proceduretext)
             .join("\r\n");
 
-          let recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
+          const recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
             .filter((lcbTip) => lcbTip && lcbTip.tiptext)
             .sort((a, b) => a.tipindex > b.tipindex)
             .map((lcbTip) => lcbTip.tiptext);
 
-          let authorNotes = (lcbAuthorNotesByRecipeId[lcbRecipe.recipeid] || [])
+          const authorNotes = (
+            lcbAuthorNotesByRecipeId[lcbRecipe.recipeid] || []
+          )
             .filter(
               (lcbAuthorNote) => lcbAuthorNote && lcbAuthorNote.authornotetext,
             )
@@ -378,7 +381,7 @@ async function main() {
           }
           totalTime = totalTime.trim();
 
-          let lcbRecipeLabels = [
+          const lcbRecipeLabels = [
             ...new Set([
               ...(lcbRecipe.recipetypes || "")
                 .split(",")
@@ -413,7 +416,7 @@ async function main() {
         }),
       );
 
-      let recipes = await Recipe.bulkCreate(
+      const recipes = await Recipe.bulkCreate(
         pendingRecipes.map((el) => el.model),
         {
           returning: true,

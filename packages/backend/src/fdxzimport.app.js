@@ -1,5 +1,5 @@
 import "./services/sentry-init.js";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 import fs from "fs-extra";
 import extract from "extract-zip";
@@ -122,7 +122,7 @@ async function main() {
 
     const fdxData = data.hixz || data.fdx || data.fdxz;
 
-    let labelMap = {};
+    const labelMap = {};
 
     const lcbCookbookNamesById = fetchDeepProp(fdxData, "Cookbook")
       .filter(
@@ -144,7 +144,7 @@ async function main() {
       // Add comments to notes
       if (recipe._attributes.Comments) notes.push(recipe._attributes.Comments);
 
-      let recipeTips = fetchDeepProp(recipe, "RecipeTip")
+      const recipeTips = fetchDeepProp(recipe, "RecipeTip")
         .filter((lcbTip) => lcbTip && lcbTip._text)
         .map((lcbTip) => lcbTip._text);
 
@@ -168,7 +168,7 @@ async function main() {
       }
       totalTime = totalTime.trim();
 
-      let ingredients = fetchDeepProp(recipe, "RecipeIngredient")
+      const ingredients = fetchDeepProp(recipe, "RecipeIngredient")
         .map((lcbIngredient) => lcbIngredient._attributes)
         .filter((lcbIngredient) => lcbIngredient)
         .map(
@@ -179,16 +179,16 @@ async function main() {
         )
         .join("\r\n");
 
-      let instructions = fetchDeepProp(recipe, "RecipeProcedure")
+      const instructions = fetchDeepProp(recipe, "RecipeProcedure")
         .map((lcbInstruction) => lcbInstruction.ProcedureText._text)
         .join("\r\n");
 
-      let rYield =
+      const rYield =
         recipe._attributes.Servings && recipe._attributes.Servings.length > 0
           ? `${recipe._attributes.Servings} servings`
           : null;
 
-      let lcbRecipeLabels = [
+      const lcbRecipeLabels = [
         ...new Set([
           ...(recipe._attributes.RecipeTypes || "")
             .split(",")
@@ -226,7 +226,7 @@ async function main() {
     });
 
     await sequelize.transaction(async (t) => {
-      let recipesWithImages = runConfig.excludeImages
+      const recipesWithImages = runConfig.excludeImages
         ? []
         : pendingRecipes
             .map((pendingRecipe) => {
@@ -238,10 +238,9 @@ async function main() {
             })
             .filter((e) => e.imageRefs.length > 0);
 
-      let i,
-        chunkedRecipesWithImages = [],
-        chunk = 50;
-      for (i = 0; i < recipesWithImages.length; i += chunk) {
+      const chunk = 50;
+      const chunkedRecipesWithImages = [];
+      for (let i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }
 
@@ -249,7 +248,7 @@ async function main() {
         return acc.then(() => {
           return Promise.all(
             lcbRecipeChunk.map((lcbRecipe) => {
-              let imageRefs = lcbRecipe.imageRefs;
+              const imageRefs = lcbRecipe.imageRefs;
 
               if (imageRefs.length == 0) return;
 
@@ -272,9 +271,9 @@ async function main() {
                   }
 
                   // let possibleFileNameRegex = imageFileNames.join('|')
-                  let possibleFileNameRegex = imageRef._attributes.FileName;
+                  const possibleFileNameRegex = imageRef._attributes.FileName;
 
-                  let possibleImageFiles = UtilService.findFilesByRegex(
+                  const possibleImageFiles = UtilService.findFilesByRegex(
                     extractPath,
                     new RegExp(`(${possibleFileNameRegex})$`, "i"),
                   );
@@ -300,7 +299,7 @@ async function main() {
         });
       }, Promise.resolve());
 
-      let recipes = await Recipe.bulkCreate(
+      const recipes = await Recipe.bulkCreate(
         pendingRecipes.map((el) => el.model),
         {
           returning: true,

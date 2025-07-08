@@ -1,7 +1,8 @@
 import { WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip";
 import { config } from "./config";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
+import { metrics } from "./metrics";
 
 export const serveGrip = new ServeGrip({
   grip: [
@@ -45,6 +46,10 @@ export const broadcastWSEvent = async function <T extends WSBoardcastEventType>(
     channel,
     new WebSocketMessageFormat(JSON.stringify(body)),
   );
+
+  metrics.websocketMessageOutgoing.inc({
+    message_type: type,
+  });
 };
 
 export const broadcastWSEventIgnoringErrors = async function <

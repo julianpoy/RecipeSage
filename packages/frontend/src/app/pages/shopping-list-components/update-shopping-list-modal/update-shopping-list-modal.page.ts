@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import {
   ModalController,
   ToastController,
@@ -20,6 +20,15 @@ import { SelectCollaboratorsComponent } from "../../../components/select-collabo
   imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class UpdateShoppingListModalPage {
+  modalCtrl = inject(ModalController);
+  navCtrl = inject(NavController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  trpcService = inject(TRPCService);
+  messagingService = inject(MessagingService);
+  userService = inject(UserService);
+  toastCtrl = inject(ToastController);
+
   @Input({
     required: true,
   })
@@ -28,17 +37,6 @@ export class UpdateShoppingListModalPage {
   loaded = false;
   listTitle = "";
   selectedCollaboratorIds: string[] = [];
-
-  constructor(
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public trpcService: TRPCService,
-    public messagingService: MessagingService,
-    public userService: UserService,
-    public toastCtrl: ToastController,
-  ) {}
 
   async load() {
     this.loaded = false;

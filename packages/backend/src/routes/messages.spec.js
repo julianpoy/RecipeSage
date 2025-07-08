@@ -30,7 +30,7 @@ describe("messages", () => {
     let dispatchStub;
 
     beforeAll(() => {
-      dispatchStub = jest
+      dispatchStub = vi
         .spyOn(UtilService, "dispatchMessageNotification")
         .mockImplementation(() => {
           // noop

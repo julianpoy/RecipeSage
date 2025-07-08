@@ -5,22 +5,18 @@ import {
 } from "../../../defineHandler";
 import multer from "multer";
 import { createReadStream } from "fs";
-import { indexRecipes } from "@recipesage/util/server/search";
-import { JobStatus, JobType } from "@prisma/client";
-import {
-  importStandardizedRecipes,
-  StandardizedRecipeImportEntry,
-} from "@recipesage/util/server/db";
-import { JobMeta, prisma } from "@recipesage/prisma";
-import Sentry from "@sentry/node";
+import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
 import {
   capitalizeEachWord,
   cleanLabelTitle,
-  JOB_RESULT_CODES,
+  toCamelCase,
+  toPascalCase,
 } from "@recipesage/util/shared";
 import {
   deletePathsSilent,
-  getImportJobResultCode,
+  importJobFailCommon,
+  importJobFinishCommon,
+  importJobSetupCommon,
 } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { parse } from "csv-parse";
@@ -42,8 +38,7 @@ export const csvHandler = defineHandler(
     ],
   },
   async (req, res) => {
-    const userLabels =
-      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+    const userId = res.locals.session.userId;
 
     const cleanupPaths: string[] = [];
 
@@ -54,17 +49,10 @@ export const csvHandler = defineHandler(
       );
     }
 
-    const job = await prisma.job.create({
-      data: {
-        userId: res.locals.session.userId,
-        type: JobType.IMPORT,
-        status: JobStatus.RUN,
-        progress: 1,
-        meta: {
-          importType: "csv",
-          importLabels: userLabels,
-        } satisfies JobMeta,
-      },
+    const { job, timer, importLabels } = await importJobSetupCommon({
+      userId,
+      importType: "csv",
+      labels: req.query.labels?.split(",") || [],
     });
 
     // We complete this work outside of the scope of the request
@@ -84,7 +72,9 @@ export const csvHandler = defineHandler(
           const val =
             record[entry] ||
             record[entry.toUpperCase()] ||
-            record[capitalizeEachWord(entry)];
+            record[capitalizeEachWord(entry)] ||
+            record[toCamelCase(entry)] ||
+            record[toPascalCase(entry)];
           if (val) return val;
         }
 
@@ -112,11 +102,11 @@ export const csvHandler = defineHandler(
               const title = getSimilarFields(["title", "name"], record);
               const description = getSimilarFields(["description"], record);
               const yld = getSimilarFields(
-                ["yield", "serves", "servings"],
+                ["yield", "serves", "servings", "quantity"],
                 record,
               );
               const activeTime = getSimilarFields(
-                ["active time", "prep time"],
+                ["active time", "prep time", "preparation time"],
                 record,
               );
               const totalTime = getSimilarFields(
@@ -130,7 +120,13 @@ export const csvHandler = defineHandler(
               );
               const url = getSimilarFields(["url"], record);
               const source = getSimilarFields(["source"], record);
-              const notes = getSimilarFields(["notes"], record);
+              const notes = [
+                getSimilarFields(["notes"], record),
+                getSimilarFields(["nutrition"], record),
+                getSimilarFields(["video", "videos"], record),
+              ]
+                .filter((el) => el.trim())
+                .join("\n");
               const imageURLs = negotiateUrls(
                 getSimilarFields(
                   [
@@ -141,6 +137,7 @@ export const csvHandler = defineHandler(
                     "photos",
                     "photo urls",
                     "photo url",
+                    "original picture",
                   ],
                   record,
                 ),
@@ -176,7 +173,7 @@ export const csvHandler = defineHandler(
                   notes,
                 },
                 images: imageURLs,
-                labels: [...labels, ...userLabels],
+                labels: [...labels, ...importLabels],
               });
             }
           } catch (e) {
@@ -197,86 +194,22 @@ export const csvHandler = defineHandler(
 
       await done;
 
-      if (standardizedRecipeImportInput.length === 0) {
-        throw new Error("No recipes");
-      }
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 25,
-        },
-      });
-
-      const createdRecipeIds = await importStandardizedRecipes(
-        res.locals.session.userId,
+      await importJobFinishCommon({
+        timer,
+        job,
+        userId,
         standardizedRecipeImportInput,
-      );
-
-      const recipesToIndex = await prisma.recipe.findMany({
-        where: {
-          id: {
-            in: createdRecipeIds,
-          },
-          userId: res.locals.session.userId,
-        },
-      });
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 75,
-        },
-      });
-
-      await indexRecipes(recipesToIndex);
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          status: JobStatus.SUCCESS,
-          resultCode: JOB_RESULT_CODES.success,
-          progress: 100,
-        },
+        importTempDirectory: undefined,
       });
     };
 
     start()
-      .catch(async (e) => {
-        const isBadFormatError =
-          e instanceof Error &&
-          e.message === "end of central directory record signature not found";
-
-        const isNoRecipesError =
-          e instanceof Error && e.message === "No recipes";
-
-        await prisma.job.update({
-          where: {
-            id: job.id,
-          },
-          data: {
-            status: JobStatus.FAIL,
-            resultCode: getImportJobResultCode({
-              isBadFormat: isBadFormatError,
-              isNoRecipes: isNoRecipesError,
-            }),
-          },
+      .catch(async (error) => {
+        await importJobFailCommon({
+          timer,
+          job,
+          error,
         });
-
-        if (!isBadFormatError && !isNoRecipesError) {
-          Sentry.captureException(e, {
-            extra: {
-              jobId: job.id,
-            },
-          });
-          console.error(e);
-        }
       })
       .finally(async () => {
         await deletePathsSilent(cleanupPaths);

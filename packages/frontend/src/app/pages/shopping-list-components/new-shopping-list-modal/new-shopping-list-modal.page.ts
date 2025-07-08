@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   ModalController,
   ToastController,
@@ -20,20 +20,18 @@ import { SelectCollaboratorsComponent } from "../../../components/select-collabo
   imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class NewShoppingListModalPage {
+  modalCtrl = inject(ModalController);
+  navCtrl = inject(NavController);
+  utilService = inject(UtilService);
+  loadingService = inject(LoadingService);
+  shoppingListService = inject(ShoppingListService);
+  messagingService = inject(MessagingService);
+  userService = inject(UserService);
+  toastCtrl = inject(ToastController);
+
   listTitle = "";
 
   selectedCollaboratorIds: string[] = [];
-
-  constructor(
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public messagingService: MessagingService,
-    public userService: UserService,
-    public toastCtrl: ToastController,
-  ) {}
 
   async save() {
     const loading = this.loadingService.start();

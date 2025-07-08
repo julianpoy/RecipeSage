@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
 }
 
@@ -279,6 +279,7 @@ model ShoppingListItem {
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([recipeId], map: "shopping_list_items_recipe_id")
+  @@index([mealPlanItemId], map: "shopping_list_items_meal_plan_item_id")
   @@index([shoppingListId], map: "shopping_list_items_shopping_list_id")
   @@map("ShoppingListItems")
 }
@@ -309,13 +310,25 @@ model ShoppingList {
   @@map("ShoppingLists")
 }
 
+model StripeEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  stripeId  String   @unique @db.VarChar(255)
+  userId    String?  @db.Uuid
+  blob      Json
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("StripeEvents")
+}
+
 model StripePayment {
   id              String   @id @default(uuid()) @db.Uuid
   userId          String?  @db.Uuid
   amountPaid      Int
   customerId      String   @db.VarChar(255)
   customerEmail   String?  @db.VarChar(255)
-  paymentIntentId String   @unique @db.VarChar(255)
+  paymentIntentId String?  @unique @db.VarChar(255)
   subscriptionId  String?  @db.VarChar(255)
   invoiceBlob     Json
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
@@ -387,7 +400,8 @@ model User {
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
   profileImages             UserProfileImage[]
-  Job                       Job[]
+  jobs                      Job[]
+  stripeEvents              StripeEvent[]
 
   @@map("Users")
 }

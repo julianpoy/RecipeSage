@@ -8,7 +8,7 @@ import {
 } from "@recipesage/prisma";
 import { convertPrismaDateToDatestamp } from "@recipesage/util/server/db";
 
-const HISTORICAL_DATE_LIMIT_DAYS = 60; // We return this number of past days of meal plan items
+const HISTORICAL_DATE_LIMIT_DAYS = 30; // We return this number of past days of meal plan items
 
 export const getMealPlansWithItems = publicProcedure.query(
   async ({ ctx }): Promise<MealPlanSummaryWithItems[]> => {

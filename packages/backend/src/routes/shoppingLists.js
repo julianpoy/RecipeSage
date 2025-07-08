@@ -186,7 +186,7 @@ router.post(
       })),
     );
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const broadcastPayload = {
       shoppingListId: shoppingList.id,
@@ -309,7 +309,7 @@ router.delete(
       },
     });
 
-    let reference = Date.now();
+    const reference = Date.now();
 
     const deletedItemBroadcast = {
       shoppingListId: shoppingList.id,
@@ -414,7 +414,7 @@ router.get(
       ],
     });
 
-    let s = shoppingListSummary.toJSON();
+    const s = shoppingListSummary.toJSON();
     ShoppingListCategorizerService.groupShoppingListItems(s.items);
     for (const item of s.items) {
       if (item.categoryTitle === null) {

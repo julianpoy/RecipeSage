@@ -5,10 +5,11 @@ import { TRPCError } from "@trpc/server";
 import {
   SessionType,
   generateSession,
+  metrics,
   validatePasswordHash,
 } from "@recipesage/util/server/general";
 import { indexRecipes } from "@recipesage/util/server/search";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 export const login = publicProcedure
   .input(
@@ -79,6 +80,10 @@ export const login = publicProcedure
         Sentry.captureException(e);
       });
     }
+
+    metrics.userLogin.inc({
+      auth_type: "password",
+    });
 
     return {
       token: session.token,

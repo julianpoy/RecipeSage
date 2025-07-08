@@ -1,4 +1,4 @@
-import { Component, Input, type OnInit } from "@angular/core";
+import { Component, Input, type OnInit, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -14,17 +14,17 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
   imports: [...SHARED_UI_IMPORTS, CopyWithWebshareComponent],
 })
 export class ShareProfileModalPage implements OnInit {
+  private translate = inject(TranslateService);
+  private userService = inject(UserService);
+  private modalCtrl = inject(ModalController);
+
   @Input() handle!: string;
   @Input() userId!: string;
   @Input() profile!: any;
 
   profileUrl?: string;
 
-  constructor(
-    private translate: TranslateService,
-    private userService: UserService,
-    private modalCtrl: ModalController,
-  ) {
+  constructor() {
     setTimeout(() => {
       if (this.handle) this.loadFromHandle(this.handle);
       if (this.userId) this.loadFromUserId(this.userId);

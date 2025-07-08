@@ -1,5 +1,5 @@
 import "./services/sentry-init.js";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 
 import {
   NotFoundError,
@@ -18,6 +18,7 @@ import { trpcExpressMiddleware } from "@recipesage/trpc";
 
 import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
 setupInvalidateStaleJobsInterval();
+import { metrics } from "@recipesage/util/server/general";
 
 // Routes
 import index from "./routes/index.js";
@@ -99,13 +100,35 @@ app.use(
     verify: (req, res, buf) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;
-      if (url.startsWith("/payments/stripe/webhooks")) {
+      if (
+        url.startsWith("/payments/stripe/webhooks") ||
+        url.startsWith("/stripe/webhook")
+      ) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (req as any).rawBody = buf.toString();
       }
     },
   }),
 );
+
+app.use(function (req, res, next) {
+  const timer = metrics.apiRequest.startTimer();
+  res.on("finish", function () {
+    const time = timer();
+    const path = req.baseUrl + (req.route?.path || req.path);
+    metrics.apiRequest.observe(
+      {
+        status_code: res.statusCode,
+        method: req.method,
+        path,
+      },
+      time,
+    );
+  });
+
+  next();
+});
+
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");
@@ -137,11 +160,9 @@ const logError = (err: ServerError) => {
   if (isExpectedError) return;
 
   console.error(err);
-
-  Sentry.captureException(err);
 };
 
-const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
+const appErrorHandler: ErrorRequestHandler = function (_err, req, res, _next) {
   const err = _err as ServerError;
   if (!err.status) err.status = 500;
 
@@ -156,6 +177,8 @@ const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
   res.status(err.status);
   res.render("error");
 };
+
+Sentry.setupExpressErrorHandler(app);
 app.use(appErrorHandler);
 
 export { app };

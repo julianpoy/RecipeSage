@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { PreferencesService } from "../../services/preferences.service";
 import {
@@ -15,6 +15,10 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class FontSizeModalComponent {
+  private modalCtrl = inject(ModalController);
+  private preferencesService = inject(PreferencesService);
+  private translate = inject(TranslateService);
+
   preferences = this.preferencesService.preferences;
 
   supportedFontSizes = SupportedFontSize as Record<string, string>;
@@ -65,11 +69,7 @@ export class FontSizeModalComponent {
     return this._fontSize;
   }
 
-  constructor(
-    private modalCtrl: ModalController,
-    private preferencesService: PreferencesService,
-    private translate: TranslateService,
-  ) {
+  constructor() {
     this.loadFontSizeOptions();
   }
 

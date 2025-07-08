@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 
 import { RecipeService, ExportFormat } from "~/services/recipe.service";
@@ -25,6 +25,10 @@ const JOB_POLL_INTERVAL_MS = 7500;
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ExportPage {
+  private utilService = inject(UtilService);
+  private trpcService = inject(TRPCService);
+  private recipeService = inject(RecipeService);
+
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
   /**
@@ -33,12 +37,6 @@ export class ExportPage {
   showJobs = 5;
   exportJobs: JobSummary[] = [];
   jobPollInterval?: NodeJS.Timeout;
-
-  constructor(
-    private utilService: UtilService,
-    private trpcService: TRPCService,
-    private recipeService: RecipeService,
-  ) {}
 
   ionViewWillEnter() {
     this.setupJobStatusPoll();
