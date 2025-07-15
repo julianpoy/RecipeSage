@@ -951,7 +951,7 @@
     "pages.import.processing": "Traitement et importation des recettes...",
     "pages.import.textFiles": "Importation à partir de fichiers texte",
     "pages.import.urls": "Importer à partir d'une liste d'URL",
-    "pages.import.csv": "Importation à partir d'un fichier CSV (PlanToEat et autres)",
+    "pages.import.csv": "Importation à partir d'un fichier CSV (PlanToEat, MyRecipeNox et autres)",
     "pages.import.fileTooLarge": "Ce fichier est trop volumineux pour être téléchargé directement.",
     "pages.import.fileTooLarge.contact": "Merci de me contacter pour avoir un import manuel de votre base de données.",
     "pages.import.upload": "Chargement et Import",
@@ -1018,5 +1018,10 @@
     "pages.import.enex": "Importer depuis un fichier Evernote",
     "pages.importEnex.title": "Importer des recettes à partir d'un fichier Evernote (enex)",
     "pages.importEnex.description": "Cela importera des recettes à partir d'une exportation Evernote (se terminant par .enex) dans votre compte RecipeSage. Veuillez vous référer au guide de l'utilisateur pour savoir comment créer un fichier dans le format correct à importer ici. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
-    "pages.contribute.manage": "Pour gérer un abonnement existant, cliquez ici"
+    "pages.contribute.manage": "Pour gérer un abonnement existant, cliquez ici",
+    "components.mealCalendar.breakfast": "Petit-Déjeuner",
+    "components.mealCalendar.lunch": "Lunch",
+    "components.mealCalendar.dinner": "Diner",
+    "components.mealCalendar.snack": "Snacking",
+    "components.mealCalendar.other": "Autre"
 }
