@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, inject, Output, EventEmitter } from "@angular/core";
 
 import { UtilService } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -10,6 +10,8 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class DraggableShoppingListItemComponent {
+  utilService = inject(UtilService);
+
   @Input({
     required: true,
   })
@@ -26,8 +28,6 @@ export class DraggableShoppingListItemComponent {
     required: true,
   })
   ownerName!: string;
-
-  constructor(private utilService: UtilService) {}
 
   formatItemCreationDate(plainTextDate: string) {
     return this.utilService.formatDate(plainTextDate, { now: true });

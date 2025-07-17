@@ -156,8 +156,35 @@ export class ShoppingListPopoverPage {
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
   }
 
-  toggleEditMode() {
+  async toggleEditMode() {
     this.editMode = !this.editMode;
+    if (
+      this.editMode &&
+      !this.preferences[ShoppingListPreferenceKey.editHelpShown]
+    ) {
+      const header = await this.translate
+        .get("components.messaging.shoppingList.categoryEdit.help.header")
+        .toPromise();
+      const message = await this.translate
+        .get("components.messaging.shoppingList.categoryEdit.help.message")
+        .toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
+
+      const alert = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: okay,
+            handler: () => {
+              this.preferences[ShoppingListPreferenceKey.editHelpShown] = true;
+              this.preferencesService.save();
+            },
+          },
+        ],
+      });
+      alert.present();
+    }
     this.dismiss();
   }
 

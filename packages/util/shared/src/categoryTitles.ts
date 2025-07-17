@@ -10,6 +10,8 @@ export const formattedCategoryTitles = {
   deli: "Deli",
 } as const;
 
-export const allCategoryTitles: string[] = Object.values(
-  formattedCategoryTitles,
-);
+export const allCategoryTitles: string[] = [
+  ...Object.values(formattedCategoryTitles),
+  "Canned",
+  "Uncategorized",
+];
