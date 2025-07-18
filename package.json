@@ -137,7 +137,7 @@
     "@nx/web": "21.2.1",
     "@sentry/esbuild-plugin": "^3.5.0",
     "@swc-node/register": "~1.10.10",
-    "@swc/core": "1.12.11",
+    "@swc/core": "1.13.0",
     "@swc/helpers": "0.5.17",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
