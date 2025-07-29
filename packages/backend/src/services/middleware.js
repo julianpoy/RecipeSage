@@ -28,7 +28,15 @@ export const validateUser = function (req, res, next) {
     where: {
       id: res.locals.session.userId,
     },
-    attributes: ["id", "name", "email", "createdAt", "updatedAt", "lastLogin"],
+    attributes: [
+      "id",
+      "name",
+      "email",
+      "handle",
+      "createdAt",
+      "updatedAt",
+      "lastLogin",
+    ],
   })
     .then((user) => {
       if (!user) {

@@ -77,12 +77,12 @@ router.post(
           {
             model: User,
             as: "toUser",
-            attributes: ["id", "name", "email"],
+            attributes: ["id", "name", "handle"],
           },
           {
             model: User,
             as: "fromUser",
-            attributes: ["id", "name", "email"],
+            attributes: ["id", "name", "handle"],
           },
           {
             model: Recipe,
@@ -153,12 +153,12 @@ router.get(
         {
           model: User,
           as: "toUser",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "fromUser",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: Recipe,
@@ -249,12 +249,12 @@ router.get(
         {
           model: User,
           as: "toUser",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "fromUser",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: Recipe,

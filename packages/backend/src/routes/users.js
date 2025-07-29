@@ -556,7 +556,7 @@ router.get(
       where: {
         email: UtilService.sanitizeEmail(req.query.email),
       },
-      attributes: ["id", "name", "email"],
+      attributes: ["id", "name", "handle"],
     });
 
     if (!user) {

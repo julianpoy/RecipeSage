@@ -6,8 +6,7 @@
 
     <ion-title>
       {{ 'pages.messageThread.title' |
-      translate:{name:(messages.at(0)?.otherUser?.name ||
-      messages.at(0)?.otherUser?.email || '')} }}
+      translate:{name:(messages.at(0)?.otherUser?.name || '')} }}
     </ion-title>
 
     <ion-buttons slot="end">

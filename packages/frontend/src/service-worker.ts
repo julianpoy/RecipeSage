@@ -265,8 +265,7 @@ try {
       case "messages:new": {
         const messageObj = JSON.parse(message.data.message);
 
-        const title = messageObj.otherUser.name || messageObj.otherUser.email;
-        return self.registration.showNotification(title, {
+        return self.registration.showNotification(messageObj.otherUser.name, {
           tag: message.data.type + "-" + messageObj.otherUser.id,
           icon: messageObj.recipe?.images.at(0)?.location || RS_LOGO_URL,
           body: messageObj.recipe ? messageObj.recipe.title : messageObj.body,
