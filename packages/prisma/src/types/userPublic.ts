@@ -3,7 +3,6 @@ import { Prisma } from "@prisma/client";
 export const userPublic = Prisma.validator<Prisma.UserFindFirstArgs>()({
   select: {
     id: true,
-    email: true,
     name: true,
     handle: true,
     enableProfile: true,

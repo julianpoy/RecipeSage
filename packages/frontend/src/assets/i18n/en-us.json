@@ -584,7 +584,7 @@
   "pages.editRecipe.clipText.placeholder": "Text that includes recipe...",
   "pages.editRecipe.clipText.invalid": "Error: Text too short or could not recognize recipe",
   "pages.editRecipe.clip.loading": "Please wait...",
-  "pages.editRecipe.clip.failed": "Failed to autofill from that URL",
+  "pages.editRecipe.clip.failed": "Failed to autofill. It is expected that some content may fail to autofill, but please contact me if you're having consistent issues.",
   "pages.editRecipe.clip.failedSelfhost": "Please check your OpenAI credentials as described in the selfhosting readme",
   "pages.editRecipe.missingLabelGroup.title": "Missing label group",
   "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the my labels page.",
