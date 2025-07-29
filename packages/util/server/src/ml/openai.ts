@@ -36,7 +36,7 @@ export class OpenAIHelper {
     tools: RSRunnableFunction[],
     toolChoice?: ChatCompletionToolChoiceOption,
   ): Promise<ChatCompletionMessageParam[]> {
-    const runner = this.openAi.beta.chat.completions.runTools({
+    const runner = this.openAi.chat.completions.runTools({
       messages: context,
       model,
       tools,
@@ -63,7 +63,7 @@ export class OpenAIHelper {
     context: ChatCompletionMessageParam[],
     tools: RSRunnableFunction[],
   ): Promise<ChatCompletionMessageParam[]> {
-    const runner = this.openAi.beta.chat.completions.runTools({
+    const runner = this.openAi.chat.completions.runTools({
       messages: context,
       model,
       tools,
@@ -103,7 +103,7 @@ export class OpenAIHelper {
       user: userId,
     });
 
-    const url = image.data[0].url;
+    const url = image.data?.[0].url;
     if (!url) {
       throw new Error("Dall-E did not create image as requested");
     }
