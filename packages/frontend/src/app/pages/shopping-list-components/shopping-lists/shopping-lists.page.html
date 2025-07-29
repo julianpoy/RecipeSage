@@ -54,21 +54,20 @@
           {{ 'pages.shoppingLists.collaboration' | translate }}
           <span *ngFor="let user of shoppingList.collaborators; last as isLast">
             <span *ngIf="shoppingList.myUserId !== user.id">
-              {{ user.name || user.email }}<span
+              {{ user.name }}<span
                 *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id"
                 >,</span
               >
             </span>
           </span>
           <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
-            {{ shoppingList.owner.name || shoppingList.owner.email }}
+            {{ shoppingList.owner.name }}
           </span>
         </p>
         <p>
           <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
             {{ 'pages.shoppingLists.createdBy' |
-            translate:{name:(shoppingList.owner.name ||
-            shoppingList.owner.email)} }}
+            translate:{name:shoppingList.owner.name} }}
           </span>
           <span *ngIf="shoppingList.myUserId === shoppingList.owner.id">
             {{ 'pages.shoppingLists.owner' | translate }}

@@ -32,18 +32,20 @@
             *ngFor="let collaboratorUser of mealPlan.collaboratorUsers; last as isLast"
           >
             <span *ngIf="me?.id !== collaboratorUser.user.id">
-              {{ collaboratorUser.user.name || collaboratorUser.user.email
-              }}<span *ngIf="!isLast || me?.id !== mealPlan.user.id">,</span>
+              {{ collaboratorUser.user.name }}<span
+                *ngIf="!isLast || me?.id !== mealPlan.user.id"
+                >,</span
+              >
             </span>
           </span>
           <span *ngIf="me?.id !== mealPlan.user.id">
-            {{ mealPlan.user.name || mealPlan.user.email }}
+            {{ mealPlan.user.name }}
           </span>
         </p>
         <p>
           <span *ngIf="me?.id !== mealPlan.user.id">
             {{ 'pages.mealPlans.metadata.createdBy' |
-            translate:{name:(mealPlan.user.name || mealPlan.user.email)} }}
+            translate:{name:mealPlan.user.name} }}
           </span>
           <span *ngIf="me?.id === mealPlan.user.id">
             {{ 'pages.mealPlans.metadata.youOwn' | translate }}
