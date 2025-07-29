@@ -10,6 +10,7 @@ import {
 import { Capabilities } from "@recipesage/util/shared";
 
 export interface UserPrivate {
+  email: string;
   createdAt: Date;
   updatedAt: Date;
   subscriptions: {
@@ -29,6 +30,7 @@ export const getMe = publicProcedure.query(
       },
       select: {
         ...userPublic.select,
+        email: true,
         createdAt: true,
         updatedAt: true,
       },

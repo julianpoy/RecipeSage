@@ -1,7 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { userPublic } from "@recipesage/prisma";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 
 export const getUserProfilesById = publicProcedure
@@ -10,10 +9,7 @@ export const getUserProfilesById = publicProcedure
       ids: z.array(z.string().uuid()).min(1).max(100),
     }),
   )
-  .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
+  .query(async ({ input }) => {
     const profiles = await prisma.user.findMany({
       where: {
         id: {
