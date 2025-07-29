@@ -1,5 +1,5 @@
 import { initOCRFormatRecipe } from "../ml/chatFunctions";
-import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
+import { OpenAIHelper, GPTModelQuality } from "../ml/openai";
 import { StandardizedRecipeImportEntry } from "../db";
 
 const openAiHelper = new OpenAIHelper();
@@ -30,7 +30,7 @@ export const visionToRecipe = async (
     throw new Error("GPT function must have name for mandated tool call");
 
   await openAiHelper.getJsonResponseWithTools(
-    SupportedGPTModel.GPT4O,
+    GPTModelQuality.ImageRecognition,
     [
       {
         role: "system",
