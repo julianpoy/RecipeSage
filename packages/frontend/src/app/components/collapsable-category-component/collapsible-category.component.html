@@ -1,0 +1,11 @@
+<ion-list-header (click)="onToggleCollapse()">
+  <ion-title class="ion-no-padding">
+    {{ categoryTitle }}
+    <ion-icon *ngIf="!isCollapsed" name="caret-down"></ion-icon>
+    <ion-icon *ngIf="isCollapsed" name="caret-up"></ion-icon>
+  </ion-title>
+</ion-list-header>
+
+<div [class.collapsed-content]="isCollapsed">
+  <ng-content></ng-content>
+</div>

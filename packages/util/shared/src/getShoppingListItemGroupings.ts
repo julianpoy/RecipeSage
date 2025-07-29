@@ -1,5 +1,6 @@
 import { ShoppingListItem } from "@prisma/client";
 import { ShoppingListSortOptions } from "./preferences";
+import { allCategoryTitles } from "./categoryTitles";
 
 interface SortableItem {
   title: string;
@@ -93,6 +94,7 @@ interface GroupableShoppingListItemsByGroupAndCategory {
 export const getShoppingListItemGroupings = (
   items: GroupableShoppingListItem[],
   sortBy: ShoppingListSortOptions,
+  editMode: boolean,
 ): {
   items: GroupableShoppingListItem[];
   groupTitles: string[];
@@ -112,9 +114,10 @@ export const getShoppingListItemGroupings = (
     return a.localeCompare(b);
   });
 
-  const categoryTitles = Array.from(
-    new Set<string>(items.map((item) => item.categoryTitle)),
-  ).sort((a, b) => {
+  const categoryTitles = editMode
+    ? allCategoryTitles
+    : Array.from(new Set<string>(items.map((item) => item.categoryTitle)));
+  categoryTitles.sort((a: string, b: string) => {
     // Sort categories by title (always)
     return a.localeCompare(b);
   });

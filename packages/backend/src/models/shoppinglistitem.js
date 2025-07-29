@@ -17,6 +17,10 @@ export const ShoppingListItemInit = (sequelize, DataTypes) => {
         defaultValue: false,
         allowNull: false,
       },
+      categoryTitle: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {},
   );
