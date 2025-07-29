@@ -248,7 +248,6 @@ export const clipUrl = async (
   const response = await fetchURL(url, {
     timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "10000"),
   }).catch((e) => {
-    console.log("caught", e);
     if (e instanceof AbortError) {
       throw new ClipTimeoutError();
     }
