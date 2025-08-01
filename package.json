@@ -45,7 +45,7 @@
     "@types/jsdom": "^21.1.7",
     "axios": "^1.8.4",
     "body-parser": "~2.2.0",
-    "commander": "13.1.0",
+    "commander": "14.0.0",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.41.0",
     "cors": "^2.8.5",
