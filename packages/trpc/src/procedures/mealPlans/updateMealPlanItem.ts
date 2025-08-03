@@ -12,19 +12,24 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 
-export const updateMealPlanItem = publicProcedure
-  .input(
-    z.object({
-      id: z.string().uuid(),
-      title: z.string(),
-      scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-      meal: z.union([
+/**
+ * TODO: Add migration to replace meal with mealTime
+ * meal: z.union([
         z.literal("breakfast"),
         z.literal("lunch"),
         z.literal("dinner"),
         z.literal("snacks"),
         z.literal("other"),
       ]),
+ */
+
+export const updateMealPlanItem = publicProcedure
+  .input(
+    z.object({
+      id: z.string().uuid(),
+      title: z.string(),
+      scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      meal: z.string(),
       recipeId: z.string().uuid().nullable(),
     }),
   )

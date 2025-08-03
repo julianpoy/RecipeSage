@@ -8,8 +8,35 @@ import {
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { MealOption, MealOptionService } from "../../services/meal-option.service";
 
 const LAST_USED_MEAL_VAR = "lastUsedMeal";
+
+
+// TODO: Integrate with meal options service
+const DEFAULT_MEAL_OPTIONS = [
+  {
+    title: "",
+    key: "breakfast",
+  },
+  {
+    title: "",
+    key: "lunch",
+  },
+  {
+    title: "",
+    key: "dinner",
+  },
+  {
+    title: "",
+    key: "snacks",
+  },
+  {
+    title: "",
+    key: "other",
+  },
+];
+
 
 @Component({
   selector: "select-meal",
@@ -23,35 +50,25 @@ export class SelectMealComponent implements AfterViewInit {
   @Input() meal = "";
   @Output() mealChange = new EventEmitter();
 
-  mealOptions = [
-    {
-      title: "",
-      key: "breakfast",
-    },
-    {
-      title: "",
-      key: "lunch",
-    },
-    {
-      title: "",
-      key: "dinner",
-    },
-    {
-      title: "",
-      key: "snacks",
-    },
-    {
-      title: "",
-      key: "other",
-    },
-  ];
+  mealOptionService = inject(MealOptionService);
+  mealOptions: MealOption[] = [];
 
   ngAfterViewInit() {
+    this.loadMealOptions();
+
     if (!this.meal) {
       this.selectLastUsedMeal();
     }
 
     this.loadTranslations();
+  }
+
+  async loadMealOptions() {
+    this.mealOptionService.fetch().then((response) => {
+      if (response.data) {
+        this.mealOptions = response.data;
+      }
+    });
   }
 
   async loadTranslations() {
@@ -70,19 +87,11 @@ export class SelectMealComponent implements AfterViewInit {
     const other = await this.translate
       .get("components.selectMeal.other")
       .toPromise();
-
-    this.mealOptions[0].title = breakfast;
-    this.mealOptions[1].title = lunch;
-    this.mealOptions[2].title = dinner;
-    this.mealOptions[3].title = snack;
-    this.mealOptions[4].title = other;
   }
 
   selectLastUsedMeal() {
     const lastUsedMeal = localStorage.getItem(LAST_USED_MEAL_VAR);
-    const mealExists = this.mealOptions.find(
-      (option) => option.key === lastUsedMeal,
-    );
+    const mealExists = this.mealOptions.find((option) => option.mealTime === lastUsedMeal);
 
     if (lastUsedMeal && mealExists) {
       this.meal = lastUsedMeal;

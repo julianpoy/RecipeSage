@@ -17,6 +17,7 @@ import { jobsRouter } from "./procedures/jobs/jobsRouter";
 import { mlRouter } from "./procedures/ml/mlRouter";
 import { assistantRouter } from "./procedures/assistant/assistantRouter";
 import { paymentsRouter } from "./procedures/payments/paymentsRouter";
+import { mealOptionsRouter } from "./procedures/mealOptions/mealOptionsRouter";
 
 const appRouter = router({
   labelGroups: labelGroupsRouter,
@@ -24,6 +25,7 @@ const appRouter = router({
   payments: paymentsRouter,
   recipes: recipesRouter,
   mealPlans: mealPlansRouter,
+  mealOptions: mealOptionsRouter,
   shoppingLists: shoppingListsRouter,
   assistant: assistantRouter,
   users: usersRouter,

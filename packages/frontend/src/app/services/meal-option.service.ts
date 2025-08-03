@@ -6,10 +6,14 @@ import {
 } from "./http-error-handler.service";
 import { HttpService } from "./http.service";
 import { UtilService } from "./util.service";
+import { TranslateService } from "@ngx-translate/core";
 
 export interface MealOption {
+  id: string;
   title: string;
-  time: number;
+  mealTime: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 @Injectable({
@@ -28,7 +32,7 @@ export class MealOptionService {
     errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<MealOption[]>({
-      path: `mealoption`,
+      path: `mealOptions`,
       method: "GET",
       payload: undefined,
       query: params,
@@ -38,14 +42,15 @@ export class MealOptionService {
 
   async create(
     payload: {
-      key: string;
       title: string;
+      mealTime: string;
     },
     errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.createBulk(
       {
         title: payload.title,
+        mealTime: payload.mealTime,
       },
       errorHandlers,
     );
@@ -59,11 +64,12 @@ export class MealOptionService {
     mealOptionId: string,
     payload: {
       title: string;
+      mealTime: string;
     },
     errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.httpService.requestWithWrapper<void>({
-      path: `mealoption/${mealOptionId}`,
+      path: `mealOptions/${mealOptionId}`,
       method: "PUT",
       payload: payload,
       query: undefined,
@@ -77,7 +83,7 @@ export class MealOptionService {
 
   async createBulk(payload: any, errorHandlers?: ErrorHandlers) {
     const response = await this.httpService.requestWithWrapper<MealOption>({
-      path: `mealoption`,
+      path: `mealOptions`,
       method: "POST",
       payload: payload,
       query: undefined,
@@ -89,64 +95,22 @@ export class MealOptionService {
     return response;
   }
 
-  // Removes label from a single associated recipe
-  // async removeFromRecipe(
-  //   params: {
-  //     labelId: string;
-  //     recipeId: string;
-  //   },
-  //   errorHandlers?: ErrorHandlers,
-  // ) {
-  //   const response = await this.httpService.requestWithWrapper<void>({
-  //     path: `labels`,
-  //     method: "DELETE",
-  //     payload: undefined,
-  //     query: params,
-  //     errorHandlers,
-  //   });
+  async delete(
+    mealOptionId: string,
+    errorHandlers?: ErrorHandlers,
+  ) {
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `mealOptions`,
+      method: "DELETE",
+      payload: undefined,
+      query: {
+        mealOptionId,
+      },
+      errorHandlers,
+    });
 
-  //   this.events.publish(EventName.LabelUpdated);
+    this.events.publish(EventName.MealOptionDeleted);
 
-  //   return response;
-  // }
-
-  // Deletes label and removes from all associated recipes
-  // async delete(
-  //   payload: {
-  //     labelIds: string[];
-  //   },
-  //   errorHandlers?: ErrorHandlers,
-  // ) {
-  //   const response = await this.httpService.requestWithWrapper<void>({
-  //     path: `labels/delete-bulk`,
-  //     method: "POST",
-  //     payload: payload,
-  //     query: undefined,
-  //     errorHandlers,
-  //   });
-
-  //   this.events.publish(EventName.LabelDeleted);
-
-  //   return response;
-  // }
-
-  // async merge(
-  //   params: {
-  //     sourceLabelId: string;
-  //     targetLabelId: string;
-  //   },
-  //   errorHandlers?: ErrorHandlers,
-  // ) {
-  //   const response = await this.httpService.requestWithWrapper<void>({
-  //     path: `labels/merge`,
-  //     method: "POST",
-  //     payload: undefined,
-  //     query: params,
-  //     errorHandlers,
-  //   });
-
-  //   this.events.publish(EventName.LabelUpdated);
-
-  //   return response;
-  // }
+    return response;
+  }
 }

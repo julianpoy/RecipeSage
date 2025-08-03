@@ -1,19 +1,18 @@
 import { Prisma } from "@prisma/client";
-import { userPublic } from "./userPublic";
 
 /**
- * Provides fields necessary for displaying a summary about a meal plan,
- * not including items
+ * Provides fields necessary for displaying a summary about a meal option
  **/
 export const mealOptionSummary =
-  Prisma.validator<Prisma.MealOptionItemFindFirstArgs>()({
+  Prisma.validator<Prisma.MealOptionFindFirstArgs>()({
     select: {
       id: true,
       userId: true,
-      user: userPublic,
       title: true,
-      scheduled: true,
-      createdAt: true,
+      mealTime: true,
+      createdAt: true, 
+      updatedAt: true,
+      // user: userPublic,
     },
   });
 
@@ -21,6 +20,4 @@ export const mealOptionSummary =
  * Provides fields necessary for displaying a summary about a meal plan,
  * not including items
  **/
-export type MealOptionSummary = Prisma.MealOptionItemGetPayload<
-  typeof mealOptionSummary
->;
+export type MealOptionSummary = Prisma.MealOptionGetPayload<typeof mealOptionSummary>;

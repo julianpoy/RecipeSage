@@ -375,4 +375,8 @@ export class SettingsPage {
   goToAccount() {
     this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
   }
+
+  goToMealOptions() {
+    this.navCtrl.navigateForward(RouteMap.MealOptionsPage.getPath());
+  }
 }

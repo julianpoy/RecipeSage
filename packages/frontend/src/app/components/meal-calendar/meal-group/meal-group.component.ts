@@ -1,16 +1,9 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { MealName } from "../../../services/meal-plan.service";
+import { MealOption, MealOptionService } from "../../../services/meal-option.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CalendarItemComponent } from "../calendar-item/calendar-item.component";
-
-const mealNameToI18n = {
-  [MealName.Breakfast]: "components.mealCalendar.breakfast",
-  [MealName.Lunch]: "components.mealCalendar.lunch",
-  [MealName.Dinner]: "components.mealCalendar.dinner",
-  [MealName.Snacks]: "components.mealCalendar.snack",
-  [MealName.Other]: "components.mealCalendar.other",
-} satisfies Record<MealName, string>;
 
 @Component({
   selector: "meal-group",
@@ -23,8 +16,7 @@ export class MealGroupComponent {
     required: true,
   })
   mealItems!: {
-    meals: MealName[];
-    itemsByMeal: Record<MealName, MealPlanItemSummary[]>;
+    itemsByMeal: Record<string, MealPlanItemSummary[]>;
   };
   @Input() enableEditing: boolean = false;
 
@@ -33,7 +25,23 @@ export class MealGroupComponent {
 
   mealItemsDragging: Record<string, boolean> = {};
 
-  constructor() {}
+  meals: MealOption[] = [];
+
+  constructor() {
+    const mealOptionService = inject(MealOptionService);
+    mealOptionService.fetch().then((response) => {
+      if (response.data) {
+        this.meals = response.data;
+      }
+    });
+  }
+
+  getObjectKeys(obj: Object) {
+    if (!obj) {
+      return [];
+    }
+    return Object.keys(obj);
+  }
 
   dragStart(event: any, mealItem: MealPlanItemSummary) {
     this.mealItemsDragging[mealItem.id] = true;
@@ -45,7 +53,9 @@ export class MealGroupComponent {
     this.itemDragEnd.emit();
   }
 
-  mealNameToI18n(mealName: MealName) {
-    return mealNameToI18n[mealName];
+  mealNameToI18n(mealName: string) {
+    const mealOption = this.meals.find((meal) => meal.mealTime === mealName) ;
+
+    return mealOption?.title || mealName;
   }
 }

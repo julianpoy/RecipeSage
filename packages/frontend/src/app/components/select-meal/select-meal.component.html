@@ -9,8 +9,8 @@
     >
       <ion-select-option
         *ngFor="let mealOption of mealOptions"
-        [value]="mealOption.key"
-        >{{ mealOption.title }}</ion-select-option
+        [value]="mealOption.mealTime"
+        >{{ mealOption.title + " " + mealOption.mealTime }}</ion-select-option
       >
     </ion-select>
   </ion-item>

@@ -18,13 +18,7 @@ export const createMealPlanItem = publicProcedure
       mealPlanId: z.string().uuid(),
       title: z.string(),
       scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-      meal: z.union([
-        z.literal("breakfast"),
-        z.literal("lunch"),
-        z.literal("dinner"),
-        z.literal("snacks"),
-        z.literal("other"),
-      ]),
+      meal: z.string(),
       recipeId: z.string().uuid().nullable(),
     }),
   )

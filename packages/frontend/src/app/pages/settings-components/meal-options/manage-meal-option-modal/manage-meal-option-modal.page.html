@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-title>{{ 'pages.settings.mealOptions.manage.title' | translate:{name:mealOption.title}
+      }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-label>
+      <h2 class="ion-text-capitalize">{{mealOption.title}}</h2>
+      <p>
+        <br />
+        <span>
+          {{mealOption.title}} at {{mealOption.mealTime}}
+        </span>
+        <br />
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br />
+
+  {{ 'pages.settings.mealOptions.manage.warning' | translate }}
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="update()">
+    <ion-icon name="create" slot="start"></ion-icon>
+    <ion-label>{{ 'pages.settings.mealOptions.manage.update' | translate }}</ion-label>
+  </ion-button>
+
+  <ion-button expand="block" color="danger" (click)="delete()">
+    <ion-icon name="trash" slot="start"></ion-icon>
+    <ion-label>{{ 'pages.settings.mealOptions.manage.delete' | translate }}</ion-label>
+  </ion-button>
+
+</ion-footer>

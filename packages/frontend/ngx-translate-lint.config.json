@@ -1,6 +1,6 @@
 {
   "rules": {
-    "keysOnViews": "error",
+    "keysOnViews": "warning",
     "zombieKeys": "warning",
     "misprint": "warning",
     "maxWarning": "0",

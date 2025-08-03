@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="nav">
+
+    {{ 'pages.settings.mealOptions.new' | translate }}
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item button (click)="type = 'label'">
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-label>
+      {{ 'pages.settings.mealOptions.new.title' | translate }}
+      <p class="ion-text-wrap">
+        {{ 'pages.settings.mealOptions.new.description' | translate }}
+      </p>
+    </ion-label>
+  </ion-item>
+</ion-content>
+
+<ion-content class="ion-padding">
+  <br />
+
+  <ion-item lines="none">
+    <ion-input
+      labelPlacement="stacked"
+      label="{{ 'pages.settings.mealOptions.new.titleInput' | translate }}"
+      placeholder="{{ 'pages.settings.mealOptions.new.titleInputPlaceholder' | translate }}"
+      helperText="{{ 'pages.settings.mealOptions.new.titleInputHint' | translate }}"
+      (ionInput)="title = $event.detail.value || ''"
+      [value]="title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-input
+      type="time"
+      labelPlacement="stacked"
+      label="{{ 'pages.settings.mealOptions.new.timeInput' | translate }}"
+      placeholder="{{ 'pages.settings.mealOptions.new.timeInputPlaceholder' | translate }}"
+      (ionInput)="mealTime = $event.detail.value || ''"
+      [value]="mealTime"
+    ></ion-input>
+  </ion-item>
+
+</ion-content>
+
+<ion-footer *ngIf="type" class="ion-padding">
+  <ion-button (click)="save()" [disabled]="!title.length" expand="block">
+    {{ 'generic.save' | translate }}
+  </ion-button>
+</ion-footer>

@@ -1,9 +1,9 @@
-<div class="group" *ngFor="let mealName of mealItems.meals">
-  <span class="meal-title" *ngIf="mealItems.itemsByMeal[mealName].length > 0">{{
-    mealNameToI18n(mealName) | translate
+<div class="group" *ngFor="let mealTime of getObjectKeys(mealItems.itemsByMeal)">
+  <span class="meal-title">{{
+    mealNameToI18n(mealTime)
   }}</span>
   <calendar-item
-    *ngFor="let mealItem of mealItems.itemsByMeal[mealName]"
+    *ngFor="let mealItem of mealItems.itemsByMeal[mealTime]"
     [mealItem]="mealItem"
     (click)="itemClicked.emit(mealItem)"
     draggable="{{ enableEditing }}"

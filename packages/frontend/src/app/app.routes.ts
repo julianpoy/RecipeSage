@@ -30,14 +30,6 @@ export const appRoutes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
-    path: RouteMap.MealOptionsPage.path,
-    loadComponent: () =>
-      import("./pages/meal-options-pages/meal-options/labels.page").then(
-        (m) => m.LabelsPage,
-      ),
-    canDeactivate: [UnsavedChangesGuardService],
-  },
-  {
     path: RouteMap.AboutPage.path,
     loadComponent: () =>
       import("./pages/info-components/about/about.page").then(
@@ -184,6 +176,14 @@ export const appRoutes: Routes = [
     loadComponent: () =>
       import("./pages/settings-components/account/account.page").then(
         (m) => m.AccountPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.MealOptionsPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/meal-options/meal-options.page").then(
+        (m) => m.MealOptionsPage,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },

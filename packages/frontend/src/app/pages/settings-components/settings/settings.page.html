@@ -32,6 +32,12 @@
     <ion-list-header>
       {{ 'pages.settings.section2.title' | translate }}
     </ion-list-header>
+
+    <ion-item lines="inset" (click)="goToMealOptions()" button>
+      <ion-icon name="restaurant" slot="start"></ion-icon>
+      <ion-label> {{ 'pages.settings.mealOptions' | translate }} </ion-label>
+    </ion-item>
+
     <ion-item lines="inset" (click)="triggerSync()" button>
       <ion-icon name="sync" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.sync' | translate }} </ion-label>

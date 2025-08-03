@@ -1,11 +1,11 @@
 import { Injectable, inject } from "@angular/core";
-import { NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   AppTheme,
   SupportedFontSize,
   SupportedLanguages,
 } from "@recipesage/util/shared";
+import { NavController } from "@ionic/angular";
 import { getBase } from "../utils/getBase";
 
 export interface RecipeTemplateModifiers {
@@ -59,12 +59,6 @@ export const RouteMap = {
       return `labels`;
     },
     path: "labels",
-  },
-  MealOptionsPage: {
-    getPath() {
-      return `meal-options`;
-    },
-    path: "meal-options",
   },
   AboutPage: {
     getPath() {
@@ -179,6 +173,12 @@ export const RouteMap = {
       return `/settings/account`;
     },
     path: "settings/account",
+  },
+  MealOptionsPage: {
+    getPath() {
+      return `/`+this.path;
+    },
+    path: "settings/meal-options",
   },
   MyProfilePage: {
     getPath() {
