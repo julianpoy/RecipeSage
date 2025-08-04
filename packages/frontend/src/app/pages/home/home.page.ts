@@ -181,6 +181,9 @@ export class HomePage {
         loading.dismiss();
       });
     });
+    this.events.subscribe(EventName.ApplicationSplitPaneChanged, () => {
+      this.updateTileColCount();
+    });
 
     this.websocketService.register(
       "messages:new",
@@ -232,7 +235,8 @@ export class HomePage {
   updateTileColCount() {
     const isSidebarEnabled =
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
-    const sidebarWidth = isSidebarEnabled ? 300 : 0;
+    const isSidebarOpen = window.innerWidth >= 1200;
+    const sidebarWidth = isSidebarEnabled && isSidebarOpen ? 300 : 0;
     const homePageWidth = window.innerWidth - sidebarWidth;
     const tileColCount = Math.max(
       Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD)),
