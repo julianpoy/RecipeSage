@@ -234,7 +234,10 @@ export class HomePage {
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const sidebarWidth = isSidebarEnabled ? 300 : 0;
     const homePageWidth = window.innerWidth - sidebarWidth;
-    const tileColCount = Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD));
+    const tileColCount = Math.max(
+      Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD)),
+      1,
+    );
 
     if (tileColCount !== this.tileColCount) {
       this.tileColCount = tileColCount;
