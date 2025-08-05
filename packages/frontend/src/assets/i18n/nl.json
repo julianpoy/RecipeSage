@@ -212,7 +212,7 @@
     "pages.welcome.description.features.5.description": "Automatisch gecategoriseerd en intelligent gegroepeerd - voeg je recepten rechtstreeks toe aan een boodschappenlijstje en vergelijkbare items worden gecombineerd",
     "pages.home.errors.noRecipes.message7": "Bezoek de documentatie voor gedetailleerde tutorials over het gebruik van de app",
     "pages.home.errors.noSearchResults.message2": "Zoeken omvat:",
-    "pages.home.deleteSelected.message": "Hierdoor worden de geselecteerde recepten definitief uit uw account verwijderd. Deze actie is onomkeerbaar. De volgende recepten worden verwijderd: {{recipeNames}}",
+    "pages.home.deleteSelected.message": "Hierdoor worden de geselecteerde recepten definitief uit je account verwijderd. Deze actie is onomkeerbaar. De volgende recepten worden verwijderd: {{recipeNames}}",
     "pages.downloadAndInstall.bookmark": "Recepten auto-clip-bladwijzer (niet meer ondersteund)",
     "pages.contribute.bonus.title": "Als dank aan degenen die RecipeSage mogelijk maken, krijg je voor je bijdrage bonusfunctionaliteiten voor je account. Je kunt hierdoor:",
     "pages.downloadAndInstall.bookmark.description": "Pakt automatisch de receptinhoud van webpagina's. De browserextensie wordt aangeraden i.p.v. deze bladwijzer.",
