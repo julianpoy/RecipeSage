@@ -21,14 +21,13 @@
     >
       <ion-icon name="chatbox" slot="start"></ion-icon>
       <ion-label>
-        <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
+        <h2>{{ thread.otherUser.name }}</h2>
         <p>
           <b *ngIf="thread.messages[0].fromUser.id === thread.otherUser.id">
             {{ 'pages.messages.history.you' | translate }}
           </b>
           <b *ngIf="thread.messages[0].fromUser.id !== thread.otherUser.id">
-            {{ thread.messages[0].fromUser.name ||
-            thread.messages[0].fromUser.email }}
+            {{ thread.messages[0].fromUser.name }}
           </b>
           :
           <span *ngIf="thread.messages[0].recipe"

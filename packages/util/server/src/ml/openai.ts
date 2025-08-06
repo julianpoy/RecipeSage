@@ -6,10 +6,20 @@ import {
 } from "openai/resources/chat/completions";
 import { RSRunnableFunction } from "./chatFunctions";
 
-export enum SupportedGPTModel {
-  GPT4OMini = "gpt-4o-mini-2024-07-18",
-  GPT4O = "gpt-4o-2024-08-06",
+export enum GPTModelQuality {
+  ImageRecognition = "imageRecognition",
+  HighQuality = "high",
+  LowQuality = "low",
 }
+
+const gptModelQualityToModel = {
+  [GPTModelQuality.HighQuality]:
+    process.env.OPENAI_MODEL_HIGH || "gpt-4o-2024-08-06",
+  [GPTModelQuality.LowQuality]:
+    process.env.OPENAI_MODEL_LOW || "gpt-4o-mini-2024-07-18",
+  [GPTModelQuality.ImageRecognition]:
+    process.env.OPENAI_MODEL_IMAGE || "gpt-4o-2024-08-06",
+};
 
 export class OpenAIHelper {
   private openAi: OpenAI;
@@ -31,14 +41,14 @@ export class OpenAIHelper {
   }
 
   async getJsonResponseWithTools(
-    model: SupportedGPTModel,
+    modelQuality: GPTModelQuality,
     context: ChatCompletionMessageParam[],
     tools: RSRunnableFunction[],
     toolChoice?: ChatCompletionToolChoiceOption,
   ): Promise<ChatCompletionMessageParam[]> {
-    const runner = this.openAi.beta.chat.completions.runTools({
+    const runner = this.openAi.chat.completions.runTools({
       messages: context,
-      model,
+      model: gptModelQualityToModel[modelQuality],
       tools,
       tool_choice: toolChoice,
       response_format: {
@@ -59,13 +69,13 @@ export class OpenAIHelper {
   }
 
   async getChatResponseWithTools(
-    model: SupportedGPTModel,
+    modelQuality: GPTModelQuality,
     context: ChatCompletionMessageParam[],
     tools: RSRunnableFunction[],
   ): Promise<ChatCompletionMessageParam[]> {
-    const runner = this.openAi.beta.chat.completions.runTools({
+    const runner = this.openAi.chat.completions.runTools({
       messages: context,
-      model,
+      model: gptModelQualityToModel[modelQuality],
       tools,
     });
 
@@ -82,12 +92,12 @@ export class OpenAIHelper {
   }
 
   async getChatResponse(
-    model: SupportedGPTModel,
+    modelQuality: GPTModelQuality,
     context: ChatCompletionMessageParam[],
   ): Promise<ChatCompletion> {
     const response = await this.openAi.chat.completions.create({
       messages: context,
-      model,
+      model: gptModelQualityToModel[modelQuality],
       max_tokens: 4000,
     });
 
@@ -103,7 +113,7 @@ export class OpenAIHelper {
       user: userId,
     });
 
-    const url = image.data[0].url;
+    const url = image.data?.[0].url;
     if (!url) {
       throw new Error("Dall-E did not create image as requested");
     }

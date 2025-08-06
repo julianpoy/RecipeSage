@@ -240,9 +240,7 @@ export class AppComponent {
             .indexOf(RouteMap.MessagesPage.getPath())
         )
           return;
-        const notification =
-          "New message from " +
-          (payload.otherUser.name || payload.otherUser.email);
+        const notification = "New message from " + payload.otherUser.name;
 
         const myMessage = payload;
 

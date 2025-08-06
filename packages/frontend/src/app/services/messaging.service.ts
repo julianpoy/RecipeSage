@@ -59,6 +59,7 @@ export interface MessageThread {
   otherUser: {
     id: string;
     name: string;
+    handle?: string;
     email: string;
   };
   messageCount: number;

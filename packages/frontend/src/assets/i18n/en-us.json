@@ -584,7 +584,7 @@
   "pages.editRecipe.clipText.placeholder": "Text that includes recipe...",
   "pages.editRecipe.clipText.invalid": "Error: Text too short or could not recognize recipe",
   "pages.editRecipe.clip.loading": "Please wait...",
-  "pages.editRecipe.clip.failed": "Failed to autofill from that URL",
+  "pages.editRecipe.clip.failed": "Failed to autofill. It is expected that some content may fail to autofill, but please contact me if you're having consistent issues.",
   "pages.editRecipe.clip.failedSelfhost": "Please check your OpenAI credentials as described in the selfhosting readme",
   "pages.editRecipe.missingLabelGroup.title": "Missing label group",
   "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the my labels page.",
@@ -893,6 +893,7 @@
   "pages.shoppingListPopover.actions.title": "Actions",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.update": "Edit/Rename List",
+  "pages.shoppingListPopover.edit": "Edit Ingredient Categories",
   "pages.shoppingListPopover.dangerZone.title": "Danger Zone",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
@@ -1037,6 +1038,9 @@
 
   "components.messaging.notificationPermission.header": "Requires Notification Permissions",
   "components.messaging.notificationPermission.message": "To notify you when your contacts send you messages, we need notification access. After dismissing this popup, you will be prompted to enable notification access.",
+
+  "components.messaging.shoppingList.categoryEdit.help.header": "Edit shopping list categories",
+  "components.messaging.shoppingList.categoryEdit.help.message": "Selecting edit allows you to drag-and-drop shopping list items to a new category",
 
   "components.selectCollaborators.title": "Collaborators",
   "components.selectCollaborators.placeholder": "Add collaborators by email address",

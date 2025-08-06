@@ -479,7 +479,7 @@
     "pages.editRecipe.create": "Создать",
     "pages.editRecipe.titleRequired": "Укажите название рецепта (единственное обязательное поле).",
     "pages.editRecipe.clip.loading": "Пожалуйста, подождите...",
-    "pages.editRecipe.clip.failed": "Не удалось выполнить автозаполнение с этого URL",
+    "pages.editRecipe.clip.failed": "Не удалось выполнить автозаполнение. Ожидается, что некоторые материалы могут не выполняться автоматически, но, пожалуйста, свяжитесь со мной, если у вас возникнут постоянные проблемы.",
     "pages.editRecipe.missingLabelGroup.title": "Отсутствует группа меток",
     "pages.editRecipe.missingLabelGroup.message": "Вы указали, что группа меток \"{{groupName}}\" должна быть обязательной. Вы можете отключить это на странице моих меток.",
     "pages.editRecipe.conflict.title": "Повторяющийся заголовок",
@@ -1024,5 +1024,8 @@
     "components.mealCalendar.lunch": "Обед",
     "components.mealCalendar.dinner": "Ужин",
     "components.mealCalendar.snack": "Перекус",
-    "components.mealCalendar.other": "Другое"
+    "components.mealCalendar.other": "Другое",
+    "pages.shoppingListPopover.edit": "Редактировать категории ингредиентов",
+    "components.messaging.shoppingList.categoryEdit.help.header": "Редактировать категории списка покупок",
+    "components.messaging.shoppingList.categoryEdit.help.message": "Выбор редактирования позволяет перетаскивать элементы списка покупок в новую категорию"
 }

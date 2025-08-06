@@ -434,7 +434,7 @@ router.get(
         {
           model: User,
           as: "fromUser",
-          attributes: ["name", "email"],
+          attributes: ["name", "handle"],
         },
         {
           model: Label,
@@ -522,7 +522,7 @@ router.get(
         {
           model: User,
           as: "fromUser",
-          attributes: ["name", "email"],
+          attributes: ["name", "handle"],
         },
         {
           model: Label,

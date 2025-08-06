@@ -42,7 +42,9 @@
         <ion-radio labelPlacement="end" justify="start" [value]="thread">
           <div class="ion-radio-label">
             {{ thread.otherUser.name }}
-            <p>{{ thread.otherUser.email }}</p>
+            <p *ngIf="thread.otherUser.handle">
+              &commat;{{ thread.otherUser.handle }}
+            </p>
           </div>
         </ion-radio>
       </ion-item>
