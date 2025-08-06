@@ -9,7 +9,7 @@
       "pages.export.jobs.status.fail.unknown",
       "pages.settings.mealOptions.*",
       "components.selectCollaborators.*",
-      
+
       "components.signInWithGoogle.button"
     ],
     "ignoredMisprintKeys": [],
