@@ -42,7 +42,9 @@ describe("createMealOption", () => {
       expect(updatedMealOption?.title).toEqual(mealTitle);
       expect(updatedMealOption?.mealTime).toEqual(mealTime);
     });
+  });
 
+  describe("error", () => {
     it("must throw conflicting meal option", async () => {
       const mealTitle = "lunch";
       const mealTime = "12:00";
@@ -60,4 +62,5 @@ describe("createMealOption", () => {
       }).rejects.toThrow("Conflicting meal option");
     });
   });
+  
 });

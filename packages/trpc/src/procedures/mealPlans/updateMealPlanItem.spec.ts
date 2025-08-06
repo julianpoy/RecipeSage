@@ -48,7 +48,7 @@ describe("updateMealPlanItem", () => {
         id: mealPlanItem.id,
         title: "NoProtein",
         scheduledDate: "2024-05-28",
-        meal: "dinner",
+        meal: "10:25",
         recipeId: null,
       });
       const updatedMealPlanItem = await prisma.mealPlanItem.findUnique({

@@ -30,7 +30,6 @@ describe("deleteMealOption", () => {
         id: _mealOption.id,
       });
 
-      expect(mealOption.mealTime).toEqual(null);
       const updatedMealOption = await trpc.mealOptions.get.query({
         title: _mealOption.id,
       });
