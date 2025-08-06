@@ -38,7 +38,7 @@ describe("createMealPlanItem", () => {
         mealPlanId: mealPlan.id,
         title: "Protein",
         scheduledDate: "2024-05-26",
-        meal: "dinner",
+        meal: "10:25",
         recipeId: null,
       });
       expect(typeof mealPlanItem?.id).toBe("string");
@@ -57,7 +57,7 @@ describe("createMealPlanItem", () => {
           mealPlanId: "00008495-d189-4a99-98bb-8888442de945",
           title: "Protein",
           scheduledDate: "2024-05-26",
-          meal: "dinner",
+          meal: "10:25",
           recipeId: null,
         });
       }).rejects.toThrow(

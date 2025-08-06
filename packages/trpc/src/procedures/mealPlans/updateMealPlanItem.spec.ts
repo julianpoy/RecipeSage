@@ -40,7 +40,7 @@ describe("updateMealPlanItem", () => {
           mealPlanId: mealPlan.id,
           title: "Protein",
           scheduledDate: "2024-05-27T04:00:00.000Z",
-          meal: "dinner",
+          meal: "10:25",
           recipeId: null,
         },
       });
@@ -80,7 +80,7 @@ describe("updateMealPlanItem", () => {
             id: "00000ca5-50e7-4144-bc11-e82925837a14",
             title: "NoProtein",
             scheduledDate: "2024-05-28",
-            meal: "dinner",
+            meal: "10:25",
             recipeId: null,
           });
         }).rejects.toThrow("NOT_FOUND");

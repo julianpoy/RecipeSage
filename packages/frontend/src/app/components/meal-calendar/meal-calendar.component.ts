@@ -63,10 +63,6 @@ export class MealCalendarComponent {
     return this._mealsByDate;
   }
 
-  get meals() {
-    return 
-  }
-
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
 

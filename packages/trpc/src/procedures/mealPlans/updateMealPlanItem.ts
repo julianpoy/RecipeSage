@@ -12,24 +12,16 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 
-/**
- * TODO: Add migration to replace meal with mealTime
- * meal: z.union([
-        z.literal("breakfast"),
-        z.literal("lunch"),
-        z.literal("dinner"),
-        z.literal("snacks"),
-        z.literal("other"),
-      ]),
- */
-
 export const updateMealPlanItem = publicProcedure
   .input(
     z.object({
       id: z.string().uuid(),
       title: z.string(),
       scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-      meal: z.string(),
+      meal: z.string().min(5).max(5).regex(
+        /^([01]\d|2[0-3]):([0-5]\d)$/,
+        "Invalid time format. Expected HH:MM (e.g., 09:30 or 23:59)"
+      ),
       recipeId: z.string().uuid().nullable(),
     }),
   )
