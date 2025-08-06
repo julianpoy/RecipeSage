@@ -1,47 +1,35 @@
 import { Component, inject } from "@angular/core";
-import { AlertController, NavController } from "@ionic/angular";
-import { TranslateService } from "@ngx-translate/core";
-import dayjs from "dayjs";
 
 import { LoadingService } from "../../../services/loading.service";
-import {
-  UtilService,
-  RouteMap,
-  AuthType,
-} from "../../../services/util.service";
+import { RouteMap } from "../../../services/util.service";
 
-import {
-  ModalController,
-  ToastController,
-} from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
-import { CapabilitiesService } from "../../../services/capabilities.service";
+import { MealOptionsPreferenceKey } from "@recipesage/util/shared";
+
+import { MealOptionService } from "../../../services/meal-option.service";
 import { MealOptionDefaultService } from "../../../services/meal-option-default.service";
-import { TRPCService } from "../../../services/trpc.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { MealOption } from "@prisma/client";
 import { NewMealOptionModalPage } from "./new-meal-option-modal/new-meal-option-modal.page";
 import { ManageMealOptionModalPage } from "./manage-meal-option-modal/manage-meal-option-modal.page";
-
+import { PreferencesService } from "../../../services/preferences.service";
 @Component({
   selector: "meal-options",
   templateUrl: "meal-options.page.html",
   styleUrls: ["meal-options.page.scss"],
   imports: [...SHARED_UI_IMPORTS],
 })
-
 export class MealOptionsPage {
-  private navCtrl = inject(NavController);
-  private translate = inject(TranslateService);
-  private alertCtrl = inject(AlertController);
-  private utilService = inject(UtilService);
   private loadingService = inject(LoadingService);
-  private trpcService = inject(TRPCService);
   private modalCtrl = inject(ModalController);
   private mealDefault = inject(MealOptionDefaultService);
+  private preferencesService = inject(PreferencesService);
+  private mealOptionService = inject(MealOptionService);
 
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MealOptionsPreferenceKey;
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
-
   mealOptions: MealOption[] = [];
 
   constructor() {
@@ -49,22 +37,15 @@ export class MealOptionsPage {
   }
 
   async load() {
-
     const loading = this.loadingService.start();
-    
-    Promise.all([
-      this.trpcService.handle(this.trpcService.trpc.mealOptions.getMealOptions.query()),
-    ]).then(async ([mealOptions]) => {
-      loading.dismiss();
 
-      this.mealOptions = [...this.mealDefault.get(), ...(mealOptions ?? [])].sort((a: MealOption, b: MealOption) => {
-        return a.mealTime < b.mealTime ? -1 : 1;
-      });
+    this.mealOptionService.fetch().then((mealOptions) => {
+      loading.dismiss();
+      this.mealOptions = this.mealDefault.add(mealOptions ?? []);
     });
   }
 
   async manageMealOption(mealOption: MealOption) {
-
     const loading = this.loadingService.start();
 
     const manageModal = await this.modalCtrl.create({
@@ -90,10 +71,21 @@ export class MealOptionsPage {
     });
 
     newModal.onDidDismiss().then(() => {
-      loading.dismiss()
+      loading.dismiss();
       this.load();
     });
 
     newModal.present();
+  }
+
+  savePreferences() {
+    this.preferencesService.save();
+  }
+
+  isMealOptionVisible(mealOption: MealOption): boolean {
+    return (
+      mealOption.userId !== "0" ||
+      this.preferences[MealOptionsPreferenceKey.ShowDefaults]
+    );
   }
 }

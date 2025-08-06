@@ -5,7 +5,7 @@ import {
   AlertController,
   ToastController,
 } from "@ionic/angular";
-import { MealOption, MealOptionService } from "~/services/meal-option.service";
+import { MealOptionService } from "~/services/meal-option.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -41,14 +41,16 @@ export class ManageMealOptionModalPage {
     const loading = this.loadingService.start();
 
     const header = await this.translate
-      .get("pages.manageMealOptionModal.renameConflict.header")
+      .get("pages.settings.mealOptions.updateConflict.header")
       .toPromise();
+      
     const message = await this.translate
-      .get("pages.manageMealOptionModal.renameConflict.message")
+      .get("pages.settings.mealOptions.updateConflict.message")
       .toPromise();
+
     const okay = await this.translate.get("generic.okay").toPromise();
 
-    const response = await this.mealOptionService.update(
+    const mealOption = await this.mealOptionService.update(
       this.mealOption.id,
       {
         title: newTitle,
@@ -70,12 +72,15 @@ export class ManageMealOptionModalPage {
           ).present();
         },
       },
-    );
-    loading.dismiss();
-    if (!response.success) return;
+    ).then(mealOption => {
 
-    this.mealOption.title = newTitle;
-    this.mealOption.mealTime = newMealTime;
+      if (!mealOption) return;
+
+      this.mealOption.title = newTitle;
+      this.mealOption.mealTime = newMealTime;
+    }).finally(() => {
+      loading.dismiss();
+    });
   }
 
   async update() {
@@ -131,9 +136,9 @@ export class ManageMealOptionModalPage {
   async _delete() {
     const loading = this.loadingService.start();
 
-    const response = await this.mealOptionService.delete(this.mealOption.id);
+    await this.mealOptionService.delete(this.mealOption.id);
+
     loading.dismiss();
-    if (!response.success) return;
 
     this.modalCtrl.dismiss();
   }

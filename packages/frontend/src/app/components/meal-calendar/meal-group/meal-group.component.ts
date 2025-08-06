@@ -1,9 +1,16 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { MealName } from "../../../services/meal-plan.service";
-import { MealOption, MealOptionService } from "../../../services/meal-option.service";
+import {
+  MealOption,
+  MealOptionService,
+} from "../../../services/meal-option.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CalendarItemComponent } from "../calendar-item/calendar-item.component";
+import { TRPCService } from "../../../services/trpc.service";
+import { MealOptionDefaultService } from "../../../services/meal-option-default.service";
+import { MealOptionsPreferenceKey } from "@recipesage/util/shared";
+import { PreferencesService } from "../../../services/preferences.service";
+import { timeToColor } from "../../../utils/timeToColor";
 
 @Component({
   selector: "meal-group",
@@ -18,6 +25,10 @@ export class MealGroupComponent {
   mealItems!: {
     itemsByMeal: Record<string, MealPlanItemSummary[]>;
   };
+  trpcService = inject(TRPCService);
+  mealOptionDefaultService = inject(MealOptionDefaultService);
+  preferencesService = inject(PreferencesService);
+  mealOptionService = inject(MealOptionService);
   @Input() enableEditing: boolean = false;
 
   @Output() itemClicked = new EventEmitter<any>();
@@ -26,14 +37,14 @@ export class MealGroupComponent {
   mealItemsDragging: Record<string, boolean> = {};
 
   meals: MealOption[] = [];
+  showTime: boolean = false;
 
   constructor() {
-    const mealOptionService = inject(MealOptionService);
-    mealOptionService.fetch().then((response) => {
-      if (response.data) {
-        this.meals = response.data;
-      }
+    this.mealOptionService.fetch().then((options) => {
+      this.meals = this.mealOptionDefaultService.add(options ?? []);
     });
+    this.showTime =
+      this.preferencesService.preferences[MealOptionsPreferenceKey.ShowTime];
   }
 
   getObjectKeys(obj: Object) {
@@ -53,9 +64,19 @@ export class MealGroupComponent {
     this.itemDragEnd.emit();
   }
 
-  mealNameToI18n(mealName: string) {
-    const mealOption = this.meals.find((meal) => meal.mealTime === mealName) ;
+  getMealColor(mealTime: string) {
+    return timeToColor(mealTime);
+  }
 
-    return mealOption?.title || mealName;
+  mealLabel(mealTime: string) {
+    const mealOption = this.meals.find((meal) => meal.mealTime === mealTime);
+
+    if (mealOption) {
+      return this.showTime
+        ? `${mealOption.title} - <span class="ion-text-nowrap">${mealTime}</span>`
+        : mealOption.title;
+    }
+
+    return mealTime;
   }
 }

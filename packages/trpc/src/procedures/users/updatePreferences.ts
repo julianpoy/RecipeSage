@@ -19,6 +19,7 @@ import {
   ShoppingListSortOptions,
   SupportedFontSize,
   SupportedLanguages,
+  MealOptionsPreferenceKey,
 } from "@recipesage/util/shared";
 
 export const updatePreferences = publicProcedure
@@ -64,6 +65,9 @@ export const updatePreferences = publicProcedure
       [ShoppingListPreferenceKey.GroupSimilar]: z.boolean(),
       [ShoppingListPreferenceKey.GroupCategories]: z.boolean(),
       [ShoppingListPreferenceKey.IgnoreItemTitles]: z.string().max(5000),
+
+      [MealOptionsPreferenceKey.ShowDefaults]: z.boolean(),
+      [MealOptionsPreferenceKey.ShowTime]: z.boolean(),
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) satisfies z.ZodSchema<AppPreferenceTypes, any, any>,

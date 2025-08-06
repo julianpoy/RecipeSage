@@ -12,18 +12,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item button (click)="type = 'label'">
-    <ion-icon name="pricetag" slot="start"></ion-icon>
-    <ion-label>
-      {{ 'pages.settings.mealOptions.new.title' | translate }}
-      <p class="ion-text-wrap">
-        {{ 'pages.settings.mealOptions.new.description' | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
-</ion-content>
-
-<ion-content class="ion-padding">
   <br />
 
   <ion-item lines="none">
@@ -50,7 +38,7 @@
 
 </ion-content>
 
-<ion-footer *ngIf="type" class="ion-padding">
+<ion-footer class="ion-padding">
   <ion-button (click)="save()" [disabled]="!title.length" expand="block">
     {{ 'generic.save' | translate }}
   </ion-button>

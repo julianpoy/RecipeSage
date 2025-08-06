@@ -1,0 +1,10 @@
+ion-item.meal-options-settings {
+  p {
+    min-height: 1.2em;
+    line-height: 1.2;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}

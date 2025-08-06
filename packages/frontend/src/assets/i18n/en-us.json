@@ -824,8 +824,12 @@
 
   "pages.settings.mealOptions.update.header": "Update {{name}}",
   "pages.settings.mealOptions.update.placeholder": "Enter the new title and time for your meal option",
-
+  "pages.settings.mealOptions.updateConflict.header": "Update Conflict",
+  "pages.settings.mealOptions.updateConflict.message": "A meal option with this title and time already exists. Please choose a different title or time.",
   "pages.settings.mealOptions.delete.header": "Delete {{name}}",
+
+  "pages.settings.mealOptions.configuration.showDefaults": "Show Default Meal Options",
+  "pages.settings.mealOptions.configuration.showTime": "Show Time",
 
   "sync.notification.title": "Offline Sync Complete",
   "sync.notification.body": "Your content has been cached for offline use, and will be kept up-to-date automatically.",

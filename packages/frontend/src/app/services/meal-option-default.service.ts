@@ -2,6 +2,9 @@ import { Injectable, inject } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { MealOption } from "@prisma/client";
 
+import { MealOptionsPreferenceKey } from "@recipesage/util/shared";
+import { PreferencesService } from "./preferences.service";
+
 const createdAt = new Date(1754228165000);
 
 const DEFAULT_MEAL_CONFIGURATION = [
@@ -32,21 +35,34 @@ const DEFAULT_MEAL_CONFIGURATION = [
 })
 export class MealOptionDefaultService {
   translate = inject(TranslateService);
+  preferencesService = inject(PreferencesService);
+
   mealOptions: MealOption[] = [];
-  
+
   constructor() {
-    DEFAULT_MEAL_CONFIGURATION.map(mealOption => {
+    DEFAULT_MEAL_CONFIGURATION.map((option) => {
+      // fill to match MealOption interface
       this.mealOptions.push({
-        ...mealOption,
+        ...option,
         userId: "0",
         createdAt: createdAt,
         updatedAt: createdAt,
-        title: this.translate.instant(`components.mealCalendar.${mealOption.id}`),
+        title: this.translate.instant(`components.mealCalendar.${option.id}`),
       });
     });
   }
 
-  get() {
-    return this.mealOptions;
+  add(userCreatedOptions: MealOption[]): MealOption[] {
+    if (!this.preferencesService.preferences[MealOptionsPreferenceKey.ShowDefaults]) {
+      return userCreatedOptions;
+    }
+
+    let mealOpts = [...this.mealOptions, ...userCreatedOptions];
+
+    mealOpts.sort((a: MealOption, b: MealOption) => {
+      return a.mealTime < b.mealTime ? -1 : 1;
+    });
+
+    return mealOpts;
   }
 }

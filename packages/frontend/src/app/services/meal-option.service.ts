@@ -6,7 +6,7 @@ import {
 } from "./http-error-handler.service";
 import { HttpService } from "./http.service";
 import { UtilService } from "./util.service";
-import { TranslateService } from "@ngx-translate/core";
+import { TRPCService } from "./trpc.service";
 
 export interface MealOption {
   id: string;
@@ -24,6 +24,7 @@ export class MealOptionService {
   utilService = inject(UtilService);
   httpService = inject(HttpService);
   httpErrorHandlerService = inject(HttpErrorHandlerService);
+  trpcService = inject(TRPCService);
 
   fetch(
     params?: {
@@ -31,13 +32,9 @@ export class MealOptionService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<MealOption[]>({
-      path: `mealOptions`,
-      method: "GET",
-      payload: undefined,
-      query: params,
-      errorHandlers,
-    });
+    return this.trpcService.handle(
+      this.trpcService.trpc.mealOptions.get.query(params || {})
+    );
   }
 
   async create(
@@ -47,12 +44,8 @@ export class MealOptionService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.createBulk(
-      {
-        title: payload.title,
-        mealTime: payload.mealTime,
-      },
-      errorHandlers,
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.mealOptions.create.mutate(payload)
     );
 
     this.events.publish(EventName.MealOptionCreated);
@@ -68,29 +61,14 @@ export class MealOptionService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>({
-      path: `mealOptions/${mealOptionId}`,
-      method: "PUT",
-      payload: payload,
-      query: undefined,
-      errorHandlers,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.mealOptions.update.mutate({
+        id: mealOptionId,
+        ...payload,
+      })
+    );
 
     this.events.publish(EventName.MealOptionUpdated);
-
-    return response;
-  }
-
-  async createBulk(payload: any, errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<MealOption>({
-      path: `mealOptions`,
-      method: "POST",
-      payload: payload,
-      query: undefined,
-      errorHandlers,
-    });
-
-    this.events.publish(EventName.MealOptionCreated);
 
     return response;
   }
@@ -99,15 +77,11 @@ export class MealOptionService {
     mealOptionId: string,
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>({
-      path: `mealOptions`,
-      method: "DELETE",
-      payload: undefined,
-      query: {
-        mealOptionId,
-      },
-      errorHandlers,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.mealOptions.remove.mutate({
+        id: mealOptionId,
+      })
+    );
 
     this.events.publish(EventName.MealOptionDeleted);
 

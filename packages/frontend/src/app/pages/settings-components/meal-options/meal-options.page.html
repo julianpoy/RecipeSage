@@ -18,20 +18,39 @@
 
   <br />
 
-  <ion-list>
-    <ion-item *ngFor="let mealOption of mealOptions" [disabled]="mealOption.userId === '0'" (click)="manageMealOption(mealOption)" button
-      class="ion-margin-start">
-      <ion-label>
-        <h2>{{ mealOption.mealTime }}</h2>
-        <p>{{ mealOption.title }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>  
+  <ion-item lines="inset">
+    <ion-icon name="nutrition-outline" slot="start"></ion-icon>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowDefaults]" (ngModelChange)="savePreferences()">
+      <div class="ion-text-wrap">
+        {{ 'pages.settings.mealOptions.configuration.showDefaults' | translate }}
+      </div>
+    </ion-toggle>
+  </ion-item>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="new()" color="primary">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+  <ion-item lines="inset">
+    <ion-icon name="time-outline" slot="start"></ion-icon>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowTime]" (ngModelChange)="savePreferences()">
+      <div class="ion-text-wrap">
+        {{ 'pages.settings.mealOptions.configuration.showTime' | translate }}
+      </div>
+    </ion-toggle>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let mealOption of mealOptions" [disabled]="mealOption.userId === '0'" [hidden]="!isMealOptionVisible(mealOption)"
+      (click)="manageMealOption(mealOption)" button class="ion-margin-start meal-options-settings">
+      <ion-label>
+        <h2>{{ mealOption.title }}<ng-container *ngIf="preferences[preferenceKeys.ShowTime]"> - {{ mealOption.mealTime }}</ng-container>
+        </h2>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="new()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

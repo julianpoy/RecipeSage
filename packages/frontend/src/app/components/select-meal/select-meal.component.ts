@@ -6,37 +6,19 @@ import {
   type AfterViewInit,
   inject,
 } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { MealOption, MealOptionService } from "../../services/meal-option.service";
+import {
+  MealOption,
+  MealOptionService,
+} from "../../services/meal-option.service";
+import { MealOptionDefaultService } from "../../services/meal-option-default.service";
+import { TRPCService } from "../../services/trpc.service";
+import { MealOptionsPreferenceKey } from "@recipesage/util/shared";
+import { PreferencesService } from "../../services/preferences.service";
+import { RouteMap } from "../../services/util.service";
+import { NavController } from "@ionic/angular";
 
 const LAST_USED_MEAL_VAR = "lastUsedMeal";
-
-
-// TODO: Integrate with meal options service
-const DEFAULT_MEAL_OPTIONS = [
-  {
-    title: "",
-    key: "breakfast",
-  },
-  {
-    title: "",
-    key: "lunch",
-  },
-  {
-    title: "",
-    key: "dinner",
-  },
-  {
-    title: "",
-    key: "snacks",
-  },
-  {
-    title: "",
-    key: "other",
-  },
-];
-
 
 @Component({
   selector: "select-meal",
@@ -45,12 +27,17 @@ const DEFAULT_MEAL_OPTIONS = [
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectMealComponent implements AfterViewInit {
-  private translate = inject(TranslateService);
-
   @Input() meal = "";
   @Output() mealChange = new EventEmitter();
+  @Output() settingsCallback = new EventEmitter();
 
   mealOptionService = inject(MealOptionService);
+  mealOptionDefaultService = inject(MealOptionDefaultService);
+  trpcService = inject(TRPCService);
+  preferencesService = inject(PreferencesService);
+  navCtrl = inject(NavController);
+  
+  mealOptionsHref = RouteMap.MealOptionsPage.getPath();
   mealOptions: MealOption[] = [];
 
   ngAfterViewInit() {
@@ -59,39 +46,19 @@ export class SelectMealComponent implements AfterViewInit {
     if (!this.meal) {
       this.selectLastUsedMeal();
     }
-
-    this.loadTranslations();
   }
 
   async loadMealOptions() {
-    this.mealOptionService.fetch().then((response) => {
-      if (response.data) {
-        this.mealOptions = response.data;
-      }
+    this.mealOptionService.fetch().then((options) => {
+      this.mealOptions = this.mealOptionDefaultService.add(options ?? []);
     });
-  }
-
-  async loadTranslations() {
-    const breakfast = await this.translate
-      .get("components.selectMeal.breakfast")
-      .toPromise();
-    const lunch = await this.translate
-      .get("components.selectMeal.lunch")
-      .toPromise();
-    const dinner = await this.translate
-      .get("components.selectMeal.dinner")
-      .toPromise();
-    const snack = await this.translate
-      .get("components.selectMeal.snack")
-      .toPromise();
-    const other = await this.translate
-      .get("components.selectMeal.other")
-      .toPromise();
   }
 
   selectLastUsedMeal() {
     const lastUsedMeal = localStorage.getItem(LAST_USED_MEAL_VAR);
-    const mealExists = this.mealOptions.find((option) => option.mealTime === lastUsedMeal);
+    const mealExists = this.mealOptions.find(
+      (option) => option.mealTime === lastUsedMeal,
+    );
 
     if (lastUsedMeal && mealExists) {
       this.meal = lastUsedMeal;
@@ -104,6 +71,19 @@ export class SelectMealComponent implements AfterViewInit {
 
   saveLastUsedMeal() {
     localStorage.setItem(LAST_USED_MEAL_VAR, this.meal);
+  }
+
+  onClickSettings() {
+    this.navCtrl.navigateForward(this.mealOptionsHref);
+    this.settingsCallback.emit();
+  }
+
+  getLabel(mealOption: MealOption) {
+    return this.preferencesService.preferences[
+      MealOptionsPreferenceKey.ShowTime
+    ]
+      ? `${mealOption.title} - ${mealOption.mealTime}`
+      : mealOption.title;
   }
 
   mealChanged() {

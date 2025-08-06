@@ -12,7 +12,6 @@ export const mealOptionSummary =
       mealTime: true,
       createdAt: true, 
       updatedAt: true,
-      // user: userPublic,
     },
   });
 

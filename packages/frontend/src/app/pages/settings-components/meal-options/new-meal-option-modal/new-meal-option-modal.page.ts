@@ -18,7 +18,6 @@ import {
   SelectMultipleItemsComponent,
 } from "../../../../components/select-multiple-items/select-multiple-items.component";
 import { SHARED_UI_IMPORTS } from "../../../../providers/shared-ui.provider";
-import { Time } from "@angular/common";
 
 @Component({
   selector: "page-new-meal-option-modal",
@@ -44,24 +43,15 @@ export class NewMealOptionModalPage {
   mealOption?: MealOptionSummary;
 
   title: string = "";
-  mealTime: string = "12:00";
-  type: "label" | "group" | null = null;
+  mealTime: string = "00:00";
 
   mealOptions: MealOption[] = [];
 
-  warnWhenNotPresent = false;
-
   async ionViewWillEnter() {
-    const mealOptions = await this.trpcService.handle(
-      this.trpcService.trpc.mealOptions.getMealOptions.query(),
-    );
+    const mealOptions = await this.mealOptionService.fetch();
     if (mealOptions) {
       this.mealOptions = mealOptions;
     }
-  }
-
-  warnToggle(event: ToggleCustomEvent) {
-    this.warnWhenNotPresent = event.detail.checked;
   }
 
   onMealTimeChange(event: any) {
@@ -96,12 +86,37 @@ export class NewMealOptionModalPage {
 
     const loading = this.loadingService.start();
 
-    await this.trpcService.handle(
-      this.trpcService.trpc.mealOptions.createMealOption.mutate({
-        title: this.title,
-        mealTime: this.mealTime,
-      }),
-    );
+    const header = await this.translate
+      .get("pages.settings.mealOptions.updateConflict.header")
+      .toPromise();
+      
+    const message = await this.translate
+      .get("pages.settings.mealOptions.updateConflict.message")
+      .toPromise();
+      
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    await this.mealOptionService.create({
+      title: this.title,
+      mealTime: this.mealTime,
+    }, 
+    {
+      409: async () => {
+        (
+          await this.alertCtrl.create({
+            header,
+            message,
+            buttons: [
+              {
+                text: okay,
+                handler: () => {},
+              },
+            ],
+          })
+        ).present();
+      },
+    });
+
     loading.dismiss();
 
     this.cancel();

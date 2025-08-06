@@ -5,7 +5,7 @@ import { mealOptionSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const deleteMealOption = publicProcedure
+export const remove = publicProcedure
   .input(
     z.object({
       id: z.string().min(1).max(100)
@@ -25,7 +25,7 @@ export const deleteMealOption = publicProcedure
 
     if (!mealOption) {
       throw new TRPCError({
-        message: "Meal Option not found",
+        message: "Meal option not found",
         code: "NOT_FOUND",
       });
     }

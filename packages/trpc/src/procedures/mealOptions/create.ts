@@ -4,9 +4,8 @@ import { z } from "zod";
 import { validateTrpcSession } from "@recipesage/util/server/general";
 import { mealOptionSummary } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
-import { cleanLabelTitle } from "@recipesage/util/shared";
 
-export const createMealOption = publicProcedure
+export const create = publicProcedure
   .input(
     z.object({
       title: z.string().min(1).max(100),
@@ -17,7 +16,8 @@ export const createMealOption = publicProcedure
     const session = ctx.session;
     validateTrpcSession(session);
 
-    const title = cleanLabelTitle(input.title);
+    const title = input.title;
+    const mealTime = input.mealTime;
 
     if (!title.length) {
       throw new TRPCError({
@@ -26,17 +26,24 @@ export const createMealOption = publicProcedure
       });
     }
 
+    if (!mealTime.length) {
+      throw new TRPCError({
+        message: "Meal option time invalid",
+        code: "BAD_REQUEST",
+      });
+    }
+
     const existingMealTime = await prisma.mealOption.findFirst({
       where: {
         userId: session.userId,
-        mealTime: input.mealTime,
-        title: input.title,
+        mealTime: mealTime,
+        title: title,
       },
     });
 
     if (existingMealTime) {
       throw new TRPCError({
-        message: "Conflicting meal time",
+        message: "Conflicting meal option",
         code: "CONFLICT",
       });
     }
