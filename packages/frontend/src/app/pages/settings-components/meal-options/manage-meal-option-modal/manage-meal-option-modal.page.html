@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="nav">
-    <ion-title>{{ 'pages.settings.mealOptions.manage.title' | translate:{name:mealOption.title}
-      }}</ion-title>
+    <ion-title
+      >{{ 'pages.settings.mealOptions.manage.title' |
+      translate:{name:mealOption.title} }}</ion-title
+    >
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -18,9 +20,7 @@
       <h2 class="ion-text-capitalize">{{mealOption.title}}</h2>
       <p>
         <br />
-        <span>
-          {{mealOption.title}} - {{mealOption.mealTime}}
-        </span>
+        <span> {{mealOption.title}} - {{mealOption.mealTime}} </span>
         <br />
       </p>
     </ion-label>
@@ -34,12 +34,15 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="update()">
     <ion-icon name="create" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.settings.mealOptions.manage.update' | translate }}</ion-label>
+    <ion-label
+      >{{ 'pages.settings.mealOptions.manage.update' | translate }}</ion-label
+    >
   </ion-button>
 
   <ion-button expand="block" color="danger" (click)="delete()">
     <ion-icon name="trash" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.settings.mealOptions.manage.delete' | translate }}</ion-label>
+    <ion-label
+      >{{ 'pages.settings.mealOptions.manage.delete' | translate }}</ion-label
+    >
   </ion-button>
-
 </ion-footer>

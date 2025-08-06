@@ -33,7 +33,7 @@ export class MealOptionService {
     errorHandlers?: ErrorHandlers,
   ) {
     return this.trpcService.handle(
-      this.trpcService.trpc.mealOptions.get.query(params || {})
+      this.trpcService.trpc.mealOptions.get.query(params || {}),
     );
   }
 
@@ -45,7 +45,7 @@ export class MealOptionService {
     errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.mealOptions.create.mutate(payload)
+      this.trpcService.trpc.mealOptions.create.mutate(payload),
     );
 
     this.events.publish(EventName.MealOptionCreated);
@@ -65,7 +65,7 @@ export class MealOptionService {
       this.trpcService.trpc.mealOptions.update.mutate({
         id: mealOptionId,
         ...payload,
-      })
+      }),
     );
 
     this.events.publish(EventName.MealOptionUpdated);
@@ -73,14 +73,11 @@ export class MealOptionService {
     return response;
   }
 
-  async delete(
-    mealOptionId: string,
-    errorHandlers?: ErrorHandlers,
-  ) {
+  async delete(mealOptionId: string, errorHandlers?: ErrorHandlers) {
     const response = await this.trpcService.handle(
       this.trpcService.trpc.mealOptions.remove.mutate({
         id: mealOptionId,
-      })
+      }),
     );
 
     this.events.publish(EventName.MealOptionDeleted);

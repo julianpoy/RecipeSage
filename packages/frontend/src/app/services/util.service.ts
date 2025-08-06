@@ -176,7 +176,7 @@ export const RouteMap = {
   },
   MealOptionsPage: {
     getPath() {
-      return `/`+this.path;
+      return `/` + this.path;
     },
     path: "settings/meal-options",
   },

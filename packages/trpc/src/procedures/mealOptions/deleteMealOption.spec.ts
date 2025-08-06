@@ -17,7 +17,6 @@ describe("deleteMealOption", () => {
   });
 
   describe("success", () => {
-
     it("deletes a meal option", async () => {
       const mealTitle = "lunch";
       const mealTime = "12:00";

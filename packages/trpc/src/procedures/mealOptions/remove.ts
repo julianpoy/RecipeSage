@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server";
 export const remove = publicProcedure
   .input(
     z.object({
-      id: z.string().min(1).max(100)
+      id: z.string().min(1).max(100),
     }),
   )
   .mutation(async ({ ctx, input }) => {

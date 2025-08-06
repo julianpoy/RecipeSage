@@ -58,7 +58,7 @@ export class NewMealOptionModalPage {
     const value = event.detail.value;
     if (Array.isArray(value) && value.length > 0) {
       this.mealTime = value[0];
-    } else if (typeof value === 'string') {
+    } else if (typeof value === "string") {
       this.mealTime = value;
     }
   }
@@ -78,7 +78,7 @@ export class NewMealOptionModalPage {
   }
 
   save() {
-      this.saveMealOption();
+    this.saveMealOption();
   }
 
   async saveMealOption() {
@@ -89,33 +89,35 @@ export class NewMealOptionModalPage {
     const header = await this.translate
       .get("pages.settings.mealOptions.updateConflict.header")
       .toPromise();
-      
+
     const message = await this.translate
       .get("pages.settings.mealOptions.updateConflict.message")
       .toPromise();
-      
+
     const okay = await this.translate.get("generic.okay").toPromise();
 
-    await this.mealOptionService.create({
-      title: this.title,
-      mealTime: this.mealTime,
-    }, 
-    {
-      409: async () => {
-        (
-          await this.alertCtrl.create({
-            header,
-            message,
-            buttons: [
-              {
-                text: okay,
-                handler: () => {},
-              },
-            ],
-          })
-        ).present();
+    await this.mealOptionService.create(
+      {
+        title: this.title,
+        mealTime: this.mealTime,
       },
-    });
+      {
+        409: async () => {
+          (
+            await this.alertCtrl.create({
+              header,
+              message,
+              buttons: [
+                {
+                  text: okay,
+                  handler: () => {},
+                },
+              ],
+            })
+          ).present();
+        },
+      },
+    );
 
     loading.dismiss();
 

@@ -54,7 +54,6 @@ describe("updateMealOption", () => {
   describe("error", () => {
     it("throws on conflicting meal option title and time", async () => {
       return expect(async () => {
-
         const title = "breakfast";
         const mealTime = "12:00";
 

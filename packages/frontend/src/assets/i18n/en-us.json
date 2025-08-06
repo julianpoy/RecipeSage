@@ -804,7 +804,7 @@
   "pages.settings.oled.message": "The black (OLED) theme may make it difficult to distinguish between elements and alerts. Shadows and other visual animations will also not be displayed.",
   "pages.settings.sync.header": "Sync Triggered",
   "pages.settings.sync.message": "You will see a notification pop up when the sync has completed if you have enabled notification permissions for the app via the messaging page.",
-  
+
   "pages.settings.mealOptions": "Meal Options",
   "pages.settings.mealOptions.description": "Customize your meal options to suit your dietary preferences and schedule. Manage and organize your meals efficiently with our intuitive meal options settings.",
   "pages.settings.mealOptions.new": "New Meal Option",
@@ -1152,6 +1152,4 @@
   "generic.options": "Options",
   "generic.submit": "Submit",
   "generic.labeledPageTitle": "{{title}} - RecipeSage"
-
-  
 }

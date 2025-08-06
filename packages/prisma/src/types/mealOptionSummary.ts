@@ -10,7 +10,7 @@ export const mealOptionSummary =
       userId: true,
       title: true,
       mealTime: true,
-      createdAt: true, 
+      createdAt: true,
       updatedAt: true,
     },
   });
@@ -19,4 +19,6 @@ export const mealOptionSummary =
  * Provides fields necessary for displaying a summary about a meal plan,
  * not including items
  **/
-export type MealOptionSummary = Prisma.MealOptionGetPayload<typeof mealOptionSummary>;
+export type MealOptionSummary = Prisma.MealOptionGetPayload<
+  typeof mealOptionSummary
+>;

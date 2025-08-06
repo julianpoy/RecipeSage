@@ -16,7 +16,7 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
   selector: "page-new-meal-plan-item-modal",
   templateUrl: "new-meal-plan-item-modal.page.html",
   styleUrls: ["new-meal-plan-item-modal.page.scss"],
-  imports: [...SHARED_UI_IMPORTS, SelectMealComponent, SelectRecipeComponent]
+  imports: [...SHARED_UI_IMPORTS, SelectMealComponent, SelectRecipeComponent],
 })
 export class NewMealPlanItemModalPage {
   navCtrl = inject(NavController);

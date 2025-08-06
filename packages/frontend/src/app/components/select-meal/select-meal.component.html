@@ -1,9 +1,16 @@
 <div>
   <ion-item>
-    <ion-select label="{{ 'components.selectMeal.title' | translate }}" [(ngModel)]="meal"
-      (ngModelChange)="mealChanged()" okText="{{ 'generic.ok' | translate }}"
-      cancelText="{{ 'generic.cancel' | translate }}">
-      <ion-select-option *ngFor="let mealOption of mealOptions" [value]="mealOption.mealTime">
+    <ion-select
+      label="{{ 'components.selectMeal.title' | translate }}"
+      [(ngModel)]="meal"
+      (ngModelChange)="mealChanged()"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
+    >
+      <ion-select-option
+        *ngFor="let mealOption of mealOptions"
+        [value]="mealOption.mealTime"
+      >
         <span [innerHTML]="getLabel(mealOption)"></span>
       </ion-select-option>
     </ion-select>

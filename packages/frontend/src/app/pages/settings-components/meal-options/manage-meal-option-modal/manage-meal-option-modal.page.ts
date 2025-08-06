@@ -43,49 +43,53 @@ export class ManageMealOptionModalPage {
     const header = await this.translate
       .get("pages.settings.mealOptions.updateConflict.header")
       .toPromise();
-      
+
     const message = await this.translate
       .get("pages.settings.mealOptions.updateConflict.message")
       .toPromise();
 
     const okay = await this.translate.get("generic.okay").toPromise();
 
-    const mealOption = await this.mealOptionService.update(
-      this.mealOption.id,
-      {
-        title: newTitle,
-        mealTime: newMealTime,
-      },
-      {
-        409: async () => {
-          (
-            await this.alertCtrl.create({
-              header,
-              message,
-              buttons: [
-                {
-                  text: okay,
-                  handler: () => {},
-                },
-              ],
-            })
-          ).present();
+    const mealOption = await this.mealOptionService
+      .update(
+        this.mealOption.id,
+        {
+          title: newTitle,
+          mealTime: newMealTime,
         },
-      },
-    ).then(mealOption => {
+        {
+          409: async () => {
+            (
+              await this.alertCtrl.create({
+                header,
+                message,
+                buttons: [
+                  {
+                    text: okay,
+                    handler: () => {},
+                  },
+                ],
+              })
+            ).present();
+          },
+        },
+      )
+      .then((mealOption) => {
+        if (!mealOption) return;
 
-      if (!mealOption) return;
-
-      this.mealOption.title = newTitle;
-      this.mealOption.mealTime = newMealTime;
-    }).finally(() => {
-      loading.dismiss();
-    });
+        this.mealOption.title = newTitle;
+        this.mealOption.mealTime = newMealTime;
+      })
+      .finally(() => {
+        loading.dismiss();
+      });
   }
 
   async update() {
     const header = await this.translate
-      .get("pages.settings.mealOptions.update.header", { name: this.mealOption.title })
+      .get("pages.settings.mealOptions.update.header", {
+        name: this.mealOption.title,
+      })
       .toPromise();
     const textPlaceholder = await this.translate
       .get("pages.settings.mealOptions.new.titleInputPlaceholder")
@@ -145,7 +149,9 @@ export class ManageMealOptionModalPage {
 
   async delete() {
     const header = await this.translate
-      .get("pages.settings.mealOptions.delete.header", { name: this.mealOption.title })
+      .get("pages.settings.mealOptions.delete.header", {
+        name: this.mealOption.title,
+      })
       .toPromise();
     const cancel = await this.translate.get("generic.cancel").toPromise();
     const del = await this.translate.get("generic.delete").toPromise();

@@ -53,7 +53,11 @@ export class MealOptionDefaultService {
   }
 
   add(userCreatedOptions: MealOption[]): MealOption[] {
-    if (!this.preferencesService.preferences[MealOptionsPreferenceKey.ShowDefaults]) {
+    if (
+      !this.preferencesService.preferences[
+        MealOptionsPreferenceKey.ShowDefaults
+      ]
+    ) {
       return userCreatedOptions;
     }
 

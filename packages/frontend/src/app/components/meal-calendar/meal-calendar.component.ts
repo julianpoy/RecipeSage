@@ -3,7 +3,10 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MealOption, MealOptionService } from "../../services/meal-option.service";
+import {
+  MealOption,
+  MealOptionService,
+} from "../../services/meal-option.service";
 import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import {
   MealName,
@@ -200,7 +203,9 @@ export class MealCalendarComponent {
     this.mealsByDate = {};
 
     this.mealPlanItems
-      .sort((a, b) => { return a.meal > b.meal ? 1 : -1; })
+      .sort((a, b) => {
+        return a.meal > b.meal ? 1 : -1;
+      })
       .forEach((item) => {
         const [year, month, day] = this.getYMD(
           item.scheduled || item.scheduledDate,
@@ -210,8 +215,7 @@ export class MealCalendarComponent {
         const dayData = (this.mealsByDate[year][month][day] = this.mealsByDate[
           year
         ][month][day] || {
-          itemsByMeal: {
-          },
+          itemsByMeal: {},
           items: [],
         });
 

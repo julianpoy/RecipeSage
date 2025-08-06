@@ -6,9 +6,11 @@ import { z } from "zod";
 
 export const get = publicProcedure
   .input(
-    z.object({
-      title: z.string().optional(),
-    }).optional()
+    z
+      .object({
+        title: z.string().optional(),
+      })
+      .optional(),
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -18,7 +20,7 @@ export const get = publicProcedure
       userId: string;
       title?: {
         contains: string;
-        mode: 'insensitive';
+        mode: "insensitive";
       };
     } = {
       userId: session.userId,
@@ -28,7 +30,7 @@ export const get = publicProcedure
     if (input?.title) {
       whereClause.title = {
         contains: input.title,
-        mode: 'insensitive',
+        mode: "insensitive",
       };
     }
 

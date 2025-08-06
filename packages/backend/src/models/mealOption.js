@@ -1,5 +1,4 @@
 export const MealOptionInit = (sequelize, DataTypes) => {
-  
   const MealOption = sequelize.define(
     "MealOption",
     {
@@ -29,6 +28,6 @@ export const MealOptionInit = (sequelize, DataTypes) => {
       as: "user",
     });
   };
-  
+
   return MealOption;
 };

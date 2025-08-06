@@ -11,11 +11,7 @@ import * as Util from "@recipesage/util/shared";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
-import {
-  BadRequest,
-  NotFound,
-  PreconditionFailed,
-} from "../utils/errors.js";
+import { BadRequest, NotFound, PreconditionFailed } from "../utils/errors.js";
 
 //Get all of a user's labels
 router.get(
@@ -33,11 +29,7 @@ router.get(
         userId: res.locals.session.userId,
         ...addlOptions,
       },
-      attributes: [
-        "id",
-        "title",
-        "mealTime",
-      ],
+      attributes: ["id", "title", "mealTime"],
       order: [["title", "ASC"]],
     });
 
@@ -56,18 +48,13 @@ router.get(
         id: req.query.mealOptionId,
         userId: res.locals.session.userId,
       },
-      attributes: [
-        "id",
-        "title",
-        "mealTime",
-      ],
+      attributes: ["id", "title", "mealTime"],
       group: ["MealOption.id"],
     });
 
     res.status(200).json(mealOption);
   }),
 );
-
 
 //Delete a meal option
 router.delete(

@@ -1,4 +1,7 @@
-<div class="group" *ngFor="let mealTime of getObjectKeys(mealItems.itemsByMeal)">
+<div
+  class="group"
+  *ngFor="let mealTime of getObjectKeys(mealItems.itemsByMeal)"
+>
   <span class="meal-title" [innerHTML]="mealLabel(mealTime)"></span>
   <calendar-item
     *ngFor="let mealItem of mealItems.itemsByMeal[mealTime]"
@@ -9,7 +12,7 @@
     (dragend)="dragEnd($event, mealItem)"
     [style.border-left-color]="getMealColor(mealItem.meal)"
     [ngClass]="{
-      dragging: mealItemsDragging[mealItem.id]
+      dragging: mealItemsDragging[mealItem.id],
     }"
   ></calendar-item>
 </div>

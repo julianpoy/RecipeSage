@@ -36,7 +36,7 @@ export class SelectMealComponent implements AfterViewInit {
   trpcService = inject(TRPCService);
   preferencesService = inject(PreferencesService);
   navCtrl = inject(NavController);
-  
+
   mealOptionsHref = RouteMap.MealOptionsPage.getPath();
   mealOptions: MealOption[] = [];
 

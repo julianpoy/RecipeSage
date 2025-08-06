@@ -17,7 +17,6 @@ describe("getMealOptions", () => {
   });
 
   describe("success", () => {
-
     const title = "breakfast";
     it("get meal options", async () => {
       await trpc.mealOptions.create.mutate({

@@ -19,7 +19,6 @@ describe("createMealOption", () => {
 
   describe("success", () => {
     it("creates meal option with all parameters provided", async () => {
-
       const mealTitle = "lunch";
       const mealTime = "12:00";
 
@@ -60,6 +59,5 @@ describe("createMealOption", () => {
         });
       }).rejects.toThrow("Conflicting meal option");
     });
-
   });
 });
