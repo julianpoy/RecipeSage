@@ -2,7 +2,7 @@
 
 import { join } from "path";
 import workerpool from "workerpool";
-import fetch from "node-fetch";
+import fetch, { AbortError } from "node-fetch";
 import * as Sentry from "@sentry/node";
 import he from "he";
 import { dedent } from "ts-dedent";
@@ -231,6 +231,13 @@ const clipRecipeHtmlWithGPT = async (document: string) => {
   return textToRecipe(text, TextToRecipeInputType.Webpage);
 };
 
+export class ClipTimeoutError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipTimeoutError";
+  }
+}
+
 export const clipUrl = async (
   url: string,
 ): Promise<StandardizedRecipeImportEntry> => {
@@ -239,7 +246,12 @@ export const clipUrl = async (
   });
 
   const response = await fetchURL(url, {
-    timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
+    timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "10000"),
+  }).catch((e) => {
+    if (e instanceof AbortError) {
+      throw new ClipTimeoutError();
+    }
+    throw e;
   });
 
   const htmlDocument = await response.text();

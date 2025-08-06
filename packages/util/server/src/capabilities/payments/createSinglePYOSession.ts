@@ -9,6 +9,7 @@ export async function createSinglePYOSession(args: {
   return await stripe.checkout.sessions.create({
     mode: "payment",
     customer: args.stripeCustomerId || undefined,
+    customer_creation: args.stripeCustomerId ? undefined : "always",
     success_url: args.successUrl,
     cancel_url: args.cancelUrl,
     line_items: [

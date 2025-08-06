@@ -108,6 +108,21 @@
     {{ 'pages.shoppingListPopover.update' | translate }}
   </ion-button>
 
+  <ion-button
+    (click)="toggleEditMode()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-checkbox
+      slot="start"
+      [checked]="editMode"
+      disabled="true"
+      class="checkbox-icon"
+    ></ion-checkbox>
+    {{ 'pages.shoppingListPopover.edit' | translate }}
+  </ion-button>
+
   <ion-list-header>
     {{ 'pages.shoppingListPopover.dangerZone.title' | translate }}
   </ion-list-header>

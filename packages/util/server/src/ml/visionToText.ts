@@ -1,4 +1,4 @@
-import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
+import { OpenAIHelper, GPTModelQuality } from "../ml/openai";
 
 const openAiHelper = new OpenAIHelper();
 
@@ -21,24 +21,27 @@ export const visionToText = async (
   imageB64: string,
   inputType: VisionToTextInputType,
 ): Promise<string> => {
-  const response = await openAiHelper.getChatResponse(SupportedGPTModel.GPT4O, [
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: prompts[inputType],
-        },
-        {
-          type: "image_url",
-          image_url: {
-            url: `data:image/jpeg;base64,${imageB64}`,
-            detail: "high",
+  const response = await openAiHelper.getChatResponse(
+    GPTModelQuality.ImageRecognition,
+    [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: prompts[inputType],
           },
-        },
-      ],
-    },
-  ]);
+          {
+            type: "image_url",
+            image_url: {
+              url: `data:image/jpeg;base64,${imageB64}`,
+              detail: "high",
+            },
+          },
+        ],
+      },
+    ],
+  );
 
   return response.choices.map((el) => el.message.content).join("") || "";
 };

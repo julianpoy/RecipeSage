@@ -135,6 +135,8 @@ export class SettingsPage {
   }
 
   toggleSplitPane() {
+    this.events.publish(EventName.ApplicationSplitPaneChanged);
+
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
       this.quickTutorialService.triggerQuickTutorial(
         QuickTutorialOptions.SplitPaneView,

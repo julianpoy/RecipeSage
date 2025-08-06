@@ -282,6 +282,7 @@ model ShoppingListItem {
   recipeId       String?       @db.Uuid
   title          String
   completed      Boolean
+  categoryTitle  String?
   createdAt      DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt      DateTime      @updatedAt @db.Timestamptz(6)
   mealPlanItem   MealPlanItem? @relation(fields: [mealPlanItemId], references: [id], onDelete: Cascade)

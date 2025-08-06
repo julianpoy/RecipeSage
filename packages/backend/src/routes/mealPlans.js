@@ -56,7 +56,7 @@ router.post(
           from: {
             id: res.locals.user.id,
             name: res.locals.user.name,
-            email: res.locals.user.email,
+            handle: res.locals.user.handle,
           },
         },
       );
@@ -98,12 +98,12 @@ router.get(
         {
           model: User,
           as: "collaborators",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "owner",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: MealPlanItem,
@@ -189,7 +189,7 @@ router.post(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -252,7 +252,7 @@ router.delete(
             updatedBy: {
               id: res.locals.user.id,
               name: res.locals.user.name,
-              email: res.locals.user.email,
+              handle: res.locals.user.handle,
             },
           },
         );
@@ -307,7 +307,7 @@ router.delete(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -389,7 +389,7 @@ router.put(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -467,7 +467,7 @@ router.post(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -543,7 +543,7 @@ router.delete(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -603,12 +603,12 @@ router.get(
         {
           model: User,
           as: "collaborators",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "owner",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: MealPlanItem,
@@ -626,7 +626,7 @@ router.get(
             {
               model: User,
               as: "owner",
-              attributes: ["id", "name", "email"],
+              attributes: ["id", "name", "handle"],
             },
             {
               model: ShoppingListItem,

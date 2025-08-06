@@ -8,7 +8,7 @@ import {
   ChatCompletionMessageToolCall,
   ChatCompletionUserMessageParam,
 } from "openai/resources/chat/completions";
-import { OpenAIHelper, SupportedGPTModel } from "./openai";
+import { OpenAIHelper, GPTModelQuality } from "./openai";
 import { AssistantMessage } from "@prisma/client";
 import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
@@ -197,8 +197,8 @@ export class Assistant {
 
     const response = await this.openAiHelper.getChatResponseWithTools(
       useLowQualityModel
-        ? SupportedGPTModel.GPT4OMini
-        : SupportedGPTModel.GPT4O,
+        ? GPTModelQuality.LowQuality
+        : GPTModelQuality.HighQuality,
       context,
       [initBuildRecipe(recipes)],
     );

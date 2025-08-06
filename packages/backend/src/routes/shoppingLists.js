@@ -62,7 +62,7 @@ router.post(
           from: {
             id: res.locals.user.id,
             name: res.locals.user.name,
-            email: res.locals.user.email,
+            handle: res.locals.user.handle,
           },
         },
       );
@@ -104,12 +104,12 @@ router.get(
         {
           model: User,
           as: "collaborators",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "owner",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: ShoppingListItem,
@@ -178,6 +178,7 @@ router.post(
       req.body.items.map((item) => ({
         title: item.title,
         completed: item.completed || false,
+        categoryTitle: item.categoryTitle || null,
         userId: res.locals.session.userId,
         shoppingListId: shoppingList.id,
         recipeId: item.recipeId || null,
@@ -192,7 +193,7 @@ router.post(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -256,7 +257,7 @@ router.delete(
             updatedBy: {
               id: res.locals.user.id,
               name: res.locals.user.name,
-              email: res.locals.user.email,
+              handle: res.locals.user.handle,
             },
           },
         );
@@ -315,7 +316,7 @@ router.delete(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };
@@ -374,22 +375,29 @@ router.get(
         {
           model: User,
           as: "collaborators",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: User,
           as: "owner",
-          attributes: ["id", "name", "email"],
+          attributes: ["id", "name", "handle"],
         },
         {
           model: ShoppingListItem,
           as: "items",
-          attributes: ["id", "title", "completed", "createdAt", "updatedAt"],
+          attributes: [
+            "id",
+            "title",
+            "completed",
+            "categoryTitle",
+            "createdAt",
+            "updatedAt",
+          ],
           include: [
             {
               model: User,
               as: "owner",
-              attributes: ["id", "name", "email"],
+              attributes: ["id", "name", "handle"],
             },
             {
               model: MealPlanItem,
@@ -408,12 +416,13 @@ router.get(
 
     const s = shoppingListSummary.toJSON();
     ShoppingListCategorizerService.groupShoppingListItems(s.items);
-    s.items.forEach(
-      (item) =>
-        (item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
+    for (const item of s.items) {
+      if (item.categoryTitle === null) {
+        item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
           item.title,
-        )),
-    );
+        );
+      }
+    }
 
     res.status(200).json(s);
   }),
@@ -458,7 +467,8 @@ router.put(
       }),
       body: Joi.object({
         title: Joi.string().min(1),
-        completed: Joi.boolean(),
+        completed: Joi.boolean().optional(),
+        categoryTitle: Joi.string().optional(),
       }),
     }),
   ),
@@ -506,7 +516,7 @@ router.put(
       updatedBy: {
         id: res.locals.user.id,
         name: res.locals.user.name,
-        email: res.locals.user.email,
+        handle: res.locals.user.handle,
       },
       reference,
     };

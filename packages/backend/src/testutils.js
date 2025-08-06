@@ -34,10 +34,15 @@ export function randomEmail() {
   return `${randomString(20)}@gmail.com`;
 }
 
+export function randomHandle() {
+  return randomString(20);
+}
+
 export const createUser = () => {
   return User.create({
     name: `${randomString(10)} ${randomString(10)}`,
     email: randomEmail(),
+    handle: randomEmail(),
     passwordHash:
       "SaVNC9ubXV8BHykB2wAD0mhxPwh/W7O7Rz+qRy/PeV+GeeakLzkv2TSghPQvLTe07b7TqxdsRUt39lC3RaaWmhORkVS9UbtEIh9dzvcbj9VzHA0ex0k97nv0lE56Jh6D6M5Laxe2BrkpiUibP3yCDCk75vCHtLGTZVjqtabTGheIs/QwiD72C7H+bK4QSL2RYSOEbB0wysNAC5nF8r1m36FB/DS5wEixOWiQH470H1s9yHODAALNag9Lom+It4P3cMSSa83mxPNvFOniEpuDDcI5W/Oxef/XiA3EhMLL8n4+CSV1Z891g65U7j7RIKSCjK1LbCvQ5JuS/jZCErNBW9472TXdGKGeYY6RTDgSBzqISyxlMCSRBsNjToWHJyPEyEbt0BTSjTkliB+0wSQpdzUiDDiJNrLVimAriH/AcU/eFvpU5YyyY1coY8Kc80LxKxP/p881Q0DABCmaRcDH+/1iEz3SoWNvSsw/Xq8u9LcgKCjccDoD8tKBDkMijS7TBPu9zJd2nUqblPO+KTGz7hVqh/u0VQ+xEdvRQuKSc+4OnUtQRVCAFQGB99hfXfQvffeGosNy3BABEuZkobaUgs8m8RTaRFGqy8qk6BYw1bk5I5KjjmA8GNOtNHlKQ+1EZO83pIKbG61Jfm93FJ6CsWji9fXsxaBsv+JNBhRgmUw=",
     passwordSalt:
@@ -126,7 +131,7 @@ export const createMessage = (
 export const secureUserMatch = (userHash, user) => {
   expect(userHash.id).toBe(user.id);
   expect(userHash.name).toBe(user.name);
-  expect(userHash.email).toBe(user.email);
+  expect(userHash.handle).toBe(user.handle);
 
   expect(Object.keys(userHash).length).toBe(3);
 };
