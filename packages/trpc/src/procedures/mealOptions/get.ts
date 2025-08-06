@@ -14,7 +14,13 @@ export const get = publicProcedure
     const session = ctx.session;
     validateTrpcSession(session);
 
-    const whereClause: any = {
+    const whereClause: {
+      userId: string;
+      title?: {
+        contains: string;
+        mode: 'insensitive';
+      };
+    } = {
       userId: session.userId,
     };
 

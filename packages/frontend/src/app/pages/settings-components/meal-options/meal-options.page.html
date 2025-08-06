@@ -40,7 +40,8 @@
     <ion-item *ngFor="let mealOption of mealOptions" [disabled]="mealOption.userId === '0'" [hidden]="!isMealOptionVisible(mealOption)"
       (click)="manageMealOption(mealOption)" button class="ion-margin-start meal-options-settings">
       <ion-label>
-        <h2>{{ mealOption.title }}<ng-container *ngIf="preferences[preferenceKeys.ShowTime]"> - {{ mealOption.mealTime }}</ng-container>
+        <h2 class="ion-text-capitalize">
+          {{ mealOption.title }}<ng-container *ngIf="preferences[preferenceKeys.ShowTime]"> - {{ mealOption.mealTime }}</ng-container>
         </h2>
       </ion-label>
 

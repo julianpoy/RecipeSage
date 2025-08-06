@@ -9,7 +9,10 @@ export const create = publicProcedure
   .input(
     z.object({
       title: z.string().min(1).max(100),
-      mealTime: z.string(),
+      mealTime: z.string().min(5).max(5).regex(
+        /^([01]\d|2[0-3]):([0-5]\d)$/,
+        "Invalid time format. Expected HH:MM (e.g., 09:30 or 23:59)"
+      ),
     }),
   )
   .mutation(async ({ ctx, input }) => {
