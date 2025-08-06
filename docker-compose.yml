@@ -26,6 +26,7 @@ services:
     environment:
       - ENVIRONMENT=development
       - APP_VERSION=development
+      - NODE_OPTIONS=--max-old-space-size=4096
     stop_grace_period: 1s
   backend:
     depends_on:
@@ -113,9 +114,5 @@ services:
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
     stop_grace_period: 1s
-  collector:
-    image: otel/opentelemetry-collector:latest
-    ports:
-      - "4318:4318"
 volumes:
   typesense-data:
