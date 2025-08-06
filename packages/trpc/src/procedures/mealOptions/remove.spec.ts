@@ -21,19 +21,19 @@ describe("deleteMealOption", () => {
       const mealTitle = "lunch";
       const mealTime = "12:00";
 
-      const _mealOption = await trpc.mealOptions.create.mutate({
+      const mealOption = await trpc.mealOptions.create.mutate({
         title: mealTitle,
         mealTime: mealTime,
       });
 
-      const mealOption = await trpc.mealOptions.remove.mutate({
-        id: _mealOption.id,
+      const _mealOption = await trpc.mealOptions.remove.mutate({
+        id: mealOption.id,
       });
 
       const updatedMealOption = await trpc.mealOptions.get.query({
-        title: _mealOption.id,
+        title: mealOption.id,
       });
-      expect(updatedMealOption).toEqual(null);
+      expect(updatedMealOption).toEqual([]);
     });
   });
   describe("error", () => {

@@ -46,8 +46,8 @@ describe("createMealOption", () => {
 
   describe("error", () => {
     it("must throw conflicting meal option", async () => {
-      const mealTitle = "lunch";
-      const mealTime = "12:00";
+      const mealTitle = "dinner";
+      const mealTime = "18:00";
 
       await trpc.mealOptions.create.mutate({
         title: mealTitle,

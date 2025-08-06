@@ -10,7 +10,6 @@
   "pages.app.nav.about": "About & Support",
   "pages.app.nav.home": "My Recipes",
   "pages.app.nav.labels": "Manage Labels",
-  "pages.app.nav.mealOptions": "Manage Meal Options",
   "pages.app.nav.people": "People & Profile",
   "pages.app.nav.assistant": "Cooking Assistant",
   "pages.app.nav.messages": "Messages",
@@ -1068,13 +1067,6 @@
   "components.selectMultipleItems.noItems": "No items",
   "components.selectMultipleItems.alreadyAdded": "Already added",
   "components.selectMultipleItems.searchPlaceholder": "Search for an item to add",
-
-  "components.selectMeal.title": "Select Meal",
-  "components.selectMeal.breakfast": "Breakfast",
-  "components.selectMeal.lunch": "Lunch",
-  "components.selectMeal.dinner": "Dinner",
-  "components.selectMeal.snack": "Snack",
-  "components.selectMeal.other": "Other",
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",
