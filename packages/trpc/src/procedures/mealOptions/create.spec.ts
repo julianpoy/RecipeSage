@@ -62,5 +62,4 @@ describe("createMealOption", () => {
       }).rejects.toThrow("Conflicting meal option");
     });
   });
-  
 });
