@@ -1030,6 +1030,7 @@
   "components.mealCalendar.dinner": "Dinner",
   "components.mealCalendar.snack": "Snack",
   "components.mealCalendar.other": "Other",
+  "components.selectMeal.title": "Select Meal",
 
   "components.multiImageUpload.add": "Click to Add Image",
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
