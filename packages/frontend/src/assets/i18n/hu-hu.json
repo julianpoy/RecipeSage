@@ -186,7 +186,7 @@
     "pages.recipeDetailsPopover.delete": "Recept törlése",
     "pages.rselectpopover.resetAll": "Összes visszaállítása",
     "pages.rselectpopover.done": "Kész",
-    "pages.about.links.details": "Rólam és RecipeSage-ről",
+    "pages.about.links.details": "Rólam és a RecipeSage-ről",
     "pages.about.links.contact": "Kapcsolat",
     "pages.about.links.userGuide": "Felhasználói útmutató (oktatóanyagok)",
     "pages.about.links.releaseNotes": "Kiadási megjegyzések",
@@ -718,7 +718,7 @@
     "components.scaleRecipe.change": "Állítsa be a recept adagját",
     "components.scaleRecipe.click": "Kattintson egy gombra, vagy adja meg az adagot kézzel",
     "components.scaleRecipe.manual": "Vagy írjon be egy számot vagy törtet",
-    "pages.editRecipe.autoclip": "Automatikus kitöltés az URL-ből",
+    "pages.editRecipe.autoclip": "Automatikus kitöltés URL-ből",
     "pages.home.errors.noRecipes.message4": "Más platformokról is importálhat recepteket.",
     "pages.home.errors.noRecipes.message7": "Az alkalmazás használatára vonatkozó részletes oktatóanyagokért keresse fel a dokumentációt",
     "generic.ok": "Ok",
@@ -801,7 +801,7 @@
     "pages.account.emailConflict": "Elnézést, de már létezik fiók ezzel az e-mail címmel.",
     "pages.messageThread.yourRecipeDeleted": "Ennek a receptnek a másolata már nem létezik",
     "pages.addRecipeToShoppingListModal.createShoppingList": "Hozzon létre egy bevásárlólistát",
-    "pages.editRecipe.clip.failed": "Nem sikerült automatikusan kitölteni erről az URL-ről",
+    "pages.editRecipe.clip.failed": "Az automatikus kitöltés nem sikerült. Várható, hogy néhány tartalom nem töltődik ki automatikusan, de kérem, vegye fel velem a kapcsolatot, ha folyamatos problémákat tapasztal.",
     "pages.account.passwordUpdated.message": "A jelszava frissítve lett. Minden olyan eszközön újra be kell jelentkeznie, amely ezt a fiókot használja.",
     "pages.export.description1": "Kérem, válasszon egy exportálási formátumot az exportálási feladat elindításához.",
     "pages.import.description1": "A RecipeSage támogatja az importálást a Pepperplate-ből, a Living Cookbookból és a Paprika-ból.",
@@ -1023,5 +1023,8 @@
     "components.mealCalendar.breakfast": "Reggeli",
     "components.mealCalendar.lunch": "Ebéd",
     "components.mealCalendar.dinner": "Vacsora",
-    "components.mealCalendar.snack": "Nassolnivaló"
+    "components.mealCalendar.snack": "Nassolnivaló",
+    "pages.shoppingListPopover.edit": "Hozzávaló kategóriák szerkesztése",
+    "components.messaging.shoppingList.categoryEdit.help.header": "Bevásárlólista kategóriák szerkesztése",
+    "components.messaging.shoppingList.categoryEdit.help.message": "A szerkesztés kiválasztása lehetővé teszi, hogy a bevásárlólista elemeit áthúzza egy új kategóriába"
 }
