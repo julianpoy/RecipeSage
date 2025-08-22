@@ -77,12 +77,14 @@ export const register = publicProcedure
       } satisfies SessionDTO;
     });
 
-    sendWelcomeEmail({
-      toAddresses: [sanitizedEmail],
-      ccAddresses: [],
-    }).catch((err) => {
-      Sentry.captureException(err);
-    });
+    if (process.env.ENABLE_WELCOME_EMAIL === "true") {
+      sendWelcomeEmail({
+        toAddresses: [sanitizedEmail],
+        ccAddresses: [],
+      }).catch((err) => {
+        Sentry.captureException(err);
+      });
+    }
 
     metrics.userCreated.inc({
       auth_type: "password",
