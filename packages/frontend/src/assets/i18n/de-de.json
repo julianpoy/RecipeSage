@@ -962,5 +962,6 @@
     "pages.import.fileTypeWarning": "Achtung! Dieser Dateityp endet nicht mit: {{ acceptableFiletypes }}. Es könnte zu Fehlern kommen.",
     "pages.import.jobs.job": "Import",
     "pages.contribute.manage": "Um ein bestehendes Abonnement zu verwalten, klicke hier",
-    "pages.export.jobs.job": "Aufgabe exportieren"
+    "pages.export.jobs.job": "Aufgabe exportieren",
+    "pages.importJsonLD.description": "Dies wird eine JSON-LD Datei (endet mit .json) in deinen RecipeSage Account importieren. Bitte beachte, dass JSON-LD ein sehr spezielles Dateiformat ist, und nicht alle .json Dateien den richtigen Inhalt haben, um kompatibel mit dieser Importmethode zu sein. Falls beim Import Probleme auftreten, lesen Sie bitte die Bedienungsanleitung. Wenn Ihre Datei viele Rezepte oder Bilder enthält, können Sie gerne einen Beitrag leisten."
 }
