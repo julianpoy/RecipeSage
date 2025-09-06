@@ -963,5 +963,14 @@
     "pages.import.jobs.job": "Import",
     "pages.contribute.manage": "Um ein bestehendes Abonnement zu verwalten, klicke hier",
     "pages.export.jobs.job": "Aufgabe exportieren",
-    "pages.importJsonLD.description": "Dies wird eine JSON-LD Datei (endet mit .json) in deinen RecipeSage Account importieren. Bitte beachte, dass JSON-LD ein sehr spezielles Dateiformat ist, und nicht alle .json Dateien den richtigen Inhalt haben, um kompatibel mit dieser Importmethode zu sein. Falls beim Import Probleme auftreten, lesen Sie bitte die Bedienungsanleitung. Wenn Ihre Datei viele Rezepte oder Bilder enthält, können Sie gerne einen Beitrag leisten."
+    "pages.importJsonLD.description": "Dies wird eine JSON-LD Datei (endet mit .json) in deinen RecipeSage-Account importieren. Bitte beachte, dass JSON-LD ein sehr spezielles Dateiformat ist, und nicht alle .json Dateien den richtigen Inhalt haben, um kompatibel mit dieser Importmethode zu sein. Falls beim Import Probleme auftreten, lies bitte die Anleitung. Wenn deine Datei viele Rezepte oder Bilder enthält, kannst du gerne einen Beitrag leisten.",
+    "pages.importUrls.urls": "Rezept-URLs",
+    "pages.importUrls.title": "Rezepte aus einer Liste von URLs importieren",
+    "pages.settings.sync": "Cache-Synchronisation für den Offlinebetrieb anstoßen",
+    "pages.importUrls.urls.helperText": "Pro Zeile eine URL. Nur URLs die mit http:// und https:// beginnen, werden unterstützt.",
+    "pages.importLivingCookbook.excludeImages": "Rezeptbilder ausschließen (optional, nicht empfohlen)",
+    "pages.importCookmate.description": "Dadurch wird eine Cookmate-Datei (mit der Endung .mcb) in dein RecipeSage-Konto importiert. Wenn du Probleme mit dem Import hast, lies bitte die Anleitung. Bitte erwäge eine Spende, wenn deine Datei eine große Anzahl von Rezepten oder Bildern enthält.",
+    "pages.importRecipeKeeper.description": "Dadurch wird eine RecipeKeeper-Datenbank (mit der Endung .zip) in dein RecipeSage-Konto importiert. Bitte beachte, dass nicht alle ZIP-Dateien kompatibel sind, sondern nur diejenigen, die aus RecipeKeeper exportiert wurden. Wenn du Probleme mit dem Import hast, lies bitte die Anleitung. Bitte erwäge eine Spende, wenn deine Datei eine große Anzahl von Rezepten oder Bildern enthält.",
+    "pages.importLivingCookbook.description": "Dadurch wird eine LivingCookbook-Datei (mit der Endung .lcb, .fdx oder .fdxz) in dein RecipeSage-Konto importiert. Wenn du Probleme mit dem Import hast, solltest du die Datenbank erneut exportieren (im FDX- oder FDXZ-Format) oder den Import mit aktivierter Option „Standardrezepte einbeziehen” versuchen. Bitte erwäge eine Spende, wenn deine Datei eine große Anzahl von Rezepten oder Bildern enthält.",
+    "pages.importUrls.description": "Dadurch wird versucht, alle angegebenen URLs mit Hilfe der Autoclip-Funktion in dein RecipeSage-Konto zu importieren. Bitte beachte, dass einige URLs möglicherweise nicht erreichbar oder nicht analysierbar sind und daher nicht importiert werden. Bei Problemen lies bitte die Anleitung. Bitte erwäge eine Spende, wenn deine Datei eine große Anzahl von Rezepten oder Bildern enthält."
 }
