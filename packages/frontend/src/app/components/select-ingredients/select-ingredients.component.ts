@@ -73,10 +73,12 @@ export class SelectIngredientsComponent {
       ShoppingListPreferenceKey.IgnoreItemTitles
     ]
       .split("\n")
-      .filter((el) => el.trim());
+      .filter((el) => el.trim())
+      .map((el) => el.toLowerCase());
 
+    const ingredientLowerCase = ingredient.originalContent.toLowerCase();
     for (const ignoredIngredient of ignoredIngredients) {
-      if (ingredient.originalContent.includes(ignoredIngredient)) {
+      if (ingredientLowerCase.includes(ignoredIngredient)) {
         return true;
       }
     }
