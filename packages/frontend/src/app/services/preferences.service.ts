@@ -15,6 +15,7 @@ import {
   ShoppingListPreferenceKey,
   ShoppingListSortOptions,
   SupportedFontSize,
+  MealOptionsPreferenceKey,
 } from "@recipesage/util/shared";
 import { TRPCService } from "./trpc.service";
 import { UtilService } from "./util.service";
@@ -73,6 +74,9 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.GroupCategories]: true,
     [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
     [ShoppingListPreferenceKey.editHelpShown]: false,
+
+    [MealOptionsPreferenceKey.ShowDefaults]: true,
+    [MealOptionsPreferenceKey.ShowTime]: false,
   };
 
   constructor() {

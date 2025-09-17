@@ -3,6 +3,10 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
+import {
+  MealOption,
+  MealOptionService,
+} from "../../services/meal-option.service";
 import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import {
   MealName,
@@ -22,8 +26,10 @@ import { MealGroupComponent } from "./meal-group/meal-group.component";
 export class MealCalendarComponent {
   utilService = inject(UtilService);
   preferencesService = inject(PreferencesService);
+  mealOptionService = inject(MealOptionService);
 
   private _mealPlanItems!: MealPlanItemSummary[];
+  private _mealOptions!: MealOption[];
 
   @Input({
     required: true,
@@ -45,10 +51,9 @@ export class MealCalendarComponent {
       [month: number]: {
         [day: number]: {
           itemsByMeal: {
-            [key in MealName]: MealPlanItemSummary[];
+            [mealTime: string]: MealPlanItemSummary[];
           };
           items: MealPlanItemSummary[];
-          meals: MealName[];
         };
       };
     };
@@ -197,20 +202,9 @@ export class MealCalendarComponent {
   processIncomingMealPlan() {
     this.mealsByDate = {};
 
-    const mealSortOrder = {
-      breakfast: 1,
-      lunch: 2,
-      dinner: 3,
-      snacks: 4,
-      other: 5,
-    };
     this.mealPlanItems
       .sort((a, b) => {
-        const comp =
-          (mealSortOrder[a.meal as keyof typeof mealSortOrder] || 6) -
-          (mealSortOrder[b.meal as keyof typeof mealSortOrder] || 6);
-        if (comp === 0) return a.title.localeCompare(b.title);
-        return comp;
+        return a.meal > b.meal ? 1 : -1;
       })
       .forEach((item) => {
         const [year, month, day] = this.getYMD(
@@ -221,16 +215,14 @@ export class MealCalendarComponent {
         const dayData = (this.mealsByDate[year][month][day] = this.mealsByDate[
           year
         ][month][day] || {
-          itemsByMeal: {
-            breakfast: [],
-            lunch: [],
-            dinner: [],
-            snacks: [],
-            other: [],
-          },
+          itemsByMeal: {},
           items: [],
-          meals: Object.values(MealName),
         });
+
+        if (!dayData.itemsByMeal[item.meal]) {
+          dayData.itemsByMeal[item.meal] = [];
+        }
+
         dayData.itemsByMeal[
           item.meal as keyof typeof dayData.itemsByMeal
         ]?.push(item);
@@ -242,7 +234,6 @@ export class MealCalendarComponent {
     const [year, month, day] = this.getYMD(dateStamp);
     return (
       this.mealsByDate[year]?.[month]?.[day] || {
-        meals: [],
         items: [],
       }
     );

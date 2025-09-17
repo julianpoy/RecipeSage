@@ -5,7 +5,14 @@
     "misprint": "warning",
     "maxWarning": "0",
     "misprintCoefficient": "0.9",
-    "ignoredKeys": [],
+    "ignoredKeys": [
+      "pages.export.jobs.status.fail.unknown",
+      "pages.settings.mealOptions.*",
+      "components.selectCollaborators.*",
+      "components.mealCalendar.*",
+
+      "components.signInWithGoogle.button"
+    ],
     "ignoredMisprintKeys": [],
     "ast": {
       "isNgsTranslateImported": "error"

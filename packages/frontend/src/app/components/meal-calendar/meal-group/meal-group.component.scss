@@ -18,31 +18,13 @@ calendar-item {
   border-radius: 4px;
   padding: 8px;
 
+  border-left: 4px solid;
+
   &:hover {
     background-color: var(--ion-background-tint-active-color);
   }
 
   &.dragging {
     opacity: 50%;
-  }
-
-  &.breakfast {
-    border-left: 4px solid var(--ion-color-danger);
-  }
-
-  &.lunch {
-    border-left: 4px solid var(--ion-color-warning);
-  }
-
-  &.dinner {
-    border-left: 4px solid var(--ion-color-success);
-  }
-
-  &.snacks {
-    border-left: 4px solid var(--ion-color-tertiary);
-  }
-
-  &.other {
-    border-left: 4px solid var(--ion-text-color);
   }
 }

@@ -46,6 +46,11 @@ export const Label = LabelInit(sequelize, DataTypes);
 db.modelNames.push(Label.name);
 db[Label.name] = Label;
 
+import { MealOptionInit } from "./mealOption.js";
+export const MealOption = MealOptionInit(sequelize, DataTypes);
+db.modelNames.push(MealOption.name);
+db[MealOption.name] = MealOption;
+
 import { MealPlanInit } from "./mealplan.js";
 export const MealPlan = MealPlanInit(sequelize, DataTypes);
 db.modelNames.push(MealPlan.name);
@@ -141,6 +146,7 @@ FCMToken.associate(db);
 Friendship.associate(db);
 Image.associate(db);
 Label.associate(db);
+MealOption.associate(db);
 MealPlan.associate(db);
 MealPlan_Collaborator.associate(db);
 MealPlanItem.associate(db);

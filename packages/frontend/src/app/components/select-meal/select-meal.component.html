@@ -9,9 +9,13 @@
     >
       <ion-select-option
         *ngFor="let mealOption of mealOptions"
-        [value]="mealOption.key"
-        >{{ mealOption.title }}</ion-select-option
+        [value]="mealOption.mealTime"
       >
+        <span [innerHTML]="getLabel(mealOption)"></span>
+      </ion-select-option>
     </ion-select>
+    <ion-button slot="end" (click)="onClickSettings()">
+      <ion-icon name="settings" slot="icon-only"></ion-icon>
+    </ion-button>
   </ion-item>
 </div>

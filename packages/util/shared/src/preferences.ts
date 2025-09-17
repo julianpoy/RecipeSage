@@ -90,6 +90,11 @@ export enum GlobalPreferenceKey {
   PreferencesSync = "global.preferencesSync",
 }
 
+export enum MealOptionsPreferenceKey {
+  ShowDefaults = "mealOptions.showDefaults",
+  ShowTime = "mealOptions.showTime",
+}
+
 export enum MyRecipesPreferenceKey {
   EnableLabelIntersection = "myRecipes.enableLabelIntersection",
   ShowLabels = "myRecipes.showLabels",
@@ -164,4 +169,7 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.GroupCategories]: boolean;
   [ShoppingListPreferenceKey.IgnoreItemTitles]: string;
   [ShoppingListPreferenceKey.editHelpShown]: boolean;
+
+  [MealOptionsPreferenceKey.ShowDefaults]: boolean;
+  [MealOptionsPreferenceKey.ShowTime]: boolean;
 }

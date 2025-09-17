@@ -1,16 +1,16 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { MealName } from "../../../services/meal-plan.service";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  MealOption,
+  MealOptionService,
+} from "../../../services/meal-option.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CalendarItemComponent } from "../calendar-item/calendar-item.component";
-
-const mealNameToI18n = {
-  [MealName.Breakfast]: "components.mealCalendar.breakfast",
-  [MealName.Lunch]: "components.mealCalendar.lunch",
-  [MealName.Dinner]: "components.mealCalendar.dinner",
-  [MealName.Snacks]: "components.mealCalendar.snack",
-  [MealName.Other]: "components.mealCalendar.other",
-} satisfies Record<MealName, string>;
+import { TRPCService } from "../../../services/trpc.service";
+import { MealOptionDefaultService } from "../../../services/meal-option-default.service";
+import { MealOptionsPreferenceKey } from "@recipesage/util/shared";
+import { PreferencesService } from "../../../services/preferences.service";
+import { timeToColor } from "../../../utils/timeToColor";
 
 @Component({
   selector: "meal-group",
@@ -23,9 +23,12 @@ export class MealGroupComponent {
     required: true,
   })
   mealItems!: {
-    meals: MealName[];
-    itemsByMeal: Record<MealName, MealPlanItemSummary[]>;
+    itemsByMeal: Record<string, MealPlanItemSummary[]>;
   };
+  trpcService = inject(TRPCService);
+  mealOptionDefaultService = inject(MealOptionDefaultService);
+  preferencesService = inject(PreferencesService);
+  mealOptionService = inject(MealOptionService);
   @Input() enableEditing: boolean = false;
 
   @Output() itemClicked = new EventEmitter<any>();
@@ -33,7 +36,23 @@ export class MealGroupComponent {
 
   mealItemsDragging: Record<string, boolean> = {};
 
-  constructor() {}
+  meals: MealOption[] = [];
+  showTime: boolean = false;
+
+  constructor() {
+    this.mealOptionService.fetch().then((options) => {
+      this.meals = this.mealOptionDefaultService.add(options ?? []);
+    });
+    this.showTime =
+      this.preferencesService.preferences[MealOptionsPreferenceKey.ShowTime];
+  }
+
+  getObjectKeys(obj: Object) {
+    if (!obj) {
+      return [];
+    }
+    return Object.keys(obj);
+  }
 
   dragStart(event: any, mealItem: MealPlanItemSummary) {
     this.mealItemsDragging[mealItem.id] = true;
@@ -45,7 +64,19 @@ export class MealGroupComponent {
     this.itemDragEnd.emit();
   }
 
-  mealNameToI18n(mealName: MealName) {
-    return mealNameToI18n[mealName];
+  getMealColor(mealTime: string) {
+    return timeToColor(mealTime);
+  }
+
+  mealLabel(mealTime: string) {
+    const mealOption = this.meals.find((meal) => meal.mealTime === mealTime);
+
+    if (mealOption) {
+      return this.showTime
+        ? `${mealOption.title} - <span class="ion-text-nowrap">${mealTime}</span>`
+        : mealOption.title;
+    }
+
+    return mealTime;
   }
 }

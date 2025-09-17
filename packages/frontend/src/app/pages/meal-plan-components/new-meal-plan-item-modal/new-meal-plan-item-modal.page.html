@@ -64,7 +64,11 @@
 
   <br /><br />
 
-  <select-meal [meal]="meal || ''" (mealChange)="meal = $event"></select-meal>
+  <select-meal
+    [meal]="meal || ''"
+    (mealChange)="meal = $event"
+    (settingsCallback)="handleGoToSettings()"
+  ></select-meal>
 </ion-content>
 
 <ion-footer class="ion-padding">

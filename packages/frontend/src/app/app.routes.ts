@@ -180,6 +180,14 @@ export const appRoutes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.MealOptionsPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/meal-options/meal-options.page").then(
+        (m) => m.MealOptionsPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.PeoplePage.path,
     loadComponent: () =>
       import("./pages/social/people/people.page").then((m) => m.PeoplePage),

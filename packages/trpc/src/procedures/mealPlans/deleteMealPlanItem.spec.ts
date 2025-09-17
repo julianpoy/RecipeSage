@@ -41,7 +41,7 @@ describe("deleteMealPlanItem", () => {
           mealPlanId: mealPlan.id,
           title: "Protein",
           scheduledDate: "2024-05-27T04:00:00.000Z",
-          meal: "dinner",
+          meal: "10:25",
           recipeId: null,
         },
       });
@@ -80,7 +80,7 @@ describe("deleteMealPlanItem", () => {
         mealPlanId: mealPlan.id,
         title: "Protein",
         scheduledDate: "2024-05-27T04:00:00.000Z",
-        meal: "dinner",
+        meal: "10:25",
         recipeId: null,
       },
     });
@@ -135,7 +135,7 @@ describe("deleteMealPlanItem", () => {
           mealPlanId: mealPlan.id,
           title: "Protein",
           scheduledDate: "2024-05-27T04:00:00.000Z",
-          meal: "dinner",
+          meal: "10:25",
           recipeId: null,
         },
       });

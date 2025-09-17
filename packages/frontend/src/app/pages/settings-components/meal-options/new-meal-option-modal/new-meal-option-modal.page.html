@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-title>{{ 'pages.settings.mealOptions.new' | translate }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <br />
+
+  <ion-item lines="none">
+    <ion-input
+      labelPlacement="stacked"
+      label="{{ 'pages.settings.mealOptions.new.titleInput' | translate }}"
+      placeholder="{{ 'pages.settings.mealOptions.new.titleInputPlaceholder' | translate }}"
+      helperText="{{ 'pages.settings.mealOptions.new.titleInputHint' | translate }}"
+      (ionInput)="title = $event.detail.value || ''"
+      [value]="title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-input
+      type="time"
+      labelPlacement="stacked"
+      label="{{ 'pages.settings.mealOptions.new.timeInput' | translate }}"
+      placeholder="{{ 'pages.settings.mealOptions.new.timeInputPlaceholder' | translate }}"
+      (ionInput)="mealTime = $event.detail.value || ''"
+      [value]="mealTime"
+    ></ion-input>
+  </ion-item>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button (click)="save()" [disabled]="!title.length" expand="block">
+    {{ 'generic.save' | translate }}
+  </ion-button>
+</ion-footer>

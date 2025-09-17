@@ -73,4 +73,8 @@ export class NewMealPlanItemModalPage {
   cancel() {
     this.modalCtrl.dismiss();
   }
+
+  handleGoToSettings() {
+    this.cancel();
+  }
 }

@@ -18,7 +18,6 @@
   "pages.app.nav.shopping": "Shopping Lists",
   "pages.app.nav.meals": "Meal Plans",
   "pages.app.nav.settings": "Settings",
-
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
   "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of RecipeSage.com, a free recipe keeper, meal planner, and shopping list organizer for Web, iOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",
@@ -804,6 +803,33 @@
   "pages.settings.oled.message": "The black (OLED) theme may make it difficult to distinguish between elements and alerts. Shadows and other visual animations will also not be displayed.",
   "pages.settings.sync.header": "Sync Triggered",
   "pages.settings.sync.message": "You will see a notification pop up when the sync has completed if you have enabled notification permissions for the app via the messaging page.",
+
+  "pages.settings.mealOptions": "Meal Options",
+  "pages.settings.mealOptions.description": "Customize your meal options to suit your dietary preferences and schedule. Manage and organize your meals efficiently with our intuitive meal options settings.",
+  "pages.settings.mealOptions.new": "New Meal Option",
+  "pages.settings.mealOptions.new.title": "Create a new meal option",
+  "pages.settings.mealOptions.new.description": "Create a new meal option to customize your meal planning experience. Add, edit, or remove meal options to suit your dietary preferences and schedule.",
+  "pages.settings.mealOptions.new.titleInput": "Label",
+  "pages.settings.mealOptions.new.titleInputPlaceholder": "e.g. breakfast, lunch, dinner, snacks, etc.",
+  "pages.settings.mealOptions.new.titleInputHint": "",
+  "pages.settings.mealOptions.new.timeInput": "Time",
+  "pages.settings.mealOptions.new.timeInputPlaceholder": "Enter the time for your meal option",
+  "pages.settings.mealOptions.new.timeInputHint": "This will be used to identify your meal option in the meal calendar.",
+
+  "pages.settings.mealOptions.manage.title": "Manage {{name}}",
+  "pages.settings.mealOptions.manage.warning": "Note: These actions are permanent",
+  "pages.settings.mealOptions.manage.update": "Update",
+  "pages.settings.mealOptions.manage.delete": "Delete",
+
+  "pages.settings.mealOptions.update.header": "Update {{name}}",
+  "pages.settings.mealOptions.update.placeholder": "Enter the new title and time for your meal option",
+  "pages.settings.mealOptions.updateConflict.header": "Update Conflict",
+  "pages.settings.mealOptions.updateConflict.message": "A meal option with this title and time already exists. Please choose a different title or time.",
+  "pages.settings.mealOptions.delete.header": "Delete {{name}}",
+
+  "pages.settings.mealOptions.configuration.showDefaults": "Show Default Meal Options",
+  "pages.settings.mealOptions.configuration.showTime": "Show Time",
+
   "sync.notification.title": "Offline Sync Complete",
   "sync.notification.body": "Your content has been cached for offline use, and will be kept up-to-date automatically.",
 
@@ -1004,6 +1030,7 @@
   "components.mealCalendar.dinner": "Dinner",
   "components.mealCalendar.snack": "Snack",
   "components.mealCalendar.other": "Other",
+  "components.selectMeal.title": "Select Meal",
 
   "components.multiImageUpload.add": "Click to Add Image",
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
@@ -1041,13 +1068,6 @@
   "components.selectMultipleItems.noItems": "No items",
   "components.selectMultipleItems.alreadyAdded": "Already added",
   "components.selectMultipleItems.searchPlaceholder": "Search for an item to add",
-
-  "components.selectMeal.title": "Select Meal",
-  "components.selectMeal.breakfast": "Breakfast",
-  "components.selectMeal.lunch": "Lunch",
-  "components.selectMeal.dinner": "Dinner",
-  "components.selectMeal.snack": "Snack",
-  "components.selectMeal.other": "Other",
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",

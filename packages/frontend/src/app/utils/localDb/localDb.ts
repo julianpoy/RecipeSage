@@ -1,10 +1,12 @@
-import { DBSchema, IDBPDatabase, openDB } from "idb";
 import * as Sentry from "@sentry/browser";
+import { DBSchema, IDBPDatabase, openDB } from "idb";
+
 import {
   AssistantMessageSummary,
   JobSummary,
   LabelGroupSummary,
   LabelSummary,
+  MealOptionSummary,
   MealPlanSummaryWithItems,
   RecipeSummary,
   SessionDTO,
@@ -21,6 +23,7 @@ export enum ObjectStoreName {
   LabelGroups = "labelGroups",
   ShoppingLists = "shoppingLists",
   MealPlans = "mealPlans",
+  MealOptions = "mealOptions",
   UserProfiles = "userProfiles",
   AssistantMessages = "assistantMessages",
   Jobs = "jobs",
@@ -93,6 +96,13 @@ export interface RSLocalDB extends DBSchema {
       userId: string;
       title: string;
       labelGroupId: string;
+    };
+  };
+  [ObjectStoreName.MealOptions]: {
+    key: string;
+    value: MealOptionSummary;
+    indexes: {
+      userId: string;
     };
   };
   [ObjectStoreName.LabelGroups]: {

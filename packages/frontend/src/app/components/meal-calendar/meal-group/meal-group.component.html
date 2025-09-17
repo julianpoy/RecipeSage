@@ -1,21 +1,18 @@
-<div class="group" *ngFor="let mealName of mealItems.meals">
-  <span class="meal-title" *ngIf="mealItems.itemsByMeal[mealName].length > 0">{{
-    mealNameToI18n(mealName) | translate
-  }}</span>
+<div
+  class="group"
+  *ngFor="let mealTime of getObjectKeys(mealItems.itemsByMeal)"
+>
+  <span class="meal-title" [innerHTML]="mealLabel(mealTime)"></span>
   <calendar-item
-    *ngFor="let mealItem of mealItems.itemsByMeal[mealName]"
+    *ngFor="let mealItem of mealItems.itemsByMeal[mealTime]"
     [mealItem]="mealItem"
     (click)="itemClicked.emit(mealItem)"
     draggable="{{ enableEditing }}"
     (dragstart)="dragStart($event, mealItem)"
     (dragend)="dragEnd($event, mealItem)"
+    [style.border-left-color]="getMealColor(mealItem.meal)"
     [ngClass]="{
       dragging: mealItemsDragging[mealItem.id],
-      breakfast: mealItem.meal === 'breakfast',
-      lunch: mealItem.meal === 'lunch',
-      dinner: mealItem.meal === 'dinner',
-      snacks: mealItem.meal === 'snacks',
-      other: mealItem.meal === 'other',
     }"
   ></calendar-item>
 </div>

@@ -40,7 +40,7 @@ model Image {
   json          Json
   createdAt     DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime           @updatedAt @db.Timestamptz(6)
-  user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user          User?              @relation(fields: [userId], references: [id])
   recipeImages  RecipeImage[]
   profileImages UserProfileImage[]
 
@@ -51,12 +51,12 @@ model Image {
 model Label {
   id           String        @id @default(uuid()) @db.Uuid
   userId       String        @db.Uuid
-  labelGroupId String?       @db.Uuid
   title        String        @db.VarChar(255)
   createdAt    DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt    DateTime      @updatedAt @db.Timestamptz(6)
+  labelGroupId String?       @db.Uuid
+  labelGroup   LabelGroup?   @relation(fields: [labelGroupId], references: [id])
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  labelGroup   LabelGroup?   @relation(fields: [labelGroupId], references: [id], onDelete: SetNull)
   profileItems ProfileItem[]
   recipeLabels RecipeLabel[]
 
@@ -70,9 +70,9 @@ model LabelGroup {
   id                 String   @id @default(uuid()) @db.Uuid
   userId             String   @db.Uuid
   title              String   @db.VarChar(255)
-  warnWhenNotPresent Boolean
   createdAt          DateTime @default(now()) @db.Timestamptz(6)
   updatedAt          DateTime @updatedAt @db.Timestamptz(6)
+  warnWhenNotPresent Boolean
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   labels             Label[]
 
@@ -87,11 +87,11 @@ model MealPlanItem {
   mealPlanId        String             @db.Uuid
   recipeId          String?            @db.Uuid
   title             String
-  scheduledDate     DateTime           @db.Date
   scheduled         DateTime?          @db.Timestamptz(6)
   meal              String             @db.VarChar(255)
   createdAt         DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
+  scheduledDate     DateTime           @db.Date
   mealPlan          MealPlan           @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
   recipe            Recipe?            @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -100,6 +100,18 @@ model MealPlanItem {
   @@index([mealPlanId], map: "meal_plan_items_meal_plan_id")
   @@index([recipeId], map: "meal_plan_items_recipe_id")
   @@map("MealPlanItems")
+}
+
+model MealOption {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  title     String
+  mealTime  String  @db.VarChar(5)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("MealOptions")
 }
 
 model MealPlanCollaborator {
@@ -158,8 +170,8 @@ model AssistantMessage {
   recipeId  String?  @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
-  user      User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
   recipe    Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
+  user      User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("AssistantMessages")
 }
@@ -233,10 +245,10 @@ model Recipe {
   updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
   indexedAt         DateTime?          @db.Timestamptz(6)
   rating            Int?
+  assistantMessages AssistantMessage[] @relation("AssistantMessages_recipeIdToRecipes")
   mealPlanItems     MealPlanItem[]
   originalRecipe    Message[]          @relation("Messages_originalRecipeIdToRecipes")
   messages          Message[]          @relation("Messages_recipeIdToRecipes")
-  assistantMessages AssistantMessage[] @relation("AssistantMessages_recipeIdToRecipes")
   profileItems      ProfileItem[]
   recipeImages      RecipeImage[]
   recipeLabels      RecipeLabel[]
@@ -378,18 +390,20 @@ model User {
   enableProfile             Boolean                    @default(false)
   profileVisibility         String?                    @db.VarChar(255)
   preferences               Json?
+  assistantMessages         AssistantMessage[]         @relation("AssistantMessages_userIdToUsers")
   fcmTokens                 FCMToken[]
   incomingFriendships       Friendship[]               @relation("Friendships_friendIdToUsers")
   outgoingFriendships       Friendship[]               @relation("Friendships_userIdToUsers")
   images                    Image[]
-  labels                    Label[]
+  jobs                      Job[]
   labelGroups               LabelGroup[]
+  labels                    Label[]
+  mealOptions               MealOption[]
   mealPlanItems             MealPlanItem[]
   mealPlanCollaborators     MealPlanCollaborator[]
   mealPlans                 MealPlan[]
   incomingMessages          Message[]                  @relation("Messages_fromUserIdToUsers")
   outgoingMessages          Message[]                  @relation("Messages_toUserIdToUsers")
-  assistantMessages         AssistantMessage[]         @relation("AssistantMessages_userIdToUsers")
   profileItems              ProfileItem[]
   outgoingRecipes           Recipe[]                   @relation("Recipes_fromUserIdToUsers")
   recipes                   Recipe[]                   @relation("Recipes_userIdToUsers")
@@ -397,11 +411,10 @@ model User {
   shoppingListItems         ShoppingListItem[]
   shoppingListCollaborators ShoppingListCollaborator[]
   shoppingLists             ShoppingList[]
+  stripeEvents              StripeEvent[]
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
   profileImages             UserProfileImage[]
-  jobs                      Job[]
-  stripeEvents              StripeEvent[]
 
   @@map("Users")
 }
@@ -420,8 +433,7 @@ model Job {
   meta       Json?
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime  @updatedAt @db.Timestamptz(6)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum JobType {

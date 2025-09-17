@@ -174,6 +174,12 @@ export const RouteMap = {
     },
     path: "settings/account",
   },
+  MealOptionsPage: {
+    getPath() {
+      return `/` + this.path;
+    },
+    path: "settings/meal-options",
+  },
   MyProfilePage: {
     getPath() {
       return `people/my-profile`;
