@@ -145,7 +145,7 @@
     "@types/he": "^1.2.3",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^2.0.0",
-    "@types/node": "22.14.0",
+    "@types/node": "24.6.2",
     "@types/node-fetch": "^2.6.11",
     "@types/pdfkit": "^0.13.9",
     "@types/pdfmake": "^0.2.11",
