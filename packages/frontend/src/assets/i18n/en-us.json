@@ -774,6 +774,7 @@
   "pages.settings.section1.title": "Data & Account",
   "pages.settings.import": "Import Recipe Data",
   "pages.settings.export": "Export Recipe Data",
+  "pages.settings.debugDump": "Download Debug Dump for Support",
   "pages.settings.account": "Account Settings & Stats",
   "pages.settings.logout": "Log Out",
   "pages.settings.section2.title": "General Settings",

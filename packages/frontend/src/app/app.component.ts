@@ -1,10 +1,5 @@
 import { Component, inject } from "@angular/core";
-import {
-  ActivatedRoute,
-  Router,
-  NavigationEnd,
-  RouterOutlet,
-} from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
 import { NgxLoadingBar } from "@ngx-loading-bar/core";
@@ -15,7 +10,6 @@ import {
   ToastController,
   AlertController,
   NavController,
-  IonicModule,
 } from "@ionic/angular";
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
@@ -42,6 +36,7 @@ import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
+import { DebugStoreService } from "./services/debugStore.service";
 
 const SW_UPDATE_CHECK_INTERVAL_MINUTES = 5;
 
@@ -78,6 +73,7 @@ export class AppComponent {
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
+  debugStoreService = inject(DebugStoreService);
 
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;

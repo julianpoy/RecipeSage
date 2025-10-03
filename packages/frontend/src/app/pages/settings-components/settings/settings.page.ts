@@ -10,6 +10,7 @@ import { RouteMap, UtilService } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   AppTheme,
+  encryptUtf8WithRSAKey,
   GlobalPreferenceKey,
   PreferencesSync,
   SupportedLanguages,
@@ -30,6 +31,9 @@ import { EventName, EventService } from "../../../services/event.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { DebugStoreService } from "../../../services/debugStore.service";
+import { DEBUG_DUMP_PUBLIC_KEY } from "../../../utils/localDb/DEBUG_DUMP_PUBLIC_KEY";
+import { downloadBlobpartsAsFile } from "../../../utils/downloadBlobpartsAsFile";
 
 @Component({
   selector: "page-settings",
@@ -53,6 +57,7 @@ export class SettingsPage {
   private recipeCompletionTrackerService = inject(
     RecipeCompletionTrackerService,
   );
+  private debugStoreService = inject(DebugStoreService);
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
@@ -142,6 +147,22 @@ export class SettingsPage {
         QuickTutorialOptions.SplitPaneView,
       );
     }
+  }
+
+  async exportDebugStore() {
+    const dump = await this.debugStoreService.createDebugDump();
+    const strDump = this.debugStoreService.stringifyDebugDump(dump);
+
+    const encryptedDump = await encryptUtf8WithRSAKey(
+      strDump,
+      DEBUG_DUMP_PUBLIC_KEY,
+    );
+
+    downloadBlobpartsAsFile({
+      data: [JSON.stringify(encryptedDump)],
+      mimetype: "application/json",
+      filename: `recipesage-debugDump-${Date.now()}.json`,
+    });
   }
 
   async triggerSync() {

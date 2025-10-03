@@ -21,6 +21,10 @@
       <ion-icon name="cloud-download" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.export' | translate }} </ion-label>
     </ion-item>
+    <ion-item lines="inset" (click)="exportDebugStore()" button>
+      <ion-icon name="bug" slot="start"></ion-icon>
+      <ion-label> {{ 'pages.settings.debugDump' | translate }} </ion-label>
+    </ion-item>
     <ion-item lines="inset" (click)="goToAccount()" button>
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.account' | translate }} </ion-label>
