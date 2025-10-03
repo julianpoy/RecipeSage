@@ -71,6 +71,8 @@ import {
   registerGetMyFriendsRoute,
   registerGetMyStatsRoute,
 } from "./app/utils/serviceWorker/routes/users";
+import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
+import { DebugStoreService } from "./app/services/debugStore.service";
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
@@ -108,6 +110,7 @@ self.addEventListener("install", async (event) => {
   self.skipWaiting();
 });
 
+const debugStore = new DebugStoreService();
 const searchManagerP = getLocalDb().then(
   (localDb) => new SearchManager(localDb),
 );
@@ -138,6 +141,31 @@ broadcastChannel.addEventListener("message", async (event) => {
     syncManagerP.then((syncManager) => {
       syncManager.syncRecipe(event.data.recipeId);
     });
+  }
+});
+
+addEventListener("message", async (event) => {
+  if (!event.data?.type) {
+    console.error("Unexpected message without data|type", event);
+    return;
+  }
+
+  switch (event.data.type) {
+    case SWMessageType.GetDebugDump: {
+      const responsePort = event.ports[0];
+      if (!responsePort) {
+        console.error("No response port for getDebugDump");
+        return;
+      }
+
+      const debugDump = debugStore.createSWDebugDump();
+      responsePort.postMessage(JSON.parse(JSON.stringify(debugDump)));
+
+      break;
+    }
+    default: {
+      console.warn("Unhandled SW message", event);
+    }
   }
 });
 
