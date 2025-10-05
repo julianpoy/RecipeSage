@@ -38,11 +38,7 @@ export const swCacheReject = (
   httpCapturedError: unknown,
 ) => {
   console.log("Service worker is rejecting due to ", reason);
-  if (
-    [SWCacheRejectReason.NoInput, SWCacheRejectReason.NoCacheResult].includes(
-      reason,
-    )
-  ) {
+  if ([SWCacheRejectReason.NoInput].includes(reason)) {
     Sentry.captureMessage(`Unexpected SW cache reject ${reason}`, {
       extra: {
         reason,
