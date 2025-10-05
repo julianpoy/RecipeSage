@@ -35,7 +35,11 @@ import { getLocalDb } from "./app/utils/localDb";
 import { SearchManager } from "./app/utils/SearchManager";
 import { SyncManager } from "./app/utils/SyncManager";
 import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+import {
+  getMessaging,
+  onBackgroundMessage,
+  isSupported as isMessagingSupported,
+} from "firebase/messaging/sw";
 import {
   registerGetRecipesRoute,
   registerGetRecipeRoute,
@@ -271,15 +275,19 @@ registerRoute(
   }),
 );
 
-// ==== FIREBASE MESSAGING ====
-
-try {
+const initializeFirebase = async () => {
   const firebaseApp = initializeApp({
     appId: "1:1064631313987:android:b6ca7a14265a6a01",
     apiKey: "AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0",
     projectId: "chef-book",
     messagingSenderId: "1064631313987",
   });
+
+  const isSupported = await isMessagingSupported();
+  if (!isSupported) {
+    console.log("Firebase cloud messaging is not supported");
+    return;
+  }
 
   const messaging = getMessaging(firebaseApp);
 
@@ -337,8 +345,10 @@ try {
         }),
     );
   });
-} catch (e) {
+};
+
+initializeFirebase().catch((e) => {
   console.error(e);
-}
+});
 
 console.log("Service worker mounted");
