@@ -340,5 +340,16 @@
     "pages.manageLabelModal.deleteWithRecipes.header": "Șterge eticheta „{{name}}” inclusiv rețetele",
     "pages.manageLabelModal.view": "Vezi toate rețetele",
     "pages.manageLabelModal.deleteWithRecipes": "Șterge inclusiv rețetele",
-    "pages.manageLabelModal.renameConflict.header": "Eroare"
+    "pages.manageLabelModal.renameConflict.header": "Eroare",
+    "pages.manageLabelModal.notFound.header": "Eticheta nu a fost găsită",
+    "pages.manageLabelModal.notFound.subHeader": "Eticheta „{{name}}” nu a fost găsită",
+    "pages.manageLabelModal.notFound.message": "Trebuie să introduci numele unei etichete deja existente pentru le a combina.",
+    "pages.manageLabelModal.mergeComplete.header": "S-au îmbinat!",
+    "pages.manageLabelModal.mergeComplete.subHeader": "Eticheta „{{sourceTitle}}” a fost îmbinată cu succes în „{{targetTitle}}”",
+    "pages.manageLabelModal.merge.subHeader": "Cu ce etichetă dorești să îmbini „{{title}}”?",
+    "pages.manageLabelModal.deleteWithRecipes.message": "Se va șterge eticheta {{name}}, inclusiv orice rețetă căreia îi este asociată.",
+    "pages.manageLabelModal.selfMerge.header": "Nu se poate îmbina eticheta cu ea însăși",
+    "pages.manageLabelModal.mergeComplete.message": "Eticheta „{{sourceTitle}}” a fost ștearsă - vei găsi toate rețetele sale mutate în „{{targetTitle}}”.",
+    "pages.manageLabelModal.selfMerge.subHeader": "Etichetele sursă și țintă trebuie să fie diferite",
+    "pages.manageLabelModal.merge.header": "Îmbină eticheta: {{title}}"
 }
