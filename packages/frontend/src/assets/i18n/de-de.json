@@ -1025,5 +1025,6 @@
     "pages.importCSV.description": "Dadurch werden alle Rezepte aus einer CSV-Datei in dein RecipeSage-Konto importiert. Viele Programme können Dateien in diesem Format exportieren, aber die interne Struktur kann etwas willkürlich sein. Bei Problemen findest du Hinweise in der Anleitung oder kannst mich direkt kontaktieren. Bitte erwäge eine Spende, wenn deine Datei eine große Anzahl von Rezepten oder Bildern enthält.",
     "components.selectMeal.breakfast": "Frühstück",
     "components.selectMeal.snack": "Snack",
-    "components.messaging.notificationPermission.message": "Damit wir dich benachrichtigen können, wenn deine Kontakte dir eine Nachricht senden, musst du Benachrichtigungen zulassen. Nachdem du dieses Popup geschlossen hast, wirst du darum gebeten, Benachrichtigungen zuzulassen."
+    "components.messaging.notificationPermission.message": "Damit wir dich benachrichtigen können, wenn deine Kontakte dir eine Nachricht senden, musst du Benachrichtigungen zulassen. Nachdem du dieses Popup geschlossen hast, wirst du darum gebeten, Benachrichtigungen zuzulassen.",
+    "pages.app.browser.title": "RecipeSage - Dein persönliches Rezeptbuch"
 }
