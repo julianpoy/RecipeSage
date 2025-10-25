@@ -43,5 +43,17 @@
     "pages.welcome.selfhostSubtitle": "Epävirallinen itse isännöity versio sivustosta RecipeSage.com ,ilmainen reseptien hallinta-, ateriasuunnittelu- ja ostoslistasovellus verkkoon, iOS:lle ja Androidille",
     "pages.welcome.description.1": "RecipeSage on ilmainen (lahjoituspohjainen ja avoimen lähdekoodin) henkilökohtainen reseptien hallinta-, ateriasuunnittelu- ja ostoslistasovellus verkkoon, iOS:lle ja Androidille.",
     "pages.auth.error.noEmail": "Syötä sähköpostiosoitteesi.",
-    "pages.auth.error.incorrectPassword": "Antamasi salasana ei täsmää tilin tietoihin."
+    "pages.auth.error.incorrectPassword": "Antamasi salasana ei täsmää tilin tietoihin.",
+    "pages.home.search.filter": "Suoda",
+    "pages.home.recipe.source": "Lähde:",
+    "pages.home.recipe.from": "Alkuperä:",
+    "pages.home.recipe.selected": "Valittu",
+    "pages.home.recipe.fromSharedCollection": "Ystävän resepti",
+    "pages.home.errors.emptyCollection.title": "Tämän käyttäjän kokoelma on tyhjä",
+    "pages.home.errors.noRecipes.title": "Tervetuloa RecipeSageen!",
+    "pages.home.errors.noRecipes.message1": "Tänne ilmestyvät reseptisi.",
+    "pages.home.errors.noRecipes.message2": "Näyttää siltä, ettei sinulla ole vielä reseptejä.",
+    "pages.home.search.placeholder": "Haku",
+    "pages.home.recipe.labels": "Tunnisteet:",
+    "pages.home.errors.emptyCollection.message": "Tässä jaetussa kokoelmassa ei ole reseptejä."
 }
