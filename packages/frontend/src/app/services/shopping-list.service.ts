@@ -135,7 +135,6 @@ export class ShoppingListService {
     payload: {
       title?: string;
       completed?: boolean;
-      categoryTitle?: string;
     },
     errorHandlers?: ErrorHandlers,
   ) {

@@ -32,7 +32,6 @@ export const shoppingListSummaryWithItems =
           updatedAt: true,
           user: userPublic,
           recipeId: true,
-          categoryTitle: true,
           recipe: {
             select: {
               id: true,
