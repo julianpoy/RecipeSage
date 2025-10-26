@@ -144,7 +144,7 @@
     "@types/cors": "^2.8.17",
     "@types/dom-screen-wake-lock": "^1.0.3",
     "@types/he": "^1.2.3",
-    "@types/morgan": "^1.9.9",
+    "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
     "@types/node": "22.14.0",
     "@types/node-fetch": "^2.6.11",
