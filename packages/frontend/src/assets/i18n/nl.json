@@ -1015,8 +1015,6 @@
     "sync.notification.title": "Offlinesynchronisatie voltooid",
     "sync.notification.body": "Je gegevens zijn gecached voor offlinegebruik, en worden automatisch actueel gehouden.",
     "generic.showMore": "Toon meer",
-    "pages.shoppingListPopover.edit": "Bewerk ingrediëntencategorieën",
-    "components.messaging.shoppingList.categoryEdit.help.header": "Bewerk boodschappenlijstjescategorieën",
     "pages.importPDFs.description": "Hiermee importeer je een reeks PDF-bestanden gecomprimeerd in een zip-bestand (eindigt in .zip) in je RecipeSage-account. Zie de gebruikershandleiding voor instructies hoe je een bestand moet maken dat hier juist geïmporteerd wordt. Overweeg om bij te dragen als het bestand een groot aantal recepten of afbeeldingen bevat.",
     "pages.settings.resetCompletion": "Reset ingrediëntenschaal, afgevinkte instructies en afgevinkte ingrediënten",
     "pages.settings.resetCompletion.header": "Reset ingrediëntenschaal, afgevinkte instructies en afgevinkte ingrediënten",

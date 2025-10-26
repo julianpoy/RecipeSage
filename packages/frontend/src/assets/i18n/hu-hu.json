@@ -1023,8 +1023,5 @@
     "components.mealCalendar.breakfast": "Reggeli",
     "components.mealCalendar.lunch": "Ebéd",
     "components.mealCalendar.dinner": "Vacsora",
-    "components.mealCalendar.snack": "Nassolnivaló",
-    "pages.shoppingListPopover.edit": "Hozzávaló kategóriák szerkesztése",
-    "components.messaging.shoppingList.categoryEdit.help.header": "Bevásárlólista kategóriák szerkesztése",
-    "components.messaging.shoppingList.categoryEdit.help.message": "A szerkesztés kiválasztása lehetővé teszi, hogy a bevásárlólista elemeit áthúzza egy új kategóriába"
+    "components.mealCalendar.snack": "Nassolnivaló"
 }

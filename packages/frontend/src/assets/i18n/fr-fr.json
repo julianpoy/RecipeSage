@@ -1023,8 +1023,5 @@
     "components.mealCalendar.lunch": "Lunch",
     "components.mealCalendar.dinner": "Diner",
     "components.mealCalendar.snack": "Snacking",
-    "components.mealCalendar.other": "Autre",
-    "pages.shoppingListPopover.edit": "Modifier les catégories d'ingrédients",
-    "components.messaging.shoppingList.categoryEdit.help.header": "Modifier les catégories de la liste d'achats",
-    "components.messaging.shoppingList.categoryEdit.help.message": "Sélectionner modifier vous permet de glisser-déposer des articles de la liste de courses dans une nouvelle catégorie"
+    "components.mealCalendar.other": "Autre"
 }

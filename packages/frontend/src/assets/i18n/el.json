@@ -818,7 +818,6 @@
     "pages.shoppingListPopover.actions.title": "Ενέργειες",
     "pages.shoppingListPopover.print": "Εκτύπωση",
     "pages.shoppingListPopover.update": "Επεξεργασία/Μετονομασία Λίστας",
-    "pages.shoppingListPopover.edit": "Επεξεργασία Κατηγοριών Συστατικών",
     "pages.shoppingListPopover.dangerZone.title": "Επικίνδυνη Περιοχή",
     "pages.shoppingListPopover.removeAll": "Αφαιρέση όλων των στοιχείων",
     "pages.shoppingListPopover.delete": "Διαγραφή λίστας",
@@ -939,7 +938,6 @@
     "components.multiImageUpload.imageError": "Υπήρξε σφάλμα στην επεξεργασία μιας ή περισσότερων από τις εικόνες που επιλέξατε",
     "components.messaging.notificationPermission.header": "Απαιτούνται δικαιώματα ειδοποιήσεων",
     "components.messaging.notificationPermission.message": "Για να σας ειδοποιούμε όταν οι επαφές σας σας στέλνουν μηνύματα, χρειαζόμαστε δικαιώματα να σας στέλνουμε ειδοποιήσεις. Αφού κλείσετε αυτό το αναδυόμενο παράθυρο, θα σας ζητηθεί να ενεργοποιήσετε την πρόσβαση σε ειδοποιήσεις.",
-    "components.messaging.shoppingList.categoryEdit.help.header": "Επεξεργασία κατηγοριών λίστας αγορών",
     "components.selectCollaborators.title": "Συνεργάτες",
     "components.selectCollaborators.placeholder": "Προσθήκη συνεργατών με διεύθυνση email",
     "components.selectCollaborators.added": "Έχει ήδη προστεθεί",
@@ -1025,6 +1023,5 @@
     "pages.manageLabelGroupModal.warnDescription": "Όταν είναι ενεργοποιημένο, θα προειδοποιείστε αν αποθηκεύσετε μια συνταγή χωρίς ετικέτα σε αυτή την κατηγορία",
     "pages.editRecipe.clip.failedSelfhost": "Παρακαλούμε ελέγξτε τα διαπιστευτήριά σας στο OpenAI όπως περιγράφεται στο readme του selfhosting",
     "pages.myProfile.share.unsaved.message": "Θα πρέπει να αποθηκεύσετε τις αλλαγές πριν δείτε πώς θα εμφανίζεται.",
-    "pages.people.noFriends.3": "Για να προσθέσετε κάποιον πατήστε το εικονίδιο αναζήτησης.",
-    "components.messaging.shoppingList.categoryEdit.help.message": "Επιλέγοντας επεξεργασία μπορείτε να σύρετε και να αποθέσετε στοιχεία της λίστας αγορών σε μια νέα κατηγορία"
+    "pages.people.noFriends.3": "Για να προσθέσετε κάποιον πατήστε το εικονίδιο αναζήτησης."
 }

@@ -1023,8 +1023,5 @@
     "components.mealCalendar.lunch": "Обед",
     "components.mealCalendar.dinner": "Ужин",
     "components.mealCalendar.snack": "Перекус",
-    "components.mealCalendar.other": "Другое",
-    "pages.shoppingListPopover.edit": "Редактировать категории ингредиентов",
-    "components.messaging.shoppingList.categoryEdit.help.header": "Редактировать категории списка покупок",
-    "components.messaging.shoppingList.categoryEdit.help.message": "Выбор редактирования позволяет перетаскивать элементы списка покупок в новую категорию"
+    "components.mealCalendar.other": "Другое"
 }
