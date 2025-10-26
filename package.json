@@ -41,7 +41,7 @@
     "@sentry/browser": "^9.42.1",
     "@sentry/node": "^9.42.1",
     "@sentry/profiling-node": "^9.42.1",
-    "@trpc/client": "^11.4.3",
+    "@trpc/client": "^11.5.1",
     "@trpc/server": "^11.0.2",
     "@types/jsdom": "^21.1.7",
     "axios": "^1.8.4",
