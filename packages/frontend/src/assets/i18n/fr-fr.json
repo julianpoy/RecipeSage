@@ -418,7 +418,7 @@
     "pages.messages.notificationsRequired": "Les notifications doivent être activées pour que la messagerie fonctionne correctement.",
     "pages.addRecipeToMealPlanModal.selectMealPlan": "Sélectionnez un plan de repas",
     "pages.editRecipe.input.uncatLabels": "Général",
-    "pages.editRecipe.clip.failed": "Échec du remplissage automatique à partir de cette URL",
+    "pages.editRecipe.clip.failed": "Échec du remplissage automatique. Il est possible que certains contenus ne se remplissent pas automatiquement, mais n'hésitez pas à me contacter si vous rencontrez des problèmes récurrents.",
     "pages.editRecipe.missingLabelGroup.message": "Vous avez spécifié que le groupe d'étiquettes \"{{groupName}}\" devrait être requis. Vous pouvez désactiver cela via la page Mes étiquettes.",
     "pages.editRecipe.conflict.message": "Une recette avec le titre \"{{title}}\" existe déjà dans votre collection. Vous pouvez choisir de sauvegarder quand même, ou vous pouvez choisir de renommer la recette en \"{{uniqueTitle}}\".",
     "pages.account.creds.name.save": "Enregistrer le nom",
