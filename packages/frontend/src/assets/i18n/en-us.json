@@ -867,7 +867,6 @@
   "pages.shoppingListPopover.actions.title": "Actions",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.update": "Edit/Rename List",
-  "pages.shoppingListPopover.edit": "Edit Ingredient Categories",
   "pages.shoppingListPopover.dangerZone.title": "Danger Zone",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
@@ -1012,9 +1011,6 @@
 
   "components.messaging.notificationPermission.header": "Requires Notification Permissions",
   "components.messaging.notificationPermission.message": "To notify you when your contacts send you messages, we need notification access. After dismissing this popup, you will be prompted to enable notification access.",
-
-  "components.messaging.shoppingList.categoryEdit.help.header": "Edit shopping list categories",
-  "components.messaging.shoppingList.categoryEdit.help.message": "Selecting edit allows you to drag-and-drop shopping list items to a new category",
 
   "components.selectCollaborators.title": "Collaborators",
   "components.selectCollaborators.placeholder": "Add collaborators by email address",

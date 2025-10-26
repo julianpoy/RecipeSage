@@ -72,7 +72,6 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.GroupSimilar]: true,
     [ShoppingListPreferenceKey.GroupCategories]: true,
     [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
-    [ShoppingListPreferenceKey.editHelpShown]: false,
   };
 
   constructor() {
