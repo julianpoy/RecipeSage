@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import cursorStream from "@julianpoy/prisma-cursorstream";
+import cursorStream from "prisma-cursorstream";
 import client from "prom-client";
 
 const prismaQuery = new client.Histogram({
