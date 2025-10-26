@@ -12,9 +12,7 @@ const sdk = new NodeSDK({
   traceExporter,
   instrumentations: [
     getNodeAutoInstrumentations(),
-    new PrismaInstrumentation({
-      middleware: true,
-    }),
+    new PrismaInstrumentation(),
   ],
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: "recipesage_api",
