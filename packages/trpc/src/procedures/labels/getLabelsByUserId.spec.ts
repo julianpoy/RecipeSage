@@ -31,14 +31,15 @@ describe("getLabelsByUserId", () => {
       expect(response[0].id).toEqual(label.id);
     });
   });
-  it("fails to get labels with different user", async () => {
+  it("fails to get lebels with differrent user", async () => {
+    const { user: user2, trpc: trpc2 } = await trpcSetup();
     await prisma.label.create({
       data: {
         userId: user.id,
         title: "fish",
       },
     });
-    const response = await trpc.labels.getLabelsByUserId.query({
+    const response = await trpc2.labels.getLabelsByUserId.query({
       userIds: [user2.id],
     });
     expect(response.length).toEqual(0);

@@ -63,7 +63,6 @@ export const updatePreferences = publicProcedure
       [ShoppingListPreferenceKey.PreferDelete]: z.boolean(),
       [ShoppingListPreferenceKey.GroupSimilar]: z.boolean(),
       [ShoppingListPreferenceKey.GroupCategories]: z.boolean(),
-      [ShoppingListPreferenceKey.editHelpShown]: z.boolean(),
       [ShoppingListPreferenceKey.IgnoreItemTitles]: z.string().max(5000),
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

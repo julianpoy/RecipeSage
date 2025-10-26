@@ -125,7 +125,6 @@ export enum ShoppingListPreferenceKey {
   GroupSimilar = "ShoppingList.groupSimilar",
   GroupCategories = "ShoppingList.groupCategories",
   IgnoreItemTitles = "ShoppingList.ignoreItemTitles",
-  editHelpShown = "ShoppingList.editHelpShown",
 }
 
 export interface AppPreferenceTypes {
@@ -163,5 +162,4 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
   [ShoppingListPreferenceKey.GroupCategories]: boolean;
   [ShoppingListPreferenceKey.IgnoreItemTitles]: string;
-  [ShoppingListPreferenceKey.editHelpShown]: boolean;
 }

@@ -178,7 +178,6 @@ router.post(
       req.body.items.map((item) => ({
         title: item.title,
         completed: item.completed || false,
-        categoryTitle: item.categoryTitle || null,
         userId: res.locals.session.userId,
         shoppingListId: shoppingList.id,
         recipeId: item.recipeId || null,
@@ -385,14 +384,7 @@ router.get(
         {
           model: ShoppingListItem,
           as: "items",
-          attributes: [
-            "id",
-            "title",
-            "completed",
-            "categoryTitle",
-            "createdAt",
-            "updatedAt",
-          ],
+          attributes: ["id", "title", "completed", "createdAt", "updatedAt"],
           include: [
             {
               model: User,
@@ -416,13 +408,12 @@ router.get(
 
     const s = shoppingListSummary.toJSON();
     ShoppingListCategorizerService.groupShoppingListItems(s.items);
-    for (const item of s.items) {
-      if (item.categoryTitle === null) {
-        item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
+    s.items.forEach(
+      (item) =>
+        (item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
           item.title,
-        );
-      }
-    }
+        )),
+    );
 
     res.status(200).json(s);
   }),
@@ -467,8 +458,7 @@ router.put(
       }),
       body: Joi.object({
         title: Joi.string().min(1),
-        completed: Joi.boolean().optional(),
-        categoryTitle: Joi.string().optional(),
+        completed: Joi.boolean(),
       }),
     }),
   ),
