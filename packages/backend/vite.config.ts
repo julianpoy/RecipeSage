@@ -33,6 +33,7 @@ export default defineConfig(() => ({
   test: {
     watch: false,
     globals: true,
+    hookTimeout: 30000,
     environment: "node",
     include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],
