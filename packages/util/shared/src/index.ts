@@ -10,5 +10,6 @@ export * from "./JOB_RESULT_CODES";
 export * from "./ImmediateDebouncer";
 export * from "./stripNumberedRecipeTitle";
 export * from "./customTrpcTransformer";
+export * from "./encryptWithRSAKey";
 export * from "./toCamelCase";
 export * from "./toPascalCase";

@@ -26,7 +26,11 @@ const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 
 const recipeClipperUMD = readFileSync(
-  "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
+  join(
+    __dirname,
+    "../../../../../",
+    "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
+  ),
   "utf-8",
 );
 

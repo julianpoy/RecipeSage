@@ -19,7 +19,7 @@ if (process.env.ENVIRONMENT !== "selfhost") {
   Sentry.init({
     release: process.env.APP_VERSION,
     environment: process.env.ENVIRONMENT,
-    dsn: "https://48261723ca12448e9b44836dd82effe1@glitchtip.poyourow.com/3",
+    dsn: "https://f6bf39d644968626a9d7207fe3ae58fd@o158500.ingest.us.sentry.io/4510138109853696",
     transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
 
     tracesSampleRate: 1,
@@ -35,7 +35,11 @@ import { getLocalDb } from "./app/utils/localDb";
 import { SearchManager } from "./app/utils/SearchManager";
 import { SyncManager } from "./app/utils/SyncManager";
 import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+import {
+  getMessaging,
+  onBackgroundMessage,
+  isSupported as isMessagingSupported,
+} from "firebase/messaging/sw";
 import {
   registerGetRecipesRoute,
   registerGetRecipeRoute,
@@ -71,6 +75,8 @@ import {
   registerGetMyFriendsRoute,
   registerGetMyStatsRoute,
 } from "./app/utils/serviceWorker/routes/users";
+import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
+import { DebugStoreService } from "./app/services/debugStore.service";
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
@@ -108,6 +114,7 @@ self.addEventListener("install", async (event) => {
   self.skipWaiting();
 });
 
+const debugStore = new DebugStoreService();
 const searchManagerP = getLocalDb().then(
   (localDb) => new SearchManager(localDb),
 );
@@ -138,6 +145,31 @@ broadcastChannel.addEventListener("message", async (event) => {
     syncManagerP.then((syncManager) => {
       syncManager.syncRecipe(event.data.recipeId);
     });
+  }
+});
+
+addEventListener("message", async (event) => {
+  if (!event.data?.type) {
+    console.error("Unexpected message without data|type", event);
+    return;
+  }
+
+  switch (event.data.type) {
+    case SWMessageType.GetDebugDump: {
+      const responsePort = event.ports[0];
+      if (!responsePort) {
+        console.error("No response port for getDebugDump");
+        return;
+      }
+
+      const debugDump = debugStore.createSWDebugDump();
+      responsePort.postMessage(JSON.parse(JSON.stringify(debugDump)));
+
+      break;
+    }
+    default: {
+      console.warn("Unhandled SW message", event);
+    }
   }
 });
 
@@ -243,15 +275,19 @@ registerRoute(
   }),
 );
 
-// ==== FIREBASE MESSAGING ====
-
-try {
+const initializeFirebase = async () => {
   const firebaseApp = initializeApp({
     appId: "1:1064631313987:android:b6ca7a14265a6a01",
     apiKey: "AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0",
     projectId: "chef-book",
     messagingSenderId: "1064631313987",
   });
+
+  const isSupported = await isMessagingSupported();
+  if (!isSupported) {
+    console.log("Firebase cloud messaging is not supported");
+    return;
+  }
 
   const messaging = getMessaging(firebaseApp);
 
@@ -309,8 +345,10 @@ try {
         }),
     );
   });
-} catch (e) {
+};
+
+initializeFirebase().catch((e) => {
   console.error(e);
-}
+});
 
 console.log("Service worker mounted");
