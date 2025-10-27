@@ -55,5 +55,11 @@
     "pages.home.errors.noRecipes.message2": "Näyttää siltä, ettei sinulla ole vielä reseptejä.",
     "pages.home.search.placeholder": "Haku",
     "pages.home.recipe.labels": "Tunnisteet:",
-    "pages.home.errors.emptyCollection.message": "Tässä jaetussa kokoelmassa ei ole reseptejä."
+    "pages.home.errors.emptyCollection.message": "Tässä jaetussa kokoelmassa ei ole reseptejä.",
+    "pages.welcome.description.features.3.title": "Tunniste- ja luokittelujärjestelmä:",
+    "pages.welcome.description.features.3.description": "Tag your recipes and filter by tags",
+    "pages.welcome.description.features.4.title": "Raahaa ja pudota -ateriasuunnittelu:",
+    "pages.welcome.description.features.4.description": "Suunnittele ateriasi vuorovaikutteisesti, nopeasti ja helposti",
+    "pages.welcome.description.features.5.title": "Kauppalistat:",
+    "pages.welcome.description.features.5.description": "Automaattisesti luokiteltu ja älykkäästi ryhmitelty – lisää reseptisi suoraan ostoslistalle, ja samankaltaiset tuotteet yhdistetään"
 }

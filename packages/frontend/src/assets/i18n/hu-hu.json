@@ -1023,5 +1023,6 @@
     "components.mealCalendar.breakfast": "Reggeli",
     "components.mealCalendar.lunch": "Ebéd",
     "components.mealCalendar.dinner": "Vacsora",
-    "components.mealCalendar.snack": "Nassolnivaló"
+    "components.mealCalendar.snack": "Nassolnivaló",
+    "pages.settings.debugDump": "Hibakeresési memóriakép letöltése a támogatáshoz"
 }
