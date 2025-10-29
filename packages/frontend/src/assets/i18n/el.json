@@ -1023,5 +1023,6 @@
     "pages.manageLabelGroupModal.warnDescription": "Όταν είναι ενεργοποιημένο, θα προειδοποιείστε αν αποθηκεύσετε μια συνταγή χωρίς ετικέτα σε αυτή την κατηγορία",
     "pages.editRecipe.clip.failedSelfhost": "Παρακαλούμε ελέγξτε τα διαπιστευτήριά σας στο OpenAI όπως περιγράφεται στο readme του selfhosting",
     "pages.myProfile.share.unsaved.message": "Θα πρέπει να αποθηκεύσετε τις αλλαγές πριν δείτε πώς θα εμφανίζεται.",
-    "pages.people.noFriends.3": "Για να προσθέσετε κάποιον πατήστε το εικονίδιο αναζήτησης."
+    "pages.people.noFriends.3": "Για να προσθέσετε κάποιον πατήστε το εικονίδιο αναζήτησης.",
+    "pages.settings.debugDump": "Λήψη διαγνωστικού αρχείου υποστήριξης"
 }
