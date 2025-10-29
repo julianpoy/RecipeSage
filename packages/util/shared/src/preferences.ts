@@ -20,10 +20,14 @@ export enum SupportedLanguages {
   ZH_CN = "zh-cn", // Chinese (Simplified), China
   PT_PT = "pt-pt", // Portugese, Portugal
   NL = "nl", // Dutch
-  PL_PL = "pl-pl", // Polish, Poland
-  JA_JP = "ja-jp", // Japanese, Japan
-  LT_LT = "lt-lt", // Lithuanian, Lithuania
+  PL = "pl", // Polish
+  JA = "ja", // Japanese
+  LT = "lt", // Lithuanian
   EU = "eu", // Basque
+  EL = 'el', // Modern Greek
+  FI = 'fi', // Finnish
+  SV = 'sv', // Swedish
+  RO = 'ro', // Romanian
 }
 
 export enum SupportedFontSize {

@@ -312,10 +312,14 @@ const defaultLocality = {
   zh: SupportedLanguages.ZH_CN,
   pt: SupportedLanguages.PT_PT,
   nl: SupportedLanguages.NL,
-  pl: SupportedLanguages.PL_PL,
-  ja: SupportedLanguages.JA_JP,
-  lt: SupportedLanguages.LT_LT,
+  pl: SupportedLanguages.PL,
+  ja: SupportedLanguages.JA,
+  lt: SupportedLanguages.LT,
   eu: SupportedLanguages.EU,
+  el: SupportedLanguages.EL,
+  fi: SupportedLanguages.FI,
+  sv: SupportedLanguages.SV,
+  ro: SupportedLanguages.RO,
 };
 
 const rtlLanguages = [SupportedLanguages.HE];
