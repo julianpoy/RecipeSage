@@ -1023,5 +1023,6 @@
     "components.mealCalendar.lunch": "Обед",
     "components.mealCalendar.dinner": "Ужин",
     "components.mealCalendar.snack": "Перекус",
-    "components.mealCalendar.other": "Другое"
+    "components.mealCalendar.other": "Другое",
+    "pages.settings.debugDump": "Загрузите отладочный дамп для поддержки"
 }

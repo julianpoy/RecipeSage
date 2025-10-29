@@ -61,5 +61,18 @@
     "pages.welcome.description.features.4.title": "Raahaa ja pudota -ateriasuunnittelu:",
     "pages.welcome.description.features.4.description": "Suunnittele ateriasi vuorovaikutteisesti, nopeasti ja helposti",
     "pages.welcome.description.features.5.title": "Kauppalistat:",
-    "pages.welcome.description.features.5.description": "Automaattisesti luokiteltu ja älykkäästi ryhmitelty – lisää reseptisi suoraan ostoslistalle, ja samankaltaiset tuotteet yhdistetään"
+    "pages.welcome.description.features.5.description": "Automaattisesti luokiteltu ja älykkäästi ryhmitelty – lisää reseptisi suoraan ostoslistalle, ja samankaltaiset tuotteet yhdistetään",
+    "pages.welcome.description.features.6.description": "Jaa reseptit sekä suunnittele ateriat ja ostoslistat yhdessä perheen tai ystävien kanssa",
+    "pages.welcome.description.features.7.title": "Tuo:",
+    "pages.welcome.description.features.7.description": "Tukee Pepperplate-, Living Cookbook- ja Paprika-sovelluksia",
+    "pages.welcome.description.features.8.title": "Vie:",
+    "pages.welcome.description.features.8.description": "Varmuuskopioi reseptisi eri formaateissa, jotta tietojen siirtäminen olisi helppoa",
+    "pages.welcome.description.cta": "Miksi RecipeSage?",
+    "pages.welcome.description.cta.1": "Maksuton (perustuu lahjoituksiin)",
+    "pages.welcome.description.cta.2": "Avoimen lähdekoodin",
+    "pages.welcome.description.cta.3": "Helppokäyttöinen",
+    "pages.welcome.description.cta.4": "Saatavilla tietokoneella ja kaikilla mobiililaitteilla",
+    "pages.welcome.description.cta.5": "Tuo reseptejä mistä tahansa URL-osoitteesta",
+    "pages.auth.title.login": "Kirjaudu sisään",
+    "pages.auth.title.register": "Luo tili"
 }
