@@ -124,13 +124,21 @@ export class MealPlanPage {
   }
 
   async loadMealPlan() {
-    const mealPlan = await this.trpcService.handle(
-      this.trpcService.trpc.mealPlans.getMealPlan.query({
-        id: this.mealPlanId,
-      }),
-    );
-    if (!mealPlan) return;
+    const [mealPlan, mealPlanItems] = await Promise.all([
+      this.trpcService.handle(
+        this.trpcService.trpc.mealPlans.getMealPlan.query({
+          id: this.mealPlanId,
+        }),
+      ),
+      this.trpcService.handle(
+        this.trpcService.trpc.mealPlans.getMealPlanItems.query({
+          mealPlanId: this.mealPlanId,
+        }),
+      )
+    ]);
+    if (!mealPlan || !mealPlanItems) return;
     this.mealPlan = mealPlan;
+    this.mealPlanItems = mealPlanItems;
 
     const title = await this.translate
       .get("generic.labeledPageTitle", {
@@ -138,14 +146,6 @@ export class MealPlanPage {
       })
       .toPromise();
     this.titleService.setTitle(title);
-
-    const mealPlanItems = await this.trpcService.handle(
-      this.trpcService.trpc.mealPlans.getMealPlanItems.query({
-        mealPlanId: this.mealPlanId,
-      }),
-    );
-    if (!mealPlanItems) return;
-    this.mealPlanItems = mealPlanItems;
   }
 
   async _addItem(item: {

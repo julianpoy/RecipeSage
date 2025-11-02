@@ -2,6 +2,8 @@ import { publicProcedure } from "../../trpc";
 import {
   WSBoardcastEventType,
   broadcastWSEventIgnoringErrors,
+  getShoppingListItemCategories,
+  getShoppingListItemGroupTitle,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
@@ -19,6 +21,7 @@ export const createShoppingListItem = publicProcedure
       title: z.string(),
       recipeId: z.string().uuid().nullable(),
       completed: z.boolean().optional(),
+      categoryTitle: z.string().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -38,13 +41,18 @@ export const createShoppingListItem = publicProcedure
       });
     }
 
+    const categoryTitle = input.categoryTitle ? input.categoryTitle : (
+      `::${await getShoppingListItemCategories([input.title])}`
+    );
+
     const createdShoppingListItem = await prisma.shoppingListItem.create({
       data: {
         shoppingListId: input.shoppingListId,
         title: input.title,
         userId: session.userId,
         recipeId: input.recipeId,
-        completed: input.completed || false,
+        completed: input.completed ?? false,
+        categoryTitle,
       },
     });
 

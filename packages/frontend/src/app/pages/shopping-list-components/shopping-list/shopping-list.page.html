@@ -5,7 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.shoppingList.title' | translate:{title: list?.title || ''} }}
+      {{ 'pages.shoppingList.title' | translate:{title: shoppingList?.title || ''} }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -54,7 +54,7 @@
               [groupTitleExpanded]="groupTitleExpanded"
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
               (completeToggle)="completeItems($event, true)"
             ></shopping-list-group>
           </div>
@@ -70,7 +70,7 @@
           [groupTitleExpanded]="groupTitleExpanded"
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
           (completeToggle)="completeItems($event, true)"
         ></shopping-list-group>
       </div>
@@ -105,9 +105,9 @@
             <shopping-list-item
               [title]="item.title"
               [completed]="item.completed"
-              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+              [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
+              [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
+              [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
               (completeToggle)="completeItems([item], true)"
             ></shopping-list-item>
           </div>
@@ -121,14 +121,14 @@
         <shopping-list-item
           [title]="item.title"
           [completed]="item.completed"
-          [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-          [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-          [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+          [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
+          [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
+          [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
           (completeToggle)="completeItems([item], true)"
         ></shopping-list-item>
       </div>
     </div>
-    <null-state *ngIf="items.length === 0 && initialLoadComplete">
+    <null-state *ngIf="shoppingListItems?.length === 0">
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
@@ -161,8 +161,8 @@
         slot="start"
         (click)="removeRecipe(recipeId)"
       ></ion-icon>
-      <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe.id)">
-        {{ itemsByRecipeId[recipeId][0].recipe.title }}
+      <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe!.id)">
+        {{ itemsByRecipeId[recipeId][0].recipe!.title }}
       </ion-label>
     </ion-item>
   </ion-list>
@@ -195,9 +195,9 @@
       *ngFor="let item of completedItems"
       [title]="item.title"
       [completed]="item.completed"
-      [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-      [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-      [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+      [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
+      [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
+      [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
       (completeToggle)="completeItems([item], false)"
     ></shopping-list-item>
   </ion-list>

@@ -69,6 +69,7 @@ services:
       - BROWSERLESS_PORT=3000
       - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
+      - GROCERY_CLASSIFIER_URL=http://grocery-classifier:8000/
       - OTEL_LOG_LEVEL=info
     env_file:
       - ./.env
@@ -112,6 +113,9 @@ services:
     stop_grace_period: 1s
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
+    stop_grace_period: 1s
+  grocery-classifier:
+    image: julianpoy/ingredient-categorizer:latest
     stop_grace_period: 1s
 
 volumes:

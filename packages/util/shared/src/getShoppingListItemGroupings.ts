@@ -1,4 +1,4 @@
-import { ShoppingListItem } from "@prisma/client";
+import type { ShoppingListItemSummary } from "@recipesage/prisma";
 import { ShoppingListSortOptions } from "./preferences";
 
 interface SortableItem {
@@ -74,16 +74,10 @@ const groupAndSort = <T extends SortableItem>(
   return groupedAndSorted;
 };
 
-type GroupableShoppingListItem = ShoppingListItem & {
-  categoryTitle: string;
-  groupTitle: string;
-};
-
-// This whole thing needs to be redone
-interface GroupableShoppingListItemsByGroupAndCategory {
+export interface ShoppingListItemSummariesByGroupAndCategory {
   [key: string]: {
     title: string;
-    items: ShoppingListItem[];
+    items: ShoppingListItemSummary[];
   }[];
 }
 
@@ -91,15 +85,15 @@ interface GroupableShoppingListItemsByGroupAndCategory {
 // sortBy must be one of 'createdAt', '-createdAt', '-title'
 // Result will be items grouped by group/category/groupcategory
 export const getShoppingListItemGroupings = (
-  items: GroupableShoppingListItem[],
+  items: ShoppingListItemSummary[],
   sortBy: ShoppingListSortOptions,
 ): {
-  items: GroupableShoppingListItem[];
+  items: ShoppingListItemSummary[];
   groupTitles: string[];
   categoryTitles: string[];
-  itemsByGroupTitle: { [key: string]: GroupableShoppingListItem[] };
-  itemsByCategoryTitle: { [key: string]: GroupableShoppingListItem[] };
-  groupsByCategoryTitle: GroupableShoppingListItemsByGroupAndCategory;
+  itemsByGroupTitle: { [key: string]: ShoppingListItemSummary[] };
+  itemsByCategoryTitle: { [key: string]: ShoppingListItemSummary[] };
+  groupsByCategoryTitle: ShoppingListItemSummariesByGroupAndCategory;
 } => {
   const sortedItems = items.sort((a, b) => {
     return itemSort(a, b, sortBy);
@@ -135,7 +129,7 @@ export const getShoppingListItemGroupings = (
     }
     grouping.items.push(item);
     return acc;
-  }, {} as GroupableShoppingListItemsByGroupAndCategory);
+  }, {} as ShoppingListItemSummariesByGroupAndCategory);
 
   return {
     items: sortedItems,

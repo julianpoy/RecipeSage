@@ -23,22 +23,22 @@ export class ShoppingListItemComponent {
   @Input({
     required: true,
   })
-  recipeTitle!: string;
+  recipeTitle!: string | undefined;
   @Input({
     required: true,
   })
-  createdAt!: string;
+  createdAt!: Date | undefined;
   @Input({
     required: true,
   })
-  ownerName!: string;
+  ownerName!: string | undefined;
   @Output() completeToggle = new EventEmitter<null>();
 
   onComplete() {
     this.completeToggle.emit();
   }
 
-  formatItemCreationDate(plainTextDate: string) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
+  formatItemCreationDate(date: string | Date) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }

@@ -20,8 +20,8 @@ export const updateShoppingListItems = publicProcedure
         .array(
           z.object({
             id: z.string().uuid(),
-            title: z.string(),
-            recipeId: z.string().uuid().nullable(),
+            title: z.string().optional(),
+            recipeId: z.string().uuid().nullable().optional(),
             completed: z.boolean().optional(),
           }),
         )
@@ -68,6 +68,10 @@ export const updateShoppingListItems = publicProcedure
 
     await prisma.$transaction(async (tx) => {
       for (const item of input.items) {
+        if (item.title === undefined && item.recipeId === undefined && item.completed === undefined) {
+          continue;
+        }
+
         await tx.shoppingListItem.update({
           where: {
             id: item.id,

@@ -6,12 +6,12 @@ import {
 } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
-import { ShoppingListService } from "~/services/shopping-list.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UserService } from "~/services/user.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-new-shopping-list-modal",
@@ -24,7 +24,7 @@ export class NewShoppingListModalPage {
   navCtrl = inject(NavController);
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
-  shoppingListService = inject(ShoppingListService);
+  trpcService = inject(TRPCService);
   messagingService = inject(MessagingService);
   userService = inject(UserService);
   toastCtrl = inject(ToastController);
@@ -36,19 +36,21 @@ export class NewShoppingListModalPage {
   async save() {
     const loading = this.loadingService.start();
 
-    const response = await this.shoppingListService.create({
-      title: this.listTitle,
-      collaborators: this.selectedCollaboratorIds,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.createShoppingList.mutate({
+        title: this.listTitle,
+        collaboratorUserIds: this.selectedCollaboratorIds,
+      })
+    );
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss({
       success: true,
     });
     this.navCtrl.navigateRoot(
-      RouteMap.ShoppingListPage.getPath(response.data.id),
+      RouteMap.ShoppingListPage.getPath(response.id),
     );
   }
 
