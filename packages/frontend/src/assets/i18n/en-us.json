@@ -936,7 +936,7 @@
   "pages.myProfile.setup1": "Before you get started, there are a few things that you'll need to set up.",
   "pages.myProfile.setup.name": "First, choose the name or nickname to be shown on your profile.",
   "pages.myProfile.name": "Name/Nickname",
-  "pages.myProfile.setup2": "Now, choose the handle for your profile, for example: @superchef",
+  "pages.myProfile.setup2": "Now, choose the handle for your profile, for example: @recipesage",
   "pages.myProfile.handle": "Unique @handle",
   "pages.myProfile.handle.taken": "That handle is taken",
   "pages.myProfile.handle.invalid": "Handle is invalid",

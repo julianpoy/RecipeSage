@@ -10,7 +10,7 @@ import { AuthPage } from "~/pages/auth/auth.page";
 import { IS_SELFHOST } from "../../environments/environment";
 
 export interface ErrorHandlers {
-  [code: string]: () => any;
+  [code: string]: (error: Error) => any;
 }
 
 @Injectable({
@@ -22,14 +22,16 @@ export class HttpErrorHandlerService {
   private translate = inject(TranslateService);
 
   isAuthOpen: boolean = false; // Track auth modal so we don't open multiple stacks
-  defaultErrorHandlers = {
+  defaultErrorHandlers: Record<number, (error: Error) => void> = {
     0: () => this.presentAlert("generic.error", "errors.offline"),
     401: () => this.promptForAuth(),
-    500: () =>
+    500: (error) => {
+      Sentry.captureException(error);
       this.presentAlert(
         "generic.error",
         IS_SELFHOST ? "errors.unexpected.selfhost" : "errors.unexpected",
-      ),
+      );
+    },
   };
   isErrorAlertOpen = false;
 
@@ -87,13 +89,17 @@ export class HttpErrorHandlerService {
     }
   }
 
-  _handleError(statusCode: number, errorHandlers?: ErrorHandlers) {
+  _handleError(
+    statusCode: number,
+    error: Error,
+    errorHandlers?: ErrorHandlers,
+  ) {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
-      errorHandlers[statusCode]();
+      errorHandlers[statusCode](error);
       // Use provided catchall if passed
     } else if (errorHandlers?.["*"]) {
-      errorHandlers["*"]();
+      errorHandlers["*"](error);
       // Fallback to default
     } else if (
       this.defaultErrorHandlers[
@@ -102,10 +108,10 @@ export class HttpErrorHandlerService {
     ) {
       this.defaultErrorHandlers[
         statusCode as keyof typeof this.defaultErrorHandlers
-      ]();
+      ](error);
       // All other errors use 500 by default for generic (unexpected) error
     } else {
-      this.defaultErrorHandlers[500]();
+      this.defaultErrorHandlers[500](error);
     }
   }
 
@@ -119,7 +125,7 @@ export class HttpErrorHandlerService {
     const axiosError = error as AxiosError;
     const statusCode = axiosError.response!.status;
 
-    this._handleError(statusCode, errorHandlers);
+    this._handleError(statusCode, error, errorHandlers);
   }
 
   handleTrpcError(
@@ -138,6 +144,6 @@ export class HttpErrorHandlerService {
       }
     }
 
-    this._handleError(statusCode, errorHandlers);
+    this._handleError(statusCode, error, errorHandlers);
   }
 }
