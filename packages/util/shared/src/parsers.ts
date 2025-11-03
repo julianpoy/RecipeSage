@@ -61,7 +61,7 @@ const measurementQuantityRegExp = new RegExp(
 ); // Should always be used with 'i' flag
 
 const fillerWordsRegexp =
-  /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
+  /\b(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s|d)?)|blended|tossed)\b/;
 
 const notesRegexp = /\(.*?\)/;
 
@@ -85,6 +85,9 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
     .filter((measurement): measurement is string => !!measurement);
 };
 
+/**
+ * A little older, consider seeing if stripIngredient works for your use-case instead
+ */
 export const getTitleForIngredient = (ingredient: string): string => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
@@ -110,6 +113,10 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .trim();
 };
 
+/**
+ * As best we can, removes anything but the singular ingredient name itself.
+ * 3 apples, blended => apples
+ */
 export const stripIngredient = (ingredient: string): string => {
   const trimmed = replaceFractionsInText(ingredient)
     .trim()
@@ -118,8 +125,13 @@ export const stripIngredient = (ingredient: string): string => {
     .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
     .trim()
     .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
+    .trim()
+    .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
+    .trim()
+    .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
+    .trim()
+    .replace(new RegExp(`,$`, "i"), "")
     .trim();
-
   if (trimmed !== ingredient) {
     return stripIngredient(trimmed);
   } else {

@@ -3,12 +3,14 @@ import Ahocorasick from "ahocorasick";
 import ingredientNames from "./ingredients.json";
 import {
   parseUnit,
-  getTitleForIngredient,
   getMeasurementsForIngredient,
+  stripIngredient,
 } from "@recipesage/util/shared";
 
 const ingredientNamesAhocorasic = new Ahocorasick(
-  ingredientNames.map((el) => el.toLowerCase()),
+  ingredientNames
+    .map((el) => el.toLowerCase())
+    .map((el) => (el.endsWith("s") ? el.substring(0, el.length - 1) : el)),
 );
 
 export const getShoppingListItemGroupTitles = <
@@ -22,9 +24,11 @@ export const getShoppingListItemGroupTitles = <
   const itemGrouper: Record<string, T[]> = {};
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    const itemTitle = item.title.toLowerCase();
+    const strippedIngredientTitle = stripIngredient(item.title).toLowerCase();
 
-    const ahocorasicMatches = ingredientNamesAhocorasic.search(itemTitle);
+    const ahocorasicMatches = ingredientNamesAhocorasic.search(
+      strippedIngredientTitle,
+    );
 
     let foundIngredientTitle: string | null = null;
     for (const [_, matches] of ahocorasicMatches) {
@@ -42,10 +46,14 @@ export const getShoppingListItemGroupTitles = <
       itemGrouper[foundIngredientTitle] ||= [];
       itemGrouper[foundIngredientTitle].push(item);
     } else {
-      const strippedIngredientTitle = getTitleForIngredient(itemTitle);
-      itemGrouper[strippedIngredientTitle] =
-        itemGrouper[strippedIngredientTitle] || [];
-      itemGrouper[strippedIngredientTitle].push(item);
+      const groupTitle = strippedIngredientTitle.endsWith("s")
+        ? strippedIngredientTitle.substring(
+            0,
+            strippedIngredientTitle.length - 1,
+          )
+        : strippedIngredientTitle;
+      itemGrouper[groupTitle] = itemGrouper[groupTitle] || [];
+      itemGrouper[groupTitle].push(item);
     }
   }
 
