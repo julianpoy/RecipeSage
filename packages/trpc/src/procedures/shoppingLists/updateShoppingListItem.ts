@@ -16,14 +16,27 @@ export const updateShoppingListItem = publicProcedure
   .input(
     z.object({
       id: z.string().uuid(),
-      title: z.string(),
-      recipeId: z.string().uuid().nullable(),
+      title: z.string().optional(),
+      recipeId: z.string().uuid().nullable().optional(),
       completed: z.boolean().optional(),
+      categoryTitle: z.string().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);
+
+    if (
+      input.title === undefined &&
+      input.recipeId === undefined &&
+      input.completed === undefined &&
+      input.categoryTitle === undefined
+    ) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "You must specify at least one property to update",
+      });
+    }
 
     const shoppingListItem = await prisma.shoppingListItem.findUnique({
       where: {
@@ -61,6 +74,7 @@ export const updateShoppingListItem = publicProcedure
         title: input.title,
         recipeId: input.recipeId,
         completed: input.completed,
+        categoryTitle: input.categoryTitle,
       },
     });
 

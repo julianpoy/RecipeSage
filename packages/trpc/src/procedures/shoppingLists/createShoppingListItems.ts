@@ -2,6 +2,7 @@ import { publicProcedure } from "../../trpc";
 import {
   WSBoardcastEventType,
   broadcastWSEventIgnoringErrors,
+  getShoppingListItemCategories,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
@@ -21,6 +22,7 @@ export const createShoppingListItems = publicProcedure
           title: z.string(),
           recipeId: z.string().uuid().nullable(),
           completed: z.boolean().optional(),
+          categoryTitle: z.string().optional(),
         }),
       ),
     }),
@@ -42,14 +44,19 @@ export const createShoppingListItems = publicProcedure
       });
     }
 
+    const autoCategories = await getShoppingListItemCategories(
+      input.items.map((el) => el.title),
+    );
+    const itemsWithCategoryTitles = input.items.map((item, idx) => ({
+      ...item,
+      completed: item.completed ?? false,
+      categoryTitle: item.categoryTitle ?? `::${autoCategories[idx]}`,
+      userId: session.userId,
+      shoppingListId: input.shoppingListId,
+    }));
+
     await prisma.shoppingListItem.createMany({
-      data: input.items.map((el) => ({
-        shoppingListId: input.shoppingListId,
-        title: el.title,
-        userId: session.userId,
-        recipeId: el.recipeId,
-        completed: el.completed || false,
-      })),
+      data: itemsWithCategoryTitles,
     });
 
     const reference = crypto.randomUUID();

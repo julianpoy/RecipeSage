@@ -24,10 +24,10 @@ export enum SupportedLanguages {
   JA = "ja", // Japanese
   LT = "lt", // Lithuanian
   EU = "eu", // Basque
-  EL = 'el', // Modern Greek
-  FI = 'fi', // Finnish
-  SV = 'sv', // Swedish
-  RO = 'ro', // Romanian
+  EL = "el", // Modern Greek
+  FI = "fi", // Finnish
+  SV = "sv", // Swedish
+  RO = "ro", // Romanian
 }
 
 export enum SupportedFontSize {

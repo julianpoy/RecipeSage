@@ -9,7 +9,7 @@ import { LoadingService } from "~/services/loading.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UserService } from "~/services/user.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService } from "~/services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

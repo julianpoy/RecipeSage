@@ -9,12 +9,16 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import { ShoppingListService } from "~/services/shopping-list.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+} from "@recipesage/prisma";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-shopping-list-popover",
@@ -28,14 +32,24 @@ export class ShoppingListPopoverPage {
   utilService = inject(UtilService);
   preferencesService = inject(PreferencesService);
   loadingService = inject(LoadingService);
-  shoppingListService = inject(ShoppingListService);
+  trpcService = inject(TRPCService);
   toastCtrl = inject(ToastController);
   popoverCtrl = inject(PopoverController);
   alertCtrl = inject(AlertController);
   modalCtrl = inject(ModalController);
 
-  @Input() shoppingListId: any;
-  @Input() shoppingList: any;
+  @Input({
+    required: true,
+  })
+  shoppingListId!: string;
+  @Input({
+    required: true,
+  })
+  shoppingList!: ShoppingListSummary;
+  @Input({
+    required: true,
+  })
+  shoppingListItems!: ShoppingListItemSummary[];
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
@@ -89,27 +103,29 @@ export class ShoppingListPopoverPage {
         },
       ],
     });
-    alert.present();
+    await alert.present();
+    await alert.onDidDismiss();
+
+    this.dismiss();
   }
 
   async _removeAllItems() {
-    if (this.shoppingList.items.length === 0) return;
+    if (this.shoppingListItems.length === 0) {
+      return;
+    }
 
     const loading = this.loadingService.start();
 
-    const itemIds = this.shoppingList.items.map((el: any) => el.id);
+    const itemIds = this.shoppingListItems.map((el: any) => el.id);
 
-    const response = await this.shoppingListService.deleteItems(
-      this.shoppingListId,
-      {
-        itemIds,
-      },
+    await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.deleteShoppingListItems.mutate({
+        ids: itemIds,
+        shoppingListId: this.shoppingListId,
+      }),
     );
 
     loading.dismiss();
-    if (!response.success) return;
-
-    this.popoverCtrl.dismiss();
   }
 
   async deleteList() {
@@ -146,10 +162,13 @@ export class ShoppingListPopoverPage {
   async _deleteList() {
     const loading = this.loadingService.start();
 
-    const response = await this.shoppingListService.delete(this.shoppingListId);
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.deleteShoppingList.mutate({
+        id: this.shoppingListId,
+      }),
+    );
     loading.dismiss();
-
-    if (!response.success) return;
+    if (!response) return;
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());

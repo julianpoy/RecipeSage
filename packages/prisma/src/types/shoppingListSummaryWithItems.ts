@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { userPublic } from "./userPublic";
+import { ShoppingListItemSummary } from "./shoppingListItemSummary";
 
 /**
  * Provides fields necessary for displaying a summary about a shopping list
@@ -28,6 +29,8 @@ export const shoppingListSummaryWithItems =
           id: true,
           shoppingListId: true,
           title: true,
+          completed: true,
+          categoryTitle: true,
           createdAt: true,
           updatedAt: true,
           user: userPublic,
@@ -57,6 +60,22 @@ export const shoppingListSummaryWithItems =
 /**
  * Provides fields necessary for displaying a summary about a shopping list, including items
  **/
-export type ShoppingListSummaryWithItems = Prisma.ShoppingListGetPayload<
-  typeof shoppingListSummaryWithItems
->;
+export type ShoppingListSummaryWithItems = Omit<
+  Prisma.ShoppingListGetPayload<typeof shoppingListSummaryWithItems>,
+  "items"
+> & {
+  items: ShoppingListItemSummary[];
+};
+
+export const prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems =
+  (
+    _shoppingListSummary: Prisma.ShoppingListGetPayload<
+      typeof shoppingListSummaryWithItems
+    >,
+    itemSummaries: ShoppingListItemSummary[],
+  ): ShoppingListSummaryWithItems => {
+    return {
+      ..._shoppingListSummary,
+      items: itemSummaries,
+    };
+  };

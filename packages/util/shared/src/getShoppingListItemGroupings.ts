@@ -1,4 +1,4 @@
-import { ShoppingListItem } from "@prisma/client";
+import type { ShoppingListItemSummary } from "@recipesage/prisma";
 import { ShoppingListSortOptions } from "./preferences";
 
 interface SortableItem {
@@ -74,16 +74,10 @@ const groupAndSort = <T extends SortableItem>(
   return groupedAndSorted;
 };
 
-type GroupableShoppingListItem = ShoppingListItem & {
-  categoryTitle: string;
-  groupTitle: string;
-};
-
-// This whole thing needs to be redone
-interface GroupableShoppingListItemsByGroupAndCategory {
+export interface ShoppingListItemSummariesByGroupAndCategory {
   [key: string]: {
     title: string;
-    items: ShoppingListItem[];
+    items: ShoppingListItemSummary[];
   }[];
 }
 
@@ -91,15 +85,16 @@ interface GroupableShoppingListItemsByGroupAndCategory {
 // sortBy must be one of 'createdAt', '-createdAt', '-title'
 // Result will be items grouped by group/category/groupcategory
 export const getShoppingListItemGroupings = (
-  items: GroupableShoppingListItem[],
+  items: ShoppingListItemSummary[],
   sortBy: ShoppingListSortOptions,
+  uncategorizedTitle: string,
 ): {
-  items: GroupableShoppingListItem[];
+  items: ShoppingListItemSummary[];
   groupTitles: string[];
   categoryTitles: string[];
-  itemsByGroupTitle: { [key: string]: GroupableShoppingListItem[] };
-  itemsByCategoryTitle: { [key: string]: GroupableShoppingListItem[] };
-  groupsByCategoryTitle: GroupableShoppingListItemsByGroupAndCategory;
+  itemsByGroupTitle: { [key: string]: ShoppingListItemSummary[] };
+  itemsByCategoryTitle: { [key: string]: ShoppingListItemSummary[] };
+  groupsByCategoryTitle: ShoppingListItemSummariesByGroupAndCategory;
 } => {
   const sortedItems = items.sort((a, b) => {
     return itemSort(a, b, sortBy);
@@ -113,7 +108,9 @@ export const getShoppingListItemGroupings = (
   });
 
   const categoryTitles = Array.from(
-    new Set<string>(items.map((item) => item.categoryTitle)),
+    new Set<string>(
+      items.map((item) => item.categoryTitle || uncategorizedTitle),
+    ),
   ).sort((a, b) => {
     // Sort categories by title (always)
     return a.localeCompare(b);
@@ -123,8 +120,9 @@ export const getShoppingListItemGroupings = (
   const itemsByCategoryTitle = groupAndSort(items, "categoryTitle", sortBy);
 
   const groupsByCategoryTitle = items.reduce((acc, item) => {
-    acc[item.categoryTitle] = acc[item.categoryTitle] || [];
-    const arr = acc[item.categoryTitle];
+    acc[item.categoryTitle || uncategorizedTitle] =
+      acc[item.categoryTitle || uncategorizedTitle] || [];
+    const arr = acc[item.categoryTitle || uncategorizedTitle];
     let grouping = arr.find((el) => el.title === item.groupTitle);
     if (!grouping) {
       grouping = {
@@ -135,7 +133,7 @@ export const getShoppingListItemGroupings = (
     }
     grouping.items.push(item);
     return acc;
-  }, {} as GroupableShoppingListItemsByGroupAndCategory);
+  }, {} as ShoppingListItemSummariesByGroupAndCategory);
 
   return {
     items: sortedItems,

@@ -4,7 +4,6 @@ import {
   ModalController,
   ToastController,
 } from "@ionic/angular";
-import { ShoppingListService } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
@@ -13,6 +12,8 @@ import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shoppin
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
+import { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-shopping-lists",
@@ -24,14 +25,13 @@ export class ShoppingListsPage {
   navCtrl = inject(NavController);
   modalCtrl = inject(ModalController);
   toastCtrl = inject(ToastController);
-  shoppingListService = inject(ShoppingListService);
+  trpcService = inject(TRPCService);
   websocketService = inject(WebsocketService);
   loadingService = inject(LoadingService);
   utilService = inject(UtilService);
 
-  shoppingLists: any = [];
-
-  initialLoadComplete = false;
+  me?: UserPublic;
+  shoppingLists?: ShoppingListSummary[] = [];
 
   constructor() {
     this.websocketService.register(
@@ -53,12 +53,10 @@ export class ShoppingListsPage {
 
   async ionViewWillEnter() {
     const loading = this.loadingService.start();
-    this.initialLoadComplete = false;
 
-    await this.loadLists();
-
-    loading.dismiss();
-    this.initialLoadComplete = true;
+    Promise.all([this.loadLists(), this.loadMe()]).finally(() => {
+      loading.dismiss();
+    });
   }
 
   async refresh(refresher: any) {
@@ -66,11 +64,22 @@ export class ShoppingListsPage {
     refresher.target.complete();
   }
 
-  async loadLists() {
-    const response = await this.shoppingListService.fetch();
-    if (!response.success) return;
+  async loadMe() {
+    const me = await this.trpcService.handle(
+      this.trpcService.trpc.users.getMe.query(),
+    );
+    if (!me) return;
 
-    this.shoppingLists = response.data.sort((a, b) => {
+    this.me = me;
+  }
+
+  async loadLists() {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.getShoppingLists.query(),
+    );
+    if (!response) return;
+
+    this.shoppingLists = response.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
   }
@@ -93,7 +102,7 @@ export class ShoppingListsPage {
     this.navCtrl.navigateForward(RouteMap.ShoppingListPage.getPath(listId));
   }
 
-  formatItemCreationDate(plainTextDate: string) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
+  formatItemCreationDate(date: string | number | Date) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }

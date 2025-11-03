@@ -1,6 +1,10 @@
 import { Component, inject } from "@angular/core";
 import { ModalController, ToastController } from "@ionic/angular";
-import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
+import {
+  RecipeService,
+  ParsedIngredient,
+  Recipe,
+} from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -26,9 +30,9 @@ export class NewShoppingListItemModalPage {
 
   inputType = "items";
 
-  itemFields: any = [{}];
+  itemFields: { title?: string }[] = [{}];
 
-  selectedRecipe: any;
+  selectedRecipe: Recipe | undefined;
   selectedIngredients: ParsedIngredient[] = [];
 
   inputTypeChanged(event: any) {
@@ -60,19 +64,24 @@ export class NewShoppingListItemModalPage {
   save() {
     let items;
     if (this.inputType === "recipe") {
+      if (!this.selectedRecipe) return;
+
       items = this.selectedIngredients.map((ingredient) => ({
         title: ingredient.content,
-        recipeId: this.selectedRecipe.id,
+        completed: false,
+        recipeId: this.selectedRecipe?.id || null,
       }));
     } else {
       // Redundant for now. Kept for sterilization
       items = this.itemFields
-        .filter((e: any) => {
+        .filter((e) => {
           return (e.title || "").length > 0;
         })
-        .map((e: any) => {
+        .map((e) => {
           return {
             title: e.title,
+            completed: false,
+            recipeId: null,
           };
         });
     }

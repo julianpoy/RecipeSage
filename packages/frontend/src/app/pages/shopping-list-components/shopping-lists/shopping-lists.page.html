@@ -50,33 +50,35 @@
           {{ 'pages.shoppingLists.created' |
           translate:{date:formatItemCreationDate(shoppingList.createdAt)} }}
         </p>
-        <p *ngIf="shoppingList.collaborators.length > 0">
+        <p *ngIf="shoppingList.collaboratorUsers.length > 0">
           {{ 'pages.shoppingLists.collaboration' | translate }}
-          <span *ngFor="let user of shoppingList.collaborators; last as isLast">
-            <span *ngIf="shoppingList.myUserId !== user.id">
-              {{ user.name }}<span
-                *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id"
+          <span
+            *ngFor="let collaboratorUser of shoppingList.collaboratorUsers; last as isLast"
+          >
+            <span *ngIf="me?.id !== collaboratorUser.user.id">
+              {{ collaboratorUser.user.name }}<span
+                *ngIf="!isLast || me?.id !== shoppingList.userId"
                 >,</span
               >
             </span>
           </span>
-          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
-            {{ shoppingList.owner.name }}
+          <span *ngIf="me?.id !== shoppingList.userId">
+            {{ shoppingList.user.name }}
           </span>
         </p>
         <p>
-          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
+          <span *ngIf="me?.id !== shoppingList.userId">
             {{ 'pages.shoppingLists.createdBy' |
-            translate:{name:shoppingList.owner.name} }}
+            translate:{name:shoppingList.user.name} }}
           </span>
-          <span *ngIf="shoppingList.myUserId === shoppingList.owner.id">
+          <span *ngIf="me?.id === shoppingList.userId">
             {{ 'pages.shoppingLists.owner' | translate }}
           </span>
         </p>
       </ion-label>
-      <ion-badge slot="end">{{ shoppingList.itemCount }}</ion-badge>
+      <ion-badge slot="end">{{ shoppingList._count.items }}</ion-badge>
     </ion-item>
-    <null-state *ngIf="shoppingLists.length === 0 && initialLoadComplete">
+    <null-state *ngIf="shoppingLists?.length === 0">
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
