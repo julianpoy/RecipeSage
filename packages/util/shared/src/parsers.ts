@@ -60,8 +60,12 @@ const measurementQuantityRegExp = new RegExp(
   `^(${measurementRegexp.source}) *(${quantityRegexp.source})?`,
 ); // Should always be used with 'i' flag
 
+/**
+ * This removes critical information from the context of an ingredient, and
+ * should only be used in a situation where you want to remove anything but, say, an ingredient title.
+ */
 const fillerWordsRegexp =
-  /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
+  /\b(halved|cored|cubed|peeled|minced|grated|shredded|crushed|roasted|toasted|melted|chilled|whipped|diced|trimmed|rinsed|chopped fine|chopped course|chopped|chilled|patted dry|heaped|about|approximately|approx|(slice(s|d)?)|blended|tossed)\b/;
 
 const notesRegexp = /\(.*?\)/;
 
@@ -85,6 +89,9 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
     .filter((measurement): measurement is string => !!measurement);
 };
 
+/**
+ * A little older, consider seeing if stripIngredient works for your use-case instead
+ */
 export const getTitleForIngredient = (ingredient: string): string => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
@@ -110,6 +117,10 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .trim();
 };
 
+/**
+ * As best we can, removes anything but the singular ingredient name itself.
+ * 3 apples, blended => apples
+ */
 export const stripIngredient = (ingredient: string): string => {
   const trimmed = replaceFractionsInText(ingredient)
     .trim()
@@ -118,8 +129,13 @@ export const stripIngredient = (ingredient: string): string => {
     .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
     .trim()
     .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
+    .trim()
+    .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
+    .trim()
+    .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
+    .trim()
+    .replace(new RegExp(`,$`, "i"), "")
     .trim();
-
   if (trimmed !== ingredient) {
     return stripIngredient(trimmed);
   } else {
