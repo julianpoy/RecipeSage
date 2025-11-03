@@ -1,6 +1,13 @@
 import { publicProcedure } from "../../trpc";
-import { getShoppingListItemGroupTitles, validateTrpcSession } from "@recipesage/util/server/general";
-import { prisma, prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems, shoppingListSummaryWithItems } from "@recipesage/prisma";
+import {
+  getShoppingListItemGroupTitles,
+  validateTrpcSession,
+} from "@recipesage/util/server/general";
+import {
+  prisma,
+  prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems,
+  shoppingListSummaryWithItems,
+} from "@recipesage/prisma";
 
 export const getShoppingListsWithItems = publicProcedure.query(
   async ({ ctx }) => {
@@ -36,11 +43,13 @@ export const getShoppingListsWithItems = publicProcedure.query(
     });
 
     const summaries = shoppingLists.map((shoppingList) => {
-      const itemsWithGroupTitle = getShoppingListItemGroupTitles(shoppingList.items);
+      const itemsWithGroupTitle = getShoppingListItemGroupTitles(
+        shoppingList.items,
+      );
       return prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems(
         shoppingList,
-        itemsWithGroupTitle
-      )
+        itemsWithGroupTitle,
+      );
     });
 
     return summaries;

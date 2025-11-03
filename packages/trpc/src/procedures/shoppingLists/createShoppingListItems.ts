@@ -44,13 +44,15 @@ export const createShoppingListItems = publicProcedure
       });
     }
 
-    const autoCategories = await getShoppingListItemCategories(input.items.map((el) => el.title));
+    const autoCategories = await getShoppingListItemCategories(
+      input.items.map((el) => el.title),
+    );
     const itemsWithCategoryTitles = input.items.map((item, idx) => ({
       ...item,
       completed: item.completed ?? false,
       categoryTitle: item.categoryTitle ?? `::${autoCategories[idx]}`,
       userId: session.userId,
-      shoppingListId: input.shoppingListId
+      shoppingListId: input.shoppingListId,
     }));
 
     await prisma.shoppingListItem.createMany({

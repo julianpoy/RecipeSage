@@ -36,7 +36,8 @@ export const shoppingListItemSummary =
     },
   });
 
-export type ShoppingListItemSummary = Prisma.ShoppingListItemGetPayload<typeof shoppingListItemSummary> & {
-  groupTitle: string,
+export type ShoppingListItemSummary = Prisma.ShoppingListItemGetPayload<
+  typeof shoppingListItemSummary
+> & {
+  groupTitle: string;
 };
-

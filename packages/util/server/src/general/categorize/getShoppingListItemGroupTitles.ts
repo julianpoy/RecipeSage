@@ -1,17 +1,23 @@
 import { Base, OutputUnit } from "unitz-ts";
-import Ahocorasick from 'ahocorasick';
-import ingredientNames from './ingredients.json';
+import Ahocorasick from "ahocorasick";
+import ingredientNames from "./ingredients.json";
 import {
   parseUnit,
   getTitleForIngredient,
   getMeasurementsForIngredient,
 } from "@recipesage/util/shared";
 
-const ingredientNamesAhocorasic = new Ahocorasick(ingredientNames.map((el) => el.toLowerCase()));
+const ingredientNamesAhocorasic = new Ahocorasick(
+  ingredientNames.map((el) => el.toLowerCase()),
+);
 
-export const getShoppingListItemGroupTitles = <T extends {
-  title: string;
-}>(items: T[]) => {
+export const getShoppingListItemGroupTitles = <
+  T extends {
+    title: string;
+  },
+>(
+  items: T[],
+) => {
   // Ingredient grouping into map by ingredientName
   const itemGrouper: Record<string, T[]> = {};
   for (let i = 0; i < items.length; i++) {
@@ -23,7 +29,10 @@ export const getShoppingListItemGroupTitles = <T extends {
     let foundIngredientTitle: string | null = null;
     for (const [_, matches] of ahocorasicMatches) {
       for (const match of matches) {
-        if (!foundIngredientTitle || foundIngredientTitle.length < match.length) {
+        if (
+          !foundIngredientTitle ||
+          foundIngredientTitle.length < match.length
+        ) {
           foundIngredientTitle = match;
         }
       }
@@ -41,7 +50,7 @@ export const getShoppingListItemGroupTitles = <T extends {
   }
 
   const results: (T & {
-    groupTitle: string,
+    groupTitle: string;
   })[] = [];
   for (const [ingredientName, items] of Object.entries(itemGrouper)) {
     const measurements = items.map((item) =>
@@ -50,11 +59,13 @@ export const getShoppingListItemGroupTitles = <T extends {
     let title = ingredientName;
 
     if (!measurements.find((measurementSet) => !measurementSet.length)) {
-      const combinedUz = measurements.flat().reduce<Base | null>(
-        (acc, measurement) =>
-          acc ? acc.add(measurement) : parseUnit(measurement),
-        null,
-      );
+      const combinedUz = measurements
+        .flat()
+        .reduce<Base | null>(
+          (acc, measurement) =>
+            acc ? acc.add(measurement) : parseUnit(measurement),
+          null,
+        );
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
           unitSpacer: " ",
@@ -64,10 +75,12 @@ export const getShoppingListItemGroupTitles = <T extends {
         title = combinedMeasurements + " " + ingredientName;
       }
     }
-    results.push(...items.map((item) => ({
-      ...item,
-      groupTitle: title,
-    })));
+    results.push(
+      ...items.map((item) => ({
+        ...item,
+        groupTitle: title,
+      })),
+    );
   }
 
   return results;

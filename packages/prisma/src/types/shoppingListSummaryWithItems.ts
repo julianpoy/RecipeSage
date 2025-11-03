@@ -52,24 +52,30 @@ export const shoppingListSummaryWithItems =
               },
             },
           },
-        }
-      }
+        },
+      },
     },
   });
 
 /**
  * Provides fields necessary for displaying a summary about a shopping list, including items
  **/
-export type ShoppingListSummaryWithItems = Omit<Prisma.ShoppingListGetPayload<typeof shoppingListSummaryWithItems>, "items"> & {
-  items: ShoppingListItemSummary[],
+export type ShoppingListSummaryWithItems = Omit<
+  Prisma.ShoppingListGetPayload<typeof shoppingListSummaryWithItems>,
+  "items"
+> & {
+  items: ShoppingListItemSummary[];
 };
 
-export const prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems = (
-  _shoppingListSummary: Prisma.ShoppingListGetPayload<typeof shoppingListSummaryWithItems>,
-  itemSummaries: ShoppingListItemSummary[]
-): ShoppingListSummaryWithItems => {
-  return {
-    ..._shoppingListSummary,
-    items: itemSummaries,
+export const prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems =
+  (
+    _shoppingListSummary: Prisma.ShoppingListGetPayload<
+      typeof shoppingListSummaryWithItems
+    >,
+    itemSummaries: ShoppingListItemSummary[],
+  ): ShoppingListSummaryWithItems => {
+    return {
+      ..._shoppingListSummary,
+      items: itemSummaries,
+    };
   };
-};

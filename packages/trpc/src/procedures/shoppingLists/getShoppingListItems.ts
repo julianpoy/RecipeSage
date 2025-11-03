@@ -1,6 +1,13 @@
 import { publicProcedure } from "../../trpc";
-import { getShoppingListItemGroupTitles, validateTrpcSession } from "@recipesage/util/server/general";
-import { prisma, ShoppingListItemSummary, shoppingListItemSummary } from "@recipesage/prisma";
+import {
+  getShoppingListItemGroupTitles,
+  validateTrpcSession,
+} from "@recipesage/util/server/general";
+import {
+  prisma,
+  ShoppingListItemSummary,
+  shoppingListItemSummary,
+} from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
@@ -40,7 +47,9 @@ export const getShoppingListItems = publicProcedure
       },
     });
 
-    const summaries = getShoppingListItemGroupTitles(shoppingListItems) satisfies ShoppingListItemSummary[];
+    const summaries = getShoppingListItemGroupTitles(
+      shoppingListItems,
+    ) satisfies ShoppingListItemSummary[];
 
     return summaries;
   });

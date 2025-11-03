@@ -52,7 +52,9 @@
         </p>
         <p *ngIf="shoppingList.collaboratorUsers.length > 0">
           {{ 'pages.shoppingLists.collaboration' | translate }}
-          <span *ngFor="let collaboratorUser of shoppingList.collaboratorUsers; last as isLast">
+          <span
+            *ngFor="let collaboratorUser of shoppingList.collaboratorUsers; last as isLast"
+          >
             <span *ngIf="me?.id !== collaboratorUser.user.id">
               {{ collaboratorUser.user.name }}<span
                 *ngIf="!isLast || me?.id !== shoppingList.userId"

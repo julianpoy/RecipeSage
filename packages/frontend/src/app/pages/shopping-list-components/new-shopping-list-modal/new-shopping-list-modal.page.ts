@@ -40,7 +40,7 @@ export class NewShoppingListModalPage {
       this.trpcService.trpc.shoppingLists.createShoppingList.mutate({
         title: this.listTitle,
         collaboratorUserIds: this.selectedCollaboratorIds,
-      })
+      }),
     );
 
     loading.dismiss();
@@ -49,9 +49,7 @@ export class NewShoppingListModalPage {
     this.modalCtrl.dismiss({
       success: true,
     });
-    this.navCtrl.navigateRoot(
-      RouteMap.ShoppingListPage.getPath(response.id),
-    );
+    this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
   }
 
   cancel() {

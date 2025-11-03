@@ -1,6 +1,10 @@
 import { Component, inject } from "@angular/core";
 import { ModalController, ToastController } from "@ionic/angular";
-import { RecipeService, ParsedIngredient, Recipe } from "~/services/recipe.service";
+import {
+  RecipeService,
+  ParsedIngredient,
+  Recipe,
+} from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

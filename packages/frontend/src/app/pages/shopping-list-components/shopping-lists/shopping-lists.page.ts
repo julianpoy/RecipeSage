@@ -75,7 +75,7 @@ export class ShoppingListsPage {
 
   async loadLists() {
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.shoppingLists.getShoppingLists.query()
+      this.trpcService.trpc.shoppingLists.getShoppingLists.query(),
     );
     if (!response) return;
 

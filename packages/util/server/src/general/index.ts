@@ -6,8 +6,8 @@ export * from "./auth/generatePasswordHash";
 export * from "./auth/validatePasswordHash";
 export * from "./auth/sanitizeUserEmail";
 
-export * from './categorize/getShoppingListItemCategories';
-export * from './categorize/getShoppingListItemGroupTitles';
+export * from "./categorize/getShoppingListItemCategories";
+export * from "./categorize/getShoppingListItemGroupTitles";
 
 export * from "./email/sendWelcomeEmail";
 export * from "./email/sendPasswordResetEmail";

@@ -134,7 +134,7 @@ export class MealPlanPage {
         this.trpcService.trpc.mealPlans.getMealPlanItems.query({
           mealPlanId: this.mealPlanId,
         }),
-      )
+      ),
     ]);
     if (!mealPlan || !mealPlanItems) return;
     this.mealPlan = mealPlan;
