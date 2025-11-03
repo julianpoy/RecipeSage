@@ -35,5 +35,7 @@ export const translate = async (
 
   const translations = loadedLanguageFileMap[lang] || {};
 
-  return translations[key] || key;
+  if (translations[key]) return translations[key];
+  if (lang !== "en-us") return translate("en-us", key);
+  return key;
 };

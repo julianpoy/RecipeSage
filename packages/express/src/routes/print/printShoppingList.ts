@@ -25,6 +25,7 @@ const schema = {
     groupCategories: z.string(),
     groupSimilar: z.string(),
     sortBy: z.nativeEnum(ShoppingListSortOptions).optional(),
+    preferredLanguage: z.string().optional(),
   }),
   params: z.object({
     shoppingListId: z.string(),
@@ -59,7 +60,8 @@ export const printShoppingListHandler = defineHandler(
       shoppingList.items,
     ) satisfies ShoppingListItemSummary[];
 
-    const languageHeader = req.headers["accept-language"] || "en-us";
+    const languageHeader =
+      req.query.preferredLanguage || req.headers["accept-language"] || "en-us";
     const categoryTitlesToi18n: Record<string, string> = {
       uncategorized: await translate(
         languageHeader,
