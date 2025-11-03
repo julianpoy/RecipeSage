@@ -60,8 +60,12 @@ const measurementQuantityRegExp = new RegExp(
   `^(${measurementRegexp.source}) *(${quantityRegexp.source})?`,
 ); // Should always be used with 'i' flag
 
+/**
+ * This removes critical information from the context of an ingredient, and
+ * should only be used in a situation where you want to remove anything but, say, an ingredient title.
+ */
 const fillerWordsRegexp =
-  /\b(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s|d)?)|blended|tossed)\b/;
+  /\b(halved|cored|cubed|peeled|minced|grated|shredded|crushed|roasted|toasted|melted|chilled|whipped|diced|trimmed|rinsed|chopped fine|chopped course|chopped|chilled|patted dry|heaped|about|approximately|approx|(slice(s|d)?)|blended|tossed)\b/;
 
 const notesRegexp = /\(.*?\)/;
 
