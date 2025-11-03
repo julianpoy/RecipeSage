@@ -189,6 +189,7 @@ export class ShoppingListPage {
     } = getShoppingListItemGroupings(
       items,
       this.preferences[ShoppingListPreferenceKey.SortBy],
+      this.parseCategoryTitle("::uncategorized"),
     );
 
     this.items = sortedItems;
@@ -201,6 +202,7 @@ export class ShoppingListPage {
     const { items: sortedCompletedItems } = getShoppingListItemGroupings(
       completedItems,
       this.preferences[ShoppingListPreferenceKey.SortBy],
+      this.parseCategoryTitle("::uncategorized"),
     );
 
     this.completedItems = sortedCompletedItems;
