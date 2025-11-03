@@ -78,11 +78,14 @@ html
     div(class="items")
       each groupTitle in groupTitles
         div(class="set doNotBreak")
-          div(class="setTitle")= groupTitle
-          div(class="subSet hint")
-            each item in itemsByGroupTitle[groupTitle]
-              i= item.title
-              br
+          if itemsByGroupTitle[groupTitle].length > 1
+            div(class="setTitle")= groupTitle
+            div(class="subSet hint")
+              each item in itemsByGroupTitle[groupTitle]
+                i= item.title
+                br
+          else
+            div(class="setTitle")= groupTitle
 
   if modifiers.groupSimilar && modifiers.groupCategories
     div(class="items")
@@ -92,11 +95,14 @@ html
             b= categoryTitle
           each group in groupsByCategoryTitle[categoryTitle]
             div(class="subSet doNotBreak")
-              div(class="setTitle")= group.title
-              div(class="subSet hint")
-                each item in group.items
-                  i= item.title
-                  br
+              if group.items.length > 1
+                div(class="setTitle")= group.title
+                div(class="subSet hint")
+                  each item in group.items
+                    i= item.title
+                    br
+              else
+                div(class="setTitle")= group.items[0].title
 
   p(class="printed-on")
     i Printed on&nbsp;

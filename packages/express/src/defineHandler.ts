@@ -97,18 +97,20 @@ export const defineHandler = <
         let session: Session | undefined;
         if (opts.authentication !== AuthenticationEnforcement.None) {
           const authorization = req.headers.authorization;
+          const queryToken = req.query.token as string | undefined;
           if (
             opts.authentication === AuthenticationEnforcement.Required &&
-            !authorization
+            !(authorization || queryToken)
           ) {
             throw new UnauthorizedError(
               "You must pass an authorization header",
             );
           }
 
-          if (authorization) {
-            const authorizationParts = authorization.split(" ");
-            const token = authorizationParts.at(1);
+          if (authorization || queryToken) {
+            const token = authorization
+              ? authorization.split(" ").at(1)
+              : queryToken;
             session = token ? await validateSession(token) : undefined;
             if (session) extendSession(session);
 
