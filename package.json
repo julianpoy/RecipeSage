@@ -138,7 +138,7 @@
     "@nx/s3-cache": "^3.0.0",
     "@nx/vite": "22.0.1",
     "@nx/web": "22.0.1",
-    "@sentry/esbuild-plugin": "^4.5.0",
+    "@sentry/esbuild-plugin": "^4.6.0",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "1.14.0",
     "@swc/helpers": "0.5.17",
