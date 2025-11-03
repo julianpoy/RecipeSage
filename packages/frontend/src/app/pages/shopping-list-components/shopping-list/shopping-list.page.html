@@ -5,7 +5,8 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.shoppingList.title' | translate:{title: shoppingList?.title || ''} }}
+      {{ 'pages.shoppingList.title' | translate:{title: shoppingList?.title ||
+      ''} }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -56,6 +57,7 @@
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
               (completeToggle)="completeItems($event, true)"
+              (recategorize)="recategorizeItems($event[0], $event[1])"
             ></shopping-list-group>
           </div>
         </div>
@@ -72,6 +74,7 @@
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
           (completeToggle)="completeItems($event, true)"
+          (recategorize)="recategorizeItems($event[0], $event[1])"
         ></shopping-list-group>
       </div>
     </div>
@@ -103,12 +106,14 @@
             class="shopping-list-item"
           >
             <shopping-list-item
+              [id]="item.id"
               [title]="item.title"
               [completed]="item.completed"
               [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
               [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
               [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
               (completeToggle)="completeItems([item], true)"
+              (recategorize)="recategorizeItems([item], $event)"
             ></shopping-list-item>
           </div>
         </div>
@@ -119,12 +124,14 @@
     >
       <div *ngFor="let item of items" class="shopping-list-item">
         <shopping-list-item
+          [id]="item.id"
           [title]="item.title"
           [completed]="item.completed"
           [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
           [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
           [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
           (completeToggle)="completeItems([item], true)"
+          (recategorize)="recategorizeItems([item], $event)"
         ></shopping-list-item>
       </div>
     </div>
@@ -193,12 +200,14 @@
     </ion-item>
     <shopping-list-item
       *ngFor="let item of completedItems"
+      [id]="item.id"
       [title]="item.title"
       [completed]="item.completed"
       [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
       [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
       [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
       (completeToggle)="completeItems([item], false)"
+      (recategorize)="recategorizeItems([item], $event)"
     ></shopping-list-item>
   </ion-list>
 

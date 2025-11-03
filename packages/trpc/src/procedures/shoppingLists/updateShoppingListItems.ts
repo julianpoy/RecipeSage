@@ -23,6 +23,7 @@ export const updateShoppingListItems = publicProcedure
             title: z.string().optional(),
             recipeId: z.string().uuid().nullable().optional(),
             completed: z.boolean().optional(),
+            categoryTitle: z.string().optional(),
           }),
         )
         .min(1)
@@ -68,7 +69,12 @@ export const updateShoppingListItems = publicProcedure
 
     await prisma.$transaction(async (tx) => {
       for (const item of input.items) {
-        if (item.title === undefined && item.recipeId === undefined && item.completed === undefined) {
+        if (
+          item.title === undefined &&
+          item.recipeId === undefined &&
+          item.completed === undefined &&
+          item.categoryTitle === undefined
+        ) {
           continue;
         }
 
@@ -80,6 +86,7 @@ export const updateShoppingListItems = publicProcedure
             title: item.title,
             recipeId: item.recipeId,
             completed: item.completed,
+            categoryTitle: item.categoryTitle,
           },
         });
       }

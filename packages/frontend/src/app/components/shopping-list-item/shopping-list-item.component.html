@@ -21,4 +21,61 @@
       </p>
     </div>
   </ion-checkbox>
+  <ion-button
+    slot="end"
+    style="icon-only"
+    fill="clear"
+    (click)="showMoveToPopover($event)"
+  >
+    <ion-icon slot="icon-only" icon="ellipsis-vertical"></ion-icon>
+  </ion-button>
+  <ion-popover
+    #moveToPopover
+    [isOpen]="moveToPopoverIsOpen"
+    (didDismiss)="moveToPopoverIsOpen = false"
+  >
+    <ng-template>
+      <ion-content>
+        <ion-list>
+          <ion-list-header>
+            {{ "components.shoppingListItem.moveTo" | translate }}
+          </ion-list-header>
+          <ion-item
+            *ngFor="let i18n of builtinCategories"
+            fill="clear"
+            (click)="moveToPopoverIsOpen = false; moveToCategoryI18n(i18n)"
+            button
+            detail="true"
+          >
+            <ion-label>
+              {{ i18n | translate }}
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngFor="let userCatTitle of userKnownCategories"
+            fill="clear"
+            (click)="
+              moveToPopoverIsOpen = false; moveToCategoryCustom(userCatTitle)
+            "
+            button
+            detail="true"
+          >
+            <ion-label>
+              {{ userCatTitle }}
+            </ion-label>
+          </ion-item>
+          <ion-item
+            fill="clear"
+            (click)="moveToPopoverIsOpen = false; showMoveToArbitraryInput()"
+            button
+            detail="true"
+          >
+            <ion-label>
+              {{ "components.shoppingListItem.moveToCustom" | translate }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
 </ion-item>

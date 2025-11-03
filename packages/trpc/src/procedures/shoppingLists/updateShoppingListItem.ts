@@ -19,13 +19,19 @@ export const updateShoppingListItem = publicProcedure
       title: z.string().optional(),
       recipeId: z.string().uuid().nullable().optional(),
       completed: z.boolean().optional(),
+      categoryTitle: z.string().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);
 
-    if (input.title === undefined && input.recipeId === undefined && input.completed === undefined) {
+    if (
+      input.title === undefined &&
+      input.recipeId === undefined &&
+      input.completed === undefined &&
+      input.categoryTitle === undefined
+    ) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "You must specify at least one property to update",
@@ -68,6 +74,7 @@ export const updateShoppingListItem = publicProcedure
         title: input.title,
         recipeId: input.recipeId,
         completed: input.completed,
+        categoryTitle: input.categoryTitle,
       },
     });
 

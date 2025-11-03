@@ -1,11 +1,13 @@
 <shopping-list-item
   *ngIf="group.items.length === 1"
+  [id]="group.items[0].id"
   [title]="group.items[0].title"
   [completed]="group.items[0].completed"
   [recipeTitle]="showRecipeTitle && group.items[0].recipe?.title"
   [createdAt]="showAddedOn && group.items[0].createdAt"
   [ownerName]="showAddedBy && group.items[0].owner?.name"
   (completeToggle)="completeToggle.emit(group.items)"
+  (recategorize)="recategorize.emit([group.items, $event])"
 ></shopping-list-item>
 <div *ngIf="group.items.length > 1">
   <ion-grid class="ion-no-padding">
@@ -51,12 +53,14 @@
       <ion-col size="12">
         <shopping-list-item
           *ngFor="let item of group.items"
+          [id]="group.items[0].id"
           [title]="item.title"
           [completed]="item.completed"
           [recipeTitle]="showRecipeTitle && item.recipe?.title"
           [createdAt]="showAddedOn && item.createdAt"
           [ownerName]="showAddedBy && item.owner?.name"
           (completeToggle)="completeToggle.emit([item])"
+          (recategorize)="recategorize.emit([[item], $event])"
         ></shopping-list-item>
       </ion-col>
     </ion-row>

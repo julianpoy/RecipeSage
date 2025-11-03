@@ -107,7 +107,7 @@ export const getShoppingListItemGroupings = (
   });
 
   const categoryTitles = Array.from(
-    new Set<string>(items.map((item) => item.categoryTitle)),
+    new Set<string>(items.map((item) => item.categoryTitle || "uncategorized")),
   ).sort((a, b) => {
     // Sort categories by title (always)
     return a.localeCompare(b);
@@ -117,8 +117,9 @@ export const getShoppingListItemGroupings = (
   const itemsByCategoryTitle = groupAndSort(items, "categoryTitle", sortBy);
 
   const groupsByCategoryTitle = items.reduce((acc, item) => {
-    acc[item.categoryTitle] = acc[item.categoryTitle] || [];
-    const arr = acc[item.categoryTitle];
+    acc[item.categoryTitle || "uncategorized"] =
+      acc[item.categoryTitle || "uncategorized"] || [];
+    const arr = acc[item.categoryTitle || "uncategorized"];
     let grouping = arr.find((el) => el.title === item.groupTitle);
     if (!grouping) {
       grouping = {

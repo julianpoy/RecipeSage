@@ -3,7 +3,6 @@ import {
   WSBoardcastEventType,
   broadcastWSEventIgnoringErrors,
   getShoppingListItemCategories,
-  getShoppingListItemGroupTitle,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
@@ -41,9 +40,9 @@ export const createShoppingListItem = publicProcedure
       });
     }
 
-    const categoryTitle = input.categoryTitle ? input.categoryTitle : (
-      `::${await getShoppingListItemCategories([input.title])}`
-    );
+    const categoryTitle = input.categoryTitle
+      ? input.categoryTitle
+      : `::${await getShoppingListItemCategories([input.title])}`;
 
     const createdShoppingListItem = await prisma.shoppingListItem.create({
       data: {

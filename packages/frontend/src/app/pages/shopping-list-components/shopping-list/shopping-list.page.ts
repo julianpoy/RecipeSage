@@ -13,7 +13,10 @@ import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { ShoppingListItemSummariesByGroupAndCategory, ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import {
+  ShoppingListItemSummariesByGroupAndCategory,
+  ShoppingListPreferenceKey,
+} from "@recipesage/util/shared";
 import { getShoppingListItemGroupings } from "@recipesage/util/shared";
 
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";
@@ -24,7 +27,26 @@ import { ShoppingListItemComponent } from "../../../components/shopping-list-ite
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { TRPCService } from "../../../services/trpc.service";
-import type { ShoppingListItemSummary, ShoppingListSummary, UserPublic } from "@recipesage/prisma";
+import type {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+  UserPublic,
+} from "@recipesage/prisma";
+
+const categoryTitlesToi18n: Record<string, string> = {
+  uncategorized: "pages.shoppingList.category.uncategorized",
+  produce: "pages.shoppingList.category.produce",
+  dairy: "pages.shoppingList.category.dairy",
+  meat: "pages.shoppingList.category.meat",
+  bakery: "pages.shoppingList.category.bakery",
+  grocery: "pages.shoppingList.category.grocery",
+  liquor: "pages.shoppingList.category.liquor",
+  seafood: "pages.shoppingList.category.seafood",
+  nonfood: "pages.shoppingList.category.nonfood",
+  frozen: "pages.shoppingList.category.frozen",
+  canned: "pages.shoppingList.category.canned",
+  beverages: "pages.shoppingList.category.beverages",
+};
 
 @Component({
   selector: "page-shopping-list",
@@ -123,11 +145,23 @@ export class ShoppingListPage {
     this.me = me;
   }
 
-  processList(_items: ShoppingListItemSummary[]) {
-    const items = _items.filter((item) => !item.completed);
-    const completedItems = items.filter(
-      (item) => item.completed,
-    );
+  async processList(_items: ShoppingListItemSummary[]) {
+    const items = _items
+      .filter((item) => !item.completed)
+      .map((el) => {
+        el.categoryTitle = this.parseCategoryTitle(
+          el.categoryTitle || "::uncategorized",
+        );
+        return el;
+      });
+    const completedItems = _items
+      .filter((item) => item.completed)
+      .map((el) => {
+        el.categoryTitle = this.parseCategoryTitle(
+          el.categoryTitle || "::uncategorized",
+        );
+        return el;
+      });
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -183,7 +217,7 @@ export class ShoppingListPage {
         this.trpcService.trpc.shoppingLists.getShoppingListItems.query({
           shoppingListId: this.shoppingListId,
         }),
-      )
+      ),
     ]);
     if (!shoppingList || !shoppingListItems) return;
     this.shoppingList = shoppingList;
@@ -214,8 +248,35 @@ export class ShoppingListPage {
         items: items.map((item) => ({
           id: item.id,
           completed,
-        }))
-      })
+        })),
+      }),
+    );
+    if (!response) return;
+
+    if (this.reference !== response.reference) {
+      this.reference = response.reference;
+      await this.loadList();
+    }
+
+    loading.dismiss();
+  }
+
+  async recategorizeItems(
+    items: ShoppingListItemSummary[],
+    categoryTitle: string,
+  ) {
+    if (!this.shoppingList) return;
+
+    const loading = this.loadingService.start();
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.updateShoppingListItems.mutate({
+        shoppingListId: this.shoppingListId,
+        items: items.map((item) => ({
+          id: item.id,
+          categoryTitle,
+        })),
+      }),
     );
     if (!response) return;
 
@@ -271,8 +332,8 @@ export class ShoppingListPage {
     const response = await this.trpcService.handle(
       this.trpcService.trpc.shoppingLists.deleteShoppingListItems.mutate({
         shoppingListId: this.shoppingListId,
-        ids: items.map((el) => el.id)
-      })
+        ids: items.map((el) => el.id),
+      }),
     );
     if (!response) return;
 
@@ -304,11 +365,13 @@ export class ShoppingListPage {
     toast.present();
   }
 
-  async _addItems(items: {
-    title: string,
-    completed: boolean,
-    recipeId: string | null
-  }[]) {
+  async _addItems(
+    items: {
+      title: string;
+      completed: boolean;
+      recipeId: string | null;
+    }[],
+  ) {
     if (!this.shoppingList) return;
 
     const loading = this.loadingService.start();
@@ -319,9 +382,9 @@ export class ShoppingListPage {
         items: items.map((el) => ({
           title: el.title,
           completed: el.completed,
-          recipeId: el.recipeId
+          recipeId: el.recipeId,
         })),
-      })
+      }),
     );
     if (!response) return;
 
@@ -370,5 +433,16 @@ export class ShoppingListPage {
 
   openRecipe(id: string): void {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
+  }
+
+  parseCategoryTitle(title: string) {
+    if (title.startsWith("::")) {
+      const i18nKey = title.substring(2);
+      const i18nStr = categoryTitlesToi18n[i18nKey];
+
+      return this.translate.instant(i18nStr);
+    }
+
+    return title;
   }
 }

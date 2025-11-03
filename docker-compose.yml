@@ -32,6 +32,7 @@ services:
       - postgres
       - pushpin
       - browserless
+      - grocery-categorizer
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -69,7 +70,7 @@ services:
       - BROWSERLESS_PORT=3000
       - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
-      - GROCERY_CLASSIFIER_URL=http://grocery-classifier:8000/
+      - GROCERY_CATEGORIZER_URL=http://grocery-categorizer:8000/
       - OTEL_LOG_LEVEL=info
     env_file:
       - ./.env
@@ -114,7 +115,7 @@ services:
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
     stop_grace_period: 1s
-  grocery-classifier:
+  grocery-categorizer:
     image: julianpoy/ingredient-categorizer:latest
     stop_grace_period: 1s
 
