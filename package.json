@@ -43,6 +43,7 @@
     "@trpc/client": "^11.5.1",
     "@trpc/server": "^11.0.2",
     "@types/jsdom": "^21.1.7",
+    "accept-language": "^3.0.20",
     "ahocorasick": "^1.0.2",
     "axios": "^1.8.4",
     "body-parser": "~2.2.0",

@@ -11,7 +11,10 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import {
+  GlobalPreferenceKey,
+  ShoppingListPreferenceKey,
+} from "@recipesage/util/shared";
 import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
@@ -71,6 +74,8 @@ export class ShoppingListPopoverPage {
         groupCategories:
           this.preferences[ShoppingListPreferenceKey.GroupCategories],
         sortBy: this.preferences[ShoppingListPreferenceKey.SortBy],
+        preferredLanguage:
+          this.preferences[GlobalPreferenceKey.Language] || undefined,
       }),
     );
   }

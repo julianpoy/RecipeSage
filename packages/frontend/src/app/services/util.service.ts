@@ -405,19 +405,22 @@ export class UtilService {
 
   generatePrintShoppingListURL(
     shoppingListId: string,
-    options?: {
-      groupSimilar?: boolean;
-      groupCategories?: boolean;
+    options: {
+      groupSimilar: boolean;
+      groupCategories: boolean;
       sortBy?: string;
+      preferredLanguage?: string;
     },
   ) {
     let query = `${this.getTokenQuery()}&version=${
       (window as any).version
     }&print=true`;
 
-    if (options?.groupSimilar) query += "&groupSimilar=true";
-    if (options?.groupCategories) query += "&groupCategories=true";
-    if (options?.sortBy) query += `&sortBy=${options.sortBy}`;
+    if (options.groupSimilar) query += "&groupSimilar=true";
+    if (options.groupCategories) query += "&groupCategories=true";
+    if (options.preferredLanguage)
+      query += `&preferredLanguage=${options.preferredLanguage}`;
+    if (options.sortBy) query += `&sortBy=${options.sortBy}`;
 
     return `${this.getBase()}print/shoppingList/${shoppingListId}${query}`;
   }

@@ -1,15 +1,24 @@
 import fs from "fs/promises";
 import { join } from "path";
+import acceptLanguage from "accept-language";
+import { SupportedLanguages } from "@recipesage/util/shared";
+acceptLanguage.languages(Object.values(SupportedLanguages));
 
 const loadedLanguageFileMap: Record<string, Record<string, string>> = {};
 
-export const translate = async (lang: string, key: string): Promise<string> => {
+export const translate = async (
+  acceptLanguageHeader: string,
+  key: string,
+): Promise<string> => {
+  const lang = acceptLanguage.get(acceptLanguageHeader);
+  if (!lang) return key;
+
   if (!loadedLanguageFileMap[lang]) {
     try {
       const path = join(
         __dirname,
         "../../../../frontend/src/assets/i18n/",
-        `${key}.json`,
+        `${lang}.json`,
       );
       const frontendI18nFile = await fs.readFile(path, "utf8");
 
@@ -24,7 +33,9 @@ export const translate = async (lang: string, key: string): Promise<string> => {
     }
   }
 
-  const translations = loadedLanguageFileMap[lang];
+  const translations = loadedLanguageFileMap[lang] || {};
 
-  return translations[key] || key;
+  if (translations[key]) return translations[key];
+  if (lang !== "en-us") return translate("en-us", key);
+  return key;
 };
