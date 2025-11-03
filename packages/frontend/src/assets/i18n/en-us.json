@@ -1128,6 +1128,8 @@
   "errors.offline": "A connectivity error occurred. While offline, you're only able to do read-only actions, and view content if your device has it cached locally.",
   "errors.unexpected": "An unexpected error occurred and the app may not work correctly. Please reload the app and try again. If this continues to occur, please contact me.",
   "errors.unexpected.selfhost": "An unexpected error occurred. Please check your server logs as well as the self hosting FAQ.",
+  "errors.resourceNotFound": "Resource Not Found",
+  "errors.resourceNotFound.message": "It looks like we tried to fetch something that doesn't exist. If this continues to occur unexpectedly, please contact me.",
 
   "generic.showMore": "Show More",
   "generic.error": "Error",

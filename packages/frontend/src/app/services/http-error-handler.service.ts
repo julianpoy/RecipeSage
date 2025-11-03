@@ -25,6 +25,11 @@ export class HttpErrorHandlerService {
   defaultErrorHandlers: Record<number, (error: Error) => void> = {
     0: () => this.presentAlert("generic.error", "errors.offline"),
     401: () => this.promptForAuth(),
+    404: () =>
+      this.presentAlert(
+        "errors.resourceNotFound",
+        "errors.resourceNotFound.message",
+      ),
     500: (error) => {
       Sentry.captureException(error);
       this.presentAlert(
@@ -68,14 +73,14 @@ export class HttpErrorHandlerService {
         message,
         buttons: [
           {
-            text: reload,
+            text: ignore,
             cssClass: "alertDanger",
+          },
+          {
+            text: reload,
             handler: () => {
               window.location.reload();
             },
-          },
-          {
-            text: ignore,
           },
         ],
       });
