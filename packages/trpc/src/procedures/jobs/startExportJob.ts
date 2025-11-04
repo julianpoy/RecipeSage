@@ -88,6 +88,8 @@ export const startExportJob = publicProcedure
             progress: 100,
             meta: {
               ...(job.meta as JobMeta),
+              exportStorageBucket: s3Record.bucket,
+              exportStorageKey: s3Record.key,
               exportDownloadUrl: s3Record.location,
             } satisfies JobMeta,
           },

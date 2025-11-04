@@ -18,10 +18,11 @@
     </ion-item>
     <div *ngFor="let exportJob of exportJobs.slice(0, showJobs)">
       <ion-item
-        [href]="exportJob.meta?.exportDownloadUrl"
+        (click)="downloadJob(exportJob)"
         target="_blank"
-        [detail]="exportJob.meta?.exportDownloadUrl"
+        [detail]="exportJob.status === 'SUCCESS'"
         detailIcon="cloud-download"
+        [button]="exportJob.status === 'SUCCESS'"
       >
         <ion-icon name="document" slot="start" />
         <ion-label>

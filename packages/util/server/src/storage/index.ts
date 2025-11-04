@@ -10,12 +10,21 @@ export interface StorageObjectRecord {
   size: string;
   bucket: string;
   key: string;
-  acl: string;
+  acl: string | undefined;
   location: string;
   etag: string;
 }
 
 export interface StorageProvider {
+  getSignedDownloadUrl: (
+    objectType: ObjectTypes,
+    key: string,
+    options?: {
+      fileExtension?: string;
+      expiresInSeconds?: number;
+    },
+  ) => Promise<string>;
+
   writeBuffer: (
     objectType: ObjectTypes,
     buffer: Buffer,
@@ -28,9 +37,9 @@ export interface StorageProvider {
     mimetype: string,
   ) => Promise<StorageObjectRecord>;
 
-  deleteObject: (key: string) => Promise<void>;
+  deleteObject: (objectType: ObjectTypes, key: string) => Promise<void>;
 
-  deleteObjects: (keys: string[]) => Promise<void>;
+  deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<void>;
 }
 
 const storageProviders: {
@@ -50,6 +59,7 @@ const storageProvider =
   storageProviders[process.env.STORAGE_TYPE.toLowerCase()];
 if (!storageProvider) throw new Error("Invalid STORAGE_TYPE");
 
+export const getSignedDownloadUrl = storageProvider.getSignedDownloadUrl;
 export const writeBuffer = storageProvider.writeBuffer;
 export const writeStream = storageProvider.writeStream;
 export const deleteObject = storageProvider.deleteObject;

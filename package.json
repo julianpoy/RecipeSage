@@ -17,6 +17,7 @@
     "@aws-sdk/client-s3": "^3.922.0",
     "@aws-sdk/client-ses": "^3.922.0",
     "@aws-sdk/lib-storage": "^3.922.0",
+    "@aws-sdk/s3-request-presigner": "^3.922.0",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/core": "7.4.4",
     "@capacitor/ios": "7.4.4",

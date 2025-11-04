@@ -45,6 +45,9 @@ services:
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
+      - AWS_BUCKET_RECIPE_IMAGE=chefbook-dev
+      - AWS_BUCKET_PROFILE_IMAGE=chefbook-dev
+      - AWS_BUCKET_DATA_EXPORT=chefbook-dev-data-export
       - FIRESTORE_BUCKET=
       - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
       - NODE_ENV=development

@@ -36,7 +36,6 @@ import {
 } from "../utils/errors.js";
 import { joiValidator } from "../middleware/joiValidator.js";
 import Joi from "joi";
-import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
 import { getFriendships } from "../utils/getFriendships.js";
 
 const VALID_RECIPE_FOLDERS = ["main", "inbox"];
@@ -723,49 +722,6 @@ router.put(
     });
 
     res.status(200).json(updatedRecipe);
-  }),
-);
-
-router.delete(
-  "/all",
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const { userId } = res.locals.session;
-
-    await sequelize.transaction(async (transaction) => {
-      const recipes = await Recipe.findAll({
-        where: {
-          userId,
-        },
-        attributes: ["id"],
-        transaction,
-      });
-      const recipeIds = recipes.map((recipe) => recipe.id);
-
-      await Recipe.destroy({
-        where: {
-          userId,
-        },
-        transaction,
-      });
-
-      await Label.destroy({
-        where: {
-          userId,
-        },
-        transaction,
-      });
-
-      // TODO: Remove this when we have a way of mocking
-      if (process.env.NODE_ENV !== "test") {
-        await Search.deleteRecipes(recipeIds);
-
-        await deleteHangingImagesForUser(userId, transaction);
-      }
-    });
-
-    res.status(200).send({});
   }),
 );
 

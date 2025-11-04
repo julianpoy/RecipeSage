@@ -32,6 +32,13 @@ const generateStorageLocation = (key: string): string => {
   return location;
 };
 
+export const getSignedDownloadUrl = async (
+  objectType: ObjectTypes,
+  key: string,
+) => {
+  return generateStorageLocation(key);
+};
+
 // Write an object to firebase storage
 export const writeBuffer = async (
   objectType: ObjectTypes,
@@ -96,7 +103,10 @@ export const writeStream = async (
 };
 
 // Delete an object from firebase storage
-export const deleteObject = async (key: string): Promise<void> => {
+export const deleteObject = async (
+  _objectType: ObjectTypes,
+  key: string,
+): Promise<void> => {
   const bucket = getStorage().bucket(BUCKET);
 
   await bucket.file(key).delete({
@@ -105,7 +115,10 @@ export const deleteObject = async (key: string): Promise<void> => {
 };
 
 // Delete multiple objects from firebase storage
-export const deleteObjects = async (keys: string[]): Promise<void> => {
+export const deleteObjects = async (
+  _objectType: ObjectTypes,
+  keys: string[],
+): Promise<void> => {
   const bucket = getStorage().bucket(BUCKET);
 
   await Promise.all(
@@ -118,6 +131,7 @@ export const deleteObjects = async (keys: string[]): Promise<void> => {
 };
 
 export default {
+  getSignedDownloadUrl,
   writeBuffer,
   writeStream,
   deleteObject,

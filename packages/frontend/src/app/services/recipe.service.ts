@@ -261,20 +261,6 @@ export class RecipeService {
     return response;
   }
 
-  async deleteAll(errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<void>({
-      path: `recipes/all`,
-      method: "DELETE",
-      payload: undefined,
-      query: undefined,
-      errorHandlers,
-    });
-
-    this.events.publish(EventName.RecipeDeleted);
-
-    return response;
-  }
-
   clipFromUrl(
     params: {
       url: string;
