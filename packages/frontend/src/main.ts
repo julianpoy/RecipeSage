@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { provideHttpClient } from "@angular/common/http";
-import { provideRouter, Router, withHashLocation } from "@angular/router";
+import { PreloadAllModules, provideRouter, Router, TitleStrategy, withHashLocation, withPreloading } from "@angular/router";
 import { IonicRouteStrategy, IonicModule } from "@ionic/angular";
 import { RouteReuseStrategy } from "@angular/router";
 
@@ -25,6 +25,7 @@ import { UnsavedChangesGuardService } from "./app/services/unsaved-changes-guard
 import { environment } from "./environments/environment";
 
 import { register as registerSwiperElements } from "swiper/element/bundle";
+import { CustomTitleStrategy } from "./app/services/title.service";
 registerSwiperElements();
 
 if (environment.production) {
@@ -34,7 +35,8 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
-    provideRouter(appRoutes, withHashLocation()),
+    provideRouter(appRoutes, withHashLocation(), withPreloading(PreloadAllModules)),
+    { provide: TitleStrategy, useClass: CustomTitleStrategy },
     importProvidersFrom(IonicModule.forRoot()),
     provideTranslate(),
     provideLoadingBar(),
