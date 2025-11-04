@@ -9,7 +9,14 @@ import {
 } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { provideHttpClient } from "@angular/common/http";
-import { PreloadAllModules, provideRouter, Router, TitleStrategy, withHashLocation, withPreloading } from "@angular/router";
+import {
+  PreloadAllModules,
+  provideRouter,
+  Router,
+  TitleStrategy,
+  withHashLocation,
+  withPreloading,
+} from "@angular/router";
 import { IonicRouteStrategy, IonicModule } from "@ionic/angular";
 import { RouteReuseStrategy } from "@angular/router";
 
@@ -35,7 +42,11 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
-    provideRouter(appRoutes, withHashLocation(), withPreloading(PreloadAllModules)),
+    provideRouter(
+      appRoutes,
+      withHashLocation(),
+      withPreloading(PreloadAllModules),
+    ),
     { provide: TitleStrategy, useClass: CustomTitleStrategy },
     importProvidersFrom(IonicModule.forRoot()),
     provideTranslate(),
