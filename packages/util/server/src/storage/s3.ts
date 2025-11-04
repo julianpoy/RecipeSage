@@ -13,7 +13,6 @@ import { Upload } from "@aws-sdk/lib-storage";
 import crypto from "crypto";
 import { PassThrough } from "stream";
 
-const AWS_BUCKET = process.env.AWS_BUCKET || "";
 const AWS_BUCKET_RECIPE_IMAGE = process.env.AWS_BUCKET_RECIPE_IMAGE || "";
 const AWS_BUCKET_PROFILE_IMAGE = process.env.AWS_BUCKET_PROFILE_IMAGE || "";
 const AWS_BUCKET_DATA_EXPORT = process.env.AWS_BUCKET_DATA_EXPORT || "";
@@ -23,11 +22,9 @@ const AWS_REGION = process.env.AWS_REGION || "us-west-2";
 
 if (
   process.env.STORAGE_TYPE === "s3" &&
-  (!AWS_BUCKET ||
-    !AWS_BUCKET_RECIPE_IMAGE ||
+  (!AWS_BUCKET_RECIPE_IMAGE ||
     !AWS_BUCKET_PROFILE_IMAGE ||
     !AWS_BUCKET_DATA_EXPORT ||
-    !AWS_BUCKET ||
     !AWS_ACCESS_KEY_ID ||
     !AWS_SECRET_ACCESS_KEY ||
     !AWS_REGION)
@@ -75,8 +72,9 @@ const generateKey = () => {
   return key;
 };
 
-const generateStorageLocation = (key: string) => {
-  const basePath = `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com`;
+const generateStorageLocation = (objectType: ObjectTypes, key: string) => {
+  const bucket = ObjectTypesToBucket[objectType];
+  const basePath = `https://${bucket}.s3.${AWS_REGION}.amazonaws.com`;
 
   return `${basePath}/${key}`;
 };
@@ -138,7 +136,7 @@ export const writeBuffer = async (
     bucket: ObjectTypesToBucket[objectType],
     key,
     acl: ObjectTypesToACL[objectType],
-    location: generateStorageLocation(key),
+    location: generateStorageLocation(objectType, key),
     etag: s3Response.ETag || "",
   };
 };
@@ -173,7 +171,7 @@ export const writeStream = async (
     bucket: ObjectTypesToBucket[objectType],
     key,
     acl: ObjectTypesToACL[objectType],
-    location: generateStorageLocation(key),
+    location: generateStorageLocation(objectType, key),
     etag: s3Response.ETag || "",
   };
 };
