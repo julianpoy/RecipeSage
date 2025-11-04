@@ -169,7 +169,7 @@
     "eslint-config-prettier": "^10.0.0",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
-    "jiti": "2.4.2",
+    "jiti": "2.6.1",
     "lint-staged": "^16.1.0",
     "nx": "22.0.1",
     "prettier": "^3.5.3",
