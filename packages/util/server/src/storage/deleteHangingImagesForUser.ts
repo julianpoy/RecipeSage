@@ -1,5 +1,5 @@
 import { prisma, PrismaTransactionClient } from "@recipesage/prisma";
-import { deleteObjects } from ".";
+import { deleteObjects, ObjectTypes } from ".";
 
 export const deleteHangingImagesForUser = async (
   userId: string,
@@ -21,7 +21,10 @@ export const deleteHangingImagesForUser = async (
     },
   });
 
-  await deleteObjects(hangingImages.map((image) => image.key));
+  await deleteObjects(
+    ObjectTypes.RECIPE_IMAGE,
+    hangingImages.map((image) => image.key),
+  );
 
   await tx.image.deleteMany({
     where: {

@@ -4,6 +4,7 @@ import {
   assistantMessageSummary,
 } from "@recipesage/prisma";
 import {
+  ChatCompletionMessageFunctionToolCall,
   ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
   ChatCompletionUserMessageParam,
@@ -227,7 +228,13 @@ export class Assistant {
         let recipeId: string | undefined = undefined;
         if (
           message.role === "tool" &&
-          toolCallsById[message.tool_call_id]?.function.name === "embedRecipe"
+          toolCallsById[message.tool_call_id] &&
+          toolCallsById[message.tool_call_id].type === "function" &&
+          (
+            toolCallsById[
+              message.tool_call_id
+            ] as ChatCompletionMessageFunctionToolCall
+          ).function.name === "embedRecipe"
         ) {
           const recipeToCreate = recipes.shift();
           if (!recipeToCreate) {

@@ -39,7 +39,6 @@ import {
   NotFound,
   PreconditionFailed,
 } from "../utils/errors.js";
-import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
 import { indexRecipes } from "@recipesage/util/server/search";
 
 router.get(
@@ -915,36 +914,6 @@ router.get(
     }
 
     res.status(200).json(user);
-  }),
-);
-
-router.delete(
-  "/",
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const userId = res.locals.session.userId;
-
-    await sequelize.transaction(async (transaction) => {
-      await Recipe.destroy({
-        where: {
-          userId,
-        },
-        transaction,
-      });
-
-      await deleteHangingImagesForUser(userId, transaction).catch((e) =>
-        Sentry.captureException(e),
-      );
-
-      await User.destroy({
-        where: {
-          id: userId,
-        },
-        transaction,
-      });
-    });
-
-    res.status(200).send("ok");
   }),
 );
 

@@ -87,10 +87,6 @@ export class ExportPage {
     this.showJobs += 5;
   }
 
-  getExportURL(format: ExportFormat) {
-    return this.recipeService.getExportURL(format);
-  }
-
   async export(format: ExportFormat) {
     const response = await this.trpcService.handle(
       this.trpcService.trpc.jobs.startExportJob.mutate({
@@ -113,6 +109,18 @@ export class ExportPage {
 
   exportAsPDF() {
     this.export(ExportFormat.PDF);
+  }
+
+  async downloadJob(job: JobSummary) {
+    if (job.status !== "SUCCESS") return;
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.jobs.getExportJobDownloadUrlById.query({
+        id: job.id,
+      }),
+    );
+    if (!response) return;
+    window.open(response.signedUrl, "_blank", 'rel="noopener"');
   }
 
   getJobFailureI18n(job: JobSummary) {

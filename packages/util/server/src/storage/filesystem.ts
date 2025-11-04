@@ -26,7 +26,7 @@ export const generateKey = (objectType: ObjectTypes): string => {
   return key;
 };
 
-export const generateStorageLocation = (
+const generateStorageLocation = (
   objectType: ObjectTypes,
   key: string,
 ): string => {
@@ -36,6 +36,13 @@ export const generateStorageLocation = (
   const location = `api/images/filesystem/${key}`;
 
   return location;
+};
+
+export const getSignedDownloadUrl = async (
+  objectType: ObjectTypes,
+  key: string,
+) => {
+  return generateStorageLocation(objectType, key);
 };
 
 // Write a file to the filesystem
@@ -96,7 +103,10 @@ export const writeStream = async (
 };
 
 // Delete a file from the filesystem
-export const deleteObject = async (key: string): Promise<void> => {
+export const deleteObject = async (
+  _objectType: ObjectTypes,
+  key: string,
+): Promise<void> => {
   try {
     await fs.unlink(key);
   } catch (e) {
@@ -105,11 +115,15 @@ export const deleteObject = async (key: string): Promise<void> => {
 };
 
 // Delete multiple files from the filesystem
-export const deleteObjects = async (keys: string[]): Promise<void> => {
-  await Promise.all(keys.map((key) => deleteObject(key)));
+export const deleteObjects = async (
+  _objectType: ObjectTypes,
+  keys: string[],
+): Promise<void> => {
+  await Promise.all(keys.map((key) => deleteObject(_objectType, key)));
 };
 
 export default {
+  getSignedDownloadUrl,
   writeBuffer,
   writeStream,
   deleteObject,

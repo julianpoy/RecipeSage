@@ -19,6 +19,7 @@
   "pages.app.nav.meals": "Meal Plans",
   "pages.app.nav.settings": "Settings",
 
+  "pages.welcome.tabTitle": "RecipeSage",
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
   "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of RecipeSage.com, a free recipe keeper, meal planner, and shopping list organizer for Web, iOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",
@@ -53,6 +54,7 @@
   "pages.welcome.description.cta.4": "Available on desktop and all mobile devices",
   "pages.welcome.description.cta.5": "Import recipes from any URL",
 
+  "pages.auth.tabTitle": "RecipeSage",
   "pages.auth.title.login": "Log In",
   "pages.auth.title.register": "Create an Account",
   "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with RecipeSage.com or any of the accounts located on the main site.",
@@ -87,6 +89,7 @@
   "pages.auth.forgot.alert.header": "Password Reset Triggered",
   "pages.auth.forgot.alert.message": "If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.",
 
+  "pages.home.tabTitle": "Recipes - RecipeSage",
   "pages.home.title.selectionMode": "{{count}} Selected",
   "pages.home.title.main": "My Recipes",
   "pages.home.title.inbox": "Recipe Inbox",
@@ -173,6 +176,7 @@
   "pages.homepopover.labelNull": "You don't have any labels. You can create labels on the recipe details page.",
   "pages.homepopover.unlabeled": "Unlabeled Only",
 
+  "pages.recipeDetails.tabTitle": "Recipe Details - RecipeSage",
   "pages.recipeDetails.pageTitle": "Recipe Details",
   "pages.recipeDetails.rating": "Rating",
   "pages.recipeDetails.source": "Source",
@@ -229,6 +233,10 @@
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
 
+  "pages.legal.tabTitle": "Legal, agreements and disclaimers - RecipeSage",
+  "pages.legal.title": "Legal, agreements and disclaimers",
+
+  "pages.about.tabTitle": "About & Support - RecipeSage",
   "pages.about.title": "About & Support",
   "pages.about.links.details": "About Me & RecipeSage",
   "pages.about.links.contact": "Contact",
@@ -238,6 +246,7 @@
   "pages.about.links.legal": "Legal, agreements and disclaimers",
   "pages.about.socialTitle": "Social Media",
 
+  "pages.aboutDetails.tabTitle": "More About Me & RecipeSage",
   "pages.aboutDetails.title": "More About Me & RecipeSage",
   "pages.aboutDetails.1.title": "A little about me",
   "pages.aboutDetails.1.1": "I'm a software developer in southern California. I do a lot of work on open source code and I spend a lot of time working on small projects.",
@@ -250,6 +259,7 @@
   "pages.aboutDetails.contribute": "Contribute page",
   "pages.aboutDetails.social": "Social Media",
 
+  "pages.contact.tabTitle": "Contact Me - RecipeSage",
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
   "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide:",
@@ -259,6 +269,7 @@
   "pages.contact.emailMe": "Although I prefer contact via Discord since I get a lot of email, you can email me for urgent or sensitive issues at",
   "pages.contact.socialTitle": "Social Media",
 
+  "pages.contribute.tabTitle": "Contribute - RecipeSage",
   "pages.contribute.title": "Contribute",
   "pages.contribute.subtitle": "Contribute to RecipeSage",
   "pages.contribute.mission": "My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.",
@@ -280,11 +291,13 @@
   "pages.contribute.minimum": "Unfortunately the minimum amount is ${{amount}} due to transaction fees - apologies",
   "pages.contribute.manage": "To manage an existing subscription, click here",
 
+  "pages.contributeThankYou.tabTitle": "Thank You - RecipeSage",
   "pages.contributeThankYou.title": "Thank You!",
   "pages.contributeThankYou.thanks": "Thank you for being a part of the RecipeSage family and helping to keep it alive!",
   "pages.contributeThankYou.bonus": "Bonus features should be unlocked for your account shortly.",
   "pages.contributeThankYou.questions": "Please feel free to contact me with any questions, concerns or comments.",
 
+  "pages.contributeCancel.tabTitle": "Contribute - RecipeSage",
   "pages.contributeCancel.title": "We need your help!",
   "pages.contributeCancel.cta.1": "RecipeSage is donation based - every contribution helps!",
   "pages.contributeCancel.cta.2": "Unfortunately, RecipeSage doesn't get many donations since it is a fairly small platform.",
@@ -292,6 +305,7 @@
   "pages.contributeCancel.cta.4": "Please reconsider - your contribution is truly appreciated!",
   "pages.contributeCancel.contribute": "Contribute",
 
+  "pages.downloadAndInstall.tabTitle": "Download & Install - RecipeSage",
   "pages.downloadAndInstall.title": "Download & Install",
   "pages.downloadAndInstall.subtitle": "RecipeSage Application",
   "pages.downloadAndInstall.done": "This will install RecipeSage as a native application on your device.",
@@ -323,6 +337,7 @@
   "pages.labelsPopover.options.selectMultipleLabels": "Select Multiple Labels",
   "pages.labelsPopover.options.unselectLabels": "Unselect All Labels",
 
+  "pages.labels.tabTitle": "Manage Labels & Categories - RecipeSage",
   "pages.labels.title": "Manage Labels & Categories",
   "pages.labels.selectionModeTitle": "{{count}} Selected",
   "pages.labels.label.sectionTitle": "Your Labels",
@@ -402,6 +417,7 @@
   "pages.manageLabelModal.merge.message": "All recipes in \"{{title}}\" will be relabeled with the target label instead, and the label \"{{title}}\" will be removed.",
   "pages.manageLabelModal.merge.placeholder": "Target label name",
 
+  "pages.mealPlan.tabTitle": "Meal Plan - RecipeSage",
   "pages.mealPlan.title": "Meal Plan - {{name}}",
   "pages.mealPlan.modal.emptyDays.header": "Empty day(s) selected",
   "pages.mealPlan.modal.emptyDays.message": "The day(s) you've selected do not contain any meal plan items. You'll need to select at least one day with meal plan items.",
@@ -462,6 +478,7 @@
   "pages.mealPlanPopover.delete.header": "Confirm Delete",
   "pages.mealPlanPopover.delete.message": "This will permanently remove this meal plan from your account. Note: If you're only a collaborator on this meal plan, it'll only be removed from your account. If you own this meal plan, it will be removed from all other collaborators accounts.",
 
+  "pages.mealPlans.tabTitle": "Meal Plans - RecipeSage",
   "pages.mealPlans.title": "Meal Plans",
   "pages.mealPlans.metadata.createdOn": "Created {{date}}",
   "pages.mealPlans.metadata.collaborators": "In collaboration with:",
@@ -492,6 +509,7 @@
   "pages.shareMealPlanModal.title": "Share Meal Plan",
   "pages.shareMealPlanModal.description": "The iCal/ICS link below can be used in almost any calendar program to sync your meal plan outside of RecipeSage",
 
+  "pages.assistant.tabTitle": "Cooking Assistant - RecipeSage",
   "pages.assistant.title": "Cooking Assistant",
   "pages.assistant.welcome.1": "Welcome to the RecipeSage cooking assistant!",
   "pages.assistant.welcome.2": "The cooking assistant is an AI model that can respond to your cooking questions and help create recipes.",
@@ -501,6 +519,7 @@
   "pages.assistant.messageLimit": "Maximum messages reached (sorry, it's costly!). Message count resets at 0:00GMT.",
   "pages.assistant.messageSize": "Your message is too long. Please send a shorter message.",
 
+  "pages.messageThread.tabTitle": "Conversation - RecipeSage",
   "pages.messageThread.title": "Conversation with {{name}}",
   "pages.messageThread.clickToOpen": "Click to open",
   "pages.messageThread.recipeDeleted": "Recipe deleted",
@@ -510,6 +529,7 @@
   "pages.messageThread.sent": "Sent!",
   "pages.messageThread.messagePlaceholder": "Message...",
 
+  "pages.messages.tabTitle": "Messages - RecipeSage",
   "pages.messages.title": "Messages",
   "pages.messages.history.you": "You",
   "pages.messages.history.sentRecipe": "Sent a recipe",
@@ -547,6 +567,7 @@
   "pages.addRecipeToShoppingListModal.add": "Add to List",
   "pages.addRecipeToShoppingListModal.newListSuccess": "Excellent! Now select the shopping list you just created.",
 
+  "pages.editRecipe.tabTitle": "Edit Recipe - RecipeSage",
   "pages.editRecipe.title.edit": "Edit Recipe",
   "pages.editRecipe.title.new": "New Recipe",
   "pages.editRecipe.showClipOptions": "Autofill recipe from...",
@@ -608,6 +629,7 @@
   "pages.printRecipeModal.template.halfSheetCols": "Half Sheet, Columns",
   "pages.printRecipeModal.template.halfSheetCompactNoCols": "Half Sheet, Compact, No Columns",
 
+  "pages.account.tabTitle": "Account & Credentials - RecipeSage",
   "pages.account.title": "Account & Credentials",
   "pages.account.description": "Here you can update and change aspects about your account",
   "pages.account.creds.title": "Credentials and Details",
@@ -660,6 +682,7 @@
   "pages.account.deleteAccount.header": "Delete Account & All Data",
   "pages.account.deleteAccount.message": "This is IRREVERSIBLE and will completely remove all of your data from RecipeSage. This may take several minutes.",
 
+  "pages.export.tabTitle": "Export - RecipeSage",
   "pages.export.title": "Export",
   "pages.export.description1": "Please select an export format to start an export job.",
   "pages.export.description2": "The exported file will contain all of your recipes in the selected format.",
@@ -680,6 +703,7 @@
   "pages.export.txt": "Export to plain text (.txt)",
   "pages.export.pdf": "Export to PDF (.zip containing .pdf files)",
 
+  "pages.import.tabTitle": "Import - RecipeSage",
   "pages.import.title": "Import",
   "pages.import.jobs": "Import Task Status",
   "pages.import.jobs.subtitle": "Imports continue to run even if you close the app once started",
@@ -723,24 +747,30 @@
   "pages.import.fileTypeWarning": "Warning! This filetype does not end with: {{ acceptableFiletypes }}. It may not work.",
   "pages.import.defaultLabel": "Import on {{dateStamp}}",
 
+  "pages.importJsonLD.tabTitle": "Import from JSON-LD - RecipeSage",
   "pages.importJsonLD.title": "Import Recipes from JSON-LD File",
   "pages.importJsonLD.description": "This will import a JSON-LD file (ends in .json) file into your RecipeSage account. Please note that JSON-LD is a very specific file format, and not all .json files have the correct contents to be compatible with this import method. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importCookmate.tabTitle": "Import from Cookmate - RecipeSage",
   "pages.importCookmate.title": "Import Recipes from Cookmate File",
   "pages.importCookmate.description": "This will import a Cookmate (ends in .mcb) file into your RecipeSage account. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importRecipeKeeper.tabTitle": "Import from Recipe Keeper - RecipeSage",
   "pages.importRecipeKeeper.title": "Import Recipes from Recipe Keeper Export",
   "pages.importRecipeKeeper.description": "This will import a RecipeKeeper database (ends in .zip) file into your RecipeSage account. Please note that not all .zip files are compatible, only those exported from RecipeKeeper. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importLivingCookbook.tabTitle": "Import from Living Cookbook - RecipeSage",
   "pages.importLivingCookbook.title": "Import Recipes from Living Cookbook",
   "pages.importLivingCookbook.description": "This will import a LivingCookbook file (ends in .lcb, .fdx, or .fdxz) file into your RecipeSage account. If you're having trouble with the import, consider re-exporting your database (in FDX or FDXZ format), or trying the import with the \"Include stock recipes\" option enabled. Please consider contributing if your file contains a large number of recipes or images.",
   "pages.importLivingCookbook.excludeImages": "Exclude recipe images (optional, not recommended)",
   "pages.importLivingCookbook.includeStock": "Include stock \"filler\" LCB recipes (optional, not recommended)",
   "pages.importLivingCookbook.includeTechniques": "Copy techniques to recipe notes (optional, not recommended)",
 
+  "pages.importPaprika.tabTitle": "Import from Paprika - RecipeSage",
   "pages.importPaprika.title": "Import Recipes from Paprika File",
   "pages.importPaprika.description": "This will import a Paprika export file (ends in .paprikarecipes) file into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importPepperplate.tabTitle": "Import from Pepperplate - RecipeSage",
   "pages.importPepperplate.title": "Import Recipes from Pepperplate",
   "pages.importPepperplate.description": "This will import all recipes from your Pepperplate account into your RecipeSage account. Please consider contributing if you have a large number of recipes or images.",
   "pages.importPepperplate.username": "Pepperplate Email/Username",
@@ -750,26 +780,33 @@
   "pages.importPepperplate.password": "Pepperplate Password",
   "pages.importPepperplate.password.helperText": "The password for your Pepperplate account",
 
+  "pages.importTextfiles.tabTitle": "Import from Text Files - RecipeSage",
   "pages.importTextfiles.title": "Import Recipes from Zip of Text Files",
   "pages.importTextfiles.description": "This will import a set of text files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importEnex.tabTitle": "Import from Evernote - RecipeSage",
   "pages.importEnex.title": "Import Recipes from Evernote (enex) File",
   "pages.importEnex.description": "This will import recipes from an Evernote export (ends in .enex) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importUrls.tabTitle": "Import from URLs - RecipeSage",
   "pages.importUrls.title": "Import Recipes from a list of URLs",
   "pages.importUrls.description": "This will attempt to import all of the URLs specified into your RecipeSage account using the autoclip functionality. Please keep in mind that some URLs may be unreachable or unparseable, and will not be imported. Please refer to the user guide for any issues. Please consider contributing if your file contains a large number of recipes or images.",
   "pages.importUrls.urls": "Recipe URLs",
   "pages.importUrls.urls.helperText": "Each URL must be on it's own separate line. Only URLs starting with http:// and https:// are supported.",
 
+  "pages.importCSV.tabTitle": "Import from CSV - RecipeSage",
   "pages.importCSV.title": "Import Recipes from a CSV file",
   "pages.importCSV.description": "This will import all of the recipes contained in a CSV file into your RecipeSage account. Many programs output this format, but the internal structure can be somewhat arbitrary. Please refer to the user guide if you have any issues, otherwise contact me. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importPDFs.tabTitle": "Import from PDFs - RecipeSage",
   "pages.importPDFs.title": "Import Recipes from PDF files",
   "pages.importPDFs.description": "This will import a set of PDF files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.importImages.tabTitle": "Import from Images - RecipeSage",
   "pages.importImages.title": "Import Recipes from image files",
   "pages.importImages.description": "This will import a set of image files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
+  "pages.settings.tabTitle": "Settings - RecipeSage",
   "pages.settings.title": "Settings",
   "pages.settings.section1.title": "Data & Account",
   "pages.settings.import": "Import Recipe Data",
@@ -842,6 +879,7 @@
   "pages.updateShoppingList.update": "Update",
   "pages.updateShoppingList.updateAndShare": "Update and Share",
 
+  "pages.shoppingList.tabTitle": "Shopping List",
   "pages.shoppingList.title": "Shopping List - {{title}}",
   "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
   "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
@@ -887,6 +925,7 @@
   "pages.shoppingListPopover.deleteList.header": "Confirm Delete",
   "pages.shoppingListPopover.deleteList.message": "This will permanently remove this shopping list from your account. Note: If you're only a collaborator on this list, it'll only be removed from your account. If you own this list, it will be removed from all other collaborators accounts.",
 
+  "pages.shoppingLists.tabTitle": "Shopping Lists - RecipeSage",
   "pages.shoppingLists.title": "Shopping Lists",
   "pages.shoppingLists.editIgnore": "Edit Item Ignore List",
   "pages.shoppingLists.created": "Created {{date}}",
@@ -931,6 +970,7 @@
   "pages.addProfileItem.tos": "By adding this item, you agree to the RecipeSage Sharing Policy",
   "pages.addProfileItem.done": "Done",
 
+  "pages.myProfile.tabTitle": "Edit Profile - RecipeSage",
   "pages.myProfile.title": "Edit Profile",
   "pages.myProfile.welcome": "Welcome to your profile!",
   "pages.myProfile.setup1": "Before you get started, there are a few things that you'll need to set up.",
@@ -958,6 +998,7 @@
   "pages.myProfile.share.unsaved.header": "Unsaved Changes",
   "pages.myProfile.share.unsaved.message": "You'll need to save your changes before you can view what your profile looks like.",
 
+  "pages.people.tabTitle": "People - RecipeSage",
   "pages.people.title": "People",
   "pages.people.nullState.1": "You haven't set up a profile.",
   "pages.people.nullState.2": "Creating a profile allows you to share collections of recipes with friends and the public.",
@@ -977,6 +1018,7 @@
   "pages.people.setup.message": "You'll need to setup your profile before you can go adding friends.",
   "pages.people.setup.confirm": "Setup",
 
+  "pages.profile.tabTitle": "Profile - RecipeSage",
   "pages.profile.title": "{{name}}'s Profile",
   "pages.profile.pinned": "Pinned Recipes & Labels",
   "pages.profile.nullState": "{{name}} hasn't added anything to their profile yet.",

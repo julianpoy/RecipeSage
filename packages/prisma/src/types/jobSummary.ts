@@ -32,7 +32,9 @@ export interface JobMeta {
   importLabels?: string[];
   exportType?: "txt" | "jsonld" | "pdf";
   exportScope?: "all" | "recipeids";
+  exportStorageBucket?: string;
   exportDownloadUrl?: string;
+  exportStorageKey?: string;
 }
 
 export type JobSummary = Omit<

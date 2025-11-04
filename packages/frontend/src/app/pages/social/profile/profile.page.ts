@@ -44,7 +44,7 @@ export class ProfilePage {
   recipeService = inject(RecipeService);
   userService = inject(UserService);
 
-  defaultBackHref: string = RouteMap.SocialPage.getPath();
+  defaultBackHref: string = RouteMap.PeoplePage.getPath();
   isSelfHost = IS_SELFHOST;
 
   handle: string;
@@ -56,7 +56,7 @@ export class ProfilePage {
     const handle = this.route.snapshot.paramMap.get("handle")?.substring(1);
 
     if (!handle) {
-      this.navCtrl.navigateRoot(RouteMap.SocialPage.getPath());
+      this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
       throw new Error("No handle specified");
     }
 

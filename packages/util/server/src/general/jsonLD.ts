@@ -14,8 +14,11 @@ type JsonLDImages =
     )[];
 
 export type JsonLD = {
+  "@context": string;
   "@type": "Recipe" | string;
+  identifier?: string;
   name?: string;
+  datePublished?: string;
   description?: string;
   recipeYield?: string | string[];
   prepTime?: string | string[];
@@ -42,49 +45,65 @@ export type JsonLD = {
     | (
         | string
         | {
+            "@type": string;
             name?: string;
             text?: string;
           }
       )[];
+  aggregateRating?:
+    | string
+    | {
+        "@type": string;
+        ratingValue?: string;
+        ratingCount?: string;
+      };
   creditText?: string;
   isBasedOn?: string;
   images?: JsonLDImages;
   image?: JsonLDImages;
 };
 
-export const recipeToJSONLD = (recipe: RecipeSummary) => ({
-  "@context": "http://schema.org",
-  "@type": "Recipe",
-  identifier: recipe.id,
-  datePublished: new Date(recipe.createdAt).toISOString(),
-  description: recipe.description,
-  image: (recipe.recipeImages || []).map(
-    (recipeImage) => recipeImage.image.location,
-  ),
-  name: recipe.title,
-  prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
-  recipeIngredient: parseIngredients(recipe.ingredients, 1, false).map((el) =>
-    el.isHeader ? `[${el.content}]` : el.content,
-  ),
-  recipeInstructions: parseInstructions(recipe.instructions).map((el) => ({
-    "@type": el.isHeader ? "HowToSection" : "HowToStep",
-    text: el.isHeader ? `[${el.content}]` : el.content,
-  })),
-  recipeYield: recipe.yield,
-  totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
-  recipeCategory: (recipe.recipeLabels || []).map(
-    (recipeLabel) => recipeLabel.label.title,
-  ),
-  creditText: recipe.source,
-  isBasedOn: recipe.url,
-  comment: [
-    {
-      "@type": "Comment",
-      name: "Author Notes",
-      text: recipe.notes,
-    },
-  ],
-});
+export const recipeToJSONLD = (recipe: RecipeSummary) =>
+  ({
+    "@context": "http://schema.org",
+    "@type": "Recipe",
+    identifier: recipe.id,
+    datePublished: new Date(recipe.createdAt).toISOString(),
+    description: recipe.description,
+    image: (recipe.recipeImages || []).map(
+      (recipeImage) => recipeImage.image.location,
+    ),
+    name: recipe.title,
+    prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
+    recipeIngredient: parseIngredients(recipe.ingredients, 1, false).map(
+      (el) => (el.isHeader ? `[${el.content}]` : el.content),
+    ),
+    recipeInstructions: parseInstructions(recipe.instructions).map((el) => ({
+      "@type": el.isHeader ? "HowToSection" : "HowToStep",
+      text: el.isHeader ? `[${el.content}]` : el.content,
+    })),
+    recipeYield: recipe.yield,
+    totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
+    recipeCategory: (recipe.recipeLabels || []).map(
+      (recipeLabel) => recipeLabel.label.title,
+    ),
+    creditText: recipe.source,
+    isBasedOn: recipe.url,
+    comment: [
+      {
+        "@type": "Comment",
+        name: "Author Notes",
+        text: recipe.notes,
+      },
+    ],
+    aggregateRating: recipe.rating
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: `${recipe.rating}`,
+          ratingCount: "5",
+        }
+      : undefined,
+  }) satisfies JsonLD;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getImageSrcFromSchema = (jsonLD: JsonLD): string | Buffer => {
@@ -275,7 +294,7 @@ const getLabelsFromSchema = (jsonLD: JsonLD) => {
   return [];
 };
 
-const getAuthorNotesComment = (jsonLD: JsonLD) => {
+const getAuthorNotesCommentFromSchema = (jsonLD: JsonLD) => {
   if (!jsonLD.comment || !jsonLD.comment[0]) return;
 
   if (Array.isArray(jsonLD.comment)) {
@@ -284,6 +303,18 @@ const getAuthorNotesComment = (jsonLD: JsonLD) => {
         return comment.text || "";
       }
     }
+  }
+};
+
+const getAggregateRatingFromSchema = (jsonLD: JsonLD) => {
+  if (!jsonLD.aggregateRating) return;
+
+  if (
+    typeof jsonLD.aggregateRating === "object" &&
+    jsonLD.aggregateRating.ratingCount
+  ) {
+    const ratingCount = parseInt(jsonLD.aggregateRating.ratingCount);
+    return isNaN(ratingCount) ? undefined : ratingCount;
   }
 };
 
@@ -298,9 +329,10 @@ export const jsonLDToStandardizedRecipeImportEntry = (
     totalTime: getTotalTimeFromSchema(jsonLD),
     source: jsonLD.creditText || "",
     url: jsonLD.isBasedOn || "",
-    notes: getAuthorNotesComment(jsonLD) || "",
+    notes: getAuthorNotesCommentFromSchema(jsonLD) || "",
     ingredients: getIngredientsFromSchema(jsonLD),
     instructions: getInstructionsFromSchema(jsonLD),
+    rating: getAggregateRatingFromSchema(jsonLD),
     folder: "main",
   },
   labels: getLabelsFromSchema(jsonLD),

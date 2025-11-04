@@ -192,12 +192,6 @@ export const RouteMap = {
     },
     path: "people",
   },
-  SocialPage: {
-    getPath() {
-      return `people`;
-    },
-    path: "people",
-  },
   ExportPage: {
     getPath() {
       return `/settings/export`;
