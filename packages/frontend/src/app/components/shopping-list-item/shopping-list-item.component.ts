@@ -49,8 +49,17 @@ export class ShoppingListItemComponent {
     required: true,
   })
   ownerName!: string | undefined;
+  @Input({
+    required: false,
+  })
+  showDeleteButton?: boolean;
+  @Input({
+    required: false,
+  })
+  hideRecategorizeButton?: boolean;
   @Output() completeToggle = new EventEmitter<null>();
   @Output() recategorize = new EventEmitter<string>();
+  @Output() deleteClick = new EventEmitter<null>();
 
   @ViewChild("moveToPopover") moveToPopover!: HTMLIonPopoverElement;
 

@@ -206,8 +206,11 @@
       [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
       [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
       [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
+      [showDeleteButton]="true"
+      [hideRecategorizeButton]="true"
       (completeToggle)="completeItems([item], false)"
       (recategorize)="recategorizeItems([item], $event)"
+      (deleteClick)="removeItems([item])"
     ></shopping-list-item>
   </ion-list>
 
