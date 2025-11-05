@@ -106,7 +106,7 @@ services:
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
   browserless:
-    image: ghcr.io/browserless/chromium:v2.24.3
+    image: ghcr.io/browserless/chromium:v2.38.2
     environment:
       - CONCURRENT=3
       - QUEUED=10
