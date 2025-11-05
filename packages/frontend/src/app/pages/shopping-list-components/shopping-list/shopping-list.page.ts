@@ -359,7 +359,12 @@ export class ShoppingListPage {
         {
           text: undo,
           handler: () => {
-            this._addItems(items);
+            this._addItems(
+              items.map((el) => ({
+                ...el,
+                completed: false,
+              })),
+            );
           },
         },
       ],

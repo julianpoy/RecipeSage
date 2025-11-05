@@ -22,6 +22,17 @@
     </div>
   </ion-checkbox>
   <ion-button
+    *ngIf="showDeleteButton"
+    slot="end"
+    style="icon-only"
+    fill="clear"
+    color="danger"
+    (click)="deleteClick.emit()"
+  >
+    <ion-icon slot="icon-only" icon="trash"></ion-icon>
+  </ion-button>
+  <ion-button
+    *ngIf="!hideRecategorizeButton"
     slot="end"
     style="icon-only"
     fill="clear"
