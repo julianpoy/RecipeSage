@@ -61,7 +61,7 @@
     "firebase-admin": "^13.2.0",
     "fraction.js": "^5.2.2",
     "fs-extra": "^11.3.0",
-    "google-auth-library": "^9.15.1",
+    "google-auth-library": "^10.5.0",
     "he": "^1.2.0",
     "https-proxy-agent": "^7.0.4",
     "ical-generator": "^8.1.1",
