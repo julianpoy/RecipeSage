@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import {
+  ClipFetchError,
   clipHtml,
   ClipTimeoutError,
   clipUrl,
@@ -22,10 +23,8 @@ router.get("/", async (req, res, next) => {
         imageURL: results.images[0] || "",
       });
     } catch (e) {
-      if (e instanceof ClipTimeoutError) {
-        return res
-          .status(400)
-          .send("Failed to reach target site, request timed out");
+      if (e instanceof ClipTimeoutError || e instanceof ClipFetchError) {
+        return res.status(400).send("Failed to reach target site");
       }
       throw e;
     }
@@ -44,10 +43,8 @@ router.post("/", async (req, res, next) => {
         const results = await clipUrl(url);
         return res.status(200).json(results);
       } catch (e) {
-        if (e instanceof ClipTimeoutError) {
-          return res
-            .status(400)
-            .send("Failed to reach target site, request timed out");
+        if (e instanceof ClipTimeoutError || e instanceof ClipFetchError) {
+          return res.status(400).send("Failed to reach target site");
         }
         throw e;
       }

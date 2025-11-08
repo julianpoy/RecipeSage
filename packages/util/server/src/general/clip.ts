@@ -242,6 +242,13 @@ export class ClipTimeoutError extends Error {
   }
 }
 
+export class ClipFetchError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipFetchError";
+  }
+}
+
 export const clipUrl = async (
   url: string,
 ): Promise<StandardizedRecipeImportEntry> => {
@@ -253,9 +260,17 @@ export const clipUrl = async (
     timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "10000"),
   }).catch((e) => {
     if (e instanceof AbortError) {
+      metrics.clipError.inc({
+        form: "url",
+        method: "timeout",
+      });
       throw new ClipTimeoutError();
     }
-    throw e;
+    metrics.clipError.inc({
+      form: "url",
+      method: "fetch",
+    });
+    throw new ClipFetchError();
   });
 
   const htmlDocument = await response.text();
