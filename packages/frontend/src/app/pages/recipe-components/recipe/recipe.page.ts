@@ -66,9 +66,9 @@ export class RecipePage {
     RecipeCompletionTrackerService,
   );
   private route = inject(ActivatedRoute);
-  private utilService = inject(UtilService);
+  utilService = inject(UtilService);
   private recipeService = inject(RecipeService);
-  private cookingToolbarService = inject(CookingToolbarService);
+  cookingToolbarService = inject(CookingToolbarService);
   private translate = inject(TranslateService);
   private trpcService = inject(TRPCService);
   private titleService = inject(Title);
@@ -616,7 +616,7 @@ export class RecipePage {
     this.wakeLockRequest = null;
   }
 
-  recipeLabelTrackBy(recipeLabel: RecipeSummary["recipeLabels"][0]) {
+  recipeLabelTrackBy(_: number, recipeLabel: { id: string }) {
     return recipeLabel.id;
   }
 }
