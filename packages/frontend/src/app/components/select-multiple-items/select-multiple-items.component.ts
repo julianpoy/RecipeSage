@@ -1,8 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService } from "~/services/util.service";
-import { Label, LabelService } from "~/services/label.service";
-import { ToastController, NavController } from "@ionic/angular";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 export interface SelectableItem {
@@ -19,12 +15,6 @@ export interface SelectableItem {
   imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectMultipleItemsComponent<T extends SelectableItem> {
-  loadingService = inject(LoadingService);
-  utilService = inject(UtilService);
-  labelService = inject(LabelService);
-  toastCtrl = inject(ToastController);
-  navCtrl = inject(NavController);
-
   searchText = "";
 
   @Input() enableCreateNew = false;

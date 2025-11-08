@@ -1,16 +1,11 @@
 import { Component, Input, inject } from "@angular/core";
 import {
-  NavController,
   ModalController,
   AlertController,
-  ToastController,
   ToggleCustomEvent,
 } from "@ionic/angular";
-import { Label, LabelService } from "~/services/label.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
-import { RecipeService } from "~/services/recipe.service";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import {
@@ -26,15 +21,10 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS, SelectMultipleItemsComponent],
 })
 export class ManageLabelGroupModalPage {
-  private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
   private loadingService = inject(LoadingService);
-  private toastCtrl = inject(ToastController);
   private modalCtrl = inject(ModalController);
   private alertCtrl = inject(AlertController);
-  private utilService = inject(UtilService);
-  private labelService = inject(LabelService);
-  private recipeService = inject(RecipeService);
   private trpcService = inject(TRPCService);
 
   @Input({

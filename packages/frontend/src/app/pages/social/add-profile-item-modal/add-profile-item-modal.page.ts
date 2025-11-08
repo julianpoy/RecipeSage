@@ -2,10 +2,10 @@ import { Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
 import { Recipe } from "../../../services/recipe.service";
-import { Label } from "../../../services/label.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectLabelComponent } from "../../../components/select-label/select-label.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import type { LabelSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-add-profile-item-modal",
@@ -27,7 +27,7 @@ export class AddProfileItemModalPage {
   itemTitle = "";
 
   selectedRecipe?: Recipe;
-  selectedLabel?: Label;
+  selectedLabel?: LabelSummary;
 
   onItemTypeChange(event: any) {
     this.itemType = event.detail.value;

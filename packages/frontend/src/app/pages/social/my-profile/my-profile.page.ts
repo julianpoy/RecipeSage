@@ -217,7 +217,6 @@ export class MyProfilePage {
       );
     }
 
-    console.log("updating", update);
     const updated = await this.userService.updateMyProfile(update);
     loading.dismiss();
     if (updated) {

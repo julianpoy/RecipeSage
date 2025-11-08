@@ -368,6 +368,8 @@
   "pages.newLabelItemModal.labelTitleInput": "Label Name",
   "pages.newLabelItemModal.labelTitleInputPlaceholder": "Enter label name",
   "pages.newLabelItemModal.labelTitleInputHint": "Many people start simple labels such as \"breakfast\", \"dessert\", or \"vegetarian\"",
+  "pages.newLabelItemModal.badLabelMessage": "Your title contains invalid characters",
+  "pages.newLabelItemModal.existingConflict": "A label with that title already exists",
 
   "pages.manageLabelGroupModal.title": "Manage Label Category",
   "pages.manageLabelGroupModal.groupTitle": "Label Category Name",

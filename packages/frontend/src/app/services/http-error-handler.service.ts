@@ -102,22 +102,46 @@ export class HttpErrorHandlerService {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode](error);
-      // Use provided catchall if passed
-    } else if (errorHandlers?.["*"]) {
+      return;
+    }
+
+    // Use provided catchall if passed
+    if (errorHandlers?.["*"]) {
       errorHandlers["*"](error);
-      // Fallback to default
-    } else if (
+      return;
+    }
+
+    // Fallback to default error handlers to present more friendly messages
+    if (
       this.defaultErrorHandlers[
         statusCode as keyof typeof this.defaultErrorHandlers
       ]
     ) {
+      // We don't care about these errors since they're relatively expected
+      if (statusCode !== 0 && statusCode !== 401) {
+        Sentry.captureException(error, {
+          extra: {
+            statusCode,
+          },
+        });
+        console.error(error);
+      } else {
+        console.warn(error);
+      }
       this.defaultErrorHandlers[
         statusCode as keyof typeof this.defaultErrorHandlers
       ](error);
-      // All other errors use 500 by default for generic (unexpected) error
-    } else {
-      this.defaultErrorHandlers[500](error);
+      return;
     }
+
+    // All other errors use 500 by default for generic (unexpected) error
+    Sentry.captureException(error, {
+      extra: {
+        statusCode,
+      },
+    });
+    console.error(error);
+    this.defaultErrorHandlers[500](error);
   }
 
   handleError(error: unknown, errorHandlers?: ErrorHandlers) {
@@ -128,7 +152,7 @@ export class HttpErrorHandlerService {
 
     // Error has been confirmed to have response property, treat as AxiosError
     const axiosError = error as AxiosError;
-    const statusCode = axiosError.response!.status;
+    const statusCode = axiosError.response?.status ?? 500;
 
     this._handleError(statusCode, error, errorHandlers);
   }
@@ -137,17 +161,7 @@ export class HttpErrorHandlerService {
     error: TRPCClientError<AppRouter>,
     errorHandlers?: ErrorHandlers,
   ) {
-    const statusCode = error.data?.httpStatus || 500;
-
-    // If it was code-based or API-based, we want to know about unexpected errors
-    if (statusCode >= 500) {
-      console.error(error);
-      try {
-        Sentry.captureException(error);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    const statusCode = error.data?.httpStatus ?? 500;
 
     this._handleError(statusCode, error, errorHandlers);
   }

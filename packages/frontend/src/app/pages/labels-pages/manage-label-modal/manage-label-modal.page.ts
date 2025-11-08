@@ -5,13 +5,12 @@ import {
   AlertController,
   ToastController,
 } from "@ionic/angular";
-import { Label, LabelService } from "~/services/label.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
-import { RecipeService } from "~/services/recipe.service";
 import type { LabelSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-manage-label-modal",
@@ -27,8 +26,7 @@ export class ManageLabelModalPage {
   modalCtrl = inject(ModalController);
   alertCtrl = inject(AlertController);
   utilService = inject(UtilService);
-  labelService = inject(LabelService);
-  recipeService = inject(RecipeService);
+  trpcService = inject(TRPCService);
 
   @Input({
     required: true,
@@ -56,11 +54,11 @@ export class ManageLabelModalPage {
       .toPromise();
     const okay = await this.translate.get("generic.okay").toPromise();
 
-    const response = await this.labelService.update(
-      this.label.id,
-      {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.labels.updateLabel.mutate({
+        id: this.label.id,
         title: newTitle,
-      },
+      }),
       {
         409: async () => {
           (
@@ -79,7 +77,7 @@ export class ManageLabelModalPage {
       },
     );
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.label.title = newTitle;
   }
@@ -141,11 +139,13 @@ export class ManageLabelModalPage {
   async _delete() {
     const loading = this.loadingService.start();
 
-    const response = await this.labelService.delete({
-      labelIds: [this.label.id],
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.labels.deleteLabel.mutate({
+        id: this.label.id,
+      }),
+    );
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss();
   }
@@ -153,11 +153,14 @@ export class ManageLabelModalPage {
   async _deleteWithRecipes() {
     const loading = this.loadingService.start();
 
-    const response = await this.recipeService.deleteByLabelIds({
-      labelIds: [this.label.id],
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.labels.deleteLabel.mutate({
+        id: this.label.id,
+        includeAttachedRecipes: true,
+      }),
+    );
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss();
   }
@@ -180,7 +183,7 @@ export class ManageLabelModalPage {
         {
           text: del,
           cssClass: "alertDanger",
-          handler: (response) => {
+          handler: () => {
             this._delete();
           },
         },
@@ -216,7 +219,7 @@ export class ManageLabelModalPage {
         {
           text: del,
           cssClass: "alertDanger",
-          handler: (response) => {
+          handler: () => {
             this._deleteWithRecipes();
           },
         },
@@ -229,44 +232,45 @@ export class ManageLabelModalPage {
   async _merge(targetTitle: string) {
     const loading = this.loadingService.start();
 
-    const labelResults = await this.labelService.fetch({
-      title: targetTitle,
-    });
-    if (!labelResults.success) return;
+    const targetLabel = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabelByTitle.query({
+        title: targetTitle,
+      }),
+      {
+        404: async () => {
+          const header = await this.translate
+            .get("pages.manageLabelModal.notFound.header")
+            .toPromise();
+          const subHeader = await this.translate
+            .get("pages.manageLabelModal.notFound.subHeader", {
+              name: targetTitle,
+            })
+            .toPromise();
+          const message = await this.translate
+            .get("pages.manageLabelModal.notFound.message")
+            .toPromise();
+          const okay = await this.translate.get("generic.okay").toPromise();
 
-    const labelsForTargetTitle = labelResults.data;
+          const notFoundAlert = await this.alertCtrl.create({
+            header,
+            subHeader,
+            message,
+            buttons: [
+              {
+                text: okay,
+                role: "cancel",
+              },
+            ],
+          });
 
-    if (labelsForTargetTitle.length === 0) {
-      const header = await this.translate
-        .get("pages.manageLabelModal.notFound.header")
-        .toPromise();
-      const subHeader = await this.translate
-        .get("pages.manageLabelModal.notFound.subHeader", { name: targetTitle })
-        .toPromise();
-      const message = await this.translate
-        .get("pages.manageLabelModal.notFound.message")
-        .toPromise();
-      const okay = await this.translate.get("generic.okay").toPromise();
-
-      const notFoundAlert = await this.alertCtrl.create({
-        header,
-        subHeader,
-        message,
-        buttons: [
-          {
-            text: okay,
-            role: "cancel",
-          },
-        ],
-      });
-
-      await notFoundAlert.present();
+          await notFoundAlert.present();
+        },
+      },
+    );
+    if (!targetLabel) {
       loading.dismiss();
-
       return;
     }
-
-    const targetLabel = labelsForTargetTitle[0];
 
     if (targetLabel.id === this.label.id) {
       const header = await this.translate
@@ -296,13 +300,15 @@ export class ManageLabelModalPage {
       return;
     }
 
-    const mergeResponse = await this.labelService.merge({
-      sourceLabelId: this.label.id,
-      targetLabelId: targetLabel.id,
-    });
-    if (!mergeResponse.success) return;
+    const mergeResponse = await this.trpcService.handle(
+      this.trpcService.trpc.labels.mergeLabels.mutate({
+        sourceId: this.label.id,
+        targetId: targetLabel.id,
+      }),
+    );
 
     loading.dismiss();
+    if (!mergeResponse) return;
 
     const header = await this.translate
       .get("pages.manageLabelModal.mergeComplete.header")

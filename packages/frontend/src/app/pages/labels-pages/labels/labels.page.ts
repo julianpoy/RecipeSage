@@ -1,8 +1,6 @@
 import { Component, inject } from "@angular/core";
 import {
-  NavController,
   AlertController,
-  ToastController,
   PopoverController,
   ModalController,
 } from "@ionic/angular";
@@ -11,7 +9,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 
-import { LabelService, Label } from "~/services/label.service";
 import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
 import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
 import { PreferencesService } from "~/services/preferences.service";
@@ -30,14 +27,11 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class LabelsPage {
-  private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
   private popoverCtrl = inject(PopoverController);
   private loadingService = inject(LoadingService);
   private alertCtrl = inject(AlertController);
   private modalCtrl = inject(ModalController);
-  private toastCtrl = inject(ToastController);
-  private labelService = inject(LabelService);
   private utilService = inject(UtilService);
   private preferencesService = inject(PreferencesService);
   private trpcService = inject(TRPCService);
@@ -203,10 +197,13 @@ export class LabelsPage {
           cssClass: "alertDanger",
           handler: async () => {
             const loading = this.loadingService.start();
-            const response = await this.labelService.delete({
-              labelIds: this.selectedLabelIds,
-            });
-            if (!response.success) return loading.dismiss();
+            const response = await this.trpcService.handle(
+              this.trpcService.trpc.labels.deleteLabels.mutate({
+                ids: this.selectedLabelIds,
+                includeAttachedRecipes: false,
+              }),
+            );
+            if (!response) return loading.dismiss();
 
             this.clearSelectedLabels();
 

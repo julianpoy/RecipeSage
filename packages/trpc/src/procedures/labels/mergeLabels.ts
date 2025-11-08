@@ -7,8 +7,8 @@ import { TRPCError } from "@trpc/server";
 export const mergeLabels = publicProcedure
   .input(
     z.object({
-      sourceId: z.string().min(1).max(100),
-      targetId: z.string().min(1).max(100),
+      sourceId: z.uuid(),
+      targetId: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
