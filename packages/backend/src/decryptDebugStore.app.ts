@@ -4,11 +4,10 @@ import { program } from "commander";
 import { decryptWithRSAKey } from "@recipesage/util/server/general";
 
 program
-  .command("decrypt")
-  .option("--input <input>", "Input filename")
-  .option("--output <output>", "Output filename")
+  .requiredOption("--input <input>", "Input filename")
+  .requiredOption("--output <output>", "Output filename")
+  .parse(process.argv)
   .action((options) => {
-    console.log(options);
     return run({
       input: options.input,
       output: options.output,
@@ -38,7 +37,9 @@ const run = async (options: { input: string; output: string }) => {
 
   const text = decryptedBlob.toString();
 
-  await writeFile(options.output, text);
+  const prettyJson = JSON.stringify(JSON.parse(text), undefined, 2);
+
+  await writeFile(options.output, prettyJson);
 
   console.log("Done!");
 

@@ -26,12 +26,11 @@ describe("updateslabel", () => {
         },
       });
 
-      const response = await trpc.labels.updateLabel.mutate({
+      await trpc.labels.updateLabel.mutate({
         id: label.id,
         title: "fish",
         labelGroupId: null,
       });
-      expect(response.title).toEqual("fish");
 
       const updatedLabel = await prisma.label.findUnique({
         where: {

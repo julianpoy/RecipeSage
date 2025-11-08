@@ -1,13 +1,9 @@
 import { Injectable, inject } from "@angular/core";
-import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
-import {
-  HttpErrorHandlerService,
-  ErrorHandlers,
-} from "./http-error-handler.service";
+import { ErrorHandlers } from "./http-error-handler.service";
 
 import { Recipe } from "./recipe.service";
-import { Label } from "./label.service";
+import type { LabelSummary } from "@recipesage/prisma";
 
 export interface ProfileItem {
   title: string;
@@ -15,7 +11,7 @@ export interface ProfileItem {
   visibility: "public" | "friends-only";
   order: number;
   recipe: Partial<Recipe>;
-  label: Partial<Label>;
+  label: Partial<LabelSummary>;
 }
 
 export interface EditProfileItem {

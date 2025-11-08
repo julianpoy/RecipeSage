@@ -1,10 +1,7 @@
 import { Component, ViewChild, Input, inject } from "@angular/core";
-import { ToastController, IonSelect, PopoverController } from "@ionic/angular";
+import { IonSelect, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { Label, LabelService } from "~/services/label.service";
-import { UtilService } from "~/services/util.service";
-import { QuickTutorialService } from "~/services/quick-tutorial.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
 import {
@@ -23,13 +20,9 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   imports: [...SHARED_UI_IMPORTS],
 })
 export class HomeSearchFilterPopoverPage {
-  translate = inject(TranslateService);
-  popoverCtrl = inject(PopoverController);
-  toastCtrl = inject(ToastController);
-  utilService = inject(UtilService);
-  preferencesService = inject(PreferencesService);
-  quickTutorialService = inject(QuickTutorialService);
-  labelService = inject(LabelService);
+  private translate = inject(TranslateService);
+  private popoverCtrl = inject(PopoverController);
+  private preferencesService = inject(PreferencesService);
 
   @ViewChild("filterByLabelSelect", { static: true })
   filterByLabelSelect?: IonSelect;

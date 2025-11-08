@@ -12,17 +12,14 @@ import { TranslateService } from "@ngx-translate/core";
 import { linkifyStr } from "~/utils/linkify";
 import {
   RecipeService,
-  Recipe,
   ParsedInstruction,
   ParsedIngredient,
   ParsedNote,
   RecipeFolderName,
 } from "~/services/recipe.service";
-import { Label, LabelService } from "~/services/label.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
 import { WakeLockService } from "~/services/wakelock.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
@@ -53,27 +50,27 @@ import { RatingComponent } from "../../../components/rating/rating.component";
   selector: "page-recipe",
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],
-  providers: [RecipeService, LabelService],
+  providers: [RecipeService],
   imports: [...SHARED_UI_IMPORTS, RatingComponent],
 })
 export class RecipePage {
-  navCtrl = inject(NavController);
-  alertCtrl = inject(AlertController);
-  toastCtrl = inject(ToastController);
-  modalCtrl = inject(ModalController);
-  popoverCtrl = inject(PopoverController);
-  loadingService = inject(LoadingService);
-  preferencesService = inject(PreferencesService);
-  wakeLockService = inject(WakeLockService);
-  recipeCompletionTrackerService = inject(RecipeCompletionTrackerService);
-  route = inject(ActivatedRoute);
+  private navCtrl = inject(NavController);
+  private alertCtrl = inject(AlertController);
+  private toastCtrl = inject(ToastController);
+  private modalCtrl = inject(ModalController);
+  private popoverCtrl = inject(PopoverController);
+  private loadingService = inject(LoadingService);
+  private preferencesService = inject(PreferencesService);
+  private wakeLockService = inject(WakeLockService);
+  private recipeCompletionTrackerService = inject(
+    RecipeCompletionTrackerService,
+  );
+  private route = inject(ActivatedRoute);
   utilService = inject(UtilService);
-  recipeService = inject(RecipeService);
-  labelService = inject(LabelService);
+  private recipeService = inject(RecipeService);
   cookingToolbarService = inject(CookingToolbarService);
-  capabilitiesService = inject(CapabilitiesService);
-  translate = inject(TranslateService);
-  trpcService = inject(TRPCService);
+  private translate = inject(TranslateService);
+  private trpcService = inject(TRPCService);
   private titleService = inject(Title);
 
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
@@ -619,10 +616,7 @@ export class RecipePage {
     this.wakeLockRequest = null;
   }
 
-  recipeLabelTrackBy(
-    idx: number,
-    recipeLabel: RecipeSummary["recipeLabels"][0],
-  ) {
+  recipeLabelTrackBy(_: number, recipeLabel: { id: string }) {
     return recipeLabel.id;
   }
 }

@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getLabelsByUserId = publicProcedure
   .input(
     z.object({
-      userIds: z.array(z.string()),
+      userIds: z.array(z.uuid()),
     }),
   )
   .query(async ({ ctx, input }) => {

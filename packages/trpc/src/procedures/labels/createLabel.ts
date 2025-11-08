@@ -10,7 +10,7 @@ export const createLabel = publicProcedure
   .input(
     z.object({
       title: z.string().min(1).max(100),
-      labelGroupId: z.string().min(1).max(100).nullable(),
+      labelGroupId: z.uuid().nullable(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -55,12 +55,19 @@ export const createLabel = publicProcedure
       }
     }
 
-    const _label = await prisma.label.create({
-      data: {
+    const _label = await prisma.label.upsert({
+      where: {
+        userId_title: {
+          title,
+          userId: session.userId,
+        },
+      },
+      create: {
         title,
         userId: session.userId,
         labelGroupId: input.labelGroupId,
       },
+      update: {},
     });
 
     const label = await prisma.label.findUniqueOrThrow({

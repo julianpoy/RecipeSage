@@ -1,14 +1,13 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const deleteLabel = publicProcedure
+export const deleteLabels = publicProcedure
   .input(
     z.object({
-      id: z.uuid(),
+      ids: z.array(z.uuid()).min(1).max(100),
       includeAttachedRecipes: z.boolean().optional(),
     }),
   )
@@ -16,17 +15,27 @@ export const deleteLabel = publicProcedure
     const session = ctx.session;
     validateTrpcSession(session);
 
-    const label = await prisma.label.findUnique({
+    const labelIdsToDelete = new Set(input.ids);
+
+    const labels = await prisma.label.findMany({
       where: {
         userId: session.userId,
-        id: input.id,
+        id: {
+          in: [...labelIdsToDelete],
+        },
       },
-      ...labelSummary,
+      select: {
+        id: true,
+      },
     });
 
-    if (!label) {
+    const labelIdsWithPermissions = new Set(labels.map((el) => el.id));
+
+    if (
+      labelIdsToDelete.symmetricDifference(labelIdsWithPermissions).size !== 0
+    ) {
       throw new TRPCError({
-        message: "Label not found",
+        message: "One of the labels you specified was not found",
         code: "NOT_FOUND",
       });
     }
@@ -36,7 +45,9 @@ export const deleteLabel = publicProcedure
         if (input.includeAttachedRecipes) {
           const recipeLabels = await tx.recipeLabel.findMany({
             where: {
-              labelId: input.id,
+              labelId: {
+                in: input.ids,
+              },
             },
             select: {
               recipeId: true,
@@ -52,15 +63,17 @@ export const deleteLabel = publicProcedure
           });
         }
 
-        await tx.label.delete({
+        await tx.label.deleteMany({
           where: {
             userId: session.userId,
-            id: input.id,
+            id: {
+              in: input.ids,
+            },
           },
         });
       },
       {
-        timeout: 30000,
+        timeout: 60000,
       },
     );
 

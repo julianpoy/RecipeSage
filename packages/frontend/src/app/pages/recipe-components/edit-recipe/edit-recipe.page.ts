@@ -476,6 +476,23 @@ export class EditRecipePage {
     return url.protocol.startsWith("http");
   }
 
+  isUnsupportedSiteUrl(input: string) {
+    let url: URL;
+
+    const regex = /youtube\.com|tiktok\.com|facebook\.com|instagram\.com/;
+
+    // Fallback for browsers without URL constructor
+    if (!URL) return !!input.match(regex);
+
+    try {
+      url = new URL(input);
+    } catch (err) {
+      return false;
+    }
+
+    return !!url.host.match(regex);
+  }
+
   getSelfhostErrorHandlers(): ErrorHandlers {
     return IS_SELFHOST
       ? {
@@ -789,6 +806,10 @@ export class EditRecipePage {
     const invalidUrl = await this.translate
       .get("pages.editRecipe.clipURL.invalidUrl")
       .toPromise();
+    const warning = await this.translate.get("generic.warning").toPromise();
+    const unsupportedSiteUrl = await this.translate
+      .get("pages.editRecipe.clipURL.unsupportedSiteUrl")
+      .toPromise();
 
     const clipInputId = "autoclip-prompt-url-input";
     const clipPrompt = await this.alertCtrl.create({
@@ -819,6 +840,23 @@ export class EditRecipePage {
                   buttons: [
                     {
                       text: okay,
+                    },
+                  ],
+                })
+              ).present();
+              return;
+            }
+            if (this.isUnsupportedSiteUrl(url)) {
+              (
+                await this.alertCtrl.create({
+                  header: warning,
+                  message: unsupportedSiteUrl,
+                  buttons: [
+                    {
+                      text: okay,
+                      handler: () => {
+                        this._clipFromUrl(data.url);
+                      },
                     },
                   ],
                 })

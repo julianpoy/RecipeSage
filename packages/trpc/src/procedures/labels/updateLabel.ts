@@ -1,21 +1,27 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const updateLabel = publicProcedure
   .input(
     z.object({
-      id: z.string().min(1).max(100),
-      title: z.string().min(1).max(100),
-      labelGroupId: z.string().min(1).max(100).nullable(),
+      id: z.uuid(),
+      title: z.string().min(1).max(100).optional(),
+      labelGroupId: z.uuid().nullable().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);
+
+    if (!input.title && input.labelGroupId === undefined) {
+      throw new TRPCError({
+        message: "You must provide at least one of: title, labelGroupId",
+        code: "BAD_REQUEST",
+      });
+    }
 
     const existingLabel = await prisma.label.findFirst({
       where: {
@@ -58,13 +64,5 @@ export const updateLabel = publicProcedure
       },
     });
 
-    const label = await prisma.label.findUniqueOrThrow({
-      where: {
-        userId: session.userId,
-        id: input.id,
-      },
-      ...labelSummary,
-    });
-
-    return label;
+    return "Ok";
   });
