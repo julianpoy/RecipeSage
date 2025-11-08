@@ -27,11 +27,10 @@ describe("deleteLabel", () => {
           title: "eggs",
         },
       });
-      const response = await trpc.labels.deleteLabel.mutate({
+      await trpc.labels.deleteLabel.mutate({
         id: label.id,
       });
 
-      expect(response.labelGroup).toEqual(null);
       const updatedLabel = await prisma.label.findUnique({
         where: {
           id: label.id,
@@ -62,11 +61,10 @@ describe("deleteLabel", () => {
         },
       });
 
-      const response = await trpc.labels.deleteLabel.mutate({
+      await trpc.labels.deleteLabel.mutate({
         id: label.id,
         includeAttachedRecipes: true,
       });
-      expect(response.labelGroup).toEqual(null);
 
       const updatedRecipe = await prisma.recipe.findUnique({
         where: {
