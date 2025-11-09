@@ -1,8 +1,11 @@
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { Resource } from "@opentelemetry/resources";
-import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { resourceFromAttributes } from "@opentelemetry/resources";
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
 import { PrismaInstrumentation } from "@prisma/instrumentation";
 
 const traceExporter = new OTLPTraceExporter({
@@ -14,9 +17,9 @@ const sdk = new NodeSDK({
     getNodeAutoInstrumentations(),
     new PrismaInstrumentation(),
   ],
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: "recipesage_api",
-    [SemanticResourceAttributes.SERVICE_VERSION]: process.env.VERSION,
+  resource: resourceFromAttributes({
+    [ATTR_SERVICE_NAME]: "recipesage_api",
+    [ATTR_SERVICE_VERSION]: process.env.VERSION,
   }),
 });
 
