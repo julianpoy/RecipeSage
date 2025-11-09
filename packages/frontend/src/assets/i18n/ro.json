@@ -609,5 +609,17 @@
     "pages.messages.tabTitle": "Mesaje - RecipeSage",
     "pages.editRecipe.tabTitle": "Editează rețeta - RecipeSage",
     "pages.account.tabTitle": "Cont și acreditări - RecipeSage",
-    "pages.account.stats.lastLogin": "Ultima autentificare"
+    "pages.account.stats.lastLogin": "Ultima autentificare",
+    "pages.import.status.run": "Se importă rețetele și imaginile...",
+    "pages.import.jobs.status.fail.badCredentials": "Credențialele sunt incorecte.",
+    "pages.import.status.fail": "Importarea a eșuat.",
+    "pages.import.jobs.status.fail.badFile": "Format incompatibil.",
+    "pages.import.jobs.status.fail.emptyFile": "Nu se poate recunoaște nicio rețetă în importul adus.",
+    "pages.import.step": "Pasul {{number}}",
+    "pages.import.jobs.status.fail.unknown": "A apărut o eroare necunoscută. Vă rog să mă contactați.",
+    "pages.import.uploading": "Încărcare în curs, nu părăsi această pagină...",
+    "pages.import.uploading.hint": "Progres încărcare fișier",
+    "pages.import.processing": "Se procesează & se importă rețetele...",
+    "pages.import.status.success": "Import finalizat cu succes.",
+    "pages.import.description1": "RecipeSage acceptă importul din Pepperplate, Living Cookbook și Paprika."
 }
