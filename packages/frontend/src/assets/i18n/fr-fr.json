@@ -1084,5 +1084,9 @@
     "pages.myProfile.tabTitle": "Modifier le Profile - RecipeSage",
     "components.shoppingListItem.customCategory.title": "Déplacer dans Catégorie Personnalisée",
     "components.shoppingListItem.moveToCustom": "Catégorie Personnalisée",
-    "components.shoppingListItem.customCategory.placeholder": "Nom de Catégorie..."
+    "components.shoppingListItem.customCategory.placeholder": "Nom de Catégorie...",
+    "pages.newLabelItemModal.badLabelMessage": "Le titre contient des caractères invalides",
+    "pages.newLabelItemModal.existingConflict": "Une étiquette avec ce titre existe déjà",
+    "pages.editRecipe.clipURL.unsupportedSiteUrl": "Des sites comme YouTube, TikTok, etc. ne réussissent généralement pas, puisqu'ils bloquent les robots. Je recommande l'utilisation de l'extension web ou de prendre une capture d'écran et d'utiliser l'importation par image.",
+    "generic.warning": "Attention"
 }
