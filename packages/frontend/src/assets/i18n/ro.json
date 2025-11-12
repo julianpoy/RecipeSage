@@ -162,7 +162,7 @@
     "pages.homepopover.labelNull": "Nicio etichetă creată. Poți crea etichete în pagina cu detaliile rețetei.",
     "pages.homepopover.warning.optionsHidden": "Notă: unele opțiuni sunt ascunse în această colecție partajată",
     "pages.welcome.description.2": "Capturează și salvează rapid rețete de pe orice site web prin folosirea linkului URL dorit. Sincronizează rețetele, planurile de mese și listele de cumpărături între toate dispozitivele tale. Partajează rețetele, listele de cumpărături și planurile de mese cu familia și prietenii.",
-    "pages.welcome.description.features.7.description": "Acceptă Pepperplate, Living Cookbook și Paprika",
+    "pages.welcome.description.features.7.description": "Funcționează cu Pepperplate, Living Cookbook, și Paprika",
     "pages.auth.button.loginInstead": "Conectează-te în schimb",
     "pages.homepopover.options.layout.compact": "Compact",
     "pages.homepopover.options.showLabelToggles": "Arată opțiunile de afișare a etichetelor",
@@ -956,7 +956,7 @@
     "pages.importUrls.description": "Se încearcă importarea tuturor URL-urile specificate în contul tău RecipeSage folosind funcția de autoclip. Reține că unele URL-uri pot fi inaccesibile sau imposibil de analizat și nu vor fi importate. Consultă ghidul utilizatorului pentru orice probleme. Te rog să iei în considerare contribuirea la aplicație dacă fișierul tău conține un număr mare de rețete sau imagini.",
     "pages.importPDFs.description": "Se va importa un set de fișiere PDF comprimate într-un fișier zip (care se termină în .zip) în contul tău RecipeSage. Consultă ghidul utilizatorului pentru a crea un fișier în formatul corect pentru a fi importat aici. Te rog să iei în considerare contribuirea la aplicație dacă fișierul tău conține un număr mare de rețete sau imagini.",
     "pages.importImages.description": "Se va importa un set de fișiere imagine comprimate într-un fișier zip (care se termină în .zip) în contul tău RecipeSage. Consultă ghidul utilizatorului pentru a crea un fișier în formatul corect pentru a fi importat aici. Te rog să iei în considerare contribuirea la aplicație dacă fișierul tău conține un număr mare de rețete sau imagini.",
-    "pages.settings.oled.header": "Negru (OLED)",
+    "pages.settings.oled.header": "Atenționare negru (OLED)",
     "pages.shoppingListPopover.sortBy.title": "Nume",
     "pages.shoppingListPopover.sortBy.createdDesc": "Creat (cele mai noi mai întâi)",
     "pages.shoppingListPopover.sortBy": "Sortează după",
@@ -1084,5 +1084,9 @@
     "pages.shoppingLists.title": "Liste de cumpărături",
     "pages.myProfile.setup.name": "În primul rând, alege numele care urmează să fie afișat pe profilul tău.",
     "pages.myProfile.setup2": "Acum, alege handle-ul pentru profilul tău, de exemplu: @recipesage",
-    "generic.save": "Salvează"
+    "generic.save": "Salvează",
+    "pages.shoppingListIgnoreModal.description": "Elementele enumerate aici vor fi excluse automat atunci când adaugi o rețetă la o listă de cumpărături. Această funcție este deosebit de utilă pentru ingrediente precum sarea, pe care probabil nu ai nevoie să o adaugi de fiecare dată când adaugi un articol la o listă de cumpărături.",
+    "services.quickTutorial.pinnedRecipes.message": "Rețeta este acum fixată! Fixarea rețetelor oferă o modalitate rapidă de a comuta între mai multe rețete în timp ce gătești. Rețetele fixate apar în bara de instrumente din partea de jos a ecranului. Vei vedea o bulă cu imaginea rețetei și prima literă a titlului rețetei. Rețetele fixate vor rămâne deschise până când sunt nefixate sau până când închideți aplicația.",
+    "pages.shoppingListIgnoreModal.instructions": "Fiecare intrare ar trebui să fie pe propriul rând. Intrările vor corespunde unui ingredient dacă ingredientul conține orice parte a rândului. Dacă scrii \"sare\", se va potrivi cu \"1 lingură de sare de mare fin măcinată\".",
+    "services.quickTutorial.splitPaneView.message": "Vizualizarea împărțită în panouri este vizibilă doar pe dispozitive cu ecrane mari (laptopuri, tablete mari etc.). Când vizualizarea împărțită în panouri este activată, meniul lateral va fi întotdeauna vizibil. Această caracteristică este utilă pentru optimizarea experienței pe dispozitive mai mari."
 }
