@@ -1,5 +1,5 @@
 {
-    "pages.app.oldBrowserAlert.header": "Navegador no compatible",
+    "pages.app.oldBrowserAlert.header": "El navegador no es compatible",
     "pages.app.oldBrowserAlert.message": "Parece que estás utilizando un navegador antiguo que no es compatible. Es posible que algunas funciones no funcionen o estén dañadas. Por favor, cambia a un navegador moderno como Firefox para una funcionalidad completa.",
     "pages.app.nav.welcome": "Bienvenido",
     "pages.app.nav.login": "Iniciar sesión",
@@ -951,5 +951,14 @@
     "pages.account.deleteAllRecipes.success.header": "Datos de receta eliminados",
     "pages.export.jobs.status.fail.unknown": "Un error inesperado ha ocurrido. Por favor contacta al desarrollador.",
     "pages.export.status.success": "Exportado de datos completado con éxito. Haz clic para descargar.",
-    "pages.import.jobCreated.message": "Los datos están siendo importados en tu cuenta. Puedes seguir el estado de la tarea en la página de importado. No verás nada en tu cuenta hasta que la tarea complete."
+    "pages.import.jobCreated.message": "Los datos están siendo importados en tu cuenta. Puedes seguir el estado de la tarea en la página de importado. No verás nada en tu cuenta hasta que la tarea complete.",
+    "pages.auth.tabTitle": "RecipeSage",
+    "pages.aboutDetails.2.2": "Soy un defensor del software de código abierto y quiero que RecipeSage sea gratuito. Todos deberían poder acceder y utilizar este software, y nunca quiero someter a los usuarios de RecipeSage a anuncios ni cobrar por el uso de la aplicación.",
+    "pages.home.tabTitle": "Recetas - RecipeSage",
+    "pages.recipeDetails.tabTitle": "Detalles de la receta - RecipeSage",
+    "pages.welcome.tabTitle": "RecipeSage",
+    "pages.legal.tabTitle": "Legal, acuerdos y exenciones de responsabilidad - RecipeSage",
+    "pages.legal.title": "Legales, acuerdos y exenciones de responsabilidad",
+    "pages.about.tabTitle": "Acerca de y Soporte - RecipeSage",
+    "pages.aboutDetails.tabTitle": "Más sobre mí y RecipeSage"
 }
