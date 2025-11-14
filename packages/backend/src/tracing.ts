@@ -10,6 +10,9 @@ import { PrismaInstrumentation } from "@prisma/instrumentation";
 
 const traceExporter = new OTLPTraceExporter({
   url: process.env.OTEL_COLLECTOR_URI,
+  headers: process.env.OTEL_COLLECTOR_HEADERS
+    ? JSON.parse(process.env.OTEL_COLLECTOR_HEADERS)
+    : undefined,
 });
 const sdk = new NodeSDK({
   traceExporter,
