@@ -1024,5 +1024,21 @@
     "components.mealCalendar.dinner": "Ужин",
     "components.mealCalendar.snack": "Перекус",
     "components.mealCalendar.other": "Другое",
-    "pages.settings.debugDump": "Загрузите отладочный дамп для поддержки"
+    "pages.settings.debugDump": "Загрузите отладочный дамп для поддержки",
+    "pages.welcome.tabTitle": "RecipeSage",
+    "pages.auth.tabTitle": "RecipeSage",
+    "pages.home.tabTitle": "Рецепты - RecipeSage",
+    "pages.recipeDetails.tabTitle": "Подробности рецепта - RecipeSage",
+    "pages.legal.tabTitle": "Юридическая информация, соглашения и отказ от ответственности - RecipeSage",
+    "pages.legal.title": "Юридическая информация, соглашения и отказ от ответственности",
+    "pages.about.tabTitle": "О компании и поддержка - RecipeSage",
+    "pages.aboutDetails.tabTitle": "Подробнее обо мне и RecipeSage",
+    "pages.contact.tabTitle": "Свяжитесь со мной - RecipeSage",
+    "pages.contribute.tabTitle": "Внести свой вклад - RecipeSage",
+    "pages.contributeThankYou.tabTitle": "Спасибо - RecipeSage",
+    "pages.contributeCancel.tabTitle": "Внести свой вклад - RecipeSage",
+    "pages.downloadAndInstall.tabTitle": "Скачать и установить - RecipeSage",
+    "pages.labels.tabTitle": "Управление метками и категориями - RecipeSage",
+    "pages.newLabelItemModal.badLabelMessage": "Ваш заголовок содержит недопустимые символы",
+    "pages.newLabelItemModal.existingConflict": "Ярлык с таким названием уже существует"
 }
