@@ -94,7 +94,6 @@
       >
         <ion-label slot="label" class="ion-text-wrap">
           {{ 'pages.settings.language' | translate }}
-          <p>{{ 'pages.settings.language.contribute' | translate }}</p>
         </ion-label>
 
         <ion-select-option value="navigator">
@@ -107,6 +106,17 @@
           {{ languageOption[1] }}
         </ion-select-option>
       </ion-select>
+    </ion-item>
+    <ion-item
+      lines="inset"
+      href="https://weblate.recipesage.com"
+      target="_blank"
+      detail
+    >
+      <ion-icon name="language-outline" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <p>{{ 'pages.settings.language.contribute' | translate }}</p>
+      </ion-label>
     </ion-item>
 
     <ion-item
