@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { metrics } from "../general";
 import { extractTextFromPDF } from "../general/extractTextFromPDF";
 import { pdfToImage } from "../general/pdfToImage";
@@ -9,7 +10,13 @@ import {
 } from "./textToRecipe";
 
 export const pdfToRecipe = async (pdf: Buffer, maxPages = 1) => {
-  const text = await extractTextFromPDF(pdf, maxPages);
+  metrics.convertPDFToRecipe.inc();
+
+  const text = await extractTextFromPDF(pdf, maxPages).catch((e) => {
+    Sentry.captureException(e);
+    console.error(e);
+    return "";
+  });
 
   if (text.trim().length < OCR_MIN_VALID_TEXT) {
     const images = [];
@@ -24,8 +31,6 @@ export const pdfToRecipe = async (pdf: Buffer, maxPages = 1) => {
     }
     return ocrImagesToRecipe(images);
   }
-
-  metrics.convertPDFToRecipe.inc();
 
   const recipe = await textToRecipe(text, TextToRecipeInputType.Document);
 

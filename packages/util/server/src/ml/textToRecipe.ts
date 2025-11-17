@@ -34,6 +34,8 @@ export const textToRecipe = async (
   text: string,
   inputType: TextToRecipeInputType,
 ) => {
+  metrics.convertTextToRecipe.inc();
+
   if (text.length < OCR_MIN_VALID_TEXT) return;
 
   const recognizedRecipes: StandardizedRecipeImportEntry[] = [];
@@ -62,8 +64,6 @@ export const textToRecipe = async (
       },
     },
   );
-
-  metrics.convertTextToRecipe.inc();
 
   const recognizedRecipe = recognizedRecipes[0];
 
