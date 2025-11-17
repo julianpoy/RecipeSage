@@ -1,4 +1,5 @@
 import { prisma } from "@recipesage/prisma";
+import * as Sentry from "@sentry/node";
 import { inferAsyncReturnType } from "@trpc/server";
 import trpcExpress from "@trpc/server/adapters/express";
 
@@ -22,6 +23,12 @@ export async function createContext({
   }
 
   const session = await getSessionFromHeader();
+
+  if (session) {
+    Sentry.setUser({
+      id: session.userId,
+    });
+  }
 
   return {
     session,
