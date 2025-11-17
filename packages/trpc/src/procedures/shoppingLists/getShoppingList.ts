@@ -11,7 +11,7 @@ import {
 export const getShoppingList = publicProcedure
   .input(
     z.object({
-      id: z.string().uuid(),
+      id: z.uuid(),
     }),
   )
   .query(async ({ ctx, input }) => {

@@ -8,9 +8,9 @@ import { TRPCError } from "@trpc/server";
 export const updateLabelGroup = publicProcedure
   .input(
     z.object({
-      id: z.string().min(1).max(100),
-      title: z.string().min(1).max(100),
-      labelIds: z.array(z.string()),
+      id: z.uuid(),
+      title: z.string().min(1).max(254),
+      labelIds: z.array(z.uuid()),
       warnWhenNotPresent: z.boolean(),
     }),
   )

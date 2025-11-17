@@ -16,7 +16,7 @@ import {
 export const getMealPlanItems = publicProcedure
   .input(
     z.object({
-      mealPlanId: z.string().uuid(),
+      mealPlanId: z.uuid(),
       limit: z.number().min(1).max(4000).default(1000),
     }),
   )

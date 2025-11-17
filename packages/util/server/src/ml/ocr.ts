@@ -5,6 +5,8 @@ import { metrics } from "../general";
 export const ocrImageBuffer = async (
   imageBuffer: Buffer,
 ): Promise<string[]> => {
+  metrics.convertImageToText.inc();
+
   const imageAnnotationClient = new ImageAnnotatorClient({
     keyFile: join(__dirname, "../../../../../.credentials/firebase.json"),
   });
@@ -17,8 +19,6 @@ export const ocrImageBuffer = async (
       return el.fullTextAnnotation?.text;
     })
     .filter((el): el is string => !!el);
-
-  metrics.convertImageToText.inc();
 
   return text;
 };

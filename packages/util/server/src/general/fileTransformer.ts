@@ -1,6 +1,13 @@
 import { Readable, Writable } from "stream";
 import sharp from "sharp";
 
+export class FileTransformError extends Error {
+  constructor() {
+    super();
+    this.name = "FileTransformError";
+  }
+}
+
 export const transformImageStream = async (
   inputStream: Readable,
   outputStream: Writable,
@@ -39,5 +46,8 @@ export const transformImageBuffer = async (
       quality,
       // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
     })
-    .toBuffer();
+    .toBuffer()
+    .catch(() => {
+      throw new FileTransformError();
+    });
 };

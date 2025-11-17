@@ -11,8 +11,8 @@ import { TRPCError } from "@trpc/server";
 export const updateUser = publicProcedure
   .input(
     z.object({
-      name: z.string().min(1).max(1000).optional(),
-      email: z.string().email().min(1).max(1000).optional(),
+      name: z.string().min(1).max(254).optional(),
+      email: z.email().min(1).max(254).optional(),
       password: z.string().min(6).max(1000).optional(),
     }),
   )

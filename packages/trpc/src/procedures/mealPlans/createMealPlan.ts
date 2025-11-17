@@ -11,8 +11,8 @@ import { TRPCError } from "@trpc/server";
 export const createMealPlan = publicProcedure
   .input(
     z.object({
-      title: z.string(),
-      collaboratorUserIds: z.array(z.string().uuid()),
+      title: z.string().min(1).max(254),
+      collaboratorUserIds: z.array(z.uuid()),
     }),
   )
   .mutation(async ({ ctx, input }) => {

@@ -3,11 +3,12 @@ import {
   AlertController,
   PopoverController,
   ModalController,
+  NavController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import { UtilService } from "~/services/util.service";
+import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
 import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
@@ -27,6 +28,7 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class LabelsPage {
+  private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
   private popoverCtrl = inject(PopoverController);
   private loadingService = inject(LoadingService);
@@ -215,6 +217,19 @@ export class LabelsPage {
       ],
     });
     alert.present();
+  }
+
+  browseLabelRecipes(label: LabelSummary) {
+    this.navCtrl.navigateForward(
+      RouteMap.HomePage.getPath("main", {
+        selectedLabels: [label.title],
+      }),
+      {
+        state: {
+          showBack: true,
+        },
+      },
+    );
   }
 
   formatDate(input: string | number | Date) {

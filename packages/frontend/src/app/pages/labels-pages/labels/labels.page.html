@@ -89,6 +89,18 @@
           </span>
         </p>
       </ion-label>
+      <ion-button
+        slot="end"
+        (click)="$event.stopPropagation(); manageLabel(label)"
+      >
+        <ion-icon name="pencil" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button
+        slot="end"
+        (click)="$event.stopPropagation(); browseLabelRecipes(label)"
+      >
+        <ion-icon name="folder-open" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">
         {{ 'pages.labels.label.selected' | translate }}
       </ion-badge>
@@ -136,6 +148,12 @@
           </span>
         </p>
       </ion-label>
+      <ion-button
+        slot="end"
+        (click)="$event.stopPropagation(); manageLabelGroup(labelGroup)"
+      >
+        <ion-icon name="pencil" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

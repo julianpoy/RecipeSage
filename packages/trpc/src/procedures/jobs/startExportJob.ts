@@ -24,7 +24,7 @@ export const startExportJob = publicProcedure
         z.literal("pdf"),
         z.literal("jsonld"),
       ]),
-      recipeIds: z.array(z.string()).optional(),
+      recipeIds: z.array(z.uuid()).optional(),
     }),
   )
   .mutation(async ({ input, ctx }) => {

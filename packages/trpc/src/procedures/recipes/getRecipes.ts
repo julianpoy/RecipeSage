@@ -9,13 +9,13 @@ import { TRPCError } from "@trpc/server";
 export const getRecipes = publicProcedure
   .input(
     z.object({
-      userIds: z.array(z.string().uuid()).optional(),
+      userIds: z.array(z.uuid()).optional(),
       folder: z.enum(["main", "inbox"]),
       orderBy: z.enum(["title", "createdAt", "updatedAt"]),
       orderDirection: z.enum(["asc", "desc"]),
       offset: z.number().min(0),
       limit: z.number().min(1).max(200),
-      recipeIds: z.array(z.string().uuid()).optional(),
+      recipeIds: z.array(z.uuid()).optional(),
       labels: z.array(z.string()).optional(),
       labelIntersection: z.boolean().optional(),
       includeAllFriends: z.boolean().optional(),

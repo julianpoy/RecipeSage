@@ -280,10 +280,20 @@
     </div>
 
     <div class="ion-padding">
-      <ion-button *ngIf="recipe.id" expand="block" (click)="save()">
+      <ion-button
+        *ngIf="recipe.id"
+        expand="block"
+        (click)="save()"
+        [disabled]="saving"
+      >
         {{ 'pages.editRecipe.save' | translate }}
       </ion-button>
-      <ion-button *ngIf="!recipe.id" expand="block" (click)="save()">
+      <ion-button
+        *ngIf="!recipe.id"
+        expand="block"
+        (click)="save()"
+        [disabled]="saving"
+      >
         {{ 'pages.editRecipe.create' | translate }}
       </ion-button>
     </div>

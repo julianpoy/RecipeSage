@@ -12,7 +12,7 @@ import {
 export const getExportJobDownloadUrlById = publicProcedure
   .input(
     z.object({
-      id: z.string().uuid(),
+      id: z.uuid(),
     }),
   )
   .query(async ({ input, ctx }) => {

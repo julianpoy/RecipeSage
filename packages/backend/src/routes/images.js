@@ -14,6 +14,7 @@ import {
   writeImageURL,
   ObjectTypes,
 } from "@recipesage/util/server/storage";
+import { FileTransformError } from "@recipesage/util/server/general";
 import * as SubscriptionsService from "../services/subscriptions.js";
 
 // Util
@@ -49,7 +50,9 @@ router.post(
       );
     } catch (e) {
       e.status = 415;
-      Sentry.captureException(e);
+      if (!(e instanceof FileTransformError)) {
+        Sentry.captureException(e);
+      }
       throw e;
     }
 

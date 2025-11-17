@@ -13,7 +13,7 @@ import { TRPCError } from "@trpc/server";
 export const createRecipe = publicProcedure
   .input(
     z.object({
-      title: z.string().min(1),
+      title: z.string().min(1).max(254),
       description: z.string(),
       yield: z.string(),
       activeTime: z.string(),
@@ -25,8 +25,8 @@ export const createRecipe = publicProcedure
       instructions: z.string(),
       rating: z.number().min(1).max(5).nullable(),
       folder: z.union([z.literal("main"), z.literal("inbox")]),
-      labelIds: z.array(z.string()),
-      imageIds: z.array(z.string()),
+      labelIds: z.array(z.uuid()),
+      imageIds: z.array(z.uuid()),
     }),
   )
   .mutation(async ({ ctx, input }) => {

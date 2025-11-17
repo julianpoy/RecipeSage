@@ -827,7 +827,7 @@
   "pages.settings.theme.midnight": "Midnight",
   "pages.settings.theme.black": "Black (OLED)",
   "pages.settings.language": "Language",
-  "pages.settings.language.contribute": "Contact me to contribute a language",
+  "pages.settings.language.contribute": "Language support is community powered. Click here to add a language or fix translations",
   "pages.settings.language.default": "Browser Default",
   "pages.settings.fontSize": "Font Size",
   "pages.settings.preferencesSync": "Sync Preferences Between Devices",

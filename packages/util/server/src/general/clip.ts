@@ -11,7 +11,12 @@ import { fetchURL } from "./fetch";
 import { StandardizedRecipeImportEntry } from "../db";
 import { readFileSync } from "fs";
 import { metrics } from "./metrics";
-import { textToRecipe, TextToRecipeInputType } from "../ml";
+import {
+  ocrImagesToRecipe,
+  pdfToRecipe,
+  textToRecipe,
+  TextToRecipeInputType,
+} from "../ml";
 
 const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
   workerType: "thread",
@@ -273,8 +278,6 @@ export const clipUrl = async (
     throw new ClipFetchError();
   });
 
-  const htmlDocument = await response.text();
-
   const captureError = (method: string, error: unknown) => {
     metrics.clipError.inc({
       form: "url",
@@ -287,6 +290,77 @@ export const clipUrl = async (
       },
     });
   };
+
+  if (response.headers.get("content-type") === "application/pdf") {
+    const pdfContent = await response.buffer();
+    const result = await pdfToRecipe(pdfContent, 3);
+
+    if (!result) {
+      metrics.clipError.inc({
+        form: "url",
+        method: "pdf",
+      });
+
+      return {
+        recipe: {
+          title: "Error",
+          url,
+        },
+        labels: [],
+        images: [],
+      };
+    }
+
+    metrics.clipSuccess.inc({
+      form: "url",
+      method: "pdf",
+    });
+
+    result.recipe.url = url;
+
+    return result;
+  }
+
+  if (response.headers.get("content-type")?.startsWith("image/")) {
+    const imageContent = await response.buffer();
+    const result = await ocrImagesToRecipe([imageContent]).catch((e) => {
+      Sentry.captureException(e, {
+        extra: {
+          imageUrl: url,
+        },
+      });
+      console.error(e);
+      return undefined;
+    });
+
+    if (!result) {
+      metrics.clipError.inc({
+        form: "url",
+        method: "image",
+      });
+
+      return {
+        recipe: {
+          title: "Error",
+          url,
+        },
+        labels: [],
+        images: [],
+      };
+    }
+
+    metrics.clipSuccess.inc({
+      form: "url",
+      method: "image",
+    });
+
+    result.recipe.url = url;
+    result.images.push(url);
+
+    return result;
+  }
+
+  const htmlDocument = await response.text();
 
   const merge = (entries: StandardizedRecipeImportEntry[]) => {
     return entries.slice(1).reduce((acc, entry) => {

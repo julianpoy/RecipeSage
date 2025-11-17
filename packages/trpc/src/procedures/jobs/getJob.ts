@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server";
 export const getJob = publicProcedure
   .input(
     z.object({
-      id: z.string().uuid(),
+      id: z.uuid(),
     }),
   )
   .query(async ({ input, ctx }) => {
