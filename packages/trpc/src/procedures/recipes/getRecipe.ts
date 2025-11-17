@@ -7,7 +7,7 @@ import { recipeSummary } from "@recipesage/prisma";
 export const getRecipe = publicProcedure
   .input(
     z.object({
-      id: z.string(),
+      id: z.uuid(),
     }),
   )
   .query(async ({ input }) => {

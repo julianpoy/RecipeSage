@@ -6,7 +6,7 @@ import { getSimilarRecipes as _getSimilarRecipes } from "@recipesage/util/server
 export const getSimilarRecipes = publicProcedure
   .input(
     z.object({
-      recipeIds: z.array(z.string()).min(1),
+      recipeIds: z.array(z.uuid()).min(1),
     }),
   )
   .query(async ({ ctx, input }) => {
