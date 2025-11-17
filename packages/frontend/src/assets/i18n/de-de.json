@@ -589,7 +589,7 @@
     "pages.settings.theme.dark": "Dunkel",
     "pages.settings.theme.black": "Schwarz (OLED)",
     "pages.settings.language": "Sprache",
-    "pages.settings.language.contribute": "Kontaktiere mich, um eine Übersetzung beizusteuern",
+    "pages.settings.language.contribute": "Übersetzungen werden von der Community erstellt – klicke hier, um mitzumachen",
     "pages.settings.language.default": "Browser-Standard",
     "pages.settings.fontSize": "Schriftgröße",
     "pages.settings.preferencesSync": "Einstellungen zwischen Geräten synchronisieren",
