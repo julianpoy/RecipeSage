@@ -70,11 +70,15 @@ export const importStandardizedRecipes = async (
           .map((image) =>
             limit(async () => {
               if (typeof image === "object") {
-                return await writeImageBuffer(
-                  ObjectTypes.RECIPE_IMAGE,
-                  image,
-                  highResConversion,
-                );
+                try {
+                  return await writeImageBuffer(
+                    ObjectTypes.RECIPE_IMAGE,
+                    image,
+                    highResConversion,
+                  );
+                } catch (e) {
+                  console.error(e);
+                }
               } else if (
                 image.startsWith("http:") ||
                 image.startsWith("https:")
