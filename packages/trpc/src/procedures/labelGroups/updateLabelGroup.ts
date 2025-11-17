@@ -9,7 +9,7 @@ export const updateLabelGroup = publicProcedure
   .input(
     z.object({
       id: z.uuid(),
-      title: z.uuid().min(1).max(254),
+      title: z.string().min(1).max(254),
       labelIds: z.array(z.uuid()),
       warnWhenNotPresent: z.boolean(),
     }),
