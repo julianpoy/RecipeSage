@@ -2,6 +2,7 @@ import { inferAsyncReturnType, initTRPC } from "@trpc/server";
 import { createContext } from "./context";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 import { customTrpcTransformer } from "@recipesage/util/shared";
+import * as Sentry from "@sentry/node";
 
 /**
  * Initialization of tRPC backend
@@ -11,6 +12,12 @@ type Context = inferAsyncReturnType<typeof createContext>;
 const t = initTRPC.context<Context>().create({
   transformer: customTrpcTransformer,
 });
+
+const sentryMiddleware = t.middleware(
+  Sentry.trpcMiddleware({
+    attachRpcInput: true,
+  }),
+);
 
 const otelMiddleware = t.middleware(async ({ path, next }) => {
   const tracer = trace.getTracer("trpc");
@@ -39,4 +46,6 @@ const otelMiddleware = t.middleware(async ({ path, next }) => {
  * that can be used throughout the router
  */
 export const router = t.router;
-export const publicProcedure = t.procedure.use(otelMiddleware);
+export const publicProcedure = t.procedure
+  .use(otelMiddleware)
+  .use(sentryMiddleware);
