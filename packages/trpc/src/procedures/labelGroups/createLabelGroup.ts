@@ -8,8 +8,8 @@ import { TRPCError } from "@trpc/server";
 export const createLabelGroup = publicProcedure
   .input(
     z.object({
-      title: z.string().min(1).max(100),
-      labelIds: z.array(z.string()),
+      title: z.string().min(1).max(254),
+      labelIds: z.array(z.uuid()),
       warnWhenNotPresent: z.boolean(),
     }),
   )

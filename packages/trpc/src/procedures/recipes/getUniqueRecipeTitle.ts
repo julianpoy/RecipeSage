@@ -14,7 +14,7 @@ const MAX_DUPES_RETRIEVED = 1000;
 export const getUniqueRecipeTitle = publicProcedure
   .input(
     z.object({
-      ignoreIds: z.array(z.string().min(1)).optional(),
+      ignoreIds: z.array(z.uuid()).optional(),
       title: z.string().min(1),
     }),
   )

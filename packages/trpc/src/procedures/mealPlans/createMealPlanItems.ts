@@ -15,21 +15,23 @@ import {
 export const createMealPlanItems = publicProcedure
   .input(
     z.object({
-      mealPlanId: z.string().uuid(),
-      items: z.array(
-        z.object({
-          title: z.string(),
-          scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-          meal: z.union([
-            z.literal("breakfast"),
-            z.literal("lunch"),
-            z.literal("dinner"),
-            z.literal("snacks"),
-            z.literal("other"),
-          ]),
-          recipeId: z.string().uuid().nullable(),
-        }),
-      ),
+      mealPlanId: z.uuid(),
+      items: z
+        .array(
+          z.object({
+            title: z.string().min(1).max(254),
+            scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+            meal: z.union([
+              z.literal("breakfast"),
+              z.literal("lunch"),
+              z.literal("dinner"),
+              z.literal("snacks"),
+              z.literal("other"),
+            ]),
+            recipeId: z.uuid().nullable(),
+          }),
+        )
+        .min(1),
     }),
   )
   .mutation(async ({ ctx, input }) => {

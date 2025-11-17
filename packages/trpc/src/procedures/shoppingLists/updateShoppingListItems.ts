@@ -15,13 +15,13 @@ import {
 export const updateShoppingListItems = publicProcedure
   .input(
     z.object({
-      shoppingListId: z.string().uuid(),
+      shoppingListId: z.uuid(),
       items: z
         .array(
           z.object({
-            id: z.string().uuid(),
-            title: z.string().optional(),
-            recipeId: z.string().uuid().nullable().optional(),
+            id: z.uuid(),
+            title: z.string().min(1).max(254).optional(),
+            recipeId: z.uuid().nullable().optional(),
             completed: z.boolean().optional(),
             categoryTitle: z.string().optional(),
           }),

@@ -12,7 +12,7 @@ export const searchRecipes = publicProcedure
   .input(
     z.object({
       searchTerm: z.string().min(1).max(255),
-      userIds: z.array(z.string().uuid()).optional(),
+      userIds: z.array(z.uuid()).optional(),
       folder: z.enum(["main", "inbox"]),
       labels: z.array(z.string()).optional(),
       labelIntersection: z.boolean().optional(),

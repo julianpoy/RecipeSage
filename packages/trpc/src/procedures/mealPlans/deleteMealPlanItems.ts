@@ -15,8 +15,8 @@ import {
 export const deleteMealPlanItems = publicProcedure
   .input(
     z.object({
-      mealPlanId: z.string().uuid(),
-      ids: z.array(z.string().uuid()),
+      mealPlanId: z.uuid(),
+      ids: z.array(z.uuid()).min(1),
     }),
   )
   .mutation(async ({ ctx, input }) => {

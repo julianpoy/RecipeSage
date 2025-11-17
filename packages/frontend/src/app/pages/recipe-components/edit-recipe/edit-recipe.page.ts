@@ -66,6 +66,7 @@ export class EditRecipePage {
   private events = inject(EventService);
   private featureFlagService = inject(FeatureFlagService);
 
+  saving = false;
   defaultBackHref: string;
 
   recipeId?: string;
@@ -281,12 +282,14 @@ export class EditRecipePage {
     if (!this.recipe.title) return;
 
     const loading = this.loadingService.start();
+    this.saving = true;
 
     const response = await (this.recipe.id
       ? this._update(this.recipe.id, this.recipe.title)
       : this._create(this.recipe.title));
 
     loading.dismiss();
+    this.saving = false;
     if (!response) return;
 
     this.markAsClean();

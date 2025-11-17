@@ -6,7 +6,7 @@ import { z } from "zod";
 export const getUserProfilesById = publicProcedure
   .input(
     z.object({
-      ids: z.array(z.string().uuid()).min(1).max(100),
+      ids: z.array(z.uuid()).min(1).max(100),
     }),
   )
   .query(async ({ input }) => {

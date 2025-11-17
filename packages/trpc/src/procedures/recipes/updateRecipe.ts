@@ -13,7 +13,7 @@ import { indexRecipes } from "@recipesage/util/server/search";
 export const updateRecipe = publicProcedure
   .input(
     z.object({
-      id: z.string(),
+      id: z.uuid(),
       title: z.string().min(1).max(254),
       description: z.string(),
       yield: z.string(),
@@ -26,8 +26,8 @@ export const updateRecipe = publicProcedure
       instructions: z.string(),
       rating: z.number().min(1).max(5).nullable(),
       folder: z.union([z.literal("main"), z.literal("inbox")]),
-      labelIds: z.array(z.string()),
-      imageIds: z.array(z.string()),
+      labelIds: z.array(z.uuid()),
+      imageIds: z.array(z.uuid()),
     }),
   )
   .mutation(async ({ ctx, input }) => {

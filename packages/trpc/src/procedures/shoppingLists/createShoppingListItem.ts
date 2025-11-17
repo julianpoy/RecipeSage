@@ -16,9 +16,9 @@ import {
 export const createShoppingListItem = publicProcedure
   .input(
     z.object({
-      shoppingListId: z.string().uuid(),
-      title: z.string(),
-      recipeId: z.string().uuid().nullable(),
+      shoppingListId: z.uuid(),
+      title: z.string().min(1).max(254),
+      recipeId: z.uuid().nullable(),
       completed: z.boolean().optional(),
       categoryTitle: z.string().optional(),
     }),

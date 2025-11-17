@@ -8,7 +8,7 @@ import { deleteRecipes } from "@recipesage/util/server/search";
 export const deleteRecipe = publicProcedure
   .input(
     z.object({
-      id: z.string(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

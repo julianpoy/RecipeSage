@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import type { TRPCClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
 
-describe("getRecipeByTitle", () => {
+describe("getRecipesByTitle", () => {
   let user: User;
   let user2: User;
   let trpc: TRPCClient<AppRouter>;

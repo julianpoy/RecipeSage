@@ -16,15 +16,17 @@ import {
 export const createShoppingListItems = publicProcedure
   .input(
     z.object({
-      shoppingListId: z.string().uuid(),
-      items: z.array(
-        z.object({
-          title: z.string(),
-          recipeId: z.string().uuid().nullable(),
-          completed: z.boolean().optional(),
-          categoryTitle: z.string().optional(),
-        }),
-      ),
+      shoppingListId: z.uuid(),
+      items: z
+        .array(
+          z.object({
+            title: z.string().min(1).max(254),
+            recipeId: z.uuid().nullable(),
+            completed: z.boolean().optional(),
+            categoryTitle: z.string().optional(),
+          }),
+        )
+        .min(1),
     }),
   )
   .mutation(async ({ ctx, input }) => {

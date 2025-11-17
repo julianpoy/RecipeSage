@@ -10,41 +10,46 @@ export const deleteUser = publicProcedure.mutation(
     const session = ctx.session;
     validateTrpcSession(session);
 
-    await prisma.$transaction(async (tx) => {
-      const allRecipeIds = await tx.recipe.findMany({
-        where: {
-          userId: session.userId,
-        },
-        select: {
-          id: true,
-        },
-      });
+    await prisma.$transaction(
+      async (tx) => {
+        const allRecipeIds = await tx.recipe.findMany({
+          where: {
+            userId: session.userId,
+          },
+          select: {
+            id: true,
+          },
+        });
 
-      await tx.recipe.deleteMany({
-        where: {
-          userId: session.userId,
-        },
-      });
-      await tx.userProfileImage.deleteMany({
-        where: {
-          userId: session.userId,
-        },
-      });
+        await tx.recipe.deleteMany({
+          where: {
+            userId: session.userId,
+          },
+        });
+        await tx.userProfileImage.deleteMany({
+          where: {
+            userId: session.userId,
+          },
+        });
 
-      await deleteHangingImagesForUser(session.userId, tx);
+        await deleteHangingImagesForUser(session.userId, tx);
 
-      await tx.user.delete({
-        where: {
-          id: session.userId,
-        },
-      });
+        await tx.user.delete({
+          where: {
+            id: session.userId,
+          },
+        });
 
-      await deleteRecipesFromSearch(allRecipeIds.map((el) => el.id)).catch(
-        (e) => {
-          Sentry.captureException(e);
-        },
-      );
-    });
+        await deleteRecipesFromSearch(allRecipeIds.map((el) => el.id)).catch(
+          (e) => {
+            Sentry.captureException(e);
+          },
+        );
+      },
+      {
+        timeout: 60000,
+      },
+    );
 
     return "Deleted";
   },

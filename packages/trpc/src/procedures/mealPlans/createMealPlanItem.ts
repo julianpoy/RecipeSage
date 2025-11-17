@@ -15,8 +15,8 @@ import {
 export const createMealPlanItem = publicProcedure
   .input(
     z.object({
-      mealPlanId: z.string().uuid(),
-      title: z.string(),
+      mealPlanId: z.uuid(),
+      title: z.string().min(1).max(254),
       scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
       meal: z.union([
         z.literal("breakfast"),
@@ -25,7 +25,7 @@ export const createMealPlanItem = publicProcedure
         z.literal("snacks"),
         z.literal("other"),
       ]),
-      recipeId: z.string().uuid().nullable(),
+      recipeId: z.uuid().nullable(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
