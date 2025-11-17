@@ -59,6 +59,7 @@ export class MyProfilePage {
   myProfile?: UserProfile;
   requiresSetup = false;
 
+  checkingHandleAvailable = false;
   isHandleAvailable = true;
   handleInputTimeout?: NodeJS.Timeout;
 
@@ -161,10 +162,11 @@ export class MyProfilePage {
         this.updatedProfileFields.handle.substring(1);
     if (!this.isHandleValid()) return;
 
-    this.handleInputTimeout = setTimeout(
-      () => this.checkHandleAvailable(this.updatedProfileFields.handle || ""),
-      500,
-    );
+    this.checkingHandleAvailable = true;
+    this.handleInputTimeout = setTimeout(() => {
+      this.checkHandleAvailable(this.updatedProfileFields.handle || "");
+      this.checkingHandleAvailable = false;
+    }, 250);
   }
 
   isHandleValid() {
@@ -184,6 +186,9 @@ export class MyProfilePage {
   }
 
   inputIsValid() {
+    if (this.requiresSetup && !this.myProfile?.handle) return false;
+    if (this.checkingHandleAvailable) return false;
+
     if (this.updatedProfileFields.handle && !this.isHandleAvailable)
       return false;
     if (this.updatedProfileFields.handle && !this.isHandleValid()) return false;
