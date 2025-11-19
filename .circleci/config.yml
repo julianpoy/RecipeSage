@@ -115,6 +115,7 @@ jobs:
           command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build frontend --skip-nx-cache)
           environment:
             ENVIRONMENT: production
+            SOURCEMAP_UPLOAD: true
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
