@@ -91,7 +91,6 @@ export const initOCRFormatRecipeTool = (
   result: StandardizedRecipeImportEntry[],
 ) =>
   tool({
-    description: "Saves a recipe. This must always be used.",
     inputSchema: z.object({
       title: z.string().describe("The title of the recipe"),
       description: z
@@ -118,7 +117,12 @@ export const initOCRFormatRecipeTool = (
       instructions: z
         .array(z.string().describe("An instruction for the recipe"))
         .describe("List of instructions"),
-      notes: z.string().optional().describe("Any notes by the author."),
+      notes: z
+        .string()
+        .optional()
+        .describe(
+          "Multiline. Any notes by the author, or content that does not fit into the other fields. Feel free to add headers by using [header] notation.",
+        ),
     }),
     execute: async ({
       title,
@@ -150,12 +154,12 @@ export const initOCRFormatRecipeTool = (
             source: "",
             url: "",
             rating: undefined,
-            yield: recipeYield || "",
-            activeTime: activeTime || "",
-            totalTime: totalTime || "",
+            yield: (recipeYield || "").replaceAll("<UNKNOWN>", ""),
+            activeTime: (activeTime || "").replaceAll("<UNKNOWN>", ""),
+            totalTime: (totalTime || "").replaceAll("<UNKNOWN>", ""),
             ingredients: ingredients.join("\n"),
             instructions: instructions.join("\n"),
-            notes: notes || "",
+            notes: (notes || "").replaceAll("\\n", "\n"),
           },
           labels: [],
           images: [],

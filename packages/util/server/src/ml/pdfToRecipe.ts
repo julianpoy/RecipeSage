@@ -9,7 +9,7 @@ import {
   textToRecipe,
 } from "./textToRecipe";
 
-export const pdfToRecipe = async (pdf: Buffer, maxPages = 4) => {
+export const pdfToRecipe = async (pdf: Buffer, maxPages = 5) => {
   metrics.convertPDFToRecipe.inc();
 
   const text = await extractTextFromPDF(pdf, maxPages).catch((e) => {
