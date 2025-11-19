@@ -419,7 +419,7 @@
     "pages.assistant.welcome.1": "Willkommen beim RecipeSage Kochassistent!",
     "pages.assistant.welcome.2": "Der Kochassistent ist ein KI-Modell, das deine Fragen zum Thema Kochen beantworten und bei der Erstellung von Rezepten helfen kann.",
     "pages.assistant.welcome.3": "Aufgrund der hohen Kosten für den Betrieb der KI hat der Kochassistent ein Limit von 5 Nachrichten pro Tag. Dieses Limit entfällt für Unterstützer.",
-    "pages.assistant.messageLimit": "Die maximale Nachrichtenanzahl wurde erreicht (sorry, KI-Nutzung ist teuer!). Der Nachrichtenzähler wird um 0:00 GMT zurückgesetzt.",
+    "pages.assistant.messageLimit": "Die maximale Nachrichtenanzahl wurde erreicht (sorry, KI-Nutzung ist teuer!). Der Zähler wird um 0:00 GMT zurückgesetzt. Durch eine Spende kannst du den Kochassistent ohne Nachrichtenlimit nutzen.",
     "pages.messageThread.title": "Unterhaltung mit {{name}}",
     "pages.messageThread.clickToOpen": "Zum Öffnen klicken",
     "pages.messageThread.recipeDeleted": "Rezept gelöscht",
