@@ -8,7 +8,7 @@ import fs from "fs/promises";
 import extract from "extract-zip";
 import path from "path";
 import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import { pdfToRecipe, TextToRecipeInputType } from "@recipesage/util/server/ml";
+import { pdfToRecipe } from "@recipesage/util/server/ml";
 import {
   deletePathsSilent,
   importJobFailCommon,
@@ -92,10 +92,7 @@ export const pdfsHandler = defineHandler(
           }
         }
 
-        const recipe = await pdfToRecipe(
-          recipePDF,
-          TextToRecipeInputType.Document,
-        );
+        const recipe = await pdfToRecipe(recipePDF);
         if (!recipe) {
           continue;
         }

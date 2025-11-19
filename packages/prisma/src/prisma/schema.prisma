@@ -155,6 +155,7 @@ model AssistantMessage {
   content   String?
   name      String?
   json      Json
+  version   Int
   recipeId  String?  @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)

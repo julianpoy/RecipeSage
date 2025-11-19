@@ -1,11 +1,11 @@
 import { Component, ViewChild, inject } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { NavController, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  NavController,
+  ToastController,
+} from "@ionic/angular";
 
-import { MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
@@ -24,16 +24,13 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   imports: [...SHARED_UI_IMPORTS, LogoIconComponent, NullStateComponent],
 })
 export class AssistantPage {
-  navCtrl = inject(NavController);
-  translate = inject(TranslateService);
-  route = inject(ActivatedRoute);
-  events = inject(EventService);
-  toastCtrl = inject(ToastController);
-  loadingService = inject(LoadingService);
-  websocketService = inject(WebsocketService);
-  utilService = inject(UtilService);
-  messagingService = inject(MessagingService);
-  trpcService = inject(TRPCService);
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private toastCtrl = inject(ToastController);
+  private alertCtrl = inject(AlertController);
+  private loadingService = inject(LoadingService);
+  private utilService = inject(UtilService);
+  private trpcService = inject(TRPCService);
 
   @ViewChild("content", { static: true }) content: any;
 
@@ -244,7 +241,7 @@ export class AssistantPage {
             .toPromise();
           const close = await this.translate.get("generic.close").toPromise();
 
-          const toast = await this.toastCtrl.create({
+          const toast = await this.alertCtrl.create({
             message,
             buttons: [
               {

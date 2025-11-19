@@ -11,7 +11,7 @@ const MAX_EXTRACT_TIME = 10000;
 
 export const extractTextFromPDF = async (
   source: Buffer,
-  maxPages = 1,
+  maxPages: number,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     const proc = spawn("pdftotext", [

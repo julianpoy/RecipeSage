@@ -1,0 +1,5 @@
+ALTER TABLE "AssistantMessages"
+ADD COLUMN "version" INTEGER NOT NULL DEFAULT 1;
+
+ALTER TABLE "AssistantMessages"
+ALTER COLUMN "version" DROP DEFAULT;

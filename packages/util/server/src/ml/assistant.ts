@@ -4,35 +4,29 @@ import {
   assistantMessageSummary,
 } from "@recipesage/prisma";
 import {
-  ChatCompletionMessageFunctionToolCall,
-  ChatCompletionMessageParam,
-  ChatCompletionMessageToolCall,
-  ChatCompletionUserMessageParam,
-} from "openai/resources/chat/completions";
-import { OpenAIHelper, GPTModelQuality } from "./openai";
-import { AssistantMessage } from "@prisma/client";
-import { initBuildRecipe } from "./chatFunctions";
+  CreateAssistantRecipeToolResult,
+  initCreateAssistantRecipeTool,
+} from "./chatFunctionsVercel";
 import dedent from "ts-dedent";
 import { userHasCapability } from "../capabilities";
 import { Capabilities } from "@recipesage/util/shared";
-import * as Sentry from "@sentry/node";
 import { Converter } from "showdown";
-import { StandardizedRecipeImportEntry } from "../db";
+import { generateText, ModelMessage } from "ai";
+import { AI_MODEL_HIGH, AI_MODEL_LOW } from "./vercel";
 const showdown = new Converter({
   simplifiedAutoLink: true,
   openLinksInNewWindow: true,
 });
 
 const FREE_MESSAGE_CAP = 5;
-const CONTRIB_MESSAGE_CAP = 50;
+const CONTRIB_MESSAGE_SOFTCAP = 50;
 const ABUSE_MESSAGE_CAP = 1440;
 
 export class Assistant {
-  private openAiHelper: OpenAIHelper;
   /**
    * Limits the number of historical messages sent to ChatGPT
    */
-  private contextSizeLimit = 4;
+  private contextSizeLimit = 6;
   /**
    * Limits the number of messages returned to the user
    * to keep long conversations loading quickly.
@@ -44,103 +38,42 @@ export class Assistant {
   private systemPrompt = dedent`
     You are the RecipeSage cooking assistant.
     You will not deviate from the topic of recipes and cooking.
-    Any response with recipe content must call the embedRecipe function.
+    Any response with recipe content must call the createRecipe function.
   `;
 
-  constructor() {
-    this.openAiHelper = new OpenAIHelper();
-  }
-
-  private _buildChatContext(_messages: AssistantMessage[]): AssistantMessage[] {
-    const messages = Array.from(_messages);
-    const context: AssistantMessage[] = [];
-
-    // Add messages until context size reached and last message is not a tool_call
-    while (
-      context.length < this.contextSizeLimit ||
-      (context.at(-1) && context.at(-1)?.role === "tool")
-    ) {
-      const message = messages.shift();
-      if (!message) return context;
-
-      context.push(message);
-    }
-
-    return context;
-  }
-
-  private async getChatContext(
-    userId: string,
-  ): Promise<ChatCompletionMessageParam[]> {
+  private async getChatContext(userId: string): Promise<ModelMessage[]> {
     const assistantMessages = await prisma.assistantMessage.findMany({
       where: {
         userId,
+        version: 2,
       },
       orderBy: {
         createdAt: "desc",
       },
-      take: 100,
+      select: {
+        json: true,
+      },
+      take: this.contextSizeLimit * 3,
     });
 
-    const assistantMessageContext = this._buildChatContext(assistantMessages);
+    const context: ModelMessage[] = [];
+    const pending: ModelMessage[] = [];
 
-    const chatGPTContext = assistantMessageContext
-      .reverse() // Oldest first
-      .map((assistantMessage) => {
-        const message =
-          assistantMessage.json as unknown as ChatCompletionMessageParam;
-        if (message.role === "assistant") {
-          return {
-            ...message,
-            // Fix for https://github.com/openai/openai-python/issues/2061
-            tool_calls: message.tool_calls?.length
-              ? message.tool_calls
-              : undefined,
-          };
-        }
+    for (const message of assistantMessages) {
+      if (context.length >= this.contextSizeLimit) break;
 
-        return message;
-      });
+      const modelMessage = message.json as ModelMessage;
+      pending.push(modelMessage);
 
-    let expectedToolCalls = 0;
-    let toolCallingError = false;
-    for (const message of chatGPTContext) {
-      if (expectedToolCalls > 0 && message.role !== "tool") {
-        toolCallingError = true;
-        continue;
-      }
-
-      if (expectedToolCalls > 0 && message.role === "tool") {
-        expectedToolCalls--;
-        continue;
-      }
-
-      if (message.role === "assistant" && message.tool_calls) {
-        expectedToolCalls = message.tool_calls.length;
+      // We want to make sure to only capture conversation "rounds"
+      // where no user<->assistant<->tool cycle is cut off
+      if (modelMessage.role === "user") {
+        context.push(...pending);
+        pending.length = 0;
       }
     }
 
-    if (toolCallingError) {
-      console.error("TOOL CALLING ERROR", userId);
-      Sentry.captureMessage("TOOL CALLING ERROR", {
-        extra: {
-          userId,
-          context: chatGPTContext,
-        },
-      });
-      // If we have a tool calling error (a tool call not followed by tool responses)
-      // we must remove all context otherwise gpt will fail.
-      // TODO: better solution for this
-      return chatGPTContext.splice(0);
-    }
-
-    // Insert the system prompt at the beginning of the messages sent to ChatGPT (oldest)
-    chatGPTContext.unshift({
-      role: "system",
-      content: this.systemPrompt,
-    });
-
-    return chatGPTContext;
+    return context.reverse();
   }
 
   async checkMessageLimit(userId: string) {
@@ -168,7 +101,7 @@ export class Assistant {
       (!moreMessages && todayMessageCount >= FREE_MESSAGE_CAP) ||
       todayMessageCount >= ABUSE_MESSAGE_CAP;
     const useLowQualityModel =
-      moreMessages && todayMessageCount >= CONTRIB_MESSAGE_CAP;
+      moreMessages && todayMessageCount >= CONTRIB_MESSAGE_SOFTCAP;
 
     return {
       isOverLimit,
@@ -181,28 +114,30 @@ export class Assistant {
     userId: string,
     useLowQualityModel: boolean,
   ): Promise<void> {
-    const assistantUser = await prisma.user.findUniqueOrThrow({
-      where: {
-        email: "assistant@recipesage.com",
-      },
-    });
-
     const userMessage = {
       role: "user",
       content,
-    } satisfies ChatCompletionUserMessageParam;
+    } as const;
 
     const context = [...(await this.getChatContext(userId)), userMessage];
 
-    const recipes: StandardizedRecipeImportEntry[] = [];
+    const response = await generateText({
+      system: this.systemPrompt,
+      model: useLowQualityModel ? AI_MODEL_LOW : AI_MODEL_HIGH,
+      messages: context,
+      tools: {
+        createRecipe: initCreateAssistantRecipeTool(),
+      },
+    });
 
-    const response = await this.openAiHelper.getChatResponseWithTools(
-      useLowQualityModel
-        ? GPTModelQuality.LowQuality
-        : GPTModelQuality.HighQuality,
-      context,
-      [initBuildRecipe(recipes)],
-    );
+    const toolResultRecipeMap = new Map<string, string>();
+    for (const toolResult of response.toolResults) {
+      if (toolResult.toolName === "createRecipe") {
+        const recipeId = (toolResult.output as CreateAssistantRecipeToolResult)
+          .storedRecipeInfo.id;
+        toolResultRecipeMap.set(toolResult.toolCallId, recipeId);
+      }
+    }
 
     await prisma.$transaction(async (tx) => {
       await tx.assistantMessage.create({
@@ -211,64 +146,33 @@ export class Assistant {
           role: userMessage.role,
           content: userMessage.content,
           json: userMessage,
+          version: 2,
           createdAt: new Date(), // Since ordering is important and we're in a transaction, we must create date here
         },
       });
 
-      const toolCallsById: Record<string, ChatCompletionMessageToolCall> = {};
-      for (const message of response) {
-        if (message.role === "assistant" && message.tool_calls) {
-          message.tool_calls.forEach((toolCall) => {
-            toolCallsById[toolCall.id] = toolCall;
-          });
-        }
-      }
-
-      for (const message of response) {
+      for (const message of response.response.messages) {
         let recipeId: string | undefined = undefined;
-        if (
-          message.role === "tool" &&
-          toolCallsById[message.tool_call_id] &&
-          toolCallsById[message.tool_call_id].type === "function" &&
-          (
-            toolCallsById[
-              message.tool_call_id
-            ] as ChatCompletionMessageFunctionToolCall
-          ).function.name === "embedRecipe"
-        ) {
-          const recipeToCreate = recipes.shift();
-          if (!recipeToCreate) {
-            throw new Error(
-              "ChatGPT claims it created a recipe but no recipe was created by function call",
-            );
+        let content: string | undefined = undefined;
+
+        if (typeof message.content === "string") {
+          content = message.content;
+        } else if (Array.isArray(message.content)) {
+          const textParts = message.content
+            .filter((part) => part.type === "text")
+            .map((part) => part.text);
+
+          content = textParts.length > 0 ? textParts.join("") : undefined;
+
+          if (message.role === "tool") {
+            for (const part of message.content) {
+              if (part.type === "tool-result") {
+                recipeId = toolResultRecipeMap.get(part.toolCallId);
+                break;
+              }
+            }
           }
-
-          const recipe = await tx.recipe.create({
-            data: {
-              ...recipeToCreate.recipe,
-              userId: assistantUser.id,
-              folder: "main",
-            },
-          });
-
-          recipeId = recipe.id;
         }
-
-        const content = Array.isArray(message.content)
-          ? message.content
-              .map((part) => {
-                switch (part.type) {
-                  case "text":
-                    return part.text;
-                  case "image_url":
-                    return part.image_url;
-                  case "input_audio":
-                  case "refusal":
-                    return "";
-                }
-              })
-              .join("\n")
-          : message.content;
 
         await tx.assistantMessage.create({
           data: {
@@ -276,8 +180,8 @@ export class Assistant {
             role: message.role,
             recipeId,
             content,
-            name: "name" in message ? message.name : null,
-            json: message as object, // Prisma does not like OpenAI's typings
+            json: message,
+            version: 2,
             createdAt: new Date(), // Since ordering is important and we're in a transaction, we must create date here
           },
         });
