@@ -16,32 +16,12 @@ export const deleteMealPlanItems = publicProcedure
   .input(
     z.object({
       mealPlanId: z.uuid(),
-      ids: z.array(z.uuid()).min(1),
+      ids: z.array(z.uuid()).min(1).max(10000),
     }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);
-
-    const mealPlanItems = await prisma.mealPlanItem.findMany({
-      where: {
-        id: {
-          in: input.ids,
-        },
-        mealPlanId: input.mealPlanId,
-      },
-      select: {
-        mealPlanId: true,
-      },
-    });
-
-    if (mealPlanItems.length !== input.ids.length) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message:
-          "One or more of the items you've passed do not exist, or do not belong to the meal plan id",
-      });
-    }
 
     const access = await getAccessToMealPlan(session.userId, input.mealPlanId);
 
@@ -56,6 +36,7 @@ export const deleteMealPlanItems = publicProcedure
     await prisma.mealPlanItem.deleteMany({
       where: {
         id: { in: input.ids },
+        mealPlanId: input.mealPlanId,
       },
     });
 
