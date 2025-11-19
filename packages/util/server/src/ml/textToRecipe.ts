@@ -1,9 +1,8 @@
-import { initOCRFormatRecipe } from "../ml/chatFunctions";
-import { OpenAIHelper, GPTModelQuality } from "../ml/openai";
+import { initOCRFormatRecipeTool } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { metrics } from "../general";
-
-const openAiHelper = new OpenAIHelper();
+import { generateText } from "ai";
+import { AI_MODEL_LOW } from "./vercel";
 
 export enum TextToRecipeInputType {
   OCR,
@@ -16,7 +15,7 @@ const prompts = {
   [TextToRecipeInputType.OCR]:
     "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Here's the OCR text:\n\n",
   [TextToRecipeInputType.Document]:
-    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Here's the document text:\n\n",
+    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Please include all recipe detail and do not summarize. Here's the document text:\n\n",
   [TextToRecipeInputType.Text]:
     "I have copied some recipe text from the internet. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Here's the copied text:\n\n",
   [TextToRecipeInputType.Webpage]:
@@ -39,31 +38,20 @@ export const textToRecipe = async (
   if (text.length < OCR_MIN_VALID_TEXT) return;
 
   const recognizedRecipes: StandardizedRecipeImportEntry[] = [];
-  const gptFn = initOCRFormatRecipe(recognizedRecipes);
-  const gptFnName = gptFn.function.name;
-  if (!gptFnName)
-    throw new Error("GPT function must have name for mandated tool call");
 
-  await openAiHelper.getJsonResponseWithTools(
-    GPTModelQuality.LowQuality,
-    [
-      {
-        role: "system",
-        content: "You are a data processor utility",
-      },
-      {
-        role: "user",
-        content: prompts[inputType] + text,
-      },
-    ],
-    [gptFn],
-    {
-      type: "function",
-      function: {
-        name: gptFnName,
-      },
+  await generateText({
+    system:
+      "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank.",
+    model: AI_MODEL_LOW,
+    prompt: prompts[inputType] + text,
+    tools: {
+      formatRecipe: initOCRFormatRecipeTool(recognizedRecipes),
     },
-  );
+    toolChoice: {
+      type: "tool",
+      toolName: "formatRecipe",
+    },
+  });
 
   const recognizedRecipe = recognizedRecipes[0];
 

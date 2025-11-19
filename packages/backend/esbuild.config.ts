@@ -10,7 +10,7 @@ build({
       disable: process.env.SOURCEMAP_UPLOAD !== "true",
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: "recipesage",
-      project: "api",
+      project: "recipesage-api",
     }),
   ],
 });

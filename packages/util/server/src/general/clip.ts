@@ -293,7 +293,7 @@ export const clipUrl = async (
 
   if (response.headers.get("content-type") === "application/pdf") {
     const pdfContent = await response.buffer();
-    const result = await pdfToRecipe(pdfContent, 3);
+    const result = await pdfToRecipe(pdfContent);
 
     if (!result) {
       metrics.clipError.inc({

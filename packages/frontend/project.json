@@ -29,7 +29,8 @@
         "commands": [
           "ng build --configuration=production",
           "webpack -c sw-webpack.config.js",
-          "workbox injectManifest"
+          "workbox injectManifest",
+          "tsx upload-sourcemaps.ts"
         ],
         "parallel": false
       }

@@ -1,8 +1,7 @@
-import { initOCRFormatRecipe } from "../ml/chatFunctions";
-import { OpenAIHelper, GPTModelQuality } from "../ml/openai";
+import { initOCRFormatRecipeTool } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
-
-const openAiHelper = new OpenAIHelper();
+import { generateText } from "ai";
+import { AI_MODEL_HIGH } from "./vercel";
 
 export enum VisionToRecipeInputType {
   Photo,
@@ -24,18 +23,12 @@ export const visionToRecipe = async (
   inputType: VisionToRecipeInputType,
 ) => {
   const recognizedRecipes: StandardizedRecipeImportEntry[] = [];
-  const gptFn = initOCRFormatRecipe(recognizedRecipes);
-  const gptFnName = gptFn.function.name;
-  if (!gptFnName)
-    throw new Error("GPT function must have name for mandated tool call");
 
-  await openAiHelper.getJsonResponseWithTools(
-    GPTModelQuality.ImageRecognition,
-    [
-      {
-        role: "system",
-        content: "You are the RecipeSage cooking assistant",
-      },
+  await generateText({
+    system:
+      "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape.",
+    model: AI_MODEL_HIGH,
+    messages: [
       {
         role: "user",
         content: [
@@ -44,28 +37,23 @@ export const visionToRecipe = async (
             text: prompts[inputType],
           },
           ...imageB64.map(
-            (imageB64) =>
+            (el) =>
               ({
-                type: "image_url",
-                image_url: {
-                  url: `data:image/jpeg;base64,${imageB64}`,
-                  detail: "high",
-                },
+                type: "image",
+                image: el,
               }) as const,
           ),
         ],
       },
     ],
-    [gptFn],
-    {
-      type: "function",
-      function: {
-        name: gptFnName,
-      },
+    tools: {
+      formatRecipe: initOCRFormatRecipeTool(recognizedRecipes),
     },
-  );
+    toolChoice: {
+      type: "tool",
+      toolName: "formatRecipe",
+    },
+  });
 
-  const recognizedRecipe = recognizedRecipes[0];
-
-  return recognizedRecipe;
+  return recognizedRecipes.at(0);
 };

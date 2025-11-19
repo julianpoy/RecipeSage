@@ -1088,6 +1088,8 @@ export class EditRecipePage {
   }
 
   async addLabel(title: string, labelGroupId: string | null) {
+    if (!title.trim()) return;
+
     const label = await this.trpcService.handle(
       this.trpcService.trpc.labels.createLabel.mutate({
         title,
