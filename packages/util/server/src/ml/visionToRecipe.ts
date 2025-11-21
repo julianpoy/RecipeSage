@@ -1,7 +1,7 @@
 import { initOCRFormatRecipeTool } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { generateText } from "ai";
-import { AI_MODEL_HIGH } from "./vercel";
+import { AI_MODEL_HIGH, aiProvider } from "./vercel";
 
 export enum VisionToRecipeInputType {
   Photo,
@@ -27,7 +27,7 @@ export const visionToRecipe = async (
   await generateText({
     system:
       "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape.",
-    model: AI_MODEL_HIGH,
+    model: aiProvider(AI_MODEL_HIGH),
     messages: [
       {
         role: "user",

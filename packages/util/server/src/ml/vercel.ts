@@ -1,7 +1,8 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { createAnthropic } from "@ai-sdk/anthropic";
+import { createOpenAI, openai } from "@ai-sdk/openai";
+import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 
-const aiProvider = (() => {
+export const aiProvider = (() => {
+  const provider = process.env.AI_PROVIDER;
   switch (process.env.AI_PROVIDER || "openai") {
     case "openai": {
       return createOpenAI({
@@ -14,9 +15,33 @@ const aiProvider = (() => {
         apiKey: process.env.ANTHROPIC_API_KEY,
       });
     }
+    default: {
+      throw new Error(`Unsupported AI provider: ${provider}`);
+    }
   }
 })();
-globalThis.AI_SDK_DEFAULT_PROVIDER = aiProvider;
+
+export const aiProviderNativeTools = (() => {
+  switch (process.env.AI_PROVIDER || "openai") {
+    case "openai": {
+      return {
+        web_search: openai.tools.webSearch({
+          searchContextSize: "high",
+        }),
+      } as const;
+    }
+    case "anthropic": {
+      return {
+        web_search: anthropic.tools.webSearch_20250305({
+          maxUses: 3,
+        }),
+      } as const;
+    }
+    default: {
+      throw new Error(`Unsupported AI provider`);
+    }
+  }
+})();
 
 export const AI_MODEL_HIGH = process.env.AI_MODEL_HIGH || "gpt-5";
 export const AI_MODEL_LOW = process.env.AI_MODEL_LOW || "gpt-5-mini";
