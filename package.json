@@ -186,7 +186,7 @@
     "vitest": "^3.2.4",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
-    "workbox-cli": "^7.0.0"
+    "workbox-cli": "^7.4.0"
   },
   "prisma": {
     "schema": "packages/prisma/src/prisma/schema.prisma"
