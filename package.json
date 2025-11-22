@@ -98,7 +98,7 @@
     "ts-dedent": "^2.2.0",
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.6.2",
-    "tsx": "^4.19.3",
+    "tsx": "^4.20.6",
     "typesense": "^2.1.0",
     "umzug": "^3.7.0",
     "unitz-ts": "^1.0.1",
