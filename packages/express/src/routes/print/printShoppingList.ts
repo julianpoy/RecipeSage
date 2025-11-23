@@ -22,8 +22,8 @@ import {
 const schema = {
   query: z.object({
     version: z.string(),
-    groupCategories: z.string(),
-    groupSimilar: z.string(),
+    groupCategories: z.string().optional(),
+    groupSimilar: z.string().optional(),
     sortBy: z.nativeEnum(ShoppingListSortOptions).optional(),
     preferredLanguage: z.string().optional(),
   }),
