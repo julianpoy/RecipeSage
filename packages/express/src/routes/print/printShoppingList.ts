@@ -24,7 +24,7 @@ const schema = {
     version: z.string(),
     groupCategories: z.string().optional(),
     groupSimilar: z.string().optional(),
-    sortBy: z.nativeEnum(ShoppingListSortOptions).optional(),
+    sortBy: z.enum(ShoppingListSortOptions).optional(),
     preferredLanguage: z.string().optional(),
   }),
   params: z.object({
