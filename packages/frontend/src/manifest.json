@@ -44,7 +44,9 @@
       "url": "/#/edit-recipe/new?utm_source=homescreen",
       "icons": [
         {
-          "src": "assets/icon/android-chrome-192x192.png"
+          "src": "assets/icon/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
@@ -55,7 +57,9 @@
       "url": "/#/shopping-lists?utm_source=homescreen",
       "icons": [
         {
-          "src": "assets/icon/android-chrome-192x192.png"
+          "src": "assets/icon/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
@@ -66,14 +70,30 @@
       "url": "/#/meal-planners?utm_source=homescreen",
       "icons": [
         {
-          "src": "assets/icon/android-chrome-192x192.png"
+          "src": "assets/icon/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://static.recipesage.com/assets/screenshots/recipesage-myrecipes-curated-recipes-md-1280x720-20251123.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://static.recipesage.com/assets/screenshots/recipesage-myrecipes-curated-recipes-md-720x1280-20251123.jpg",
+      "sizes": "719x1280",
+      "type": "image/jpeg"
     }
   ],
   "share_target": {
     "action": "/#/edit-recipe/new",
     "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "sharetarget-title",
       "text": "sharetarget-text",
