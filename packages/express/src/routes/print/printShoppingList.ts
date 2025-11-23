@@ -22,9 +22,9 @@ import {
 const schema = {
   query: z.object({
     version: z.string(),
-    groupCategories: z.string(),
-    groupSimilar: z.string(),
-    sortBy: z.nativeEnum(ShoppingListSortOptions).optional(),
+    groupCategories: z.string().optional(),
+    groupSimilar: z.string().optional(),
+    sortBy: z.enum(ShoppingListSortOptions).optional(),
     preferredLanguage: z.string().optional(),
   }),
   params: z.object({

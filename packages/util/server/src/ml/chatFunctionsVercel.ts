@@ -12,6 +12,12 @@ export const initCreateAssistantRecipeTool = () =>
       "Creates and displays a well-formatted embedded recipe to the user in the UI",
     inputSchema: z.object({
       title: z.string().describe("The title of the recipe"),
+      source: z
+        .string()
+        .describe(
+          "The source site of the recipe, if it was pulled from a web search",
+        )
+        .optional(),
       yield: z
         .string()
         .describe('The yield of the recipe. E.g. "2 servings" or "6 cupcakes"'),
@@ -32,6 +38,7 @@ export const initCreateAssistantRecipeTool = () =>
     }),
     execute: async ({
       title,
+      source,
       yield: recipeYield,
       activeTime,
       totalTime,
@@ -40,6 +47,7 @@ export const initCreateAssistantRecipeTool = () =>
     }) => {
       console.log("buildRecipe called with", {
         title,
+        source,
         yield: recipeYield,
         activeTime,
         totalTime,
@@ -65,7 +73,7 @@ export const initCreateAssistantRecipeTool = () =>
           title: title || "Unnamed",
           description: "",
           folder: "main",
-          source: "RecipeSage Cooking Assistant",
+          source: source || "RecipeSage Cooking Assistant",
           url: "",
           rating: undefined,
           yield: recipeYield || "",
