@@ -39,6 +39,7 @@ export class DebugStoreService {
       userAgent: navigator.userAgent,
       windowWidth: self.innerWidth,
       windowHeight: self.innerHeight,
+      version: (window as any).version,
       sw: {
         isPresent: !!navigator.serviceWorker.controller,
         state: navigator.serviceWorker.controller?.state,
