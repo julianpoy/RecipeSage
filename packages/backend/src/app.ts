@@ -116,14 +116,18 @@ app.use(function (req, res, next) {
   res.on("finish", function () {
     const time = timer();
     const path = req.baseUrl + (req.route?.path || req.path);
-    metrics.apiRequest.observe(
-      {
-        status_code: res.statusCode,
-        method: req.method,
-        path,
-      },
-      time,
-    );
+
+    // We don't capture 404s here because endpoint probing blows up our cardinality
+    if (res.statusCode !== 404) {
+      metrics.apiRequest.observe(
+        {
+          status_code: res.statusCode,
+          method: req.method,
+          path,
+        },
+        time,
+      );
+    }
   });
 
   next();
