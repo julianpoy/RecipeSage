@@ -46,7 +46,7 @@
     "ahocorasick": "^1.0.2",
     "ai": "^6.0.0-beta.99",
     "axios": "^1.8.4",
-    "body-parser": "~2.2.0",
+    "body-parser": "~2.2.1",
     "commander": "14.0.1",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.47.0",
