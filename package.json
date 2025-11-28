@@ -125,7 +125,7 @@
     "@angular/language-service": "20.3.10",
     "@babel/preset-env": "^7.27.1",
     "@capacitor/cli": "7.4.4",
-    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.30.0",
     "@faker-js/faker": "^9.7.0",
     "@ionic/angular-toolkit": "12.3.0",
