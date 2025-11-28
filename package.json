@@ -175,7 +175,7 @@
     "regenerator-runtime": "^0.14.1",
     "sequelize-cli": "^6.6.2",
     "sinon": "^21.0.0",
-    "supertest": "7.1.0",
+    "supertest": "7.1.4",
     "ts-loader": "^9.5.2",
     "ts-node": "~10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
