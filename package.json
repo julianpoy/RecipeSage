@@ -152,7 +152,7 @@
     "@types/node": "24.9.1",
     "@types/node-fetch": "^2.6.11",
     "@types/pdfkit": "^0.17.3",
-    "@types/pdfmake": "^0.2.11",
+    "@types/pdfmake": "^0.2.12",
     "@types/sanitize-html": "^2.16.0",
     "@types/sharp": "^0.31.1",
     "@types/showdown": "^2.0.6",
