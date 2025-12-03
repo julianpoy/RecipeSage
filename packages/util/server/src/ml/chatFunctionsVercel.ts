@@ -120,10 +120,20 @@ export const initOCRFormatRecipeTool = (
           "The total amount of time it will take to cook the recipe including prep",
         ),
       ingredients: z
-        .array(z.string().describe("An ingredient required for the recipe"))
+        .array(
+          z.object({
+            text: z.string(),
+            isSectionHeader: z.boolean(),
+          }),
+        )
         .describe("List of ingredients"),
       instructions: z
-        .array(z.string().describe("An instruction for the recipe"))
+        .array(
+          z.object({
+            text: z.string(),
+            isSectionHeader: z.boolean(),
+          }),
+        )
         .describe("List of instructions"),
       notes: z
         .string()
@@ -142,7 +152,7 @@ export const initOCRFormatRecipeTool = (
       instructions,
       notes,
     }) => {
-      console.log("buildRecipe called with", {
+      console.log("initOCRFormatRecipeTool called with", {
         title,
         description,
         yield: recipeYield,
@@ -165,8 +175,12 @@ export const initOCRFormatRecipeTool = (
             yield: (recipeYield || "").replaceAll("<UNKNOWN>", ""),
             activeTime: (activeTime || "").replaceAll("<UNKNOWN>", ""),
             totalTime: (totalTime || "").replaceAll("<UNKNOWN>", ""),
-            ingredients: ingredients.join("\n"),
-            instructions: instructions.join("\n"),
+            ingredients: ingredients
+              .map((el) => (el.isSectionHeader ? `[${el.text}]` : el.text))
+              .join("\n"),
+            instructions: instructions
+              .map((el) => (el.isSectionHeader ? `[${el.text}]` : el.text))
+              .join("\n"),
             notes: (notes || "").replaceAll("\\n", "\n"),
           },
           labels: [],

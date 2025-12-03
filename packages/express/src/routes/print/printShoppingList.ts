@@ -113,11 +113,11 @@ export const printShoppingListHandler = defineHandler(
     const itemSummariesTranslated = itemSummaries.map((el) => {
       const categoryTitle = el.categoryTitle || "::uncategorized";
       if (categoryTitle.startsWith("::")) {
-        const key = categoryTitlesToi18n[categoryTitle.substring(2)];
+        const translatedTitle =
+          categoryTitlesToi18n[categoryTitle.substring(2)];
         return {
           ...el,
-          categoryTitle:
-            categoryTitlesToi18n[key] || categoryTitlesToi18n.uncategorized,
+          categoryTitle: translatedTitle || categoryTitlesToi18n.uncategorized,
         };
       }
       return el;
