@@ -108,7 +108,11 @@ export const enexHandler = defineHandler(
       };
 
       const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
-      for (const enexRecipe of data["en-export"].note) {
+      // We want to support both single-note evernote files as well as multi-note
+      const entries = Array.isArray(data["en-export"].note)
+        ? data["en-export"].note
+        : [data["en-export"].note];
+      for (const enexRecipe of entries) {
         if (!enexRecipe.content._cdata) continue;
 
         let recipeText = "";
