@@ -122,34 +122,39 @@ async function main() {
     }
 
     for (const tableName of tablesNeeded) {
-      const jsonl = await new Promise((resolve, reject) => {
-        const process = spawn("mdb-json", [potentialDbPaths[0], tableName]);
+      try {
+        const jsonl = await new Promise((resolve, reject) => {
+          const process = spawn("mdb-json", [potentialDbPaths[0], tableName]);
 
-        let stdout = "";
-        let stderr = "";
-        process.stdout.on("data", (data) => {
-          stdout += data;
+          let stdout = "";
+          let stderr = "";
+          process.stdout.on("data", (data) => {
+            stdout += data;
+          });
+
+          process.stderr.on("data", (data) => {
+            stderr += data;
+          });
+
+          process.on("close", (code) => {
+            if (code > 0) {
+              reject(stderr);
+            } else {
+              resolve(stdout);
+            }
+          });
         });
 
-        process.stderr.on("data", (data) => {
-          stderr += data;
-        });
+        const json = jsonl
+          .split("\n")
+          .filter((line) => line.trim())
+          .map((line) => JSON.parse(line));
 
-        process.on("close", (code) => {
-          if (code > 0) {
-            reject(stderr);
-          } else {
-            resolve(stdout);
-          }
-        });
-      });
-
-      const json = jsonl
-        .split("\n")
-        .filter((line) => line.trim())
-        .map((line) => JSON.parse(line));
-
-      tableMap[tableName] = json;
+        tableMap[tableName] = json;
+      } catch (e) {
+        tableMap[tableName] = [];
+        console.error(e);
+      }
     }
 
     const labelMap = {};
