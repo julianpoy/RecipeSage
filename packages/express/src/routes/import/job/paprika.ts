@@ -81,7 +81,6 @@ export const paprikaHandler = defineHandler(
             ? `Nutritional Info: ${recipeData.difficulty}`
             : "",
           recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : "",
-          recipeData.rating ? `Rating: ${recipeData.rating}` : "",
         ]
           .filter((e) => e && e.length > 0)
           .join("\n");
@@ -109,6 +108,7 @@ export const paprikaHandler = defineHandler(
             ingredients: recipeData.ingredients,
             instructions: recipeData.directions,
             yield: recipeData.servings,
+            rating: parseInt(recipeData.rating),
             totalTime,
             activeTime: recipeData.prep_time,
             notes,
