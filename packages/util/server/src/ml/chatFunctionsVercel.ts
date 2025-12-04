@@ -120,26 +120,18 @@ export const initOCRFormatRecipeTool = (
           "The total amount of time it will take to cook the recipe including prep",
         ),
       ingredients: z
-        .array(
-          z.object({
-            text: z.string(),
-            isSectionHeader: z.boolean(),
-          }),
-        )
-        .describe("List of ingredients"),
+        .string()
+        .optional()
+        .describe("Multiline string list of ingredients"),
       instructions: z
-        .array(
-          z.object({
-            text: z.string(),
-            isSectionHeader: z.boolean(),
-          }),
-        )
-        .describe("List of instructions"),
+        .string()
+        .optional()
+        .describe("Multiline string list of instructions"),
       notes: z
         .string()
         .optional()
         .describe(
-          "Multiline. Any notes by the author, or content that does not fit into the other fields. Feel free to add headers by using [header] notation.",
+          "Multiline string of any notes by the author, or content that does not fit into the other fields",
         ),
     }),
     execute: async ({
@@ -163,6 +155,13 @@ export const initOCRFormatRecipeTool = (
         notes,
       });
 
+      const markdownHeadersToRS = (line: string) => {
+        if (line.startsWith("#")) {
+          return `[${line.replace(/^#\s*/, "")}]`;
+        }
+        return line;
+      };
+
       try {
         const entry: StandardizedRecipeImportEntry = {
           recipe: {
@@ -175,13 +174,21 @@ export const initOCRFormatRecipeTool = (
             yield: (recipeYield || "").replaceAll("<UNKNOWN>", ""),
             activeTime: (activeTime || "").replaceAll("<UNKNOWN>", ""),
             totalTime: (totalTime || "").replaceAll("<UNKNOWN>", ""),
-            ingredients: ingredients
-              .map((el) => (el.isSectionHeader ? `[${el.text}]` : el.text))
+            ingredients: (ingredients || "")
+              .replaceAll("\\n", "\n")
+              .split("\n")
+              .map(markdownHeadersToRS)
               .join("\n"),
-            instructions: instructions
-              .map((el) => (el.isSectionHeader ? `[${el.text}]` : el.text))
+            instructions: (instructions || "")
+              .replaceAll("\\n", "\n")
+              .split("\n")
+              .map(markdownHeadersToRS)
               .join("\n"),
-            notes: (notes || "").replaceAll("\\n", "\n"),
+            notes: (notes || "")
+              .replaceAll("\\n", "\n")
+              .split("\n")
+              .map(markdownHeadersToRS)
+              .join("\n"),
           },
           labels: [],
           images: [],
