@@ -17,6 +17,7 @@ export const shoppingListSummaryWithItems =
         },
       },
       title: true,
+      categoryOrder: true,
       createdAt: true,
       updatedAt: true,
       _count: {

@@ -88,6 +88,7 @@ export const getShoppingListItemGroupings = (
   items: ShoppingListItemSummary[],
   sortBy: ShoppingListSortOptions,
   uncategorizedTitle: string,
+  categoryOrder: string | null,
 ): {
   items: ShoppingListItemSummary[];
   groupTitles: string[];
@@ -107,13 +108,26 @@ export const getShoppingListItemGroupings = (
     return a.localeCompare(b);
   });
 
+  const categoryOrderSet = new Set(categoryOrder?.toLowerCase().split("\n"));
+  const categoryOrderMap = Object.fromEntries(
+    Array.from(categoryOrderSet).map((el, idx) => [el, idx + 1]),
+  );
+
   const categoryTitles = Array.from(
     new Set<string>(
       items.map((item) => item.categoryTitle || uncategorizedTitle),
     ),
   ).sort((a, b) => {
-    // Sort categories by title (always)
-    return a.localeCompare(b);
+    const aOrder =
+      categoryOrderMap[a.toLowerCase()] || categoryOrderSet.size + 1;
+    const bOrder =
+      categoryOrderMap[b.toLowerCase()] || categoryOrderSet.size + 1;
+
+    if (aOrder === bOrder) {
+      return a.localeCompare(b);
+    }
+
+    return aOrder - bOrder;
   });
 
   const itemsByGroupTitle = groupAndSort(items, "groupTitle", sortBy);

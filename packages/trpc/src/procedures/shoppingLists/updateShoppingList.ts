@@ -11,13 +11,15 @@ import {
   ShoppingListAccessLevel,
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
+import type { Prisma } from "@prisma/client";
 
 export const updateShoppingList = publicProcedure
   .input(
     z.object({
       id: z.uuid(),
-      title: z.string().min(1).max(254),
-      collaboratorUserIds: z.array(z.uuid()),
+      title: z.string().min(1).max(254).optional(),
+      collaboratorUserIds: z.array(z.uuid()).optional(),
+      categoryOrder: z.string().max(10000).nullable().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -33,29 +35,43 @@ export const updateShoppingList = publicProcedure
       });
     }
 
-    const collaboratorUsers = await prisma.user.findMany({
-      where: {
-        id: {
-          in: input.collaboratorUserIds,
+    let collaboratorUsersUpdate:
+      | Prisma.ShoppingListCollaboratorUncheckedUpdateManyWithoutShoppingListNestedInput
+      | undefined = undefined;
+    if (input.collaboratorUserIds) {
+      const collaboratorUsers = await prisma.user.findMany({
+        where: {
+          id: {
+            in: input.collaboratorUserIds,
+          },
         },
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (collaboratorUsers.length < input.collaboratorUserIds.length) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "One or more of the collaborators you specified are not valid",
+        select: {
+          id: true,
+        },
       });
-    }
 
-    await prisma.shoppingListCollaborator.deleteMany({
-      where: {
-        shoppingListId: input.id,
-      },
-    });
+      if (collaboratorUsers.length < input.collaboratorUserIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "One or more of the collaborators you specified are not valid",
+        });
+      }
+
+      await prisma.shoppingListCollaborator.deleteMany({
+        where: {
+          shoppingListId: input.id,
+        },
+      });
+
+      collaboratorUsersUpdate = {
+        createMany: {
+          data: collaboratorUsers.map((collaboratorUser) => ({
+            userId: collaboratorUser.id,
+          })),
+        },
+      };
+    }
 
     const updatedShoppingList = await prisma.shoppingList.update({
       where: {
@@ -64,13 +80,8 @@ export const updateShoppingList = publicProcedure
       data: {
         title: input.title,
         userId: session.userId,
-        collaboratorUsers: {
-          createMany: {
-            data: collaboratorUsers.map((collaboratorUser) => ({
-              userId: collaboratorUser.id,
-            })),
-          },
-        },
+        collaboratorUsers: collaboratorUsersUpdate,
+        categoryOrder: input.categoryOrder,
       },
     });
 
@@ -80,7 +91,7 @@ export const updateShoppingList = publicProcedure
         updatedShoppingList.userId,
         // We need to notify both the old collaborators and the new collaborators of the update
         ...access.subscriberIds,
-        ...input.collaboratorUserIds,
+        ...(input.collaboratorUserIds || []),
       ]),
     ];
     for (const subscriberId of subscriberIds) {

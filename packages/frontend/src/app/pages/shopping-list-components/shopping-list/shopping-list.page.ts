@@ -145,7 +145,10 @@ export class ShoppingListPage {
     this.me = me;
   }
 
-  async processList(_items: ShoppingListItemSummary[]) {
+  async processList(
+    _items: ShoppingListItemSummary[],
+    categoryOrder: string | null,
+  ) {
     const items = _items
       .filter((item) => !item.completed)
       .map((el) => {
@@ -190,6 +193,7 @@ export class ShoppingListPage {
       items,
       this.preferences[ShoppingListPreferenceKey.SortBy],
       this.parseCategoryTitle("::uncategorized"),
+      categoryOrder,
     );
 
     this.items = sortedItems;
@@ -203,6 +207,7 @@ export class ShoppingListPage {
       completedItems,
       this.preferences[ShoppingListPreferenceKey.SortBy],
       this.parseCategoryTitle("::uncategorized"),
+      categoryOrder,
     );
 
     this.completedItems = sortedCompletedItems;
@@ -232,7 +237,7 @@ export class ShoppingListPage {
       .toPromise();
     this.titleService.setTitle(title);
 
-    this.processList(shoppingListItems);
+    this.processList(shoppingListItems, shoppingList.categoryOrder);
   }
 
   async completeItems(items: ShoppingListItemSummary[], completed: boolean) {

@@ -108,6 +108,16 @@
     {{ 'pages.shoppingListPopover.update' | translate }}
   </ion-button>
 
+  <ion-button
+    (click)="showCategoryOrderModal()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="reorder-three" slot="start"></ion-icon>
+    {{ 'pages.shoppingListPopover.categoryOrder' | translate }}
+  </ion-button>
+
   <ion-list-header>
     {{ 'pages.shoppingListPopover.dangerZone.title' | translate }}
   </ion-list-header>

@@ -302,6 +302,7 @@ model ShoppingList {
   id                String                     @id @default(uuid()) @db.Uuid
   userId            String                     @db.Uuid
   title             String
+  categoryOrder     String?
   createdAt         DateTime                   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime                   @updatedAt @db.Timestamptz(6)
   items             ShoppingListItem[]
