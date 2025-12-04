@@ -22,6 +22,7 @@ import {
   ShoppingListSummary,
 } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
+import { ShoppingListCategoryOrderModalPage } from "../shopping-list-category-order-modal/shopping-list-category-order-modal.page";
 
 @Component({
   selector: "page-shopping-list-popover",
@@ -187,6 +188,20 @@ export class ShoppingListPopoverPage {
       },
     });
 
+    await modal.present();
+    await modal.onDidDismiss();
+
+    this.dismiss();
+  }
+
+  async showCategoryOrderModal() {
+    const modal = await this.modalCtrl.create({
+      component: ShoppingListCategoryOrderModalPage,
+      componentProps: {
+        shoppingListId: this.shoppingListId,
+        categoryOrder: this.shoppingList.categoryOrder,
+      },
+    });
     await modal.present();
     await modal.onDidDismiss();
 

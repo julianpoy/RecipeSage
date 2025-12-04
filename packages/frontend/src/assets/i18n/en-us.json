@@ -920,6 +920,7 @@
   "pages.shoppingListPopover.actions.title": "Actions",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.update": "Edit/Rename List",
+  "pages.shoppingListPopover.categoryOrder": "Change Category Order",
   "pages.shoppingListPopover.dangerZone.title": "Danger Zone",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
@@ -943,6 +944,12 @@
   "pages.shoppingListIgnoreModal.instructions": "Each entry should be on it's own line. Entries will match an ingredient if the ingredient contains any part of the line. If you enter \"salt\", it will match \"1 tbsp sea salt finely ground\".",
   "pages.shoppingListIgnoreModal.label": "Ignore list",
   "pages.shoppingListIgnoreModal.placeholder": "Keywords to ignore, each on their own line",
+
+  "pages.shoppingListCategoryOrderModal.title": "Shopping List Category Order List",
+  "pages.shoppingListCategoryOrderModal.description": "Categories within this shopping list will be sorted in the order you list them here.",
+  "pages.shoppingListCategoryOrderModal.instructions": "Each entry should be on it's own line, and should match one of the predefined categories, or a custom category title you've entered when sorting items. Capitalization is ignored.",
+  "pages.shoppingListCategoryOrderModal.label": "Category order",
+  "pages.shoppingListCategoryOrderModal.placeholder": "Category titles, each on their own line",
 
   "pages.addFriendModal.title": "Find User",
   "pages.addFriendModal.profileWarning": "Note: The desired user must have enabled their profile.",

@@ -134,6 +134,7 @@ export const printShoppingListHandler = defineHandler(
       itemSummariesTranslated,
       req.query.sortBy || ShoppingListSortOptions.TitleDesc,
       categoryTitlesToi18n.uncategorized,
+      shoppingList.categoryOrder,
     );
 
     res.render("shoppinglist-default", {

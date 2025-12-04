@@ -17,6 +17,7 @@ export const shoppingListSummary =
         },
       },
       title: true,
+      categoryOrder: true,
       createdAt: true,
       updatedAt: true,
       _count: {
