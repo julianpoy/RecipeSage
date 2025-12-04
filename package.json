@@ -120,7 +120,7 @@
     "@angular-eslint/schematics": "20.5.1",
     "@angular-eslint/template-parser": "20.5.1",
     "@angular/cli": "20.3.9",
-    "@angular/compiler": "20.3.10",
+    "@angular/compiler": "20.3.15",
     "@angular/compiler-cli": "20.3.10",
     "@angular/language-service": "20.3.10",
     "@babel/preset-env": "^7.28.5",
