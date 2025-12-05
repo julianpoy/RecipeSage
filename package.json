@@ -45,7 +45,7 @@
     "accept-language": "^3.0.20",
     "ahocorasick": "^1.0.2",
     "ai": "^6.0.0-beta.130",
-    "axios": "^1.8.4",
+    "axios": "^1.13.2",
     "body-parser": "~2.2.1",
     "commander": "14.0.1",
     "cookie-parser": "^1.4.7",
