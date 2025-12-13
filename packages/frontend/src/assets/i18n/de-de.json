@@ -1088,5 +1088,11 @@
     "pages.newLabelItemModal.badLabelMessage": "Dein Label-Name enthält ungültige Zeichen",
     "pages.newLabelItemModal.existingConflict": "Es existiert bereits ein Label mit diesem Namen",
     "pages.editRecipe.clipURL.unsupportedSiteUrl": "Das Extrahieren von Websites wie YouTube, TikTok etc. ist normalerweise nicht erfolgreich, da diese Sites Scraper blockieren. Ich empfehle das Verwenden der Browser-Erweiterung. Alternativ kannst du einen Screenshot des Rezepts machen und es als Bild importieren.",
-    "generic.warning": "Warnung"
+    "generic.warning": "Warnung",
+    "pages.shoppingListPopover.categoryOrder": "Reihenfolge der Kategorien ändern",
+    "pages.shoppingListCategoryOrderModal.title": "Kategoriereihenfolge für Einkaufsliste",
+    "pages.shoppingListCategoryOrderModal.description": "Kategorien auf dieser Einkaufsliste werden in der von dir hier festgelegten Reihenfolge sortiert.",
+    "pages.shoppingListCategoryOrderModal.instructions": "Jeder Eintrag sollte in einer eigenen Zeile stehen und mit dem Namen einer der vordefinierten oder benutzerdefinierten Kategorien übereinstimmen, die du beim Sortieren von Artikeln eingegeben hast. Es muss nicht auf Klein‑ und Großschreibung geachtet werden.",
+    "pages.shoppingListCategoryOrderModal.label": "Kategoriereihenfolge",
+    "pages.shoppingListCategoryOrderModal.placeholder": "Kategorienamen, einer pro Zeile"
 }
