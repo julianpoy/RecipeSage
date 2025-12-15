@@ -1088,5 +1088,11 @@
     "pages.contact.tabTitle": "Επικοινωνήστε Μαζί μου - RecipeSage",
     "pages.contributeThankYou.tabTitle": "Ευχαριστώ - RecipeSage",
     "pages.contributeCancel.tabTitle": "Συνεισφορά - RecipeSage",
-    "pages.downloadAndInstall.tabTitle": "Λήψη & Εγκατάσταση - RecipeSage"
+    "pages.downloadAndInstall.tabTitle": "Λήψη & Εγκατάσταση - RecipeSage",
+    "pages.shoppingListPopover.categoryOrder": "Αλλαγή Ταξινόμησης Κατηγοριών",
+    "pages.shoppingListCategoryOrderModal.title": "Λίστα Ψώνια - Ταξινόμηση Κατηγοριών",
+    "pages.shoppingListCategoryOrderModal.description": "Οι κατηγορίες σε αυτή τη λίστα για ψώνια θα ταξινομηθούν με βάση τη σειρά που τις ορίζετε εδώ.",
+    "pages.shoppingListCategoryOrderModal.instructions": "Κάθε στοιχείο πρέπει να είναι σε μια γραμμή και πρέπει να ταιριάζει με μια από τις προκαθορισμένες ή προσαρμοσμένες κατηγορίες κατά την ταξινόμηση.",
+    "pages.shoppingListCategoryOrderModal.label": "Ταξινόμηση Κατηγορίας",
+    "pages.shoppingListCategoryOrderModal.placeholder": "Κατηγορίες, ένα στοιχείο ανά γραμμή"
 }
