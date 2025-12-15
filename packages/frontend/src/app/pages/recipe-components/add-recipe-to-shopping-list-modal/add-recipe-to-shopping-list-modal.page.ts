@@ -7,16 +7,14 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import {
-  ShoppingLists,
-  ShoppingListService,
-} from "~/services/shopping-list.service";
 import { LoadingService } from "~/services/loading.service";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
 import { UtilService } from "~/services/util.service";
 import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
+import { TRPCService } from "../../../services/trpc.service";
+import type { RecipeSummary, ShoppingListSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-add-recipe-to-shopping-list-modal",
@@ -27,27 +25,27 @@ import { SelectIngredientsComponent } from "../../../components/select-ingredien
 export class AddRecipeToShoppingListModalPage {
   navCtrl = inject(NavController);
   translate = inject(TranslateService);
-  shoppingListService = inject(ShoppingListService);
   recipeService = inject(RecipeService);
   loadingService = inject(LoadingService);
   utilService = inject(UtilService);
   toastCtrl = inject(ToastController);
   alertCtrl = inject(AlertController);
   modalCtrl = inject(ModalController);
+  trpcService = inject(TRPCService);
 
   @Input({
     required: true,
   })
-  recipes!: any[];
+  recipes!: Pick<RecipeSummary, "id" | "title" | "ingredients">[];
   @Input() scale = 1;
   selectedIngredientsByRecipe: { [key: string]: ParsedIngredient[] } = {};
   selectedIngredients: ParsedIngredient[] = [];
 
-  shoppingLists?: ShoppingLists;
+  shoppingLists?: ShoppingListSummary[];
 
-  destinationShoppingList: any;
+  destinationShoppingList?: ShoppingListSummary;
 
-  @Input() reference: any;
+  saving = false;
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
@@ -67,17 +65,14 @@ export class AddRecipeToShoppingListModalPage {
     const lastUsedShoppingListId = localStorage.getItem(
       "lastUsedShoppingListId",
     );
-    const matchingLists = this.shoppingLists.filter(
-      (shoppingList) => shoppingList.id === lastUsedShoppingListId,
+    this.destinationShoppingList = this.shoppingLists.find(
+      (el) => el.id === lastUsedShoppingListId,
     );
-    if (matchingLists.length > 0) {
-      this.destinationShoppingList = matchingLists[0];
-    } else if (this.shoppingLists.length === 1) {
-      this.destinationShoppingList = this.shoppingLists[0];
-    }
   }
 
   saveLastUsedShoppingList() {
+    if (!this.destinationShoppingList) return;
+
     localStorage.setItem(
       "lastUsedShoppingListId",
       this.destinationShoppingList.id,
@@ -85,10 +80,12 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   async loadLists() {
-    const response = await this.shoppingListService.fetch();
-    if (!response.success) return;
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.getShoppingLists.query(),
+    );
+    if (!response) return;
 
-    this.shoppingLists = response.data;
+    this.shoppingLists = response;
 
     this.selectLastUsedShoppingList();
   }
@@ -111,30 +108,33 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   async save() {
+    if (this.saving) return;
+    if (!this.destinationShoppingList) return;
+
+    this.saving = true;
     const loading = this.loadingService.start();
 
     this.saveLastUsedShoppingList();
-
-    const reference = this.reference || Date.now();
 
     const items = Object.entries(this.selectedIngredientsByRecipe)
       .map(([recipeId, ingredients]) =>
         (ingredients as ParsedIngredient[]).map((ingredient) => ({
           title: ingredient.content,
           recipeId,
-          reference,
         })),
       )
       .flat();
 
-    const response = await this.shoppingListService.addItems(
-      this.destinationShoppingList.id,
-      {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.createShoppingListItems.mutate({
+        shoppingListId: this.destinationShoppingList.id,
         items,
-      },
+      }),
     );
+
+    this.saving = false;
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss();
   }
@@ -146,6 +146,9 @@ export class AddRecipeToShoppingListModalPage {
 
     const modal = await this.modalCtrl.create({
       component: NewShoppingListModalPage,
+      componentProps: {
+        openAfterCreate: false,
+      },
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {

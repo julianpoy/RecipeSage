@@ -106,20 +106,6 @@ export class ShoppingListPage {
       this.navCtrl.navigateRoot(RouteMap.ShoppingListsPage.getPath());
       throw new Error("Shopping list ID not provided");
     }
-
-    this.websocketService.register(
-      "shoppingList:itemsUpdated",
-      (payload) => {
-        if (
-          payload.shoppingListId === this.shoppingListId &&
-          payload.reference !== this.reference
-        ) {
-          this.reference = payload.reference;
-          this.loadList();
-        }
-      },
-      this,
-    );
   }
 
   ionViewWillEnter() {
@@ -128,7 +114,23 @@ export class ShoppingListPage {
     Promise.all([this.loadList(), this.loadMe()]).finally(() => {
       loading.dismiss();
     });
+
+    this.websocketService.on("shoppingList:itemsUpdated", this.onWSEvent);
   }
+
+  ionViewWillLeave() {
+    this.websocketService.off("shoppingList:itemsUpdated", this.onWSEvent);
+  }
+
+  onWSEvent = (data: Record<string, string>) => {
+    if (
+      data.shoppingListId === this.shoppingListId &&
+      data.reference !== this.reference
+    ) {
+      this.reference = data.reference;
+      this.loadList();
+    }
+  };
 
   refresh(loader: any) {
     this.loadList().finally(() => {
@@ -434,7 +436,9 @@ export class ShoppingListPage {
     });
 
     await popover.present();
-    await popover.onDidDismiss();
+    const { data } = await popover.onDidDismiss();
+    if (data.reference) this.reference = data.reference;
+    if (data.doNotLoad) return;
 
     const loading = this.loadingService.start();
 

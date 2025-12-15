@@ -89,21 +89,23 @@ export class MealPlanPage {
       throw new Error("mealPlanId not provided");
     }
     this.mealPlanId = mealPlanId;
-
-    this.websocketService.register(
-      "mealPlan:itemsUpdated",
-      (payload) => {
-        if (payload.mealPlanId === this.mealPlanId) {
-          this.loadMealPlan();
-        }
-      },
-      this,
-    );
   }
 
   ionViewWillEnter() {
     this.loadWithProgress();
+
+    this.websocketService.on("mealPlan:itemsUpdated", this.onWSEvent);
   }
+
+  ionViewWillLeave() {
+    this.websocketService.off("mealPlan:itemsUpdated", this.onWSEvent);
+  }
+
+  onWSEvent = (data: Record<string, string>) => {
+    if (data.mealPlanId === this.mealPlanId) {
+      this.loadMealPlan();
+    }
+  };
 
   refresh(loader: any) {
     this.loadMealPlan().then(

@@ -33,30 +33,22 @@ export class ShoppingListsPage {
   me?: UserPublic;
   shoppingLists?: ShoppingListSummary[] = [];
 
-  constructor() {
-    this.websocketService.register(
-      "shoppingList:received",
-      () => {
-        this.loadLists();
-      },
-      this,
-    );
+  constructor() {}
 
-    this.websocketService.register(
-      "shoppingList:removed",
-      () => {
-        this.loadLists();
-      },
-      this,
-    );
-  }
-
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     const loading = this.loadingService.start();
 
     Promise.all([this.loadLists(), this.loadMe()]).finally(() => {
       loading.dismiss();
     });
+
+    this.websocketService.on("shoppingList:received", this.loadLists);
+    this.websocketService.on("shoppingList:removed", this.loadLists);
+  }
+
+  ionViewWillLeave() {
+    this.websocketService.off("shoppingList:received", this.loadLists);
+    this.websocketService.off("shoppingList:removed", this.loadLists);
   }
 
   async refresh(refresher: any) {
@@ -73,7 +65,7 @@ export class ShoppingListsPage {
     this.me = me;
   }
 
-  async loadLists() {
+  loadLists = async () => {
     const response = await this.trpcService.handle(
       this.trpcService.trpc.shoppingLists.getShoppingLists.query(),
     );
@@ -82,7 +74,7 @@ export class ShoppingListsPage {
     this.shoppingLists = response.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
-  }
+  };
 
   async newShoppingList() {
     const modal = await this.modalCtrl.create({

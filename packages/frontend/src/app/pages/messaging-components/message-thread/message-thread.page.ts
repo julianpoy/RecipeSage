@@ -1,6 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController, ToastController } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 
 import { linkifyStr } from "~/utils/linkify";
 import { Message, MessagingService } from "~/services/messaging.service";
@@ -9,7 +9,6 @@ import { WebsocketService } from "~/services/websocket.service";
 import { EventName, EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
-import { Recipe } from "../../../services/recipe.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
@@ -20,15 +19,14 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 })
 export class MessageThreadPage {
   private changeDetector = inject(ChangeDetectorRef);
-  navCtrl = inject(NavController);
-  translate = inject(TranslateService);
-  route = inject(ActivatedRoute);
-  events = inject(EventService);
-  toastCtrl = inject(ToastController);
-  loadingService = inject(LoadingService);
-  websocketService = inject(WebsocketService);
-  utilService = inject(UtilService);
-  messagingService = inject(MessagingService);
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private route = inject(ActivatedRoute);
+  private events = inject(EventService);
+  private loadingService = inject(LoadingService);
+  private websocketService = inject(WebsocketService);
+  private utilService = inject(UtilService);
+  private messagingService = inject(MessagingService);
 
   defaultBackHref: string = RouteMap.MessagesPage.getPath();
 
@@ -46,44 +44,15 @@ export class MessageThreadPage {
   messagePlaceholder = "";
   reloading = false;
 
-  isViewLoaded = true;
-
   selectedChatIdx = -1;
 
   constructor() {
-    const events = this.events;
-
     const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
     if (!otherUserId) {
       this.navCtrl.navigateBack(this.defaultBackHref);
       throw new Error("OtherUserId not provided");
     }
     this.otherUserId = otherUserId;
-
-    this.websocketService.register(
-      "messages:new",
-      (payload) => {
-        if (!this.isViewLoaded || payload.otherUser.id !== this.otherUserId)
-          return;
-
-        this.loadMessages().then(
-          () => {},
-          () => {},
-        );
-      },
-      this,
-    );
-
-    events.subscribe(EventName.ApplicationMultitaskingResumed, () => {
-      if (!this.isViewLoaded) return;
-
-      this.loadMessages().then(
-        () => {
-          this.changeDetector.detectChanges();
-        },
-        () => {},
-      );
-    });
   }
 
   ionViewWillEnter() {
@@ -92,33 +61,32 @@ export class MessageThreadPage {
       .toPromise()
       .then((str: string) => (this.messagePlaceholder = str));
 
-    this.isViewLoaded = true;
+    const loading = this.loadingService.start();
 
-    if (!this.otherUserId) {
-      this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
-    } else {
-      const loading = this.loadingService.start();
+    let messageArea: any;
+    try {
+      messageArea = this.content.getNativeElement().children[1].children[0];
+    } catch (e) {}
 
-      let messageArea: any;
-      try {
-        messageArea = this.content.getNativeElement().children[1].children[0];
-      } catch (e) {}
+    if (messageArea) messageArea.style.opacity = 0;
+    this.loadMessages(true).finally(() => {
+      loading.dismiss();
+      if (messageArea) messageArea.style.opacity = 1;
+    });
 
-      if (messageArea) messageArea.style.opacity = 0;
-      this.loadMessages(true).then(
-        () => {
-          loading.dismiss();
-          if (messageArea) messageArea.style.opacity = 1;
-        },
-        () => {
-          loading.dismiss();
-        },
-      );
-    }
+    this.websocketService.on("messages:new", this.onWSEvent);
+    this.events.subscribe(
+      EventName.ApplicationMultitaskingResumed,
+      this.loadMessages,
+    );
   }
 
   ionViewWillLeave() {
-    this.isViewLoaded = false;
+    this.websocketService.off("messages:new", this.onWSEvent);
+    this.events.unsubscribe(
+      EventName.ApplicationMultitaskingResumed,
+      this.loadMessages,
+    );
   }
 
   reload() {
@@ -141,6 +109,14 @@ export class MessageThreadPage {
       },
     );
   }
+
+  onWSEvent = (data: Record<string, Record<string, string>>) => {
+    if (data.otherUser.id !== this.otherUserId) {
+      return;
+    }
+
+    this.loadMessages();
+  };
 
   scrollToBottom(animate?: boolean, delay?: boolean, callback?: () => any) {
     const animationDuration = animate ? 300 : 0;
@@ -166,7 +142,7 @@ export class MessageThreadPage {
     return item.id;
   }
 
-  async loadMessages(isInitialLoad?: boolean) {
+  loadMessages = async (isInitialLoad?: boolean) => {
     const response = await this.messagingService.fetch({
       user: this.otherUserId,
     });
@@ -188,7 +164,7 @@ export class MessageThreadPage {
     this.processMessages();
 
     this.scrollToBottom(!isInitialLoad, true);
-  }
+  };
 
   processMessages() {
     for (let i = 0; i < this.messages.length; i++) {

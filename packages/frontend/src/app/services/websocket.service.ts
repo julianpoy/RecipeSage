@@ -13,13 +13,7 @@ export class WebsocketService {
   connection: WebSocket | undefined;
   reconnectTimeout: NodeJS.Timeout | undefined;
 
-  listeners: Record<
-    string,
-    {
-      cb: (msg: Record<string, any>) => void;
-      ctx: unknown;
-    }[]
-  > = {};
+  listeners: Record<string, Set<(msg: Record<string, any>) => void>> = {};
 
   constructor() {
     this.connect();
@@ -40,18 +34,21 @@ export class WebsocketService {
     return false;
   }
 
-  // Listeners
-  register(
-    eventName: string,
-    cb: (msg: Record<string, any>) => void,
-    ctx: any,
-  ) {
-    if (!this.listeners[eventName]) this.listeners[eventName] = [];
+  on(eventName: string, cb: (msg: Record<string, any>) => void) {
+    let listeners = this.listeners[eventName];
+    if (!listeners) {
+      listeners = new Set();
+      this.listeners[eventName] = listeners;
+    }
 
-    this.listeners[eventName].push({
-      cb,
-      ctx,
-    });
+    listeners.add(cb);
+  }
+
+  off(eventName: string, cb: (msg: Record<string, any>) => void) {
+    const listeners = this.listeners[eventName];
+    if (!listeners) return;
+
+    listeners.delete(cb);
   }
 
   // Outgoing
@@ -136,7 +133,7 @@ export class WebsocketService {
     if (!queue) return;
 
     for (const queueItem of queue) {
-      queueItem.cb.call(queueItem.ctx, msg);
+      queueItem(msg);
     }
   }
 }

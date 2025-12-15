@@ -36,22 +36,16 @@ export class MessagesPage {
 
   constructor() {
     this.messagingService.requestNotifications();
-
-    this.websocketService.register(
-      "messages:new",
-      () => {
-        this.loadThreads();
-      },
-      this,
-    );
   }
 
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
-    this.loadThreads().finally(() => {
-      this.loading = false;
-      loading.dismiss();
-    });
+    this.loadThreadsWithProgress();
+
+    this.websocketService.on("messages:new", this.loadThreads);
+  }
+
+  ionViewWillLeave() {
+    this.websocketService.off("messages:new", this.loadThreads);
   }
 
   refresh(refresher: any) {
@@ -65,7 +59,15 @@ export class MessagesPage {
     );
   }
 
-  async loadThreads() {
+  loadThreadsWithProgress = () => {
+    const loading = this.loadingService.start();
+    this.loadThreads().finally(() => {
+      this.loading = false;
+      loading.dismiss();
+    });
+  };
+
+  loadThreads = async () => {
     const response = await this.messagingService.threads({
       limit: 1,
     });
@@ -77,7 +79,7 @@ export class MessagesPage {
       // Ascending (newest first)
       return bCreatedAt.valueOf() - aCreatedAt.valueOf();
     });
-  }
+  };
 
   openThread(thread: MessageThread) {
     this.navCtrl.navigateForward(

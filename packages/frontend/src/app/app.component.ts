@@ -226,38 +226,34 @@ export class AppComponent {
       this.loadFriendRequestCount();
     });
 
-    this.websocketService.register(
-      "messages:new",
-      async (payload) => {
-        if (
-          this.route.snapshot.url
-            .toString()
-            .indexOf(RouteMap.MessagesPage.getPath())
-        )
-          return;
-        const notification = "New message from " + payload.otherUser.name;
+    this.websocketService.on("messages:new", async (payload) => {
+      if (
+        this.route.snapshot.url
+          .toString()
+          .indexOf(RouteMap.MessagesPage.getPath())
+      )
+        return;
+      const notification = "New message from " + payload.otherUser.name;
 
-        const myMessage = payload;
+      const myMessage = payload;
 
-        const toast = await this.toastCtrl.create({
-          message: notification,
-          duration: 7000,
-          buttons: [
-            {
-              text: "View",
-              role: "cancel",
-              handler: () => {
-                this.navCtrl.navigateForward(
-                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id),
-                );
-              },
+      const toast = await this.toastCtrl.create({
+        message: notification,
+        duration: 7000,
+        buttons: [
+          {
+            text: "View",
+            role: "cancel",
+            handler: () => {
+              this.navCtrl.navigateForward(
+                RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id),
+              );
             },
-          ],
-        });
-        toast.present();
-      },
-      this,
-    );
+          },
+        ],
+      });
+      toast.present();
+    });
   }
 
   updateIsLoggedIn() {

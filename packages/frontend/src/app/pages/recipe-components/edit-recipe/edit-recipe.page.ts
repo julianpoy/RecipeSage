@@ -280,6 +280,7 @@ export class EditRecipePage {
 
   async _save() {
     if (!this.recipe.title) return;
+    if (this.saving) return;
 
     const loading = this.loadingService.start();
     this.saving = true;
