@@ -1088,5 +1088,11 @@
     "pages.contributeThankYou.tabTitle": "Köszönetnyilvánítás - RecipeSage",
     "pages.downloadAndInstall.tabTitle": "Letöltés és telepítés - RecipeSage",
     "pages.labels.tabTitle": "Címkék és kategóriák kezelése - RecipeSage",
-    "pages.importJsonLD.tabTitle": "Importálás JSON-LD-ből - RecipeSage"
+    "pages.importJsonLD.tabTitle": "Importálás JSON-LD-ből - RecipeSage",
+    "pages.shoppingListPopover.categoryOrder": "Kategóriák sorrendjének módosítása",
+    "pages.shoppingListCategoryOrderModal.title": "Bevásárlólista kategóriáinak sorrendje",
+    "pages.shoppingListCategoryOrderModal.description": "A bevásárlólista kategóriái az itt megadott sorrend szerint lesznek rendezve.",
+    "pages.shoppingListCategoryOrderModal.instructions": "Minden bejegyzés külön sorban legyen, és illeszkednie kell az egyik előre definiált kategóriához vagy ahhoz az egyéni kategóriaelnevezéshez, amelyet a tételek rendezésekor megadott. A kis- és nagybetűk megkülönböztetése nem számít.",
+    "pages.shoppingListCategoryOrderModal.label": "Kategóriák sorrendje",
+    "pages.shoppingListCategoryOrderModal.placeholder": "Kategória címek — mindegyik külön sorban"
 }
