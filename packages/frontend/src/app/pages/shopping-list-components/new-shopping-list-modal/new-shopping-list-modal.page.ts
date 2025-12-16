@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import {
   ModalController,
   ToastController,
@@ -29,11 +29,17 @@ export class NewShoppingListModalPage {
   userService = inject(UserService);
   toastCtrl = inject(ToastController);
 
+  @Input() openAfterCreate = true;
+
+  saving = false;
   listTitle = "";
 
   selectedCollaboratorIds: string[] = [];
 
   async save() {
+    if (this.saving) return;
+
+    this.saving = true;
     const loading = this.loadingService.start();
 
     const response = await this.trpcService.handle(
@@ -43,13 +49,16 @@ export class NewShoppingListModalPage {
       }),
     );
 
+    this.saving = false;
     loading.dismiss();
     if (!response) return;
 
     this.modalCtrl.dismiss({
       success: true,
     });
-    this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
+    if (this.openAfterCreate) {
+      this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
+    }
   }
 
   cancel() {

@@ -163,58 +163,67 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
+    this.updateTileColCount();
+
+    this.websocketService.on("messages:new", this.onWSEvent);
+    window.addEventListener("resize", this.updateTileColCount);
     this.events.subscribe(
       [
         EventName.RecipeCreated,
         EventName.RecipeUpdated,
         EventName.RecipeDeleted,
+        EventName.LabelCreated,
+        EventName.LabelUpdated,
+        EventName.LabelDeleted,
       ],
-      () => (this.reloadPending = true),
+      this.setReloadPending,
     );
     this.events.subscribe(
-      [EventName.LabelCreated, EventName.LabelUpdated, EventName.LabelDeleted],
-      () => (this.reloadPending = true),
+      EventName.ImportPepperplateComplete,
+      this.onImportComplete,
     );
-    this.events.subscribe(EventName.ImportPepperplateComplete, () => {
-      const loading = this.loadingService.start();
-      this.resetAndLoadAll().finally(() => {
-        loading.dismiss();
-      });
-    });
-    this.events.subscribe(EventName.ApplicationSplitPaneChanged, () => {
-      this.updateTileColCount();
-    });
-
-    this.websocketService.register(
-      "messages:new",
-      (payload) => {
-        if (payload.recipe && this.folder === "inbox") {
-          this.resetAndLoadRecipes();
-        }
-      },
-      this,
+    this.events.subscribe(
+      EventName.ApplicationSplitPaneChanged,
+      this.updateTileColCount,
     );
-
-    this.updateTileColCount();
-
-    window.addEventListener("resize", () => this.updateTileColCount());
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
+    this.updateTileColCount();
+
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll(this.datasource.adapter.firstVisible.$index).finally(
-        () => {
-          loading.dismiss();
-        },
-      );
+      this.resetAndLoadAll(true).finally(() => {
+        loading.dismiss();
+      });
     }
 
     this.fetchMyProfile();
     this.fetchFriends();
   }
+
+  onWSEvent = (data: Record<string, string>) => {
+    if (data.recipe && this.folder === "inbox") {
+      this.resetAndLoadRecipes();
+    }
+  };
+
+  onImportComplete = () => {
+    this.resetAndLoadAllWithProgressIndicator(true);
+  };
+
+  resetAndLoadAllWithProgressIndicator(scrollToLastPosition?: boolean) {
+    const loading = this.loadingService.start();
+    this.resetAndLoadAll(scrollToLastPosition).finally(() => {
+      loading.dismiss();
+    });
+  }
+
+  setReloadPending = () => {
+    this.reloadPending = true;
+  };
 
   async setDefaultBackHref() {
     if (this.userId) {
@@ -232,7 +241,7 @@ export class HomePage {
     }
   }
 
-  updateTileColCount() {
+  updateTileColCount = () => {
     const isSidebarEnabled =
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const isSidebarOpen = window.innerWidth >= 1200;
@@ -250,7 +259,7 @@ export class HomePage {
       this.datasource.settings!.startIndex = 0;
       this.datasource.adapter.reset();
     }
-  }
+  };
 
   async fetchMoreRecipes(endIndex: number) {
     if (this.searchText) return;
@@ -264,7 +273,9 @@ export class HomePage {
     }
   }
 
-  async resetAndLoadAll(scrollToIndex?: number): Promise<[void, void] | void> {
+  async resetAndLoadAll(
+    scrollToLastPosition?: boolean,
+  ): Promise<[void, void] | void> {
     this.reloadPending = false;
 
     // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
@@ -272,7 +283,7 @@ export class HomePage {
     if (this.selectedLabels.length === 0 || this.userId) {
       return Promise.all([
         this.resetAndLoadLabels(),
-        this.resetAndLoadRecipes(scrollToIndex),
+        this.resetAndLoadRecipes(scrollToLastPosition),
       ]);
     }
 
@@ -283,7 +294,7 @@ export class HomePage {
         (e) => labelNames.has(e) || e === "unlabeled",
       );
 
-      return this.resetAndLoadRecipes(scrollToIndex);
+      return this.resetAndLoadRecipes(scrollToLastPosition);
     });
   }
 
@@ -292,11 +303,11 @@ export class HomePage {
     return this.loadLabels();
   }
 
-  resetAndLoadRecipes(scrollToIndex?: number) {
+  resetAndLoadRecipes(scrollToLastPosition?: boolean) {
     this.loading = true;
     this.resetRecipes();
 
-    return this._resetAndLoadRecipes(scrollToIndex).then(
+    return this._resetAndLoadRecipes(scrollToLastPosition).then(
       () => {
         this.loading = false;
       },
@@ -306,14 +317,17 @@ export class HomePage {
     );
   }
 
-  async _resetAndLoadRecipes(scrollToIndex?: number) {
+  async _resetAndLoadRecipes(scrollToLastPosition?: boolean) {
     if (this.searchText && this.searchText.trim().length > 0) {
       await this.search(this.searchText);
     } else {
       await this.loadRecipes(0, this.fetchPerPage);
     }
 
-    this.datasource.settings!.startIndex = scrollToIndex || 0;
+    const startIndex = scrollToLastPosition
+      ? this.datasource.adapter.firstVisible.$index
+      : 0;
+    this.datasource.settings!.startIndex = startIndex;
     await this.datasource.adapter.reset();
   }
 

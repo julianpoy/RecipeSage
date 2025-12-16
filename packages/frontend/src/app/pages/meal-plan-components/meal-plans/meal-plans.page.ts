@@ -1,11 +1,6 @@
 import { Component, inject } from "@angular/core";
-import {
-  NavController,
-  ModalController,
-  ToastController,
-} from "@ionic/angular";
+import { NavController, ModalController } from "@ionic/angular";
 
-import { MealPlanService } from "~/services/meal-plan.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
@@ -32,26 +27,6 @@ export class MealPlansPage {
   me?: UserPublic;
   mealPlans?: MealPlanSummary[] = [];
 
-  constructor() {
-    this.websocketService.register(
-      "mealPlan:received",
-      () => {
-        this.loadPlans();
-      },
-      this,
-    );
-
-    this.websocketService.register(
-      "mealPlan:removed",
-      () => {
-        this.loadPlans();
-      },
-      this,
-    );
-  }
-
-  ionViewDidLoad() {}
-
   ionViewWillEnter() {
     const loading = this.loadingService.start();
 
@@ -60,7 +35,19 @@ export class MealPlansPage {
     Promise.all([this.loadPlans(), this.loadMe()]).finally(() => {
       loading.dismiss();
     });
+
+    this.websocketService.on("mealPlan:received", this.onWSEvent);
+    this.websocketService.on("mealPlan:removed", this.onWSEvent);
   }
+
+  ionViewWillLeave() {
+    this.websocketService.off("mealPlan:received", this.onWSEvent);
+    this.websocketService.off("mealPlan:removed", this.onWSEvent);
+  }
+
+  onWSEvent = () => {
+    this.loadPlans();
+  };
 
   refresh(refresher: any) {
     this.loadPlans().then(

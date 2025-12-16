@@ -1,6 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
 import {
-  ToastController,
   AlertController,
   NavController,
   PopoverController,
@@ -31,16 +30,15 @@ import { ShoppingListCategoryOrderModalPage } from "../shopping-list-category-or
   imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListPopoverPage {
-  navCtrl = inject(NavController);
-  translate = inject(TranslateService);
-  utilService = inject(UtilService);
-  preferencesService = inject(PreferencesService);
-  loadingService = inject(LoadingService);
-  trpcService = inject(TRPCService);
-  toastCtrl = inject(ToastController);
-  popoverCtrl = inject(PopoverController);
-  alertCtrl = inject(AlertController);
-  modalCtrl = inject(ModalController);
+  private navCtrl = inject(NavController);
+  private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
+  private preferencesService = inject(PreferencesService);
+  private loadingService = inject(LoadingService);
+  private trpcService = inject(TRPCService);
+  private popoverCtrl = inject(PopoverController);
+  private alertCtrl = inject(AlertController);
+  private modalCtrl = inject(ModalController);
 
   @Input({
     required: true,
@@ -176,7 +174,10 @@ export class ShoppingListPopoverPage {
     loading.dismiss();
     if (!response) return;
 
-    this.popoverCtrl.dismiss();
+    this.popoverCtrl.dismiss({
+      reference: response.reference,
+      doNotLoad: true,
+    });
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
   }
 

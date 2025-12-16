@@ -38,6 +38,23 @@ export class EventService {
     }
   }
 
+  unsubscribe(
+    _eventNames: EventName | EventName[],
+    listener: (data?: any) => void,
+  ): void {
+    const eventNames = [];
+    if (Array.isArray(_eventNames)) eventNames.push(..._eventNames);
+    else eventNames.push(_eventNames);
+
+    for (const eventName of eventNames) {
+      this.eventListeners[eventName] = this.eventListeners[eventName] || [];
+      this.eventListeners[eventName].splice(
+        this.eventListeners[eventName].indexOf(listener),
+        1,
+      );
+    }
+  }
+
   publish(eventName: EventName, data?: any) {
     this.eventListeners[eventName]?.map((cb) => cb(data));
   }
