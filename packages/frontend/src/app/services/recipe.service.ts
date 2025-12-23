@@ -407,8 +407,11 @@ export class RecipeService {
     return parseIngredients(ingredients, scale, boldify);
   }
 
-  parseInstructions(instructions: string): ParsedInstruction[] {
-    return parseInstructions(instructions);
+  parseInstructions(
+    instructions: string,
+    scale: number = 1,
+  ): ParsedInstruction[] {
+    return parseInstructions(instructions, scale);
   }
 
   parseNotes(notes: string): ParsedNote[] {

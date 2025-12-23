@@ -257,8 +257,24 @@ export const parseIngredients = (
   return lines;
 };
 
+const scaleInstructionNumbers = (instructions: string, scale: number): string =>
+  instructions.replace(/\{([^{}]+)\}/g, (match, value) => {
+    const trimmed = value.trim();
+    if (!trimmed || !/^[0-9./\s-]+$/.test(trimmed)) return match;
+
+    try {
+      const frac = new FractionJS(trimmed).mul(scale);
+      if (trimmed.includes(".")) return frac.valueOf().toString();
+      if (trimmed.includes("/")) return frac.toFraction(true);
+      return frac.toString();
+    } catch (_e) {
+      return match;
+    }
+  });
+
 export const parseInstructions = (
   instructions: string,
+  scale = 1,
 ): {
   content: string;
   isHeader: boolean;
@@ -267,6 +283,7 @@ export const parseInstructions = (
   isRtl: boolean;
 }[] => {
   instructions = replaceFractionsInText(instructions);
+  instructions = scaleInstructionNumbers(instructions, scale);
 
   // Starts with [, anything inbetween, ends with ]
   const headerRegexp = /^\[.*\]$/;
