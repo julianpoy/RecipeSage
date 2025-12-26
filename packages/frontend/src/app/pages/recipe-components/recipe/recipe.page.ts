@@ -172,12 +172,6 @@ export class RecipePage {
       this.recipe.url = "http://" + this.recipe.url.trim();
     }
 
-    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-      this.instructions = this.recipeService.parseInstructions(
-        this.recipe.instructions,
-      );
-    }
-
     if (this.recipe.notes && this.recipe.notes.length > 0) {
       this.notes = this.recipeService
         .parseNotes(this.recipe.notes)
@@ -355,6 +349,14 @@ export class RecipePage {
       this.scale,
       true,
     );
+    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
+      this.instructions = this.recipeService.parseInstructions(
+        this.recipe.instructions,
+        this.scale,
+      );
+    } else {
+      this.instructions = [];
+    }
   }
 
   editRecipe() {
