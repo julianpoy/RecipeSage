@@ -134,7 +134,7 @@
     "@nx/eslint": "22.0.1",
     "@nx/eslint-plugin": "22.0.1",
     "@nx/js": "22.0.1",
-    "@nx/s3-cache": "^3.0.0",
+    "@nx/s3-cache": "^5.0.0",
     "@nx/vite": "22.0.1",
     "@nx/web": "22.0.1",
     "@sentry/esbuild-plugin": "^4.6.1",
