@@ -36,6 +36,7 @@ import { DEBUG_DUMP_PUBLIC_KEY } from "../../../utils/localDb/DEBUG_DUMP_PUBLIC_
 import { downloadBlobpartsAsFile } from "../../../utils/downloadBlobpartsAsFile";
 
 @Component({
+  standalone: true,
   selector: "page-settings",
   templateUrl: "settings.page.html",
   styleUrls: ["settings.page.scss"],

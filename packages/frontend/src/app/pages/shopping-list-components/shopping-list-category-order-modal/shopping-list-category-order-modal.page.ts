@@ -5,6 +5,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
+  standalone: true,
   selector: "page-shopping-list-category-order-modal",
   templateUrl: "shopping-list-category-order-modal.page.html",
   styleUrls: ["shopping-list-category-order-modal.page.scss"],

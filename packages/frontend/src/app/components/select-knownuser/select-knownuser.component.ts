@@ -5,6 +5,7 @@ import { MessageThread, MessagingService } from "~/services/messaging.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "select-knownuser",
   templateUrl: "select-knownuser.component.html",
   styleUrls: ["./select-knownuser.component.scss"],

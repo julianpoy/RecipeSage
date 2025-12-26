@@ -47,6 +47,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 
 @Component({
+  standalone: true,
   selector: "page-recipe",
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],

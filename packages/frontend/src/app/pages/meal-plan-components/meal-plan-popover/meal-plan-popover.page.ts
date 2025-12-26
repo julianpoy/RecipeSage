@@ -20,6 +20,7 @@ import { UserService } from "../../../services/user.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-meal-plan-popover",
   templateUrl: "meal-plan-popover.page.html",
   styleUrls: ["meal-plan-popover.page.scss"],

@@ -9,6 +9,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 const MAX_FILE_SIZE_MB = 1000;
 
 @Component({
+  standalone: true,
   selector: "page-import-livingcookbok",
   templateUrl: "import-livingcookbook.page.html",
   styleUrls: ["import-livingcookbook.page.scss"],

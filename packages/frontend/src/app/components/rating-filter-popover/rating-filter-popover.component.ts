@@ -4,6 +4,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { RatingComponent } from "../rating/rating.component";
 
 @Component({
+  standalone: true,
   selector: "rating-filter-popover",
   templateUrl: "rating-filter-popover.component.html",
   styleUrls: ["./rating-filter-popover.component.scss"],

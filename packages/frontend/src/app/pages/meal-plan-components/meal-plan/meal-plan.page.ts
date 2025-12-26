@@ -29,6 +29,7 @@ import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-meal-plan",
   templateUrl: "meal-plan.page.html",
   styleUrls: ["meal-plan.page.scss"],

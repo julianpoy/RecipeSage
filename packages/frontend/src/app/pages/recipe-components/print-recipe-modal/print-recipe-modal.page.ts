@@ -15,6 +15,7 @@ export interface PrintOption {
 }
 
 @Component({
+  standalone: true,
   selector: "page-print-recipe-modal",
   templateUrl: "print-recipe-modal.page.html",
   styleUrls: ["print-recipe-modal.page.scss"],

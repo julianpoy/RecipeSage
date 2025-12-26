@@ -3,6 +3,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "recipe-preview",
   templateUrl: "recipe-preview.component.html",
   styleUrls: ["./recipe-preview.component.scss"],

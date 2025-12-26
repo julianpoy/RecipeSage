@@ -6,6 +6,7 @@ import { ToastController, NavController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "select-recipe",
   templateUrl: "select-recipe.component.html",
   styleUrls: ["./select-recipe.component.scss"],

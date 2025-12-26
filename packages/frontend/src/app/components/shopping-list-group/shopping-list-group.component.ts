@@ -3,6 +3,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ShoppingListItemComponent } from "../shopping-list-item/shopping-list-item.component";
 
 @Component({
+  standalone: true,
   selector: "shopping-list-group",
   templateUrl: "shopping-list-group.component.html",
   styleUrls: ["./shopping-list-group.component.scss"],

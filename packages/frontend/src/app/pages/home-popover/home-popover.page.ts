@@ -12,6 +12,7 @@ import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-home-popover",
   templateUrl: "home-popover.page.html",
   styleUrls: ["home-popover.page.scss"],

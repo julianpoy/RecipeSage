@@ -8,6 +8,7 @@ import { LoadingService } from "../../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-import-pepperplate",
   templateUrl: "import-pepperplate.page.html",
   styleUrls: ["import-pepperplate.page.scss"],

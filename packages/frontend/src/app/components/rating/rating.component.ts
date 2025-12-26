@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "rating",
   templateUrl: "rating.component.html",
   styleUrls: ["./rating.component.scss"],

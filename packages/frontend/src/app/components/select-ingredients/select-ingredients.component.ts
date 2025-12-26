@@ -8,6 +8,7 @@ import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "select-ingredients",
   templateUrl: "select-ingredients.component.html",
   styleUrls: ["./select-ingredients.component.scss"],

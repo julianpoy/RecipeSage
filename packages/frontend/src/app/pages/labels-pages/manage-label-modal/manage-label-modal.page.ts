@@ -13,6 +13,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
+  standalone: true,
   selector: "page-manage-label-modal",
   templateUrl: "manage-label-modal.page.html",
   styleUrls: ["manage-label-modal.page.scss"],

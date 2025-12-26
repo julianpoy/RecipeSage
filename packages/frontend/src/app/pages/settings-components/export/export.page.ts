@@ -19,6 +19,7 @@ export const getJobFailureI18n = (exportJob: JobSummary) => {
 const JOB_POLL_INTERVAL_MS = 7500;
 
 @Component({
+  standalone: true,
   selector: "page-export",
   templateUrl: "export.page.html",
   styleUrls: ["export.page.scss"],

@@ -9,6 +9,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 const MAX_FILE_SIZE_MB = 1000;
 
 @Component({
+  standalone: true,
   selector: "page-import-enex",
   templateUrl: "import-enex.page.html",
   styleUrls: ["import-enex.page.scss"],

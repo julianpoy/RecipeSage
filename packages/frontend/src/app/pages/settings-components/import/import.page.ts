@@ -42,6 +42,7 @@ type ImportFormat =
   | "enex";
 
 @Component({
+  standalone: true,
   selector: "page-import",
   templateUrl: "import.page.html",
   styleUrls: ["import.page.scss"],

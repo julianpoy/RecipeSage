@@ -13,6 +13,7 @@ export type ResettableSelectGroupedOptions = Record<
 >;
 
 @Component({
+  standalone: true,
   selector: "resettable-select-popover-page",
   templateUrl: "resettable-select-popover.page.html",
   styleUrls: ["resettable-select-popover.page.scss"],

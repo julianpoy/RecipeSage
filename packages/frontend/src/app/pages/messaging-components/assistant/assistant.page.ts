@@ -18,6 +18,7 @@ import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.compo
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
+  standalone: true,
   selector: "page-assistant",
   templateUrl: "assistant.page.html",
   styleUrls: ["assistant.page.scss"],

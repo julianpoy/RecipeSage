@@ -14,6 +14,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 
 @Component({
+  standalone: true,
   selector: "page-add-friend-modal",
   templateUrl: "add-friend-modal.page.html",
   styleUrls: ["add-friend-modal.page.scss"],

@@ -14,6 +14,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 
 @Component({
+  standalone: true,
   selector: "page-new-message-modal",
   templateUrl: "new-message-modal.page.html",
   styleUrls: ["new-message-modal.page.scss"],

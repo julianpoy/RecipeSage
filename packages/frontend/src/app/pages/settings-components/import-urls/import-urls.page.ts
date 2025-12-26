@@ -7,6 +7,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-import-urls",
   templateUrl: "import-urls.page.html",
   styleUrls: ["import-urls.page.scss"],

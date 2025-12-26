@@ -12,6 +12,7 @@ import { SelectIngredientsComponent } from "../../../components/select-ingredien
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 
 @Component({
+  standalone: true,
   selector: "page-new-shopping-list-item-modal",
   templateUrl: "new-shopping-list-item-modal.page.html",
   styleUrls: ["new-shopping-list-item-modal.page.scss"],

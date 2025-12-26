@@ -6,6 +6,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.component";
 
 @Component({
+  standalone: true,
   selector: "page-contribute-thankyou",
   templateUrl: "contribute-thankyou.page.html",
   styleUrls: ["contribute-thankyou.page.scss"],

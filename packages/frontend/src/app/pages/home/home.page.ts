@@ -36,6 +36,7 @@ const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 
 @Component({
+  standalone: true,
   selector: "page-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
@@ -163,10 +164,7 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    this.updateTileColCount();
-
     this.websocketService.on("messages:new", this.onWSEvent);
-    window.addEventListener("resize", this.updateTileColCount);
     this.events.subscribe(
       [
         EventName.RecipeCreated,
@@ -189,6 +187,7 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
+    window.addEventListener("resize", this.updateTileColCount);
     this.updateTileColCount();
 
     this.clearSelectedRecipes();
@@ -202,6 +201,10 @@ export class HomePage {
 
     this.fetchMyProfile();
     this.fetchFriends();
+  }
+
+  ionViewWillLeave() {
+    window.removeEventListener("resize", this.updateTileColCount);
   }
 
   onWSEvent = (data: Record<string, string>) => {
@@ -303,18 +306,12 @@ export class HomePage {
     return this.loadLabels();
   }
 
-  resetAndLoadRecipes(scrollToLastPosition?: boolean) {
+  async resetAndLoadRecipes(scrollToLastPosition?: boolean) {
     this.loading = true;
     this.resetRecipes();
 
-    return this._resetAndLoadRecipes(scrollToLastPosition).then(
-      () => {
-        this.loading = false;
-      },
-      () => {
-        this.loading = false;
-      },
-    );
+    await this._resetAndLoadRecipes(scrollToLastPosition);
+    this.loading = false;
   }
 
   async _resetAndLoadRecipes(scrollToLastPosition?: boolean) {
@@ -325,7 +322,7 @@ export class HomePage {
     }
 
     const startIndex = scrollToLastPosition
-      ? this.datasource.adapter.firstVisible.$index
+      ? (this.datasource.adapter.firstVisible.$index ?? 0)
       : 0;
     this.datasource.settings!.startIndex = startIndex;
     await this.datasource.adapter.reset();

@@ -12,6 +12,7 @@ import { Swiper } from "swiper/types";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "image-viewer",
   templateUrl: "image-viewer.component.html",
   styleUrls: ["./image-viewer.component.scss"],

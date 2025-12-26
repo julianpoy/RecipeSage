@@ -8,6 +8,7 @@ import { CapabilitiesService } from "~/services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "multi-image-upload",
   templateUrl: "multi-image-upload.component.html",
   styleUrls: ["./multi-image-upload.component.scss"],

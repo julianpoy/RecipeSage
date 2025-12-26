@@ -16,6 +16,7 @@ import { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
+  standalone: true,
   selector: "page-shopping-lists",
   templateUrl: "shopping-lists.page.html",
   styleUrls: ["shopping-lists.page.scss"],

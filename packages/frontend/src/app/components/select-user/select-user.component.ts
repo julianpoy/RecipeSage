@@ -8,6 +8,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 const PAUSE_BEFORE_SEARCH = 500; // Ms
 
 @Component({
+  standalone: true,
   selector: "select-user",
   templateUrl: "select-user.component.html",
   styleUrls: ["./select-user.component.scss"],

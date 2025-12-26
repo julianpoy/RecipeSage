@@ -12,6 +12,7 @@ import { MealCalendarComponent } from "../../../components/meal-calendar/meal-ca
 import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
 
 @Component({
+  standalone: true,
   selector: "page-add-recipe-to-meal-plan-modal",
   templateUrl: "add-recipe-to-meal-plan-modal.page.html",
   styleUrls: ["add-recipe-to-meal-plan-modal.page.scss"],

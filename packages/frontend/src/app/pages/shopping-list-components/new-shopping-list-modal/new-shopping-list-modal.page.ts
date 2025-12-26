@@ -14,6 +14,7 @@ import { SelectCollaboratorsComponent } from "../../../components/select-collabo
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
+  standalone: true,
   selector: "page-new-shopping-list-modal",
   templateUrl: "new-shopping-list-modal.page.html",
   styleUrls: ["new-shopping-list-modal.page.scss"],

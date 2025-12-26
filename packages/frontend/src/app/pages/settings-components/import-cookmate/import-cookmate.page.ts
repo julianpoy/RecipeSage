@@ -9,6 +9,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 const MAX_FILE_SIZE_MB = 1000;
 
 @Component({
+  standalone: true,
   selector: "page-import-cookmate",
   templateUrl: "import-cookmate.page.html",
   styleUrls: ["import-cookmate.page.scss"],

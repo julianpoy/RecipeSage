@@ -16,6 +16,7 @@ import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-account",
   templateUrl: "account.page.html",
   styleUrls: ["account.page.scss"],

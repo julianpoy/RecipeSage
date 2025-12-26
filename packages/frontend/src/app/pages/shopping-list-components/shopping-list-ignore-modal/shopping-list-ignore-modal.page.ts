@@ -15,6 +15,7 @@ import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-shopping-list-ignore-modal",
   templateUrl: "shopping-list-ignore-modal.page.html",
   styleUrls: ["shopping-list-ignore-modal.page.scss"],

@@ -6,6 +6,7 @@ import { IS_SELFHOST } from "../../../../environments/environment";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-welcome",
   templateUrl: "welcome.page.html",
   styleUrls: ["welcome.page.scss"],

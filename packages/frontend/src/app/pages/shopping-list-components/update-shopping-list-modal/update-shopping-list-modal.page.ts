@@ -14,6 +14,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
 
 @Component({
+  standalone: true,
   selector: "page-update-shopping-list-modal",
   templateUrl: "update-shopping-list-modal.page.html",
   styleUrls: ["update-shopping-list-modal.page.scss"],

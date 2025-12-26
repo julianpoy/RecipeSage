@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-download-and-install",
   templateUrl: "download-and-install.page.html",
   styleUrls: ["download-and-install.page.scss"],

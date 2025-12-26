@@ -22,6 +22,7 @@ export type RecipeDetailsPopoverActionTypes =
   | "updateWakeLock";
 
 @Component({
+  standalone: true,
   selector: "page-recipe-details-popover",
   templateUrl: "recipe-details-popover.page.html",
   styleUrls: ["recipe-details-popover.page.scss"],

@@ -5,6 +5,7 @@ import { TRPCService } from "../../services/trpc.service";
 import { LabelSummary } from "@recipesage/prisma";
 
 @Component({
+  standalone: true,
   selector: "select-label",
   templateUrl: "select-label.component.html",
   styleUrls: ["./select-label.component.scss"],
