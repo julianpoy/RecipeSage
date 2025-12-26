@@ -40,6 +40,7 @@ export default defineConfig(() => ({
     coverage: {
       reportsDirectory: "../../coverage/packages/backend",
       provider: "v8" as const,
+      include: ["src/**/*.{js,ts}"],
     },
   },
 }));

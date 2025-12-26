@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2021",
-    "outDir": "./dist/out-tsc"
+    "outDir": "./dist/out-tsc",
+    "moduleResolution": "bundler"
   },
   "angularCompilerOptions": {
     "strictTemplates": true,

@@ -1,7 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 
 import { LoadingBarService } from "@ngx-loading-bar/core";
-import { LoadingBarState } from "@ngx-loading-bar/core/loading-bar.state";
 
 export interface LoadingRef {
   dismiss: () => void;
@@ -15,7 +14,7 @@ export class LoadingService {
 
   REQUEST_COMPLETE_DELAY = 150;
 
-  loadingBarRef: LoadingBarState;
+  loadingBarRef: ReturnType<typeof this.loadingBar.useRef>;
 
   constructor() {
     this.loadingBarRef = this.loadingBar.useRef();

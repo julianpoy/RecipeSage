@@ -8,7 +8,6 @@ import {
   importProvidersFrom,
 } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
-import { provideHttpClient } from "@angular/common/http";
 import {
   PreloadAllModules,
   provideRouter,
@@ -41,7 +40,6 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(),
     provideRouter(
       appRoutes,
       withHashLocation(),
