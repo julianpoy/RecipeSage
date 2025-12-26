@@ -138,15 +138,6 @@ h2.recipeTitle {
   }
 }
 
-:host
-  ::ng-deep
-  .instructions
-  .instruction
-  .instructionContent
-  .scaledInstructionNumber {
-  font-weight: bold;
-}
-
 .notes {
   .header {
     font-weight: bold;

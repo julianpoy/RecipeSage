@@ -136,10 +136,6 @@ html
         padding-right: 10px;
       }
 
-      .instruction .scaledInstructionNumber {
-        font-weight: bold;
-      }
-
       .action-buttons {
         display: flex;
         align-items: center;
@@ -293,7 +289,7 @@ html
           div(class='instruction')
             if instruction.isHeader
               span
-              b= instruction.content
+              b !{instruction.content}
             else
               b(class='count')= instruction.count
               span !{instruction.content}

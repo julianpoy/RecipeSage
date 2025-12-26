@@ -402,16 +402,17 @@ export class RecipeService {
   parseIngredients(
     ingredients: string,
     scale: number,
-    boldify?: boolean,
+    boldify: boolean,
   ): ParsedIngredient[] {
     return parseIngredients(ingredients, scale, boldify);
   }
 
   parseInstructions(
     instructions: string,
-    scale: number = 1,
+    scale: number,
+    boldify: boolean,
   ): ParsedInstruction[] {
-    return parseInstructions(instructions, scale);
+    return parseInstructions(instructions, scale, boldify);
   }
 
   parseNotes(notes: string): ParsedNote[] {

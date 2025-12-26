@@ -89,7 +89,7 @@ export class SelectIngredientsComponent {
 
   applyScale(init?: boolean) {
     this.scaledIngredients = this.recipeService
-      .parseIngredients(this._ingredients, this.scale)
+      .parseIngredients(this._ingredients, this.scale, false)
       .filter((e) => !e.isHeader);
 
     this.selectedIngredients = [];
