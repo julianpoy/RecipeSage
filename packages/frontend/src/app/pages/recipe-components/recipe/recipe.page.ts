@@ -348,14 +348,11 @@ export class RecipePage {
       this.scale,
       true,
     );
-    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-      this.instructions = this.recipeService.parseInstructions(
-        this.recipe.instructions,
-        this.scale,
-      );
-    } else {
-      this.instructions = [];
-    }
+    this.instructions = this.recipeService.parseInstructions(
+      this.recipe.instructions,
+      this.scale,
+      true,
+    );
   }
 
   editRecipe() {

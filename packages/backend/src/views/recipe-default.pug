@@ -289,10 +289,10 @@ html
           div(class='instruction')
             if instruction.isHeader
               span
-              b= instruction.content
+              b !{instruction.content}
             else
               b(class='count')= instruction.count
-              span= instruction.content
+              span !{instruction.content}
 
     if recipe.notes && !modifiers.hideNotes
       p(class='sans')

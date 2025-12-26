@@ -143,10 +143,12 @@ export const stripIngredient = (ingredient: string): string => {
   }
 };
 
+const NUM_SCALED_DECIMAL_PLACES = 3;
+
 export const parseIngredients = (
   ingredients: string,
   scale: number,
-  boldify?: boolean,
+  boldify: boolean,
 ): {
   content: string;
   originalContent: string;
@@ -202,7 +204,7 @@ export const parseIngredients = (
           for (let j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
             const frac = new FractionJS(measurementParts[j].trim()).mul(scale);
-            let scaledMeasurement = frac.toString();
+            let scaledMeasurement = frac.toString(NUM_SCALED_DECIMAL_PLACES);
 
             // Preserve original fraction format if entered
             if (measurementParts[j].indexOf("/") > -1) {
@@ -257,24 +259,34 @@ export const parseIngredients = (
   return lines;
 };
 
-const scaleInstructionNumbers = (instructions: string, scale: number): string =>
+const scaleInstructionNumbers = (
+  instructions: string,
+  scale: number,
+  boldify: boolean,
+): string =>
   instructions.replace(/\{([^{}]+)\}/g, (match, value) => {
     const trimmed = value.trim();
     if (!trimmed || !/^[0-9./\s-]+$/.test(trimmed)) return match;
 
     try {
       const frac = new FractionJS(trimmed).mul(scale);
-      if (trimmed.includes(".")) return frac.valueOf().toString();
-      if (trimmed.includes("/")) return frac.toFraction(true);
-      return frac.toString();
-    } catch (_e) {
+      let result = frac.toString(NUM_SCALED_DECIMAL_PLACES);
+      if (trimmed.includes("/")) {
+        result = frac.toFraction(true);
+      }
+
+      if (boldify) return `<b class="instructionMeasurement">${result}</b>`;
+      return result;
+    } catch (e) {
+      console.warn(value, match, e);
       return match;
     }
   });
 
 export const parseInstructions = (
   instructions: string,
-  scale = 1,
+  scale: number,
+  boldify: boolean,
 ): {
   content: string;
   isHeader: boolean;
@@ -283,7 +295,7 @@ export const parseInstructions = (
   isRtl: boolean;
 }[] => {
   instructions = replaceFractionsInText(instructions);
-  instructions = scaleInstructionNumbers(instructions, scale);
+  instructions = scaleInstructionNumbers(instructions, scale, boldify);
 
   // Starts with [, anything inbetween, ends with ]
   const headerRegexp = /^\[.*\]$/;
