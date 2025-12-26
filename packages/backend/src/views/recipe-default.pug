@@ -136,6 +136,10 @@ html
         padding-right: 10px;
       }
 
+      .instruction .scaledInstructionNumber {
+        font-weight: bold;
+      }
+
       .action-buttons {
         display: flex;
         align-items: center;
@@ -292,7 +296,7 @@ html
               b= instruction.content
             else
               b(class='count')= instruction.count
-              span= instruction.content
+              span !{instruction.content}
 
     if recipe.notes && !modifiers.hideNotes
       p(class='sans')

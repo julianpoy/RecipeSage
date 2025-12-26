@@ -14,6 +14,16 @@ import * as SharedUtils from "@recipesage/util/shared";
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
 
+const instructionHtmlAllowlist = {
+  allowedTags: ["span"],
+  allowedAttributes: {
+    span: ["class"],
+  },
+  allowedClasses: {
+    span: ["scaledInstructionNumber"],
+  },
+};
+
 router.get(
   "/",
   wrapRequestWithErrorHandler(async (req, res) => {
@@ -106,7 +116,13 @@ router.get(
           recipe.instructions = SharedUtils.parseInstructions(
             sanitizeHtml(recipe.instructions),
             modifiers.scale,
-          );
+          ).map((instruction) => ({
+            ...instruction,
+            content: sanitizeHtml(
+              instruction.content,
+              instructionHtmlAllowlist,
+            ),
+          }));
           recipe.ingredients = SharedUtils.parseIngredients(
             sanitizeHtml(recipe.ingredients),
             modifiers.scale,

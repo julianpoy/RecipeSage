@@ -268,7 +268,7 @@ const scaleInstructionNumbers = (instructions: string, scale: number): string =>
       if (trimmed.includes(".")) scaled = frac.valueOf().toString();
       else if (trimmed.includes("/")) scaled = frac.toFraction(true);
       else scaled = frac.toString();
-      return `<b>${scaled}</b>`;
+      return `<span class="scaledInstructionNumber">${scaled}</span>`;
     } catch (_e) {
       return match;
     }
