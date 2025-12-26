@@ -15,11 +15,13 @@
     (selectedUserChange)="onSelectedUserChange($event)"
     [selectedUser]="recipientInfo"
   ></select-user>
-  <ion-item *ngIf="!recipientId">
+  @if (!recipientId) {
+  <ion-item>
     <ion-label>
       <p>{{ 'pages.newMessageModal.input.target' | translate }}</p>
     </ion-label>
   </ion-item>
+  }
 
   <br /><br />
 

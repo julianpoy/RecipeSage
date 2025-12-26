@@ -10,26 +10,30 @@
 </ion-header>
 
 <ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
-  <ion-icon
-    *ngIf="slideNum > 0"
-    (click)="swiperContainer.swiper.slidePrev()"
-    name="arrow-back"
-    class="back"
-  ></ion-icon>
+  @if (slideNum > 0) {
+    <ion-icon
+      (click)="swiperContainer.swiper.slidePrev()"
+      name="arrow-back"
+      class="back"
+    ></ion-icon>
+  }
   <swiper-container
     #swiperContainer
     [modules]="swiperModules"
     pagination="true"
     centeredSlides="true"
   >
-    <swiper-slide *ngFor="let imageUrl of imageUrls">
-      <div class="image-container"><img [src]="imageUrl" /></div>
-    </swiper-slide>
+    @for (imageUrl of imageUrls; track imageUrl) {
+      <swiper-slide>
+        <div class="image-container"><img [src]="imageUrl" /></div>
+      </swiper-slide>
+    }
   </swiper-container>
-  <ion-icon
-    *ngIf="slideNum < imageUrls.length - 1"
-    (click)="swiperContainer.swiper.slideNext()"
-    name="arrow-forward"
-    class="forward"
-  ></ion-icon>
+  @if (slideNum < imageUrls.length - 1) {
+    <ion-icon
+      (click)="swiperContainer.swiper.slideNext()"
+      name="arrow-forward"
+      class="forward"
+    ></ion-icon>
+  }
 </ion-content>

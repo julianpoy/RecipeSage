@@ -9,14 +9,16 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="importJobs.length">
+  @if (importJobs.length) {
+  <div>
     <ion-item lines="none">
       <ion-label class="ion-text-wrap">
         {{ 'pages.import.jobs' | translate }}
         <p>{{ 'pages.import.jobs.subtitle' | translate }}<br /></p>
       </ion-label>
     </ion-item>
-    <div *ngFor="let importJob of importJobs.slice(0, showJobs)">
+    @for (importJob of importJobs.slice(0, showJobs); track importJob) {
+    <div>
       <ion-item
         [button]="getImportJobPath(importJob)"
         (click)="goToImportPath(importJob)"
@@ -31,36 +33,43 @@
               timestamp:formatItemCreationDate(importJob.createdAt) } }}
             </span>
             <br />
-            <span *ngIf="importJob.status === 'CREATE'" class="job-create">
+            @if (importJob.status === 'CREATE') {
+            <span class="job-create">
               {{ 'pages.import.status.create' | translate }}
             </span>
-            <span *ngIf="importJob.status === 'RUN'" class="job-run">
+            } @if (importJob.status === 'RUN') {
+            <span class="job-run">
               {{ 'pages.import.status.run' | translate }}
             </span>
-            <span *ngIf="importJob.status === 'FAIL'" class="job-fail">
+            } @if (importJob.status === 'FAIL') {
+            <span class="job-fail">
               {{ 'pages.import.status.fail' | translate }} {{
               getJobFailureI18n(importJob) | translate }}
             </span>
-            <span *ngIf="importJob.status === 'SUCCESS'" class="job-success">
+            } @if (importJob.status === 'SUCCESS') {
+            <span class="job-success">
               {{ 'pages.import.status.success' | translate }}
             </span>
+            } @if (importJob.status === 'RUN') {
             <ion-progress-bar
-              *ngIf="importJob.status === 'RUN'"
               type="determinate"
               [value]="(getRunningJob()?.progress || 0) * 0.01"
             ></ion-progress-bar>
+            }
           </p>
         </ion-label>
       </ion-item>
     </div>
-    <ion-item *ngIf="importJobs.length > showJobs" lines="none">
+    } @if (importJobs.length > showJobs) {
+    <ion-item lines="none">
       <ion-button (click)="showMoreJobs()" fill="clear">
         {{ 'generic.showMore' | translate }}
       </ion-button>
     </ion-item>
+    }
   </div>
-
-  <div *ngIf="!getRunningJob()">
+  } @if (!getRunningJob()) {
+  <div>
     <ion-item lines="none">
       <ion-label class="ion-text-wrap">
         <br />
@@ -72,7 +81,6 @@
         </p>
       </ion-label>
     </ion-item>
-
     <ion-list>
       <ion-item (click)="startImport('jsonld')" detail button>
         <ion-icon name="cloud-upload" slot="start"></ion-icon>
@@ -124,6 +132,7 @@
       </ion-item>
     </ion-list>
   </div>
+  }
 
   <br />
   <br />

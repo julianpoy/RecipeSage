@@ -14,9 +14,11 @@
 
 <ion-content class="ion-padding">
   <ion-item (click)="mealItem.recipe ? openRecipe() : null" button>
-    <ion-avatar *ngIf="mealItem.recipe?.recipeImages?.length" slot="start">
+    @if (mealItem.recipe?.recipeImages?.length) {
+    <ion-avatar slot="start">
       <img src="{{ mealItem.recipe?.recipeImages?.at(0)?.image?.location }}" />
     </ion-avatar>
+    }
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
       <p class="mealItem-meta">
@@ -35,15 +37,16 @@
           }}
         </span>
       </p>
-      <p *ngIf="mealItem.recipe">
-        {{ 'pages.mealPlanItemDetailsModal.clickToOpen' | translate }}
-      </p>
+      @if (mealItem.recipe) {
+      <p>{{ 'pages.mealPlanItemDetailsModal.clickToOpen' | translate }}</p>
+      }
     </ion-label>
   </ion-item>
 
   <br />
 
-  <ion-item *ngIf="mealItem.recipe?.id" (click)="addToShoppingList()" button>
+  @if (mealItem.recipe?.id) {
+  <ion-item (click)="addToShoppingList()" button>
     <ion-icon slot="start" name="cart"></ion-icon>
     <ion-label>
       <h2>
@@ -52,22 +55,25 @@
       </h2>
     </ion-label>
   </ion-item>
-
+  } @if (mealItem.recipe && mealItem.recipe.id) {
   <ion-item
-    *ngIf="mealItem.recipe && mealItem.recipe.id"
     (click)="cookingToolbarService.isPinned(mealItem.recipe.id) ? unpinRecipe() : pinRecipe()"
     button
   >
     <ion-icon slot="start" name="pin"></ion-icon>
     <ion-label>
-      <h2 *ngIf="cookingToolbarService.isPinned(mealItem.recipe.id)">
+      @if (cookingToolbarService.isPinned(mealItem.recipe.id)) {
+      <h2>
         {{ 'pages.mealPlanItemDetailsModal.actions.unpinRecipe' | translate }}
       </h2>
-      <h2 *ngIf="!cookingToolbarService.isPinned(mealItem.recipe.id)">
+      } @if (!cookingToolbarService.isPinned(mealItem.recipe.id)) {
+      <h2>
         {{ 'pages.mealPlanItemDetailsModal.actions.pinRecipe' | translate }}
       </h2>
+      }
     </ion-label>
   </ion-item>
+  }
 
   <ion-item (click)="edit()" button>
     <ion-icon slot="start" name="create"></ion-icon>

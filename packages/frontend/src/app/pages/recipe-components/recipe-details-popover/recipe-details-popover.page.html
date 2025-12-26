@@ -1,9 +1,11 @@
 <ion-list no-border>
-  <div *ngIf="wakeLockCapable">
-    <ion-list-header *ngIf="wakeLockCapable">
+  @if (wakeLockCapable) {
+  <div>
+    @if (wakeLockCapable) {
+    <ion-list-header>
       {{ 'pages.recipeDetailsPopover.options' | translate }}
     </ion-list-header>
-
+    }
     <ion-item lines="full">
       <ion-icon name="eye" slot="start"></ion-icon>
       <ion-toggle
@@ -16,6 +18,7 @@
       </ion-toggle>
     </ion-item>
   </div>
+  }
 
   <ion-list-header>
     {{ 'pages.recipeDetailsPopover.actions' | translate }}
@@ -28,15 +31,15 @@
     class="ion-margin"
   >
     <ion-icon name="pin" slot="start"></ion-icon>
-    <span *ngIf="cookingToolbarService.isPinned(recipe.id)">
-      {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
-    </span>
-    <span *ngIf="!cookingToolbarService.isPinned(recipe.id)">
-      {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }}
-    </span>
+    @if (cookingToolbarService.isPinned(recipe.id)) {
+    <span> {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }} </span>
+    } @if (!cookingToolbarService.isPinned(recipe.id)) {
+    <span> {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }} </span>
+    }
   </ion-button>
 
-  <div *ngIf="recipe.userId === me?.id && recipe.folder === 'inbox'">
+  @if (recipe.userId === me?.id && recipe.folder === 'inbox') {
+  <div>
     <ion-item lines="none">
       <ion-label>
         <p class="ion-text-wrap">
@@ -44,7 +47,6 @@
         </p>
       </ion-label>
     </ion-item>
-
     <ion-button
       (click)="closeWithAction('moveToMain')"
       expand="block"
@@ -54,11 +56,9 @@
       <ion-icon name="cloud-download" slot="start"></ion-icon>
       {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
     </ion-button>
-
     <ion-list-header>
       {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
     </ion-list-header>
-
     <ion-button
       (click)="closeWithAction('delete')"
       expand="block"
@@ -70,8 +70,8 @@
       {{ 'pages.recipeDetailsPopover.delete' | translate }}
     </ion-button>
   </div>
-
-  <div *ngIf="recipe.userId !== me?.id && isLoggedIn">
+  } @if (recipe.userId !== me?.id && isLoggedIn) {
+  <div>
     <ion-item lines="none">
       <ion-label>
         <p class="ion-text-wrap">
@@ -79,7 +79,6 @@
         </p>
       </ion-label>
     </ion-item>
-
     <ion-button
       (click)="closeWithAction('clone')"
       expand="block"
@@ -90,8 +89,8 @@
       {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
     </ion-button>
   </div>
-
-  <div *ngIf="recipe.userId !== me?.id && !isLoggedIn">
+  } @if (recipe.userId !== me?.id && !isLoggedIn) {
+  <div>
     <ion-item lines="none">
       <ion-label>
         <p class="ion-text-wrap">
@@ -99,7 +98,6 @@
         </p>
       </ion-label>
     </ion-item>
-
     <ion-button
       (click)="closeWithAction('authAndClone')"
       expand="block"
@@ -110,8 +108,8 @@
       {{ 'pages.recipeDetails.registerOrLoginToSave' | translate }}
     </ion-button>
   </div>
-
-  <div *ngIf="recipe.userId === me?.id && recipe.folder === 'main'">
+  } @if (recipe.userId === me?.id && recipe.folder === 'main') {
+  <div>
     <ion-button
       (click)="closeWithAction('addToShoppingList')"
       expand="block"
@@ -121,7 +119,6 @@
       <ion-icon name="list" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.addToShoppingList' | translate }}
     </ion-button>
-
     <ion-button
       (click)="closeWithAction('addToMealPlan')"
       expand="block"
@@ -131,7 +128,6 @@
       <ion-icon name="calendar" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.addToMealPlan' | translate }}
     </ion-button>
-
     <ion-button
       (click)="closeWithAction('share')"
       expand="block"
@@ -141,7 +137,6 @@
       <ion-icon name="share" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.share' | translate }}
     </ion-button>
-
     <ion-button
       (click)="closeWithAction('print')"
       expand="block"
@@ -151,7 +146,6 @@
       <ion-icon name="print" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.print' | translate }}
     </ion-button>
-
     <ion-button
       (click)="closeWithAction('edit')"
       expand="block"
@@ -161,7 +155,6 @@
       <ion-icon name="create" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.edit' | translate }}
     </ion-button>
-
     <ion-button
       (click)="closeWithAction('clone')"
       expand="block"
@@ -171,11 +164,9 @@
       <ion-icon name="copy" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.makeACopy' | translate }}
     </ion-button>
-
     <ion-list-header>
       {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
     </ion-list-header>
-
     <ion-button
       (click)="closeWithAction('delete')"
       expand="block"
@@ -187,4 +178,5 @@
       {{ 'pages.recipeDetailsPopover.delete' | translate }}
     </ion-button>
   </div>
+  }
 </ion-list>

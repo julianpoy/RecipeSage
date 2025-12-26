@@ -1,21 +1,24 @@
-<div class="group" *ngFor="let mealName of mealItems.meals">
-  <span class="meal-title" *ngIf="mealItems.itemsByMeal[mealName].length > 0">{{
-    mealNameToI18n(mealName) | translate
-  }}</span>
-  <calendar-item
-    *ngFor="let mealItem of mealItems.itemsByMeal[mealName]"
-    [mealItem]="mealItem"
-    (click)="itemClicked.emit(mealItem)"
-    draggable="{{ enableEditing }}"
-    (dragstart)="dragStart($event, mealItem)"
-    (dragend)="dragEnd($event, mealItem)"
-    [ngClass]="{
-      dragging: mealItemsDragging[mealItem.id],
-      breakfast: mealItem.meal === 'breakfast',
-      lunch: mealItem.meal === 'lunch',
-      dinner: mealItem.meal === 'dinner',
-      snacks: mealItem.meal === 'snacks',
-      other: mealItem.meal === 'other',
-    }"
-  ></calendar-item>
-</div>
+@for (mealName of mealItems.meals; track mealName) {
+  <div class="group">
+    @if (mealItems.itemsByMeal[mealName].length > 0) {
+      <span class="meal-title">{{ mealNameToI18n(mealName) | translate }}</span>
+    }
+    @for (mealItem of mealItems.itemsByMeal[mealName]; track mealItem) {
+      <calendar-item
+        [mealItem]="mealItem"
+        (click)="itemClicked.emit(mealItem)"
+        draggable="{{ enableEditing }}"
+        (dragstart)="dragStart($event, mealItem)"
+        (dragend)="dragEnd($event, mealItem)"
+        [ngClass]="{
+          dragging: mealItemsDragging[mealItem.id],
+          breakfast: mealItem.meal === 'breakfast',
+          lunch: mealItem.meal === 'lunch',
+          dinner: mealItem.meal === 'dinner',
+          snacks: mealItem.meal === 'snacks',
+          other: mealItem.meal === 'other',
+        }"
+      ></calendar-item>
+    }
+  </div>
+}

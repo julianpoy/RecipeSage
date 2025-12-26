@@ -1,11 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf="recipes.length > 1">
+    @if (recipes.length > 1) {
+    <ion-title>
       {{ 'pages.addRecipeToShoppingListModal.title.plural' | translate }}
     </ion-title>
-    <ion-title *ngIf="recipes.length <= 1">
+    } @if (recipes.length <= 1) {
+    <ion-title>
       {{ 'pages.addRecipeToShoppingListModal.title.singular' | translate }}
     </ion-title>
+    }
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -20,27 +23,23 @@
     {{ 'pages.addRecipeToShoppingListModal.selectDestination' | translate }}
   </p>
 
-  <p *ngIf="!shoppingLists">
-    {{ 'pages.addRecipeToShoppingListModal.loading' | translate }}
-  </p>
-
-  <ion-item *ngIf="shoppingLists && shoppingLists.length > 0">
+  @if (!shoppingLists) {
+  <p>{{ 'pages.addRecipeToShoppingListModal.loading' | translate }}</p>
+  } @if (shoppingLists && shoppingLists.length > 0) {
+  <ion-item>
     <ion-select
       label="{{ 'pages.addRecipeToShoppingListModal.destination' | translate }}"
       [(ngModel)]="destinationShoppingList"
       okText="{{ 'generic.ok' | translate }}"
       cancelText="{{ 'generic.cancel' | translate }}"
     >
-      <ion-select-option *ngFor="let list of shoppingLists" [value]="list"
-        >{{ list.title }}</ion-select-option
-      >
+      @for (list of shoppingLists; track list) {
+      <ion-select-option [value]="list">{{ list.title }}</ion-select-option>
+      }
     </ion-select>
   </ion-item>
-
-  <div
-    *ngIf="shoppingLists && shoppingLists.length === 0"
-    (click)="createShoppingList()"
-  >
+  } @if (shoppingLists && shoppingLists.length === 0) {
+  <div (click)="createShoppingList()">
     <p>
       {{ 'pages.addRecipeToShoppingListModal.noShoppingLists' | translate }}<br /><br />
       <ion-button>
@@ -52,13 +51,17 @@
       </ion-button>
     </p>
   </div>
+  }
 
   <br />
 
-  <div *ngFor="let recipe of recipes">
-    <div *ngIf="recipes.length > 1">
+  @for (recipe of recipes; track recipe) {
+  <div>
+    @if (recipes.length > 1) {
+    <div>
       <b>{{recipe.title}}</b>
     </div>
+    }
     <select-ingredients
       [ingredients]="recipe.ingredients"
       [initialScale]="scale"
@@ -67,6 +70,7 @@
     <br />
     <br />
   </div>
+  }
 </ion-content>
 
 <ion-footer class="ion-padding">

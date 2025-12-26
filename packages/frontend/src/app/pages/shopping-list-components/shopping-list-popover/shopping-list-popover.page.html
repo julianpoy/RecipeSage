@@ -56,7 +56,8 @@
     </ion-toggle>
   </ion-item>
 
-  <ion-item lines="full" *ngIf="shoppingList.collaboratorUsers.length > 0">
+  @if (shoppingList.collaboratorUsers.length > 0) {
+  <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]"
       (ngModelChange)="savePreferences()"
@@ -66,6 +67,7 @@
       </div>
     </ion-toggle>
   </ion-item>
+  }
 
   <ion-item lines="full">
     <ion-toggle

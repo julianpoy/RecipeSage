@@ -9,12 +9,12 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="myProfile && requiresSetup" class="setup-screen ion-padding">
+  @if (myProfile && requiresSetup) {
+  <div class="setup-screen ion-padding">
     <div class="intro">
       <h3>{{ 'pages.myProfile.welcome' | translate }}</h3>
       {{ 'pages.myProfile.setup1' | translate }}
     </div>
-
     {{ 'pages.myProfile.setup.name' | translate }}
     <ion-item>
       <ion-input
@@ -26,7 +26,6 @@
     </ion-item>
     <br />
     <br />
-
     {{ 'pages.myProfile.setup2' | translate }}
     <ion-item>
       <ion-input
@@ -38,44 +37,37 @@
     </ion-item>
     <ion-item lines="none">
       <ion-label>
-        <p
-          class="error"
-          *ngIf="updatedProfileFields.handle && !isHandleAvailable"
-        >
-          {{ 'pages.myProfile.handle.taken' | translate }}
-        </p>
-        <p
-          class="error"
-          *ngIf="updatedProfileFields.handle && !isHandleValid()"
-        >
-          {{ 'pages.myProfile.handle.invalid' | translate }}
-        </p>
+        @if (updatedProfileFields.handle && !isHandleAvailable) {
+        <p class="error">{{ 'pages.myProfile.handle.taken' | translate }}</p>
+        } @if (updatedProfileFields.handle && !isHandleValid()) {
+        <p class="error">{{ 'pages.myProfile.handle.invalid' | translate }}</p>
+        }
         <p class="ion-text-wrap">
           {{ 'pages.myProfile.handle.unique' | translate }}
         </p>
       </ion-label>
     </ion-item>
   </div>
-
-  <div *ngIf="myProfile && !requiresSetup">
+  } @if (myProfile && !requiresSetup) {
+  <div>
     <br />
-
     <div class="profile-details-container">
       <multi-image-upload
         [images]="myProfile.profileImages"
         (imageUpdate)="updatedProfileFields.profileImages = myProfile.profileImages; markAsDirty();"
       ></multi-image-upload>
-
       <div
         class="profile-details"
         [ngClass]="{break: (myProfile.profileImages.length || 0) > 1}"
       >
-        <ion-item *ngIf="!revealNameInput" lines="none">
+        @if (!revealNameInput) {
+        <ion-item lines="none">
           <h3 class="username-preview" (click)="revealNameInput = true">
             {{ myProfile.name }} <ion-icon name="pencil"></ion-icon>
           </h3>
         </ion-item>
-        <ion-item class="username-edit" *ngIf="revealNameInput">
+        } @if (revealNameInput) {
+        <ion-item class="username-edit">
           <ion-input
             label="{{ 'pages.myProfile.name' | translate }}"
             labelPlacement="stacked"
@@ -83,12 +75,14 @@
             (ngModelChange)="updatedProfileFields.name = myProfile.name"
           ></ion-input>
         </ion-item>
-        <ion-item *ngIf="!revealHandleInput" lines="none">
+        } @if (!revealHandleInput) {
+        <ion-item lines="none">
           <h5 class="handle-preview" (click)="revealHandleInput = true">
             &commat;{{ myProfile.handle }} <ion-icon name="pencil"></ion-icon>
           </h5>
         </ion-item>
-        <ion-item class="handle-edit" *ngIf="revealHandleInput">
+        } @if (revealHandleInput) {
+        <ion-item class="handle-edit">
           <ion-input
             label="{{ 'pages.myProfile.handle' | translate }}"
             labelPlacement="stacked"
@@ -96,27 +90,25 @@
             (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput()"
           ></ion-input>
         </ion-item>
-        <ion-item lines="none" *ngIf="revealHandleInput">
+        } @if (revealHandleInput) {
+        <ion-item lines="none">
           <ion-label>
-            <p
-              class="error"
-              *ngIf="updatedProfileFields.handle && !isHandleAvailable"
-            >
+            @if (updatedProfileFields.handle && !isHandleAvailable) {
+            <p class="error">
               {{ 'pages.myProfile.handle.taken' | translate }}
             </p>
-            <p
-              class="error"
-              *ngIf="updatedProfileFields.handle && !isHandleValid()"
-            >
+            } @if (updatedProfileFields.handle && !isHandleValid()) {
+            <p class="error">
               {{ 'pages.myProfile.handle.invalid' | translate }}
             </p>
+            }
             <p class="ion-text-wrap">
               {{ 'pages.myProfile.handle.unique' | translate }}
             </p>
           </ion-label>
         </ion-item>
-
-        <ion-item class="enable-profile" lines="none" *ngIf="accountInfo">
+        } @if (accountInfo) {
+        <ion-item class="enable-profile" lines="none">
           <ion-toggle
             [(ngModel)]="accountInfo.enableProfile"
             (ngModelChange)="updatedProfileFields.enableProfile = accountInfo.enableProfile; markAsDirty();"
@@ -126,7 +118,7 @@
             </div>
           </ion-toggle>
         </ion-item>
-
+        }
         <div style="display: flex">
           <ion-item lines="none">
             <ion-button (click)="shareProfile()">
@@ -143,9 +135,7 @@
         </div>
       </div>
     </div>
-
     <br />
-
     <ion-item lines="full">
       <ion-icon name="key" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
@@ -156,76 +146,67 @@
         <ion-icon name="add" slot="start"></ion-icon>
       </ion-button>
     </ion-item>
-
-    <ion-list
-      *ngIf="myProfile?.profileItems?.length"
-      class="profile-items-list"
-    >
+    @if (myProfile.profileItems.length) {
+    <ion-list class="profile-items-list">
       <ion-reorder-group (ionItemReorder)="ionReorder($event)" disabled="false">
-        <ng-container
-          *ngFor="let item of myProfile?.profileItems; let idx = index"
-        >
-          <ion-item
-            *ngIf="item.type === 'all-recipes'"
-            button
-            (click)="open(item)"
+        @for (item of myProfile.profileItems; track item; let idx = $index) {
+        @if (item.type === 'all-recipes') {
+        <ion-item button (click)="open(item)">
+          <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
+          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+          <!--</ion-button>-->
+          <ion-button
+            color="danger"
+            slot="end"
+            (click)="$event.stopPropagation(); removeProfileItem(idx)"
           >
-            <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
-            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-
-            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-            <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-            <!--</ion-button>-->
-            <ion-button
-              color="danger"
-              slot="end"
-              (click)="$event.stopPropagation(); removeProfileItem(idx)"
-            >
-              <ion-icon name="trash" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-reorder slot="end"></ion-reorder>
-          </ion-item>
-
-          <ion-item *ngIf="item.type === 'recipe'" button (click)="open(item)">
-            <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
-              <img [src]="item.recipe.images?.at(0)?.location" />
-            </ion-avatar>
-            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-
-            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-            <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-            <!--</ion-button>-->
-            <ion-button
-              color="danger"
-              slot="end"
-              (click)="$event.stopPropagation(); removeProfileItem(idx)"
-            >
-              <ion-icon name="trash" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-reorder slot="end"></ion-reorder>
-          </ion-item>
-
-          <ion-item *ngIf="item.type === 'label'" button (click)="open(item)">
-            <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
-            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-
-            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-            <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-            <!--</ion-button>-->
-            <ion-button
-              color="danger"
-              slot="end"
-              (click)="$event.stopPropagation(); removeProfileItem(idx)"
-            >
-              <ion-icon name="trash" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-reorder slot="end"></ion-reorder>
-          </ion-item>
-        </ng-container>
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+        } @if (item.type === 'recipe') {
+        <ion-item button (click)="open(item)">
+          @if (item?.recipe?.images?.length) {
+          <ion-avatar slot="start">
+            <img [src]="item.recipe.images?.at(0)?.location" />
+          </ion-avatar>
+          }
+          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
+          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+          <!--</ion-button>-->
+          <ion-button
+            color="danger"
+            slot="end"
+            (click)="$event.stopPropagation(); removeProfileItem(idx)"
+          >
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+        } @if (item.type === 'label') {
+        <ion-item button (click)="open(item)">
+          <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
+          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+          <!--</ion-button>-->
+          <ion-button
+            color="danger"
+            slot="end"
+            (click)="$event.stopPropagation(); removeProfileItem(idx)"
+          >
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+        } }
       </ion-reorder-group>
     </ion-list>
-
-    <null-state *ngIf="!myProfile?.profileItems?.length">
+    } @if (!myProfile.profileItems.length) {
+    <null-state>
       <ion-icon
         name="bookmarks"
         class="big-icon"
@@ -238,7 +219,9 @@
         </p>
       </ion-label>
     </null-state>
+    }
   </div>
+  }
   <br />
   <br />
   <br />

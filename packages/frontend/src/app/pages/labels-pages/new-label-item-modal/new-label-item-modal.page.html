@@ -1,20 +1,22 @@
 <ion-header>
   <ion-toolbar color="nav">
-    <ion-buttons slot="start" *ngIf="type">
+    @if (type) {
+    <ion-buttons slot="start">
       <ion-button (click)="type = null">
         <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-title *ngIf="!type">
-      {{ 'pages.newLabelItemModal.title' | translate }}
-    </ion-title>
-    <ion-title *ngIf="type === 'group'">
+    } @if (!type) {
+    <ion-title> {{ 'pages.newLabelItemModal.title' | translate }} </ion-title>
+    } @if (type === 'group') {
+    <ion-title>
       {{ 'pages.newLabelItemModal.categoryTitle' | translate }}
     </ion-title>
-    <ion-title *ngIf="type === 'label'">
+    } @if (type === 'label') {
+    <ion-title>
       {{ 'pages.newLabelItemModal.labelTitle' | translate }}
     </ion-title>
+    }
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -24,7 +26,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" *ngIf="!type">
+@if (!type) {
+<ion-content class="ion-padding">
   <ion-item button (click)="type = 'label'">
     <ion-icon name="pricetag" slot="start"></ion-icon>
     <ion-label>
@@ -34,7 +37,6 @@
       </p>
     </ion-label>
   </ion-item>
-
   <ion-item button (click)="type = 'group'">
     <ion-icon name="pricetags" slot="start"></ion-icon>
     <ion-label>
@@ -45,10 +47,9 @@
     </ion-label>
   </ion-item>
 </ion-content>
-
-<ion-content class="ion-padding" *ngIf="type === 'label'">
+} @if (type === 'label') {
+<ion-content class="ion-padding">
   <br />
-
   <ion-item lines="none">
     <ion-input
       labelPlacement="stacked"
@@ -60,10 +61,9 @@
     ></ion-input>
   </ion-item>
 </ion-content>
-
-<ion-content class="ion-padding" *ngIf="type === 'group'">
+} @if (type === 'group') {
+<ion-content class="ion-padding">
   <br />
-
   <ion-item lines="none">
     <ion-input
       labelPlacement="stacked"
@@ -74,10 +74,8 @@
       [value]="title"
     ></ion-input>
   </ion-item>
-
   <br />
   <br />
-
   <ion-item lines="none">
     <ion-toggle [checked]="warnWhenNotPresent" (ionChange)="warnToggle($event)">
       {{ 'pages.manageLabelGroupModal.warn' | translate }}
@@ -88,7 +86,6 @@
       </ion-label>
     </ion-toggle>
   </ion-item>
-
   <ion-item lines="none">
     <ion-label>
       {{ 'pages.manageLabelGroupModal.labels' | translate }}
@@ -97,7 +94,6 @@
       </p>
     </ion-label>
   </ion-item>
-
   <select-multiple-items
     [items]="mapLabelsToSelectableItems(ungroupedLabels)"
     (selectedItemsChange)="selectedLabelsChange($event)"
@@ -106,9 +102,10 @@
     searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
   ></select-multiple-items>
 </ion-content>
-
-<ion-footer *ngIf="type" class="ion-padding">
+} @if (type) {
+<ion-footer class="ion-padding">
   <ion-button (click)="save()" [disabled]="!title.length" expand="block">
     {{ 'generic.save' | translate }}
   </ion-button>
 </ion-footer>
+}

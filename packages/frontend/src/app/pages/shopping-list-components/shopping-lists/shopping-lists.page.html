@@ -37,10 +37,10 @@
   </ion-popover>
 
   <ion-list>
+    @for (shoppingList of shoppingLists; track shoppingList) {
     <ion-item
       button
       class="ion-text-wrap"
-      *ngFor="let shoppingList of shoppingLists"
       (click)="openShoppingList(shoppingList.id)"
     >
       <ion-icon name="list" slot="start"></ion-icon>
@@ -50,35 +50,41 @@
           {{ 'pages.shoppingLists.created' |
           translate:{date:formatItemCreationDate(shoppingList.createdAt)} }}
         </p>
-        <p *ngIf="shoppingList.collaboratorUsers.length > 0">
-          {{ 'pages.shoppingLists.collaboration' | translate }}
-          <span
-            *ngFor="let collaboratorUser of shoppingList.collaboratorUsers; last as isLast"
-          >
-            <span *ngIf="me?.id !== collaboratorUser.user.id">
-              {{ collaboratorUser.user.name }}<span
-                *ngIf="!isLast || me?.id !== shoppingList.userId"
-                >,</span
-              >
-            </span>
-          </span>
-          <span *ngIf="me?.id !== shoppingList.userId">
-            {{ shoppingList.user.name }}
-          </span>
-        </p>
+        @if (shoppingList.collaboratorUsers.length > 0) {
         <p>
-          <span *ngIf="me?.id !== shoppingList.userId">
+          {{ 'pages.shoppingLists.collaboration' | translate }} @for
+          (collaboratorUser of shoppingList.collaboratorUsers; track
+          collaboratorUser; let isLast = $last) {
+          <span>
+            @if (me?.id !== collaboratorUser.user.id) {
+            <span>
+              {{ collaboratorUser.user.name }}@if (!isLast || me?.id !==
+              shoppingList.userId) {
+              <span>,</span>
+              }
+            </span>
+            }
+          </span>
+          } @if (me?.id !== shoppingList.userId) {
+          <span> {{ shoppingList.user.name }} </span>
+          }
+        </p>
+        }
+        <p>
+          @if (me?.id !== shoppingList.userId) {
+          <span>
             {{ 'pages.shoppingLists.createdBy' |
             translate:{name:shoppingList.user.name} }}
           </span>
-          <span *ngIf="me?.id === shoppingList.userId">
-            {{ 'pages.shoppingLists.owner' | translate }}
-          </span>
+          } @if (me?.id === shoppingList.userId) {
+          <span> {{ 'pages.shoppingLists.owner' | translate }} </span>
+          }
         </p>
       </ion-label>
       <ion-badge slot="end">{{ shoppingList._count.items }}</ion-badge>
     </ion-item>
-    <null-state *ngIf="shoppingLists?.length === 0">
+    } @if (shoppingLists?.length === 0) {
+    <null-state>
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
@@ -87,6 +93,7 @@
         </p>
       </ion-label>
     </null-state>
+    }
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -7,31 +7,34 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="ratingFilter">
-    <ion-item lines="none">
-      <ion-checkbox
-        labelPlacement="end"
-        justify="start"
-        [checked]="ratingFilter.includes(null)"
-        (ionChange)="toggle(null)"
-      >
-        {{ "components.ratingFilter.unrated" | translate }}
-      </ion-checkbox>
-    </ion-item>
-
-    <ion-item lines="none" *ngFor="let possibleRating of possibleRatings">
-      <ion-checkbox
-        labelPlacement="end"
-        justify="start"
-        [checked]="ratingFilter.includes(possibleRating)"
-        (ionChange)="toggle(possibleRating)"
-      >
-        <div style="display: flex">
-          <rating [rating]="possibleRating"></rating>&nbsp;
-        </div>
-      </ion-checkbox>
-    </ion-item>
-  </ion-list>
+  @if (ratingFilter) {
+    <ion-list>
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          [checked]="ratingFilter.includes(null)"
+          (ionChange)="toggle(null)"
+        >
+          {{ "components.ratingFilter.unrated" | translate }}
+        </ion-checkbox>
+      </ion-item>
+      @for (possibleRating of possibleRatings; track possibleRating) {
+        <ion-item lines="none">
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [checked]="ratingFilter.includes(possibleRating)"
+            (ionChange)="toggle(possibleRating)"
+          >
+            <div style="display: flex">
+              <rating [rating]="possibleRating"></rating>&nbsp;
+            </div>
+          </ion-checkbox>
+        </ion-item>
+      }
+    </ion-list>
+  }
 </ion-content>
 
 <ion-footer>

@@ -24,13 +24,14 @@
           translate:{count:label._count.recipeLabels} }}
         </span>
         <br />
-        <span *ngIf="label.labelGroup">
+        @if (label.labelGroup) {
+        <span>
           {{ 'pages.manageLabelModal.group' |
           translate:{title:label.labelGroup.title} }}
         </span>
-        <span *ngIf="!label.labelGroup">
-          {{ 'pages.manageLabelModal.noGroup' | translate }}
-        </span>
+        } @if (!label.labelGroup) {
+        <span> {{ 'pages.manageLabelModal.noGroup' | translate }} </span>
+        }
         <br />
         <span>
           {{ 'pages.manageLabelModal.createdAt' |

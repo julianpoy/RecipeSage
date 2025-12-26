@@ -13,11 +13,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <selfhost-warning-item *ngIf="isSelfHost"></selfhost-warning-item>
+  @if (isSelfHost) {
+  <selfhost-warning-item></selfhost-warning-item>
+  }
 
   <br />
 
-  <null-state *ngIf="accountInfo && !accountInfo?.enableProfile">
+  @if (accountInfo && !accountInfo.enableProfile) {
+  <null-state>
     <ion-icon
       name="person-circle"
       class="big-icon"
@@ -36,40 +39,37 @@
       </p>
     </ion-label>
   </null-state>
-
-  <ion-item *ngIf="accountInfo?.enableProfile" button (click)="editProfile()">
+  } @if (accountInfo?.enableProfile) {
+  <ion-item button (click)="editProfile()">
     <ion-avatar slot="start">
-      <img *ngIf="!myProfile?.profileImages?.length" src="assets/avatar.svg" />
-      <img
-        *ngIf="myProfile?.profileImages?.length"
-        [src]="myProfile?.profileImages?.at(0)?.location"
-      />
+      @if (!myProfile?.profileImages?.length) {
+      <img src="assets/avatar.svg" />
+      } @if (myProfile?.profileImages?.length) {
+      <img [src]="myProfile?.profileImages?.at(0)?.location" />
+      }
     </ion-avatar>
     <ion-label> {{ 'pages.people.edit' | translate }} </ion-label>
   </ion-item>
+  }
 
   <br />
   <br />
   <br />
 
-  <ion-list *ngIf="accountInfo?.enableProfile">
-    <ion-item-divider *ngIf="friendships?.friends?.length > 0">
+  @if (accountInfo?.enableProfile) {
+  <ion-list>
+    @if (friendships?.friends?.length > 0) {
+    <ion-item-divider>
       <ion-label> {{ 'pages.people.friends' | translate }} </ion-label>
     </ion-item-divider>
-    <ion-item
-      *ngFor="let friendship of friendships?.friends"
-      button
-      (click)="openProfile(friendship.otherUser.handle)"
-    >
+    } @for (friendship of friendships?.friends; track friendship) {
+    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
       <ion-avatar slot="start">
-        <img
-          *ngIf="!friendship.otherUser.profileImages?.length"
-          src="assets/avatar.svg"
-        />
-        <img
-          *ngIf="friendship.otherUser.profileImages?.length"
-          [src]="friendship.otherUser.profileImages[0].location"
-        />
+        @if (!friendship.otherUser.profileImages?.length) {
+        <img src="assets/avatar.svg" />
+        } @if (friendship.otherUser.profileImages?.length) {
+        <img [src]="friendship.otherUser.profileImages[0].location" />
+        }
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button
@@ -80,24 +80,18 @@
         {{ 'pages.people.unfriend' | translate }}
       </ion-button>
     </ion-item>
-
-    <ion-item-divider *ngIf="friendships?.incomingRequests?.length > 0">
+    } @if (friendships?.incomingRequests?.length > 0) {
+    <ion-item-divider>
       <ion-label> {{ 'pages.people.invites' | translate }} </ion-label>
     </ion-item-divider>
-    <ion-item
-      *ngFor="let friendship of friendships?.incomingRequests"
-      button
-      (click)="openProfile(friendship.otherUser.handle)"
-    >
+    } @for (friendship of friendships?.incomingRequests; track friendship) {
+    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
       <ion-avatar slot="start">
-        <img
-          *ngIf="!friendship.otherUser.profileImages?.length"
-          src="assets/avatar.svg"
-        />
-        <img
-          *ngIf="friendship.otherUser.profileImages?.length"
-          [src]="friendship.otherUser.profileImages[0].location"
-        />
+        @if (!friendship.otherUser.profileImages?.length) {
+        <img src="assets/avatar.svg" />
+        } @if (friendship.otherUser.profileImages?.length) {
+        <img [src]="friendship.otherUser.profileImages[0].location" />
+        }
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button
@@ -114,24 +108,18 @@
         {{ 'pages.people.decline' | translate }}
       </ion-button>
     </ion-item>
-
-    <ion-item-divider *ngIf="friendships?.outgoingRequests?.length > 0">
+    } @if (friendships?.outgoingRequests?.length > 0) {
+    <ion-item-divider>
       <ion-label> {{ 'pages.people.sentInvites' | translate }} </ion-label>
     </ion-item-divider>
-    <ion-item
-      *ngFor="let friendship of friendships?.outgoingRequests"
-      button
-      (click)="openProfile(friendship.otherUser.handle)"
-    >
+    } @for (friendship of friendships?.outgoingRequests; track friendship) {
+    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
       <ion-avatar slot="start">
-        <img
-          *ngIf="!friendship.otherUser.profileImages?.length"
-          src="assets/avatar.svg"
-        />
-        <img
-          *ngIf="friendship.otherUser.profileImages?.length"
-          [src]="friendship.otherUser.profileImages[0].location"
-        />
+        @if (!friendship.otherUser.profileImages?.length) {
+        <img src="assets/avatar.svg" />
+        } @if (friendship.otherUser.profileImages?.length) {
+        <img [src]="friendship.otherUser.profileImages[0].location" />
+        }
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button
@@ -142,10 +130,9 @@
         {{ 'pages.people.cancel' | translate }}
       </ion-button>
     </ion-item>
-
-    <null-state
-      *ngIf="!friendships?.incomingRequests?.length && !friendships?.outgoingRequests?.length && !friendships?.friends?.length"
-    >
+    } @if (!friendships?.incomingRequests?.length &&
+    !friendships?.outgoingRequests?.length && !friendships?.friends?.length) {
+    <null-state>
       <ion-icon name="people" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
@@ -155,7 +142,9 @@
         </p>
       </ion-label>
     </null-state>
+    }
   </ion-list>
+  }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="findProfile()" color="primary">

@@ -10,7 +10,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" *ngIf="loaded">
+@if (loaded) {
+<ion-content class="ion-padding">
   <ion-item>
     <ion-input
       label="{{ 'pages.updateShoppingList.listTitle' | translate }}"
@@ -23,25 +24,23 @@
       spellcheck="true"
     ></ion-input>
   </ion-item>
-
   <br /><br />
-
   <select-collaborators
     [selectedCollaboratorIds]="selectedCollaboratorIds"
     (selectedCollaboratorIdsChanged)="selectedCollaboratorIds = $event"
   ></select-collaborators>
 </ion-content>
+}
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
-      <span *ngIf="selectedCollaboratorIds.length === 0">
-        {{ 'pages.updateShoppingList.update' | translate }}
-      </span>
-      <span *ngIf="selectedCollaboratorIds.length > 0">
-        {{ 'pages.updateShoppingList.updateAndShare' | translate }}
-      </span>
+      @if (selectedCollaboratorIds.length === 0) {
+      <span> {{ 'pages.updateShoppingList.update' | translate }} </span>
+      } @if (selectedCollaboratorIds.length > 0) {
+      <span> {{ 'pages.updateShoppingList.updateAndShare' | translate }} </span>
+      }
     </ion-label>
   </ion-button>
 </ion-footer>

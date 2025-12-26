@@ -2,15 +2,17 @@
   <h6>{{ "components.selectCollaborators.title" | translate }}</h6>
 
   <div class="labels">
-    <button class="label" *ngFor="let userId of selectedCollaboratorIds">
-      <ion-icon
-        class="delete-label"
-        (click)="removeCollaborator(userId)"
-        name="trash"
-        slot="start"
-      ></ion-icon>
-      {{ userProfilesById.get(userId)?.name || "--" }}
-    </button>
+    @for (userId of selectedCollaboratorIds; track userId) {
+      <button class="label">
+        <ion-icon
+          class="delete-label"
+          (click)="removeCollaborator(userId)"
+          name="trash"
+          slot="start"
+        ></ion-icon>
+        {{ userProfilesById.get(userId)?.name || "--" }}
+      </button>
+    }
   </div>
 
   <select-user

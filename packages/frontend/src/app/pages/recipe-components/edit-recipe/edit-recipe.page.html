@@ -3,12 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="recipe.id"
-      >{{ 'pages.editRecipe.title.edit' | translate }}</ion-title
-    >
-    <ion-title *ngIf="!recipe.id"
-      >{{ 'pages.editRecipe.title.new' | translate }}</ion-title
-    >
+    @if (recipe.id) {
+    <ion-title>{{ 'pages.editRecipe.title.edit' | translate }}</ion-title>
+    } @if (!recipe.id) {
+    <ion-title>{{ 'pages.editRecipe.title.new' | translate }}</ion-title>
+    }
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -25,10 +24,12 @@
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
-    <ion-button *ngIf="!recipe.id" id="autoclip-popover-trigger">
+    @if (!recipe.id) {
+    <ion-button id="autoclip-popover-trigger">
       <ion-icon name="cut-outline" slot="start"></ion-icon>
       {{ 'pages.editRecipe.showClipOptions' | translate }}
     </ion-button>
+    }
     <ion-popover
       trigger="autoclip-popover-trigger"
       triggerAction="click"
@@ -239,11 +240,13 @@
 
     <div class="label-input-group-container">
       <div class="label-input-group">
-        <ion-item *ngIf="labelGroups.length" lines="none">
+        @if (labelGroups.length) {
+        <ion-item lines="none">
           <ion-label>
             {{ 'pages.editRecipe.input.uncatLabels' | translate }}
           </ion-label>
         </ion-item>
+        }
 
         <select-multiple-items
           [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, null))"
@@ -259,11 +262,11 @@
         ></select-multiple-items>
       </div>
 
-      <div class="label-input-group" *ngFor="let labelGroup of labelGroups">
+      @for (labelGroup of labelGroups; track labelGroup) {
+      <div class="label-input-group">
         <ion-item lines="none">
           <ion-label> {{labelGroup.title}} </ion-label>
         </ion-item>
-
         <select-multiple-items
           [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, labelGroup.id))"
           [enableCreateNew]="true"
@@ -277,25 +280,19 @@
           searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
         ></select-multiple-items>
       </div>
+      }
     </div>
 
     <div class="ion-padding">
-      <ion-button
-        *ngIf="recipe.id"
-        expand="block"
-        (click)="save()"
-        [disabled]="saving"
-      >
+      @if (recipe.id) {
+      <ion-button expand="block" (click)="save()" [disabled]="saving">
         {{ 'pages.editRecipe.save' | translate }}
       </ion-button>
-      <ion-button
-        *ngIf="!recipe.id"
-        expand="block"
-        (click)="save()"
-        [disabled]="saving"
-      >
+      } @if (!recipe.id) {
+      <ion-button expand="block" (click)="save()" [disabled]="saving">
         {{ 'pages.editRecipe.create' | translate }}
       </ion-button>
+      }
     </div>
   </div>
 </ion-content>

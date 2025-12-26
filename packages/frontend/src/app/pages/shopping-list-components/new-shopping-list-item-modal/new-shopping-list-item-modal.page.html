@@ -22,10 +22,12 @@
     </ion-segment>
   </div>
 
-  <div [ngSwitch]="inputType">
-    <div *ngSwitchCase="'items'">
+  <div>
+    @switch (inputType) { @case ('items') {
+    <div>
       <br />
-      <ion-item *ngFor="let item of itemFields">
+      @for (item of itemFields; track item) {
+      <ion-item>
         <ion-input
           label="{{ 'pages.newShoppingListItem.itemTitle' | translate }}"
           labelPlacement="stacked"
@@ -38,18 +40,22 @@
           spellcheck="true"
         ></ion-input>
       </ion-item>
+      }
     </div>
-
-    <div *ngSwitchCase="'recipe'">
-      <br *ngIf="!selectedRecipe" />
+    } @case ('recipe') {
+    <div>
+      @if (!selectedRecipe) {
+      <br />
+      }
       <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
-
+      @if (selectedRecipe) {
       <select-ingredients
-        *ngIf="selectedRecipe"
         [ingredients]="selectedRecipe.ingredients"
         (selectedIngredientsChange)="selectedIngredients = $event"
       ></select-ingredients>
+      }
     </div>
+    } }
   </div>
 </ion-content>
 

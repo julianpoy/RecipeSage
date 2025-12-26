@@ -1,22 +1,20 @@
-<ion-list no-border *ngIf="!loading">
+@if (!loading) {
+<ion-list no-border>
   <ion-list-header>
     {{ 'pages.mealPlanPopover.options.title' | translate }}
   </ion-list-header>
-
   <!--<ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">-->
   <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
   <!--<ion-label>-->
   <!--Show Added By-->
   <!--</ion-label>-->
   <!--</ion-item>-->
-
   <!--<ion-item lines="full">-->
   <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
   <!--<ion-label>-->
   <!--Show Added On-->
   <!--</ion-label>-->
   <!--</ion-item>-->
-
   <ion-item lines="full">
     <ion-select
       label="{{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}"
@@ -33,16 +31,13 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
-
   <ion-list-header>
     {{ 'pages.mealPlanPopover.actions.title' | translate }}
   </ion-list-header>
-
   <ion-button (click)="share()" expand="block" size="small" class="ion-margin">
     <ion-icon name="share" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.share' | translate }}
   </ion-button>
-
   <ion-button
     (click)="pinRecipes()"
     expand="block"
@@ -52,7 +47,6 @@
     <ion-icon name="pin" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.pinRecipesOpen' | translate }}
   </ion-button>
-
   <ion-button
     (click)="bulkAddToShoppingList()"
     expand="block"
@@ -62,7 +56,6 @@
     <ion-icon name="cart" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.addToShoppingList' | translate }}
   </ion-button>
-
   <ion-button
     (click)="copySelected()"
     expand="block"
@@ -72,7 +65,6 @@
     <ion-icon name="copy" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.copyDays' | translate }}
   </ion-button>
-
   <ion-button
     (click)="moveSelected()"
     expand="block"
@@ -82,7 +74,6 @@
     <ion-icon name="cut" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.moveDays' | translate }}
   </ion-button>
-
   <ion-button
     (click)="deleteSelected()"
     color="danger"
@@ -93,10 +84,9 @@
     <ion-icon name="trash" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.deleteDays' | translate }}
   </ion-button>
-
+  @if (isOwner) {
   <ion-button
     (click)="updateMealPlan()"
-    *ngIf="isOwner"
     expand="block"
     size="small"
     class="ion-margin"
@@ -104,11 +94,10 @@
     <ion-icon name="pencil" slot="start"></ion-icon>
     {{ 'pages.mealPlanPopover.actions.update' | translate }}
   </ion-button>
-
+  }
   <ion-list-header>
     {{ 'pages.mealPlanPopover.dangerZone.title' | translate }}
   </ion-list-header>
-
   <ion-button
     (click)="deleteMealPlan()"
     color="danger"
@@ -120,3 +109,4 @@
     {{ 'pages.mealPlanPopover.dangerZone.delete' | translate }}
   </ion-button>
 </ion-list>
+}

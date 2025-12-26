@@ -1,21 +1,20 @@
 <ion-header>
   <ion-toolbar color="nav">
-    <ion-buttons *ngIf="isInModal" slot="start">
+    @if (isInModal) {
+    <ion-buttons slot="start">
       <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-buttons *ngIf="!isInModal" slot="start">
+    } @if (!isInModal) {
+    <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-
-    <ion-title *ngIf="showLogin"
-      >{{ 'pages.auth.title.login' | translate }}</ion-title
-    >
-    <ion-title *ngIf="!showLogin"
-      >{{ 'pages.auth.title.register' | translate }}</ion-title
-    >
+    } @if (showLogin) {
+    <ion-title>{{ 'pages.auth.title.login' | translate }}</ion-title>
+    } @if (!showLogin) {
+    <ion-title>{{ 'pages.auth.title.register' | translate }}</ion-title>
+    }
   </ion-toolbar>
 </ion-header>
 
@@ -25,27 +24,28 @@
       <div class="auth-entry">
         <br />
 
-        <div *ngIf="isSelfHost">
-          {{ 'pages.auth.selfhostWarning' | translate }}
-        </div>
-
-        <logo-icon *ngIf="!isSelfHost" [noBg]="true"></logo-icon>
-
-        <div class="welcome" *ngIf="showLogin">
+        @if (isSelfHost) {
+        <div>{{ 'pages.auth.selfhostWarning' | translate }}</div>
+        } @if (!isSelfHost) {
+        <logo-icon [noBg]="true"></logo-icon>
+        } @if (showLogin) {
+        <div class="welcome">
           <h2>{{ 'pages.auth.welcome.login' | translate }}</h2>
           <span>{{ 'pages.auth.welcome.login.sub' | translate }}</span>
         </div>
-
-        <div class="welcome" *ngIf="!showLogin">
+        } @if (!showLogin) {
+        <div class="welcome">
           <h2>{{ 'pages.auth.welcome.register' | translate }}</h2>
           <span>{{ 'pages.auth.welcome.register.sub1' | translate }}</span
           ><br />
           <span>{{ 'pages.auth.welcome.register.sub2' | translate }}</span>
         </div>
+        }
 
         <br /><br /><br /><br />
 
-        <div *ngIf="!showLogin">
+        @if (!showLogin) {
+        <div>
           <ion-item>
             <ion-input
               label="{{ 'pages.auth.input.name' | translate }}"
@@ -56,6 +56,7 @@
           </ion-item>
           <br />
         </div>
+        }
 
         <ion-item>
           <ion-input
@@ -92,7 +93,8 @@
         </ion-item>
         <br />
 
-        <div *ngIf="!showLogin">
+        @if (!showLogin) {
+        <div>
           <ion-item>
             <ion-input
               label="{{ 'pages.auth.input.confirmPassword' | translate }}"
@@ -119,56 +121,56 @@
           </ion-item>
           <br /><br />
         </div>
+        }
       </div>
 
-      <tos-clickwrap-agreement *ngIf="!isSelfHost"></tos-clickwrap-agreement>
-
-      <div *ngIf="isSelfHost">
-        {{ 'pages.auth.selfhostWarning2' | translate }}
-      </div>
+      @if (!isSelfHost) {
+      <tos-clickwrap-agreement></tos-clickwrap-agreement>
+      } @if (isSelfHost) {
+      <div>{{ 'pages.auth.selfhostWarning2' | translate }}</div>
+      }
 
       <div class="ion-padding">
-        <ion-button *ngIf="showLogin" expand="block" (click)="auth()"
+        @if (showLogin) {
+        <ion-button expand="block" (click)="auth()"
           >{{ 'pages.auth.button.login' | translate }}</ion-button
         >
-        <ion-button *ngIf="!showLogin" expand="block" (click)="auth()"
+        } @if (!showLogin) {
+        <ion-button expand="block" (click)="auth()"
           >{{ 'pages.auth.button.register' | translate }}</ion-button
         >
+        }
       </div>
 
-      <div class="divider" *ngIf="!isSelfHost">
+      @if (!isSelfHost) {
+      <div class="divider">
         <div class="divider-segment"></div>
         <p class="ion-text-center">{{ 'pages.auth.or' | translate }}</p>
         <div class="divider-segment"></div>
       </div>
-
-      <div
-        class="ion-padding-start ion-padding-end ion-padding-bottom"
-        *ngIf="!isSelfHost"
-      >
+      } @if (!isSelfHost) {
+      <div class="ion-padding-start ion-padding-end ion-padding-bottom">
         <sign-in-with-google
           (signInComplete)="signInWithGoogleComplete($event)"
         ></sign-in-with-google>
       </div>
+      }
 
       <div>
-        <ion-button
-          fill="clear"
-          expand="block"
-          *ngIf="showLogin"
-          (click)="forgotPassword()"
+        @if (showLogin) {
+        <ion-button fill="clear" expand="block" (click)="forgotPassword()"
           >{{ 'pages.auth.button.forgotPassword' | translate }}</ion-button
         >
+        }
       </div>
 
       <div>
         <ion-button fill="clear" expand="block" (click)="toggleLogin()">
-          <span *ngIf="showLogin"
-            >{{ 'pages.auth.button.registerInstead' | translate }}</span
-          >
-          <span *ngIf="!showLogin"
-            >{{ 'pages.auth.button.loginInstead' | translate }}</span
-          >
+          @if (showLogin) {
+          <span>{{ 'pages.auth.button.registerInstead' | translate }}</span>
+          } @if (!showLogin) {
+          <span>{{ 'pages.auth.button.loginInstead' | translate }}</span>
+          }
         </ion-button>
       </div>
     </ion-list>

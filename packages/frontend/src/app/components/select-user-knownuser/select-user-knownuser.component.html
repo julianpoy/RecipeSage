@@ -4,9 +4,10 @@
     (selectedUserChange)="selectedUser = $event"
     (searchInputChange)="manualSelect = !!$event.trim()"
   ></select-user>
-  <select-knownuser
-    *ngIf="!manualSelect"
-    [selectedUser]="_knownUserSelectState"
-    (selectedUserChange)="selectedUser = $event"
-  ></select-knownuser>
+  @if (!manualSelect) {
+    <select-knownuser
+      [selectedUser]="_knownUserSelectState"
+      (selectedUserChange)="selectedUser = $event"
+    ></select-knownuser>
+  }
 </div>

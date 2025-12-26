@@ -19,114 +19,121 @@
       }"
     >
       <ion-row class="week-title">
-        <ion-col class="day-title" *ngFor="let day of dayTitles">
-          {{ day }}
-        </ion-col>
+        @for (day of dayTitles; track day) {
+          <ion-col class="day-title">
+            {{ day }}
+          </ion-col>
+        }
       </ion-row>
-      <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
-        <ion-col
-          class="day"
-          *ngFor="let day of weekOfMonth"
-          (keyup.enter)="dayKeyEnter($event, day)"
-          (mousedown)="dayMouseDown($event, day)"
-          (mouseup)="dayMouseUp($event, day)"
-          (mouseover)="dayMouseOver($event, day)"
-          (dragover)="dayDragOver($event, day)"
-          (drop)="dayDragDrop($event, day)"
-          [ngClass]="{
-            today:
-              today.getFullYear() === day.year() &&
-              today.getMonth() === day.month() &&
-              today.getDate() === day.date(),
-            highlighted: day === highlightedDay || isSelected(day),
-          }"
-          tabindex="0"
-        >
-          <div
-            class="date"
-            [ngClass]="{
-              inactive: center.getMonth() !== day.month(),
-              today:
-                today.getFullYear() === day.year() &&
-                today.getMonth() === day.month() &&
-                today.getDate() === day.date(),
-              highlighted: day === highlightedDay || isSelected(day),
-            }"
-          >
-            {{ day.date() }}
-          </div>
-          <div *ngIf="mode === 'full'">
-            <meal-group
-              [mealItems]="mealItemsByDay(day)"
-              [enableEditing]="enableEditing"
-              (itemClicked)="itemClicked.emit($event)"
-              (itemDragEnd)="itemDragEnd()"
-            ></meal-group>
-          </div>
-          <div
-            class="meal-marker-container"
-            *ngIf="mode === 'split' || mode === 'outline'"
-          >
-            <div
-              class="meal-marker"
-              *ngFor="let mealItem of mealItemsByDay(day).items"
-            ></div>
-          </div>
-        </ion-col>
-      </ion-row>
+      @for (weekOfMonth of weeksOfMonth; track weekOfMonth) {
+        <ion-row class="week">
+          @for (day of weekOfMonth; track day) {
+            <ion-col
+              class="day"
+              (keyup.enter)="dayKeyEnter($event, day)"
+              (mousedown)="dayMouseDown($event, day)"
+              (mouseup)="dayMouseUp($event, day)"
+              (mouseover)="dayMouseOver($event, day)"
+              (dragover)="dayDragOver($event, day)"
+              (drop)="dayDragDrop($event, day)"
+              [ngClass]="{
+                today:
+                  today.getFullYear() === day.year() &&
+                  today.getMonth() === day.month() &&
+                  today.getDate() === day.date(),
+                highlighted: day === highlightedDay || isSelected(day),
+              }"
+              tabindex="0"
+            >
+              <div
+                class="date"
+                [ngClass]="{
+                  inactive: center.getMonth() !== day.month(),
+                  today:
+                    today.getFullYear() === day.year() &&
+                    today.getMonth() === day.month() &&
+                    today.getDate() === day.date(),
+                  highlighted: day === highlightedDay || isSelected(day),
+                }"
+              >
+                {{ day.date() }}
+              </div>
+              @if (mode === "full") {
+                <div>
+                  <meal-group
+                    [mealItems]="mealItemsByDay(day)"
+                    [enableEditing]="enableEditing"
+                    (itemClicked)="itemClicked.emit($event)"
+                    (itemDragEnd)="itemDragEnd()"
+                  ></meal-group>
+                </div>
+              }
+              @if (mode === "split" || mode === "outline") {
+                <div class="meal-marker-container">
+                  @for (mealItem of mealItemsByDay(day).items; track mealItem) {
+                    <div class="meal-marker"></div>
+                  }
+                </div>
+              }
+            </ion-col>
+          }
+        </ion-row>
+      }
     </ion-grid>
 
-    <p *ngIf="mode === 'outline'">
-      <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length > 0">
-        <i>{{ "components.mealCalendar.recipes" | translate }}:</i>&nbsp;
-        {{ mealItemTitlesByDay(this.selectedDays[0]).join(", ") }}
-      </span>
-
-      <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length === 0">
-        <i>{{ "components.mealCalendar.noRecipes" | translate }}</i>
-      </span>
-    </p>
+    @if (mode === "outline") {
+      <p>
+        @if (mealItemsByDay(this.selectedDays[0]).items.length > 0) {
+          <span>
+            <i>{{ "components.mealCalendar.recipes" | translate }}:</i>&nbsp;
+            {{ mealItemTitlesByDay(this.selectedDays[0]).join(", ") }}
+          </span>
+        }
+        @if (mealItemsByDay(this.selectedDays[0]).items.length === 0) {
+          <span>
+            <i>{{ "components.mealCalendar.noRecipes" | translate }}</i>
+          </span>
+        }
+      </p>
+    }
   </div>
-  <ion-list
-    *ngIf="mode === 'split'"
-    class="meal-list"
-    lines="none"
-    class="ion-padding"
-  >
-    <ion-item lines="none">
-      <ion-label class="ion-text-center ion-no-padding">
-        {{ "components.mealCalendar.meals" | translate }}:
-      </ion-label>
-    </ion-item>
-
-    <ion-item *ngIf="this.selectedDays.length !== 1">
-      <ion-label class="ion-text-wrap ion-text-center">
-        <br />
-        <p>
-          {{ "components.mealCalendar.selectDay" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-
-    <ion-item
-      *ngIf="
+  @if (mode === "split") {
+    <ion-list class="meal-list" lines="none" class="ion-padding">
+      <ion-item lines="none">
+        <ion-label class="ion-text-center ion-no-padding">
+          {{ "components.mealCalendar.meals" | translate }}:
+        </ion-label>
+      </ion-item>
+      @if (this.selectedDays.length !== 1) {
+        <ion-item>
+          <ion-label class="ion-text-wrap ion-text-center">
+            <br />
+            <p>
+              {{ "components.mealCalendar.selectDay" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      }
+      @if (
         this.selectedDays.length === 1 &&
         mealItemsByDay(this.selectedDays[0]).items.length === 0
-      "
-    >
-      <ion-label class="ion-text-wrap ion-text-center">
-        <br />
-        <p>
-          {{ "components.mealCalendar.noMeals" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-
-    <meal-group
-      *ngIf="this.selectedDays.length === 1"
-      [mealItems]="mealItemsByDay(this.selectedDays[0])"
-      [enableEditing]="enableEditing"
-      (itemClicked)="itemClicked.emit($event)"
-    ></meal-group>
-  </ion-list>
+      ) {
+        <ion-item>
+          <ion-label class="ion-text-wrap ion-text-center">
+            <br />
+            <p>
+              {{ "components.mealCalendar.noMeals" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      }
+      @if (this.selectedDays.length === 1) {
+        <meal-group
+          [mealItems]="mealItemsByDay(this.selectedDays[0])"
+          [enableEditing]="enableEditing"
+          (itemClicked)="itemClicked.emit($event)"
+        ></meal-group>
+      }
+    </ion-list>
+  }
 </div>
