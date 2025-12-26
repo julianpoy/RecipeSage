@@ -13,6 +13,7 @@ const mealNameToI18n = {
 } satisfies Record<MealName, string>;
 
 @Component({
+  standalone: true,
   selector: "meal-group",
   templateUrl: "meal-group.component.html",
   styleUrls: ["./meal-group.component.scss"],

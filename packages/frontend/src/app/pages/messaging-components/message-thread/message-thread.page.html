@@ -26,33 +26,27 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div>
+    @for (message of messages; track trackByFn(i, message); let i = $index) {
     <div
       class="message"
       [ngClass]="{'me': message.toUser.id === message.otherUser.id, 'blue': message.fromUser.id === message.otherUser.id }"
-      *ngFor="let message of messages; let i = index; trackBy: trackByFn"
     >
-      <div class="time-divider" *ngIf="message.deservesDateDiff">
-        {{ message.dateDiff }}
-      </div>
-      <div class="chat" *ngIf="!message.recipe" (click)="setSelectedChat(i)">
+      @if (message.deservesDateDiff) {
+      <div class="time-divider">{{ message.dateDiff }}</div>
+      } @if (!message.recipe) {
+      <div class="chat" (click)="setSelectedChat(i)">
         <span [innerHTML]="message.body"></span>
       </div>
-      <div
-        class="recipe"
-        *ngIf="message.recipe && message.fromUser.id === message.otherUser.id"
-      >
+      } @if (message.recipe && message.fromUser.id === message.otherUser.id) {
+      <div class="recipe">
         <!-- RECIPIENT -->
-        <ion-item
-          *ngIf="message.recipe"
-          (click)="openRecipe(message.recipe)"
-          lines="none"
-        >
-          <ion-avatar
-            *ngIf="message.recipe.images && message.recipe.images.length > 0"
-            slot="start"
-          >
+        @if (message.recipe) {
+        <ion-item (click)="openRecipe(message.recipe)" lines="none">
+          @if (message.recipe.images && message.recipe.images.length > 0) {
+          <ion-avatar slot="start">
             <img src="{{ message.recipe.images[0].location }}" />
           </ion-avatar>
+          }
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
             <p class="description">
@@ -60,11 +54,8 @@
             </p>
           </ion-label>
         </ion-item>
-        <ion-item
-          *ngIf="!message.recipe"
-          (click)="setSelectedChat(i)"
-          lines="none"
-        >
+        } @if (!message.recipe) {
+        <ion-item (click)="setSelectedChat(i)" lines="none">
           <ion-label>
             <h2 class="ion-text-wrap">
               {{ 'pages.messageThread.recipeDeleted' | translate }}
@@ -74,24 +65,20 @@
             </p>
           </ion-label>
         </ion-item>
+        }
       </div>
-
-      <div
-        class="recipe"
-        *ngIf="message.originalRecipe && message.fromUser.id !== message.otherUser.id"
-      >
+      } @if (message.originalRecipe && message.fromUser.id !==
+      message.otherUser.id) {
+      <div class="recipe">
         <!-- SENDER -->
-        <ion-item
-          *ngIf="message.originalRecipe"
-          (click)="openRecipe(message.originalRecipe)"
-          lines="none"
-        >
-          <ion-avatar
-            *ngIf="message.originalRecipe.images && message.originalRecipe.images.length > 0"
-            slot="start"
-          >
+        @if (message.originalRecipe) {
+        <ion-item (click)="openRecipe(message.originalRecipe)" lines="none">
+          @if (message.originalRecipe.images &&
+          message.originalRecipe.images.length > 0) {
+          <ion-avatar slot="start">
             <img src="{{ message.originalRecipe.images[0].location }}" />
           </ion-avatar>
+          }
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.originalRecipe.title }}</h2>
             <p class="description">
@@ -99,11 +86,8 @@
             </p>
           </ion-label>
         </ion-item>
-        <ion-item
-          *ngIf="!message.originalRecipe"
-          (click)="setSelectedChat(i)"
-          lines="none"
-        >
+        } @if (!message.originalRecipe) {
+        <ion-item (click)="setSelectedChat(i)" lines="none">
           <ion-label>
             <h2 class="ion-text-wrap">
               {{ 'pages.messageThread.recipeDeleted' | translate }}
@@ -113,12 +97,13 @@
             </p>
           </ion-label>
         </ion-item>
+        }
       </div>
-
-      <div class="chatDetails" *ngIf="selectedChatIdx === i">
-        {{ message.formattedDate }}
-      </div>
+      } @if (selectedChatIdx === i) {
+      <div class="chatDetails">{{ message.formattedDate }}</div>
+      }
     </div>
+    }
   </div>
 </ion-content>
 

@@ -17,33 +17,38 @@
       <ion-header>
         <ion-toolbar color="nav">
           <ion-title>
-            <span *ngIf="isSelfHost">RecipeSage Self Hosted</span>
-            <img
-              *ngIf="!isSelfHost"
-              src="assets/recipesage-white-trimmed.png"
-              alt="RecipeSage Logo"
-              style="display: inline-block"
-              height="40px"
-            />
+            @if (isSelfHost) {
+              <span>RecipeSage Self Hosted</span>
+            }
+            @if (!isSelfHost) {
+              <img
+                src="assets/recipesage-white-trimmed.png"
+                alt="RecipeSage Logo"
+                style="display: inline-block"
+                height="40px"
+              />
+            }
           </ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
         <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of navList">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label class="ion-text-wrap">
-                {{ p.title }}
-              </ion-label>
-              <ion-badge *ngIf="p.id === 'people' && friendRequestCount">{{
-                friendRequestCount
-              }}</ion-badge>
-              <ion-badge *ngIf="p.id === 'inbox' && inboxCount">{{
-                inboxCount
-              }}</ion-badge>
-            </ion-item>
-          </ion-menu-toggle>
+          @for (p of navList; track p) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+                <ion-icon slot="start" [name]="p.icon"></ion-icon>
+                <ion-label class="ion-text-wrap">
+                  {{ p.title }}
+                </ion-label>
+                @if (p.id === "people" && friendRequestCount) {
+                  <ion-badge>{{ friendRequestCount }}</ion-badge>
+                }
+                @if (p.id === "inbox" && inboxCount) {
+                  <ion-badge>{{ inboxCount }}</ion-badge>
+                }
+              </ion-item>
+            </ion-menu-toggle>
+          }
         </ion-list>
       </ion-content>
 
@@ -66,8 +71,8 @@
       }"
     ></ion-router-outlet>
 
-    <cooking-toolbar
-      *ngIf="cookingToolbarService.pinnedRecipes.length > 0"
-    ></cooking-toolbar>
+    @if (cookingToolbarService.pinnedRecipes.length > 0) {
+      <cooking-toolbar></cooking-toolbar>
+    }
   </ion-split-pane>
 </ion-app>

@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "font-size-modal",
   templateUrl: "font-size-modal.component.html",
   styleUrls: ["./font-size-modal.component.scss"],

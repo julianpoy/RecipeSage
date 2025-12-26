@@ -12,6 +12,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 const LAST_USED_MEAL_VAR = "lastUsedMeal";
 
 @Component({
+  standalone: true,
   selector: "select-meal",
   templateUrl: "select-meal.component.html",
   styleUrls: ["./select-meal.component.scss"],

@@ -15,6 +15,7 @@ import {
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-manage-label-group-modal",
   templateUrl: "manage-label-group-modal.page.html",
   styleUrls: ["manage-label-group-modal.page.scss"],

@@ -4,6 +4,7 @@ import { RouteMap } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "tos-clickwrap-agreement",
   templateUrl: "tos-clickwrap-agreement.component.html",
   styleUrls: ["./tos-clickwrap-agreement.component.scss"],

@@ -13,12 +13,11 @@
 <ion-content>
   <ion-list>
     <ion-item lines="none">
-      <ion-avatar
-        *ngIf="recipe.images && recipe.images.length > 0"
-        slot="start"
-      >
+      @if (recipe.images && recipe.images.length > 0) {
+      <ion-avatar slot="start">
         <img src="{{ recipe.images[0].location }}" />
       </ion-avatar>
+      }
       <ion-label>
         <h2>{{ recipe.title }}</h2>
         <p class="ion-text-wrap">{{ 'pages.share.description' | translate }}</p>
@@ -39,23 +38,23 @@
       </ion-segment>
     </div>
 
-    <div [ngSwitch]="shareMethod">
+    <div>
+      @switch (shareMethod) { @case ('link') {
       <copy-with-webshare
-        *ngSwitchCase="'link'"
         [webshareTitle]="recipe.title"
         [webshareText]="recipe.title + ':'"
         [webshareURL]="recipeURL || ''"
         [copyText]="recipeURL || ''"
       ></copy-with-webshare>
-
-      <div *ngSwitchCase="'embed'">
+      } @case ('embed') {
+      <div>
         <br />
-        <div class="preview-settings-container" *ngIf="recipePreviewURL">
+        @if (recipePreviewURL) {
+        <div class="preview-settings-container">
           <recipe-preview
             [url]="recipePreviewURL"
             [description]="'Embed Preview'"
           ></recipe-preview>
-
           <ion-item>
             <ion-icon name="image" slot="start"></ion-icon>
             <ion-toggle
@@ -67,7 +66,6 @@
               </div>
             </ion-toggle>
           </ion-item>
-
           <ion-item>
             <ion-icon name="swap-horizontal" slot="start"></ion-icon>
             <ion-toggle
@@ -79,7 +77,6 @@
               </div>
             </ion-toggle>
           </ion-item>
-
           <ion-item>
             <ion-icon name="print" slot="start"></ion-icon>
             <ion-toggle
@@ -91,7 +88,6 @@
               </div>
             </ion-toggle>
           </ion-item>
-
           <ion-item>
             <ion-icon name="link" slot="start"></ion-icon>
             <ion-toggle
@@ -103,7 +99,6 @@
               </div>
             </ion-toggle>
           </ion-item>
-
           <ion-item>
             <ion-icon name="document-text" slot="start"></ion-icon>
             <ion-toggle
@@ -116,7 +111,7 @@
             </ion-toggle>
           </ion-item>
         </div>
-
+        }
         <ion-item>
           <ion-icon name="resize" slot="start"></ion-icon>
           <ion-input
@@ -126,7 +121,6 @@
             (ngModelChange)="updateEmbed();"
           ></ion-input>
         </ion-item>
-
         <ion-item>
           <ion-icon name="resize" slot="start"></ion-icon>
           <ion-input
@@ -136,7 +130,6 @@
             (ngModelChange)="updateEmbed();"
           ></ion-input>
         </ion-item>
-
         <ion-item>
           <ion-icon name="code-working" slot="start"></ion-icon>
           <ion-toggle
@@ -148,50 +141,41 @@
             </div>
           </ion-toggle>
         </ion-item>
-
         <ion-item lines="none">
           {{ 'pages.share.byEmbed.copy' | translate }}
         </ion-item>
-
         <copy-with-webshare
           [disableWebshare]="true"
           [copyText]="recipeEmbedCode || ''"
         ></copy-with-webshare>
       </div>
-
-      <div *ngSwitchCase="'account'" class="ion-padding">
+      } @case ('account') {
+      <div class="ion-padding">
         <ion-item lines="none">
           <ion-label class="ion-text-wrap">
             <p>{{ 'pages.share.byAccount.description' | translate }}</p>
           </ion-label>
         </ion-item>
-
         <select-user-knownuser
           [selectedUser]="selectedUser"
           (selectedUserChange)="selectUser($event)"
         ></select-user-knownuser>
       </div>
+      } }
     </div>
   </ion-list>
 </ion-content>
 
 <ion-footer class="ion-padding">
-  <ion-button
-    *ngIf="shareMethod === 'account'"
-    expand="block"
-    (click)="send()"
-    [disabled]="!recipientId"
-  >
+  @if (shareMethod === 'account') {
+  <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
     <ion-label> {{ 'pages.share.send' | translate }} </ion-label>
   </ion-button>
-
-  <ion-button
-    *ngIf="shareMethod === 'link' || shareMethod === 'embed'"
-    expand="block"
-    (click)="cancel()"
-  >
+  } @if (shareMethod === 'link' || shareMethod === 'embed') {
+  <ion-button expand="block" (click)="cancel()">
     <ion-icon name="close" slot="start"></ion-icon>
     <ion-label> {{ 'pages.share.close' | translate }} </ion-label>
   </ion-button>
+  }
 </ion-footer>

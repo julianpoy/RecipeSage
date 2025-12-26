@@ -4,14 +4,16 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      <span *ngIf="isSelfHost">RecipeSage Self Hosted</span>
+      @if (isSelfHost) {
+      <span>RecipeSage Self Hosted</span>
+      } @if (!isSelfHost) {
       <img
-        *ngIf="!isSelfHost"
         src="assets/recipesage-white-trimmed.png"
         alt="RecipeSage Logo"
         style="display: inline-block"
         height="40px"
       />
+      }
       <!--RecipeSage-->
     </ion-title>
   </ion-toolbar>
@@ -24,19 +26,15 @@
     <div class="intro-fold-dimmer"></div>
 
     <div class="title">
-      <h1 *ngIf="isSelfHost">
-        {{ 'pages.welcome.selfhostTitle' | translate }}
-      </h1>
-
-      <h1 *ngIf="!isSelfHost">{{ 'pages.welcome.title' | translate }}</h1>
-
-      <p class="subtitle" *ngIf="isSelfHost">
-        {{ 'pages.welcome.selfhostSubtitle' | translate }}
-      </p>
-
-      <p class="subtitle" *ngIf="!isSelfHost">
-        {{ 'pages.welcome.subtitle' | translate }}
-      </p>
+      @if (isSelfHost) {
+      <h1>{{ 'pages.welcome.selfhostTitle' | translate }}</h1>
+      } @if (!isSelfHost) {
+      <h1>{{ 'pages.welcome.title' | translate }}</h1>
+      } @if (isSelfHost) {
+      <p class="subtitle">{{ 'pages.welcome.selfhostSubtitle' | translate }}</p>
+      } @if (!isSelfHost) {
+      <p class="subtitle">{{ 'pages.welcome.subtitle' | translate }}</p>
+      }
 
       <br />
 

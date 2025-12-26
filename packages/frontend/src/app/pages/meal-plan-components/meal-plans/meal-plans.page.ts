@@ -11,6 +11,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
+  standalone: true,
   selector: "page-meal-plans",
   templateUrl: "meal-plans.page.html",
   styleUrls: ["meal-plans.page.scss"],

@@ -1,81 +1,85 @@
 <div>
-  <ion-item
-    class="selectedUser"
-    (click)="clearSelectedUser()"
-    *ngIf="selectedUser"
-    button
-  >
-    <ion-avatar slot="start">
-      <img
-        [src]="
-          getFirstProfileImage(selectedUser)?.image?.location ||
-          'assets/avatar.svg'
-        "
-      />
-    </ion-avatar>
-    <ion-label>
-      <h2>
-        {{ selectedUser.name }}
-      </h2>
-      <p>
-        {{ "components.selectUser.change" | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
+  @if (selectedUser) {
+    <ion-item class="selectedUser" (click)="clearSelectedUser()" button>
+      <ion-avatar slot="start">
+        <img
+          [src]="
+            getFirstProfileImage(selectedUser)?.image?.location ||
+            'assets/avatar.svg'
+          "
+        />
+      </ion-avatar>
+      <ion-label>
+        <h2>
+          {{ selectedUser.name }}
+        </h2>
+        <p>
+          {{ "components.selectUser.change" | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
+  }
 
-  <div *ngIf="!selectedUser">
-    <ion-searchbar
-      (ionInput)="onSearchInputChange($event)"
-      [value]="searchText"
-      placeholder="{{ 'components.selectUser.placeholder' | translate }}"
-      autocomplete="off"
-    ></ion-searchbar>
-    <div class="ion-padding-start ion-padding-end">
-      <div class="results-list-container" *ngIf="searchText.length">
-        <div class="results-list">
-          <ion-item
-            *ngFor="let user of results; trackBy: userTrackBy"
-            (click)="selectUser(user)"
-            button
-          >
-            <ion-avatar slot="start">
-              <img
-                [src]="
-                  getFirstProfileImage(user)?.image?.location ||
-                  'assets/avatar.svg'
-                "
-              />
-            </ion-avatar>
-            <ion-label>
-              <h2>
-                {{ user.name }}
-              </h2>
-              <p>
-                {{ "components.selectUser.select" | translate }}
-              </p>
-            </ion-label>
-          </ion-item>
-          <ion-item *ngIf="searching">
-            <ion-spinner slot="start"></ion-spinner>
-            <ion-label>
-              {{
-                "components.selectUser.searching"
-                  | translate: { name: searchText }
-              }}
-            </ion-label>
-          </ion-item>
-          <ion-item
-            *ngIf="results.length === 0 && searchText.length > 0 && !searching"
-          >
-            <ion-icon name="folder-open" slot="start"></ion-icon>
-            <ion-label>
-              {{
-                "components.selectUser.null" | translate: { name: searchText }
-              }}
-            </ion-label>
-          </ion-item>
-        </div>
+  @if (!selectedUser) {
+    <div>
+      <ion-searchbar
+        (ionInput)="onSearchInputChange($event)"
+        [value]="searchText"
+        placeholder="{{ 'components.selectUser.placeholder' | translate }}"
+        autocomplete="off"
+      ></ion-searchbar>
+      <div class="ion-padding-start ion-padding-end">
+        @if (searchText.length) {
+          <div class="results-list-container">
+            <div class="results-list">
+              @for (user of results; track userTrackBy($index, user)) {
+                <ion-item (click)="selectUser(user)" button>
+                  <ion-avatar slot="start">
+                    <img
+                      [src]="
+                        getFirstProfileImage(user)?.image?.location ||
+                        'assets/avatar.svg'
+                      "
+                    />
+                  </ion-avatar>
+                  <ion-label>
+                    <h2>
+                      {{ user.name }}
+                    </h2>
+                    <p>
+                      {{ "components.selectUser.select" | translate }}
+                    </p>
+                  </ion-label>
+                </ion-item>
+              }
+              @if (searching) {
+                <ion-item>
+                  <ion-spinner slot="start"></ion-spinner>
+                  <ion-label>
+                    {{
+                      "components.selectUser.searching"
+                        | translate: { name: searchText }
+                    }}
+                  </ion-label>
+                </ion-item>
+              }
+              @if (
+                results.length === 0 && searchText.length > 0 && !searching
+              ) {
+                <ion-item>
+                  <ion-icon name="folder-open" slot="start"></ion-icon>
+                  <ion-label>
+                    {{
+                      "components.selectUser.null"
+                        | translate: { name: searchText }
+                    }}
+                  </ion-label>
+                </ion-item>
+              }
+            </div>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

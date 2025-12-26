@@ -22,6 +22,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
+  standalone: true,
   selector: "page-labels",
   templateUrl: "labels.page.html",
   styleUrls: ["labels.page.scss"],

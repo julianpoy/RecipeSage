@@ -18,7 +18,8 @@
 
 <ion-content>
   <br />
-  <div class="mealplan-flex" *ngIf="mealPlanItems">
+  @if (mealPlanItems) {
+  <div class="mealplan-flex">
     <meal-calendar
       [mealPlanItems]="mealPlanItems"
       (selectedDaysChange)="setSelectedDays($event)"
@@ -30,6 +31,7 @@
       mode="{{calendarMode}}"
     ></meal-calendar>
   </div>
+  }
 
   <br /><br /><br /><br />
 

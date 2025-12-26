@@ -6,6 +6,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
+  standalone: true,
   selector: "page-not-found",
   templateUrl: "not-found.page.html",
   styleUrls: ["not-found.page.scss"],

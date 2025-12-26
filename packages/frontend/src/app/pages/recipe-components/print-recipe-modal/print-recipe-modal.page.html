@@ -12,15 +12,16 @@
 
 <ion-content class="ion-padding">
   <div class="templates">
+    @for (template of templates; track template; let i = $index) {
     <recipe-preview
       [selected]="selectedTemplate === i"
       [landscape]="template.orientation === 'landscape'"
       [url]="template.url"
       [description]="template.description"
-      *ngFor="let template of templates; let i = index"
       (click)="selectedTemplate = i"
       (previewClick)="selectedTemplate = i"
     ></recipe-preview>
+    }
   </div>
 </ion-content>
 

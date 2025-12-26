@@ -18,138 +18,131 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="recipe" class="ion-no-margin">
+  @if (recipe) {
+  <div class="ion-no-margin">
     <ion-item lines="none">
+      @if (recipe.recipeImages.length) {
       <ion-thumbnail
         class="ion-margin-top"
-        *ngIf="recipe.recipeImages.length"
         slot="start"
         (click)="openImageViewer()"
       >
         <img src="{{ sortedRecipeImages()[0].image.location }}" />
       </ion-thumbnail>
-
+      }
       <ion-label dir="auto">
         <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
-
-        <ion-grid
-          class="meta metacontainer-desktop"
-          *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
-        >
+        @if (recipe.rating || recipe.source || recipe.url || recipe.activeTime
+        || recipe.totalTime || recipe.yield) {
+        <ion-grid class="meta metacontainer-desktop">
           <ion-row class="ion-justify-content-start">
-            <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
+            @if (recipe.rating) {
+            <ion-col class="ion-no-padding" size="auto">
               <p>
                 <b>{{ 'pages.recipeDetails.rating' | translate }}:</b>
                 <rating [rating]="recipe.rating"></rating>
               </p>
             </ion-col>
-            <ion-col
-              *ngIf="recipe.source || recipe.url"
-              class="ion-no-padding"
-              size="auto"
-            >
+            } @if (recipe.source || recipe.url) {
+            <ion-col class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
+                @if (recipe.url.trim()) {
                 <a
-                  *ngIf="recipe.url?.trim()"
                   href="{{ recipe.url ? recipe.url : '' }}"
                   target="_blank"
                   rel="noreferrer noopener"
                   >{{ recipe.source.trim() ||
                   utilService.truncate(recipe.url.trim(), 40) }}</a
                 >
-                <span *ngIf="!recipe.url?.trim()"
-                  >{{ recipe.source.trim() }}</span
-                >
+                } @if (!recipe.url.trim()) {
+                <span>{{ recipe.source.trim() }}</span>
+                }
               </p>
             </ion-col>
-            <ion-col
-              *ngIf="recipe.activeTime"
-              class="ion-no-padding"
-              size="auto"
-            >
+            } @if (recipe.activeTime) {
+            <ion-col class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{
                 recipe.activeTime }}
               </p>
             </ion-col>
-            <ion-col
-              *ngIf="recipe.totalTime"
-              class="ion-no-padding"
-              size="auto"
-            >
+            } @if (recipe.totalTime) {
+            <ion-col class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{
                 recipe.totalTime }}
               </p>
             </ion-col>
-            <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
+            } @if (recipe.yield) {
+            <ion-col class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{
                 recipe.yield }}
               </p>
             </ion-col>
+            }
           </ion-row>
         </ion-grid>
+        }
         <p dir="auto" class="ion-text-wrap">{{ recipe.description }}</p>
       </ion-label>
     </ion-item>
-
-    <ion-item
-      class="metacontainer-mobile"
-      lines="none"
-      *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
-    >
+    @if (recipe.rating || recipe.source || recipe.url || recipe.activeTime ||
+    recipe.totalTime || recipe.yield) {
+    <ion-item class="metacontainer-mobile" lines="none">
       <ion-grid class="meta">
         <ion-row class="ion-justify-content-start">
-          <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
+          @if (recipe.rating) {
+          <ion-col class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.rating' | translate }}:</b>
               <rating [rating]="recipe.rating"></rating>
             </p>
           </ion-col>
-          <ion-col
-            *ngIf="recipe.source || recipe.url"
-            class="ion-no-padding"
-            size="auto"
-          >
+          } @if (recipe.source || recipe.url) {
+          <ion-col class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
+              @if (recipe.url.trim()) {
               <a
-                *ngIf="recipe.url?.trim()"
                 href="{{ recipe.url ? recipe.url : '' }}"
                 target="_blank"
                 rel="noreferrer noopener"
                 >{{ recipe.source.trim() || recipe.url }}</a
               >
-              <span *ngIf="!recipe.url?.trim()"
-                >{{ recipe.source.trim() }}</span
-              >
+              } @if (!recipe.url.trim()) {
+              <span>{{ recipe.source.trim() }}</span>
+              }
             </p>
           </ion-col>
-          <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
+          } @if (recipe.activeTime) {
+          <ion-col class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{
               recipe.activeTime }}
             </p>
           </ion-col>
-          <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
+          } @if (recipe.totalTime) {
+          <ion-col class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{
               recipe.totalTime }}
             </p>
           </ion-col>
-          <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
+          } @if (recipe.yield) {
+          <ion-col class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{
               recipe.yield }}
             </p>
           </ion-col>
+          }
         </ion-row>
       </ion-grid>
     </ion-item>
-
-    <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
+    } @if (recipe.folder === 'inbox' && recipe.fromUser) {
+    <ion-item lines="none">
       <p class="ion-text-wrap">
         <b
           >{{ 'pages.recipeDetails.sentBy' | translate:{name:
@@ -158,9 +151,8 @@
         {{ 'pages.recipeDetails.sentByAction' | translate }}<br /><br />
       </p>
     </ion-item>
-
+    }
     <br />
-
     <div class="ingredientsInstructionsGrid">
       <div class="ingredientsCol">
         <ion-item lines="none">
@@ -171,17 +163,18 @@
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
           <ion-label dir="auto">
+            @for (ingredient of ingredients; track ingredient; let ingredientIdx
+            = $index) {
             <p
-              *ngFor="let ingredient of ingredients; index as ingredientIdx"
               [innerHTML]="ingredient.content"
               dir="auto"
               class="ingredient ion-text-wrap"
               [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
               (click)="ingredientClicked($event, ingredient, ingredientIdx)"
             ></p>
-            <p *ngIf="!ingredients || ingredients.length === 0">
-              {{ 'pages.recipeDetails.noIngredients' | translate }}
-            </p>
+            } @if (!ingredients || ingredients.length === 0) {
+            <p>{{ 'pages.recipeDetails.noIngredients' | translate }}</p>
+            }
             <p>
               <a class="scale" (click)="changeScale()"
                 >{{ 'pages.recipeDetails.scaleStatus' | translate:{scale:scale}
@@ -201,16 +194,15 @@
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
           <ion-label dir="auto">
-            <p
-              *ngFor="let instruction of instructions; index as instructionIdx"
-              class="instruction ion-text-wrap"
-              dir="auto"
-            >
-              <span *ngIf="instruction.isHeader">
+            @for (instruction of instructions; track instruction; let
+            instructionIdx = $index) {
+            <p class="instruction ion-text-wrap" dir="auto">
+              @if (instruction.isHeader) {
+              <span>
                 <b class="sectionHeader">{{instruction.content}}</b>
               </span>
+              } @if (!instruction.isHeader) {
               <span
-                *ngIf="!instruction.isHeader"
                 (click)="instructionClicked($event, instruction, instructionIdx)"
                 [ngClass]="{ complete: getInstructionComplete(instructionIdx) }"
                 dir="auto"
@@ -222,16 +214,17 @@
                   dir="auto"
                 ></span>
               </span>
+              }
             </p>
-            <p *ngIf="!instructions || instructions.length === 0">
-              {{ 'pages.recipeDetails.noInstructions' | translate }}
-            </p>
+            } @if (!instructions || instructions.length === 0) {
+            <p>{{ 'pages.recipeDetails.noInstructions' | translate }}</p>
+            }
           </ion-label>
         </ion-item>
       </div>
     </div>
-
-    <div *ngIf="notes" class="notes ion-margin-top">
+    @if (notes) {
+    <div class="notes ion-margin-top">
       <ion-item lines="none">
         <ion-icon name="document-text" slot="start" size="large"></ion-icon>
         <ion-label class="section-title">
@@ -240,61 +233,61 @@
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
         <ion-label dir="auto">
+          @for (note of notes; track note; let noteIdx = $index) {
           <p
-            *ngFor="let note of notes; index as noteIdx"
             dir="auto"
             [innerHTML]="note.content"
             [ngClass]="{ header: note.isHeader }"
             class="ion-text-wrap"
           ></p>
-          <p *ngIf="!notes || notes.length === 0">
-            {{ 'pages.recipeDetails.noNotes' | translate }}
-          </p>
+          } @if (!notes || notes.length === 0) {
+          <p>{{ 'pages.recipeDetails.noNotes' | translate }}</p>
+          }
         </ion-label>
       </ion-item>
     </div>
-
-    <div *ngIf="recipe.folder !== 'inbox' && this.recipe.recipeLabels.length">
+    } @if (recipe.folder !== 'inbox' && this.recipe.recipeLabels.length) {
+    <div>
       <ion-item class="labels ion-text-wrap ion-margin-top" lines="none">
         <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
         <ion-label class="section-title">
           <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
         </ion-label>
       </ion-item>
-
       <div class="label-group-container ion-padding-start ion-margin-start">
-        <div class="label-group" *ngIf="recipeLabelsForGroupId(null).length">
-          <ion-label *ngIf="labelGroupIds.length">
+        @if (recipeLabelsForGroupId(null).length) {
+        <div class="label-group">
+          @if (labelGroupIds.length) {
+          <ion-label>
             <p>{{ 'pages.recipeDetails.labels.uncatLabels' | translate }}</p>
           </ion-label>
-
+          }
           <div>
-            <ion-chip
-              *ngFor="let recipeLabel of recipeLabelsForGroupId(null); trackBy: recipeLabelTrackBy"
-            >
-              {{recipeLabel.label.title}}
-            </ion-chip>
+            @for (recipeLabel of recipeLabelsForGroupId(null); track
+            recipeLabelTrackBy($index, recipeLabel)) {
+            <ion-chip> {{recipeLabel.label.title}} </ion-chip>
+            }
           </div>
         </div>
-        <div class="label-group" *ngFor="let labelGroupId of labelGroupIds">
+        } @for (labelGroupId of labelGroupIds; track labelGroupId) {
+        <div class="label-group">
           <ion-label>
             <p>{{labelGroupById[labelGroupId].title}}</p>
           </ion-label>
-
           <div>
-            <ion-chip
-              *ngFor="let recipeLabel of recipeLabelsForGroupId(labelGroupId)"
-            >
-              {{recipeLabel.label.title}}
-            </ion-chip>
+            @for (recipeLabel of recipeLabelsForGroupId(labelGroupId); track
+            recipeLabel) {
+            <ion-chip> {{recipeLabel.label.title}} </ion-chip>
+            }
           </div>
         </div>
+        }
       </div>
     </div>
-
+    }
     <br />
-
-    <div *ngIf="similarRecipes.length">
+    @if (similarRecipes.length) {
+    <div>
       <ion-item lines="none">
         <ion-icon name="flashlight" slot="start" size="large"></ion-icon>
         <ion-label>
@@ -303,19 +296,17 @@
           </p>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" *ngFor="let similarRecipe of similarRecipes">
+      @for (similarRecipe of similarRecipes; track similarRecipe) {
+      <ion-item lines="none">
         <ion-button fill="clear" (click)="openRecipe(similarRecipe.id, $event)">
           {{similarRecipe.title}}
         </ion-button>
       </ion-item>
-
+      }
       <br />
     </div>
-
-    <div
-      *ngIf="recipe.userId === me?.id && recipe.folder === 'inbox'"
-      class="ion-padding"
-    >
+    } @if (recipe.userId === me?.id && recipe.folder === 'inbox') {
+    <div class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -340,8 +331,8 @@
         </ion-row>
       </ion-grid>
     </div>
-
-    <div *ngIf="recipe.userId !== me?.id && isLoggedIn" class="ion-padding">
+    } @if (recipe.userId !== me?.id && isLoggedIn) {
+    <div class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -354,8 +345,8 @@
         {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
       </ion-button>
     </div>
-
-    <div *ngIf="recipe.userId !== me?.id && !isLoggedIn" class="ion-padding">
+    } @if (recipe.userId !== me?.id && !isLoggedIn) {
+    <div class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -368,7 +359,7 @@
         {{ 'pages.recipeDetails.registerOrLoginToSave' | translate }}
       </ion-button>
     </div>
-
+    }
     <ion-item lines="full">
       <ion-label class="section-title">
         <p>
@@ -381,13 +372,9 @@
         </p>
       </ion-label>
     </ion-item>
-
     <br />
-
-    <ion-row
-      *ngIf="recipe.userId === me?.id && recipe.folder === 'main'"
-      class="action-buttons ion-justify-content-around"
-    >
+    @if (recipe.userId === me?.id && recipe.folder === 'main') {
+    <ion-row class="action-buttons ion-justify-content-around">
       <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="editRecipe()" fill="clear" size="small">
           <ion-icon name="create" slot="start"></ion-icon>
@@ -441,14 +428,15 @@
           size="small"
         >
           <ion-icon name="pin" slot="start"></ion-icon>
-          <span *ngIf="!cookingToolbarService.isPinned(recipeId)">
-            {{ 'pages.recipeDetails.pinRecipe' | translate }}
-          </span>
-          <span *ngIf="cookingToolbarService.isPinned(recipeId)">
-            {{ 'pages.recipeDetails.unPinRecipe' | translate }}
-          </span>
+          @if (!cookingToolbarService.isPinned(recipeId)) {
+          <span> {{ 'pages.recipeDetails.pinRecipe' | translate }} </span>
+          } @if (cookingToolbarService.isPinned(recipeId)) {
+          <span> {{ 'pages.recipeDetails.unPinRecipe' | translate }} </span>
+          }
         </ion-button>
       </ion-col>
     </ion-row>
+    }
   </div>
+  }
 </ion-content>

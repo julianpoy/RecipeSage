@@ -4,9 +4,11 @@
     <ion-label class="ion-text-wrap">
       <p>
         {{ "components.copyWithWebshare.instructions" | translate }}
-        <span *ngIf="!hasWebShareAPI">
-          {{ "components.copyWithWebshare.shareIcon" | translate }}
-        </span>
+        @if (!hasWebShareAPI) {
+          <span>
+            {{ "components.copyWithWebshare.shareIcon" | translate }}
+          </span>
+        }
       </p>
     </ion-label>
   </ion-item>
@@ -14,16 +16,16 @@
     <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
       {{ copyText }}
     </div>
-    <ion-button fill="clear" *ngIf="hasWebShareAPI" (click)="webShare()">
-      <ion-icon name="share" slot="icon-only"></ion-icon>
-    </ion-button>
-    <ion-button
-      fill="clear"
-      *ngIf="!hasWebShareAPI && hasCopyAPI"
-      (click)="clipboard()"
-    >
-      <ion-icon name="copy" slot="icon-only"></ion-icon>
-    </ion-button>
+    @if (hasWebShareAPI) {
+      <ion-button fill="clear" (click)="webShare()">
+        <ion-icon name="share" slot="icon-only"></ion-icon>
+      </ion-button>
+    }
+    @if (!hasWebShareAPI && hasCopyAPI) {
+      <ion-button fill="clear" (click)="clipboard()">
+        <ion-icon name="copy" slot="icon-only"></ion-icon>
+      </ion-button>
+    }
   </div>
   <textarea
     id="codeBlockCopy"

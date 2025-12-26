@@ -21,6 +21,7 @@ const getGoogleRef = () => {
 };
 
 @Component({
+  standalone: true,
   selector: "sign-in-with-google",
   templateUrl: "sign-in-with-google.component.html",
   styleUrls: ["./sign-in-with-google.component.scss"],

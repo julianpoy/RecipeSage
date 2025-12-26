@@ -5,13 +5,14 @@
 </ion-header>
 
 <ion-list>
-  <ion-item *ngIf="message" lines="none">
+  @if (message) {
+  <ion-item lines="none">
     <ion-label>
       <p>{{ message }}</p>
     </ion-label>
   </ion-item>
-
-  <ion-item *ngFor="let option of ungroupedOptions">
+  } @for (option of ungroupedOptions; track option) {
+  <ion-item>
     <ion-checkbox
       labelPlacement="end"
       justify="start"
@@ -21,13 +22,14 @@
       <div class="ion-text-wrap">{{option.title}}</div>
     </ion-checkbox>
   </ion-item>
-
-  <div *ngFor="let groupTitle of getGroupTitles()">
+  } @for (groupTitle of getGroupTitles(); track groupTitle) {
+  <div>
     <ion-item lines="none">
       <ion-label> {{groupTitle}} </ion-label>
     </ion-item>
     <div class="ion-padding-start">
-      <ion-item *ngFor="let option of groupedOptions[groupTitle]">
+      @for (option of groupedOptions[groupTitle]; track option) {
+      <ion-item>
         <ion-checkbox
           labelPlacement="end"
           justify="start"
@@ -37,12 +39,14 @@
           <div class="ion-text-wrap">{{option.title}}</div>
         </ion-checkbox>
       </ion-item>
+      }
     </div>
   </div>
-
-  <ion-item *ngIf="!ungroupedOptions.length && !getGroupTitles().length">
+  } @if (!ungroupedOptions.length && !getGroupTitles().length) {
+  <ion-item>
     <ion-label class="ion-text-wrap">{{nullMessage}}</ion-label>
   </ion-item>
+  }
 </ion-list>
 
 <ion-footer>

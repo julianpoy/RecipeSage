@@ -6,6 +6,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SocialLinksComponent } from "../../../components/social-links/social-links.component";
 
 @Component({
+  standalone: true,
   selector: "page-about",
   templateUrl: "about.page.html",
   styleUrls: ["about.page.scss"],

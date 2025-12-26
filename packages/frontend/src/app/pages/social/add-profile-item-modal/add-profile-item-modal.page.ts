@@ -8,6 +8,7 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
 import type { LabelSummary } from "@recipesage/prisma";
 
 @Component({
+  standalone: true,
   selector: "page-add-profile-item-modal",
   templateUrl: "add-profile-item-modal.page.html",
   styleUrls: ["add-profile-item-modal.page.scss"],

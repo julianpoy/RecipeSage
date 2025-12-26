@@ -12,6 +12,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-message-thread",
   templateUrl: "message-thread.page.html",
   styleUrls: ["message-thread.page.scss"],

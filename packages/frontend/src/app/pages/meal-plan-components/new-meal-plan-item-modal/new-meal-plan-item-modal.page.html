@@ -1,11 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf="isEditing">
+    @if (isEditing) {
+    <ion-title>
       {{ 'pages.newMealPlanItemModal.title.update' | translate }}
     </ion-title>
-    <ion-title *ngIf="!isEditing">
+    } @if (!isEditing) {
+    <ion-title>
       {{ 'pages.newMealPlanItemModal.title.new' | translate }}
     </ion-title>
+    }
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -27,8 +30,9 @@
     </ion-segment>
   </div>
 
-  <div [ngSwitch]="inputType">
-    <div *ngSwitchCase="'manualEntry'">
+  <div>
+    @switch (inputType) { @case ('manualEntry') {
+    <div>
       <ion-item>
         <ion-input
           label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
@@ -42,11 +46,12 @@
         ></ion-input>
       </ion-item>
     </div>
-
-    <div *ngSwitchCase="'recipe'">
+    } @case ('recipe') {
+    <div>
       <br /><br />
       <select-recipe [(selectedRecipe)]="recipe"></select-recipe>
     </div>
+    } }
   </div>
 
   <br /><br />
@@ -70,11 +75,12 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="calendar" slot="start"></ion-icon>
-    <ion-label *ngIf="isEditing">
-      {{ 'pages.newMealPlanItemModal.save' | translate }}
-    </ion-label>
-    <ion-label *ngIf="!isEditing">
+    @if (isEditing) {
+    <ion-label> {{ 'pages.newMealPlanItemModal.save' | translate }} </ion-label>
+    } @if (!isEditing) {
+    <ion-label>
       {{ 'pages.newMealPlanItemModal.create' | translate }}
     </ion-label>
+    }
   </ion-button>
 </ion-footer>

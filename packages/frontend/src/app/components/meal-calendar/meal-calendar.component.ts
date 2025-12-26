@@ -14,6 +14,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { MealGroupComponent } from "./meal-group/meal-group.component";
 
 @Component({
+  standalone: true,
   selector: "meal-calendar",
   templateUrl: "meal-calendar.component.html",
   styleUrls: ["./meal-calendar.component.scss"],

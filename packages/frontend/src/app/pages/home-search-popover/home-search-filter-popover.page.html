@@ -14,10 +14,12 @@
       >{{ 'pages.homeSearchFilterPopover.filterByRating' | translate
       }}</ion-label
     >
-    <ion-badge *ngIf="ratingFilter?.length" slot="end">
+    @if (ratingFilter.length) {
+    <ion-badge slot="end">
       {{ratingFilter.length}}
       <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
     </ion-badge>
+    }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
 
@@ -32,9 +34,9 @@
       >{{ 'pages.homeSearchFilterPopover.filterByLabel' | translate
       }}</ion-label
     >
-    <ion-badge *ngIf="selectedLabels.length > 0" slot="end"
-      >{{selectedLabels.length}}</ion-badge
-    >
+    @if (selectedLabels.length > 0) {
+    <ion-badge slot="end">{{selectedLabels.length}}</ion-badge>
+    }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
 
@@ -49,7 +51,8 @@
     </ion-toggle>
   </ion-item>
 
-  <ion-item lines="full" *ngIf="!guestMode">
+  @if (!guestMode) {
+  <ion-item lines="full">
     <ion-select
       label="{{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
@@ -75,8 +78,9 @@
       >
     </ion-select>
   </ion-item>
-
-  <ion-item lines="none" *ngIf="guestMode">
+  } @if (guestMode) {
+  <ion-item lines="none">
     <p>{{ 'pages.homeSearchFilterPopover.optionsHidden' | translate }}</p>
   </ion-item>
+  }
 </ion-list>

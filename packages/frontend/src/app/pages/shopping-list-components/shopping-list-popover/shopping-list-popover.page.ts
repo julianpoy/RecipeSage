@@ -24,6 +24,7 @@ import { TRPCService } from "../../../services/trpc.service";
 import { ShoppingListCategoryOrderModalPage } from "../shopping-list-category-order-modal/shopping-list-category-order-modal.page";
 
 @Component({
+  standalone: true,
   selector: "page-shopping-list-popover",
   templateUrl: "shopping-list-popover.page.html",
   styleUrls: ["shopping-list-popover.page.scss"],

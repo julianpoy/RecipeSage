@@ -22,6 +22,7 @@ import { TRPCService } from "../../../services/trpc.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-meal-plan-item-details-modal",
   templateUrl: "meal-plan-item-details-modal.page.html",
   styleUrls: ["meal-plan-item-details-modal.page.scss"],

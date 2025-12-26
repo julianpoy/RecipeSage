@@ -11,6 +11,7 @@ import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-labels-popover",
   templateUrl: "labels-popover.page.html",
   styleUrls: ["labels-popover.page.scss"],

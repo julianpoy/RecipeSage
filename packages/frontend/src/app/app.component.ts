@@ -48,6 +48,7 @@ interface NavPage {
 }
 
 @Component({
+  standalone: true,
   selector: "app-root",
   templateUrl: "app.component.html",
   imports: [...SHARED_UI_IMPORTS, CookingToolbarComponent, NgxLoadingBar],

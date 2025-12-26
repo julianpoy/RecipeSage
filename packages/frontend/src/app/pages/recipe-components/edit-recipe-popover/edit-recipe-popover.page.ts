@@ -5,6 +5,7 @@ import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-edit-recipe-popover",
   templateUrl: "edit-recipe-popover.page.html",
   styleUrls: ["edit-recipe-popover.page.scss"],

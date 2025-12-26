@@ -17,6 +17,7 @@ import { TRPCService } from "../../../services/trpc.service";
 import type { RecipeSummary, ShoppingListSummary } from "@recipesage/prisma";
 
 @Component({
+  standalone: true,
   selector: "page-add-recipe-to-shopping-list-modal",
   templateUrl: "add-recipe-to-shopping-list-modal.page.html",
   styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],

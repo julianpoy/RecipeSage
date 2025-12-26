@@ -1,22 +1,23 @@
 <div class="container">
   <ion-icon name="pin" class="pin"></ion-icon>
   <div class="item-container">
-    <div
-      class="item ion-activatable"
-      *ngFor="let pinnedRecipe of cookingToolbarService.pinnedRecipes"
-      (click)="openRecipe(pinnedRecipe.id)"
-    >
-      <img *ngIf="pinnedRecipe.imageUrl" [src]="pinnedRecipe.imageUrl" />
-      <img
-        *ngIf="!pinnedRecipe.imageUrl"
-        src="assets/imgs/logo_green.png"
-        class="placeholder"
-      />
-      <div class="letter">
-        {{ pinnedRecipe.title.substring(0, 1).toUpperCase() }}
+    @for (
+      pinnedRecipe of cookingToolbarService.pinnedRecipes;
+      track pinnedRecipe
+    ) {
+      <div class="item ion-activatable" (click)="openRecipe(pinnedRecipe.id)">
+        @if (pinnedRecipe.imageUrl) {
+          <img [src]="pinnedRecipe.imageUrl" />
+        }
+        @if (!pinnedRecipe.imageUrl) {
+          <img src="assets/imgs/logo_green.png" class="placeholder" />
+        }
+        <div class="letter">
+          {{ pinnedRecipe.title.substring(0, 1).toUpperCase() }}
+        </div>
+        <ion-ripple-effect></ion-ripple-effect>
       </div>
-      <ion-ripple-effect></ion-ripple-effect>
-    </div>
+    }
   </div>
   <ion-icon
     (click)="clearPins()"

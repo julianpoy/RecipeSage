@@ -14,6 +14,7 @@ import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-meal-plan-bulk-pin-modal",
   templateUrl: "meal-plan-bulk-pin-modal.page.html",
   styleUrls: ["meal-plan-bulk-pin-modal.page.scss"],

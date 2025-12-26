@@ -13,13 +13,14 @@
 </ion-header>
 
 <ion-content>
+  @if (profileUrl) {
   <copy-with-webshare
-    *ngIf="profileUrl"
     [webshareTitle]="profile.name + '\'s RecipeSage profile'"
     [webshareText]="'Click to view' + this.profile.name + '\'s public RecipeSage profile'"
     [webshareURL]="profileUrl"
     [copyText]="profileUrl"
   ></copy-with-webshare>
+  }
 
   <div class="share-icon-container">
     <ion-item lines="none" (click)="openFacebook()" button>

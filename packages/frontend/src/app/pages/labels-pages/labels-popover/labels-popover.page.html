@@ -20,11 +20,14 @@
     size="small"
     class="ion-margin"
   >
-    <span *ngIf="selectionMode">
+    @if (selectionMode) {
+    <span>
       {{ 'pages.labelsPopover.options.unselectLabels' | translate }}
     </span>
-    <span *ngIf="!selectionMode">
+    } @if (!selectionMode) {
+    <span>
       {{ 'pages.labelsPopover.options.selectMultipleLabels' | translate }}
     </span>
+    }
   </ion-button>
 </ion-list>

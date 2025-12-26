@@ -26,6 +26,7 @@ import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-a
 import { WebsocketService } from "../../services/websocket.service";
 
 @Component({
+  standalone: true,
   selector: "page-auth",
   templateUrl: "auth.page.html",
   styleUrls: ["auth.page.scss"],

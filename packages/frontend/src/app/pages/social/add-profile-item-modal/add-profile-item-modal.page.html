@@ -11,7 +11,8 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="!itemType">
+  @if (!itemType) {
+  <div>
     <ion-item lines="none">
       <ion-icon name="folder-open" slot="start"></ion-icon>
       <ion-label> {{ 'pages.addProfileItem.prompt' | translate }} </ion-label>
@@ -23,13 +24,11 @@
             {{ 'pages.addProfileItem.recipe' | translate }}
           </ion-radio>
         </ion-item>
-
         <ion-item>
           <ion-radio labelPlacement="end" justify="start" value="label">
             {{ 'pages.addProfileItem.label' | translate }}
           </ion-radio>
         </ion-item>
-
         <ion-item>
           <ion-radio labelPlacement="end" justify="start" value="all-recipes">
             {{ 'pages.addProfileItem.allRecipes' | translate }}
@@ -38,66 +37,54 @@
       </ion-radio-group>
     </div>
   </div>
-
-  <ion-item *ngIf="itemType" (click)="itemType = null" button>
+  } @if (itemType) {
+  <ion-item (click)="itemType = null" button>
     <ion-icon name="folder-open" slot="start"></ion-icon>
     <ion-label>
       <h2>
-        {{ 'pages.addProfileItem.type' | translate }}
-        <span *ngIf="itemType === 'recipe'">
-          {{ 'pages.addProfileItem.type.recipe' | translate }}
-        </span>
-        <span *ngIf="itemType === 'label'">
-          {{ 'pages.addProfileItem.type.label' | translate }}
-        </span>
-        <span *ngIf="itemType === 'all-recipes'">
-          {{ 'pages.addProfileItem.type.allRecipes' | translate }}
-        </span>
+        {{ 'pages.addProfileItem.type' | translate }} @if (itemType ===
+        'recipe') {
+        <span> {{ 'pages.addProfileItem.type.recipe' | translate }} </span>
+        } @if (itemType === 'label') {
+        <span> {{ 'pages.addProfileItem.type.label' | translate }} </span>
+        } @if (itemType === 'all-recipes') {
+        <span> {{ 'pages.addProfileItem.type.allRecipes' | translate }} </span>
+        }
       </h2>
       <p>{{ 'pages.addProfileItem.change' | translate }}</p>
     </ion-label>
   </ion-item>
-
-  <ion-item
-    *ngIf="(itemType === 'recipe' || itemType === 'label') && !isItemSelected()"
-    class="ion-margin-top"
-    lines="none"
-  >
-    <ion-icon
-      *ngIf="itemType === 'recipe'"
-      name="document-text"
-      slot="start"
-    ></ion-icon>
-    <ion-icon
-      *ngIf="itemType === 'label'"
-      name="pricetag"
-      slot="start"
-    ></ion-icon>
+  } @if ((itemType === 'recipe' || itemType === 'label') && !isItemSelected()) {
+  <ion-item class="ion-margin-top" lines="none">
+    @if (itemType === 'recipe') {
+    <ion-icon name="document-text" slot="start"></ion-icon>
+    } @if (itemType === 'label') {
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    }
     <ion-label>
-      <span *ngIf="itemType === 'recipe'">
-        {{ 'pages.addProfileItem.selectRecipe' | translate }}
-      </span>
-      <span *ngIf="itemType === 'label'">
-        {{ 'pages.addProfileItem.selectLabel' | translate }}
-      </span>
+      @if (itemType === 'recipe') {
+      <span> {{ 'pages.addProfileItem.selectRecipe' | translate }} </span>
+      } @if (itemType === 'label') {
+      <span> {{ 'pages.addProfileItem.selectLabel' | translate }} </span>
+      }
     </ion-label>
   </ion-item>
+  } @if (itemType === 'recipe') {
   <div
-    *ngIf="itemType === 'recipe'"
     [class.ion-padding-start]="!selectedRecipe"
     [class.ion-padding-end]="!selectedRecipe"
   >
     <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
   </div>
+  } @if (itemType === 'label') {
   <div
-    *ngIf="itemType === 'label'"
     [class.ion-padding-start]="!selectedLabel"
     [class.ion-padding-end]="!selectedLabel"
   >
     <select-label [(selectedLabel)]="selectedLabel"></select-label>
   </div>
-
-  <div *ngIf="isItemSelected() && !itemVisibility">
+  } @if (isItemSelected() && !itemVisibility) {
+  <div>
     <ion-item>
       <ion-icon name="eye" slot="start"></ion-icon>
       <ion-label>
@@ -114,7 +101,6 @@
             {{ 'pages.addProfileItem.selectVisibility.public' | translate }}
           </ion-radio>
         </ion-item>
-
         <ion-item>
           <ion-radio labelPlacement="end" justify="start" value="friends-only">
             {{ 'pages.addProfileItem.selectVisibility.friends' | translate }}
@@ -123,23 +109,24 @@
       </ion-radio-group>
     </div>
   </div>
-
-  <ion-item *ngIf="itemVisibility" (click)="itemVisibility = null" button>
+  } @if (itemVisibility) {
+  <ion-item (click)="itemVisibility = null" button>
     <ion-icon name="eye" slot="start"></ion-icon>
     <ion-label>
       <h2>
-        <span *ngIf="itemVisibility === 'public'">
-          {{ 'pages.addProfileItem.visibilityPublic' | translate }}
-        </span>
-        <span *ngIf="itemVisibility === 'friends-only'">
+        @if (itemVisibility === 'public') {
+        <span> {{ 'pages.addProfileItem.visibilityPublic' | translate }} </span>
+        } @if (itemVisibility === 'friends-only') {
+        <span>
           {{ 'pages.addProfileItem.visibilityFriends' | translate }}
         </span>
+        }
       </h2>
       <p>{{ 'pages.addProfileItem.change' | translate }}</p>
     </ion-label>
   </ion-item>
-
-  <ion-item *ngIf="itemVisibility">
+  } @if (itemVisibility) {
+  <ion-item>
     <ion-icon name="pricetag" slot="start"></ion-icon>
     <ion-input
       label="{{ 'pages.addProfileItem.itemTitle' | translate }}"
@@ -147,6 +134,7 @@
       [(ngModel)]="itemTitle"
     ></ion-input>
   </ion-item>
+  }
 </ion-content>
 
 <ion-footer class="ion-padding">

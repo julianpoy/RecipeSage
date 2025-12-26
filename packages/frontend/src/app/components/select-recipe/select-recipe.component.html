@@ -1,79 +1,94 @@
 <div>
-  <ion-item
-    class="selectedRecipe"
-    (click)="selectedRecipe = undefined"
-    *ngIf="selectedRecipe"
-    button
-  >
-    <ion-avatar *ngIf="selectedRecipe.images?.length" slot="start">
-      <img src="{{ selectedRecipe.images[0].location }}" />
-    </ion-avatar>
-    <ion-avatar *ngIf="!selectedRecipe.images?.length" slot="start">
-      <img src="assets/imgs/logo_green_padded.png" />
-    </ion-avatar>
-    <ion-label>
-      <h2>{{ selectedRecipe.title }}</h2>
-      <p>
-        {{ "components.selectRecipe.change" | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
+  @if (selectedRecipe) {
+    <ion-item
+      class="selectedRecipe"
+      (click)="selectedRecipe = undefined"
+      button
+    >
+      @if (selectedRecipe.images.length) {
+        <ion-avatar slot="start">
+          <img src="{{ selectedRecipe.images[0].location }}" />
+        </ion-avatar>
+      }
+      @if (!selectedRecipe.images.length) {
+        <ion-avatar slot="start">
+          <img src="assets/imgs/logo_green_padded.png" />
+        </ion-avatar>
+      }
+      <ion-label>
+        <h2>{{ selectedRecipe.title }}</h2>
+        <p>
+          {{ "components.selectRecipe.change" | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
+  }
 
-  <div *ngIf="!selectedRecipe">
-    <ion-searchbar
-      (ionInput)="onSearchInputChange($event)"
-      placeholder="{{ 'components.selectRecipe.search' | translate }}"
-      autocomplete="off"
-    ></ion-searchbar>
-    <div class="ion-padding-start ion-padding-end">
-      <div class="results-list-container" *ngIf="searchText.length">
-        <div class="results-list">
-          <ion-item
-            *ngFor="let recipe of recipes; trackBy: recipeTrackBy"
-            (click)="selectRecipe(recipe)"
-            button
-          >
-            <ion-avatar *ngIf="recipe.images?.length" slot="start">
-              <img src="{{ recipe.images[0].location }}" />
-            </ion-avatar>
-            <ion-avatar *ngIf="!recipe.images?.length" slot="start">
-              <img src="assets/imgs/logo_green_padded.png" />
-            </ion-avatar>
-            <ion-label>
-              <h2>{{ recipe.title }}</h2>
-              <p>
-                {{ "components.selectRecipe.select" | translate }}
-              </p>
-            </ion-label>
-          </ion-item>
-          <!-- Searching for user for which a thread does not exist -->
-          <ion-item *ngIf="searching">
-            <ion-spinner slot="start"></ion-spinner>
-            <ion-label>
-              <h2>
-                {{
-                  "components.selectRecipe.searching"
-                    | translate: { searchText: searchText }
-                }}
-              </h2>
-            </ion-label>
-          </ion-item>
-          <!-- Searching for user for which a thread does not exist -->
-          <ion-item
-            *ngIf="recipes.length === 0 && searchText.length > 0 && !searching"
-          >
-            <ion-icon name="folder-open" slot="start"></ion-icon>
-            <ion-label>
-              <h2>
-                {{
-                  "components.selectRecipe.null"
-                    | translate: { searchText: searchText }
-                }}
-              </h2>
-            </ion-label>
-          </ion-item>
-        </div>
+  @if (!selectedRecipe) {
+    <div>
+      <ion-searchbar
+        (ionInput)="onSearchInputChange($event)"
+        placeholder="{{ 'components.selectRecipe.search' | translate }}"
+        autocomplete="off"
+      ></ion-searchbar>
+      <div class="ion-padding-start ion-padding-end">
+        @if (searchText.length) {
+          <div class="results-list-container">
+            <div class="results-list">
+              @for (recipe of recipes; track recipeTrackBy($index, recipe)) {
+                <ion-item (click)="selectRecipe(recipe)" button>
+                  @if (recipe.images.length) {
+                    <ion-avatar slot="start">
+                      <img src="{{ recipe.images[0].location }}" />
+                    </ion-avatar>
+                  }
+                  @if (!recipe.images.length) {
+                    <ion-avatar slot="start">
+                      <img src="assets/imgs/logo_green_padded.png" />
+                    </ion-avatar>
+                  }
+                  <ion-label>
+                    <h2>{{ recipe.title }}</h2>
+                    <p>
+                      {{ "components.selectRecipe.select" | translate }}
+                    </p>
+                  </ion-label>
+                </ion-item>
+              }
+              <!-- Searching for user for which a thread does not exist -->
+              @if (searching) {
+                <ion-item>
+                  <ion-spinner slot="start"></ion-spinner>
+                  <ion-label>
+                    <h2>
+                      {{
+                        "components.selectRecipe.searching"
+                          | translate: { searchText: searchText }
+                      }}
+                    </h2>
+                  </ion-label>
+                </ion-item>
+              }
+              <!-- Searching for user for which a thread does not exist -->
+              @if (
+                recipes.length === 0 && searchText.length > 0 && !searching
+              ) {
+                <ion-item>
+                  <ion-icon name="folder-open" slot="start"></ion-icon>
+                  <ion-label>
+                    <h2>
+                      {{
+                        "components.selectRecipe.null"
+                          | translate: { searchText: searchText }
+                      }}
+                    </h2>
+                  </ion-label>
+                </ion-item>
+              }
+            </div>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

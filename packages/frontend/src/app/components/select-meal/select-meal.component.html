@@ -7,11 +7,11 @@
       okText="{{ 'generic.ok' | translate }}"
       cancelText="{{ 'generic.cancel' | translate }}"
     >
-      <ion-select-option
-        *ngFor="let mealOption of mealOptions"
-        [value]="mealOption.key"
-        >{{ mealOption.title }}</ion-select-option
-      >
+      @for (mealOption of mealOptions; track mealOption) {
+        <ion-select-option [value]="mealOption.key">{{
+          mealOption.title
+        }}</ion-select-option>
+      }
     </ion-select>
   </ion-item>
 </div>

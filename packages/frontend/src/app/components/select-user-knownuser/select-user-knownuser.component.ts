@@ -4,6 +4,7 @@ import { SelectKnownUserComponent } from "../select-knownuser/select-knownuser.c
 import { SelectUserComponent } from "../select-user/select-user.component";
 
 @Component({
+  standalone: true,
   selector: "select-user-knownuser",
   templateUrl: "select-user-knownuser.component.html",
   styleUrls: ["./select-user-knownuser.component.scss"],

@@ -19,6 +19,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../select-user/select-user.component";
 
 @Component({
+  standalone: true,
   selector: "select-collaborators",
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],

@@ -37,7 +37,8 @@
     </ion-toggle>
   </ion-item>
 
-  <ion-item lines="full" *ngIf="!guestMode">
+  @if (!guestMode) {
+  <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]"
       (ngModelChange)="savePreferences()"
@@ -47,6 +48,7 @@
       </div>
     </ion-toggle>
   </ion-item>
+  }
 
   <ion-item lines="full">
     <ion-toggle
@@ -113,8 +115,8 @@
     </ion-select>
   </ion-item>
 
+  @if (!guestMode) {
   <ion-button
-    *ngIf="!guestMode"
     (click)="toggleSelectionMode()"
     expand="block"
     size="small"
@@ -124,15 +126,19 @@
       [name]="selectionMode ? 'close' : 'checkmark'"
       slot="start"
     ></ion-icon>
-    <span *ngIf="selectionMode">
+    @if (selectionMode) {
+    <span>
       {{ 'pages.homepopover.options.unselectAllRecipes' | translate }}
     </span>
-    <span *ngIf="!selectionMode">
+    } @if (!selectionMode) {
+    <span>
       {{ 'pages.homepopover.options.selectMultipleRecipes' | translate }}
     </span>
+    }
   </ion-button>
-
-  <ion-item lines="none" *ngIf="guestMode">
+  } @if (guestMode) {
+  <ion-item lines="none">
     <p>{{ 'pages.homepopover.warning.optionsHidden' | translate }}</p>
   </ion-item>
+  }
 </ion-list>

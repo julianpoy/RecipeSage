@@ -20,6 +20,7 @@ import { CopyWithWebshareComponent } from "../../components/copy-with-webshare/c
 import { RecipePreviewComponent } from "../../components/recipe-preview/recipe-preview.component";
 
 @Component({
+  standalone: true,
   selector: "page-share-modal",
   templateUrl: "share-modal.page.html",
   styleUrls: ["share-modal.page.scss"],

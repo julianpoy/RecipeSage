@@ -14,6 +14,7 @@ import type { LabelSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "page-home-search-filter-popover",
   templateUrl: "home-search-filter-popover.page.html",
   styleUrls: ["home-search-filter-popover.page.scss"],

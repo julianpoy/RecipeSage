@@ -36,7 +36,8 @@
       </ion-button>
     </div>
 
-    <div class="amount-row" *ngIf="frequency === 'monthly'">
+    @if (frequency === 'monthly') {
+    <div class="amount-row">
       <ion-button
         [fill]="amount === 1 ? 'solid' : 'outline'"
         (click)="setAmount(1)"
@@ -61,8 +62,8 @@
         [(ngModel)]="customAmount"
       />
     </div>
-
-    <div class="amount-row" *ngIf="frequency === 'single'">
+    } @if (frequency === 'single') {
+    <div class="amount-row">
       <ion-button
         [fill]="amount === 10 ? 'solid' : 'outline'"
         (click)="setAmount(10)"
@@ -87,8 +88,8 @@
         [(ngModel)]="customAmount"
       />
     </div>
-
-    <div class="submit-row ion-text-center" *ngIf="frequency">
+    } @if (frequency) {
+    <div class="submit-row ion-text-center">
       <ion-button [disabled]="!validAmount()" (click)="contribute()">
         <span> {{ 'pages.contribute.action' | translate }} </span>
         <ion-icon name="arrow-forward" slot="end"></ion-icon>
@@ -96,6 +97,7 @@
       <br /><br />
       <tos-clickwrap-agreement></tos-clickwrap-agreement>
     </div>
+    }
 
     <br />
 
@@ -104,26 +106,31 @@
     <div class="feature-list">
       <ul>
         <li>
-          {{ 'pages.contribute.bonus.feature.1' | translate }} &nbsp;<ion-badge
-            *ngIf="capabilitiesService.capabilities.highResImages"
-            slot="end"
+          {{ 'pages.contribute.bonus.feature.1' | translate }} &nbsp;@if
+          (capabilitiesService.capabilities.highResImages) {
+          <ion-badge slot="end"
             >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
-          ><br />
+          >
+          }<br />
         </li>
         <li>
-          {{ 'pages.contribute.bonus.feature.2' | translate }} &nbsp;<ion-badge
-            *ngIf="capabilitiesService.capabilities.multipleImages"
-            slot="end"
+          {{ 'pages.contribute.bonus.feature.2' | translate }} &nbsp;@if
+          (capabilitiesService.capabilities.multipleImages) {
+          <ion-badge slot="end"
             >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
           >
+          }
         </li>
-        <li *ngIf="enableAssistant">
-          {{ 'pages.contribute.bonus.feature.3' | translate }} &nbsp;<ion-badge
-            *ngIf="capabilitiesService.capabilities.assistantMoreMessages"
-            slot="end"
+        @if (enableAssistant) {
+        <li>
+          {{ 'pages.contribute.bonus.feature.3' | translate }} &nbsp;@if
+          (capabilitiesService.capabilities.assistantMoreMessages) {
+          <ion-badge slot="end"
             >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
           >
+          }
         </li>
+        }
       </ul>
     </div>
 

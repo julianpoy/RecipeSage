@@ -20,6 +20,7 @@ const BILLING_PORTAL_URL =
   "https://billing.stripe.com/p/login/dR6aFm6ex5vuauk8ww";
 
 @Component({
+  standalone: true,
   selector: "page-contribute",
   templateUrl: "contribute.page.html",
   styleUrls: ["contribute.page.scss"],

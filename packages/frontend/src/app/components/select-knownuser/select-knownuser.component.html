@@ -1,53 +1,61 @@
 <div>
-  <ion-list *ngIf="friendships.length > 0">
-    <ion-radio-group
-      [value]="_radioFriendship"
-      (ionChange)="friendshipRadioChanged($event)"
-    >
-      <ion-list-header style="margin-bottom: 0" lines="none">
-        {{ "components.selectKnownUser.friends" | translate }}
-      </ion-list-header>
+  @if (friendships.length > 0) {
+    <ion-list>
+      <ion-radio-group
+        [value]="_radioFriendship"
+        (ionChange)="friendshipRadioChanged($event)"
+      >
+        <ion-list-header style="margin-bottom: 0" lines="none">
+          {{ "components.selectKnownUser.friends" | translate }}
+        </ion-list-header>
+        @for (friendship of friendships; track friendship) {
+          <ion-item>
+            <ion-avatar slot="start">
+              @if (!friendship.otherUser.profileImages?.length) {
+                <img src="assets/avatar.svg" />
+              }
+              @if (friendship.otherUser.profileImages?.length) {
+                <img [src]="friendship.otherUser.profileImages[0].location" />
+              }
+            </ion-avatar>
+            <ion-radio
+              labelPlacement="end"
+              justify="start"
+              [value]="friendship"
+            >
+              <div class="ion-radio-label">
+                {{ friendship.otherUser.name }}
+                <p>&commat;{{ friendship.otherUser.handle }}</p>
+              </div>
+            </ion-radio>
+          </ion-item>
+        }
+      </ion-radio-group>
+    </ion-list>
+  }
 
-      <ion-item *ngFor="let friendship of friendships">
-        <ion-avatar slot="start">
-          <img
-            *ngIf="!friendship.otherUser.profileImages?.length"
-            src="assets/avatar.svg"
-          />
-          <img
-            *ngIf="friendship.otherUser.profileImages?.length"
-            [src]="friendship.otherUser.profileImages[0].location"
-          />
-        </ion-avatar>
-        <ion-radio labelPlacement="end" justify="start" [value]="friendship">
-          <div class="ion-radio-label">
-            {{ friendship.otherUser.name }}
-            <p>&commat;{{ friendship.otherUser.handle }}</p>
-          </div>
-        </ion-radio>
-      </ion-item>
-    </ion-radio-group>
-  </ion-list>
-
-  <ion-list *ngIf="threads.length > 0">
-    <ion-radio-group
-      [value]="_radioThread"
-      (ionChange)="threadRadioChanged($event)"
-    >
-      <ion-list-header style="margin-bottom: 0" lines="none">
-        {{ "components.selectKnownUser.conversations" | translate }}
-      </ion-list-header>
-
-      <ion-item *ngFor="let thread of threads">
-        <ion-radio labelPlacement="end" justify="start" [value]="thread">
-          <div class="ion-radio-label">
-            {{ thread.otherUser.name }}
-            <p *ngIf="thread.otherUser.handle">
-              &commat;{{ thread.otherUser.handle }}
-            </p>
-          </div>
-        </ion-radio>
-      </ion-item>
-    </ion-radio-group>
-  </ion-list>
+  @if (threads.length > 0) {
+    <ion-list>
+      <ion-radio-group
+        [value]="_radioThread"
+        (ionChange)="threadRadioChanged($event)"
+      >
+        <ion-list-header style="margin-bottom: 0" lines="none">
+          {{ "components.selectKnownUser.conversations" | translate }}
+        </ion-list-header>
+        @for (thread of threads; track thread) {
+          <ion-item>
+            <ion-radio labelPlacement="end" justify="start" [value]="thread">
+              <div class="ion-radio-label">
+                {{ thread.otherUser.name }}
+                @if (thread.otherUser.handle) {
+                  <p>&commat;{{ thread.otherUser.handle }}</p>
+                }
+              </div>
+            </ion-radio>
+          </ion-item>
+        }
+      </ion-radio-group>
+    </ion-list>
+  }
 </div>

@@ -8,6 +8,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
 
 @Component({
+  standalone: true,
   selector: "page-new-meal-plan-modal",
   templateUrl: "new-meal-plan-modal.page.html",
   styleUrls: ["new-meal-plan-modal.page.scss"],

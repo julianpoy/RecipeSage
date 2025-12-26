@@ -28,6 +28,7 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 
 @Component({
+  standalone: true,
   selector: "page-my-profile",
   templateUrl: "my-profile.page.html",
   styleUrls: ["my-profile.page.scss"],

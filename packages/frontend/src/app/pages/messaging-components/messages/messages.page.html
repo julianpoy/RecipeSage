@@ -13,34 +13,27 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item
-      class="thread"
-      *ngFor="let thread of threads"
-      (click)="openThread(thread)"
-      button
-    >
+    @for (thread of threads; track thread) {
+    <ion-item class="thread" (click)="openThread(thread)" button>
       <ion-icon name="chatbox" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ thread.otherUser.name }}</h2>
         <p>
-          <b *ngIf="thread.messages[0].fromUser.id === thread.otherUser.id">
-            {{ 'pages.messages.history.you' | translate }}
-          </b>
-          <b *ngIf="thread.messages[0].fromUser.id !== thread.otherUser.id">
-            {{ thread.messages[0].fromUser.name }}
-          </b>
-          :
-          <span *ngIf="thread.messages[0].recipe"
-            >{{ 'pages.messages.history.sentRecipe' | translate }}</span
-          >
-          <span *ngIf="!thread.messages[0].recipe"
-            >{{ thread.messages[0].body }}</span
-          >
+          @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
+          <b> {{ 'pages.messages.history.you' | translate }} </b>
+          } @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
+          <b> {{ thread.messages[0].fromUser.name }} </b>
+          } : @if (thread.messages[0].recipe) {
+          <span>{{ 'pages.messages.history.sentRecipe' | translate }}</span>
+          } @if (!thread.messages[0].recipe) {
+          <span>{{ thread.messages[0].body }}</span>
+          }
         </p>
         <p>{{prettyDate(thread.messages[0].updatedAt)}}</p>
       </ion-label>
     </ion-item>
-    <null-state *ngIf="threads.length === 0 && !loading">
+    } @if (threads.length === 0 && !loading) {
+    <null-state>
       <ion-icon name="chatbox" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
@@ -49,6 +42,7 @@
         </p>
       </ion-label>
     </null-state>
+    }
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -57,10 +51,8 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-footer
-    *ngIf="isNotificationsCapable() && !isNotificationsEnabled()"
-    class="ion-text-center ion-padding"
-  >
+  @if (isNotificationsCapable() && !isNotificationsEnabled()) {
+  <ion-footer class="ion-text-center ion-padding">
     <b class="notificationWarning"
       >{{ 'pages.messages.warning' | translate }}</b
     >
@@ -72,4 +64,5 @@
       {{ 'pages.messages.notificationsInstructions' | translate }}
     </a>
   </ion-footer>
+  }
 </ion-content>

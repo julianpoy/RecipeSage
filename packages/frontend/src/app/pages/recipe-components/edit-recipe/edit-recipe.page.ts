@@ -39,6 +39,7 @@ import { RatingComponent } from "../../../components/rating/rating.component";
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 
 @Component({
+  standalone: true,
   selector: "page-edit-recipe",
   templateUrl: "edit-recipe.page.html",
   styleUrls: ["edit-recipe.page.scss"],

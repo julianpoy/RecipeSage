@@ -9,7 +9,8 @@
 </ion-header>
 
 <ion-content class="ion-padding" #content>
-  <div *ngIf="isSelfHost">
+  @if (isSelfHost) {
+  <div>
     <h1>
       Note: Some parts of this page apply to software hosted at RecipeSage.com.
     </h1>
@@ -42,6 +43,7 @@
     <br />
     <br />
   </div>
+  }
 
   <p>
     Here you'll find a summary of the legal agreements and disclaimers. I've

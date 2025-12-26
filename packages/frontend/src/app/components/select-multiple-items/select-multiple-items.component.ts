@@ -9,6 +9,7 @@ export interface SelectableItem {
 }
 
 @Component({
+  standalone: true,
   selector: "select-multiple-items",
   templateUrl: "select-multiple-items.component.html",
   styleUrls: ["./select-multiple-items.component.scss"],

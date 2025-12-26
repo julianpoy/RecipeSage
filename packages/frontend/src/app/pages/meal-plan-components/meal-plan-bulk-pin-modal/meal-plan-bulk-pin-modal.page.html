@@ -22,8 +22,8 @@
 
   <br />
 
+  @if (!allSelected) {
   <ion-button
-    *ngIf="!allSelected"
     color="primary"
     (click)="selectAllRecipes()"
     size="small"
@@ -31,17 +31,14 @@
   >
     {{ 'pages.mealPlanBulkPinModal.selectAll' | translate }}
   </ion-button>
-  <ion-button
-    *ngIf="allSelected"
-    color="primary"
-    (click)="deselectAll()"
-    size="small"
-    fill="clear"
-  >
+  } @if (allSelected) {
+  <ion-button color="primary" (click)="deselectAll()" size="small" fill="clear">
     {{ 'pages.mealPlanBulkPinModal.deselectAll' | translate }}
   </ion-button>
+  }
   <ion-list>
-    <ion-item *ngFor="let mealItem of mealItems">
+    @for (mealItem of mealItems; track mealItem) {
+    <ion-item>
       <ion-checkbox
         labelPlacement="end"
         justify="start"
@@ -50,13 +47,16 @@
         (ionChange)="mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)"
       >
         <div class="ion-checkbox-label">
-          {{ mealItem.recipe?.title || mealItem.title }}
-          <p *ngIf="!mealItem.recipe?.id">
+          {{ mealItem.recipe?.title || mealItem.title }} @if
+          (!mealItem.recipe?.id) {
+          <p>
             {{ 'pages.mealPlanBulkPinModal.notLinkedToRecipe' | translate }}
           </p>
+          }
         </div>
       </ion-checkbox>
     </ion-item>
+    }
   </ion-list>
 </ion-content>
 

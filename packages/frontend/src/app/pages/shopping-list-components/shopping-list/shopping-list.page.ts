@@ -49,6 +49,7 @@ const categoryTitlesToi18n: Record<string, string> = {
 };
 
 @Component({
+  standalone: true,
   selector: "page-shopping-list",
   templateUrl: "shopping-list.page.html",
   styleUrls: ["shopping-list.page.scss"],

@@ -7,6 +7,7 @@ import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
+  standalone: true,
   selector: "cooking-toolbar",
   templateUrl: "cooking-toolbar.component.html",
   styleUrls: ["./cooking-toolbar.component.scss"],

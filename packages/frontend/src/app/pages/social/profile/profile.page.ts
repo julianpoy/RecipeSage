@@ -23,6 +23,7 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
 import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";
 
 @Component({
+  standalone: true,
   selector: "page-profile",
   templateUrl: "profile.page.html",
   styleUrls: ["profile.page.scss"],

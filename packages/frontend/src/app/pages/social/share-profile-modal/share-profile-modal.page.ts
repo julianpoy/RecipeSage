@@ -8,6 +8,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 
 @Component({
+  standalone: true,
   selector: "page-share-profile-modal",
   templateUrl: "share-profile-modal.page.html",
   styleUrls: ["share-profile-modal.page.scss"],
