@@ -4,27 +4,27 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.contributeThankYou.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.contributeThankYou.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding ion-text-center">
-  <p class="headline">{{ 'pages.contributeThankYou.title' | translate }}</p>
+  <p class="headline">{{ "pages.contributeThankYou.title" | translate }}</p>
 
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
-    <p>{{ 'pages.contributeThankYou.thanks' | translate }}</p>
+    <p>{{ "pages.contributeThankYou.thanks" | translate }}</p>
 
     <p>
-      <a [routerLink]="accountPath"
-        >{{ 'pages.contributeThankYou.bonus' | translate }}</a
-      >
+      <a [routerLink]="accountPath">{{
+        "pages.contributeThankYou.bonus" | translate
+      }}</a>
     </p>
 
     <br />
 
-    <p>{{ 'pages.contributeThankYou.questions' | translate }}</p>
+    <p>{{ "pages.contributeThankYou.questions" | translate }}</p>
 
     <br />
 

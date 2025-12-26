@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.mealPlans.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.mealPlans.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,61 +14,76 @@
   </ion-refresher>
   <ion-list>
     @for (mealPlan of mealPlans; track mealPlan) {
-    <ion-item button class="ion-text-wrap" (click)="openMealPlan(mealPlan.id)">
-      <ion-icon name="calendar" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ mealPlan.title }}</h2>
-        <p>
-          {{ 'pages.mealPlans.metadata.createdOn' |
-          translate:{date:formatItemCreationDate(mealPlan.createdAt)} }}
-        </p>
-        @if (mealPlan.collaboratorUsers.length > 0) {
-        <p>
-          {{ 'pages.mealPlans.metadata.collaborators' | translate }} @for
-          (collaboratorUser of mealPlan.collaboratorUsers; track
-          collaboratorUser; let isLast = $last) {
-          <span>
-            @if (me?.id !== collaboratorUser.user.id) {
-            <span>
-              {{ collaboratorUser.user.name }}@if (!isLast || me?.id !==
-              mealPlan.user.id) {
-              <span>,</span>
+      <ion-item
+        button
+        class="ion-text-wrap"
+        (click)="openMealPlan(mealPlan.id)"
+      >
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>
+          <h2>{{ mealPlan.title }}</h2>
+          <p>
+            {{
+              "pages.mealPlans.metadata.createdOn"
+                | translate
+                  : { date: formatItemCreationDate(mealPlan.createdAt) }
+            }}
+          </p>
+          @if (mealPlan.collaboratorUsers.length > 0) {
+            <p>
+              {{ "pages.mealPlans.metadata.collaborators" | translate }}
+              @for (
+                collaboratorUser of mealPlan.collaboratorUsers;
+                track collaboratorUser;
+                let isLast = $last
+              ) {
+                <span>
+                  @if (me?.id !== collaboratorUser.user.id) {
+                    <span>
+                      {{ collaboratorUser.user.name }}
+                      @if (!isLast || me?.id !== mealPlan.user.id) {
+                        <span>,</span>
+                      }
+                    </span>
+                  }
+                </span>
               }
-            </span>
+              @if (me?.id !== mealPlan.user.id) {
+                <span> {{ mealPlan.user.name }} </span>
+              }
+            </p>
+          }
+          <p>
+            @if (me?.id !== mealPlan.user.id) {
+              <span>
+                {{
+                  "pages.mealPlans.metadata.createdBy"
+                    | translate: { name: mealPlan.user.name }
+                }}
+              </span>
             }
-          </span>
-          } @if (me?.id !== mealPlan.user.id) {
-          <span> {{ mealPlan.user.name }} </span>
-          }
-        </p>
-        }
-        <p>
-          @if (me?.id !== mealPlan.user.id) {
-          <span>
-            {{ 'pages.mealPlans.metadata.createdBy' |
-            translate:{name:mealPlan.user.name} }}
-          </span>
-          } @if (me?.id === mealPlan.user.id) {
-          <span> {{ 'pages.mealPlans.metadata.youOwn' | translate }} </span>
-          }
-        </p>
-      </ion-label>
-      <ion-badge slot="end">{{ mealPlan._count.items }}</ion-badge>
-    </ion-item>
-    } @if (mealPlans?.length === 0) {
-    <null-state>
-      <ion-icon
-        name="calendar"
-        class="big-icon"
-        virtualSlot="header"
-      ></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.mealPlans.noPlans' | translate }}<br />
-          {{ 'pages.mealPlans.toCreate' | translate }}
-        </p>
-      </ion-label>
-    </null-state>
+            @if (me?.id === mealPlan.user.id) {
+              <span> {{ "pages.mealPlans.metadata.youOwn" | translate }} </span>
+            }
+          </p>
+        </ion-label>
+        <ion-badge slot="end">{{ mealPlan._count.items }}</ion-badge>
+      </ion-item>
+    }
+    @if (mealPlans?.length === 0) {
+      <null-state>
+        <ion-icon
+          name="calendar"
+          class="big-icon"
+          virtualSlot="header"
+        ></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            {{ "pages.mealPlans.noPlans" | translate }}<br />
+            {{ "pages.mealPlans.toCreate" | translate }}
+          </p>
+        </ion-label>
+      </null-state>
     }
   </ion-list>
 

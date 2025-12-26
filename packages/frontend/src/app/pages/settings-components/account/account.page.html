@@ -4,284 +4,371 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.account.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.account.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 @if (me && myStats) {
-<ion-content>
-  <br />
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>{{ 'pages.account.description' | translate }}</p>
-    </ion-label>
-  </ion-item>
-  <br />
-  <ion-item lines="none">
-    <ion-icon name="key" slot="start"></ion-icon>
-    <ion-label class="ion-text-wrap"
-      >{{ 'pages.account.creds.title' | translate }}</ion-label
-    >
-  </ion-item>
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.account.creds.name' | translate }}"
-      labelPlacement="stacked"
-      autocomplete="off"
-      autofill="off"
-      type="text"
-      [(ngModel)]="name"
-      (ionFocus)="nameChanged = true"
-      (ngModelChange)="nameChanged = true"
-    ></ion-input>
-    @if (nameChanged) {
-    <ion-button (click)="saveName()" slot="end" class="ion-align-self-center">
-      {{ 'pages.account.creds.name.save' | translate }}
-    </ion-button>
+  <ion-content>
+    <br />
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>{{ "pages.account.description" | translate }}</p>
+      </ion-label>
+    </ion-item>
+    <br />
+    <ion-item lines="none">
+      <ion-icon name="key" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">{{
+        "pages.account.creds.title" | translate
+      }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        label="{{ 'pages.account.creds.name' | translate }}"
+        labelPlacement="stacked"
+        autocomplete="off"
+        autofill="off"
+        type="text"
+        [(ngModel)]="name"
+        (ionFocus)="nameChanged = true"
+        (ngModelChange)="nameChanged = true"
+      ></ion-input>
+      @if (nameChanged) {
+        <ion-button
+          (click)="saveName()"
+          slot="end"
+          class="ion-align-self-center"
+        >
+          {{ "pages.account.creds.name.save" | translate }}
+        </ion-button>
+      }
+    </ion-item>
+    <ion-item>
+      <ion-input
+        label="{{ 'pages.account.creds.email' | translate }}"
+        labelPlacement="stacked"
+        autocomplete="off"
+        autofill="off"
+        type="email"
+        [(ngModel)]="email"
+        (ionFocus)="emailChanged = true"
+        (ngModelChange)="emailChanged = true"
+      ></ion-input>
+      @if (emailChanged) {
+        <ion-button
+          (click)="saveEmail()"
+          slot="end"
+          class="ion-align-self-center"
+        >
+          {{ "pages.account.creds.email.save" | translate }}
+        </ion-button>
+      }
+    </ion-item>
+    <ion-item>
+      <ion-input
+        label="{{ 'pages.account.creds.password' | translate }}"
+        labelPlacement="stacked"
+        autocomplete="new-password"
+        autofill="off"
+        type="password"
+        [(ngModel)]="password"
+        (ionFocus)="password = ''; passwordChanged = true"
+        (ngModelChange)="passwordChanged = true"
+      ></ion-input>
+    </ion-item>
+    @if (passwordChanged) {
+      <ion-item>
+        <ion-input
+          label="{{ 'pages.account.creds.password.confirm' | translate }}"
+          labelPlacement="stacked"
+          autocomplete="new-password"
+          autofill="off"
+          type="password"
+          [(ngModel)]="confirmPassword"
+        ></ion-input>
+        <ion-button
+          (click)="savePassword()"
+          slot="end"
+          class="ion-align-self-center"
+        >
+          {{ "pages.account.creds.password.save" | translate }}
+        </ion-button>
+      </ion-item>
     }
-  </ion-item>
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.account.creds.email' | translate }}"
-      labelPlacement="stacked"
-      autocomplete="off"
-      autofill="off"
-      type="email"
-      [(ngModel)]="email"
-      (ionFocus)="emailChanged = true"
-      (ngModelChange)="emailChanged = true"
-    ></ion-input>
-    @if (emailChanged) {
-    <ion-button (click)="saveEmail()" slot="end" class="ion-align-self-center">
-      {{ 'pages.account.creds.email.save' | translate }}
-    </ion-button>
-    }
-  </ion-item>
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.account.creds.password' | translate }}"
-      labelPlacement="stacked"
-      autocomplete="new-password"
-      autofill="off"
-      type="password"
-      [(ngModel)]="password"
-      (ionFocus)="password = ''; passwordChanged = true;"
-      (ngModelChange)="passwordChanged = true;"
-    ></ion-input>
-  </ion-item>
-  @if (passwordChanged) {
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.account.creds.password.confirm' | translate }}"
-      labelPlacement="stacked"
-      autocomplete="new-password"
-      autofill="off"
-      type="password"
-      [(ngModel)]="confirmPassword"
-    ></ion-input>
+    <br />
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>{{ "pages.account.creds.instructions" | translate }}</p>
+      </ion-label>
+    </ion-item>
+    <br /><br />
+    <ion-item lines="none">
+      <ion-icon name="stats-chart" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">{{
+        "pages.account.stats.title" | translate
+      }}</ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label>
+        <h2>{{ "pages.account.stats.recipeCount" | translate }}</h2>
+        <p>{{ myStats.recipeCount }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label>
+        <h2>{{ "pages.account.stats.recipeImageCount" | translate }}</h2>
+        <p>{{ myStats.recipeImageCount }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label>
+        <h2>{{ "pages.account.stats.messageCount" | translate }}</h2>
+        <p>{{ myStats.messageCount }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label>
+        <h2>{{ "pages.account.stats.createdAt" | translate }}</h2>
+        <p>{{ formatDate(myStats.createdAt) }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label>
+        <h2>{{ "pages.account.stats.lastLogin" | translate }}</h2>
+        <p>{{ formatDate(myStats.lastLogin || myStats.createdAt) }}</p>
+      </ion-label>
+    </ion-item>
+    <br /><br />
+    <ion-item lines="none">
+      <ion-icon name="heart" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">{{
+        "pages.account.bonus.title" | translate
+      }}</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>
+          <a [routerLink]="contributePath">
+            {{ "pages.account.bonus.description" | translate }}
+          </a>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">
+        <h2>{{ "pages.account.bonus.highResImages" | translate }}</h2>
+        @if (capabilitySubscriptions["highResImages"]?.enabled) {
+          <p>{{ "pages.account.bonus.enabled" | translate }}</p>
+        }
+        @if (!capabilitySubscriptions["highResImages"]?.enabled) {
+          <p>{{ "pages.account.bonus.notEnabled" | translate }}</p>
+        }
+        @if (capabilitySubscriptions["highResImages"]) {
+          <p>
+            @if (
+              capabilitySubscriptions["highResImages"].expires &&
+              capabilitySubscriptions["highResImages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpired"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["highResImages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["highResImages"].expires &&
+              !capabilitySubscriptions["highResImages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpires"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["highResImages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (!capabilitySubscriptions["highResImages"].expires) {
+              <span>
+                {{ "pages.account.bonus.subscriptionNeverExpires" | translate }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["highResImages"].expires &&
+              capabilitySubscriptions["highResImages"].enabled
+            ) {
+              <span>
+                {{ "pages.account.bonus.automaticRenewal" | translate }}
+              </span>
+            }
+          </p>
+        }
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">
+        <h2>{{ "pages.account.bonus.multipleImages" | translate }}</h2>
+        @if (capabilitySubscriptions["multipleImages"]?.enabled) {
+          <p>{{ "pages.account.bonus.enabled" | translate }}</p>
+        }
+        @if (!capabilitySubscriptions["multipleImages"]?.enabled) {
+          <p>{{ "pages.account.bonus.notEnabled" | translate }}</p>
+        }
+        @if (
+          capabilitySubscriptions["multipleImages"] &&
+          capabilitySubscriptions["multipleImages"].expired !== null
+        ) {
+          <p>
+            @if (
+              capabilitySubscriptions["multipleImages"].expires &&
+              capabilitySubscriptions["multipleImages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpired"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["multipleImages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["multipleImages"].expires &&
+              !capabilitySubscriptions["multipleImages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpires"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["multipleImages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (!capabilitySubscriptions["multipleImages"].expires) {
+              <span>
+                {{ "pages.account.bonus.subscriptionNeverExpires" | translate }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["multipleImages"].expires &&
+              capabilitySubscriptions["multipleImages"].enabled
+            ) {
+              <span>
+                {{ "pages.account.bonus.automaticRenewal" | translate }}
+              </span>
+            }
+          </p>
+        }
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-text-wrap">
+      <ion-label class="ion-text-wrap">
+        <h2>{{ "pages.account.bonus.assistantMoreMessages" | translate }}</h2>
+        @if (capabilitySubscriptions["assistantMoreMessages"]?.enabled) {
+          <p>{{ "pages.account.bonus.enabled" | translate }}</p>
+        }
+        @if (!capabilitySubscriptions["assistantMoreMessages"]?.enabled) {
+          <p>{{ "pages.account.bonus.notEnabled" | translate }}</p>
+        }
+        @if (
+          capabilitySubscriptions["assistantMoreMessages"] &&
+          capabilitySubscriptions["assistantMoreMessages"].expired !== null
+        ) {
+          <p>
+            @if (
+              capabilitySubscriptions["assistantMoreMessages"].expires &&
+              capabilitySubscriptions["assistantMoreMessages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpired"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["assistantMoreMessages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["assistantMoreMessages"].expires &&
+              !capabilitySubscriptions["assistantMoreMessages"].expired
+            ) {
+              <span>
+                {{
+                  "pages.account.bonus.subscriptionExpires"
+                    | translate
+                      : {
+                          date: capabilitySubscriptions["assistantMoreMessages"]
+                            .expires,
+                        }
+                }}
+              </span>
+            }
+            @if (!capabilitySubscriptions["assistantMoreMessages"].expires) {
+              <span>
+                {{ "pages.account.bonus.subscriptionNeverExpires" | translate }}
+              </span>
+            }
+            @if (
+              capabilitySubscriptions["assistantMoreMessages"].expires &&
+              capabilitySubscriptions["multipleImages"].enabled
+            ) {
+              <span>
+                {{ "pages.account.bonus.automaticRenewal" | translate }}
+              </span>
+            }
+          </p>
+        }
+      </ion-label>
+    </ion-item>
+    <br /><br />
+    <ion-item lines="none">
+      <ion-icon name="warning" color="danger" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        {{ "pages.account.dangerZone.title" | translate }}
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>
+          {{ "pages.account.dangerZone.warning1" | translate }}<br />
+          {{ "pages.account.dangerZone.warning2" | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
     <ion-button
-      (click)="savePassword()"
-      slot="end"
-      class="ion-align-self-center"
+      color="danger"
+      (click)="deleteAllRecipes()"
+      class="ion-margin-start ion-margin-top"
     >
-      {{ 'pages.account.creds.password.save' | translate }}
+      {{ "pages.account.dangerZone.deleteAllRecipes" | translate }}
     </ion-button>
-  </ion-item>
-  }
-  <br />
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>{{ 'pages.account.creds.instructions' | translate }}</p>
-    </ion-label>
-  </ion-item>
-  <br /><br />
-  <ion-item lines="none">
-    <ion-icon name="stats-chart" slot="start"></ion-icon>
-    <ion-label class="ion-text-wrap"
-      >{{ 'pages.account.stats.title' | translate }}</ion-label
+    <br />
+    <ion-button
+      color="danger"
+      (click)="deleteAccount()"
+      class="ion-margin-start ion-margin-top"
     >
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <h2>{{ 'pages.account.stats.recipeCount' | translate }}</h2>
-      <p>{{myStats.recipeCount}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <h2>{{ 'pages.account.stats.recipeImageCount' | translate }}</h2>
-      <p>{{myStats.recipeImageCount}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <h2>{{ 'pages.account.stats.messageCount' | translate }}</h2>
-      <p>{{myStats.messageCount}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <h2>{{ 'pages.account.stats.createdAt' | translate }}</h2>
-      <p>{{formatDate(myStats.createdAt)}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <h2>{{ 'pages.account.stats.lastLogin' | translate }}</h2>
-      <p>{{formatDate(myStats.lastLogin || myStats.createdAt)}}</p>
-    </ion-label>
-  </ion-item>
-  <br /><br />
-  <ion-item lines="none">
-    <ion-icon name="heart" slot="start"></ion-icon>
-    <ion-label class="ion-text-wrap"
-      >{{ 'pages.account.bonus.title' | translate }}</ion-label
-    >
-  </ion-item>
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>
-        <a [routerLink]="contributePath">
-          {{ 'pages.account.bonus.description' | translate }}
-        </a>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label class="ion-text-wrap">
-      <h2>{{ 'pages.account.bonus.highResImages' | translate }}</h2>
-      @if (capabilitySubscriptions['highResImages']?.enabled) {
-      <p>{{ 'pages.account.bonus.enabled' | translate }}</p>
-      } @if (!capabilitySubscriptions['highResImages']?.enabled) {
-      <p>{{ 'pages.account.bonus.notEnabled' | translate }}</p>
-      } @if (capabilitySubscriptions['highResImages']) {
-      <p>
-        @if (capabilitySubscriptions['highResImages'].expires &&
-        capabilitySubscriptions['highResImages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date:
-          capabilitySubscriptions['highResImages'].expires} }}
-        </span>
-        } @if (capabilitySubscriptions['highResImages'].expires &&
-        !capabilitySubscriptions['highResImages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
-          capabilitySubscriptions['highResImages'].expires} }}
-        </span>
-        } @if (!capabilitySubscriptions['highResImages'].expires) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
-        </span>
-        } @if (capabilitySubscriptions['highResImages'].expires &&
-        capabilitySubscriptions['highResImages'].enabled) {
-        <span> {{ 'pages.account.bonus.automaticRenewal' | translate }} </span>
-        }
-      </p>
-      }
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label class="ion-text-wrap">
-      <h2>{{ 'pages.account.bonus.multipleImages' | translate }}</h2>
-      @if (capabilitySubscriptions['multipleImages']?.enabled) {
-      <p>{{ 'pages.account.bonus.enabled' | translate }}</p>
-      } @if (!capabilitySubscriptions['multipleImages']?.enabled) {
-      <p>{{ 'pages.account.bonus.notEnabled' | translate }}</p>
-      } @if (capabilitySubscriptions['multipleImages'] &&
-      capabilitySubscriptions['multipleImages'].expired !== null) {
-      <p>
-        @if (capabilitySubscriptions['multipleImages'].expires &&
-        capabilitySubscriptions['multipleImages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date:
-          capabilitySubscriptions['multipleImages'].expires} }}
-        </span>
-        } @if (capabilitySubscriptions['multipleImages'].expires &&
-        !capabilitySubscriptions['multipleImages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
-          capabilitySubscriptions['multipleImages'].expires} }}
-        </span>
-        } @if (!capabilitySubscriptions['multipleImages'].expires) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
-        </span>
-        } @if (capabilitySubscriptions['multipleImages'].expires &&
-        capabilitySubscriptions['multipleImages'].enabled) {
-        <span> {{ 'pages.account.bonus.automaticRenewal' | translate }} </span>
-        }
-      </p>
-      }
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label class="ion-text-wrap">
-      <h2>{{ 'pages.account.bonus.assistantMoreMessages' | translate }}</h2>
-      @if (capabilitySubscriptions['assistantMoreMessages']?.enabled) {
-      <p>{{ 'pages.account.bonus.enabled' | translate }}</p>
-      } @if (!capabilitySubscriptions['assistantMoreMessages']?.enabled) {
-      <p>{{ 'pages.account.bonus.notEnabled' | translate }}</p>
-      } @if (capabilitySubscriptions['assistantMoreMessages'] &&
-      capabilitySubscriptions['assistantMoreMessages'].expired !== null) {
-      <p>
-        @if (capabilitySubscriptions['assistantMoreMessages'].expires &&
-        capabilitySubscriptions['assistantMoreMessages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date:
-          capabilitySubscriptions['assistantMoreMessages'].expires} }}
-        </span>
-        } @if (capabilitySubscriptions['assistantMoreMessages'].expires &&
-        !capabilitySubscriptions['assistantMoreMessages'].expired) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
-          capabilitySubscriptions['assistantMoreMessages'].expires} }}
-        </span>
-        } @if (!capabilitySubscriptions['assistantMoreMessages'].expires) {
-        <span>
-          {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
-        </span>
-        } @if (capabilitySubscriptions['assistantMoreMessages'].expires &&
-        capabilitySubscriptions['multipleImages'].enabled) {
-        <span> {{ 'pages.account.bonus.automaticRenewal' | translate }} </span>
-        }
-      </p>
-      }
-    </ion-label>
-  </ion-item>
-  <br /><br />
-  <ion-item lines="none">
-    <ion-icon name="warning" color="danger" slot="start"></ion-icon>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.account.dangerZone.title' | translate }}
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>
-        {{ 'pages.account.dangerZone.warning1' | translate }}<br />
-        {{ 'pages.account.dangerZone.warning2' | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-button
-    color="danger"
-    (click)="deleteAllRecipes()"
-    class="ion-margin-start ion-margin-top"
-  >
-    {{ 'pages.account.dangerZone.deleteAllRecipes' | translate }}
-  </ion-button>
-  <br />
-  <ion-button
-    color="danger"
-    (click)="deleteAccount()"
-    class="ion-margin-start ion-margin-top"
-  >
-    {{ 'pages.account.dangerZone.deleteAccount' | translate }}
-  </ion-button>
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>{{ 'pages.account.dangerZone.description' | translate }}</p>
-    </ion-label>
-  </ion-item>
-</ion-content>
+      {{ "pages.account.dangerZone.deleteAccount" | translate }}
+    </ion-button>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>{{ "pages.account.dangerZone.description" | translate }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-content>
 }

@@ -5,8 +5,10 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.shoppingList.title' | translate:{title: shoppingList?.title ||
-      ''} }}
+      {{
+        "pages.shoppingList.title"
+          | translate: { title: shoppingList?.title || "" }
+      }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -22,201 +24,278 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
-    @if (preferences[preferenceKeys.GroupCategories] &&
-    preferences[preferenceKeys.GroupSimilar]) {
-    <div>
-      @for (categoryTitle of categoryTitles; track categoryTitle) {
-      <div class="category-container">
-        <ion-list-header
-          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
-        >
-          <ion-title class="ion-no-padding">
-            {{ categoryTitle }} @if (!categoryTitleCollapsed[categoryTitle]) {
-            <ion-icon name="caret-down"></ion-icon>
-            } @if (categoryTitleCollapsed[categoryTitle]) {
-            <ion-icon name="caret-up"></ion-icon>
+    @if (
+      preferences[preferenceKeys.GroupCategories] &&
+      preferences[preferenceKeys.GroupSimilar]
+    ) {
+      <div>
+        @for (categoryTitle of categoryTitles; track categoryTitle) {
+          <div class="category-container">
+            <ion-list-header
+              (click)="
+                categoryTitleCollapsed[categoryTitle] =
+                  !categoryTitleCollapsed[categoryTitle]
+              "
+            >
+              <ion-title class="ion-no-padding">
+                {{ categoryTitle }}
+                @if (!categoryTitleCollapsed[categoryTitle]) {
+                  <ion-icon name="caret-down"></ion-icon>
+                }
+                @if (categoryTitleCollapsed[categoryTitle]) {
+                  <ion-icon name="caret-up"></ion-icon>
+                }
+              </ion-title>
+            </ion-list-header>
+            @if (!categoryTitleCollapsed[categoryTitle]) {
+              <div>
+                @for (
+                  group of groupsByCategoryTitle[categoryTitle];
+                  track group
+                ) {
+                  <div class="shopping-list-item">
+                    <shopping-list-group
+                      [group]="group"
+                      [categoryTitle]="categoryTitle"
+                      [groupTitleExpanded]="groupTitleExpanded"
+                      [showRecipeTitle]="
+                        preferences[preferenceKeys.ShowRecipeTitle]
+                      "
+                      [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+                      [showAddedBy]="
+                        preferences[preferenceKeys.ShowAddedBy] &&
+                        !!shoppingList?.collaboratorUsers?.length
+                      "
+                      (completeToggle)="completeItems($event, true)"
+                      (recategorize)="recategorizeItems($event[0], $event[1])"
+                    ></shopping-list-group>
+                  </div>
+                }
+              </div>
             }
-          </ion-title>
-        </ion-list-header>
-        @if (!categoryTitleCollapsed[categoryTitle]) {
-        <div>
-          @for (group of groupsByCategoryTitle[categoryTitle]; track group) {
+          </div>
+        }
+      </div>
+    }
+    @if (
+      !preferences[preferenceKeys.GroupCategories] &&
+      preferences[preferenceKeys.GroupSimilar]
+    ) {
+      <div>
+        @for (groupTitle of groupTitles; track groupTitle) {
           <div class="shopping-list-item">
             <shopping-list-group
-              [group]="group"
-              [categoryTitle]="categoryTitle"
+              [group]="{
+                title: groupTitle,
+                items: itemsByGroupTitle[groupTitle],
+              }"
               [groupTitleExpanded]="groupTitleExpanded"
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
+              [showAddedBy]="
+                preferences[preferenceKeys.ShowAddedBy] &&
+                !!shoppingList?.collaboratorUsers?.length
+              "
               (completeToggle)="completeItems($event, true)"
               (recategorize)="recategorizeItems($event[0], $event[1])"
             ></shopping-list-group>
           </div>
-          }
-        </div>
         }
       </div>
-      }
-    </div>
-    } @if (!preferences[preferenceKeys.GroupCategories] &&
-    preferences[preferenceKeys.GroupSimilar]) {
-    <div>
-      @for (groupTitle of groupTitles; track groupTitle) {
-      <div class="shopping-list-item">
-        <shopping-list-group
-          [group]="{ title: groupTitle, items: itemsByGroupTitle[groupTitle] }"
-          [groupTitleExpanded]="groupTitleExpanded"
-          [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
-          [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!shoppingList?.collaboratorUsers?.length"
-          (completeToggle)="completeItems($event, true)"
-          (recategorize)="recategorizeItems($event[0], $event[1])"
-        ></shopping-list-group>
-      </div>
-      }
-    </div>
-    } @if (preferences[preferenceKeys.GroupCategories] &&
-    !preferences[preferenceKeys.GroupSimilar]) {
-    <div>
-      @for (categoryTitle of categoryTitles; track categoryTitle) {
-      <div class="category-container">
-        <ion-list-header
-          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
-        >
-          <ion-title class="ion-no-padding">
-            {{ categoryTitle }} @if (!categoryTitleCollapsed[categoryTitle]) {
-            <ion-icon name="caret-down"></ion-icon>
-            } @if (categoryTitleCollapsed[categoryTitle]) {
-            <ion-icon name="caret-up"></ion-icon>
+    }
+    @if (
+      preferences[preferenceKeys.GroupCategories] &&
+      !preferences[preferenceKeys.GroupSimilar]
+    ) {
+      <div>
+        @for (categoryTitle of categoryTitles; track categoryTitle) {
+          <div class="category-container">
+            <ion-list-header
+              (click)="
+                categoryTitleCollapsed[categoryTitle] =
+                  !categoryTitleCollapsed[categoryTitle]
+              "
+            >
+              <ion-title class="ion-no-padding">
+                {{ categoryTitle }}
+                @if (!categoryTitleCollapsed[categoryTitle]) {
+                  <ion-icon name="caret-down"></ion-icon>
+                }
+                @if (categoryTitleCollapsed[categoryTitle]) {
+                  <ion-icon name="caret-up"></ion-icon>
+                }
+              </ion-title>
+            </ion-list-header>
+            @if (!categoryTitleCollapsed[categoryTitle]) {
+              <div>
+                @for (item of itemsByCategoryTitle[categoryTitle]; track item) {
+                  <div class="shopping-list-item">
+                    <shopping-list-item
+                      [id]="item.id"
+                      [title]="item.title"
+                      [completed]="item.completed"
+                      [recipeTitle]="
+                        (preferences[preferenceKeys.ShowRecipeTitle] &&
+                          item.recipe?.title) ||
+                        undefined
+                      "
+                      [createdAt]="
+                        (preferences[preferenceKeys.ShowAddedOn] &&
+                          item.createdAt) ||
+                        undefined
+                      "
+                      [ownerName]="
+                        (preferences[preferenceKeys.ShowAddedBy] &&
+                          shoppingList?.collaboratorUsers?.length &&
+                          item.user.name) ||
+                        undefined
+                      "
+                      (completeToggle)="completeItems([item], true)"
+                      (recategorize)="recategorizeItems([item], $event)"
+                    ></shopping-list-item>
+                  </div>
+                }
+              </div>
             }
-          </ion-title>
-        </ion-list-header>
-        @if (!categoryTitleCollapsed[categoryTitle]) {
-        <div>
-          @for (item of itemsByCategoryTitle[categoryTitle]; track item) {
+          </div>
+        }
+      </div>
+    }
+    @if (
+      !preferences[preferenceKeys.GroupCategories] &&
+      !preferences[preferenceKeys.GroupSimilar]
+    ) {
+      <div>
+        @for (item of items; track item) {
           <div class="shopping-list-item">
             <shopping-list-item
               [id]="item.id"
               [title]="item.title"
               [completed]="item.completed"
-              [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
-              [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
-              [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
+              [recipeTitle]="
+                (preferences[preferenceKeys.ShowRecipeTitle] &&
+                  item.recipe?.title) ||
+                undefined
+              "
+              [createdAt]="
+                (preferences[preferenceKeys.ShowAddedOn] && item.createdAt) ||
+                undefined
+              "
+              [ownerName]="
+                (preferences[preferenceKeys.ShowAddedBy] &&
+                  shoppingList?.collaboratorUsers?.length &&
+                  item.user.name) ||
+                undefined
+              "
               (completeToggle)="completeItems([item], true)"
               (recategorize)="recategorizeItems([item], $event)"
             ></shopping-list-item>
           </div>
-          }
-        </div>
         }
       </div>
-      }
-    </div>
-    } @if (!preferences[preferenceKeys.GroupCategories] &&
-    !preferences[preferenceKeys.GroupSimilar]) {
-    <div>
-      @for (item of items; track item) {
-      <div class="shopping-list-item">
-        <shopping-list-item
-          [id]="item.id"
-          [title]="item.title"
-          [completed]="item.completed"
-          [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
-          [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
-          [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
-          (completeToggle)="completeItems([item], true)"
-          (recategorize)="recategorizeItems([item], $event)"
-        ></shopping-list-item>
-      </div>
-      }
-    </div>
-    } @if (shoppingListItems?.length === 0) {
-    <null-state>
-      <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.shoppingList.nullState.1' | translate }}<br />
-          {{ 'pages.shoppingList.nullState.2' | translate }}
-          <br /><br />
-          <ion-button (click)="newShoppingListItem()">
-            <ion-icon name="add" slot="start"></ion-icon>
-            <ion-label>
-              {{ 'pages.shoppingList.nullState.add' | translate }}
-            </ion-label>
-          </ion-button>
-        </p>
-      </ion-label>
-    </null-state>
+    }
+    @if (shoppingListItems?.length === 0) {
+      <null-state>
+        <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            {{ "pages.shoppingList.nullState.1" | translate }}<br />
+            {{ "pages.shoppingList.nullState.2" | translate }}
+            <br /><br />
+            <ion-button (click)="newShoppingListItem()">
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>
+                {{ "pages.shoppingList.nullState.add" | translate }}
+              </ion-label>
+            </ion-button>
+          </p>
+        </ion-label>
+      </null-state>
     }
   </ion-list>
 
   <br />
 
   @if (recipeIds.length > 0) {
-  <ion-list>
-    <ion-item>
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.shoppingList.recipes' | translate }}
-      </ion-label>
-    </ion-item>
-    @for (recipeId of recipeIds; track recipeId) {
-    <ion-item button>
-      <ion-icon
-        class="delete-recipe"
-        name="trash"
-        slot="start"
-        (click)="removeRecipe(recipeId)"
-      ></ion-icon>
-      <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe!.id)">
-        {{ itemsByRecipeId[recipeId][0].recipe!.title }}
-      </ion-label>
-    </ion-item>
-    }
-  </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          {{ "pages.shoppingList.recipes" | translate }}
+        </ion-label>
+      </ion-item>
+      @for (recipeId of recipeIds; track recipeId) {
+        <ion-item button>
+          <ion-icon
+            class="delete-recipe"
+            name="trash"
+            slot="start"
+            (click)="removeRecipe(recipeId)"
+          ></ion-icon>
+          <ion-label
+            (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe!.id)"
+          >
+            {{ itemsByRecipeId[recipeId][0].recipe!.title }}
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
   }
 
   <br />
 
   @if (completedItems.length > 0) {
-  <ion-list>
-    <ion-item>
-      <ion-label> {{ 'pages.shoppingList.completed' | translate }} </ion-label>
-      <ion-button
-        color="primary"
-        slot="end"
-        size="small"
-        alt="Restore All"
-        (click)="completeItems(completedItems, false)"
-      >
-        <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button
-        color="danger"
-        slot="end"
-        size="small"
-        alt="Delete All"
-        (click)="removeItemsConfirm(completedItems)"
-      >
-        <ion-icon name="trash" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item>
-    @for (item of completedItems; track item) {
-    <shopping-list-item
-      [id]="item.id"
-      [title]="item.title"
-      [completed]="item.completed"
-      [recipeTitle]="(preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title) || undefined"
-      [createdAt]="(preferences[preferenceKeys.ShowAddedOn] && item.createdAt) || undefined"
-      [ownerName]="(preferences[preferenceKeys.ShowAddedBy] && shoppingList?.collaboratorUsers?.length && item.user.name) || undefined"
-      [showDeleteButton]="true"
-      [hideRecategorizeButton]="true"
-      (completeToggle)="completeItems([item], false)"
-      (recategorize)="recategorizeItems([item], $event)"
-      (deleteClick)="removeItems([item])"
-    ></shopping-list-item>
-    }
-  </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          {{ "pages.shoppingList.completed" | translate }}
+        </ion-label>
+        <ion-button
+          color="primary"
+          slot="end"
+          size="small"
+          alt="Restore All"
+          (click)="completeItems(completedItems, false)"
+        >
+          <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button
+          color="danger"
+          slot="end"
+          size="small"
+          alt="Delete All"
+          (click)="removeItemsConfirm(completedItems)"
+        >
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+      @for (item of completedItems; track item) {
+        <shopping-list-item
+          [id]="item.id"
+          [title]="item.title"
+          [completed]="item.completed"
+          [recipeTitle]="
+            (preferences[preferenceKeys.ShowRecipeTitle] &&
+              item.recipe?.title) ||
+            undefined
+          "
+          [createdAt]="
+            (preferences[preferenceKeys.ShowAddedOn] && item.createdAt) ||
+            undefined
+          "
+          [ownerName]="
+            (preferences[preferenceKeys.ShowAddedBy] &&
+              shoppingList?.collaboratorUsers?.length &&
+              item.user.name) ||
+            undefined
+          "
+          [showDeleteButton]="true"
+          [hideRecategorizeButton]="true"
+          (completeToggle)="completeItems([item], false)"
+          (recategorize)="recategorizeItems([item], $event)"
+          (deleteClick)="removeItems([item])"
+        ></shopping-list-item>
+      }
+    </ion-list>
   }
 
   <br />

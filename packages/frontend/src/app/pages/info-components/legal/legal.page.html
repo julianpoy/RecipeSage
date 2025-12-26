@@ -4,45 +4,46 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.legal.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.legal.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" #content>
   @if (isSelfHost) {
-  <div>
-    <h1>
-      Note: Some parts of this page apply to software hosted at RecipeSage.com.
-    </h1>
-    Keep in mind that all RecipeSage images, branding, naming, code, etc. are
-    not licensed for commercial or non-personal use. If you would like to use
-    RecipeSage or any of it's associated materials for commercial or
-    non-personal use, please feel free to contact me.<br />
-    You can also self host your own personal, non-commercial copy based on the
-    configurations provided at
-    <a
-      href="https://github.com/julianpoy/recipesage-selfhosted"
-      target="_blank"
-      rel="noreferrer noopener"
-      >https://github.com/julianpoy/recipesage-selfhosted</a
-    >
-    Again, this is a self hosted version of the site, so RecipeSage official may
-    not be able to back some of the commitments below in regards to the self
-    hosted version. RecipeSage expects that all self hosted instances follow the
-    guidelines below, but RecipeSage cannot be held responsible for self hosted
-    versions.<br />
-    Additionally, all terms from the self host license at
-    <a
-      href="https://github.com/julianpoy/recipesage-selfhosted"
-      target="_blank"
-      rel="noreferrer noopener"
-      >https://github.com/julianpoy/recipesage-selfhosted</a
-    >
-    apply to users &amp; self host server owners.
-    <br />
-    <br />
-    <br />
-  </div>
+    <div>
+      <h1>
+        Note: Some parts of this page apply to software hosted at
+        RecipeSage.com.
+      </h1>
+      Keep in mind that all RecipeSage images, branding, naming, code, etc. are
+      not licensed for commercial or non-personal use. If you would like to use
+      RecipeSage or any of it's associated materials for commercial or
+      non-personal use, please feel free to contact me.<br />
+      You can also self host your own personal, non-commercial copy based on the
+      configurations provided at
+      <a
+        href="https://github.com/julianpoy/recipesage-selfhosted"
+        target="_blank"
+        rel="noreferrer noopener"
+        >https://github.com/julianpoy/recipesage-selfhosted</a
+      >
+      Again, this is a self hosted version of the site, so RecipeSage official
+      may not be able to back some of the commitments below in regards to the
+      self hosted version. RecipeSage expects that all self hosted instances
+      follow the guidelines below, but RecipeSage cannot be held responsible for
+      self hosted versions.<br />
+      Additionally, all terms from the self host license at
+      <a
+        href="https://github.com/julianpoy/recipesage-selfhosted"
+        target="_blank"
+        rel="noreferrer noopener"
+        >https://github.com/julianpoy/recipesage-selfhosted</a
+      >
+      apply to users &amp; self host server owners.
+      <br />
+      <br />
+      <br />
+    </div>
   }
 
   <p>

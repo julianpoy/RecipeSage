@@ -4,35 +4,35 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.aboutDetails.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.aboutDetails.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <p>
-    <b> {{ 'pages.aboutDetails.1.title' | translate }} </b>
+    <b> {{ "pages.aboutDetails.1.title" | translate }} </b>
   </p>
-  <p>{{ 'pages.aboutDetails.1.1' | translate }}</p>
-  <p>{{ 'pages.aboutDetails.1.2' | translate }}</p>
+  <p>{{ "pages.aboutDetails.1.1" | translate }}</p>
+  <p>{{ "pages.aboutDetails.1.2" | translate }}</p>
 
   <br />
   <p>
-    <b> {{ 'pages.aboutDetails.2.title' | translate }} </b>
+    <b> {{ "pages.aboutDetails.2.title" | translate }} </b>
   </p>
-  <p>{{ 'pages.aboutDetails.2.1' | translate }}</p>
-  <p>{{ 'pages.aboutDetails.2.2' | translate }}</p>
+  <p>{{ "pages.aboutDetails.2.1" | translate }}</p>
+  <p>{{ "pages.aboutDetails.2.2" | translate }}</p>
   <p>
-    {{ 'pages.aboutDetails.2.3' | translate }}
+    {{ "pages.aboutDetails.2.3" | translate }}
 
     <a (click)="$event.preventDefault(); goToDonate()" href="">
-      {{ 'pages.aboutDetails.contribute' | translate }}
+      {{ "pages.aboutDetails.contribute" | translate }}
     </a>
   </p>
 
   <br />
 
   <p>
-    <b> {{ 'pages.aboutDetails.social' | translate }} </b>
+    <b> {{ "pages.aboutDetails.social" | translate }} </b>
   </p>
   <social-links></social-links>
 </ion-content>

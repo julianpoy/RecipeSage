@@ -1,9 +1,8 @@
 <ion-header>
   <ion-toolbar color="nav">
-    <ion-title
-      >{{ 'pages.manageLabelModal.title' | translate:{name:label.title}
-      }}</ion-title
-    >
+    <ion-title>{{
+      "pages.manageLabelModal.title" | translate: { name: label.title }
+    }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -17,25 +16,32 @@
   <ion-item lines="none">
     <ion-icon name="pricetag" slot="start"></ion-icon>
     <ion-label>
-      <h2 class="ion-text-capitalize">{{label.title}}</h2>
+      <h2 class="ion-text-capitalize">{{ label.title }}</h2>
       <p>
         <span>
-          {{ 'pages.manageLabelModal.recipeCount' |
-          translate:{count:label._count.recipeLabels} }}
+          {{
+            "pages.manageLabelModal.recipeCount"
+              | translate: { count: label._count.recipeLabels }
+          }}
         </span>
         <br />
         @if (label.labelGroup) {
-        <span>
-          {{ 'pages.manageLabelModal.group' |
-          translate:{title:label.labelGroup.title} }}
-        </span>
-        } @if (!label.labelGroup) {
-        <span> {{ 'pages.manageLabelModal.noGroup' | translate }} </span>
+          <span>
+            {{
+              "pages.manageLabelModal.group"
+                | translate: { title: label.labelGroup.title }
+            }}
+          </span>
+        }
+        @if (!label.labelGroup) {
+          <span> {{ "pages.manageLabelModal.noGroup" | translate }} </span>
         }
         <br />
         <span>
-          {{ 'pages.manageLabelModal.createdAt' |
-          translate:{dateString:createdAt} }}
+          {{
+            "pages.manageLabelModal.createdAt"
+              | translate: { dateString: createdAt }
+          }}
         </span>
         <br />
       </p>
@@ -44,34 +50,34 @@
 
   <br /><br />
 
-  {{ 'pages.manageLabelModal.warning' | translate }}
+  {{ "pages.manageLabelModal.warning" | translate }}
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="view()">
     <ion-icon name="folder-open" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.manageLabelModal.view' | translate }}</ion-label>
+    <ion-label>{{ "pages.manageLabelModal.view" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" (click)="rename()">
     <ion-icon name="create" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.manageLabelModal.rename' | translate }}</ion-label>
+    <ion-label>{{ "pages.manageLabelModal.rename" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" (click)="merge()">
     <ion-icon name="git-network" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.manageLabelModal.merge' | translate }}</ion-label>
+    <ion-label>{{ "pages.manageLabelModal.merge" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" color="danger" (click)="delete()">
     <ion-icon name="trash" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.manageLabelModal.delete' | translate }}</ion-label>
+    <ion-label>{{ "pages.manageLabelModal.delete" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" color="danger" (click)="deleteWithRecipes()">
     <ion-icon name="trash" slot="start"></ion-icon>
-    <ion-label
-      >{{ 'pages.manageLabelModal.deleteWithRecipes' | translate }}</ion-label
-    >
+    <ion-label>{{
+      "pages.manageLabelModal.deleteWithRecipes" | translate
+    }}</ion-label>
   </ion-button>
 </ion-footer>

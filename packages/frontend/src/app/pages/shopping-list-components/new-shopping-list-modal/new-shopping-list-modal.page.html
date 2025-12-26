@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.newShoppingList.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.newShoppingList.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -38,9 +38,10 @@
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
       @if (selectedCollaboratorIds.length === 0) {
-      <span> {{ 'pages.newShoppingList.create' | translate }} </span>
-      } @if (selectedCollaboratorIds.length > 0) {
-      <span> {{ 'pages.newShoppingList.createAndShare' | translate }} </span>
+        <span> {{ "pages.newShoppingList.create" | translate }} </span>
+      }
+      @if (selectedCollaboratorIds.length > 0) {
+        <span> {{ "pages.newShoppingList.createAndShare" | translate }} </span>
       }
     </ion-label>
   </ion-button>

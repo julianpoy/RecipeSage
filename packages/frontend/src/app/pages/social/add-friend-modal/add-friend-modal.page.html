@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.addFriendModal.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.addFriendModal.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -16,7 +16,7 @@
   ></select-user>
   <ion-item>
     <ion-label>
-      <p>{{ 'pages.addFriendModal.profileWarning' | translate }}</p>
+      <p>{{ "pages.addFriendModal.profileWarning" | translate }}</p>
     </ion-label>
   </ion-item>
 </ion-content>
@@ -24,10 +24,10 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.addFriendModal.send' | translate }} </ion-label>
+    <ion-label> {{ "pages.addFriendModal.send" | translate }} </ion-label>
   </ion-button>
   <ion-button expand="block" (click)="open()" [disabled]="!recipientId">
     <ion-icon name="open" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.addFriendModal.open' | translate }} </ion-label>
+    <ion-label> {{ "pages.addFriendModal.open" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

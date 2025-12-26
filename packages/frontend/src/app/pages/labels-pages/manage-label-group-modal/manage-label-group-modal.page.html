@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-title>
-      {{ 'pages.manageLabelGroupModal.title' | translate }}
+      {{ "pages.manageLabelGroupModal.title" | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -17,8 +17,12 @@
     <ion-input
       labelPlacement="stacked"
       label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
-      placeholder="{{ 'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate }}"
-      helperText="{{ 'pages.manageLabelGroupModal.groupTitleHint' | translate }}"
+      placeholder="{{
+        'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate
+      }}"
+      helperText="{{
+        'pages.manageLabelGroupModal.groupTitleHint' | translate
+      }}"
       (ionInput)="title = $event.detail.value || ''"
       [value]="title"
     ></ion-input>
@@ -41,9 +45,9 @@
 
   <ion-item lines="none">
     <ion-label>
-      {{ 'pages.manageLabelGroupModal.labels' | translate }}
+      {{ "pages.manageLabelGroupModal.labels" | translate }}
       <p class="ion-text-wrap">
-        {{ 'pages.manageLabelGroupModal.labelsHint' | translate }}
+        {{ "pages.manageLabelGroupModal.labelsHint" | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -52,17 +56,21 @@
     [selectedItems]="mapLabelsToSelectableItems(selectedLabels)"
     [items]="mapLabelsToSelectableItems(ungroupedLabels)"
     (selectedItemsChange)="selectedLabelsChange($event)"
-    noSelectedItemsText="{{ 'pages.manageLabelGroupModal.labels.noSelectedItems' | translate }}"
+    noSelectedItemsText="{{
+      'pages.manageLabelGroupModal.labels.noSelectedItems' | translate
+    }}"
     noItemsText="{{ 'pages.manageLabelGroupModal.labels.noItems' | translate }}"
-    searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
+    searchPlaceholderText="{{
+      'pages.manageLabelGroupModal.labels.search' | translate
+    }}"
   ></select-multiple-items>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button (click)="save()" [disabled]="!title.length" expand="block">
-    {{ 'generic.save' | translate }}
+    {{ "generic.save" | translate }}
   </ion-button>
   <ion-button color="danger" (click)="delete()" expand="block">
-    {{ 'generic.delete' | translate }}
+    {{ "generic.delete" | translate }}
   </ion-button>
 </ion-footer>

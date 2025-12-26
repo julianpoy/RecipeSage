@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ 'pages.addRecipeToMealPlanModal.title' | translate }}
+      {{ "pages.addRecipeToMealPlanModal.title" | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -14,44 +14,51 @@
 
 <ion-content class="ion-padding">
   @if (!selectedMealPlan) {
-  <p>{{ 'pages.addRecipeToMealPlanModal.instructions1' | translate }}</p>
-  } @if (!mealPlans) {
-  <p>{{ 'pages.addRecipeToMealPlanModal.loading' | translate }}</p>
-  } @if (mealPlans && mealPlans.length > 0) {
-  <ion-item>
-    <ion-select
-      label="{{ 'pages.addRecipeToMealPlanModal.selectDestination' | translate }}"
-      [(ngModel)]="selectedMealPlan"
-      (ngModelChange)="selectedMealPlan && loadMealPlan(selectedMealPlan.id)"
-      okText="{{ 'generic.ok' | translate }}"
-      cancelText="{{ 'generic.cancel' | translate }}"
-    >
-      @for (mealPlan of mealPlans; track mealPlan) {
-      <ion-select-option [value]="mealPlan"
-        >{{ mealPlan.title }}</ion-select-option
+    <p>{{ "pages.addRecipeToMealPlanModal.instructions1" | translate }}</p>
+  }
+  @if (!mealPlans) {
+    <p>{{ "pages.addRecipeToMealPlanModal.loading" | translate }}</p>
+  }
+  @if (mealPlans && mealPlans.length > 0) {
+    <ion-item>
+      <ion-select
+        label="{{
+          'pages.addRecipeToMealPlanModal.selectDestination' | translate
+        }}"
+        [(ngModel)]="selectedMealPlan"
+        (ngModelChange)="selectedMealPlan && loadMealPlan(selectedMealPlan.id)"
+        okText="{{ 'generic.ok' | translate }}"
+        cancelText="{{ 'generic.cancel' | translate }}"
       >
-      }
-    </ion-select>
-  </ion-item>
-  } @if (mealPlans && mealPlans.length === 0) {
-  <div (click)="createMealPlan()">
-    <p>
-      {{ 'pages.addRecipeToMealPlanModal.noMealPlans' | translate }}<br /><br />
-      <ion-button>
-        <ion-icon name="calendar" slot="start"></ion-icon>
-        <ion-label>
-          {{ 'pages.addRecipeToMealPlanModal.createMealPlan' | translate }}
-        </ion-label>
-      </ion-button>
-    </p>
-  </div>
-  } @if (selectedMealPlanItems) {
-  <div>
-    <meal-calendar
-      [mealPlanItems]="selectedMealPlanItems"
-      (selectedDaysChange)="selectedDays = $event"
-    ></meal-calendar>
-  </div>
+        @for (mealPlan of mealPlans; track mealPlan) {
+          <ion-select-option [value]="mealPlan">{{
+            mealPlan.title
+          }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+  }
+  @if (mealPlans && mealPlans.length === 0) {
+    <div (click)="createMealPlan()">
+      <p>
+        {{ "pages.addRecipeToMealPlanModal.noMealPlans" | translate
+        }}<br /><br />
+        <ion-button>
+          <ion-icon name="calendar" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.addRecipeToMealPlanModal.createMealPlan" | translate }}
+          </ion-label>
+        </ion-button>
+      </p>
+    </div>
+  }
+  @if (selectedMealPlanItems) {
+    <div>
+      <meal-calendar
+        [mealPlanItems]="selectedMealPlanItems"
+        (selectedDaysChange)="selectedDays = $event"
+      ></meal-calendar>
+    </div>
   }
 </ion-content>
 
@@ -62,16 +69,17 @@
       <ion-icon name="calendar" slot="start"></ion-icon>
       <ion-label>
         @if (isFormValid()) {
-        <span>{{ 'pages.addRecipeToMealPlanModal.add' | translate }}</span>
-        } @if (!selectedMealPlan) {
-        <span
-          >{{ 'pages.addRecipeToMealPlanModal.selectMealPlan' | translate
-          }}</span
-        >
-        } @if (selectedMealPlan && (!selectedDays[0] || !meal)) {
-        <span
-          >{{ 'pages.addRecipeToMealPlanModal.selectMeal' | translate }}</span
-        >
+          <span>{{ "pages.addRecipeToMealPlanModal.add" | translate }}</span>
+        }
+        @if (!selectedMealPlan) {
+          <span>{{
+            "pages.addRecipeToMealPlanModal.selectMealPlan" | translate
+          }}</span>
+        }
+        @if (selectedMealPlan && (!selectedDays[0] || !meal)) {
+          <span>{{
+            "pages.addRecipeToMealPlanModal.selectMeal" | translate
+          }}</span>
         }
       </ion-label>
     </ion-button>

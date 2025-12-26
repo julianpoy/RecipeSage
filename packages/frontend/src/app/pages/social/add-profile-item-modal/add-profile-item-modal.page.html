@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.addProfileItem.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.addProfileItem.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -12,128 +12,148 @@
 
 <ion-content class="ion-padding">
   @if (!itemType) {
-  <div>
-    <ion-item lines="none">
-      <ion-icon name="folder-open" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.addProfileItem.prompt' | translate }} </ion-label>
-    </ion-item>
-    <div class="ion-padding-start ion-padding-end">
-      <ion-radio-group (ionChange)="onItemTypeChange($event)">
-        <ion-item>
-          <ion-radio labelPlacement="end" justify="start" value="recipe">
-            {{ 'pages.addProfileItem.recipe' | translate }}
-          </ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-radio labelPlacement="end" justify="start" value="label">
-            {{ 'pages.addProfileItem.label' | translate }}
-          </ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-radio labelPlacement="end" justify="start" value="all-recipes">
-            {{ 'pages.addProfileItem.allRecipes' | translate }}
-          </ion-radio>
-        </ion-item>
-      </ion-radio-group>
+    <div>
+      <ion-item lines="none">
+        <ion-icon name="folder-open" slot="start"></ion-icon>
+        <ion-label> {{ "pages.addProfileItem.prompt" | translate }} </ion-label>
+      </ion-item>
+      <div class="ion-padding-start ion-padding-end">
+        <ion-radio-group (ionChange)="onItemTypeChange($event)">
+          <ion-item>
+            <ion-radio labelPlacement="end" justify="start" value="recipe">
+              {{ "pages.addProfileItem.recipe" | translate }}
+            </ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-radio labelPlacement="end" justify="start" value="label">
+              {{ "pages.addProfileItem.label" | translate }}
+            </ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-radio labelPlacement="end" justify="start" value="all-recipes">
+              {{ "pages.addProfileItem.allRecipes" | translate }}
+            </ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </div>
     </div>
-  </div>
-  } @if (itemType) {
-  <ion-item (click)="itemType = null" button>
-    <ion-icon name="folder-open" slot="start"></ion-icon>
-    <ion-label>
-      <h2>
-        {{ 'pages.addProfileItem.type' | translate }} @if (itemType ===
-        'recipe') {
-        <span> {{ 'pages.addProfileItem.type.recipe' | translate }} </span>
-        } @if (itemType === 'label') {
-        <span> {{ 'pages.addProfileItem.type.label' | translate }} </span>
-        } @if (itemType === 'all-recipes') {
-        <span> {{ 'pages.addProfileItem.type.allRecipes' | translate }} </span>
-        }
-      </h2>
-      <p>{{ 'pages.addProfileItem.change' | translate }}</p>
-    </ion-label>
-  </ion-item>
-  } @if ((itemType === 'recipe' || itemType === 'label') && !isItemSelected()) {
-  <ion-item class="ion-margin-top" lines="none">
-    @if (itemType === 'recipe') {
-    <ion-icon name="document-text" slot="start"></ion-icon>
-    } @if (itemType === 'label') {
-    <ion-icon name="pricetag" slot="start"></ion-icon>
-    }
-    <ion-label>
-      @if (itemType === 'recipe') {
-      <span> {{ 'pages.addProfileItem.selectRecipe' | translate }} </span>
-      } @if (itemType === 'label') {
-      <span> {{ 'pages.addProfileItem.selectLabel' | translate }} </span>
-      }
-    </ion-label>
-  </ion-item>
-  } @if (itemType === 'recipe') {
-  <div
-    [class.ion-padding-start]="!selectedRecipe"
-    [class.ion-padding-end]="!selectedRecipe"
-  >
-    <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
-  </div>
-  } @if (itemType === 'label') {
-  <div
-    [class.ion-padding-start]="!selectedLabel"
-    [class.ion-padding-end]="!selectedLabel"
-  >
-    <select-label [(selectedLabel)]="selectedLabel"></select-label>
-  </div>
-  } @if (isItemSelected() && !itemVisibility) {
-  <div>
-    <ion-item>
-      <ion-icon name="eye" slot="start"></ion-icon>
+  }
+  @if (itemType) {
+    <ion-item (click)="itemType = null" button>
+      <ion-icon name="folder-open" slot="start"></ion-icon>
       <ion-label>
-        {{ 'pages.addProfileItem.selectVisibility' | translate }}
+        <h2>
+          {{ "pages.addProfileItem.type" | translate }}
+          @if (itemType === "recipe") {
+            <span> {{ "pages.addProfileItem.type.recipe" | translate }} </span>
+          }
+          @if (itemType === "label") {
+            <span> {{ "pages.addProfileItem.type.label" | translate }} </span>
+          }
+          @if (itemType === "all-recipes") {
+            <span>
+              {{ "pages.addProfileItem.type.allRecipes" | translate }}
+            </span>
+          }
+        </h2>
+        <p>{{ "pages.addProfileItem.change" | translate }}</p>
       </ion-label>
     </ion-item>
-    <div class="ion-padding-start ion-padding-end">
-      <ion-radio-group
-        [value]="itemVisibility"
-        (ionChange)="onItemVisibilityChange($event)"
-      >
-        <ion-item>
-          <ion-radio labelPlacement="end" justify="start" value="public">
-            {{ 'pages.addProfileItem.selectVisibility.public' | translate }}
-          </ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-radio labelPlacement="end" justify="start" value="friends-only">
-            {{ 'pages.addProfileItem.selectVisibility.friends' | translate }}
-          </ion-radio>
-        </ion-item>
-      </ion-radio-group>
-    </div>
-  </div>
-  } @if (itemVisibility) {
-  <ion-item (click)="itemVisibility = null" button>
-    <ion-icon name="eye" slot="start"></ion-icon>
-    <ion-label>
-      <h2>
-        @if (itemVisibility === 'public') {
-        <span> {{ 'pages.addProfileItem.visibilityPublic' | translate }} </span>
-        } @if (itemVisibility === 'friends-only') {
-        <span>
-          {{ 'pages.addProfileItem.visibilityFriends' | translate }}
-        </span>
+  }
+  @if ((itemType === "recipe" || itemType === "label") && !isItemSelected()) {
+    <ion-item class="ion-margin-top" lines="none">
+      @if (itemType === "recipe") {
+        <ion-icon name="document-text" slot="start"></ion-icon>
+      }
+      @if (itemType === "label") {
+        <ion-icon name="pricetag" slot="start"></ion-icon>
+      }
+      <ion-label>
+        @if (itemType === "recipe") {
+          <span> {{ "pages.addProfileItem.selectRecipe" | translate }} </span>
         }
-      </h2>
-      <p>{{ 'pages.addProfileItem.change' | translate }}</p>
-    </ion-label>
-  </ion-item>
-  } @if (itemVisibility) {
-  <ion-item>
-    <ion-icon name="pricetag" slot="start"></ion-icon>
-    <ion-input
-      label="{{ 'pages.addProfileItem.itemTitle' | translate }}"
-      labelPlacement="stacked"
-      [(ngModel)]="itemTitle"
-    ></ion-input>
-  </ion-item>
+        @if (itemType === "label") {
+          <span> {{ "pages.addProfileItem.selectLabel" | translate }} </span>
+        }
+      </ion-label>
+    </ion-item>
+  }
+  @if (itemType === "recipe") {
+    <div
+      [class.ion-padding-start]="!selectedRecipe"
+      [class.ion-padding-end]="!selectedRecipe"
+    >
+      <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
+    </div>
+  }
+  @if (itemType === "label") {
+    <div
+      [class.ion-padding-start]="!selectedLabel"
+      [class.ion-padding-end]="!selectedLabel"
+    >
+      <select-label [(selectedLabel)]="selectedLabel"></select-label>
+    </div>
+  }
+  @if (isItemSelected() && !itemVisibility) {
+    <div>
+      <ion-item>
+        <ion-icon name="eye" slot="start"></ion-icon>
+        <ion-label>
+          {{ "pages.addProfileItem.selectVisibility" | translate }}
+        </ion-label>
+      </ion-item>
+      <div class="ion-padding-start ion-padding-end">
+        <ion-radio-group
+          [value]="itemVisibility"
+          (ionChange)="onItemVisibilityChange($event)"
+        >
+          <ion-item>
+            <ion-radio labelPlacement="end" justify="start" value="public">
+              {{ "pages.addProfileItem.selectVisibility.public" | translate }}
+            </ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-radio
+              labelPlacement="end"
+              justify="start"
+              value="friends-only"
+            >
+              {{ "pages.addProfileItem.selectVisibility.friends" | translate }}
+            </ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+    </div>
+  }
+  @if (itemVisibility) {
+    <ion-item (click)="itemVisibility = null" button>
+      <ion-icon name="eye" slot="start"></ion-icon>
+      <ion-label>
+        <h2>
+          @if (itemVisibility === "public") {
+            <span>
+              {{ "pages.addProfileItem.visibilityPublic" | translate }}
+            </span>
+          }
+          @if (itemVisibility === "friends-only") {
+            <span>
+              {{ "pages.addProfileItem.visibilityFriends" | translate }}
+            </span>
+          }
+        </h2>
+        <p>{{ "pages.addProfileItem.change" | translate }}</p>
+      </ion-label>
+    </ion-item>
+  }
+  @if (itemVisibility) {
+    <ion-item>
+      <ion-icon name="pricetag" slot="start"></ion-icon>
+      <ion-input
+        label="{{ 'pages.addProfileItem.itemTitle' | translate }}"
+        labelPlacement="stacked"
+        [(ngModel)]="itemTitle"
+      ></ion-input>
+    </ion-item>
   }
 </ion-content>
 
@@ -141,14 +161,14 @@
   <ion-item class="sharing-tos">
     <ion-label>
       <p>
-        <a href="/#/legal?scrollTo=sharing" (click)="cancel();">
-          {{ 'pages.addProfileItem.tos' | translate }}
+        <a href="/#/legal?scrollTo=sharing" (click)="cancel()">
+          {{ "pages.addProfileItem.tos" | translate }}
         </a>
       </p>
     </ion-label>
   </ion-item>
   <ion-button expand="block" (click)="done()" [disabled]="!isValid()">
     <ion-icon name="checkmark" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.addProfileItem.done' | translate }} </ion-label>
+    <ion-label> {{ "pages.addProfileItem.done" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

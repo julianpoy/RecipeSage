@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title
-      >{{ 'pages.shoppingListIgnoreModal.title' | translate }}</ion-title
-    >
+    <ion-title>{{
+      "pages.shoppingListIgnoreModal.title" | translate
+    }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="close()">
@@ -15,8 +15,8 @@
 <ion-content class="ion-padding">
   <ion-item class="ion-no-padding">
     <ion-label class="ion-text-wrap">
-      {{ 'pages.shoppingListIgnoreModal.description' | translate }}
-      <p>{{ 'pages.shoppingListIgnoreModal.instructions' | translate }}</p>
+      {{ "pages.shoppingListIgnoreModal.description" | translate }}
+      <p>{{ "pages.shoppingListIgnoreModal.instructions" | translate }}</p>
     </ion-label>
   </ion-item>
 
@@ -33,6 +33,6 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save(); close()">
     <ion-icon name="save" slot="start"></ion-icon>
-    <ion-label> {{ 'generic.save' | translate }} </ion-label>
+    <ion-label> {{ "generic.save" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

@@ -5,7 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.mealPlan.title' | translate:{name:mealPlan?.title} }}
+      {{ "pages.mealPlan.title" | translate: { name: mealPlan?.title } }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -19,18 +19,18 @@
 <ion-content>
   <br />
   @if (mealPlanItems) {
-  <div class="mealplan-flex">
-    <meal-calendar
-      [mealPlanItems]="mealPlanItems"
-      (selectedDaysChange)="setSelectedDays($event)"
-      (itemClicked)="itemClicked($event)"
-      (itemMoved)="itemMoved($event)"
-      (dayClicked)="dayClicked($event)"
-      (mealsByDateChange)="setMealsByDate($event)"
-      [enableEditing]="true"
-      mode="{{calendarMode}}"
-    ></meal-calendar>
-  </div>
+    <div class="mealplan-flex">
+      <meal-calendar
+        [mealPlanItems]="mealPlanItems"
+        (selectedDaysChange)="setSelectedDays($event)"
+        (itemClicked)="itemClicked($event)"
+        (itemMoved)="itemMoved($event)"
+        (dayClicked)="dayClicked($event)"
+        (mealsByDateChange)="setMealsByDate($event)"
+        [enableEditing]="true"
+        mode="{{ calendarMode }}"
+      ></meal-calendar>
+    </div>
   }
 
   <br /><br /><br /><br />

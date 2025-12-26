@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.share.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.share.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -14,168 +14,176 @@
   <ion-list>
     <ion-item lines="none">
       @if (recipe.images && recipe.images.length > 0) {
-      <ion-avatar slot="start">
-        <img src="{{ recipe.images[0].location }}" />
-      </ion-avatar>
+        <ion-avatar slot="start">
+          <img src="{{ recipe.images[0].location }}" />
+        </ion-avatar>
       }
       <ion-label>
         <h2>{{ recipe.title }}</h2>
-        <p class="ion-text-wrap">{{ 'pages.share.description' | translate }}</p>
+        <p class="ion-text-wrap">{{ "pages.share.description" | translate }}</p>
       </ion-label>
     </ion-item>
 
     <div class="share-method-container">
       <ion-segment (ionChange)="shareMethodChanged($event)" value="account">
         <ion-segment-button value="account">
-          {{ 'pages.share.byAccount' | translate }}
+          {{ "pages.share.byAccount" | translate }}
         </ion-segment-button>
         <ion-segment-button value="link">
-          {{ 'pages.share.byLink' | translate }}
+          {{ "pages.share.byLink" | translate }}
         </ion-segment-button>
         <ion-segment-button value="embed">
-          {{ 'pages.share.byEmbed' | translate }}
+          {{ "pages.share.byEmbed" | translate }}
         </ion-segment-button>
       </ion-segment>
     </div>
 
     <div>
-      @switch (shareMethod) { @case ('link') {
-      <copy-with-webshare
-        [webshareTitle]="recipe.title"
-        [webshareText]="recipe.title + ':'"
-        [webshareURL]="recipeURL || ''"
-        [copyText]="recipeURL || ''"
-      ></copy-with-webshare>
-      } @case ('embed') {
-      <div>
-        <br />
-        @if (recipePreviewURL) {
-        <div class="preview-settings-container">
-          <recipe-preview
-            [url]="recipePreviewURL"
-            [description]="'Embed Preview'"
-          ></recipe-preview>
-          <ion-item>
-            <ion-icon name="image" slot="start"></ion-icon>
-            <ion-toggle
-              [(ngModel)]="embedConfig.titleImage"
-              (ngModelChange)="updateEmbed(true);"
-            >
-              <div class="ion-text-wrap">
-                {{ 'pages.share.byEmbed.image' | translate }}
-              </div>
-            </ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="swap-horizontal" slot="start"></ion-icon>
-            <ion-toggle
-              [(ngModel)]="embedConfig.verticalInstrIng"
-              (ngModelChange)="updateEmbed(true);"
-            >
-              <div class="ion-text-wrap">
-                {{ 'pages.share.byEmbed.columns' | translate }}
-              </div>
-            </ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="print" slot="start"></ion-icon>
-            <ion-toggle
-              [(ngModel)]="embedConfig.showPrintButton"
-              (ngModelChange)="updateEmbed(true);"
-            >
-              <div class="ion-text-wrap">
-                {{ 'pages.share.byEmbed.print' | translate }}
-              </div>
-            </ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="link" slot="start"></ion-icon>
-            <ion-toggle
-              [(ngModel)]="embedConfig.hideSource"
-              (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"
-            >
-              <div class="ion-text-wrap">
-                {{ 'pages.share.byEmbed.sources' | translate }}
-              </div>
-            </ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="document-text" slot="start"></ion-icon>
-            <ion-toggle
-              [(ngModel)]="embedConfig.hideNotes"
-              (ngModelChange)="updateEmbed(true);"
-            >
-              <div class="ion-text-wrap">
-                {{ 'pages.share.byEmbed.notes' | translate }}
-              </div>
-            </ion-toggle>
-          </ion-item>
-        </div>
+      @switch (shareMethod) {
+        @case ("link") {
+          <copy-with-webshare
+            [webshareTitle]="recipe.title"
+            [webshareText]="recipe.title + ':'"
+            [webshareURL]="recipeURL || ''"
+            [copyText]="recipeURL || ''"
+          ></copy-with-webshare>
         }
-        <ion-item>
-          <ion-icon name="resize" slot="start"></ion-icon>
-          <ion-input
-            label="{{ 'pages.share.byEmbed.height' | translate }}"
-            type="number"
-            [(ngModel)]="embedHeight"
-            (ngModelChange)="updateEmbed();"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-icon name="resize" slot="start"></ion-icon>
-          <ion-input
-            label="{{ 'pages.share.byEmbed.width' | translate }}"
-            type="number"
-            [(ngModel)]="embedWidth"
-            (ngModelChange)="updateEmbed();"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-icon name="code-working" slot="start"></ion-icon>
-          <ion-toggle
-            [(ngModel)]="enableJSONLD"
-            (ngModelChange)="updateEmbed();"
-          >
-            <div class="ion-text-wrap">
-              {{ 'pages.share.byEmbed.jsonLD' | translate }}
-            </div>
-          </ion-toggle>
-        </ion-item>
-        <ion-item lines="none">
-          {{ 'pages.share.byEmbed.copy' | translate }}
-        </ion-item>
-        <copy-with-webshare
-          [disableWebshare]="true"
-          [copyText]="recipeEmbedCode || ''"
-        ></copy-with-webshare>
-      </div>
-      } @case ('account') {
-      <div class="ion-padding">
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            <p>{{ 'pages.share.byAccount.description' | translate }}</p>
-          </ion-label>
-        </ion-item>
-        <select-user-knownuser
-          [selectedUser]="selectedUser"
-          (selectedUserChange)="selectUser($event)"
-        ></select-user-knownuser>
-      </div>
-      } }
+        @case ("embed") {
+          <div>
+            <br />
+            @if (recipePreviewURL) {
+              <div class="preview-settings-container">
+                <recipe-preview
+                  [url]="recipePreviewURL"
+                  [description]="'Embed Preview'"
+                ></recipe-preview>
+                <ion-item>
+                  <ion-icon name="image" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.titleImage"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.image" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="swap-horizontal" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.verticalInstrIng"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.columns" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="print" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.showPrintButton"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.print" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="link" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.hideSource"
+                    (ngModelChange)="
+                      embedConfig.hideSourceURL = embedConfig.hideSource;
+                      updateEmbed(true)
+                    "
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.sources" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="document-text" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.hideNotes"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.notes" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+              </div>
+            }
+            <ion-item>
+              <ion-icon name="resize" slot="start"></ion-icon>
+              <ion-input
+                label="{{ 'pages.share.byEmbed.height' | translate }}"
+                type="number"
+                [(ngModel)]="embedHeight"
+                (ngModelChange)="updateEmbed()"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="resize" slot="start"></ion-icon>
+              <ion-input
+                label="{{ 'pages.share.byEmbed.width' | translate }}"
+                type="number"
+                [(ngModel)]="embedWidth"
+                (ngModelChange)="updateEmbed()"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="code-working" slot="start"></ion-icon>
+              <ion-toggle
+                [(ngModel)]="enableJSONLD"
+                (ngModelChange)="updateEmbed()"
+              >
+                <div class="ion-text-wrap">
+                  {{ "pages.share.byEmbed.jsonLD" | translate }}
+                </div>
+              </ion-toggle>
+            </ion-item>
+            <ion-item lines="none">
+              {{ "pages.share.byEmbed.copy" | translate }}
+            </ion-item>
+            <copy-with-webshare
+              [disableWebshare]="true"
+              [copyText]="recipeEmbedCode || ''"
+            ></copy-with-webshare>
+          </div>
+        }
+        @case ("account") {
+          <div class="ion-padding">
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">
+                <p>{{ "pages.share.byAccount.description" | translate }}</p>
+              </ion-label>
+            </ion-item>
+            <select-user-knownuser
+              [selectedUser]="selectedUser"
+              (selectedUserChange)="selectUser($event)"
+            ></select-user-knownuser>
+          </div>
+        }
+      }
     </div>
   </ion-list>
 </ion-content>
 
 <ion-footer class="ion-padding">
-  @if (shareMethod === 'account') {
-  <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
-    <ion-icon name="send" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.share.send' | translate }} </ion-label>
-  </ion-button>
-  } @if (shareMethod === 'link' || shareMethod === 'embed') {
-  <ion-button expand="block" (click)="cancel()">
-    <ion-icon name="close" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.share.close' | translate }} </ion-label>
-  </ion-button>
+  @if (shareMethod === "account") {
+    <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
+      <ion-icon name="send" slot="start"></ion-icon>
+      <ion-label> {{ "pages.share.send" | translate }} </ion-label>
+    </ion-button>
+  }
+  @if (shareMethod === "link" || shareMethod === "embed") {
+    <ion-button expand="block" (click)="cancel()">
+      <ion-icon name="close" slot="start"></ion-icon>
+      <ion-label> {{ "pages.share.close" | translate }} </ion-label>
+    </ion-button>
   }
 </ion-footer>

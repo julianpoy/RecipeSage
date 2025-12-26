@@ -4,9 +4,10 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
     @if (recipe.id) {
-    <ion-title>{{ 'pages.editRecipe.title.edit' | translate }}</ion-title>
-    } @if (!recipe.id) {
-    <ion-title>{{ 'pages.editRecipe.title.new' | translate }}</ion-title>
+      <ion-title>{{ "pages.editRecipe.title.edit" | translate }}</ion-title>
+    }
+    @if (!recipe.id) {
+      <ion-title>{{ "pages.editRecipe.title.new" | translate }}</ion-title>
     }
 
     <ion-buttons slot="end">
@@ -20,15 +21,15 @@
 <ion-content>
   <multi-image-upload
     [images]="images"
-    (onImageAdded)="markAsDirty();"
+    (onImageAdded)="markAsDirty()"
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
     @if (!recipe.id) {
-    <ion-button id="autoclip-popover-trigger">
-      <ion-icon name="cut-outline" slot="start"></ion-icon>
-      {{ 'pages.editRecipe.showClipOptions' | translate }}
-    </ion-button>
+      <ion-button id="autoclip-popover-trigger">
+        <ion-icon name="cut-outline" slot="start"></ion-icon>
+        {{ "pages.editRecipe.showClipOptions" | translate }}
+      </ion-button>
     }
     <ion-popover
       trigger="autoclip-popover-trigger"
@@ -46,25 +47,25 @@
               (click)="isAutoclipPopoverOpen = false; clipFromUrl()"
             >
               <ion-icon name="link" slot="start"></ion-icon>
-              {{ 'pages.editRecipe.autoclip' | translate }}
+              {{ "pages.editRecipe.autoclip" | translate }}
             </ion-item>
             <ion-item
               button
               (click)="isAutoclipPopoverOpen = false; clipFromText()"
             >
               <ion-icon name="document-text-outline" slot="start"></ion-icon>
-              {{ 'pages.editRecipe.clipText' | translate }}
+              {{ "pages.editRecipe.clipText" | translate }}
             </ion-item>
             <ion-item
               button
               (click)="isAutoclipPopoverOpen = false; scanImage()"
             >
               <ion-icon name="camera" slot="start"></ion-icon>
-              {{ 'pages.editRecipe.scanImage' | translate }}
+              {{ "pages.editRecipe.scanImage" | translate }}
             </ion-item>
             <ion-item button (click)="isAutoclipPopoverOpen = false; scanPDF()">
               <ion-icon name="document-text-outline" slot="start"></ion-icon>
-              {{ 'pages.editRecipe.scanPDF' | translate }}
+              {{ "pages.editRecipe.scanPDF" | translate }}
             </ion-item>
           </ion-list>
         </ion-content>
@@ -175,7 +176,7 @@
 
       <div class="rating">
         <div class="rating-title">
-          {{ 'pages.editRecipe.input.rating' | translate }}
+          {{ "pages.editRecipe.input.rating" | translate }}
         </div>
         <rating
           [rating]="recipe.rating"
@@ -234,64 +235,87 @@
 
     <ion-item lines="none">
       <ion-label>
-        <h2>{{ 'pages.editRecipe.input.labels' | translate }}</h2>
+        <h2>{{ "pages.editRecipe.input.labels" | translate }}</h2>
       </ion-label>
     </ion-item>
 
     <div class="label-input-group-container">
       <div class="label-input-group">
         @if (labelGroups.length) {
-        <ion-item lines="none">
-          <ion-label>
-            {{ 'pages.editRecipe.input.uncatLabels' | translate }}
-          </ion-label>
-        </ion-item>
+          <ion-item lines="none">
+            <ion-label>
+              {{ "pages.editRecipe.input.uncatLabels" | translate }}
+            </ion-label>
+          </ion-item>
         }
 
         <select-multiple-items
           [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, null))"
           [enableCreateNew]="true"
-          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, null))"
+          [selectedItems]="
+            mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, null))
+          "
           (selectedItemsChange)="selectedLabelsChange(null, $event)"
           (newItem)="addLabel($event, null)"
           [disallowedTitles]="disallowedTitleMap(labels, null)"
           [reserveSearchResultsHeight]="false"
-          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
-          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
-          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
+          noSelectedItemsText="{{
+            'pages.editRecipe.input.labels.noSelectedItems' | translate
+          }}"
+          noItemsText="{{
+            'pages.editRecipe.input.labels.noItems' | translate
+          }}"
+          searchPlaceholderText="{{
+            'pages.editRecipe.input.labels.search' | translate
+          }}"
         ></select-multiple-items>
       </div>
 
       @for (labelGroup of labelGroups; track labelGroup) {
-      <div class="label-input-group">
-        <ion-item lines="none">
-          <ion-label> {{labelGroup.title}} </ion-label>
-        </ion-item>
-        <select-multiple-items
-          [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, labelGroup.id))"
-          [enableCreateNew]="true"
-          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, labelGroup.id))"
-          (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
-          (newItem)="addLabel($event, labelGroup.id)"
-          [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
-          [reserveSearchResultsHeight]="false"
-          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
-          noItemsText="{{ 'pages.editRecipe.input.labels.noItemsGroup' | translate }}"
-          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
-        ></select-multiple-items>
-      </div>
+        <div class="label-input-group">
+          <ion-item lines="none">
+            <ion-label> {{ labelGroup.title }} </ion-label>
+          </ion-item>
+          <select-multiple-items
+            [items]="
+              mapLabelsToSelectableItems(
+                labelsForGroupId(labels, labelGroup.id)
+              )
+            "
+            [enableCreateNew]="true"
+            [selectedItems]="
+              mapLabelsToSelectableItems(
+                labelsForGroupId(selectedLabels, labelGroup.id)
+              )
+            "
+            (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
+            (newItem)="addLabel($event, labelGroup.id)"
+            [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
+            [reserveSearchResultsHeight]="false"
+            noSelectedItemsText="{{
+              'pages.editRecipe.input.labels.noSelectedItems' | translate
+            }}"
+            noItemsText="{{
+              'pages.editRecipe.input.labels.noItemsGroup' | translate
+            }}"
+            searchPlaceholderText="{{
+              'pages.editRecipe.input.labels.search' | translate
+            }}"
+          ></select-multiple-items>
+        </div>
       }
     </div>
 
     <div class="ion-padding">
       @if (recipe.id) {
-      <ion-button expand="block" (click)="save()" [disabled]="saving">
-        {{ 'pages.editRecipe.save' | translate }}
-      </ion-button>
-      } @if (!recipe.id) {
-      <ion-button expand="block" (click)="save()" [disabled]="saving">
-        {{ 'pages.editRecipe.create' | translate }}
-      </ion-button>
+        <ion-button expand="block" (click)="save()" [disabled]="saving">
+          {{ "pages.editRecipe.save" | translate }}
+        </ion-button>
+      }
+      @if (!recipe.id) {
+        <ion-button expand="block" (click)="save()" [disabled]="saving">
+          {{ "pages.editRecipe.create" | translate }}
+        </ion-button>
       }
     </div>
   </div>

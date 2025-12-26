@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.assistant.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.assistant.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button
@@ -26,114 +26,134 @@
     <null-state>
       <logo-icon virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
-        <h2>{{ 'pages.assistant.welcome.1' | translate }}</h2>
+        <h2>{{ "pages.assistant.welcome.1" | translate }}</h2>
         <br /><br />
         <p>
-          {{ 'pages.assistant.welcome.2' | translate }}<br />
-          {{ 'pages.assistant.welcome.3' | translate }}<br />
-          {{ 'pages.assistant.welcome.4' | translate }}<br />
+          {{ "pages.assistant.welcome.2" | translate }}<br />
+          {{ "pages.assistant.welcome.3" | translate }}<br />
+          {{ "pages.assistant.welcome.4" | translate }}<br />
           <a
             href="https://docs.recipesage.com/docs/tutorials/assistant/"
             target="_blank"
-            >{{ 'pages.assistant.welcome.documentation' | translate }}</a
+            >{{ "pages.assistant.welcome.documentation" | translate }}</a
           >
           <br /><br /><br />
         </p>
       </ion-label>
     </null-state>
     @for (message of messages; track trackByFn(i, message); let i = $index) {
-    <div
-      class="message"
-      [ngClass]="{'me': message.role === 'user', 'blue': message.role !== 'user' }"
-      [id]="'message-' + message.id"
-    >
-      @if (message.deservesDateDiff) {
-      <div class="time-divider">{{ message.dateDiff }}</div>
-      } @if (!message.recipeId) {
       <div
-        class="chat"
-        (click)="setSelectedChat(i)"
-        [innerHTML]="message.content"
-      ></div>
-      } @if (message.recipe && message.role !== 'user') {
-      <div class="recipe">
-        <!-- RECIPIENT -->
-        @if (message.recipe) {
-        <ion-item
-          (click)="openRecipe(message.recipe)"
-          lines="none"
-          button="true"
-        >
-          @if (message.recipe.recipeImages && message.recipe.recipeImages.length
-          > 0) {
-          <ion-avatar slot="start">
-            <img src="{{ message.recipe.recipeImages[0].image.location }}" />
-          </ion-avatar>
-          } @if (!message.recipe.recipeImages ||
-          message.recipe.recipeImages.length === 0) {
-          <ion-avatar class="assistant-recipe-image" slot="start">
-            <img src="assets/imgs/logo_green.png" />
-          </ion-avatar>
-          }
-          <ion-label>
-            <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
-            <p class="description">
-              {{ 'pages.messageThread.clickToOpen' | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-        } @if (!message.recipe) {
-        <ion-item (click)="setSelectedChat(i)" lines="none">
-          <ion-label>
-            <h2 class="ion-text-wrap">
-              {{ 'pages.messageThread.recipeDeleted' | translate }}
-            </h2>
-            <p class="description">
-              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
+        class="message"
+        [ngClass]="{
+          me: message.role === 'user',
+          blue: message.role !== 'user',
+        }"
+        [id]="'message-' + message.id"
+      >
+        @if (message.deservesDateDiff) {
+          <div class="time-divider">{{ message.dateDiff }}</div>
+        }
+        @if (!message.recipeId) {
+          <div
+            class="chat"
+            (click)="setSelectedChat(i)"
+            [innerHTML]="message.content"
+          ></div>
+        }
+        @if (message.recipe && message.role !== "user") {
+          <div class="recipe">
+            <!-- RECIPIENT -->
+            @if (message.recipe) {
+              <ion-item
+                (click)="openRecipe(message.recipe)"
+                lines="none"
+                button="true"
+              >
+                @if (
+                  message.recipe.recipeImages &&
+                  message.recipe.recipeImages.length > 0
+                ) {
+                  <ion-avatar slot="start">
+                    <img
+                      src="{{ message.recipe.recipeImages[0].image.location }}"
+                    />
+                  </ion-avatar>
+                }
+                @if (
+                  !message.recipe.recipeImages ||
+                  message.recipe.recipeImages.length === 0
+                ) {
+                  <ion-avatar class="assistant-recipe-image" slot="start">
+                    <img src="assets/imgs/logo_green.png" />
+                  </ion-avatar>
+                }
+                <ion-label>
+                  <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
+                  <p class="description">
+                    {{ "pages.messageThread.clickToOpen" | translate }}
+                  </p>
+                </ion-label>
+              </ion-item>
+            }
+            @if (!message.recipe) {
+              <ion-item (click)="setSelectedChat(i)" lines="none">
+                <ion-label>
+                  <h2 class="ion-text-wrap">
+                    {{ "pages.messageThread.recipeDeleted" | translate }}
+                  </h2>
+                  <p class="description">
+                    {{ "pages.messageThread.yourRecipeDeleted" | translate }}
+                  </p>
+                </ion-label>
+              </ion-item>
+            }
+          </div>
+        }
+        @if (message.recipe && message.role === "user") {
+          <div class="recipe">
+            <!-- SENDER -->
+            @if (message.recipe) {
+              <ion-item
+                (click)="openRecipe(message.recipe)"
+                lines="none"
+                button="true"
+              >
+                @if (
+                  message.recipe.recipeImages &&
+                  message.recipe.recipeImages.length > 0
+                ) {
+                  <ion-avatar slot="start">
+                    <img
+                      src="{{ message.recipe.recipeImages[0].image.location }}"
+                    />
+                  </ion-avatar>
+                }
+                <ion-label>
+                  <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
+                  <p class="description">
+                    {{ "pages.messageThread.recipeCopySent" | translate }}
+                  </p>
+                </ion-label>
+              </ion-item>
+            }
+            @if (!message.recipe) {
+              <ion-item (click)="setSelectedChat(i)" lines="none">
+                <ion-label>
+                  <h2 class="ion-text-wrap">
+                    {{ "pages.messageThread.recipeDeleted" | translate }}
+                  </h2>
+                  <p class="description">
+                    {{ "pages.messageThread.yourRecipeDeleted" | translate }}
+                  </p>
+                </ion-label>
+              </ion-item>
+            }
+          </div>
+        }
+        @if (selectedChatIdx === i) {
+          <div class="chatDetails">{{ message.formattedDate }}</div>
         }
       </div>
-      } @if (message.recipe && message.role === 'user') {
-      <div class="recipe">
-        <!-- SENDER -->
-        @if (message.recipe) {
-        <ion-item
-          (click)="openRecipe(message.recipe)"
-          lines="none"
-          button="true"
-        >
-          @if (message.recipe.recipeImages && message.recipe.recipeImages.length
-          > 0) {
-          <ion-avatar slot="start">
-            <img src="{{ message.recipe.recipeImages[0].image.location }}" />
-          </ion-avatar>
-          }
-          <ion-label>
-            <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
-            <p class="description">
-              {{ 'pages.messageThread.recipeCopySent' | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-        } @if (!message.recipe) {
-        <ion-item (click)="setSelectedChat(i)" lines="none">
-          <ion-label>
-            <h2 class="ion-text-wrap">
-              {{ 'pages.messageThread.recipeDeleted' | translate }}
-            </h2>
-            <p class="description">
-              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-        }
-      </div>
-      } @if (selectedChatIdx === i) {
-      <div class="chatDetails">{{ message.formattedDate }}</div>
-      }
-    </div>
     }
   </div>
 </ion-content>
@@ -167,9 +187,10 @@
         class="submit"
       >
         @if (!processing) {
-        <ion-icon name="send" slot="icon-only"></ion-icon>
-        } @if (processing) {
-        <ion-spinner name="crescent"></ion-spinner>
+          <ion-icon name="send" slot="icon-only"></ion-icon>
+        }
+        @if (processing) {
+          <ion-spinner name="crescent"></ion-spinner>
         }
       </ion-button>
     </ion-item>

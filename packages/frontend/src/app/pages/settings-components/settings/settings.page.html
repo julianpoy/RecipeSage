@@ -4,86 +4,86 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.settings.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.settings.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
     <ion-list-header>
-      {{ 'pages.settings.section1.title' | translate }}
+      {{ "pages.settings.section1.title" | translate }}
     </ion-list-header>
     <ion-item lines="inset" (click)="goToImport()" button>
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.import' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.import" | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="goToExport()" button>
       <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.export' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.export" | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="exportDebugStore()" button>
       <ion-icon name="bug" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.debugDump' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.debugDump" | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="goToAccount()" button>
       <ion-icon name="person" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.account' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.account" | translate }} </ion-label>
     </ion-item>
     <ion-item [disabled]="!isLoggedIn" (click)="logout()" button>
       <ion-icon slot="start" name="log-out"></ion-icon>
       <ion-label> {{ "pages.settings.logout" | translate }} </ion-label>
     </ion-item>
     <ion-list-header>
-      {{ 'pages.settings.section2.title' | translate }}
+      {{ "pages.settings.section2.title" | translate }}
     </ion-list-header>
     <ion-item lines="inset" (click)="triggerSync()" button>
       <ion-icon name="sync" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.sync' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.sync" | translate }} </ion-label>
     </ion-item>
 
     <ion-item lines="inset" (click)="resetCompletion()" button>
       <ion-icon name="trash-bin" slot="start"></ion-icon>
       <ion-label>
-        {{ 'pages.settings.resetCompletion' | translate }}
+        {{ "pages.settings.resetCompletion" | translate }}
       </ion-label>
     </ion-item>
 
     @if (showSplitPaneOption) {
-    <ion-item lines="inset">
-      <ion-icon name="tablet-landscape" slot="start"></ion-icon>
-      <ion-toggle
-        [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
-        (ngModelChange)="toggleSplitPane(); savePreferences()"
-      >
-        <div class="ion-text-wrap">
-          {{ 'pages.settings.splitPane' | translate }}
-        </div>
-      </ion-toggle>
-    </ion-item>
+      <ion-item lines="inset">
+        <ion-icon name="tablet-landscape" slot="start"></ion-icon>
+        <ion-toggle
+          [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
+          (ngModelChange)="toggleSplitPane(); savePreferences()"
+        >
+          <div class="ion-text-wrap">
+            {{ "pages.settings.splitPane" | translate }}
+          </div>
+        </ion-toggle>
+      </ion-item>
     }
     <ion-item lines="inset">
       <ion-icon name="brush" slot="start"></ion-icon>
       <ion-select
         [(ngModel)]="preferences[preferenceKeys.Theme]"
-        (ngModelChange)="appThemeChanged();"
+        (ngModelChange)="appThemeChanged()"
         label="{{ 'pages.settings.theme' | translate }}"
         okText="{{ 'generic.ok' | translate }}"
         cancelText="{{ 'generic.cancel' | translate }}"
       >
         <ion-select-option value="default">
-          {{ 'pages.settings.theme.default' | translate }}
+          {{ "pages.settings.theme.default" | translate }}
         </ion-select-option>
         <ion-select-option value="light">
-          {{ 'pages.settings.theme.light' | translate }}
+          {{ "pages.settings.theme.light" | translate }}
         </ion-select-option>
         <ion-select-option value="midnight">
-          {{ 'pages.settings.theme.midnight' | translate }}
+          {{ "pages.settings.theme.midnight" | translate }}
         </ion-select-option>
         <ion-select-option value="dark">
-          {{ 'pages.settings.theme.dark' | translate }}
+          {{ "pages.settings.theme.dark" | translate }}
         </ion-select-option>
         <ion-select-option value="black">
-          {{ 'pages.settings.theme.black' | translate }}
+          {{ "pages.settings.theme.black" | translate }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -92,19 +92,19 @@
       <ion-select
         [interfaceOptions]="languageSelectInterfaceOptions"
         [(ngModel)]="language"
-        (ngModelChange)="languageChanged();"
+        (ngModelChange)="languageChanged()"
       >
         <ion-label slot="label" class="ion-text-wrap">
-          {{ 'pages.settings.language' | translate }}
+          {{ "pages.settings.language" | translate }}
         </ion-label>
 
         <ion-select-option value="navigator">
-          {{ 'pages.settings.language.default' | translate }}
+          {{ "pages.settings.language.default" | translate }}
         </ion-select-option>
         @for (languageOption of languageOptions; track languageOption) {
-        <ion-select-option [value]="languageOption[0]">
-          {{ languageOption[1] }}
-        </ion-select-option>
+          <ion-select-option [value]="languageOption[0]">
+            {{ languageOption[1] }}
+          </ion-select-option>
         }
       </ion-select>
     </ion-item>
@@ -116,7 +116,7 @@
     >
       <ion-icon name="language-outline" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <p>{{ 'pages.settings.language.contribute' | translate }}</p>
+        <p>{{ "pages.settings.language.contribute" | translate }}</p>
       </ion-label>
     </ion-item>
 
@@ -128,7 +128,7 @@
       detail="false"
     >
       <ion-icon name="text-outline" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.fontSize' | translate}} </ion-label>
+      <ion-label> {{ "pages.settings.fontSize" | translate }} </ion-label>
       <ion-icon
         name="caret-down-sharp"
         size="small"
@@ -143,13 +143,13 @@
         (ionChange)="togglePreferencesSync($event)"
       >
         <div class="ion-text-wrap">
-          {{ 'pages.settings.preferencesSync' | translate }}
+          {{ "pages.settings.preferencesSync" | translate }}
         </div>
       </ion-toggle>
     </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.reset' | translate }} </ion-label>
+      <ion-label> {{ "pages.settings.reset" | translate }} </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

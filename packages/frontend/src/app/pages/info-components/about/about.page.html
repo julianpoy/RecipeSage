@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.about.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.about.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,31 +12,33 @@
   <ion-list>
     <ion-item button (click)="goToUserGuide()">
       <ion-icon name="help" slot="start"></ion-icon>
-      {{ 'pages.about.links.userGuide' | translate }}
+      {{ "pages.about.links.userGuide" | translate }}
     </ion-item>
     <ion-item button (click)="goToContact()">
       <ion-icon name="send" slot="start"></ion-icon>
-      {{ 'pages.about.links.contact' | translate }}
+      {{ "pages.about.links.contact" | translate }}
     </ion-item>
     <ion-item button (click)="goToContribute()">
       <ion-icon name="heart" slot="start"></ion-icon>
-      {{ 'pages.about.links.contribute' | translate }}
+      {{ "pages.about.links.contribute" | translate }}
     </ion-item>
     <ion-item button (click)="goToReleaseNotes()">
       <ion-icon name="archive" slot="start"></ion-icon>
-      {{ 'pages.about.links.releaseNotes' | translate }}
+      {{ "pages.about.links.releaseNotes" | translate }}
     </ion-item>
     <ion-item button (click)="goToAboutDetails()">
       <ion-icon name="person" slot="start"></ion-icon>
-      {{ 'pages.about.links.details' | translate }}
+      {{ "pages.about.links.details" | translate }}
     </ion-item>
     <ion-item button (click)="goToLegal()">
       <ion-icon name="list" slot="start"></ion-icon>
-      {{ 'pages.about.links.legal' | translate }}
+      {{ "pages.about.links.legal" | translate }}
     </ion-item>
   </ion-list>
 
   <br />
-  <p><b>{{ 'pages.about.socialTitle' | translate }}</b></p>
+  <p>
+    <b>{{ "pages.about.socialTitle" | translate }}</b>
+  </p>
   <social-links></social-links>
 </ion-content>

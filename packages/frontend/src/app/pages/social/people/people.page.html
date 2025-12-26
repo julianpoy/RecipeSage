@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.people.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.people.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,42 +14,44 @@
   </ion-refresher>
 
   @if (isSelfHost) {
-  <selfhost-warning-item></selfhost-warning-item>
+    <selfhost-warning-item></selfhost-warning-item>
   }
 
   <br />
 
   @if (accountInfo && !accountInfo.enableProfile) {
-  <null-state>
-    <ion-icon
-      name="person-circle"
-      class="big-icon"
-      virtualSlot="header"
-    ></ion-icon>
-    <ion-label virtualSlot="body">
-      <p>
-        {{ 'pages.people.nullState.1' | translate }}<br />
-        {{ 'pages.people.nullState.2' | translate }}
-        <br />
-        <br />
-        <ion-button (click)="editProfile()">
-          <ion-icon slot="start" name="add"></ion-icon>
-          {{ 'pages.people.create' | translate }}
-        </ion-button>
-      </p>
-    </ion-label>
-  </null-state>
-  } @if (accountInfo?.enableProfile) {
-  <ion-item button (click)="editProfile()">
-    <ion-avatar slot="start">
-      @if (!myProfile?.profileImages?.length) {
-      <img src="assets/avatar.svg" />
-      } @if (myProfile?.profileImages?.length) {
-      <img [src]="myProfile?.profileImages?.at(0)?.location" />
-      }
-    </ion-avatar>
-    <ion-label> {{ 'pages.people.edit' | translate }} </ion-label>
-  </ion-item>
+    <null-state>
+      <ion-icon
+        name="person-circle"
+        class="big-icon"
+        virtualSlot="header"
+      ></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          {{ "pages.people.nullState.1" | translate }}<br />
+          {{ "pages.people.nullState.2" | translate }}
+          <br />
+          <br />
+          <ion-button (click)="editProfile()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            {{ "pages.people.create" | translate }}
+          </ion-button>
+        </p>
+      </ion-label>
+    </null-state>
+  }
+  @if (accountInfo?.enableProfile) {
+    <ion-item button (click)="editProfile()">
+      <ion-avatar slot="start">
+        @if (!myProfile?.profileImages?.length) {
+          <img src="assets/avatar.svg" />
+        }
+        @if (myProfile?.profileImages?.length) {
+          <img [src]="myProfile?.profileImages?.at(0)?.location" />
+        }
+      </ion-avatar>
+      <ion-label> {{ "pages.people.edit" | translate }} </ion-label>
+    </ion-item>
   }
 
   <br />
@@ -57,93 +59,115 @@
   <br />
 
   @if (accountInfo?.enableProfile) {
-  <ion-list>
-    @if (friendships?.friends?.length > 0) {
-    <ion-item-divider>
-      <ion-label> {{ 'pages.people.friends' | translate }} </ion-label>
-    </ion-item-divider>
-    } @for (friendship of friendships?.friends; track friendship) {
-    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
-      <ion-avatar slot="start">
-        @if (!friendship.otherUser.profileImages?.length) {
-        <img src="assets/avatar.svg" />
-        } @if (friendship.otherUser.profileImages?.length) {
-        <img [src]="friendship.otherUser.profileImages[0].location" />
-        }
-      </ion-avatar>
-      <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button
-        slot="end"
-        color="danger"
-        (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)"
-      >
-        {{ 'pages.people.unfriend' | translate }}
-      </ion-button>
-    </ion-item>
-    } @if (friendships?.incomingRequests?.length > 0) {
-    <ion-item-divider>
-      <ion-label> {{ 'pages.people.invites' | translate }} </ion-label>
-    </ion-item-divider>
-    } @for (friendship of friendships?.incomingRequests; track friendship) {
-    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
-      <ion-avatar slot="start">
-        @if (!friendship.otherUser.profileImages?.length) {
-        <img src="assets/avatar.svg" />
-        } @if (friendship.otherUser.profileImages?.length) {
-        <img [src]="friendship.otherUser.profileImages[0].location" />
-        }
-      </ion-avatar>
-      <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button
-        slot="end"
-        (click)="$event.stopPropagation(); addFriend(friendship.friendId)"
-      >
-        {{ 'pages.people.accept' | translate }}
-      </ion-button>
-      <ion-button
-        slot="end"
-        color="danger"
-        (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)"
-      >
-        {{ 'pages.people.decline' | translate }}
-      </ion-button>
-    </ion-item>
-    } @if (friendships?.outgoingRequests?.length > 0) {
-    <ion-item-divider>
-      <ion-label> {{ 'pages.people.sentInvites' | translate }} </ion-label>
-    </ion-item-divider>
-    } @for (friendship of friendships?.outgoingRequests; track friendship) {
-    <ion-item button (click)="openProfile(friendship.otherUser.handle)">
-      <ion-avatar slot="start">
-        @if (!friendship.otherUser.profileImages?.length) {
-        <img src="assets/avatar.svg" />
-        } @if (friendship.otherUser.profileImages?.length) {
-        <img [src]="friendship.otherUser.profileImages[0].location" />
-        }
-      </ion-avatar>
-      <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button
-        slot="end"
-        color="danger"
-        (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)"
-      >
-        {{ 'pages.people.cancel' | translate }}
-      </ion-button>
-    </ion-item>
-    } @if (!friendships?.incomingRequests?.length &&
-    !friendships?.outgoingRequests?.length && !friendships?.friends?.length) {
-    <null-state>
-      <ion-icon name="people" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.people.noFriends.1' | translate }}<br />
-          {{ 'pages.people.noFriends.2' | translate }}<br />
-          {{ 'pages.people.noFriends.3' | translate }}
-        </p>
-      </ion-label>
-    </null-state>
-    }
-  </ion-list>
+    <ion-list>
+      @if (friendships?.friends?.length > 0) {
+        <ion-item-divider>
+          <ion-label> {{ "pages.people.friends" | translate }} </ion-label>
+        </ion-item-divider>
+      }
+      @for (friendship of friendships?.friends; track friendship) {
+        <ion-item button (click)="openProfile(friendship.otherUser.handle)">
+          <ion-avatar slot="start">
+            @if (!friendship.otherUser.profileImages?.length) {
+              <img src="assets/avatar.svg" />
+            }
+            @if (friendship.otherUser.profileImages?.length) {
+              <img [src]="friendship.otherUser.profileImages[0].location" />
+            }
+          </ion-avatar>
+          <ion-label>{{ friendship.otherUser.name }}</ion-label>
+          <ion-button
+            slot="end"
+            color="danger"
+            (click)="
+              $event.stopPropagation(); deleteFriend(friendship.otherUser.id)
+            "
+          >
+            {{ "pages.people.unfriend" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+      @if (friendships?.incomingRequests?.length > 0) {
+        <ion-item-divider>
+          <ion-label> {{ "pages.people.invites" | translate }} </ion-label>
+        </ion-item-divider>
+      }
+      @for (friendship of friendships?.incomingRequests; track friendship) {
+        <ion-item button (click)="openProfile(friendship.otherUser.handle)">
+          <ion-avatar slot="start">
+            @if (!friendship.otherUser.profileImages?.length) {
+              <img src="assets/avatar.svg" />
+            }
+            @if (friendship.otherUser.profileImages?.length) {
+              <img [src]="friendship.otherUser.profileImages[0].location" />
+            }
+          </ion-avatar>
+          <ion-label>{{ friendship.otherUser.name }}</ion-label>
+          <ion-button
+            slot="end"
+            (click)="$event.stopPropagation(); addFriend(friendship.friendId)"
+          >
+            {{ "pages.people.accept" | translate }}
+          </ion-button>
+          <ion-button
+            slot="end"
+            color="danger"
+            (click)="
+              $event.stopPropagation(); deleteFriend(friendship.otherUser.id)
+            "
+          >
+            {{ "pages.people.decline" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+      @if (friendships?.outgoingRequests?.length > 0) {
+        <ion-item-divider>
+          <ion-label> {{ "pages.people.sentInvites" | translate }} </ion-label>
+        </ion-item-divider>
+      }
+      @for (friendship of friendships?.outgoingRequests; track friendship) {
+        <ion-item button (click)="openProfile(friendship.otherUser.handle)">
+          <ion-avatar slot="start">
+            @if (!friendship.otherUser.profileImages?.length) {
+              <img src="assets/avatar.svg" />
+            }
+            @if (friendship.otherUser.profileImages?.length) {
+              <img [src]="friendship.otherUser.profileImages[0].location" />
+            }
+          </ion-avatar>
+          <ion-label>{{ friendship.otherUser.name }}</ion-label>
+          <ion-button
+            slot="end"
+            color="danger"
+            (click)="
+              $event.stopPropagation(); deleteFriend(friendship.otherUser.id)
+            "
+          >
+            {{ "pages.people.cancel" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+      @if (
+        !friendships?.incomingRequests?.length &&
+        !friendships?.outgoingRequests?.length &&
+        !friendships?.friends?.length
+      ) {
+        <null-state>
+          <ion-icon
+            name="people"
+            class="big-icon"
+            virtualSlot="header"
+          ></ion-icon>
+          <ion-label virtualSlot="body">
+            <p>
+              {{ "pages.people.noFriends.1" | translate }}<br />
+              {{ "pages.people.noFriends.2" | translate }}<br />
+              {{ "pages.people.noFriends.3" | translate }}
+            </p>
+          </ion-label>
+        </null-state>
+      }
+    </ion-list>
   }
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

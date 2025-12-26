@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.messages.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.messages.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,34 +14,43 @@
   </ion-refresher>
   <ion-list>
     @for (thread of threads; track thread) {
-    <ion-item class="thread" (click)="openThread(thread)" button>
-      <ion-icon name="chatbox" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ thread.otherUser.name }}</h2>
-        <p>
-          @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
-          <b> {{ 'pages.messages.history.you' | translate }} </b>
-          } @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
-          <b> {{ thread.messages[0].fromUser.name }} </b>
-          } : @if (thread.messages[0].recipe) {
-          <span>{{ 'pages.messages.history.sentRecipe' | translate }}</span>
-          } @if (!thread.messages[0].recipe) {
-          <span>{{ thread.messages[0].body }}</span>
-          }
-        </p>
-        <p>{{prettyDate(thread.messages[0].updatedAt)}}</p>
-      </ion-label>
-    </ion-item>
-    } @if (threads.length === 0 && !loading) {
-    <null-state>
-      <ion-icon name="chatbox" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.messages.noMessages' | translate }}<br />
-          {{ 'pages.messages.instructions' | translate }}
-        </p>
-      </ion-label>
-    </null-state>
+      <ion-item class="thread" (click)="openThread(thread)" button>
+        <ion-icon name="chatbox" slot="start"></ion-icon>
+        <ion-label>
+          <h2>{{ thread.otherUser.name }}</h2>
+          <p>
+            @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
+              <b> {{ "pages.messages.history.you" | translate }} </b>
+            }
+            @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
+              <b> {{ thread.messages[0].fromUser.name }} </b>
+            }
+            :
+            @if (thread.messages[0].recipe) {
+              <span>{{ "pages.messages.history.sentRecipe" | translate }}</span>
+            }
+            @if (!thread.messages[0].recipe) {
+              <span>{{ thread.messages[0].body }}</span>
+            }
+          </p>
+          <p>{{ prettyDate(thread.messages[0].updatedAt) }}</p>
+        </ion-label>
+      </ion-item>
+    }
+    @if (threads.length === 0 && !loading) {
+      <null-state>
+        <ion-icon
+          name="chatbox"
+          class="big-icon"
+          virtualSlot="header"
+        ></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            {{ "pages.messages.noMessages" | translate }}<br />
+            {{ "pages.messages.instructions" | translate }}
+          </p>
+        </ion-label>
+      </null-state>
     }
   </ion-list>
 
@@ -52,17 +61,17 @@
   </ion-fab>
 
   @if (isNotificationsCapable() && !isNotificationsEnabled()) {
-  <ion-footer class="ion-text-center ion-padding">
-    <b class="notificationWarning"
-      >{{ 'pages.messages.warning' | translate }}</b
-    >
-    {{ 'pages.messages.notificationsRequired' | translate }}<br />
-    <a
-      href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1"
-      target="_blank"
-    >
-      {{ 'pages.messages.notificationsInstructions' | translate }}
-    </a>
-  </ion-footer>
+    <ion-footer class="ion-text-center ion-padding">
+      <b class="notificationWarning">{{
+        "pages.messages.warning" | translate
+      }}</b>
+      {{ "pages.messages.notificationsRequired" | translate }}<br />
+      <a
+        href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1"
+        target="_blank"
+      >
+        {{ "pages.messages.notificationsInstructions" | translate }}
+      </a>
+    </ion-footer>
   }
 </ion-content>

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ 'pages.updateShoppingList.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.updateShoppingList.title" | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -11,25 +11,25 @@
 </ion-header>
 
 @if (loaded) {
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.updateShoppingList.listTitle' | translate }}"
-      labelPlacement="stacked"
-      [(ngModel)]="listTitle"
-      type="text"
-      autocapitalize="on"
-      autocomplete="on"
-      autocorrect="on"
-      spellcheck="true"
-    ></ion-input>
-  </ion-item>
-  <br /><br />
-  <select-collaborators
-    [selectedCollaboratorIds]="selectedCollaboratorIds"
-    (selectedCollaboratorIdsChanged)="selectedCollaboratorIds = $event"
-  ></select-collaborators>
-</ion-content>
+  <ion-content class="ion-padding">
+    <ion-item>
+      <ion-input
+        label="{{ 'pages.updateShoppingList.listTitle' | translate }}"
+        labelPlacement="stacked"
+        [(ngModel)]="listTitle"
+        type="text"
+        autocapitalize="on"
+        autocomplete="on"
+        autocorrect="on"
+        spellcheck="true"
+      ></ion-input>
+    </ion-item>
+    <br /><br />
+    <select-collaborators
+      [selectedCollaboratorIds]="selectedCollaboratorIds"
+      (selectedCollaboratorIdsChanged)="selectedCollaboratorIds = $event"
+    ></select-collaborators>
+  </ion-content>
 }
 
 <ion-footer class="ion-padding">
@@ -37,9 +37,12 @@
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
       @if (selectedCollaboratorIds.length === 0) {
-      <span> {{ 'pages.updateShoppingList.update' | translate }} </span>
-      } @if (selectedCollaboratorIds.length > 0) {
-      <span> {{ 'pages.updateShoppingList.updateAndShare' | translate }} </span>
+        <span> {{ "pages.updateShoppingList.update" | translate }} </span>
+      }
+      @if (selectedCollaboratorIds.length > 0) {
+        <span>
+          {{ "pages.updateShoppingList.updateAndShare" | translate }}
+        </span>
       }
     </ion-label>
   </ion-button>
