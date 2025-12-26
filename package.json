@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.0-beta.71",
-    "@ai-sdk/openai": "^3.0.0-beta.81",
+    "@ai-sdk/openai": "^3.0.1",
     "@angular/common": "21.0.6",
     "@angular/core": "21.0.6",
     "@angular/forms": "21.0.6",
