@@ -264,9 +264,11 @@ const scaleInstructionNumbers = (instructions: string, scale: number): string =>
 
     try {
       const frac = new FractionJS(trimmed).mul(scale);
-      if (trimmed.includes(".")) return frac.valueOf().toString();
-      if (trimmed.includes("/")) return frac.toFraction(true);
-      return frac.toString();
+      let scaled: string;
+      if (trimmed.includes(".")) scaled = frac.valueOf().toString();
+      else if (trimmed.includes("/")) scaled = frac.toFraction(true);
+      else scaled = frac.toString();
+      return `<b>${scaled}</b>`;
     } catch (_e) {
       return match;
     }
