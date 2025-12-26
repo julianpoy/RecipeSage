@@ -52,6 +52,7 @@ export default defineConfig(() => ({
     coverage: {
       reportsDirectory: "../../coverage/packages/trpc",
       provider: "v8" as const,
+      include: ["src/**/*.{js,ts}"],
     },
   },
 }));
