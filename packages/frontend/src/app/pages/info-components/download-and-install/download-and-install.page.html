@@ -4,92 +4,99 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.downloadAndInstall.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.downloadAndInstall.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p>{{ 'pages.downloadAndInstall.subtitle' | translate }}</p>
+  <p>{{ "pages.downloadAndInstall.subtitle" | translate }}</p>
 
   <ion-list>
     @if (pwaPromptCapable()) {
-    <ion-item button (click)="showPWAPrompt()">
-      <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-label
-        >{{ 'pages.downloadAndInstall.thisDevice' | translate }}</ion-label
-      >
-    </ion-item>
+      <ion-item button (click)="showPWAPrompt()">
+        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-label>{{
+          "pages.downloadAndInstall.thisDevice" | translate
+        }}</ion-label>
+      </ion-item>
     }
     <ion-item button (click)="toggleAndroid()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label
-        >{{ 'pages.downloadAndInstall.android.title' | translate }}</ion-label
-      >
+      <ion-label>{{
+        "pages.downloadAndInstall.android.title" | translate
+      }}</ion-label>
     </ion-item>
     @if (showAndroid) {
-    <ion-item>
-      <p class="instruction">
-        {{ 'pages.downloadAndInstall.android.instructionHeader' | translate
-        }}<br />
-        <b>1.</b> {{ 'pages.downloadAndInstall.android.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.android.step.2' | translate }}
-        <ion-icon name="ellipsis-vertical"></ion-icon><br />
-        <b>3.</b> {{ 'pages.downloadAndInstall.android.step.3' | translate }}<br />
-        {{ 'pages.downloadAndInstall.done' | translate }}
-      </p>
-    </ion-item>
+      <ion-item>
+        <p class="instruction">
+          {{ "pages.downloadAndInstall.android.instructionHeader" | translate
+          }}<br />
+          <b>1.</b> {{ "pages.downloadAndInstall.android.step.1" | translate
+          }}<br />
+          <b>2.</b> {{ "pages.downloadAndInstall.android.step.2" | translate }}
+          <ion-icon name="ellipsis-vertical"></ion-icon><br />
+          <b>3.</b> {{ "pages.downloadAndInstall.android.step.3" | translate
+          }}<br />
+          {{ "pages.downloadAndInstall.done" | translate }}
+        </p>
+      </ion-item>
     }
     <ion-item button (click)="toggleIOS()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label
-        >{{ 'pages.downloadAndInstall.ios.title' | translate }}</ion-label
-      >
+      <ion-label>{{
+        "pages.downloadAndInstall.ios.title" | translate
+      }}</ion-label>
     </ion-item>
     @if (showIOS) {
-    <ion-item>
-      <p class="instruction">
-        {{ 'pages.downloadAndInstall.ios.instructionHeader' | translate }}<br />
-        <b>1.</b> {{ 'pages.downloadAndInstall.ios.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.ios.step.2' | translate }}
-        <ion-icon name="share-outline" color="primary"></ion-icon><br />
-        <b>3.</b> {{ 'pages.downloadAndInstall.ios.step.3' | translate }}<br />
-        {{ 'pages.downloadAndInstall.done' | translate }}
-      </p>
-    </ion-item>
+      <ion-item>
+        <p class="instruction">
+          {{ "pages.downloadAndInstall.ios.instructionHeader" | translate
+          }}<br />
+          <b>1.</b> {{ "pages.downloadAndInstall.ios.step.1" | translate
+          }}<br />
+          <b>2.</b> {{ "pages.downloadAndInstall.ios.step.2" | translate }}
+          <ion-icon name="share-outline" color="primary"></ion-icon><br />
+          <b>3.</b> {{ "pages.downloadAndInstall.ios.step.3" | translate
+          }}<br />
+          {{ "pages.downloadAndInstall.done" | translate }}
+        </p>
+      </ion-item>
     }
     <ion-item button (click)="toggleDesktop()" detail="true">
       <ion-icon name="laptop" slot="start"></ion-icon>
-      <ion-label
-        >{{ 'pages.downloadAndInstall.desktop.title' | translate }}</ion-label
-      >
+      <ion-label>{{
+        "pages.downloadAndInstall.desktop.title" | translate
+      }}</ion-label>
     </ion-item>
     @if (showDesktop) {
-    <ion-item>
-      <p class="instruction">
-        {{ 'pages.downloadAndInstall.desktop.instructionHeader' | translate
-        }}<br />
-        <b>1.</b> {{ 'pages.downloadAndInstall.desktop.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.desktop.step.2' | translate }}
-        <ion-icon name="ellipsis-vertical"></ion-icon><br />
-        <b>3.</b> {{ 'pages.downloadAndInstall.desktop.step.3' | translate }}<br />
-        {{ 'pages.downloadAndInstall.done' | translate }}
-      </p>
-    </ion-item>
+      <ion-item>
+        <p class="instruction">
+          {{ "pages.downloadAndInstall.desktop.instructionHeader" | translate
+          }}<br />
+          <b>1.</b> {{ "pages.downloadAndInstall.desktop.step.1" | translate
+          }}<br />
+          <b>2.</b> {{ "pages.downloadAndInstall.desktop.step.2" | translate }}
+          <ion-icon name="ellipsis-vertical"></ion-icon><br />
+          <b>3.</b> {{ "pages.downloadAndInstall.desktop.step.3" | translate
+          }}<br />
+          {{ "pages.downloadAndInstall.done" | translate }}
+        </p>
+      </ion-item>
     }
   </ion-list>
 
   <br />
   <br />
 
-  <p>{{ 'pages.downloadAndInstall.other' | translate }}</p>
+  <p>{{ "pages.downloadAndInstall.other" | translate }}</p>
 
   <ion-list>
     <ion-item>
       <p>
-        {{ 'pages.downloadAndInstall.extension' | translate }}
+        {{ "pages.downloadAndInstall.extension" | translate }}
         <ion-label>
           <p class="ion-text-wrap">
-            {{ 'pages.downloadAndInstall.extension.description' | translate }}
+            {{ "pages.downloadAndInstall.extension.description" | translate }}
           </p>
         </ion-label>
         <a
@@ -108,10 +115,10 @@
 
     <ion-item>
       <p>
-        {{ 'pages.downloadAndInstall.bookmark' | translate }}
+        {{ "pages.downloadAndInstall.bookmark" | translate }}
         <ion-label>
           <p class="ion-text-wrap">
-            {{ 'pages.downloadAndInstall.bookmark.description' | translate }}
+            {{ "pages.downloadAndInstall.bookmark.description" | translate }}
           </p>
         </ion-label>
         <a
@@ -119,7 +126,7 @@
           (click)="$event.preventDefault()"
           title="Autoclip to RecipeSage"
         >
-          {{ 'pages.downloadAndInstall.bookmark.instructions' | translate }}
+          {{ "pages.downloadAndInstall.bookmark.instructions" | translate }}
         </a>
       </p>
     </ion-item>

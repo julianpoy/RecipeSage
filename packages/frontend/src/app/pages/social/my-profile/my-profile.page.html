@@ -4,223 +4,266 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title> {{ 'pages.myProfile.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.myProfile.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   @if (myProfile && requiresSetup) {
-  <div class="setup-screen ion-padding">
-    <div class="intro">
-      <h3>{{ 'pages.myProfile.welcome' | translate }}</h3>
-      {{ 'pages.myProfile.setup1' | translate }}
+    <div class="setup-screen ion-padding">
+      <div class="intro">
+        <h3>{{ "pages.myProfile.welcome" | translate }}</h3>
+        {{ "pages.myProfile.setup1" | translate }}
+      </div>
+      {{ "pages.myProfile.setup.name" | translate }}
+      <ion-item>
+        <ion-input
+          label="{{ 'pages.myProfile.name' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="myProfile.name"
+          (ngModelChange)="updatedProfileFields.name = myProfile.name"
+        ></ion-input>
+      </ion-item>
+      <br />
+      <br />
+      {{ "pages.myProfile.setup2" | translate }}
+      <ion-item>
+        <ion-input
+          label="{{ 'pages.myProfile.handle' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="myProfile.handle"
+          (ngModelChange)="
+            updatedProfileFields.handle = myProfile.handle; handleInput()
+          "
+        ></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          @if (updatedProfileFields.handle && !isHandleAvailable) {
+            <p class="error">
+              {{ "pages.myProfile.handle.taken" | translate }}
+            </p>
+          }
+          @if (updatedProfileFields.handle && !isHandleValid()) {
+            <p class="error">
+              {{ "pages.myProfile.handle.invalid" | translate }}
+            </p>
+          }
+          <p class="ion-text-wrap">
+            {{ "pages.myProfile.handle.unique" | translate }}
+          </p>
+        </ion-label>
+      </ion-item>
     </div>
-    {{ 'pages.myProfile.setup.name' | translate }}
-    <ion-item>
-      <ion-input
-        label="{{ 'pages.myProfile.name' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="myProfile.name"
-        (ngModelChange)="updatedProfileFields.name = myProfile.name"
-      ></ion-input>
-    </ion-item>
-    <br />
-    <br />
-    {{ 'pages.myProfile.setup2' | translate }}
-    <ion-item>
-      <ion-input
-        label="{{ 'pages.myProfile.handle' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="myProfile.handle"
-        (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput();"
-      ></ion-input>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>
-        @if (updatedProfileFields.handle && !isHandleAvailable) {
-        <p class="error">{{ 'pages.myProfile.handle.taken' | translate }}</p>
-        } @if (updatedProfileFields.handle && !isHandleValid()) {
-        <p class="error">{{ 'pages.myProfile.handle.invalid' | translate }}</p>
-        }
-        <p class="ion-text-wrap">
-          {{ 'pages.myProfile.handle.unique' | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-  </div>
-  } @if (myProfile && !requiresSetup) {
-  <div>
-    <br />
-    <div class="profile-details-container">
-      <multi-image-upload
-        [images]="myProfile.profileImages"
-        (imageUpdate)="updatedProfileFields.profileImages = myProfile.profileImages; markAsDirty();"
-      ></multi-image-upload>
-      <div
-        class="profile-details"
-        [ngClass]="{break: (myProfile.profileImages.length || 0) > 1}"
-      >
-        @if (!revealNameInput) {
-        <ion-item lines="none">
-          <h3 class="username-preview" (click)="revealNameInput = true">
-            {{ myProfile.name }} <ion-icon name="pencil"></ion-icon>
-          </h3>
-        </ion-item>
-        } @if (revealNameInput) {
-        <ion-item class="username-edit">
-          <ion-input
-            label="{{ 'pages.myProfile.name' | translate }}"
-            labelPlacement="stacked"
-            [(ngModel)]="myProfile.name"
-            (ngModelChange)="updatedProfileFields.name = myProfile.name"
-          ></ion-input>
-        </ion-item>
-        } @if (!revealHandleInput) {
-        <ion-item lines="none">
-          <h5 class="handle-preview" (click)="revealHandleInput = true">
-            &commat;{{ myProfile.handle }} <ion-icon name="pencil"></ion-icon>
-          </h5>
-        </ion-item>
-        } @if (revealHandleInput) {
-        <ion-item class="handle-edit">
-          <ion-input
-            label="{{ 'pages.myProfile.handle' | translate }}"
-            labelPlacement="stacked"
-            [(ngModel)]="myProfile.handle"
-            (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput()"
-          ></ion-input>
-        </ion-item>
-        } @if (revealHandleInput) {
-        <ion-item lines="none">
-          <ion-label>
-            @if (updatedProfileFields.handle && !isHandleAvailable) {
-            <p class="error">
-              {{ 'pages.myProfile.handle.taken' | translate }}
-            </p>
-            } @if (updatedProfileFields.handle && !isHandleValid()) {
-            <p class="error">
-              {{ 'pages.myProfile.handle.invalid' | translate }}
-            </p>
-            }
-            <p class="ion-text-wrap">
-              {{ 'pages.myProfile.handle.unique' | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-        } @if (accountInfo) {
-        <ion-item class="enable-profile" lines="none">
-          <ion-toggle
-            [(ngModel)]="accountInfo.enableProfile"
-            (ngModelChange)="updatedProfileFields.enableProfile = accountInfo.enableProfile; markAsDirty();"
-          >
-            <div class="ion-text-wrap">
-              {{ 'pages.myProfile.enable' | translate }}
-            </div>
-          </ion-toggle>
-        </ion-item>
-        }
-        <div style="display: flex">
-          <ion-item lines="none">
-            <ion-button (click)="shareProfile()">
-              {{ 'pages.myProfile.share' | translate }}
-              <ion-icon name="share-social" slot="end"></ion-icon>
-            </ion-button>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-button (click)="viewProfile()">
-              {{ 'pages.myProfile.view' | translate }}
-              <ion-icon name="arrow-forward" slot="end"></ion-icon>
-            </ion-button>
-          </ion-item>
+  }
+  @if (myProfile && !requiresSetup) {
+    <div>
+      <br />
+      <div class="profile-details-container">
+        <multi-image-upload
+          [images]="myProfile.profileImages"
+          (imageUpdate)="
+            updatedProfileFields.profileImages = myProfile.profileImages;
+            markAsDirty()
+          "
+        ></multi-image-upload>
+        <div
+          class="profile-details"
+          [ngClass]="{ break: (myProfile.profileImages.length || 0) > 1 }"
+        >
+          @if (!revealNameInput) {
+            <ion-item lines="none">
+              <h3 class="username-preview" (click)="revealNameInput = true">
+                {{ myProfile.name }} <ion-icon name="pencil"></ion-icon>
+              </h3>
+            </ion-item>
+          }
+          @if (revealNameInput) {
+            <ion-item class="username-edit">
+              <ion-input
+                label="{{ 'pages.myProfile.name' | translate }}"
+                labelPlacement="stacked"
+                [(ngModel)]="myProfile.name"
+                (ngModelChange)="updatedProfileFields.name = myProfile.name"
+              ></ion-input>
+            </ion-item>
+          }
+          @if (!revealHandleInput) {
+            <ion-item lines="none">
+              <h5 class="handle-preview" (click)="revealHandleInput = true">
+                &commat;{{ myProfile.handle }}
+                <ion-icon name="pencil"></ion-icon>
+              </h5>
+            </ion-item>
+          }
+          @if (revealHandleInput) {
+            <ion-item class="handle-edit">
+              <ion-input
+                label="{{ 'pages.myProfile.handle' | translate }}"
+                labelPlacement="stacked"
+                [(ngModel)]="myProfile.handle"
+                (ngModelChange)="
+                  updatedProfileFields.handle = myProfile.handle; handleInput()
+                "
+              ></ion-input>
+            </ion-item>
+          }
+          @if (revealHandleInput) {
+            <ion-item lines="none">
+              <ion-label>
+                @if (updatedProfileFields.handle && !isHandleAvailable) {
+                  <p class="error">
+                    {{ "pages.myProfile.handle.taken" | translate }}
+                  </p>
+                }
+                @if (updatedProfileFields.handle && !isHandleValid()) {
+                  <p class="error">
+                    {{ "pages.myProfile.handle.invalid" | translate }}
+                  </p>
+                }
+                <p class="ion-text-wrap">
+                  {{ "pages.myProfile.handle.unique" | translate }}
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+          @if (accountInfo) {
+            <ion-item class="enable-profile" lines="none">
+              <ion-toggle
+                [(ngModel)]="accountInfo.enableProfile"
+                (ngModelChange)="
+                  updatedProfileFields.enableProfile =
+                    accountInfo.enableProfile;
+                  markAsDirty()
+                "
+              >
+                <div class="ion-text-wrap">
+                  {{ "pages.myProfile.enable" | translate }}
+                </div>
+              </ion-toggle>
+            </ion-item>
+          }
+          <div style="display: flex">
+            <ion-item lines="none">
+              <ion-button (click)="shareProfile()">
+                {{ "pages.myProfile.share" | translate }}
+                <ion-icon name="share-social" slot="end"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button (click)="viewProfile()">
+                {{ "pages.myProfile.view" | translate }}
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </div>
         </div>
       </div>
+      <br />
+      <ion-item lines="full">
+        <ion-icon name="key" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          {{ "pages.myProfile.pinned" | translate }}
+        </ion-label>
+        <ion-button slot="end" (click)="startNewProfileItem()">
+          {{ "pages.myProfile.add" | translate }}
+          <ion-icon name="add" slot="start"></ion-icon>
+        </ion-button>
+      </ion-item>
+      @if (myProfile.profileItems.length) {
+        <ion-list class="profile-items-list">
+          <ion-reorder-group
+            (ionItemReorder)="ionReorder($event)"
+            disabled="false"
+          >
+            @for (
+              item of myProfile.profileItems;
+              track item;
+              let idx = $index
+            ) {
+              @if (item.type === "all-recipes") {
+                <ion-item button (click)="open(item)">
+                  <ion-icon
+                    class="item-icon"
+                    name="folder"
+                    slot="start"
+                  ></ion-icon>
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+                  <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                  <!--</ion-button>-->
+                  <ion-button
+                    color="danger"
+                    slot="end"
+                    (click)="$event.stopPropagation(); removeProfileItem(idx)"
+                  >
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-reorder slot="end"></ion-reorder>
+                </ion-item>
+              }
+              @if (item.type === "recipe") {
+                <ion-item button (click)="open(item)">
+                  @if (item?.recipe?.images?.length) {
+                    <ion-avatar slot="start">
+                      <img [src]="item.recipe.images?.at(0)?.location" />
+                    </ion-avatar>
+                  }
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+                  <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                  <!--</ion-button>-->
+                  <ion-button
+                    color="danger"
+                    slot="end"
+                    (click)="$event.stopPropagation(); removeProfileItem(idx)"
+                  >
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-reorder slot="end"></ion-reorder>
+                </ion-item>
+              }
+              @if (item.type === "label") {
+                <ion-item button (click)="open(item)">
+                  <ion-icon
+                    class="item-icon"
+                    name="pricetag"
+                    slot="start"
+                  ></ion-icon>
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+                  <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                  <!--</ion-button>-->
+                  <ion-button
+                    color="danger"
+                    slot="end"
+                    (click)="$event.stopPropagation(); removeProfileItem(idx)"
+                  >
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-reorder slot="end"></ion-reorder>
+                </ion-item>
+              }
+            }
+          </ion-reorder-group>
+        </ion-list>
+      }
+      @if (!myProfile.profileItems.length) {
+        <null-state>
+          <ion-icon
+            name="bookmarks"
+            class="big-icon"
+            virtualSlot="header"
+          ></ion-icon>
+          <ion-label virtualSlot="body">
+            <p>
+              {{ "pages.myProfile.nullState.1" | translate }}<br />
+              {{ "pages.myProfile.nullState.2" | translate }}
+            </p>
+          </ion-label>
+        </null-state>
+      }
     </div>
-    <br />
-    <ion-item lines="full">
-      <ion-icon name="key" slot="start"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.myProfile.pinned' | translate }}
-      </ion-label>
-      <ion-button slot="end" (click)="startNewProfileItem()">
-        {{ 'pages.myProfile.add' | translate }}
-        <ion-icon name="add" slot="start"></ion-icon>
-      </ion-button>
-    </ion-item>
-    @if (myProfile.profileItems.length) {
-    <ion-list class="profile-items-list">
-      <ion-reorder-group (ionItemReorder)="ionReorder($event)" disabled="false">
-        @for (item of myProfile.profileItems; track item; let idx = $index) {
-        @if (item.type === 'all-recipes') {
-        <ion-item button (click)="open(item)">
-          <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-          <!--</ion-button>-->
-          <ion-button
-            color="danger"
-            slot="end"
-            (click)="$event.stopPropagation(); removeProfileItem(idx)"
-          >
-            <ion-icon name="trash" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-reorder slot="end"></ion-reorder>
-        </ion-item>
-        } @if (item.type === 'recipe') {
-        <ion-item button (click)="open(item)">
-          @if (item?.recipe?.images?.length) {
-          <ion-avatar slot="start">
-            <img [src]="item.recipe.images?.at(0)?.location" />
-          </ion-avatar>
-          }
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-          <!--</ion-button>-->
-          <ion-button
-            color="danger"
-            slot="end"
-            (click)="$event.stopPropagation(); removeProfileItem(idx)"
-          >
-            <ion-icon name="trash" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-reorder slot="end"></ion-reorder>
-        </ion-item>
-        } @if (item.type === 'label') {
-        <ion-item button (click)="open(item)">
-          <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-          <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
-          <!--</ion-button>-->
-          <ion-button
-            color="danger"
-            slot="end"
-            (click)="$event.stopPropagation(); removeProfileItem(idx)"
-          >
-            <ion-icon name="trash" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-reorder slot="end"></ion-reorder>
-        </ion-item>
-        } }
-      </ion-reorder-group>
-    </ion-list>
-    } @if (!myProfile.profileItems.length) {
-    <null-state>
-      <ion-icon
-        name="bookmarks"
-        class="big-icon"
-        virtualSlot="header"
-      ></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.myProfile.nullState.1' | translate }}<br />
-          {{ 'pages.myProfile.nullState.2' | translate }}
-        </p>
-      </ion-label>
-    </null-state>
-    }
-  </div>
   }
   <br />
   <br />
@@ -234,7 +277,7 @@
       [disabled]="!isUpdatePending() || !inputIsValid()"
       (click)="save()"
     >
-      {{ 'pages.myProfile.save' | translate }}<br />
+      {{ "pages.myProfile.save" | translate }}<br />
     </ion-button>
   </ion-toolbar>
 </ion-footer>

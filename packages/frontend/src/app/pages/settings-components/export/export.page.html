@@ -4,99 +4,112 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.export.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.export.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   @if (exportJobs.length) {
-  <div>
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.export.jobs' | translate }}
-        <p>{{ 'pages.export.jobs.subtitle' | translate }}<br /></p>
-      </ion-label>
-    </ion-item>
-    @for (exportJob of exportJobs.slice(0, showJobs); track exportJob) {
     <div>
-      <ion-item
-        (click)="downloadJob(exportJob)"
-        target="_blank"
-        [detail]="exportJob.status === 'SUCCESS'"
-        detailIcon="cloud-download"
-        [button]="exportJob.status === 'SUCCESS'"
-      >
-        <ion-icon name="document" slot="start" />
-        <ion-label>
-          {{ getJobTitleI18n(exportJob) | translate }}
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          {{ "pages.export.jobs" | translate }}
+          <p>{{ "pages.export.jobs.subtitle" | translate }}<br /></p>
+        </ion-label>
+      </ion-item>
+      @for (exportJob of exportJobs.slice(0, showJobs); track exportJob) {
+        <div>
+          <ion-item
+            (click)="downloadJob(exportJob)"
+            target="_blank"
+            [detail]="exportJob.status === 'SUCCESS'"
+            detailIcon="cloud-download"
+            [button]="exportJob.status === 'SUCCESS'"
+          >
+            <ion-icon name="document" slot="start" />
+            <ion-label>
+              {{ getJobTitleI18n(exportJob) | translate }}
+              <p>
+                <span>
+                  {{
+                    "pages.export.jobs.job.created"
+                      | translate
+                        : {
+                            timestamp: formatItemCreationDate(
+                              exportJob.createdAt
+                            ),
+                          }
+                  }}
+                </span>
+                <br />
+                @if (exportJob.status === "CREATE") {
+                  <span class="job-create">
+                    {{ "pages.export.status.create" | translate }}
+                  </span>
+                }
+                @if (exportJob.status === "RUN") {
+                  <span class="job-run">
+                    {{ "pages.export.status.run" | translate }}
+                  </span>
+                }
+                @if (exportJob.status === "FAIL") {
+                  <span class="job-fail">
+                    {{ "pages.export.status.fail" | translate }}
+                    {{ getJobFailureI18n(exportJob) | translate }}
+                  </span>
+                }
+                @if (exportJob.status === "SUCCESS") {
+                  <span class="job-success">
+                    {{ "pages.export.status.success" | translate }}
+                  </span>
+                }
+                @if (exportJob.status === "RUN") {
+                  <ion-progress-bar
+                    type="determinate"
+                    [value]="(getRunningJob()?.progress || 0) * 0.01"
+                  ></ion-progress-bar>
+                }
+              </p>
+            </ion-label>
+          </ion-item>
+        </div>
+      }
+      @if (exportJobs.length > showJobs) {
+        <ion-item lines="none">
+          <ion-button (click)="showMoreJobs()" fill="clear">
+            {{ "generic.showMore" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+    </div>
+  }
+  @if (!getRunningJob()) {
+    <div>
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          <br />
+          <p>{{ "pages.export.description1" | translate }}</p>
+          <br />
           <p>
-            <span>
-              {{ 'pages.export.jobs.job.created' | translate:{
-              timestamp:formatItemCreationDate(exportJob.createdAt) } }}
-            </span>
-            <br />
-            @if (exportJob.status === 'CREATE') {
-            <span class="job-create">
-              {{ 'pages.export.status.create' | translate }}
-            </span>
-            } @if (exportJob.status === 'RUN') {
-            <span class="job-run">
-              {{ 'pages.export.status.run' | translate }}
-            </span>
-            } @if (exportJob.status === 'FAIL') {
-            <span class="job-fail">
-              {{ 'pages.export.status.fail' | translate }} {{
-              getJobFailureI18n(exportJob) | translate }}
-            </span>
-            } @if (exportJob.status === 'SUCCESS') {
-            <span class="job-success">
-              {{ 'pages.export.status.success' | translate }}
-            </span>
-            } @if (exportJob.status === 'RUN') {
-            <ion-progress-bar
-              type="determinate"
-              [value]="(getRunningJob()?.progress || 0) * 0.01"
-            ></ion-progress-bar>
-            }
+            {{ "pages.export.description2" | translate }}<br />
+            {{ "pages.export.description3" | translate }}
           </p>
         </ion-label>
       </ion-item>
+      <ion-list>
+        <ion-item (click)="exportAsJSONLD()" detail button>
+          <ion-icon name="cloud-download" slot="start"></ion-icon>
+          <ion-label> {{ "pages.export.jsonld" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="exportAsTXT()" detail button>
+          <ion-icon name="cloud-download" slot="start"></ion-icon>
+          <ion-label> {{ "pages.export.txt" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="exportAsPDF()" detail button>
+          <ion-icon name="cloud-download" slot="start"></ion-icon>
+          <ion-label> {{ "pages.export.pdf" | translate }} </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
-    } @if (exportJobs.length > showJobs) {
-    <ion-item lines="none">
-      <ion-button (click)="showMoreJobs()" fill="clear">
-        {{ 'generic.showMore' | translate }}
-      </ion-button>
-    </ion-item>
-    }
-  </div>
-  } @if (!getRunningJob()) {
-  <div>
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">
-        <br />
-        <p>{{ 'pages.export.description1' | translate }}</p>
-        <br />
-        <p>
-          {{ 'pages.export.description2' | translate }}<br />
-          {{ 'pages.export.description3' | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-list>
-      <ion-item (click)="exportAsJSONLD()" detail button>
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.export.jsonld' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="exportAsTXT()" detail button>
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.export.txt' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="exportAsPDF()" detail button>
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.export.pdf' | translate }} </ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
   }
 </ion-content>

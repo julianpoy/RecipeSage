@@ -4,21 +4,21 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.contribute.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.contribute.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <p class="headline ion-text-center">
-    {{ 'pages.contribute.subtitle' | translate }}
+    {{ "pages.contribute.subtitle" | translate }}
   </p>
 
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
-    <p>{{ 'pages.contribute.mission' | translate }}</p>
+    <p>{{ "pages.contribute.mission" | translate }}</p>
 
-    <p>{{ 'pages.contribute.purpose' | translate }}</p>
+    <p>{{ "pages.contribute.purpose" | translate }}</p>
     <br />
 
     <div class="frequency-row">
@@ -26,132 +26,135 @@
         [fill]="frequency === 'monthly' ? 'solid' : 'outline'"
         (click)="setFrequency('monthly')"
       >
-        <span> {{ 'pages.contribute.monthly' | translate }} </span>
+        <span> {{ "pages.contribute.monthly" | translate }} </span>
       </ion-button>
       <ion-button
         [fill]="frequency === 'single' ? 'solid' : 'outline'"
         (click)="setFrequency('single')"
       >
-        <span> {{ 'pages.contribute.oneTime' | translate }} </span>
+        <span> {{ "pages.contribute.oneTime" | translate }} </span>
       </ion-button>
     </div>
 
-    @if (frequency === 'monthly') {
-    <div class="amount-row">
-      <ion-button
-        [fill]="amount === 1 ? 'solid' : 'outline'"
-        (click)="setAmount(1)"
-      >
-        $1.00
-      </ion-button>
-      <ion-button
-        [fill]="amount === 5 ? 'solid' : 'outline'"
-        (click)="setAmount(5)"
-      >
-        $5.00
-      </ion-button>
-      <ion-button
-        [fill]="amount === 10 ? 'solid' : 'outline'"
-        (click)="setAmount(10)"
-      >
-        $10.00
-      </ion-button>
-      <input
-        [placeholder]="'pages.contribute.custom' | translate"
-        (focus)="focusCustom()"
-        [(ngModel)]="customAmount"
-      />
-    </div>
-    } @if (frequency === 'single') {
-    <div class="amount-row">
-      <ion-button
-        [fill]="amount === 10 ? 'solid' : 'outline'"
-        (click)="setAmount(10)"
-      >
-        $10.00
-      </ion-button>
-      <ion-button
-        [fill]="amount === 25 ? 'solid' : 'outline'"
-        (click)="setAmount(25)"
-      >
-        $25.00
-      </ion-button>
-      <ion-button
-        [fill]="amount === 50 ? 'solid' : 'outline'"
-        (click)="setAmount(50)"
-      >
-        $50.00
-      </ion-button>
-      <input
-        [placeholder]="'pages.contribute.custom' | translate"
-        (focus)="focusCustom()"
-        [(ngModel)]="customAmount"
-      />
-    </div>
-    } @if (frequency) {
-    <div class="submit-row ion-text-center">
-      <ion-button [disabled]="!validAmount()" (click)="contribute()">
-        <span> {{ 'pages.contribute.action' | translate }} </span>
-        <ion-icon name="arrow-forward" slot="end"></ion-icon>
-      </ion-button>
-      <br /><br />
-      <tos-clickwrap-agreement></tos-clickwrap-agreement>
-    </div>
+    @if (frequency === "monthly") {
+      <div class="amount-row">
+        <ion-button
+          [fill]="amount === 1 ? 'solid' : 'outline'"
+          (click)="setAmount(1)"
+        >
+          $1.00
+        </ion-button>
+        <ion-button
+          [fill]="amount === 5 ? 'solid' : 'outline'"
+          (click)="setAmount(5)"
+        >
+          $5.00
+        </ion-button>
+        <ion-button
+          [fill]="amount === 10 ? 'solid' : 'outline'"
+          (click)="setAmount(10)"
+        >
+          $10.00
+        </ion-button>
+        <input
+          [placeholder]="'pages.contribute.custom' | translate"
+          (focus)="focusCustom()"
+          [(ngModel)]="customAmount"
+        />
+      </div>
+    }
+    @if (frequency === "single") {
+      <div class="amount-row">
+        <ion-button
+          [fill]="amount === 10 ? 'solid' : 'outline'"
+          (click)="setAmount(10)"
+        >
+          $10.00
+        </ion-button>
+        <ion-button
+          [fill]="amount === 25 ? 'solid' : 'outline'"
+          (click)="setAmount(25)"
+        >
+          $25.00
+        </ion-button>
+        <ion-button
+          [fill]="amount === 50 ? 'solid' : 'outline'"
+          (click)="setAmount(50)"
+        >
+          $50.00
+        </ion-button>
+        <input
+          [placeholder]="'pages.contribute.custom' | translate"
+          (focus)="focusCustom()"
+          [(ngModel)]="customAmount"
+        />
+      </div>
+    }
+    @if (frequency) {
+      <div class="submit-row ion-text-center">
+        <ion-button [disabled]="!validAmount()" (click)="contribute()">
+          <span> {{ "pages.contribute.action" | translate }} </span>
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+        <br /><br />
+        <tos-clickwrap-agreement></tos-clickwrap-agreement>
+      </div>
     }
 
     <br />
 
-    <p>{{ 'pages.contribute.bonus.title' | translate }}</p>
+    <p>{{ "pages.contribute.bonus.title" | translate }}</p>
 
     <div class="feature-list">
       <ul>
         <li>
-          {{ 'pages.contribute.bonus.feature.1' | translate }} &nbsp;@if
-          (capabilitiesService.capabilities.highResImages) {
-          <ion-badge slot="end"
-            >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
-          >
-          }<br />
+          {{ "pages.contribute.bonus.feature.1" | translate }} &nbsp;
+          @if (capabilitiesService.capabilities.highResImages) {
+            <ion-badge slot="end">{{
+              "pages.contribute.bonus.enabled" | translate
+            }}</ion-badge>
+          }
+          <br />
         </li>
         <li>
-          {{ 'pages.contribute.bonus.feature.2' | translate }} &nbsp;@if
-          (capabilitiesService.capabilities.multipleImages) {
-          <ion-badge slot="end"
-            >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
-          >
+          {{ "pages.contribute.bonus.feature.2" | translate }} &nbsp;
+          @if (capabilitiesService.capabilities.multipleImages) {
+            <ion-badge slot="end">{{
+              "pages.contribute.bonus.enabled" | translate
+            }}</ion-badge>
           }
         </li>
         @if (enableAssistant) {
-        <li>
-          {{ 'pages.contribute.bonus.feature.3' | translate }} &nbsp;@if
-          (capabilitiesService.capabilities.assistantMoreMessages) {
-          <ion-badge slot="end"
-            >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
-          >
-          }
-        </li>
+          <li>
+            {{ "pages.contribute.bonus.feature.3" | translate }} &nbsp;
+            @if (capabilitiesService.capabilities.assistantMoreMessages) {
+              <ion-badge slot="end">{{
+                "pages.contribute.bonus.enabled" | translate
+              }}</ion-badge>
+            }
+          </li>
         }
       </ul>
     </div>
 
     <p>
-      <i>{{ 'pages.contribute.monthly' | translate }}: </i>{{
-      'pages.contribute.monthly.description' | translate }}<br />
-      <i>{{ 'pages.contribute.oneTime' | translate }}: </i>{{
-      'pages.contribute.oneTime.description' | translate }}
+      <i>{{ "pages.contribute.monthly" | translate }}: </i
+      >{{ "pages.contribute.monthly.description" | translate }}<br />
+      <i>{{ "pages.contribute.oneTime" | translate }}: </i
+      >{{ "pages.contribute.oneTime.description" | translate }}
     </p>
-    <p>{{ 'pages.contribute.bonus.reason' | translate }}</p>
-    <p>{{ 'pages.contribute.cta.1' | translate }}</p>
-    <p>{{ 'pages.contribute.cta.2' | translate }}</p>
+    <p>{{ "pages.contribute.bonus.reason" | translate }}</p>
+    <p>{{ "pages.contribute.cta.1" | translate }}</p>
+    <p>{{ "pages.contribute.cta.2" | translate }}</p>
 
     <br />
     <br />
     <br />
 
     <p>
-      <a [href]="billingPortalUrl" target="_blank" rel="noopener noreferrer"
-        >{{ 'pages.contribute.manage' | translate }}</a
-      >
+      <a [href]="billingPortalUrl" target="_blank" rel="noopener noreferrer">{{
+        "pages.contribute.manage" | translate
+      }}</a>
     </p>
 
     <br />

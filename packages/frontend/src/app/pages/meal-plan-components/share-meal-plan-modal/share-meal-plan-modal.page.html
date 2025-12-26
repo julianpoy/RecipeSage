@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.shareMealPlanModal.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.shareMealPlanModal.title" | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <br />
-  {{ 'pages.shareMealPlanModal.description' | translate }}
+  {{ "pages.shareMealPlanModal.description" | translate }}
 
   <copy-with-webshare
     [webshareURL]="icalURL"
@@ -17,6 +17,6 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="close()">
     <ion-icon name="close" slot="start"></ion-icon>
-    <ion-label> {{ 'generic.close' | translate }} </ion-label>
+    <ion-label> {{ "generic.close" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

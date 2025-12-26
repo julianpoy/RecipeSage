@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title
-      >{{ 'pages.shoppingListCategoryOrderModal.title' | translate }}</ion-title
-    >
+    <ion-title>{{
+      "pages.shoppingListCategoryOrderModal.title" | translate
+    }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="close()">
@@ -15,10 +15,10 @@
 <ion-content class="ion-padding">
   <ion-item class="ion-no-padding">
     <ion-label class="ion-text-wrap">
-      {{ 'pages.shoppingListCategoryOrderModal.description' | translate }}
+      {{ "pages.shoppingListCategoryOrderModal.description" | translate }}
 
       <p>
-        {{ 'pages.shoppingListCategoryOrderModal.instructions' | translate }}
+        {{ "pages.shoppingListCategoryOrderModal.instructions" | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -26,7 +26,9 @@
   <ion-textarea
     label="{{ 'pages.shoppingListCategoryOrderModal.label' | translate }}"
     labelPlacement="stacked"
-    placeholder="{{ 'pages.shoppingListCategoryOrderModal.placeholder' | translate }}"
+    placeholder="{{
+      'pages.shoppingListCategoryOrderModal.placeholder' | translate
+    }}"
     [(ngModel)]="categoryOrder"
     rows="8"
     auto-grow="true"
@@ -36,6 +38,6 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()">
     <ion-icon name="save" slot="start"></ion-icon>
-    <ion-label> {{ 'generic.save' | translate }} </ion-label>
+    <ion-label> {{ "generic.save" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

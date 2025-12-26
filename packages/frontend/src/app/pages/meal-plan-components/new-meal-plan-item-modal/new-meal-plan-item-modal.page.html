@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar>
     @if (isEditing) {
-    <ion-title>
-      {{ 'pages.newMealPlanItemModal.title.update' | translate }}
-    </ion-title>
-    } @if (!isEditing) {
-    <ion-title>
-      {{ 'pages.newMealPlanItemModal.title.new' | translate }}
-    </ion-title>
+      <ion-title>
+        {{ "pages.newMealPlanItemModal.title.update" | translate }}
+      </ion-title>
+    }
+    @if (!isEditing) {
+      <ion-title>
+        {{ "pages.newMealPlanItemModal.title.new" | translate }}
+      </ion-title>
     }
 
     <ion-buttons slot="end">
@@ -22,42 +23,45 @@
   <div>
     <ion-segment [(ngModel)]="inputType" value="recipe">
       <ion-segment-button value="recipe">
-        {{ 'pages.newMealPlanItemModal.inputType.recipe' | translate }}
+        {{ "pages.newMealPlanItemModal.inputType.recipe" | translate }}
       </ion-segment-button>
       <ion-segment-button value="manualEntry">
-        {{ 'pages.newMealPlanItemModal.inputType.manual' | translate }}
+        {{ "pages.newMealPlanItemModal.inputType.manual" | translate }}
       </ion-segment-button>
     </ion-segment>
   </div>
 
   <div>
-    @switch (inputType) { @case ('manualEntry') {
-    <div>
-      <ion-item>
-        <ion-input
-          label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="title"
-          type="text"
-          autocapitalize="on"
-          autocomplete="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
-    </div>
-    } @case ('recipe') {
-    <div>
-      <br /><br />
-      <select-recipe [(selectedRecipe)]="recipe"></select-recipe>
-    </div>
-    } }
+    @switch (inputType) {
+      @case ("manualEntry") {
+        <div>
+          <ion-item>
+            <ion-input
+              label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
+              labelPlacement="stacked"
+              [(ngModel)]="title"
+              type="text"
+              autocapitalize="on"
+              autocomplete="on"
+              autocorrect="on"
+              spellcheck="true"
+            ></ion-input>
+          </ion-item>
+        </div>
+      }
+      @case ("recipe") {
+        <div>
+          <br /><br />
+          <select-recipe [(selectedRecipe)]="recipe"></select-recipe>
+        </div>
+      }
+    }
   </div>
 
   <br /><br />
 
   <ion-item>
-    <ion-label> {{ 'pages.newMealPlanItemModal.date' | translate }} </ion-label>
+    <ion-label> {{ "pages.newMealPlanItemModal.date" | translate }} </ion-label>
     <input
       class="rs-date"
       type="date"
@@ -76,11 +80,14 @@
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="calendar" slot="start"></ion-icon>
     @if (isEditing) {
-    <ion-label> {{ 'pages.newMealPlanItemModal.save' | translate }} </ion-label>
-    } @if (!isEditing) {
-    <ion-label>
-      {{ 'pages.newMealPlanItemModal.create' | translate }}
-    </ion-label>
+      <ion-label>
+        {{ "pages.newMealPlanItemModal.save" | translate }}
+      </ion-label>
+    }
+    @if (!isEditing) {
+      <ion-label>
+        {{ "pages.newMealPlanItemModal.create" | translate }}
+      </ion-label>
     }
   </ion-button>
 </ion-footer>

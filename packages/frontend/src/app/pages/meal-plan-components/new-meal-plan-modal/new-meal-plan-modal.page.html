@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.newMealPlanModal.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.newMealPlanModal.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -37,11 +37,12 @@
   <ion-button expand="block" (click)="save()" [disabled]="!mealPlanTitle">
     <ion-icon name="list" slot="start"></ion-icon>
     @if (selectedCollaboratorIds.length > 0) {
-    <ion-label>
-      {{ 'pages.newMealPlanModal.createAndShare' | translate }}
-    </ion-label>
-    } @if (selectedCollaboratorIds.length === 0) {
-    <ion-label> {{ 'pages.newMealPlanModal.create' | translate }} </ion-label>
+      <ion-label>
+        {{ "pages.newMealPlanModal.createAndShare" | translate }}
+      </ion-label>
+    }
+    @if (selectedCollaboratorIds.length === 0) {
+      <ion-label> {{ "pages.newMealPlanModal.create" | translate }} </ion-label>
     }
   </ion-button>
 </ion-footer>

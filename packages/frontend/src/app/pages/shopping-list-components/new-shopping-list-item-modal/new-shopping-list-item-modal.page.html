@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.newShoppingListItem.title' | translate }} </ion-title>
+    <ion-title> {{ "pages.newShoppingListItem.title" | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -14,54 +14,57 @@
   <div>
     <ion-segment (ionChange)="inputTypeChanged($event)" value="items">
       <ion-segment-button value="items">
-        {{ 'pages.newShoppingListItem.items' | translate }}
+        {{ "pages.newShoppingListItem.items" | translate }}
       </ion-segment-button>
       <ion-segment-button value="recipe">
-        {{ 'pages.newShoppingListItem.recipe' | translate }}
+        {{ "pages.newShoppingListItem.recipe" | translate }}
       </ion-segment-button>
     </ion-segment>
   </div>
 
   <div>
-    @switch (inputType) { @case ('items') {
-    <div>
-      <br />
-      @for (item of itemFields; track item) {
-      <ion-item>
-        <ion-input
-          label="{{ 'pages.newShoppingListItem.itemTitle' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="item.title"
-          (ngModelChange)="addOrRemoveTextFields()"
-          type="text"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+    @switch (inputType) {
+      @case ("items") {
+        <div>
+          <br />
+          @for (item of itemFields; track item) {
+            <ion-item>
+              <ion-input
+                label="{{ 'pages.newShoppingListItem.itemTitle' | translate }}"
+                labelPlacement="stacked"
+                [(ngModel)]="item.title"
+                (ngModelChange)="addOrRemoveTextFields()"
+                type="text"
+                value=""
+                autocapitalize="on"
+                autocorrect="on"
+                spellcheck="true"
+              ></ion-input>
+            </ion-item>
+          }
+        </div>
       }
-    </div>
-    } @case ('recipe') {
-    <div>
-      @if (!selectedRecipe) {
-      <br />
+      @case ("recipe") {
+        <div>
+          @if (!selectedRecipe) {
+            <br />
+          }
+          <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
+          @if (selectedRecipe) {
+            <select-ingredients
+              [ingredients]="selectedRecipe.ingredients"
+              (selectedIngredientsChange)="selectedIngredients = $event"
+            ></select-ingredients>
+          }
+        </div>
       }
-      <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
-      @if (selectedRecipe) {
-      <select-ingredients
-        [ingredients]="selectedRecipe.ingredients"
-        (selectedIngredientsChange)="selectedIngredients = $event"
-      ></select-ingredients>
-      }
-    </div>
-    } }
+    }
   </div>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="list" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.newShoppingListItem.add' | translate }} </ion-label>
+    <ion-label> {{ "pages.newShoppingListItem.add" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

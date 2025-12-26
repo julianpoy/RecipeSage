@@ -1,1 +1,10 @@
-{}
+{
+  "overrides": [
+    {
+      "files": "packages/frontend/**/*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
+}

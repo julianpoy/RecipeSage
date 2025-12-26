@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ 'pages.printRecipeModal.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.printRecipeModal.title" | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -13,14 +13,14 @@
 <ion-content class="ion-padding">
   <div class="templates">
     @for (template of templates; track template; let i = $index) {
-    <recipe-preview
-      [selected]="selectedTemplate === i"
-      [landscape]="template.orientation === 'landscape'"
-      [url]="template.url"
-      [description]="template.description"
-      (click)="selectedTemplate = i"
-      (previewClick)="selectedTemplate = i"
-    ></recipe-preview>
+      <recipe-preview
+        [selected]="selectedTemplate === i"
+        [landscape]="template.orientation === 'landscape'"
+        [url]="template.url"
+        [description]="template.description"
+        (click)="selectedTemplate = i"
+        (previewClick)="selectedTemplate = i"
+      ></recipe-preview>
     }
   </div>
 </ion-content>
@@ -32,6 +32,6 @@
     [disabled]="selectedTemplate === -1"
   >
     <ion-icon name="print" slot="start"></ion-icon>
-    <ion-label> {{ 'pages.printRecipeModal.print' | translate }} </ion-label>
+    <ion-label> {{ "pages.printRecipeModal.print" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

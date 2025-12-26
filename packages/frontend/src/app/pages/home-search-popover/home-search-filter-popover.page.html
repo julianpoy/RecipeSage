@@ -1,6 +1,6 @@
 <ion-list no-border>
   <ion-list-header>
-    {{ 'pages.homeSearchFilterPopover.title' | translate }}
+    {{ "pages.homeSearchFilterPopover.title" | translate }}
   </ion-list-header>
 
   <ion-item
@@ -10,15 +10,14 @@
     button
     detail="false"
   >
-    <ion-label
-      >{{ 'pages.homeSearchFilterPopover.filterByRating' | translate
-      }}</ion-label
-    >
+    <ion-label>{{
+      "pages.homeSearchFilterPopover.filterByRating" | translate
+    }}</ion-label>
     @if (ratingFilter.length) {
-    <ion-badge slot="end">
-      {{ratingFilter.length}}
-      <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
-    </ion-badge>
+      <ion-badge slot="end">
+        {{ ratingFilter.length }}
+        <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+      </ion-badge>
     }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
@@ -30,12 +29,11 @@
     button
     detail="false"
   >
-    <ion-label
-      >{{ 'pages.homeSearchFilterPopover.filterByLabel' | translate
-      }}</ion-label
-    >
+    <ion-label>{{
+      "pages.homeSearchFilterPopover.filterByLabel" | translate
+    }}</ion-label>
     @if (selectedLabels.length > 0) {
-    <ion-badge slot="end">{{selectedLabels.length}}</ion-badge>
+      <ion-badge slot="end">{{ selectedLabels.length }}</ion-badge>
     }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
@@ -43,44 +41,41 @@
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]"
-      (ngModelChange)="savePreferences(true);"
+      (ngModelChange)="savePreferences(true)"
     >
       <div class="ion-text-wrap">
-        {{ 'pages.homeSearchFilterPopover.matchAllLabels' | translate }}
+        {{ "pages.homeSearchFilterPopover.matchAllLabels" | translate }}
       </div>
     </ion-toggle>
   </ion-item>
 
   @if (!guestMode) {
-  <ion-item lines="full">
-    <ion-select
-      label="{{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}"
-      [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
-      (ngModelChange)="savePreferences(true);"
-      okText="{{ 'generic.ok' | translate }}"
-      cancelText="{{ 'generic.cancel' | translate }}"
-    >
-      <ion-select-option value="yes"
-        >{{ 'pages.homeSearchFilterPopover.includeFriends.yes' | translate
-        }}</ion-select-option
+    <ion-item lines="full">
+      <ion-select
+        label="{{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}"
+        [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
+        (ngModelChange)="savePreferences(true)"
+        okText="{{ 'generic.ok' | translate }}"
+        cancelText="{{ 'generic.cancel' | translate }}"
       >
-      <ion-select-option value="search"
-        >{{ 'pages.homeSearchFilterPopover.includeFriends.search' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="browse"
-        >{{ 'pages.homeSearchFilterPopover.includeFriends.browse' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="no"
-        >{{ 'pages.homeSearchFilterPopover.includeFriends.no' | translate
-        }}</ion-select-option
-      >
-    </ion-select>
-  </ion-item>
-  } @if (guestMode) {
-  <ion-item lines="none">
-    <p>{{ 'pages.homeSearchFilterPopover.optionsHidden' | translate }}</p>
-  </ion-item>
+        <ion-select-option value="yes">{{
+          "pages.homeSearchFilterPopover.includeFriends.yes" | translate
+        }}</ion-select-option>
+        <ion-select-option value="search">{{
+          "pages.homeSearchFilterPopover.includeFriends.search" | translate
+        }}</ion-select-option>
+        <ion-select-option value="browse">{{
+          "pages.homeSearchFilterPopover.includeFriends.browse" | translate
+        }}</ion-select-option>
+        <ion-select-option value="no">{{
+          "pages.homeSearchFilterPopover.includeFriends.no" | translate
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  }
+  @if (guestMode) {
+    <ion-item lines="none">
+      <p>{{ "pages.homeSearchFilterPopover.optionsHidden" | translate }}</p>
+    </ion-item>
   }
 </ion-list>

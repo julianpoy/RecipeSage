@@ -1,28 +1,25 @@
 <ion-list no-border>
   <ion-list-header>
-    {{ 'pages.homepopover.options' | translate }}
+    {{ "pages.homepopover.options" | translate }}
   </ion-list-header>
 
   <ion-item lines="full">
     <ion-select
       label="{{ 'pages.homepopover.options.layout' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.ViewType]"
-      (ngModelChange)="savePreferences();"
+      (ngModelChange)="savePreferences()"
       okText="{{ 'generic.ok' | translate }}"
       cancelText="{{ 'generic.cancel' | translate }}"
     >
-      <ion-select-option value="tiles"
-        >{{ 'pages.homepopover.options.layout.tiles' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="list"
-        >{{ 'pages.homepopover.options.layout.list' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="compact"
-        >{{ 'pages.homepopover.options.layout.compact' | translate
-        }}</ion-select-option
-      >
+      <ion-select-option value="tiles">{{
+        "pages.homepopover.options.layout.tiles" | translate
+      }}</ion-select-option>
+      <ion-select-option value="list">{{
+        "pages.homepopover.options.layout.list" | translate
+      }}</ion-select-option>
+      <ion-select-option value="compact">{{
+        "pages.homepopover.options.layout.compact" | translate
+      }}</ion-select-option>
     </ion-select>
   </ion-item>
 
@@ -32,22 +29,22 @@
       (ngModelChange)="savePreferences()"
     >
       <div class="ion-text-wrap">
-        {{ 'pages.homepopover.options.showLabels' | translate }}
+        {{ "pages.homepopover.options.showLabels" | translate }}
       </div>
     </ion-toggle>
   </ion-item>
 
   @if (!guestMode) {
-  <ion-item lines="full">
-    <ion-toggle
-      [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]"
-      (ngModelChange)="savePreferences()"
-    >
-      <div class="ion-text-wrap">
-        {{ 'pages.homepopover.options.showLabelToggles' | translate }}
-      </div>
-    </ion-toggle>
-  </ion-item>
+    <ion-item lines="full">
+      <ion-toggle
+        [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]"
+        (ngModelChange)="savePreferences()"
+      >
+        <div class="ion-text-wrap">
+          {{ "pages.homepopover.options.showLabelToggles" | translate }}
+        </div>
+      </ion-toggle>
+    </ion-item>
   }
 
   <ion-item lines="full">
@@ -56,7 +53,7 @@
       (ngModelChange)="savePreferences()"
     >
       <div class="ion-text-wrap">
-        {{ 'pages.homepopover.options.showImages' | translate }}
+        {{ "pages.homepopover.options.showImages" | translate }}
       </div>
     </ion-toggle>
   </ion-item>
@@ -67,7 +64,7 @@
       (ngModelChange)="savePreferences()"
     >
       <div class="ion-text-wrap">
-        {{ 'pages.homepopover.options.showSource' | translate }}
+        {{ "pages.homepopover.options.showSource" | translate }}
       </div>
     </ion-toggle>
   </ion-item>
@@ -78,7 +75,7 @@
       (ngModelChange)="savePreferences()"
     >
       <div class="ion-text-wrap">
-        {{ 'pages.homepopover.options.showRecipeDescription' | translate }}
+        {{ "pages.homepopover.options.showRecipeDescription" | translate }}
       </div>
     </ion-toggle>
   </ion-item>
@@ -87,58 +84,55 @@
     <ion-select
       label="{{ 'pages.homepopover.options.sortBy' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.SortBy]"
-      (ngModelChange)="savePreferences(true);"
+      (ngModelChange)="savePreferences(true)"
       okText="{{ 'generic.ok' | translate }}"
       cancelText="{{ 'generic.cancel' | translate }}"
     >
-      <ion-select-option value="title"
-        >{{ 'pages.homepopover.options.sortBy.title' | translate
-        }}</ion-select-option
-      >
+      <ion-select-option value="title">{{
+        "pages.homepopover.options.sortBy.title" | translate
+      }}</ion-select-option>
       <!--<ion-select-option value="label">Label</ion-select-option>-->
-      <ion-select-option value="-createdAt"
-        >{{ 'pages.homepopover.options.sortBy.createdNewest' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="createdAt"
-        >{{ 'pages.homepopover.options.sortBy.createdOldest' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="-updatedAt"
-        >{{ 'pages.homepopover.options.sortBy.updatedNewest' | translate
-        }}</ion-select-option
-      >
-      <ion-select-option value="updatedAt"
-        >{{ 'pages.homepopover.options.sortBy.updatedOldest' | translate
-        }}</ion-select-option
-      >
+      <ion-select-option value="-createdAt">{{
+        "pages.homepopover.options.sortBy.createdNewest" | translate
+      }}</ion-select-option>
+      <ion-select-option value="createdAt">{{
+        "pages.homepopover.options.sortBy.createdOldest" | translate
+      }}</ion-select-option>
+      <ion-select-option value="-updatedAt">{{
+        "pages.homepopover.options.sortBy.updatedNewest" | translate
+      }}</ion-select-option>
+      <ion-select-option value="updatedAt">{{
+        "pages.homepopover.options.sortBy.updatedOldest" | translate
+      }}</ion-select-option>
     </ion-select>
   </ion-item>
 
   @if (!guestMode) {
-  <ion-button
-    (click)="toggleSelectionMode()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon
-      [name]="selectionMode ? 'close' : 'checkmark'"
-      slot="start"
-    ></ion-icon>
-    @if (selectionMode) {
-    <span>
-      {{ 'pages.homepopover.options.unselectAllRecipes' | translate }}
-    </span>
-    } @if (!selectionMode) {
-    <span>
-      {{ 'pages.homepopover.options.selectMultipleRecipes' | translate }}
-    </span>
-    }
-  </ion-button>
-  } @if (guestMode) {
-  <ion-item lines="none">
-    <p>{{ 'pages.homepopover.warning.optionsHidden' | translate }}</p>
-  </ion-item>
+    <ion-button
+      (click)="toggleSelectionMode()"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon
+        [name]="selectionMode ? 'close' : 'checkmark'"
+        slot="start"
+      ></ion-icon>
+      @if (selectionMode) {
+        <span>
+          {{ "pages.homepopover.options.unselectAllRecipes" | translate }}
+        </span>
+      }
+      @if (!selectionMode) {
+        <span>
+          {{ "pages.homepopover.options.selectMultipleRecipes" | translate }}
+        </span>
+      }
+    </ion-button>
+  }
+  @if (guestMode) {
+    <ion-item lines="none">
+      <p>{{ "pages.homepopover.warning.optionsHidden" | translate }}</p>
+    </ion-item>
   }
 </ion-list>

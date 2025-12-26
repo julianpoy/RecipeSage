@@ -4,134 +4,149 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.import.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.import.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   @if (importJobs.length) {
-  <div>
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.import.jobs' | translate }}
-        <p>{{ 'pages.import.jobs.subtitle' | translate }}<br /></p>
-      </ion-label>
-    </ion-item>
-    @for (importJob of importJobs.slice(0, showJobs); track importJob) {
     <div>
-      <ion-item
-        [button]="getImportJobPath(importJob)"
-        (click)="goToImportPath(importJob)"
-        [detail]="getImportJobPath(importJob)"
-      >
-        <ion-icon name="file-tray-full" slot="start" />
-        <ion-label>
-          {{ getJobTitleI18n(importJob) | translate }}
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          {{ "pages.import.jobs" | translate }}
+          <p>{{ "pages.import.jobs.subtitle" | translate }}<br /></p>
+        </ion-label>
+      </ion-item>
+      @for (importJob of importJobs.slice(0, showJobs); track importJob) {
+        <div>
+          <ion-item
+            [button]="getImportJobPath(importJob)"
+            (click)="goToImportPath(importJob)"
+            [detail]="getImportJobPath(importJob)"
+          >
+            <ion-icon name="file-tray-full" slot="start" />
+            <ion-label>
+              {{ getJobTitleI18n(importJob) | translate }}
+              <p>
+                <span>
+                  {{
+                    "pages.import.jobs.job.created"
+                      | translate
+                        : {
+                            timestamp: formatItemCreationDate(
+                              importJob.createdAt
+                            ),
+                          }
+                  }}
+                </span>
+                <br />
+                @if (importJob.status === "CREATE") {
+                  <span class="job-create">
+                    {{ "pages.import.status.create" | translate }}
+                  </span>
+                }
+                @if (importJob.status === "RUN") {
+                  <span class="job-run">
+                    {{ "pages.import.status.run" | translate }}
+                  </span>
+                }
+                @if (importJob.status === "FAIL") {
+                  <span class="job-fail">
+                    {{ "pages.import.status.fail" | translate }}
+                    {{ getJobFailureI18n(importJob) | translate }}
+                  </span>
+                }
+                @if (importJob.status === "SUCCESS") {
+                  <span class="job-success">
+                    {{ "pages.import.status.success" | translate }}
+                  </span>
+                }
+                @if (importJob.status === "RUN") {
+                  <ion-progress-bar
+                    type="determinate"
+                    [value]="(getRunningJob()?.progress || 0) * 0.01"
+                  ></ion-progress-bar>
+                }
+              </p>
+            </ion-label>
+          </ion-item>
+        </div>
+      }
+      @if (importJobs.length > showJobs) {
+        <ion-item lines="none">
+          <ion-button (click)="showMoreJobs()" fill="clear">
+            {{ "generic.showMore" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+    </div>
+  }
+  @if (!getRunningJob()) {
+    <div>
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          <br />
+          <p>{{ "pages.import.description1" | translate }}</p>
+          <br />
           <p>
-            <span>
-              {{ 'pages.import.jobs.job.created' | translate:{
-              timestamp:formatItemCreationDate(importJob.createdAt) } }}
-            </span>
-            <br />
-            @if (importJob.status === 'CREATE') {
-            <span class="job-create">
-              {{ 'pages.import.status.create' | translate }}
-            </span>
-            } @if (importJob.status === 'RUN') {
-            <span class="job-run">
-              {{ 'pages.import.status.run' | translate }}
-            </span>
-            } @if (importJob.status === 'FAIL') {
-            <span class="job-fail">
-              {{ 'pages.import.status.fail' | translate }} {{
-              getJobFailureI18n(importJob) | translate }}
-            </span>
-            } @if (importJob.status === 'SUCCESS') {
-            <span class="job-success">
-              {{ 'pages.import.status.success' | translate }}
-            </span>
-            } @if (importJob.status === 'RUN') {
-            <ion-progress-bar
-              type="determinate"
-              [value]="(getRunningJob()?.progress || 0) * 0.01"
-            ></ion-progress-bar>
-            }
+            {{ "pages.import.description2" | translate }}<br />
+            {{ "pages.import.description3" | translate }}
           </p>
         </ion-label>
       </ion-item>
+      <ion-list>
+        <ion-item (click)="startImport('jsonld')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.jsonld" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('pepperplate')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.pepperplate" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('livingcookbook')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.import.livingCookbook" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('paprika')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.paprika" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('cookmate')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.cookmate" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('recipekeeper')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.recipeKeeper" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('textfiles')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.textFiles" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('urls')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.urls" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('pdfs')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.pdfs" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('images')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.images" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('csv')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.csv" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('enex')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.enex" | translate }} </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
-    } @if (importJobs.length > showJobs) {
-    <ion-item lines="none">
-      <ion-button (click)="showMoreJobs()" fill="clear">
-        {{ 'generic.showMore' | translate }}
-      </ion-button>
-    </ion-item>
-    }
-  </div>
-  } @if (!getRunningJob()) {
-  <div>
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">
-        <br />
-        <p>{{ 'pages.import.description1' | translate }}</p>
-        <br />
-        <p>
-          {{ 'pages.import.description2' | translate }}<br />
-          {{ 'pages.import.description3' | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-list>
-      <ion-item (click)="startImport('jsonld')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.jsonld' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('pepperplate')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.pepperplate' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('livingcookbook')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.livingCookbook' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('paprika')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.paprika' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('cookmate')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.cookmate' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('recipekeeper')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.recipeKeeper' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('textfiles')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.textFiles' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('urls')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.urls' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('pdfs')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.pdfs' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('images')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.images' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('csv')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.csv' | translate }} </ion-label>
-      </ion-item>
-      <ion-item (click)="startImport('enex')" detail button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
-        <ion-label> {{ 'pages.import.enex' | translate }} </ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
   }
 
   <br />

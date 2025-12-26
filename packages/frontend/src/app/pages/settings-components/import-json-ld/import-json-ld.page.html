@@ -4,14 +4,14 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.importJsonLD.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.importJsonLD.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      {{ 'pages.importJsonLD.description' | translate }}
+      {{ "pages.importJsonLD.description" | translate }}
     </ion-label>
   </ion-item>
 
@@ -28,39 +28,50 @@
 
     <ion-item lines="none" [disabled]="progress !== undefined">
       <ion-label>
-        {{ 'pages.import.step' | translate:{ number: 1 } }}
+        {{ "pages.import.step" | translate: { number: 1 } }}
 
         <div class="ion-padding">
           <ion-button fill="outline" (click)="filePicker()">
             @if (file) {
-            <span>
-              {{ 'pages.import.filePicker.file' | translate:{fileName:file.name}
-              }}
-            </span>
-            } @if (!file) {
-            <span>
-              {{ 'pages.import.filePicker.noFile' |
-              translate:{acceptableFiletypes:'.json'} }}
-            </span>
+              <span>
+                {{
+                  "pages.import.filePicker.file"
+                    | translate: { fileName: file.name }
+                }}
+              </span>
+            }
+            @if (!file) {
+              <span>
+                {{
+                  "pages.import.filePicker.noFile"
+                    | translate: { acceptableFiletypes: ".json" }
+                }}
+              </span>
             }
           </ion-button>
 
           @if (showFileTypeWarning()) {
-          <div>
-            <p>
-              {{ 'pages.import.fileTypeWarning' |
-              translate:{acceptableFiletypes:'.json'} }}
-            </p>
-          </div>
-          } @if (isFileTooLarge()) {
-          <div>
-            <p>
-              <b>{{ 'pages.import.fileTooLarge' | translate }}</b><br />
-              <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-                {{ 'pages.import.fileTooLarge.contact' | translate }}
-              </a>
-            </p>
-          </div>
+            <div>
+              <p>
+                {{
+                  "pages.import.fileTypeWarning"
+                    | translate: { acceptableFiletypes: ".json" }
+                }}
+              </p>
+            </div>
+          }
+          @if (isFileTooLarge()) {
+            <div>
+              <p>
+                <b>{{ "pages.import.fileTooLarge" | translate }}</b
+                ><br />
+                <a
+                  href="mailto:julian@recipesage.com?subject=RecipeSage Support"
+                >
+                  {{ "pages.import.fileTooLarge.contact" | translate }}
+                </a>
+              </p>
+            </div>
           }
         </div>
       </ion-label>
@@ -71,17 +82,18 @@
       [disabled]="!file || progress !== undefined || isFileTooLarge()"
     >
       <ion-label>
-        {{ 'pages.import.step' | translate:{ number: 2 } }}
+        {{ "pages.import.step" | translate: { number: 2 } }}
 
         <div class="ion-padding">
           @if (!showFileTypeWarning()) {
-          <ion-button slot="start" (click)="submit()">
-            {{ 'pages.import.upload' | translate }}
-          </ion-button>
-          } @if (showFileTypeWarning()) {
-          <ion-button slot="start" (click)="submit()">
-            {{ 'pages.import.upload.ignoreWarning' | translate }}
-          </ion-button>
+            <ion-button slot="start" (click)="submit()">
+              {{ "pages.import.upload" | translate }}
+            </ion-button>
+          }
+          @if (showFileTypeWarning()) {
+            <ion-button slot="start" (click)="submit()">
+              {{ "pages.import.upload.ignoreWarning" | translate }}
+            </ion-button>
           }
         </div>
       </ion-label>
@@ -89,30 +101,31 @@
 
     <ion-item lines="none" [disabled]="progress === undefined">
       <ion-label slot="start">
-        {{ 'pages.import.step' | translate:{ number: 3 } }} @if (progress ===
-        undefined) {
-        <div class="ion-padding">
-          {{ 'pages.import.uploading.hint' | translate }}<br />
-          <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
-        </div>
-        } @if (progress !== undefined) {
-        <div class="ion-padding">
-          {{ 'pages.import.uploading' | translate }}<br />
-          <ion-progress-bar
-            type="determinate"
-            [value]="progress"
-          ></ion-progress-bar>
-        </div>
+        {{ "pages.import.step" | translate: { number: 3 } }}
+        @if (progress === undefined) {
+          <div class="ion-padding">
+            {{ "pages.import.uploading.hint" | translate }}<br />
+            <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
+          </div>
+        }
+        @if (progress !== undefined) {
+          <div class="ion-padding">
+            {{ "pages.import.uploading" | translate }}<br />
+            <ion-progress-bar
+              type="determinate"
+              [value]="progress"
+            ></ion-progress-bar>
+          </div>
         }
       </ion-label>
     </ion-item>
 
     <ion-item lines="none" [disabled]="true">
       <ion-label slot="start">
-        {{ 'pages.import.step' | translate:{ number: 4 } }}
+        {{ "pages.import.step" | translate: { number: 4 } }}
 
         <div class="ion-padding">
-          {{ 'pages.import.processing' | translate }}<br />
+          {{ "pages.import.processing" | translate }}<br />
           <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
         </div>
       </ion-label>

@@ -2,14 +2,15 @@
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       @if (!isLoggedIn()) {
-      <ion-menu-button></ion-menu-button>
-      } @if (isLoggedIn()) {
-      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+        <ion-menu-button></ion-menu-button>
+      }
+      @if (isLoggedIn()) {
+        <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
       }
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.profile.title' | translate:{name:profile?.name} }}
+      {{ "pages.profile.title" | translate: { name: profile?.name } }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -20,143 +21,175 @@
   </ion-refresher>
 
   @if (profile) {
-  <div>
-    <br />
-    @if (isSelfHost) {
-    <selfhost-warning-item></selfhost-warning-item>
-    }
-    <br />
-    <div class="profile-details-container">
-      @if (!profile.profileImages || profile.profileImages.length === 0) {
-      <div class="no-image">
-        <img src="assets/imgs/logo_green.png" />
-      </div>
-      } @if (profile.profileImages && profile.profileImages.length > 0) {
-      <ion-thumbnail
-        class="profile-image ion-margin-top"
-        slot="start"
-        (click)="openImageViewer()"
-      >
-        <img src="{{ profile.profileImages.at(0)?.location }}" />
-      </ion-thumbnail>
+    <div>
+      <br />
+      @if (isSelfHost) {
+        <selfhost-warning-item></selfhost-warning-item>
       }
-      <div class="profile-details">
-        <ion-item lines="none">
-          <h3 class="username">{{ profile.name }}</h3>
-        </ion-item>
-        <ion-item lines="none">
-          <h5 class="handle">&commat;{{ profile.handle }}</h5>
-        </ion-item>
-        <div class="profile-icon-buttons">
-          <ion-item lines="none" (click)="shareProfile()" button>
-            <ion-icon name="share-social"></ion-icon>
+      <br />
+      <div class="profile-details-container">
+        @if (!profile.profileImages || profile.profileImages.length === 0) {
+          <div class="no-image">
+            <img src="assets/imgs/logo_green.png" />
+          </div>
+        }
+        @if (profile.profileImages && profile.profileImages.length > 0) {
+          <ion-thumbnail
+            class="profile-image ion-margin-top"
+            slot="start"
+            (click)="openImageViewer()"
+          >
+            <img src="{{ profile.profileImages.at(0)?.location }}" />
+          </ion-thumbnail>
+        }
+        <div class="profile-details">
+          <ion-item lines="none">
+            <h3 class="username">{{ profile.name }}</h3>
           </ion-item>
-          @if (isLoggedIn() && !profile.isMe) {
-          <ion-item lines="none" (click)="sendMessage()" button>
-            <ion-icon name="mail"></ion-icon>
+          <ion-item lines="none">
+            <h5 class="handle">&commat;{{ profile.handle }}</h5>
           </ion-item>
-          }
+          <div class="profile-icon-buttons">
+            <ion-item lines="none" (click)="shareProfile()" button>
+              <ion-icon name="share-social"></ion-icon>
+            </ion-item>
+            @if (isLoggedIn() && !profile.isMe) {
+              <ion-item lines="none" (click)="sendMessage()" button>
+                <ion-icon name="mail"></ion-icon>
+              </ion-item>
+            }
+          </div>
         </div>
       </div>
-    </div>
-    <br />
-    <ion-item lines="none">
-      <ion-icon name="key" slot="start"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.profile.pinned' | translate }}
-      </ion-label>
-    </ion-item>
-    @if (profile.profileItems.length) {
-    <ion-list>
-      @for (item of profile.profileItems; track item) {
-      <div>
-        @if (item.type === 'all-recipes') {
-        <ion-item button (click)="open(item)">
-          <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-        </ion-item>
-        } @if (item.type === 'recipe') {
-        <ion-item button (click)="open(item)">
-          @if (item?.recipe?.images?.length) {
-          <ion-avatar slot="start">
-            <img [src]="item.recipe.images?.at(0)?.location" />
-          </ion-avatar>
+      <br />
+      <ion-item lines="none">
+        <ion-icon name="key" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          {{ "pages.profile.pinned" | translate }}
+        </ion-label>
+      </ion-item>
+      @if (profile.profileItems.length) {
+        <ion-list>
+          @for (item of profile.profileItems; track item) {
+            <div>
+              @if (item.type === "all-recipes") {
+                <ion-item button (click)="open(item)">
+                  <ion-icon
+                    class="item-icon"
+                    name="folder"
+                    slot="start"
+                  ></ion-icon>
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+                </ion-item>
+              }
+              @if (item.type === "recipe") {
+                <ion-item button (click)="open(item)">
+                  @if (item?.recipe?.images?.length) {
+                    <ion-avatar slot="start">
+                      <img [src]="item.recipe.images?.at(0)?.location" />
+                    </ion-avatar>
+                  }
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+                </ion-item>
+              }
+              @if (item.type === "label") {
+                <ion-item button (click)="open(item)">
+                  <ion-icon
+                    class="item-icon"
+                    name="pricetag"
+                    slot="start"
+                  ></ion-icon>
+                  <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
+                  <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+                </ion-item>
+              }
+            </div>
           }
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-        </ion-item>
-        } @if (item.type === 'label') {
-        <ion-item button (click)="open(item)">
-          <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-        </ion-item>
-        }
-      </div>
+        </ion-list>
       }
-    </ion-list>
-    } @if (!profile.profileItems.length) {
-    <null-state>
-      <ion-icon
-        name="bookmarks"
-        class="big-icon"
-        virtualSlot="header"
-      ></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.profile.nullState' | translate:{name:profile.name} }}
-          <br />
-        </p>
-      </ion-label>
-    </null-state>
-    }
-  </div>
+      @if (!profile.profileItems.length) {
+        <null-state>
+          <ion-icon
+            name="bookmarks"
+            class="big-icon"
+            virtualSlot="header"
+          ></ion-icon>
+          <ion-label virtualSlot="body">
+            <p>
+              {{
+                "pages.profile.nullState" | translate: { name: profile.name }
+              }}
+              <br />
+            </p>
+          </ion-label>
+        </null-state>
+      }
+    </div>
   }
 </ion-content>
 
 @if (profile && !profile.isMe) {
-<ion-footer>
-  @if (isLoggedIn()) {
-  <ion-toolbar class="ion-padding-horizontal">
-    @if (myProfile?.enableProfile) {
-    <div class="action-button-container">
-      @if (!profile.incomingFriendship && !profile.outgoingFriendship) {
-      <ion-button expand="block" (click)="addFriend()">
-        {{ 'pages.profile.send' | translate }}
-      </ion-button>
-      } @if (!profile.incomingFriendship && profile.outgoingFriendship) {
-      <ion-button expand="block" (click)="deleteFriend()" color="danger">
-        {{ 'pages.profile.cancel' | translate }}
-      </ion-button>
-      } @if (profile.incomingFriendship && !profile.outgoingFriendship) {
-      <ion-button expand="block" (click)="addFriend()">
-        {{ 'pages.profile.accept' | translate }}
-      </ion-button>
-      } @if (profile.incomingFriendship && !profile.outgoingFriendship) {
-      <ion-button expand="block" (click)="deleteFriend()" color="danger">
-        {{ 'pages.profile.decline' | translate }}
-      </ion-button>
-      } @if (profile.incomingFriendship && profile.outgoingFriendship) {
-      <ion-button expand="block" (click)="deleteFriend()" color="danger">
-        {{ 'pages.profile.unfriend' | translate }}
-      </ion-button>
-      }
-    </div>
-    } @if (!myProfile?.enableProfile) {
-    <div class="action-button-container">
-      <ion-button expand="block" (click)="setupMyProfile()">
-        {{ 'pages.profile.setup' | translate }}
-      </ion-button>
-    </div>
+  <ion-footer>
+    @if (isLoggedIn()) {
+      <ion-toolbar class="ion-padding-horizontal">
+        @if (myProfile?.enableProfile) {
+          <div class="action-button-container">
+            @if (!profile.incomingFriendship && !profile.outgoingFriendship) {
+              <ion-button expand="block" (click)="addFriend()">
+                {{ "pages.profile.send" | translate }}
+              </ion-button>
+            }
+            @if (!profile.incomingFriendship && profile.outgoingFriendship) {
+              <ion-button
+                expand="block"
+                (click)="deleteFriend()"
+                color="danger"
+              >
+                {{ "pages.profile.cancel" | translate }}
+              </ion-button>
+            }
+            @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+              <ion-button expand="block" (click)="addFriend()">
+                {{ "pages.profile.accept" | translate }}
+              </ion-button>
+            }
+            @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+              <ion-button
+                expand="block"
+                (click)="deleteFriend()"
+                color="danger"
+              >
+                {{ "pages.profile.decline" | translate }}
+              </ion-button>
+            }
+            @if (profile.incomingFriendship && profile.outgoingFriendship) {
+              <ion-button
+                expand="block"
+                (click)="deleteFriend()"
+                color="danger"
+              >
+                {{ "pages.profile.unfriend" | translate }}
+              </ion-button>
+            }
+          </div>
+        }
+        @if (!myProfile?.enableProfile) {
+          <div class="action-button-container">
+            <ion-button expand="block" (click)="setupMyProfile()">
+              {{ "pages.profile.setup" | translate }}
+            </ion-button>
+          </div>
+        }
+      </ion-toolbar>
     }
-  </ion-toolbar>
-  } @if (!isLoggedIn()) {
-  <ion-toolbar class="ion-padding-horizontal">
-    <ion-button expand="block" (click)="authAndAddFriend()">
-      {{ 'pages.profile.login' | translate }}
-    </ion-button>
-  </ion-toolbar>
-  }
-</ion-footer>
+    @if (!isLoggedIn()) {
+      <ion-toolbar class="ion-padding-horizontal">
+        <ion-button expand="block" (click)="authAndAddFriend()">
+          {{ "pages.profile.login" | translate }}
+        </ion-button>
+      </ion-toolbar>
+    }
+  </ion-footer>
 }

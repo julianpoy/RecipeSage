@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ 'pages.mealPlanBulkPinModal.title' | translate }}
+      {{ "pages.mealPlanBulkPinModal.title" | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -15,47 +15,57 @@
 <ion-content class="ion-padding">
   <ion-item lines="none">
     <ion-label>
-      {{ 'pages.mealPlanBulkPinModal.instructions1' | translate }}<br />
-      {{ 'pages.mealPlanBulkPinModal.instructions2' | translate }}<br />
+      {{ "pages.mealPlanBulkPinModal.instructions1" | translate }}<br />
+      {{ "pages.mealPlanBulkPinModal.instructions2" | translate }}<br />
     </ion-label>
   </ion-item>
 
   <br />
 
   @if (!allSelected) {
-  <ion-button
-    color="primary"
-    (click)="selectAllRecipes()"
-    size="small"
-    fill="clear"
-  >
-    {{ 'pages.mealPlanBulkPinModal.selectAll' | translate }}
-  </ion-button>
-  } @if (allSelected) {
-  <ion-button color="primary" (click)="deselectAll()" size="small" fill="clear">
-    {{ 'pages.mealPlanBulkPinModal.deselectAll' | translate }}
-  </ion-button>
+    <ion-button
+      color="primary"
+      (click)="selectAllRecipes()"
+      size="small"
+      fill="clear"
+    >
+      {{ "pages.mealPlanBulkPinModal.selectAll" | translate }}
+    </ion-button>
+  }
+  @if (allSelected) {
+    <ion-button
+      color="primary"
+      (click)="deselectAll()"
+      size="small"
+      fill="clear"
+    >
+      {{ "pages.mealPlanBulkPinModal.deselectAll" | translate }}
+    </ion-button>
   }
   <ion-list>
     @for (mealItem of mealItems; track mealItem) {
-    <ion-item>
-      <ion-checkbox
-        labelPlacement="end"
-        justify="start"
-        [disabled]="!mealItem.recipe?.id"
-        [checked]="mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]"
-        (ionChange)="mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)"
-      >
-        <div class="ion-checkbox-label">
-          {{ mealItem.recipe?.title || mealItem.title }} @if
-          (!mealItem.recipe?.id) {
-          <p>
-            {{ 'pages.mealPlanBulkPinModal.notLinkedToRecipe' | translate }}
-          </p>
-          }
-        </div>
-      </ion-checkbox>
-    </ion-item>
+      <ion-item>
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          [disabled]="!mealItem.recipe?.id"
+          [checked]="
+            mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]
+          "
+          (ionChange)="
+            mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)
+          "
+        >
+          <div class="ion-checkbox-label">
+            {{ mealItem.recipe?.title || mealItem.title }}
+            @if (!mealItem.recipe?.id) {
+              <p>
+                {{ "pages.mealPlanBulkPinModal.notLinkedToRecipe" | translate }}
+              </p>
+            }
+          </div>
+        </ion-checkbox>
+      </ion-item>
     }
   </ion-list>
 </ion-content>
@@ -65,13 +75,13 @@
     <ion-button expand="block" (click)="close()">
       <ion-icon name="close" slot="start"></ion-icon>
       <ion-label>
-        {{ 'pages.mealPlanBulkPinModal.cancel' | translate }}
+        {{ "pages.mealPlanBulkPinModal.cancel" | translate }}
       </ion-label>
     </ion-button>
     <ion-button expand="block" (click)="pinRecipes(); close()">
       <ion-icon name="pin" slot="start"></ion-icon>
       <ion-label>
-        {{ 'pages.mealPlanBulkPinModal.pin' | translate }}
+        {{ "pages.mealPlanBulkPinModal.pin" | translate }}
       </ion-label>
     </ion-button>
   </div>

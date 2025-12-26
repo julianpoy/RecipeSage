@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ 'pages.mealPlanItemDetailsModal.title' | translate }}
+      {{ "pages.mealPlanItemDetailsModal.title" | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -15,30 +15,42 @@
 <ion-content class="ion-padding">
   <ion-item (click)="mealItem.recipe ? openRecipe() : null" button>
     @if (mealItem.recipe?.recipeImages?.length) {
-    <ion-avatar slot="start">
-      <img src="{{ mealItem.recipe?.recipeImages?.at(0)?.image?.location }}" />
-    </ion-avatar>
+      <ion-avatar slot="start">
+        <img
+          src="{{ mealItem.recipe?.recipeImages?.at(0)?.image?.location }}"
+        />
+      </ion-avatar>
     }
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
       <p class="mealItem-meta">
         <ion-icon name="calendar"></ion-icon>
         <span>
-          {{ 'pages.mealPlanItemDetailsModal.scheduled' |
-          translate:{meal:mealItem.meal,date:formatDate(mealItem.scheduledDate)}
+          {{
+            "pages.mealPlanItemDetailsModal.scheduled"
+              | translate
+                : {
+                    meal: mealItem.meal,
+                    date: formatDate(mealItem.scheduledDate),
+                  }
           }}
         </span>
       </p>
       <p class="mealItem-meta">
         <ion-icon name="person"></ion-icon>
         <span>
-          {{ 'pages.mealPlanItemDetailsModal.lastModified' |
-          translate:{name:mealItem.user.name,date:formatDate(mealItem.updatedAt)}
+          {{
+            "pages.mealPlanItemDetailsModal.lastModified"
+              | translate
+                : {
+                    name: mealItem.user.name,
+                    date: formatDate(mealItem.updatedAt),
+                  }
           }}
         </span>
       </p>
       @if (mealItem.recipe) {
-      <p>{{ 'pages.mealPlanItemDetailsModal.clickToOpen' | translate }}</p>
+        <p>{{ "pages.mealPlanItemDetailsModal.clickToOpen" | translate }}</p>
       }
     </ion-label>
   </ion-item>
@@ -46,39 +58,49 @@
   <br />
 
   @if (mealItem.recipe?.id) {
-  <ion-item (click)="addToShoppingList()" button>
-    <ion-icon slot="start" name="cart"></ion-icon>
-    <ion-label>
-      <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.addToShoppingList' |
-        translate }}
-      </h2>
-    </ion-label>
-  </ion-item>
-  } @if (mealItem.recipe && mealItem.recipe.id) {
-  <ion-item
-    (click)="cookingToolbarService.isPinned(mealItem.recipe.id) ? unpinRecipe() : pinRecipe()"
-    button
-  >
-    <ion-icon slot="start" name="pin"></ion-icon>
-    <ion-label>
-      @if (cookingToolbarService.isPinned(mealItem.recipe.id)) {
-      <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.unpinRecipe' | translate }}
-      </h2>
-      } @if (!cookingToolbarService.isPinned(mealItem.recipe.id)) {
-      <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.pinRecipe' | translate }}
-      </h2>
-      }
-    </ion-label>
-  </ion-item>
+    <ion-item (click)="addToShoppingList()" button>
+      <ion-icon slot="start" name="cart"></ion-icon>
+      <ion-label>
+        <h2>
+          {{
+            "pages.mealPlanItemDetailsModal.actions.addToShoppingList"
+              | translate
+          }}
+        </h2>
+      </ion-label>
+    </ion-item>
+  }
+  @if (mealItem.recipe && mealItem.recipe.id) {
+    <ion-item
+      (click)="
+        cookingToolbarService.isPinned(mealItem.recipe.id)
+          ? unpinRecipe()
+          : pinRecipe()
+      "
+      button
+    >
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>
+        @if (cookingToolbarService.isPinned(mealItem.recipe.id)) {
+          <h2>
+            {{
+              "pages.mealPlanItemDetailsModal.actions.unpinRecipe" | translate
+            }}
+          </h2>
+        }
+        @if (!cookingToolbarService.isPinned(mealItem.recipe.id)) {
+          <h2>
+            {{ "pages.mealPlanItemDetailsModal.actions.pinRecipe" | translate }}
+          </h2>
+        }
+      </ion-label>
+    </ion-item>
   }
 
   <ion-item (click)="edit()" button>
     <ion-icon slot="start" name="create"></ion-icon>
     <ion-label>
-      <h2>{{ 'pages.mealPlanItemDetailsModal.actions.edit' | translate }}</h2>
+      <h2>{{ "pages.mealPlanItemDetailsModal.actions.edit" | translate }}</h2>
     </ion-label>
   </ion-item>
 
@@ -86,7 +108,7 @@
     <ion-icon slot="start" name="copy"></ion-icon>
     <ion-label>
       <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.duplicate' | translate }}
+        {{ "pages.mealPlanItemDetailsModal.actions.duplicate" | translate }}
       </h2>
     </ion-label>
   </ion-item>
@@ -94,7 +116,7 @@
   <ion-item (click)="delete()" button>
     <ion-icon slot="start" name="trash" color="danger"></ion-icon>
     <ion-label color="danger">
-      <h2>{{ 'pages.mealPlanItemDetailsModal.actions.delete' | translate }}</h2>
+      <h2>{{ "pages.mealPlanItemDetailsModal.actions.delete" | translate }}</h2>
     </ion-label>
   </ion-item>
 </ion-content>
@@ -103,7 +125,7 @@
   <ion-button expand="block" (click)="close()">
     <ion-icon name="close" slot="start"></ion-icon>
     <ion-label>
-      {{ 'pages.mealPlanItemDetailsModal.actions.close' | translate }}
+      {{ "pages.mealPlanItemDetailsModal.actions.close" | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

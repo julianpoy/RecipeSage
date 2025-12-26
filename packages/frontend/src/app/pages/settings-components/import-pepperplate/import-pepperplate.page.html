@@ -4,14 +4,14 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.importPepperplate.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.importPepperplate.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      {{ 'pages.importPepperplate.description' | translate }}
+      {{ "pages.importPepperplate.description" | translate }}
     </ion-label>
   </ion-item>
 
@@ -21,7 +21,9 @@
     <ion-input
       labelPlacement="stacked"
       label="{{ 'pages.importPepperplate.username' | translate }}"
-      helperText="{{ 'pages.importPepperplate.username.helperText' | translate }}"
+      helperText="{{
+        'pages.importPepperplate.username.helperText' | translate
+      }}"
       (ionInput)="username = $event.detail.value || ''"
       [value]="username"
       autocomplete="off"
@@ -32,7 +34,9 @@
     <ion-input
       labelPlacement="stacked"
       label="{{ 'pages.importPepperplate.password' | translate }}"
-      helperText="{{ 'pages.importPepperplate.password.helperText' | translate }}"
+      helperText="{{
+        'pages.importPepperplate.password.helperText' | translate
+      }}"
       (ionInput)="password = $event.detail.value || ''"
       [value]="password"
       type="password"
@@ -43,7 +47,7 @@
   <ion-item lines="none">
     <ion-label>
       <ion-button (click)="submit()">
-        {{ 'generic.submit' | translate }}
+        {{ "generic.submit" | translate }}
       </ion-button>
     </ion-label>
   </ion-item>

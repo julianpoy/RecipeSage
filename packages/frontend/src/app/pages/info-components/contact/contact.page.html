@@ -4,33 +4,37 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.contact.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.contact.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p><b>{{ 'pages.contact.subtitle' | translate }}</b></p>
+  <p>
+    <b>{{ "pages.contact.subtitle" | translate }}</b>
+  </p>
 
   <p>
-    {{ 'pages.contact.pleaseUserGuide' | translate }}
+    {{ "pages.contact.pleaseUserGuide" | translate }}
     <a href="https://docs.recipesage.com">https://docs.recipesage.com</a>
   </p>
 
   <p>
-    {{ 'pages.contact.discord' | translate }}
+    {{ "pages.contact.discord" | translate }}
     <a href="https://discord.gg/yCfzBft" target="_blank">
-      {{ 'pages.contact.discord.link' | translate }}
+      {{ "pages.contact.discord.link" | translate }}
     </a>
   </p>
 
   <p>
-    {{ 'pages.contact.emailMe' | translate }}
+    {{ "pages.contact.emailMe" | translate }}
     <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
       julian&#64;recipesage.com
     </a>
   </p>
 
   <br />
-  <p><b>{{ 'pages.contact.socialTitle' | translate }}</b></p>
+  <p>
+    <b>{{ "pages.contact.socialTitle" | translate }}</b>
+  </p>
   <social-links></social-links>
 </ion-content>

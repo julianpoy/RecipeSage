@@ -1,112 +1,119 @@
 @if (!loading) {
-<ion-list no-border>
-  <ion-list-header>
-    {{ 'pages.mealPlanPopover.options.title' | translate }}
-  </ion-list-header>
-  <!--<ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">-->
-  <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
-  <!--<ion-label>-->
-  <!--Show Added By-->
-  <!--</ion-label>-->
-  <!--</ion-item>-->
-  <!--<ion-item lines="full">-->
-  <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
-  <!--<ion-label>-->
-  <!--Show Added On-->
-  <!--</ion-label>-->
-  <!--</ion-item>-->
-  <ion-item lines="full">
-    <ion-select
-      label="{{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}"
-      [(ngModel)]="preferences[preferenceKeys.StartOfWeek]"
-      (ngModelChange)="savePreferences();"
-      okText="{{ 'generic.ok' | translate }}"
-      cancelText="{{ 'generic.cancel' | translate }}"
+  <ion-list no-border>
+    <ion-list-header>
+      {{ "pages.mealPlanPopover.options.title" | translate }}
+    </ion-list-header>
+    <!--<ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">-->
+    <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
+    <!--<ion-label>-->
+    <!--Show Added By-->
+    <!--</ion-label>-->
+    <!--</ion-item>-->
+    <!--<ion-item lines="full">-->
+    <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
+    <!--<ion-label>-->
+    <!--Show Added On-->
+    <!--</ion-label>-->
+    <!--</ion-item>-->
+    <ion-item lines="full">
+      <ion-select
+        label="{{
+          'pages.mealPlanPopover.options.startWeekOn.title' | translate
+        }}"
+        [(ngModel)]="preferences[preferenceKeys.StartOfWeek]"
+        (ngModelChange)="savePreferences()"
+        okText="{{ 'generic.ok' | translate }}"
+        cancelText="{{ 'generic.cancel' | translate }}"
+      >
+        <ion-select-option value="sunday">
+          {{ "pages.mealPlanPopover.options.startWeekOn.sunday" | translate }}
+        </ion-select-option>
+        <ion-select-option value="monday">
+          {{ "pages.mealPlanPopover.options.startWeekOn.monday" | translate }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-list-header>
+      {{ "pages.mealPlanPopover.actions.title" | translate }}
+    </ion-list-header>
+    <ion-button
+      (click)="share()"
+      expand="block"
+      size="small"
+      class="ion-margin"
     >
-      <ion-select-option value="sunday">
-        {{ 'pages.mealPlanPopover.options.startWeekOn.sunday' | translate }}
-      </ion-select-option>
-      <ion-select-option value="monday">
-        {{ 'pages.mealPlanPopover.options.startWeekOn.monday' | translate }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-list-header>
-    {{ 'pages.mealPlanPopover.actions.title' | translate }}
-  </ion-list-header>
-  <ion-button (click)="share()" expand="block" size="small" class="ion-margin">
-    <ion-icon name="share" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.share' | translate }}
-  </ion-button>
-  <ion-button
-    (click)="pinRecipes()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="pin" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.pinRecipesOpen' | translate }}
-  </ion-button>
-  <ion-button
-    (click)="bulkAddToShoppingList()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="cart" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.addToShoppingList' | translate }}
-  </ion-button>
-  <ion-button
-    (click)="copySelected()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="copy" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.copyDays' | translate }}
-  </ion-button>
-  <ion-button
-    (click)="moveSelected()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="cut" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.moveDays' | translate }}
-  </ion-button>
-  <ion-button
-    (click)="deleteSelected()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="trash" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.deleteDays' | translate }}
-  </ion-button>
-  @if (isOwner) {
-  <ion-button
-    (click)="updateMealPlan()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="pencil" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.actions.update' | translate }}
-  </ion-button>
-  }
-  <ion-list-header>
-    {{ 'pages.mealPlanPopover.dangerZone.title' | translate }}
-  </ion-list-header>
-  <ion-button
-    (click)="deleteMealPlan()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="trash" slot="start"></ion-icon>
-    {{ 'pages.mealPlanPopover.dangerZone.delete' | translate }}
-  </ion-button>
-</ion-list>
+      <ion-icon name="share" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.share" | translate }}
+    </ion-button>
+    <ion-button
+      (click)="pinRecipes()"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="pin" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.pinRecipesOpen" | translate }}
+    </ion-button>
+    <ion-button
+      (click)="bulkAddToShoppingList()"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="cart" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.addToShoppingList" | translate }}
+    </ion-button>
+    <ion-button
+      (click)="copySelected()"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="copy" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.copyDays" | translate }}
+    </ion-button>
+    <ion-button
+      (click)="moveSelected()"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="cut" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.moveDays" | translate }}
+    </ion-button>
+    <ion-button
+      (click)="deleteSelected()"
+      color="danger"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.actions.deleteDays" | translate }}
+    </ion-button>
+    @if (isOwner) {
+      <ion-button
+        (click)="updateMealPlan()"
+        expand="block"
+        size="small"
+        class="ion-margin"
+      >
+        <ion-icon name="pencil" slot="start"></ion-icon>
+        {{ "pages.mealPlanPopover.actions.update" | translate }}
+      </ion-button>
+    }
+    <ion-list-header>
+      {{ "pages.mealPlanPopover.dangerZone.title" | translate }}
+    </ion-list-header>
+    <ion-button
+      (click)="deleteMealPlan()"
+      color="danger"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      {{ "pages.mealPlanPopover.dangerZone.delete" | translate }}
+    </ion-button>
+  </ion-list>
 }

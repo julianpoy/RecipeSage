@@ -1,56 +1,59 @@
 <ion-header>
   <ion-button (click)="resetAll()" fill="clear">
-    <ion-label> {{ 'pages.rselectpopover.resetAll' | translate }} </ion-label>
+    <ion-label> {{ "pages.rselectpopover.resetAll" | translate }} </ion-label>
   </ion-button>
 </ion-header>
 
 <ion-list>
   @if (message) {
-  <ion-item lines="none">
-    <ion-label>
-      <p>{{ message }}</p>
-    </ion-label>
-  </ion-item>
-  } @for (option of ungroupedOptions; track option) {
-  <ion-item>
-    <ion-checkbox
-      labelPlacement="end"
-      justify="start"
-      [(ngModel)]="option.selected"
-      (ngModelChange)="emitChange();"
-    >
-      <div class="ion-text-wrap">{{option.title}}</div>
-    </ion-checkbox>
-  </ion-item>
-  } @for (groupTitle of getGroupTitles(); track groupTitle) {
-  <div>
     <ion-item lines="none">
-      <ion-label> {{groupTitle}} </ion-label>
+      <ion-label>
+        <p>{{ message }}</p>
+      </ion-label>
     </ion-item>
-    <div class="ion-padding-start">
-      @for (option of groupedOptions[groupTitle]; track option) {
-      <ion-item>
-        <ion-checkbox
-          labelPlacement="end"
-          justify="start"
-          [(ngModel)]="option.selected"
-          (ngModelChange)="emitChange();"
-        >
-          <div class="ion-text-wrap">{{option.title}}</div>
-        </ion-checkbox>
+  }
+  @for (option of ungroupedOptions; track option) {
+    <ion-item>
+      <ion-checkbox
+        labelPlacement="end"
+        justify="start"
+        [(ngModel)]="option.selected"
+        (ngModelChange)="emitChange()"
+      >
+        <div class="ion-text-wrap">{{ option.title }}</div>
+      </ion-checkbox>
+    </ion-item>
+  }
+  @for (groupTitle of getGroupTitles(); track groupTitle) {
+    <div>
+      <ion-item lines="none">
+        <ion-label> {{ groupTitle }} </ion-label>
       </ion-item>
-      }
+      <div class="ion-padding-start">
+        @for (option of groupedOptions[groupTitle]; track option) {
+          <ion-item>
+            <ion-checkbox
+              labelPlacement="end"
+              justify="start"
+              [(ngModel)]="option.selected"
+              (ngModelChange)="emitChange()"
+            >
+              <div class="ion-text-wrap">{{ option.title }}</div>
+            </ion-checkbox>
+          </ion-item>
+        }
+      </div>
     </div>
-  </div>
-  } @if (!ungroupedOptions.length && !getGroupTitles().length) {
-  <ion-item>
-    <ion-label class="ion-text-wrap">{{nullMessage}}</ion-label>
-  </ion-item>
+  }
+  @if (!ungroupedOptions.length && !getGroupTitles().length) {
+    <ion-item>
+      <ion-label class="ion-text-wrap">{{ nullMessage }}</ion-label>
+    </ion-item>
   }
 </ion-list>
 
 <ion-footer>
   <ion-button (click)="close()" fill="clear" class="ion-float-end">
-    <ion-label> {{ 'pages.rselectpopover.done' | translate }} </ion-label>
+    <ion-label> {{ "pages.rselectpopover.done" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

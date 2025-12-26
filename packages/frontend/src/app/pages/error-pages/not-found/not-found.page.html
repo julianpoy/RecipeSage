@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.notfound.title' | translate }}</ion-title>
+    <ion-title>{{ "pages.notfound.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,18 +12,20 @@
   <null-state>
     <ion-icon name="compass" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
-      <h2>{{ 'pages.notfound.error.title' | translate }}</h2>
+      <h2>{{ "pages.notfound.error.title" | translate }}</h2>
       <br /><br />
       <p>
-        {{ 'pages.notfound.error.message1' | translate }}<br />
-        {{ 'pages.notfound.error.message2' | translate }}<br />
-        {{ 'pages.notfound.error.message3' | translate }}<br />
+        {{ "pages.notfound.error.message1" | translate }}<br />
+        {{ "pages.notfound.error.message2" | translate }}<br />
+        {{ "pages.notfound.error.message3" | translate }}<br />
         <br />
-        <a (click)="$event.preventDefault(); goToContact()" href=""
-          >{{ 'pages.notfound.error.contact' | translate }}</a
+        <a (click)="$event.preventDefault(); goToContact()" href="">{{
+          "pages.notfound.error.contact" | translate
+        }}</a
         ><br />
-        <a (click)="$event.preventDefault(); goToHome()" href=""
-          >{{ 'pages.notfound.error.goHome' | translate }}</a
+        <a (click)="$event.preventDefault(); goToHome()" href="">{{
+          "pages.notfound.error.goHome" | translate
+        }}</a
         ><br />
       </p>
     </ion-label>
