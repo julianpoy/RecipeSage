@@ -55,7 +55,7 @@ export type JsonLD = {
     | {
         "@type": string;
         ratingValue?: string;
-        ratingCount?: string;
+        bestRating?: string;
       };
   creditText?: string;
   isBasedOn?: string;
@@ -102,7 +102,7 @@ export const recipeToJSONLD = (recipe: RecipeSummary) =>
       ? {
           "@type": "AggregateRating",
           ratingValue: `${recipe.rating}`,
-          ratingCount: "5",
+          bestRating: "5",
         }
       : undefined,
   }) satisfies JsonLD;
@@ -313,10 +313,12 @@ const getAggregateRatingFromSchema = (jsonLD: JsonLD) => {
 
   if (
     typeof jsonLD.aggregateRating === "object" &&
-    jsonLD.aggregateRating.ratingCount
+    jsonLD.aggregateRating.ratingValue
   ) {
-    const ratingCount = parseInt(jsonLD.aggregateRating.ratingCount);
-    return isNaN(ratingCount) ? undefined : ratingCount;
+    const ratingValue = parseInt(jsonLD.aggregateRating.ratingValue);
+    return isNaN(ratingValue) || ratingValue > 5 || ratingValue < 1
+      ? undefined
+      : ratingValue;
   }
 };
 
