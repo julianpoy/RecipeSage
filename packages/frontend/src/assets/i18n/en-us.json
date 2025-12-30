@@ -732,6 +732,7 @@
   "pages.import.jsonld": "Import from JSON-LD file",
   "pages.import.cookmate": "Import from Cookmate file",
   "pages.import.recipeKeeper": "Import from Recipe Keeper file",
+  "pages.import.copymethat": "Import from CopyMeThat file",
   "pages.import.pepperplate": "Import from Pepperplate account",
   "pages.import.livingCookbook": "Import from Living Cookbook file",
   "pages.import.paprika": "Import from Paprika Recipes file",
@@ -761,6 +762,10 @@
   "pages.importRecipeKeeper.tabTitle": "Import from Recipe Keeper - RecipeSage",
   "pages.importRecipeKeeper.title": "Import Recipes from Recipe Keeper Export",
   "pages.importRecipeKeeper.description": "This will import a RecipeKeeper database (ends in .zip) file into your RecipeSage account. Please note that not all .zip files are compatible, only those exported from RecipeKeeper. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importCopymethat.tabTitle": "Import from CopyMeThat - RecipeSage",
+  "pages.importCopymethat.title": "Import Recipes from CopyMeThat Export",
+  "pages.importCopymethat.description": "This will import a CopyMeThat export (ends in .zip) into your RecipeSage account. Please note that you must export in HTML format from CopyMeThat to be supported by this importer. CopyMeThat's text export can be used with the \"text files\" RecipeSage importer if desired instead. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.importLivingCookbook.tabTitle": "Import from Living Cookbook - RecipeSage",
   "pages.importLivingCookbook.title": "Import Recipes from Living Cookbook",

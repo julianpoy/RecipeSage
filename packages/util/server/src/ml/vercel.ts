@@ -3,24 +3,20 @@ import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 export const aiProvider = (() => {
+  const commonConfig = {
+    apiKey: process.env.AI_API_KEY || "selfhost-invalid-placeholder",
+    baseURL: process.env.AI_API_BASE_URL || undefined,
+  };
   const provider = process.env.AI_PROVIDER;
   switch (process.env.AI_PROVIDER || "openai") {
     case "google": {
-      return createGoogleGenerativeAI({
-        apiKey: process.env.OPENAI_API_KEY || "selfhost-invalid-placeholder",
-        baseURL: process.env.OPENAI_API_BASE_URL || undefined,
-      });
+      return createGoogleGenerativeAI(commonConfig);
     }
     case "openai": {
-      return createOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || "selfhost-invalid-placeholder",
-        baseURL: process.env.OPENAI_API_BASE_URL || undefined,
-      });
+      return createOpenAI(commonConfig);
     }
     case "anthropic": {
-      return createAnthropic({
-        apiKey: process.env.ANTHROPIC_API_KEY,
-      });
+      return createAnthropic(commonConfig);
     }
     default: {
       throw new Error(`Unsupported AI provider: ${provider}`);

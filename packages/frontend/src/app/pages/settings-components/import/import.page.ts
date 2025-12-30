@@ -39,7 +39,8 @@ type ImportFormat =
   | "csv"
   | "pdfs"
   | "images"
-  | "enex";
+  | "enex"
+  | "copymethat";
 
 @Component({
   standalone: true,
@@ -139,6 +140,10 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportRecipeKeeperPage.getPath());
         break;
       }
+      case "copymethat": {
+        this.navCtrl.navigateForward(RouteMap.ImportCopymethatPage.getPath());
+        break;
+      }
       case "textfiles": {
         this.navCtrl.navigateForward(RouteMap.ImportTextfilesPage.getPath());
         break;
@@ -206,6 +211,9 @@ export class ImportPage {
       }
       case "recipekeeper": {
         return "pages.import.recipeKeeper";
+      }
+      case "copymethat": {
+        return "pages.import.copymethat";
       }
       case "cookmate": {
         return "pages.import.cookmate";
