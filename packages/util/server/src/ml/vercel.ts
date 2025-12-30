@@ -1,9 +1,16 @@
-import { createOpenAI, openai } from "@ai-sdk/openai";
+import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 export const aiProvider = (() => {
   const provider = process.env.AI_PROVIDER;
   switch (process.env.AI_PROVIDER || "openai") {
+    case "google": {
+      return createGoogleGenerativeAI({
+        apiKey: process.env.OPENAI_API_KEY || "selfhost-invalid-placeholder",
+        baseURL: process.env.OPENAI_API_BASE_URL || undefined,
+      });
+    }
     case "openai": {
       return createOpenAI({
         apiKey: process.env.OPENAI_API_KEY || "selfhost-invalid-placeholder",
@@ -23,6 +30,11 @@ export const aiProvider = (() => {
 
 export const aiProviderNativeTools = (() => {
   switch (process.env.AI_PROVIDER || "openai") {
+    case "google": {
+      return {
+        web_search: undefined,
+      } as const;
+    }
     case "openai": {
       return {
         web_search: openai.tools.webSearch({
