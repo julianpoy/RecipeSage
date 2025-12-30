@@ -1,5 +1,6 @@
 import express from "express";
 import { textfilesHandler } from "./textfiles";
+import { copymethatHandler } from "./copymethat";
 import { cookmateHandler } from "./cookmate";
 import { fdxzHandler } from "./fdxz";
 import { jsonldHandler } from "./jsonld";
@@ -16,6 +17,7 @@ import { enexHandler } from "./enex";
 const router = express.Router();
 
 router.post("/cookmate", ...cookmateHandler);
+router.post("/copymethat", ...copymethatHandler);
 router.post("/fdxz", ...fdxzHandler);
 router.post("/jsonld", ...jsonldHandler);
 router.post("/livingcookbook", ...livingcookbookHandler);

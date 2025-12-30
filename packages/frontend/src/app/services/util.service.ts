@@ -228,6 +228,12 @@ export const RouteMap = {
     },
     path: "settings/import/cookmate",
   },
+  ImportCopymethatPage: {
+    getPath() {
+      return `/settings/import/copymethat`;
+    },
+    path: "settings/import/copymethat",
+  },
   ImportRecipeKeeperPage: {
     getPath() {
       return `/settings/import/recipe-keeper`;

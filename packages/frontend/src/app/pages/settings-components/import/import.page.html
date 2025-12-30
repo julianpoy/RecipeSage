@@ -145,6 +145,10 @@
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.enex" | translate }} </ion-label>
         </ion-item>
+        <ion-item (click)="startImport('copymethat')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.copymethat" | translate }} </ion-label>
+        </ion-item>
       </ion-list>
     </div>
   }
