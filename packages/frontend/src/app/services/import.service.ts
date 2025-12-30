@@ -215,6 +215,30 @@ export class ImportService {
     });
   }
 
+  importCopymethat(
+    file: Blob,
+    errorHandlers?: ErrorHandlers,
+    onUploadProgress?: UploadProgressHandler,
+  ) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<{
+      jobId: string;
+    }>({
+      path: "import/job/copymethat",
+      method: "POST",
+      payload: formData,
+      query: {
+        labels: this.getImportLabel(),
+      },
+      errorHandlers,
+      listeners: {
+        onUploadProgress,
+      },
+    });
+  }
+
   importRecipekeeper(
     file: Blob,
     errorHandlers?: ErrorHandlers,

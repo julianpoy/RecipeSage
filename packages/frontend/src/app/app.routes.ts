@@ -279,6 +279,15 @@ export const appRoutes: Routes = [
     title: "pages.importCookmate.tabTitle",
   },
   {
+    path: RouteMap.ImportCopymethatPage.path,
+    loadComponent: () =>
+      import(
+        "./pages/settings-components/import-copymethat/import-copymethat.page"
+      ).then((m) => m.ImportCopymethatPage),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.importCopymethat.tabTitle",
+  },
+  {
     path: RouteMap.ImportRecipeKeeperPage.path,
     loadComponent: () =>
       import(
