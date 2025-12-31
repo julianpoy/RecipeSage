@@ -3,11 +3,11 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
+import { join } from "path";
 import multer from "multer";
 import fs from "fs/promises";
 import extract from "extract-zip";
 import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import jsdom from "jsdom";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 import {
   deletePathsSilent,
@@ -16,6 +16,18 @@ import {
   importJobSetupCommon,
 } from "@recipesage/util/server/general";
 import { z } from "zod";
+import workerpool from "workerpool";
+import type { CopyMeThatResult } from "./copymethat.worker.ts";
+
+const pool = workerpool.pool(join(__dirname, "./copymethat.worker.ts"), {
+  workerType: "thread",
+  workerThreadOpts: {
+    execArgv: [
+      "--experimental-strip-types",
+      "--disable-warning=ExperimentalWarning",
+    ],
+  },
+});
 
 const schema = {
   query: z.object({
@@ -65,81 +77,28 @@ export const copymethatHandler = defineHandler(
         "utf-8",
       );
 
-      const dom = new jsdom.JSDOM(recipeHtml);
+      const result = (await pool.exec("extractCopyMeThatFields", [
+        recipeHtml,
+        extractPath,
+      ])) as CopyMeThatResult[];
 
       const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
-      const domList = dom.window.document.getElementsByClassName("recipe");
-      for (const domItem of domList) {
-        const title =
-          domItem.querySelector("#name")?.textContent?.trim() || "Untitled";
-        const description = domItem
-          .querySelector("#description")
-          ?.textContent?.trim();
-        const sourceUrl = (
-          domItem.querySelector("#original_link") as HTMLLinkElement | null
-        )?.href;
-        const rating =
-          parseInt(
-            domItem.querySelector("#ratingValue")?.textContent.trim() || "NaN",
-          ) || undefined;
-        const servings = domItem
-          .querySelector("#recipeYield")
-          ?.textContent?.trim();
-
-        const ingredients = Array.from(
-          domItem.querySelectorAll(".recipeIngredient"),
-        )
-          .map((ingredient) => ingredient.textContent.trim())
-          .join("\n");
-
-        const instructions = Array.from(
-          domItem.querySelectorAll(".instruction"),
-        )
-          .map((instruction) => instruction.textContent.trim())
-          .join("\n");
-
-        const notes =
-          domItem.querySelector("#recipeNotes")?.textContent || undefined;
-
-        const labels = [
-          ...(domItem.querySelector("extra_info")?.children || []),
-        ]
-          .map((el) => el?.id)
-          .filter(Boolean)
-          .filter((el) => el !== "rating")
-          .map(cleanLabelTitle);
-
-        const unconfirmedImagePaths = [
-          ...new Set(
-            [...domItem.getElementsByTagName("img")].map((el) => el.src),
-          ),
-        ].map((src) => extractPath + "/" + src);
-
-        const imagePaths = [];
-        for (const imagePath of unconfirmedImagePaths) {
-          try {
-            await fs.stat(imagePath);
-            imagePaths.push(imagePath);
-          } catch (_e) {
-            // Do nothing, image excluded
-          }
-        }
-
+      for (const entry of result) {
         standardizedRecipeImportInput.push({
           recipe: {
-            title,
-            description,
-            ingredients,
-            instructions,
-            yield: servings,
-            notes,
-            url: sourceUrl,
+            title: entry.title,
+            description: entry.description,
+            ingredients: entry.ingredients,
+            instructions: entry.instructions,
+            yield: entry.servings,
+            notes: entry.notes,
+            url: entry.url,
             folder: "main",
-            rating,
+            rating: entry.rating,
           },
 
-          labels: [...labels, ...importLabels],
-          images: imagePaths,
+          labels: [...entry.labels.map(cleanLabelTitle), ...importLabels],
+          images: entry.imagePaths,
         });
       }
 
