@@ -10,4 +10,5 @@ export enum ObjectTypes {
   RECIPE_IMAGE = "recipeImage",
   PROFILE_IMAGE = "profileImage",
   DATA_EXPORT = "dataExport",
+  IMPORT_DATA = "importData",
 }

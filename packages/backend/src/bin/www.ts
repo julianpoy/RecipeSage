@@ -9,6 +9,7 @@ import Debug from "debug";
 const debug = Debug("chefbook-backend:server");
 import { getRunningJobs } from "../services/job-tracker.js";
 import protocol from "http";
+import { jobQueueWorker } from "@recipesage/queue-worker";
 
 /**
  * Get port from environment and store in Express.
@@ -106,3 +107,10 @@ const termHandler = async () => {
 
 process.on("SIGTERM", termHandler);
 process.on("SIGINT", termHandler);
+
+if (
+  process.env.NODE_ENV === "development" ||
+  process.env.NODE_ENV === "selfhost"
+) {
+  jobQueueWorker.run();
+}

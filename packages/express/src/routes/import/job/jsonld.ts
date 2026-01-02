@@ -5,13 +5,9 @@ import {
 } from "../../../defineHandler";
 import multer from "multer";
 import { z } from "zod";
-import {
-  importJobFailCommon,
-  importJobFinishCommon,
-  importJobSetupCommon,
-  JsonLD,
-  jsonLDToStandardizedRecipeImportEntry,
-} from "@recipesage/util/server/general";
+import { importJobSetupCommon } from "@recipesage/util/server/general";
+import { ObjectTypes, writeBuffer } from "@recipesage/util/server/storage";
+import { enqueueJob } from "@recipesage/queue-worker";
 
 const schema = {
   body: z
@@ -38,63 +34,29 @@ export const jsonldHandler = defineHandler(
   async (req, res) => {
     const userId = res.locals.session.userId;
 
-    const file = req.file?.buffer.toString() || req.body?.jsonLD;
-    if (!file) {
+    const fileContent = req.file?.buffer.toString() || req.body?.jsonLD;
+    if (!fileContent) {
       throw new BadRequestError(
-        "Request must include multipart file under the 'file' field",
+        "Request must include multipart file under the 'file' field or jsonLD in body",
       );
     }
 
-    const { job, timer, importLabels } = await importJobSetupCommon({
+    const { job } = await importJobSetupCommon({
       userId,
       importType: "jsonld",
       labels: req.query.labels?.split(",") || [],
     });
 
-    // We complete this work outside of the scope of the request
-    const start = async () => {
-      const input = JSON.parse(file) as
-        | JsonLD
-        | JsonLD[]
-        | { recipes: JsonLD[] };
+    const buffer = Buffer.from(fileContent, "utf-8");
+    const storageRecord = await writeBuffer(
+      ObjectTypes.IMPORT_DATA,
+      buffer,
+      "application/json",
+    );
 
-      let jsonLD: JsonLD[];
-      if (Array.isArray(input)) jsonLD = input;
-      else if ("recipes" in input) jsonLD = input.recipes;
-      else jsonLD = [input];
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      jsonLD = jsonLD.filter((el: any) => el["@type"] === "Recipe");
-
-      if (!jsonLD.length) {
-        throw new BadRequestError(
-          "Only supports JSON-LD or array of JSON-LD with type 'Recipe'",
-        );
-      }
-
-      const standardizedRecipeImportInput = jsonLD.map((ld: JsonLD) => {
-        const result = jsonLDToStandardizedRecipeImportEntry(ld);
-        return {
-          ...result,
-          labels: [...result.labels, ...importLabels],
-        };
-      });
-
-      await importJobFinishCommon({
-        timer,
-        job,
-        userId,
-        standardizedRecipeImportInput,
-        importTempDirectory: undefined,
-      });
-    };
-
-    start().catch(async (error) => {
-      await importJobFailCommon({
-        timer,
-        job,
-        error,
-      });
+    await enqueueJob({
+      jobId: job.id,
+      s3StorageKey: storageRecord.key,
     });
 
     return {

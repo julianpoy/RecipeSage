@@ -55,7 +55,7 @@ export const metrics = {
   jobFailed: new client.Histogram({
     name: "job_failed",
     help: "A job has failed",
-    labelNames: ["job_type", "import_type"],
+    labelNames: ["job_type", "import_type", "expected"],
   }),
   pepperplateAuthFailure: new client.Counter({
     name: "pepperplate_auth_failure",
