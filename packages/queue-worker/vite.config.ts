@@ -53,5 +53,6 @@ export default defineConfig(() => ({
       reportsDirectory: "../../coverage/packages/queue-worker",
       provider: "v8" as const,
     },
+    passWithNoTests: true,
   },
 }));
