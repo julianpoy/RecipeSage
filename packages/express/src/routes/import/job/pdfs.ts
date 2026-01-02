@@ -4,17 +4,11 @@ import {
   defineHandler,
 } from "../../../defineHandler";
 import multer from "multer";
-import fs from "fs/promises";
-import extract from "extract-zip";
-import path from "path";
-import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import { pdfToRecipe } from "@recipesage/util/server/ml";
-import {
-  deletePathsSilent,
-  importJobFailCommon,
-  importJobFinishCommon,
-  importJobSetupCommon,
-} from "@recipesage/util/server/general";
+import { createReadStream } from "fs";
+import { unlink } from "fs/promises";
+import { importJobSetupCommon } from "@recipesage/util/server/general";
+import { ObjectTypes, writeStream } from "@recipesage/util/server/storage";
+import { enqueueJob } from "@recipesage/queue-worker";
 import { z } from "zod";
 
 const schema = {
@@ -36,8 +30,6 @@ export const pdfsHandler = defineHandler(
   async (req, res) => {
     const userId = res.locals.session.userId;
 
-    const cleanupPaths: string[] = [];
-
     const file = req.file;
     if (!file) {
       throw new BadRequestError(
@@ -45,85 +37,28 @@ export const pdfsHandler = defineHandler(
       );
     }
 
-    const { job, timer, importLabels } = await importJobSetupCommon({
+    const { job } = await importJobSetupCommon({
       userId,
       importType: "pdfs",
       labels: req.query.labels?.split(",") || [],
     });
 
-    // We complete this work outside of the scope of the request
-    const start = async () => {
-      const zipPath = file.path;
-      cleanupPaths.push(zipPath);
-      const extractPath = zipPath + "-extract";
-      cleanupPaths.push(extractPath);
+    // Stream file to S3
+    const fileStream = createReadStream(file.path);
+    const storageRecord = await writeStream(
+      ObjectTypes.IMPORT_DATA,
+      fileStream,
+      file.mimetype,
+    );
 
-      await extract(zipPath, { dir: extractPath });
+    // Delete temp file
+    await unlink(file.path);
 
-      const fileNames = await fs.readdir(extractPath);
-
-      const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
-      for (const fileName of fileNames) {
-        const filePath = path.join(extractPath, fileName);
-
-        if (!filePath.endsWith(".pdf")) {
-          continue;
-        }
-
-        const recipePDF = await fs.readFile(filePath);
-
-        const images = [];
-        const baseName = path.basename(fileName);
-        const possibleImageNames = [
-          `${baseName}.png`,
-          `${baseName}.jpg`,
-          `${baseName}.jpeg`,
-        ];
-
-        for (const possibleImageName of possibleImageNames) {
-          try {
-            const fileContents = await fs.readFile(
-              path.join(extractPath, possibleImageName),
-              "base64",
-            );
-            images.push(fileContents);
-          } catch (_e) {
-            // Do nothing
-          }
-        }
-
-        const recipe = await pdfToRecipe(recipePDF);
-        if (!recipe) {
-          continue;
-        }
-
-        standardizedRecipeImportInput.push({
-          ...recipe,
-          images,
-          labels: importLabels,
-        });
-      }
-
-      await importJobFinishCommon({
-        timer,
-        job,
-        userId,
-        standardizedRecipeImportInput,
-        importTempDirectory: extractPath,
-      });
-    };
-
-    start()
-      .catch(async (error) => {
-        await importJobFailCommon({
-          timer,
-          job,
-          error,
-        });
-      })
-      .finally(async () => {
-        await deletePathsSilent(cleanupPaths);
-      });
+    // Enqueue job for worker processing
+    await enqueueJob({
+      jobId: job.id,
+      s3StorageKey: storageRecord.key,
+    });
 
     return {
       statusCode: 201,

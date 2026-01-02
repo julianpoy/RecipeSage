@@ -39,16 +39,15 @@ services:
     volumes:
       - ./packages:/app/packages
       - ./.credentials:/app/.credentials
-    ports:
-      - "3000:3000"
-    command: ./scripts/watchandrun.sh 'node node_modules/ts-node/dist/bin.js --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www.ts' ./packages/backend ./packages/trpc ./packages/util ./packages/express ./packages/prisma
+    command: ./scripts/watchandrun.sh 'node node_modules/ts-node/dist/bin.js --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www.ts' ./packages/backend ./packages/queue-worker ./packages/trpc ./packages/util ./packages/express ./packages/prisma
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET_RECIPE_IMAGE=chefbook-dev
       - AWS_BUCKET_PROFILE_IMAGE=chefbook-dev
+      - AWS_BUCKET_IMPORT_DATA=chefbook-dev-import-data
       - AWS_BUCKET_DATA_EXPORT=chefbook-dev-data-export
       - FIRESTORE_BUCKET=
-      - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
+      - STORAGE_TYPE=s3
       - NODE_ENV=development
       - ENVIRONMENT=development
       - VERBOSE=false
@@ -70,6 +69,7 @@ services:
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - BROWSERLESS_TOKEN=recipesage_dev
+      - JOB_QUEUE_IMPORT_REDIS_HOST=redis
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
       - GROCERY_CATEGORIZER_URL=http://grocery-categorizer:8000/
       - OTEL_LOG_LEVEL=info
@@ -113,6 +113,8 @@ services:
       - MAX_MEMORY_PERCENT=80
       - TOKEN=recipesage_dev
     stop_grace_period: 1s
+  redis:
+    image: redis
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
     stop_grace_period: 1s

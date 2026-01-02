@@ -1,9 +1,10 @@
 import { StorageObjectRecord, type StorageProvider } from "./";
 import { ObjectTypes } from "./shared";
 import fs from "fs/promises";
+import { createReadStream } from "fs";
 import crypto from "crypto";
 import { join, dirname } from "path";
-import { PassThrough } from "stream";
+import { PassThrough, Readable } from "stream";
 
 if (
   process.env.STORAGE_TYPE === "filesystem" &&
@@ -76,7 +77,7 @@ export const writeBuffer = async (
 
 export const writeStream = async (
   objectType: ObjectTypes,
-  stream: PassThrough,
+  stream: PassThrough | Readable,
   mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const key = generateKey(objectType);
@@ -122,10 +123,19 @@ export const deleteObjects = async (
   await Promise.all(keys.map((key) => deleteObject(_objectType, key)));
 };
 
+export async function readStream(
+  _objectType: ObjectTypes,
+  key: string,
+): Promise<Readable> {
+  const fsLocation = join(FILESYSTEM_STORAGE_PATH, key);
+  return createReadStream(fsLocation);
+}
+
 export default {
   getSignedDownloadUrl,
   writeBuffer,
   writeStream,
   deleteObject,
   deleteObjects,
+  readStream,
 } satisfies StorageProvider as StorageProvider;

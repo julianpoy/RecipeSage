@@ -2,20 +2,10 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
-import { JobStatus } from "@prisma/client";
-import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
 import { z } from "zod";
-import {
-  clipUrl,
-  importJobFailCommon,
-  importJobFinishCommon,
-  importJobSetupCommon,
-  throttleDropPromise,
-} from "@recipesage/util/server/general";
-
-const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
+import { importJobSetupCommon } from "@recipesage/util/server/general";
+import { ObjectTypes, writeBuffer } from "@recipesage/util/server/storage";
+import { enqueueJob } from "@recipesage/queue-worker";
 
 const schema = {
   body: z.object({
@@ -36,70 +26,25 @@ export const urlsHandler = defineHandler(
 
     const urls = req.body.urls;
 
-    const { job, timer, importLabels } = await importJobSetupCommon({
+    const { job } = await importJobSetupCommon({
       userId,
       importType: "urls",
       labels: req.query.labels?.split(",") || [],
     });
 
-    // We complete this work outside of the scope of the request
-    const start = async () => {
-      const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
+    // Upload URLs to S3 as text file (newline-separated)
+    const urlsText = urls.join("\n");
+    const buffer = Buffer.from(urlsText, "utf-8");
+    const storageRecord = await writeBuffer(
+      ObjectTypes.IMPORT_DATA,
+      buffer,
+      "text/plain",
+    );
 
-      const onClipProgress = throttleDropPromise(
-        async (processed: number, totalCount: number) => {
-          try {
-            await prisma.job.updateMany({
-              where: {
-                id: job.id,
-                status: JobStatus.RUN,
-              },
-              data: {
-                progress: Math.max(
-                  Math.floor((processed / totalCount) * 100) / 2,
-                  1,
-                ),
-              },
-            });
-          } catch (e) {
-            Sentry.captureException(e);
-            console.error(e);
-          }
-        },
-        JOB_PROGRESS_UPDATE_PERIOD_SECONDS * 1000,
-      );
-
-      for (let i = 0; i < urls.length; i++) {
-        const url = urls[i];
-
-        try {
-          const clipResults = await clipUrl(url);
-          standardizedRecipeImportInput.push({
-            ...clipResults,
-            labels: importLabels,
-          });
-        } catch (_e) {
-          // Skip entry
-        }
-
-        onClipProgress(i, urls.length);
-      }
-
-      await importJobFinishCommon({
-        timer,
-        job,
-        userId,
-        standardizedRecipeImportInput,
-        importTempDirectory: undefined,
-      });
-    };
-
-    start().catch(async (error) => {
-      await importJobFailCommon({
-        timer,
-        job,
-        error,
-      });
+    // Enqueue job for worker processing
+    await enqueueJob({
+      jobId: job.id,
+      s3StorageKey: storageRecord.key,
     });
 
     return {

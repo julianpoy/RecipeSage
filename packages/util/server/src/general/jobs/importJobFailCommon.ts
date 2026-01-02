@@ -12,9 +12,16 @@ export class ImportNoRecipesError extends Error {
 }
 
 export class ImportBadFormatError extends Error {
-  constructor() {
-    super();
+  constructor(message?: string) {
+    super(message);
     this.name = "ImportBadFormatError";
+  }
+}
+
+export class ImportBadCredentialsError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "ImportBadCredentialsError";
   }
 }
 
@@ -34,6 +41,8 @@ export async function importJobFailCommon(args: {
 
   const isNoRecipesError = args.error instanceof ImportNoRecipesError;
 
+  const isBadCredentialsError = args.error instanceof ImportBadCredentialsError;
+
   await prisma.job.update({
     where: {
       id: args.job.id,
@@ -43,24 +52,28 @@ export async function importJobFailCommon(args: {
       resultCode: getImportJobResultCode({
         isBadFormat: isBadZipError || isBadFormatError,
         isNoRecipes: isNoRecipesError,
+        isBadCredentials: isBadCredentialsError,
       }),
     },
   });
 
-  if (!isBadFormatError && !isNoRecipesError) {
+  if (!isBadFormatError && !isNoRecipesError && !isBadCredentialsError) {
     Sentry.captureException(args.error, {
       extra: {
         jobId: args.job.id,
       },
     });
     console.error(args.error);
-
-    metrics.jobFailed.observe(
-      {
-        job_type: "import",
-        import_type: (args.job.meta as JobMeta).importType,
-      },
-      args.timer(),
-    );
   }
+
+  metrics.jobFailed.observe(
+    {
+      job_type: "import",
+      import_type: (args.job.meta as JobMeta).importType,
+      expected: String(
+        isBadFormatError || isNoRecipesError || isBadCredentialsError,
+      ),
+    },
+    args.timer(),
+  );
 }
