@@ -1094,5 +1094,9 @@
     "pages.shoppingListCategoryOrderModal.description": "Kategorien auf dieser Einkaufsliste werden in der von dir hier festgelegten Reihenfolge sortiert.",
     "pages.shoppingListCategoryOrderModal.instructions": "Jeder Eintrag sollte in einer eigenen Zeile stehen und mit dem Namen einer der vordefinierten oder benutzerdefinierten Kategorien übereinstimmen, die du beim Sortieren von Artikeln eingegeben hast. Es muss nicht auf Klein‑ und Großschreibung geachtet werden.",
     "pages.shoppingListCategoryOrderModal.label": "Kategoriereihenfolge",
-    "pages.shoppingListCategoryOrderModal.placeholder": "Kategorienamen, einer pro Zeile"
+    "pages.shoppingListCategoryOrderModal.placeholder": "Kategorienamen, einer pro Zeile",
+    "pages.import.copymethat": "Aus CopyMeThat-Datei importieren",
+    "pages.importCopymethat.tabTitle": "Aus CopyMeThat importieren – RecipeSage",
+    "pages.importCopymethat.title": "Rezepte aus CopyMeThat-Export importieren",
+    "pages.importCopymethat.description": "Dadurch wird eine CopyMeThat-Exportdatei (mit der Endung .zip) in dein RecipeSage-Konto importiert. Bitte beachte, die Rezepte bei CopyMeThat im HTML-Format zu exportieren, damit der Import unterstützt wird. Stattdessen kann die exportierte CopyMeThat-Textdatei auch mit dem Textdatei-Importer von RecipeSage verwendet werden. Bitte lies bei Problemen mit dem Import das Benutzerhandbuch. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende."
 }
