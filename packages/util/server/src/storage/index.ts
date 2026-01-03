@@ -2,7 +2,7 @@ import S3Storage from "./s3";
 import FirebaseStorage from "./firebase";
 import FilesystemStorage from "./filesystem";
 import { ObjectTypes } from "./shared";
-import { PassThrough } from "stream";
+import { PassThrough, Readable } from "stream";
 
 export interface StorageObjectRecord {
   objectType: ObjectTypes;
@@ -33,13 +33,15 @@ export interface StorageProvider {
 
   writeStream: (
     objectType: ObjectTypes,
-    stream: PassThrough,
+    stream: PassThrough | Readable,
     mimetype: string,
   ) => Promise<StorageObjectRecord>;
 
   deleteObject: (objectType: ObjectTypes, key: string) => Promise<void>;
 
   deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<void>;
+
+  readStream: (objectType: ObjectTypes, key: string) => Promise<Readable>;
 }
 
 const storageProviders: {
@@ -64,6 +66,7 @@ export const writeBuffer = storageProvider.writeBuffer;
 export const writeStream = storageProvider.writeStream;
 export const deleteObject = storageProvider.deleteObject;
 export const deleteObjects = storageProvider.deleteObjects;
+export const readStream = storageProvider.readStream;
 export * from "./image";
 export * from "./shared";
 export * from "./gunzipPromise";

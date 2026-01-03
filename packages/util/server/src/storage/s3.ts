@@ -11,11 +11,12 @@ import {
 import { getSignedUrl as s3SdkGetSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Upload } from "@aws-sdk/lib-storage";
 import crypto from "crypto";
-import { PassThrough } from "stream";
+import { PassThrough, Readable } from "stream";
 
 const AWS_BUCKET_RECIPE_IMAGE = process.env.AWS_BUCKET_RECIPE_IMAGE || "";
 const AWS_BUCKET_PROFILE_IMAGE = process.env.AWS_BUCKET_PROFILE_IMAGE || "";
 const AWS_BUCKET_DATA_EXPORT = process.env.AWS_BUCKET_DATA_EXPORT || "";
+const AWS_BUCKET_IMPORT_DATA = process.env.AWS_BUCKET_IMPORT_DATA || "";
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || "";
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || "";
 const AWS_REGION = process.env.AWS_REGION || "us-west-2";
@@ -25,6 +26,7 @@ if (
   (!AWS_BUCKET_RECIPE_IMAGE ||
     !AWS_BUCKET_PROFILE_IMAGE ||
     !AWS_BUCKET_DATA_EXPORT ||
+    !AWS_BUCKET_IMPORT_DATA ||
     !AWS_ACCESS_KEY_ID ||
     !AWS_SECRET_ACCESS_KEY ||
     !AWS_REGION)
@@ -39,16 +41,19 @@ const ObjectTypesToBucket = {
   [ObjectTypes.RECIPE_IMAGE]: AWS_BUCKET_RECIPE_IMAGE,
   [ObjectTypes.PROFILE_IMAGE]: AWS_BUCKET_PROFILE_IMAGE,
   [ObjectTypes.DATA_EXPORT]: AWS_BUCKET_DATA_EXPORT,
+  [ObjectTypes.IMPORT_DATA]: AWS_BUCKET_IMPORT_DATA,
 } satisfies Record<ObjectTypes, string>;
 const ObjectTypesToACL = {
   [ObjectTypes.RECIPE_IMAGE]: S3_PUBLIC_READ_ACL,
   [ObjectTypes.PROFILE_IMAGE]: S3_PUBLIC_READ_ACL,
   [ObjectTypes.DATA_EXPORT]: undefined,
+  [ObjectTypes.IMPORT_DATA]: undefined,
 } satisfies Record<ObjectTypes, ObjectCannedACL | undefined>;
 const ObjectTypesToCacheControl = {
   [ObjectTypes.RECIPE_IMAGE]: S3_YEAR_IMMUTABLE_CACHECONTROL,
   [ObjectTypes.PROFILE_IMAGE]: S3_YEAR_IMMUTABLE_CACHECONTROL,
   [ObjectTypes.DATA_EXPORT]: S3_YEAR_IMMUTABLE_CACHECONTROL,
+  [ObjectTypes.IMPORT_DATA]: undefined,
 } satisfies Record<ObjectTypes, string | undefined>;
 
 const s3 = new S3Client({
@@ -143,7 +148,7 @@ export const writeBuffer = async (
 
 export const writeStream = async (
   objectType: ObjectTypes,
-  stream: PassThrough,
+  stream: PassThrough | Readable,
   mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const key = generateKey();
@@ -209,10 +214,29 @@ export const deleteObjects = async (
   return;
 };
 
+export async function readStream(
+  objectType: ObjectTypes,
+  key: string,
+): Promise<Readable> {
+  const command = new GetObjectCommand({
+    Bucket: ObjectTypesToBucket[objectType],
+    Key: key,
+  });
+
+  const response = await s3.send(command);
+
+  if (!response.Body) {
+    throw new Error(`No body in S3 response for key: ${key}`);
+  }
+
+  return response.Body as Readable;
+}
+
 export default {
   getSignedDownloadUrl,
   writeBuffer,
   writeStream,
   deleteObject,
   deleteObjects,
+  readStream,
 } satisfies StorageProvider as StorageProvider;

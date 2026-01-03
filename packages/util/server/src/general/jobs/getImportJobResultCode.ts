@@ -7,6 +7,6 @@ export const getImportJobResultCode = (args: {
 }) => {
   if (args.isBadFormat) return JOB_RESULT_CODES.badFile;
   if (args.isNoRecipes) return JOB_RESULT_CODES.emptyFile;
-  if (args.isBadCredentials) return JOB_RESULT_CODES.emptyFile;
+  if (args.isBadCredentials) return JOB_RESULT_CODES.badCredentials;
   return JOB_RESULT_CODES.unknown;
 };

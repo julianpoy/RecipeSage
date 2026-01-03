@@ -37,6 +37,7 @@ jobs:
           SEARCH_PROVIDER: none
           STORAGE_TYPE: filesystem
           FILESYSTEM_STORAGE_PATH: ~/project/rsdata
+          JOB_QUEUE_IMPORT_REDIS_HOST: localhost
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
       - image: postgres:16.1
@@ -44,6 +45,7 @@ jobs:
           POSTGRES_USER: chefbook
           POSTGRES_PASSWORD: admin
           POSTGRES_DB: chefbook_test
+      - image: redis
     steps:
       - checkout
       - install-dependencies

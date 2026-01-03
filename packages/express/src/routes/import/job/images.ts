@@ -4,17 +4,11 @@ import {
   defineHandler,
 } from "../../../defineHandler";
 import multer from "multer";
-import fs from "fs/promises";
-import extract from "extract-zip";
-import path from "path";
-import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
-import {
-  deletePathsSilent,
-  importJobFailCommon,
-  importJobFinishCommon,
-  importJobSetupCommon,
-} from "@recipesage/util/server/general";
+import { createReadStream } from "fs";
+import { unlink } from "fs/promises";
+import { importJobSetupCommon } from "@recipesage/util/server/general";
+import { ObjectTypes, writeStream } from "@recipesage/util/server/storage";
+import { enqueueJob } from "@recipesage/queue-worker";
 import { z } from "zod";
 
 const schema = {
@@ -36,8 +30,6 @@ export const imagesHandler = defineHandler(
   async (req, res) => {
     const userId = res.locals.session.userId;
 
-    const cleanupPaths: string[] = [];
-
     const file = req.file;
     if (!file) {
       throw new BadRequestError(
@@ -45,71 +37,25 @@ export const imagesHandler = defineHandler(
       );
     }
 
-    const { job, timer, importLabels } = await importJobSetupCommon({
+    const { job } = await importJobSetupCommon({
       userId,
       importType: "images",
       labels: req.query.labels?.split(",") || [],
     });
 
-    // We complete this work outside of the scope of the request
-    const start = async () => {
-      const zipPath = file.path;
-      cleanupPaths.push(zipPath);
-      const extractPath = zipPath + "-extract";
-      cleanupPaths.push(extractPath);
+    const fileStream = createReadStream(file.path);
+    const storageRecord = await writeStream(
+      ObjectTypes.IMPORT_DATA,
+      fileStream,
+      file.mimetype,
+    );
 
-      await extract(zipPath, { dir: extractPath });
+    await unlink(file.path);
 
-      const fileNames = await fs.readdir(extractPath);
-
-      const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
-      for (const fileName of fileNames) {
-        const filePath = path.join(extractPath, fileName);
-
-        if (
-          !filePath.endsWith(".jpg") &&
-          !filePath.endsWith(".jpeg") &&
-          !filePath.endsWith(".png")
-        ) {
-          continue;
-        }
-
-        const recipeImageBuffer = await fs.readFile(filePath);
-        const images = [];
-        images.push(filePath);
-
-        const recipe = await ocrImagesToRecipe([recipeImageBuffer]);
-        if (!recipe) {
-          continue;
-        }
-
-        standardizedRecipeImportInput.push({
-          ...recipe,
-          images,
-          labels: importLabels,
-        });
-      }
-
-      await importJobFinishCommon({
-        timer,
-        job,
-        userId,
-        standardizedRecipeImportInput,
-        importTempDirectory: extractPath,
-      });
-    };
-
-    start()
-      .catch(async (error) => {
-        await importJobFailCommon({
-          timer,
-          job,
-          error,
-        });
-      })
-      .finally(async () => {
-        await deletePathsSilent(cleanupPaths);
-      });
+    await enqueueJob({
+      jobId: job.id,
+      s3StorageKey: storageRecord.key,
+    });
 
     return {
       statusCode: 201,

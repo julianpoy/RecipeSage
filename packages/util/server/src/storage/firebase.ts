@@ -1,4 +1,4 @@
-import { PassThrough } from "stream";
+import { PassThrough, Readable } from "stream";
 import { StorageObjectRecord, type StorageProvider } from "./";
 import { ObjectTypes } from "./shared";
 import crypto from "crypto";
@@ -13,6 +13,7 @@ const ObjectTypesToSubpath = {
   [ObjectTypes.RECIPE_IMAGE]: ObjectTypes.RECIPE_IMAGE,
   [ObjectTypes.PROFILE_IMAGE]: ObjectTypes.PROFILE_IMAGE,
   [ObjectTypes.DATA_EXPORT]: ObjectTypes.DATA_EXPORT,
+  [ObjectTypes.IMPORT_DATA]: ObjectTypes.IMPORT_DATA,
 };
 
 // Generate a unique key for the object
@@ -74,7 +75,7 @@ export const writeBuffer = async (
 
 export const writeStream = async (
   objectType: ObjectTypes,
-  stream: PassThrough,
+  stream: PassThrough | Readable,
   mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const bucket = getStorage().bucket(BUCKET);
@@ -130,10 +131,19 @@ export const deleteObjects = async (
   );
 };
 
+export async function readStream(
+  _objectType: ObjectTypes,
+  key: string,
+): Promise<Readable> {
+  const bucket = getStorage().bucket(BUCKET);
+  return bucket.file(key).createReadStream();
+}
+
 export default {
   getSignedDownloadUrl,
   writeBuffer,
   writeStream,
   deleteObject,
   deleteObjects,
+  readStream,
 } satisfies StorageProvider as StorageProvider;

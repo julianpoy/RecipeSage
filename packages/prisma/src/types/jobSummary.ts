@@ -31,6 +31,13 @@ export interface JobMeta {
     | "enex"
     | "copymethat";
   importLabels?: string[];
+  importStorageKey?: string;
+  importStorageBucket?: string;
+  options?: {
+    excludeImages?: boolean;
+    includeStockRecipes?: boolean;
+    includeTechniques?: boolean;
+  };
   exportType?: "txt" | "jsonld" | "pdf";
   exportScope?: "all" | "recipeids";
   exportStorageBucket?: string;

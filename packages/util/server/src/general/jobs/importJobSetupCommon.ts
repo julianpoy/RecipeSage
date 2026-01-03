@@ -7,6 +7,9 @@ export async function importJobSetupCommon(args: {
   importType: JobMeta["importType"];
   labels: string[];
   userId: string;
+  excludeImages?: boolean;
+  includeStockRecipes?: boolean;
+  includeTechniques?: boolean;
 }) {
   const timer = metrics.jobFinished.startTimer();
 
@@ -26,6 +29,11 @@ export async function importJobSetupCommon(args: {
       meta: {
         importType: args.importType,
         importLabels,
+        options: {
+          excludeImages: args.excludeImages,
+          includeStockRecipes: args.includeStockRecipes,
+          includeTechniques: args.includeTechniques,
+        },
       } satisfies JobMeta,
     },
   });
