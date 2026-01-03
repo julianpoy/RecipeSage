@@ -144,7 +144,7 @@
     "@sentry/esbuild-plugin": "^4.6.1",
     "@sentry/webpack-plugin": "^4.6.1",
     "@swc-node/register": "~1.11.1",
-    "@swc/core": "1.15.7",
+    "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
     "@types/ahocorasick": "^1.0.0",
     "@types/cookie-parser": "^1.4.8",
