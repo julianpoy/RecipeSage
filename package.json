@@ -177,7 +177,7 @@
     "nx": "22.3.3",
     "prettier": "^3.5.3",
     "regenerator-runtime": "^0.14.1",
-    "sequelize-cli": "^6.6.2",
+    "sequelize-cli": "^6.6.3",
     "sinon": "^21.0.0",
     "supertest": "7.1.4",
     "ts-loader": "^9.5.2",
