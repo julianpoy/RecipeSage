@@ -154,7 +154,7 @@
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
     "@types/node": "24.9.1",
-    "@types/node-fetch": "^2.6.11",
+    "@types/node-fetch": "^2.6.13",
     "@types/pdfkit": "^0.17.4",
     "@types/pdfmake": "^0.2.12",
     "@types/sanitize-html": "^2.16.0",
