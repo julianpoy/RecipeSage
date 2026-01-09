@@ -123,7 +123,7 @@
     "@angular-eslint/schematics": "21.1.0",
     "@angular-eslint/template-parser": "21.1.0",
     "@angular/cli": "21.0.4",
-    "@angular/compiler": "21.0.6",
+    "@angular/compiler": "21.0.7",
     "@angular/compiler-cli": "21.0.6",
     "@angular/language-service": "21.0.6",
     "@babel/preset-env": "^7.28.5",
