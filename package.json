@@ -166,7 +166,7 @@
     "@types/zip-stream": "^7.0.0",
     "@vitest/coverage-v8": "4.0.9",
     "@vitest/eslint-plugin": "^1.6.6",
-    "@vitest/ui": "4.0.9",
+    "@vitest/ui": "4.0.17",
     "copy-webpack-plugin": "^12.0.2",
     "eslint": "9.39.2",
     "eslint-config-prettier": "^10.0.0",
