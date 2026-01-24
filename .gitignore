@@ -36,6 +36,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.mockup/*
 
 # System Files
 .DS_Store
@@ -57,3 +58,6 @@ kube/secrets.yml
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
 generated
+
+# Claude Code local settings
+.claude/
