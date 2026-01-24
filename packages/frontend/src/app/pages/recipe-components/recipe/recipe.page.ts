@@ -110,20 +110,25 @@ export class RecipePage {
 
   isLoggedIn: boolean = !!localStorage.getItem("token");
 
+  // Cached nutrition data - updated when recipe loads
+  nutrition: NutritionInfo | null = null;
+  ingredientNutritionList: IngredientNutrition[] | undefined = undefined;
+
   /**
-   * Computed nutrition info from recipe data.
+   * Computes nutrition info from recipe data.
    * Returns null if no nutrition data is available.
    */
-  get nutrition(): NutritionInfo | null {
-    if (!this.recipe?.nutritionCalories) return null;
+  private computeNutrition(): NutritionInfo | null {
+    // Use == null to allow calories of 0 (e.g., water, tea)
+    if (this.recipe?.nutritionCalories == null) return null;
 
     return {
       servingSize: this.recipe.nutritionServingSize || "",
       yield: this.recipe.yield,
       calories: this.recipe.nutritionCalories,
-      carbs: this.recipe.nutritionCarbs || 0,
-      protein: this.recipe.nutritionProtein || 0,
-      fat: this.recipe.nutritionFat || 0,
+      carbs: this.recipe.nutritionCarbs ?? 0,
+      protein: this.recipe.nutritionProtein ?? 0,
+      fat: this.recipe.nutritionFat ?? 0,
       saturatedFat: this.recipe.nutritionSaturatedFat ?? undefined,
       unsaturatedFat: this.recipe.nutritionUnsaturatedFat ?? undefined,
       fiber: this.recipe.nutritionFiber ?? undefined,
@@ -134,10 +139,11 @@ export class RecipePage {
   }
 
   /**
-   * Computed ingredient nutrition list from recipe JSON data.
+   * Computes ingredient nutrition list from recipe JSON data.
    * Transforms the keyed object into an array for the modal.
+   * Keys are the original ingredient strings from the recipe.
    */
-  get ingredientNutritionList(): IngredientNutrition[] | undefined {
+  private computeIngredientNutritionList(): IngredientNutrition[] | undefined {
     if (!this.recipe?.ingredientNutrition) return undefined;
 
     const data = this.recipe.ingredientNutrition as Record<
@@ -160,10 +166,10 @@ export class RecipePage {
       name: ing.name,
       quantity: ing.quantity && ing.unit ? `${ing.quantity} ${ing.unit}` : key,
       grams: ing.grams,
-      calories: ing.calories || 0,
-      fat: ing.fat || 0,
-      carbs: ing.carbs || 0,
-      protein: ing.protein || 0,
+      calories: ing.calories ?? 0,
+      fat: ing.fat ?? 0,
+      carbs: ing.carbs ?? 0,
+      protein: ing.protein ?? 0,
       estimated: ing.estimated,
       optional: ing.optional,
     }));
@@ -190,6 +196,8 @@ export class RecipePage {
     this.me = null;
     this.similarRecipes = [];
     this.linkedRecipes = [];
+    this.nutrition = null;
+    this.ingredientNutritionList = undefined;
 
     this.loadWithBar();
 
@@ -227,6 +235,8 @@ export class RecipePage {
     if (!response) return;
 
     this.recipe = response;
+    this.nutrition = this.computeNutrition();
+    this.ingredientNutritionList = this.computeIngredientNutritionList();
     if (this.recipe && "recipeLinks" in this.recipe) {
       const recipeWithLinks = this.recipe as typeof this.recipe & {
         recipeLinks: Array<{
