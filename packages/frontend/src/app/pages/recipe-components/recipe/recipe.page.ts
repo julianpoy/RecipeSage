@@ -110,82 +110,64 @@ export class RecipePage {
 
   isLoggedIn: boolean = !!localStorage.getItem("token");
 
-  // Mock nutrition data for frontend development
-  // TODO: Replace with data from backend once schema is implemented
-  mockNutrition: NutritionInfo | null = {
-    servingSize: "4 fries",
-    yield: "16 fries",
-    calories: 330,
-    carbs: 22,
-    protein: 6,
-    fat: 25,
-    saturatedFat: 4,
-    unsaturatedFat: 18,
-    fiber: 5,
-    sugar: 1,
-    sodium: 620,
-    cholesterol: 93,
-  };
+  /**
+   * Computed nutrition info from recipe data.
+   * Returns null if no nutrition data is available.
+   */
+  get nutrition(): NutritionInfo | null {
+    if (!this.recipe?.nutritionCalories) return null;
 
-  mockIngredientNutrition: IngredientNutrition[] = [
-    {
-      name: "Avocados",
-      quantity: "2 large",
-      grams: 400,
-      calories: 640,
-      fat: 60,
-      carbs: 36,
-      protein: 8,
-    },
-    {
-      name: "Panko bread crumbs",
-      quantity: "3/4 cup",
-      grams: 45,
-      calories: 165,
-      fat: 2,
-      carbs: 33,
-      protein: 5,
-    },
-    {
-      name: "Eggs",
-      quantity: "2 large",
-      grams: 100,
-      calories: 143,
-      fat: 10,
-      carbs: 1,
-      protein: 13,
-    },
-    {
-      name: "All-purpose flour",
-      quantity: "1/2 cup",
-      grams: 63,
-      calories: 228,
-      fat: 1,
-      carbs: 48,
-      protein: 6,
-    },
-    {
-      name: "Olive oil",
-      quantity: "1 tbsp",
-      grams: 14,
-      calories: 124,
-      fat: 14,
-      carbs: 0,
-      protein: 0,
-      estimated: true,
-    },
-    {
-      name: "Chipotle ranch",
-      quantity: "4 tbsp",
-      grams: 60,
-      calories: 220,
-      fat: 22,
-      carbs: 2,
-      protein: 1,
-      estimated: true,
-      optional: true,
-    },
-  ];
+    return {
+      servingSize: this.recipe.nutritionServingSize || "",
+      yield: this.recipe.yield,
+      calories: this.recipe.nutritionCalories,
+      carbs: this.recipe.nutritionCarbs || 0,
+      protein: this.recipe.nutritionProtein || 0,
+      fat: this.recipe.nutritionFat || 0,
+      saturatedFat: this.recipe.nutritionSaturatedFat ?? undefined,
+      unsaturatedFat: this.recipe.nutritionUnsaturatedFat ?? undefined,
+      fiber: this.recipe.nutritionFiber ?? undefined,
+      sugar: this.recipe.nutritionSugar ?? undefined,
+      sodium: this.recipe.nutritionSodium ?? undefined,
+      cholesterol: this.recipe.nutritionCholesterol ?? undefined,
+    };
+  }
+
+  /**
+   * Computed ingredient nutrition list from recipe JSON data.
+   * Transforms the keyed object into an array for the modal.
+   */
+  get ingredientNutritionList(): IngredientNutrition[] | undefined {
+    if (!this.recipe?.ingredientNutrition) return undefined;
+
+    const data = this.recipe.ingredientNutrition as Record<
+      string,
+      {
+        name: string;
+        quantity?: number;
+        unit?: string;
+        grams: number;
+        calories?: number;
+        fat?: number;
+        carbs?: number;
+        protein?: number;
+        estimated?: boolean;
+        optional?: boolean;
+      }
+    >;
+
+    return Object.entries(data).map(([key, ing]) => ({
+      name: ing.name,
+      quantity: ing.quantity && ing.unit ? `${ing.quantity} ${ing.unit}` : key,
+      grams: ing.grams,
+      calories: ing.calories || 0,
+      fat: ing.fat || 0,
+      carbs: ing.carbs || 0,
+      protein: ing.protein || 0,
+      estimated: ing.estimated,
+      optional: ing.optional,
+    }));
+  }
 
   constructor() {
     this.updateIsLoggedIn();
@@ -732,13 +714,13 @@ export class RecipePage {
   }
 
   async openNutritionModal() {
-    if (!this.mockNutrition) return;
+    if (!this.nutrition) return;
 
     const modal = await this.modalCtrl.create({
       component: NutritionModalComponent,
       componentProps: {
-        nutrition: this.mockNutrition,
-        ingredientNutrition: this.mockIngredientNutrition,
+        nutrition: this.nutrition,
+        ingredientNutrition: this.ingredientNutritionList,
         servings: this.parseServings(this.recipe?.yield),
       },
     });
