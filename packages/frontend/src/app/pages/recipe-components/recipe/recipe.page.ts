@@ -37,6 +37,11 @@ import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import {
+  NutritionModalComponent,
+  type NutritionInfo,
+  type IngredientNutrition,
+} from "~/modals/nutrition-modal/nutrition-modal.component";
 import type {
   RecipeSummary,
   RecipeSummaryLite,
@@ -53,7 +58,7 @@ import { RatingComponent } from "../../../components/rating/rating.component";
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],
   providers: [RecipeService],
-  imports: [...SHARED_UI_IMPORTS, RatingComponent],
+  imports: [...SHARED_UI_IMPORTS, RatingComponent, NutritionModalComponent],
 })
 export class RecipePage {
   private navCtrl = inject(NavController);
@@ -104,6 +109,83 @@ export class RecipePage {
   ratingVisual = new Array<string>(5).fill("star-outline");
 
   isLoggedIn: boolean = !!localStorage.getItem("token");
+
+  // Mock nutrition data for frontend development
+  // TODO: Replace with data from backend once schema is implemented
+  mockNutrition: NutritionInfo | null = {
+    servingSize: "4 fries",
+    yield: "16 fries",
+    calories: 330,
+    carbs: 22,
+    protein: 6,
+    fat: 25,
+    saturatedFat: 4,
+    unsaturatedFat: 18,
+    fiber: 5,
+    sugar: 1,
+    sodium: 620,
+    cholesterol: 93,
+  };
+
+  mockIngredientNutrition: IngredientNutrition[] = [
+    {
+      name: "Avocados",
+      quantity: "2 large",
+      grams: 400,
+      calories: 640,
+      fat: 60,
+      carbs: 36,
+      protein: 8,
+    },
+    {
+      name: "Panko bread crumbs",
+      quantity: "3/4 cup",
+      grams: 45,
+      calories: 165,
+      fat: 2,
+      carbs: 33,
+      protein: 5,
+    },
+    {
+      name: "Eggs",
+      quantity: "2 large",
+      grams: 100,
+      calories: 143,
+      fat: 10,
+      carbs: 1,
+      protein: 13,
+    },
+    {
+      name: "All-purpose flour",
+      quantity: "1/2 cup",
+      grams: 63,
+      calories: 228,
+      fat: 1,
+      carbs: 48,
+      protein: 6,
+    },
+    {
+      name: "Olive oil",
+      quantity: "1 tbsp",
+      grams: 14,
+      calories: 124,
+      fat: 14,
+      carbs: 0,
+      protein: 0,
+      estimated: true,
+    },
+    {
+      name: "Chipotle ranch",
+      quantity: "4 tbsp",
+      grams: 60,
+      calories: 220,
+      fat: 22,
+      carbs: 2,
+      protein: 1,
+      estimated: true,
+      optional: true,
+    },
+  ];
 
   constructor() {
     this.updateIsLoggedIn();
@@ -647,6 +729,27 @@ export class RecipePage {
       },
     });
     imageViewerModal.present();
+  }
+
+  async openNutritionModal() {
+    if (!this.mockNutrition) return;
+
+    const modal = await this.modalCtrl.create({
+      component: NutritionModalComponent,
+      componentProps: {
+        nutrition: this.mockNutrition,
+        ingredientNutrition: this.mockIngredientNutrition,
+        servings: this.parseServings(this.recipe?.yield),
+      },
+    });
+
+    modal.present();
+  }
+
+  parseServings(yieldStr: string | undefined | null): number {
+    if (!yieldStr) return 4;
+    const match = yieldStr.match(/(\d+)/);
+    return match ? parseInt(match[1], 10) : 4;
   }
 
   pinRecipe() {

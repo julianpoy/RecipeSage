@@ -180,3 +180,66 @@ h2.recipeTitle {
   gap: 16px;
   flex-wrap: wrap;
 }
+
+// Nutrition Summary
+.nutrition-summary {
+  margin-top: 8px;
+  margin-bottom: 16px;
+
+  ion-label {
+    margin: 0;
+  }
+
+  .nutrition-meta {
+    margin: 0 0 4px 0;
+    font-size: 0.875rem;
+    color: var(--ion-color-step-600);
+  }
+
+  .nutrition-label {
+    font-weight: 500;
+  }
+
+  .serving-size {
+    color: var(--ion-color-step-500);
+  }
+
+  .nutrition-macros {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ion-text-color);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+
+    .macro {
+      b {
+        font-weight: 600;
+      }
+    }
+
+    .macro-sep {
+      color: var(--ion-color-step-300);
+      margin: 0 4px;
+    }
+
+    .details-link {
+      color: var(--ion-color-primary);
+      cursor: pointer;
+      margin-left: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-weight: 500;
+
+      ion-icon {
+        font-size: 14px;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

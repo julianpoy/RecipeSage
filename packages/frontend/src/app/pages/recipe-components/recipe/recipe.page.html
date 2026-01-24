@@ -175,6 +175,43 @@
           </p>
         </ion-item>
       }
+      @if (mockNutrition) {
+        <ion-item lines="none" class="nutrition-summary">
+          <ion-label>
+            <p class="nutrition-meta">
+              <span class="nutrition-label">{{
+                "pages.recipeDetails.nutritionPerServing" | translate
+              }}</span>
+              @if (mockNutrition.servingSize) {
+                <span class="serving-size"
+                  >({{ mockNutrition.servingSize }})</span
+                >
+              }
+            </p>
+            <p class="nutrition-macros">
+              <span class="macro"
+                ><b>{{ mockNutrition.calories | number: "1.0-0" }}</b> Cal</span
+              >
+              <span class="macro-sep">|</span>
+              <span class="macro"
+                ><b>{{ mockNutrition.fat }}g</b> Fat</span
+              >
+              <span class="macro-sep">|</span>
+              <span class="macro"
+                ><b>{{ mockNutrition.carbs }}g</b> Carbs</span
+              >
+              <span class="macro-sep">|</span>
+              <span class="macro"
+                ><b>{{ mockNutrition.protein }}g</b> Protein</span
+              >
+              <a class="details-link" (click)="openNutritionModal()">
+                {{ "pages.recipeDetails.nutritionDetails" | translate }}
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </a>
+            </p>
+          </ion-label>
+        </ion-item>
+      }
       <br />
       <div class="ingredientsInstructionsGrid">
         <div class="ingredientsCol">

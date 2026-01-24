@@ -1,0 +1,278 @@
+// Controls section
+.nutrition-controls {
+  margin-bottom: 16px;
+
+  .scope-segment {
+    margin-bottom: 12px;
+
+    ion-segment-button {
+      --indicator-color: var(--ion-color-primary);
+      --color-checked: var(--ion-color-primary);
+      font-size: 0.875rem;
+      min-height: 36px;
+    }
+  }
+
+  .include-toggle {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    font-size: 0.875rem;
+
+    ion-label {
+      color: var(--ion-color-step-600);
+    }
+
+    ion-toggle {
+      --track-background: var(--ion-color-step-200);
+      --track-background-checked: var(--ion-color-primary);
+    }
+  }
+}
+
+// Context line
+.nutrition-context {
+  font-size: 0.75rem;
+  color: var(--ion-color-step-500);
+  margin: 0 0 16px 0;
+}
+
+// Macro summary row
+.macro-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--ion-border-color);
+
+  .macro-cal {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .macro-value-large {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+  }
+
+  .macro-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .macro-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  .macro-unit {
+    font-size: 0.875rem;
+    color: var(--ion-color-step-500);
+  }
+
+  .macro-sep-large {
+    color: var(--ion-color-step-300);
+    font-size: 1.25rem;
+    margin: 0 4px;
+  }
+}
+
+// Detailed breakdown list
+.nutrition-details {
+  margin-bottom: 24px;
+
+  ion-list {
+    padding: 0;
+    background: transparent;
+  }
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --min-height: 36px;
+    font-size: 0.875rem;
+
+    ion-label {
+      margin: 8px 0;
+      color: var(--ion-text-color);
+    }
+
+    ion-note {
+      font-size: 0.875rem;
+      color: var(--ion-text-color);
+      font-weight: 500;
+    }
+
+    &.sub-item {
+      --padding-start: 16px;
+
+      ion-label {
+        color: var(--ion-color-step-500);
+      }
+
+      ion-note {
+        font-weight: 400;
+        color: var(--ion-color-step-600);
+      }
+    }
+  }
+}
+
+// Ingredient breakdown table
+.ingredient-breakdown {
+  .breakdown-header {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 8px;
+
+    ion-icon {
+      color: var(--ion-text-color);
+      font-size: 24px;
+    }
+
+    p {
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  .breakdown-table {
+    border: 1px solid var(--ion-border-color);
+    border-radius: 8px;
+    overflow: hidden;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background: var(--ion-color-step-50);
+        color: var(--ion-color-step-600);
+        font-weight: 500;
+        border-bottom: 1px solid var(--ion-border-color);
+      }
+
+      td {
+        border-bottom: 1px solid var(--ion-color-step-50);
+        color: var(--ion-text-color);
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .col-ingredient {
+        text-align: left;
+        min-width: 140px;
+
+        .ingredient-qty {
+          color: var(--ion-color-step-500);
+          font-size: 0.6875rem;
+        }
+      }
+
+      .col-num {
+        text-align: right;
+        width: 50px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .strikethrough {
+        text-decoration: line-through;
+        color: var(--ion-color-step-400);
+      }
+
+      .excluded td {
+        color: var(--ion-color-step-400);
+      }
+
+      .estimated {
+        color: var(--ion-color-step-400);
+        margin-left: 2px;
+      }
+
+      tfoot {
+        .totals-row {
+          background: var(--ion-color-step-50);
+
+          td {
+            font-weight: 600;
+            color: var(--ion-text-color);
+            border-top: 1px solid var(--ion-border-color);
+          }
+        }
+      }
+    }
+
+    .table-footer {
+      padding: 8px 12px;
+      margin: 0;
+      font-size: 0.75rem;
+      color: var(--ion-color-step-400);
+      background: var(--ion-color-step-50);
+      border-top: 1px solid var(--ion-border-color);
+
+      .estimated {
+        margin-right: 2px;
+      }
+    }
+  }
+}
+
+// Rounding note
+.rounding-note {
+  font-size: 0.75rem;
+  color: var(--ion-color-step-400);
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .macro-summary {
+    .macro-value-large {
+      font-size: 1.25rem;
+    }
+
+    .macro-value {
+      font-size: 1rem;
+    }
+
+    .macro-sep-large {
+      font-size: 1rem;
+    }
+  }
+
+  .ingredient-breakdown {
+    .breakdown-table {
+      table {
+        font-size: 0.6875rem;
+
+        th,
+        td {
+          padding: 6px 4px;
+        }
+
+        .col-ingredient {
+          min-width: 100px;
+        }
+
+        .col-num {
+          width: 36px;
+        }
+      }
+    }
+  }
+}
