@@ -740,9 +740,10 @@ export class RecipePage {
   }
 
   parseServings(yieldStr: string | undefined | null): number {
-    if (!yieldStr) return 4;
+    // Default to 1 when yield is unknown to avoid misleading per-recipe totals
+    if (!yieldStr) return 1;
     const match = yieldStr.match(/(\d+)/);
-    return match ? parseInt(match[1], 10) : 4;
+    return match ? parseInt(match[1], 10) : 1;
   }
 
   pinRecipe() {

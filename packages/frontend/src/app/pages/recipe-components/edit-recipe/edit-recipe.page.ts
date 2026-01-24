@@ -114,6 +114,7 @@ export class EditRecipePage {
   }[] = [];
 
   isAutoclipPopoverOpen = false;
+  showDetailedNutrition = false;
 
   constructor() {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
@@ -320,6 +321,65 @@ export class EditRecipePage {
     return response;
   }
 
+  private hasNutritionData(): boolean {
+    return (
+      !!this.recipe.nutritionServingSize ||
+      this.recipe.nutritionCalories != null ||
+      this.recipe.nutritionProtein != null ||
+      this.recipe.nutritionCarbs != null ||
+      this.recipe.nutritionFat != null ||
+      this.recipe.nutritionSaturatedFat != null ||
+      this.recipe.nutritionUnsaturatedFat != null ||
+      this.recipe.nutritionFiber != null ||
+      this.recipe.nutritionSugar != null ||
+      this.recipe.nutritionSodium != null ||
+      this.recipe.nutritionCholesterol != null
+    );
+  }
+
+  private hadNutritionData(): boolean {
+    // Check if the original recipe had nutrition data (for clearing)
+    return (
+      !!this.fullRecipe?.nutritionServingSize ||
+      this.fullRecipe?.nutritionCalories != null ||
+      this.fullRecipe?.nutritionProtein != null ||
+      this.fullRecipe?.nutritionCarbs != null ||
+      this.fullRecipe?.nutritionFat != null
+    );
+  }
+
+  private toNutritionInt(value: unknown): number | null {
+    if (value == null || value === "") return null;
+    const num = Number(value);
+    return Number.isNaN(num) ? null : Math.round(num);
+  }
+
+  private async _saveNutrition(recipeId: string): Promise<boolean> {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.updateRecipeNutrition.mutate({
+        id: recipeId,
+        nutritionServingSize: this.recipe.nutritionServingSize || null,
+        nutritionCalories: this.toNutritionInt(this.recipe.nutritionCalories),
+        nutritionCarbs: this.toNutritionInt(this.recipe.nutritionCarbs),
+        nutritionProtein: this.toNutritionInt(this.recipe.nutritionProtein),
+        nutritionFat: this.toNutritionInt(this.recipe.nutritionFat),
+        nutritionSaturatedFat: this.toNutritionInt(
+          this.recipe.nutritionSaturatedFat,
+        ),
+        nutritionUnsaturatedFat: this.toNutritionInt(
+          this.recipe.nutritionUnsaturatedFat,
+        ),
+        nutritionFiber: this.toNutritionInt(this.recipe.nutritionFiber),
+        nutritionSugar: this.toNutritionInt(this.recipe.nutritionSugar),
+        nutritionSodium: this.toNutritionInt(this.recipe.nutritionSodium),
+        nutritionCholesterol: this.toNutritionInt(
+          this.recipe.nutritionCholesterol,
+        ),
+      }),
+    );
+    return !!response;
+  }
+
   async _save() {
     if (!this.recipe.title) return;
     if (this.saving) return;
@@ -334,6 +394,15 @@ export class EditRecipePage {
     loading.dismiss();
     this.saving = false;
     if (!response) return;
+
+    // Save nutrition data if any exists or if clearing existing data
+    if (this.hasNutritionData() || this.hadNutritionData()) {
+      const nutritionSaved = await this._saveNutrition(response.id);
+      if (!nutritionSaved) {
+        // Nutrition save failed but recipe saved - still navigate
+        // Error already shown by trpcService.handle
+      }
+    }
 
     this.markAsClean();
 

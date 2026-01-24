@@ -61,3 +61,18 @@
   padding-left: 16px;
   padding-right: 16px;
 }
+
+.section-header {
+  margin: 24px 0 8px;
+
+  ion-label {
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+
+  ion-note {
+    display: block;
+    font-size: 0.85em;
+    color: var(--ion-color-medium);
+  }
+}

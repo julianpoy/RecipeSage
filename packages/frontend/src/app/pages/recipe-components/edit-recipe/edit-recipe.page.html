@@ -218,6 +218,149 @@
       </div>
     </div>
 
+    <!-- Nutrition Section -->
+    <div class="section-header">
+      <ion-label>{{
+        "pages.editRecipe.nutritionHeader" | translate
+      }}</ion-label>
+      <ion-note>{{ "pages.editRecipe.nutritionNote" | translate }}</ion-note>
+    </div>
+
+    <ion-item class="recipe-input">
+      <ion-input
+        label="{{ 'pages.editRecipe.nutritionServingSize' | translate }}"
+        labelPlacement="stacked"
+        [(ngModel)]="recipe.nutritionServingSize"
+        (ngModelChange)="markAsDirty()"
+        type="text"
+        placeholder="{{
+          'pages.editRecipe.nutritionServingSizePlaceholder' | translate
+        }}"
+      ></ion-input>
+    </ion-item>
+
+    <!-- Primary macros -->
+    <div class="miniflex">
+      <ion-item class="recipe-input">
+        <ion-input
+          label="{{ 'pages.editRecipe.nutritionCalories' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="recipe.nutritionCalories"
+          (ngModelChange)="markAsDirty()"
+          type="number"
+          min="0"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="recipe-input">
+        <ion-input
+          label="{{ 'pages.editRecipe.nutritionProtein' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="recipe.nutritionProtein"
+          (ngModelChange)="markAsDirty()"
+          type="number"
+          min="0"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="recipe-input">
+        <ion-input
+          label="{{ 'pages.editRecipe.nutritionCarbs' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="recipe.nutritionCarbs"
+          (ngModelChange)="markAsDirty()"
+          type="number"
+          min="0"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="recipe-input">
+        <ion-input
+          label="{{ 'pages.editRecipe.nutritionFat' | translate }}"
+          labelPlacement="stacked"
+          [(ngModel)]="recipe.nutritionFat"
+          (ngModelChange)="markAsDirty()"
+          type="number"
+          min="0"
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Detailed nutrition (toggleable) -->
+    @if (showDetailedNutrition) {
+      <div class="miniflex">
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionSaturatedFat' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionSaturatedFat"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionUnsaturatedFat' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionUnsaturatedFat"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionFiber' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionFiber"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionSugar' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionSugar"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionSodium' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionSodium"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="recipe-input">
+          <ion-input
+            label="{{ 'pages.editRecipe.nutritionCholesterol' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="recipe.nutritionCholesterol"
+            (ngModelChange)="markAsDirty()"
+            type="number"
+            min="0"
+          ></ion-input>
+        </ion-item>
+      </div>
+    }
+    <ion-button
+      fill="clear"
+      size="small"
+      (click)="showDetailedNutrition = !showDetailedNutrition"
+    >
+      {{
+        (showDetailedNutrition
+          ? "pages.editRecipe.hideDetailedNutrition"
+          : "pages.editRecipe.showDetailedNutrition"
+        ) | translate
+      }}
+    </ion-button>
+
     <ion-item class="recipe-input">
       <ion-textarea
         label="{{ 'pages.editRecipe.input.ingredients' | translate }}"
