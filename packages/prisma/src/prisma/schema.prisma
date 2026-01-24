@@ -252,6 +252,21 @@ model Recipe {
   indexedAt         DateTime?          @db.Timestamptz(6)
   lastMadeAt        DateTime?          @db.Date
   rating            Int?
+
+  // Nutrition (per serving, matching schema.org NutritionInformation)
+  nutritionServingSize    String?
+  nutritionCalories       Int?
+  nutritionCarbs          Int?
+  nutritionProtein        Int?
+  nutritionFat            Int?
+  nutritionSaturatedFat   Int?
+  nutritionUnsaturatedFat Int?
+  nutritionFiber          Int?
+  nutritionSugar          Int?
+  nutritionSodium         Int?
+  nutritionCholesterol    Int?
+  ingredientNutrition     Json?
+
   mealPlanItems     MealPlanItem[]
   originalRecipe    Message[]          @relation("Messages_originalRecipeIdToRecipes")
   messages          Message[]          @relation("Messages_recipeIdToRecipes")
