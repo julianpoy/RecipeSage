@@ -731,7 +731,8 @@ export class RecipePage {
       componentProps: {
         nutrition: this.nutrition,
         ingredientNutrition: this.ingredientNutritionList,
-        servings: this.parseServings(this.recipe?.yield),
+        servings: this.parseServings(this.recipe?.yield) * this.scale,
+        hasYield: !!this.recipe?.yield,
       },
     });
 

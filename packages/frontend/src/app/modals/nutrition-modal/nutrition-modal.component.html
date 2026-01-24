@@ -41,8 +41,10 @@
     @if (scope === "serving") {
       {{ "pages.nutritionModal.serving" | translate }}:
       {{ nutrition.servingSize }}
-    } @else {
+    } @else if (hasYield) {
       {{ "pages.nutritionModal.yield" | translate }}: {{ nutrition.yield }}
+    } @else {
+      {{ "pages.nutritionModal.unknownYield" | translate }}
     }
   </p>
 
@@ -52,22 +54,30 @@
       <span class="macro-value-large">{{
         displayData.calories | number: "1.0-0"
       }}</span>
-      <span class="macro-unit">Cal</span>
+      <span class="macro-unit">{{
+        "pages.nutritionModal.calUnit" | translate
+      }}</span>
     </span>
     <span class="macro-sep-large">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.fat }}g</span>
-      <span class="macro-unit">Fat</span>
+      <span class="macro-unit">{{
+        "pages.nutritionModal.fatLabel" | translate
+      }}</span>
     </span>
     <span class="macro-sep-large">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.carbs }}g</span>
-      <span class="macro-unit">Carbs</span>
+      <span class="macro-unit">{{
+        "pages.nutritionModal.carbsLabel" | translate
+      }}</span>
     </span>
     <span class="macro-sep-large">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.protein }}g</span>
-      <span class="macro-unit">Protein</span>
+      <span class="macro-unit">{{
+        "pages.nutritionModal.proteinLabel" | translate
+      }}</span>
     </span>
   </div>
 
@@ -147,12 +157,24 @@
         <table>
           <thead>
             <tr>
-              <th class="col-ingredient">Ingredient</th>
-              <th class="col-num">g</th>
-              <th class="col-num">Cal</th>
-              <th class="col-num">Fat (g)</th>
-              <th class="col-num">Carb (g)</th>
-              <th class="col-num">Pro (g)</th>
+              <th class="col-ingredient">
+                {{ "pages.nutritionModal.ingredientColumn" | translate }}
+              </th>
+              <th class="col-num">
+                {{ "pages.nutritionModal.gramsColumn" | translate }}
+              </th>
+              <th class="col-num">
+                {{ "pages.nutritionModal.caloriesColumn" | translate }}
+              </th>
+              <th class="col-num">
+                {{ "pages.nutritionModal.fatColumn" | translate }}
+              </th>
+              <th class="col-num">
+                {{ "pages.nutritionModal.carbsColumn" | translate }}
+              </th>
+              <th class="col-num">
+                {{ "pages.nutritionModal.proteinColumn" | translate }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -239,7 +261,9 @@
           </tbody>
           <tfoot>
             <tr class="totals-row">
-              <td class="col-ingredient">Total</td>
+              <td class="col-ingredient">
+                {{ "pages.nutritionModal.totalRow" | translate }}
+              </td>
               <td class="col-num">{{ totals.grams }}</td>
               <td class="col-num">{{ totals.calories }}</td>
               <td class="col-num">{{ totals.fat }}</td>

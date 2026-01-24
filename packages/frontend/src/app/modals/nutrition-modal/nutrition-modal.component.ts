@@ -42,6 +42,7 @@ export class NutritionModalComponent {
   @Input() nutrition!: NutritionInfo;
   @Input() ingredientNutrition?: IngredientNutrition[];
   @Input() servings: number = 4;
+  @Input() hasYield: boolean = true;
 
   scope: "serving" | "recipe" = "serving";
   includeOptional: boolean = false;
@@ -67,24 +68,30 @@ export class NutritionModalComponent {
       carbs: Math.round(this.nutrition.carbs * multiplier),
       protein: Math.round(this.nutrition.protein * multiplier),
       fat: Math.round(this.nutrition.fat * multiplier),
-      saturatedFat: this.nutrition.saturatedFat
-        ? Math.round(this.nutrition.saturatedFat * multiplier)
-        : undefined,
-      unsaturatedFat: this.nutrition.unsaturatedFat
-        ? Math.round(this.nutrition.unsaturatedFat * multiplier)
-        : undefined,
-      fiber: this.nutrition.fiber
-        ? Math.round(this.nutrition.fiber * multiplier)
-        : undefined,
-      sugar: this.nutrition.sugar
-        ? Math.round(this.nutrition.sugar * multiplier)
-        : undefined,
-      sodium: this.nutrition.sodium
-        ? Math.round(this.nutrition.sodium * multiplier)
-        : undefined,
-      cholesterol: this.nutrition.cholesterol
-        ? Math.round(this.nutrition.cholesterol * multiplier)
-        : undefined,
+      saturatedFat:
+        this.nutrition.saturatedFat != null
+          ? Math.round(this.nutrition.saturatedFat * multiplier)
+          : undefined,
+      unsaturatedFat:
+        this.nutrition.unsaturatedFat != null
+          ? Math.round(this.nutrition.unsaturatedFat * multiplier)
+          : undefined,
+      fiber:
+        this.nutrition.fiber != null
+          ? Math.round(this.nutrition.fiber * multiplier)
+          : undefined,
+      sugar:
+        this.nutrition.sugar != null
+          ? Math.round(this.nutrition.sugar * multiplier)
+          : undefined,
+      sodium:
+        this.nutrition.sodium != null
+          ? Math.round(this.nutrition.sodium * multiplier)
+          : undefined,
+      cholesterol:
+        this.nutrition.cholesterol != null
+          ? Math.round(this.nutrition.cholesterol * multiplier)
+          : undefined,
     };
   }
 
