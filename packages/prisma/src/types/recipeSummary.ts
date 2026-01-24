@@ -26,6 +26,18 @@ export const recipeSummary = {
     updatedAt: true,
     lastMadeAt: true,
     rating: true,
+    nutritionServingSize: true,
+    nutritionCalories: true,
+    nutritionCarbs: true,
+    nutritionProtein: true,
+    nutritionFat: true,
+    nutritionSaturatedFat: true,
+    nutritionUnsaturatedFat: true,
+    nutritionFiber: true,
+    nutritionSugar: true,
+    nutritionSodium: true,
+    nutritionCholesterol: true,
+    ingredientNutrition: true,
     recipeLabels: {
       select: {
         id: true,

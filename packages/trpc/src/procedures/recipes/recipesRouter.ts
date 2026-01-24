@@ -14,6 +14,7 @@ import { getSimilarRecipes } from "./getSimilarRecipes";
 import { getUniqueRecipeTitle } from "./getUniqueRecipeTitle";
 import { searchRecipes } from "./searchRecipes";
 import { updateRecipe } from "./updateRecipe";
+import { updateRecipeNutrition } from "./updateRecipeNutrition";
 
 export const recipesRouter = router({
   createRecipe,
@@ -31,4 +32,5 @@ export const recipesRouter = router({
   getSimilarRecipes,
   getRecipesByTitle,
   getUniqueRecipeTitle,
+  updateRecipeNutrition,
 });
