@@ -40,38 +40,95 @@ export class NutritionModalComponent {
   private modalCtrl = inject(ModalController);
 
   @Input() nutrition!: NutritionInfo;
-  @Input() ingredientNutrition?: IngredientNutrition[];
   @Input() servings: number = 4;
   @Input() hasYield: boolean = true;
 
-  scope: "serving" | "recipe" = "serving";
-  includeOptional: boolean = false;
-
-  get hasOptionalIngredients(): boolean {
-    return this.ingredientNutrition?.some((ing) => ing.optional) ?? false;
+  // Use setter to initialize excluded ingredients when data arrives
+  private _ingredientNutrition?: IngredientNutrition[];
+  @Input()
+  set ingredientNutrition(value: IngredientNutrition[] | undefined) {
+    this._ingredientNutrition = value;
+    // Initialize: exclude optional ingredients by default
+    this.excludedIngredients = new Set(
+      value?.filter((ing) => ing.optional).map((ing) => ing.name) ?? [],
+    );
+  }
+  get ingredientNutrition(): IngredientNutrition[] | undefined {
+    return this._ingredientNutrition;
   }
 
-  get optionalIngredientName(): string {
-    const optional = this.ingredientNutrition?.find((ing) => ing.optional);
-    return optional?.name ?? "optional ingredients";
+  scope: "serving" | "recipe" = "serving";
+  excludedIngredients: Set<string> = new Set();
+
+  toggleIngredient(name: string): void {
+    if (this.excludedIngredients.has(name)) {
+      this.excludedIngredients.delete(name);
+    } else {
+      this.excludedIngredients.add(name);
+    }
+    // Trigger change detection by creating new Set
+    this.excludedIngredients = new Set(this.excludedIngredients);
+  }
+
+  isExcluded(name: string): boolean {
+    return this.excludedIngredients.has(name);
   }
 
   get yieldContainsServings(): boolean {
     return /serving|serves/i.test(this.nutrition.yield ?? "");
   }
 
+  get hasSubDetails(): boolean {
+    return (
+      this.displayData.saturatedFat !== undefined ||
+      this.displayData.unsaturatedFat !== undefined ||
+      this.displayData.fiber !== undefined ||
+      this.displayData.sugar !== undefined ||
+      this.displayData.sodium !== undefined ||
+      this.displayData.cholesterol !== undefined
+    );
+  }
+
+  /**
+   * Returns nutrition data for display. When ingredient breakdown is available,
+   * uses calculated totals for main macros to ensure numbers reconcile with the table.
+   * Sub-details (saturated fat, fiber, etc.) still come from stored nutrition
+   * since we don't track those at ingredient level.
+   */
   get displayData(): NutritionInfo {
+    // When we have ingredient data, use calculated totals for main macros
+    // This ensures the macro summary matches the table totals
+    const useCalculatedTotals =
+      this.ingredientNutrition && this.ingredientNutrition.length > 0;
+    // totals is already scope-aware (per-serving or per-recipe based on displayIngredients)
+    const calc = useCalculatedTotals ? this.totals : null;
+
     if (this.scope === "serving") {
-      return this.nutrition;
+      return {
+        ...this.nutrition,
+        // Use calculated totals if available, otherwise use stored values
+        calories: calc?.calories ?? this.nutrition.calories,
+        fat: calc?.fat ?? this.nutrition.fat,
+        carbs: calc?.carbs ?? this.nutrition.carbs,
+        protein: calc?.protein ?? this.nutrition.protein,
+      };
     }
 
+    // Per-recipe view
     const multiplier = this.servings;
+
+    // If using calculated totals, they're already full-recipe values (don't multiply again)
+    // If using stored nutrition (per-serving), multiply by servings
     return {
       ...this.nutrition,
-      calories: Math.round(this.nutrition.calories * multiplier),
-      carbs: Math.round(this.nutrition.carbs * multiplier),
-      protein: Math.round(this.nutrition.protein * multiplier),
-      fat: Math.round(this.nutrition.fat * multiplier),
+      calories: calc
+        ? calc.calories
+        : Math.round(this.nutrition.calories * multiplier),
+      fat: calc ? calc.fat : Math.round(this.nutrition.fat * multiplier),
+      carbs: calc ? calc.carbs : Math.round(this.nutrition.carbs * multiplier),
+      protein: calc
+        ? calc.protein
+        : Math.round(this.nutrition.protein * multiplier),
       saturatedFat:
         this.nutrition.saturatedFat != null
           ? Math.round(this.nutrition.saturatedFat * multiplier)
@@ -128,7 +185,7 @@ export class NutritionModalComponent {
     }
 
     const items = this.displayIngredients.filter(
-      (ing) => !ing.optional || this.includeOptional,
+      (ing) => !this.isExcluded(ing.name),
     );
 
     return items.reduce(

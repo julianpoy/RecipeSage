@@ -241,7 +241,9 @@
         [(ngModel)]="recipe.nutritionServingSize"
         (ngModelChange)="markAsDirty()"
         type="text"
-        placeholder="{{ 'pages.editRecipe.nutritionServingSizePlaceholder' | translate }}"
+        placeholder="{{
+          'pages.editRecipe.nutritionServingSizePlaceholder' | translate
+        }}"
       ></ion-input>
     </ion-item>
 
@@ -540,4 +542,3 @@
     </div>
   </div>
 </ion-content>
-

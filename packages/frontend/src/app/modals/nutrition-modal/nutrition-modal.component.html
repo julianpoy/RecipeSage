@@ -10,8 +10,8 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Scope Controls -->
-  <div class="nutrition-controls">
+  <!-- Header row: Scope + Context -->
+  <div class="nutrition-header">
     <ion-segment [(ngModel)]="scope" class="scope-segment">
       <ion-segment-button value="serving">
         <ion-label>{{
@@ -24,36 +24,32 @@
         }}</ion-label>
       </ion-segment-button>
     </ion-segment>
-
-    @if (hasOptionalIngredients) {
-      <ion-item lines="none" class="include-toggle">
-        <ion-label
-          >{{ "pages.nutritionModal.include" | translate }}:
-          {{ optionalIngredientName }}</ion-label
-        >
-        <ion-toggle [(ngModel)]="includeOptional" slot="end"></ion-toggle>
-      </ion-item>
-    }
-  </div>
-
-  <!-- Context -->
-  <p class="nutrition-context">
-    @if (scope === "serving") {
-      {{ "pages.nutritionModal.serving" | translate }}:
-      {{ nutrition.servingSize || ("pages.nutritionModal.perServing" | translate) }}
-    } @else if (hasYield) {
-      @if (nutrition.yield) {
+    <span class="nutrition-context">
+      @if (scope === "serving") {
+        {{
+          nutrition.servingSize ||
+            ("pages.nutritionModal.perServing" | translate)
+        }}
+      } @else if (hasYield && nutrition.yield) {
         {{ nutrition.yield }}
         @if (servings > 1 && !yieldContainsServings) {
-          ({{ servings }} {{ servings === 1 ? ("pages.nutritionModal.servingSingular" | translate) : ("pages.nutritionModal.servingsPlural" | translate) }})
+          ({{ servings }}
+          {{
+            servings === 1
+              ? ("pages.nutritionModal.servingSingular" | translate)
+              : ("pages.nutritionModal.servingsPlural" | translate)
+          }})
         }
-      } @else {
-        {{ servings }} {{ servings === 1 ? ("pages.nutritionModal.servingSingular" | translate) : ("pages.nutritionModal.servingsPlural" | translate) }}
+      } @else if (hasYield) {
+        {{ servings }}
+        {{
+          servings === 1
+            ? ("pages.nutritionModal.servingSingular" | translate)
+            : ("pages.nutritionModal.servingsPlural" | translate)
+        }}
       }
-    } @else {
-      {{ "pages.nutritionModal.unknownYield" | translate }}
-    }
-  </p>
+    </span>
+  </div>
 
   <!-- Macro Summary -->
   <div class="macro-summary">
@@ -65,21 +61,21 @@
         "pages.nutritionModal.calUnit" | translate
       }}</span>
     </span>
-    <span class="macro-sep-large">|</span>
+    <span class="macro-sep">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.fat }}g</span>
       <span class="macro-unit">{{
         "pages.nutritionModal.fatLabel" | translate
       }}</span>
     </span>
-    <span class="macro-sep-large">|</span>
+    <span class="macro-sep">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.carbs }}g</span>
       <span class="macro-unit">{{
         "pages.nutritionModal.carbsLabel" | translate
       }}</span>
     </span>
-    <span class="macro-sep-large">|</span>
+    <span class="macro-sep">|</span>
     <span class="macro-item">
       <span class="macro-value">{{ displayData.protein }}g</span>
       <span class="macro-unit">{{
@@ -88,78 +84,69 @@
     </span>
   </div>
 
-  <!-- Detailed Breakdown -->
-  <div class="nutrition-details">
-    <ion-list lines="none">
-      <ion-item>
-        <ion-label>{{ "pages.nutritionModal.totalFat" | translate }}</ion-label>
-        <ion-note slot="end">{{ displayData.fat }} g</ion-note>
-      </ion-item>
-      @if (displayData.saturatedFat !== undefined) {
-        <ion-item class="sub-item">
-          <ion-label>{{
-            "pages.nutritionModal.saturatedFat" | translate
-          }}</ion-label>
-          <ion-note slot="end">{{ displayData.saturatedFat }} g</ion-note>
-        </ion-item>
+  <!-- Sub-details (only show items not in macro summary) -->
+  @if (hasSubDetails) {
+    <div class="nutrition-sub-details">
+      @if (
+        displayData.saturatedFat !== undefined ||
+        displayData.unsaturatedFat !== undefined
+      ) {
+        <span class="sub-group">
+          @if (displayData.saturatedFat !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.saturatedFat" | translate }}:
+              {{ displayData.saturatedFat }}g</span
+            >
+          }
+          @if (displayData.unsaturatedFat !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.unsaturatedFat" | translate }}:
+              {{ displayData.unsaturatedFat }}g</span
+            >
+          }
+        </span>
       }
-      @if (displayData.unsaturatedFat !== undefined) {
-        <ion-item class="sub-item">
-          <ion-label>{{
-            "pages.nutritionModal.unsaturatedFat" | translate
-          }}</ion-label>
-          <ion-note slot="end">{{ displayData.unsaturatedFat }} g</ion-note>
-        </ion-item>
+      @if (displayData.fiber !== undefined || displayData.sugar !== undefined) {
+        <span class="sub-group">
+          @if (displayData.fiber !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.fiber" | translate }}:
+              {{ displayData.fiber }}g</span
+            >
+          }
+          @if (displayData.sugar !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.sugar" | translate }}:
+              {{ displayData.sugar }}g</span
+            >
+          }
+        </span>
       }
-      <ion-item>
-        <ion-label>{{
-          "pages.nutritionModal.totalCarbs" | translate
-        }}</ion-label>
-        <ion-note slot="end">{{ displayData.carbs }} g</ion-note>
-      </ion-item>
-      @if (displayData.fiber !== undefined) {
-        <ion-item class="sub-item">
-          <ion-label>{{ "pages.nutritionModal.fiber" | translate }}</ion-label>
-          <ion-note slot="end">{{ displayData.fiber }} g</ion-note>
-        </ion-item>
+      @if (
+        displayData.sodium !== undefined ||
+        displayData.cholesterol !== undefined
+      ) {
+        <span class="sub-group">
+          @if (displayData.sodium !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.sodium" | translate }}:
+              {{ displayData.sodium }}mg</span
+            >
+          }
+          @if (displayData.cholesterol !== undefined) {
+            <span class="sub-item"
+              >{{ "pages.nutritionModal.cholesterol" | translate }}:
+              {{ displayData.cholesterol }}mg</span
+            >
+          }
+        </span>
       }
-      @if (displayData.sugar !== undefined) {
-        <ion-item class="sub-item">
-          <ion-label>{{ "pages.nutritionModal.sugar" | translate }}</ion-label>
-          <ion-note slot="end">{{ displayData.sugar }} g</ion-note>
-        </ion-item>
-      }
-      <ion-item>
-        <ion-label>{{ "pages.nutritionModal.protein" | translate }}</ion-label>
-        <ion-note slot="end">{{ displayData.protein }} g</ion-note>
-      </ion-item>
-      @if (displayData.sodium !== undefined) {
-        <ion-item>
-          <ion-label>{{ "pages.nutritionModal.sodium" | translate }}</ion-label>
-          <ion-note slot="end">{{ displayData.sodium }} mg</ion-note>
-        </ion-item>
-      }
-      @if (displayData.cholesterol !== undefined) {
-        <ion-item>
-          <ion-label>{{
-            "pages.nutritionModal.cholesterol" | translate
-          }}</ion-label>
-          <ion-note slot="end">{{ displayData.cholesterol }} mg</ion-note>
-        </ion-item>
-      }
-    </ion-list>
-  </div>
+    </div>
+  }
 
   <!-- Ingredient Breakdown Table -->
   @if (displayIngredients && displayIngredients.length > 0) {
     <div class="ingredient-breakdown">
-      <ion-item lines="none" class="breakdown-header">
-        <ion-icon name="nutrition-outline" slot="start"></ion-icon>
-        <ion-label>
-          <p>{{ "pages.nutritionModal.ingredientBreakdown" | translate }}</p>
-        </ion-label>
-      </ion-item>
-
       <div class="breakdown-table">
         <table>
           <thead>
@@ -167,36 +154,31 @@
               <th class="col-ingredient">
                 {{ "pages.nutritionModal.ingredientColumn" | translate }}
               </th>
-              <th class="col-num">
-                {{ "pages.nutritionModal.gramsColumn" | translate }}
-              </th>
-              <th class="col-num">
-                {{ "pages.nutritionModal.caloriesColumn" | translate }}
-              </th>
-              <th class="col-num">
-                {{ "pages.nutritionModal.fatColumn" | translate }}
-              </th>
-              <th class="col-num">
-                {{ "pages.nutritionModal.carbsColumn" | translate }}
-              </th>
-              <th class="col-num">
-                {{ "pages.nutritionModal.proteinColumn" | translate }}
-              </th>
+              <th class="col-num">Cal</th>
+              <th class="col-num">Fat</th>
+              <th class="col-num">Carbs</th>
+              <th class="col-num">Protein</th>
             </tr>
           </thead>
           <tbody>
             @for (ingredient of displayIngredients; track ingredient.name) {
-              <tr [class.excluded]="ingredient.optional && !includeOptional">
+              <tr
+                [class.excluded]="isExcluded(ingredient.name)"
+                (click)="toggleIngredient(ingredient.name)"
+              >
                 <td
                   class="col-ingredient"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
+                  [class.strikethrough]="isExcluded(ingredient.name)"
                 >
                   {{ ingredient.name }}
                   @if (ingredient.quantity) {
                     <span class="ingredient-qty"
-                      >({{ ingredient.quantity }})</span
+                      >({{ ingredient.quantity }},
+                      {{ ingredient.grams }}g)</span
+                    >
+                  } @else {
+                    <span class="ingredient-qty"
+                      >({{ ingredient.grams }}g)</span
                     >
                   }
                   @if (ingredient.estimated) {
@@ -205,63 +187,27 @@
                 </td>
                 <td
                   class="col-num"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
+                  [class.strikethrough]="isExcluded(ingredient.name)"
                 >
-                  @if (ingredient.optional && !includeOptional) {
-                    —
-                  } @else {
-                    {{ ingredient.grams }}
-                  }
+                  {{ ingredient.calories }}
                 </td>
                 <td
                   class="col-num"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
+                  [class.strikethrough]="isExcluded(ingredient.name)"
                 >
-                  @if (ingredient.optional && !includeOptional) {
-                    —
-                  } @else {
-                    {{ ingredient.calories }}
-                  }
+                  {{ ingredient.fat }}
                 </td>
                 <td
                   class="col-num"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
+                  [class.strikethrough]="isExcluded(ingredient.name)"
                 >
-                  @if (ingredient.optional && !includeOptional) {
-                    —
-                  } @else {
-                    {{ ingredient.fat }}
-                  }
+                  {{ ingredient.carbs }}
                 </td>
                 <td
                   class="col-num"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
+                  [class.strikethrough]="isExcluded(ingredient.name)"
                 >
-                  @if (ingredient.optional && !includeOptional) {
-                    —
-                  } @else {
-                    {{ ingredient.carbs }}
-                  }
-                </td>
-                <td
-                  class="col-num"
-                  [class.strikethrough]="
-                    ingredient.optional && !includeOptional
-                  "
-                >
-                  @if (ingredient.optional && !includeOptional) {
-                    —
-                  } @else {
-                    {{ ingredient.protein }}
-                  }
+                  {{ ingredient.protein }}
                 </td>
               </tr>
             }
@@ -271,7 +217,6 @@
               <td class="col-ingredient">
                 {{ "pages.nutritionModal.totalRow" | translate }}
               </td>
-              <td class="col-num">{{ totals.grams }}</td>
               <td class="col-num">{{ totals.calories }}</td>
               <td class="col-num">{{ totals.fat }}</td>
               <td class="col-num">{{ totals.carbs }}</td>
@@ -282,13 +227,10 @@
         <p class="table-footer">
           <span class="estimated">†</span
           >{{ "pages.nutritionModal.estimated" | translate }} ·
-          {{ "pages.nutritionModal.source" | translate }}
+          {{ "pages.nutritionModal.source" | translate }} ·
+          {{ "pages.nutritionModal.roundingNote" | translate }}
         </p>
       </div>
     </div>
   }
-
-  <p class="rounding-note">
-    {{ "pages.nutritionModal.roundingNote" | translate }}
-  </p>
 </ion-content>

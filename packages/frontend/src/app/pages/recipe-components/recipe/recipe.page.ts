@@ -750,10 +750,12 @@ export class RecipePage {
     // Default to 1 when yield is unknown to avoid misleading per-recipe totals
     if (!yieldStr) return 1;
 
-    // If yield explicitly mentions "serving(s)" or "serves", extract that number
-    const servingMatch = yieldStr.match(/(\d+)\s*(?:servings?|serves)/i);
+    // If yield explicitly mentions servings - handle both "4 servings" and "serves 4"
+    const servingMatch =
+      yieldStr.match(/(\d+)\s*(?:servings?|serves)/i) ||
+      yieldStr.match(/(?:servings?|serves)\s*(\d+)/i);
     if (servingMatch) {
-      return parseInt(servingMatch[1], 10);
+      return Math.max(1, parseInt(servingMatch[1], 10));
     }
 
     // Extract number and unit from yield (e.g., "12 eggs" -> 12, "eggs")
@@ -761,24 +763,35 @@ export class RecipePage {
     if (!yieldMatch) return 1;
 
     const yieldNum = parseFloat(yieldMatch[1]);
-    const yieldUnit = yieldMatch[2]?.toLowerCase();
+    const yieldUnit = this.normalizeUnit(yieldMatch[2]);
 
     // If we have a serving size with matching unit, divide to get servings
     if (servingSizeStr && yieldUnit) {
-      const servingMatch = servingSizeStr.match(/(\d+(?:\.\d+)?)\s*(\w+)?/);
-      if (servingMatch) {
-        const servingNum = parseFloat(servingMatch[1]);
-        const servingUnit = servingMatch[2]?.toLowerCase();
+      const servingSizeMatch = servingSizeStr.match(/(\d+(?:\.\d+)?)\s*(\w+)?/);
+      if (servingSizeMatch) {
+        const servingNum = parseFloat(servingSizeMatch[1]);
+        const servingUnit = this.normalizeUnit(servingSizeMatch[2]);
 
-        // Units match (e.g., "12 eggs" / "3 eggs" = 4 servings)
+        // Units match (e.g., "12 cookies" / "1 cookie" = 12 servings)
         if (servingUnit === yieldUnit && servingNum > 0) {
-          return Math.round(yieldNum / servingNum);
+          // Clamp to minimum of 1 to prevent division issues downstream
+          return Math.max(1, Math.round(yieldNum / servingNum));
         }
       }
     }
 
     // No serving size or units don't match - default to 1 (conservative)
     return 1;
+  }
+
+  /**
+   * Normalizes a unit string for comparison (lowercase, remove trailing 's' for plural)
+   */
+  private normalizeUnit(unit: string | undefined): string | undefined {
+    if (!unit) return undefined;
+    const lower = unit.toLowerCase();
+    // Remove trailing 's' to normalize singular/plural (cookies -> cookie)
+    return lower.endsWith("s") && lower.length > 1 ? lower.slice(0, -1) : lower;
   }
 
   pinRecipe() {
@@ -821,4 +834,3 @@ export class RecipePage {
     return recipeLabel.id;
   }
 }
-
