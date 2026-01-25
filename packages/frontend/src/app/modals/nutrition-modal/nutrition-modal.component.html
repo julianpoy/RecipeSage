@@ -40,9 +40,16 @@
   <p class="nutrition-context">
     @if (scope === "serving") {
       {{ "pages.nutritionModal.serving" | translate }}:
-      {{ nutrition.servingSize }}
+      {{ nutrition.servingSize || ("pages.nutritionModal.perServing" | translate) }}
     } @else if (hasYield) {
-      {{ "pages.nutritionModal.yield" | translate }}: {{ nutrition.yield }}
+      @if (nutrition.yield) {
+        {{ nutrition.yield }}
+        @if (servings > 1 && !yieldContainsServings) {
+          ({{ servings }} {{ servings === 1 ? ("pages.nutritionModal.servingSingular" | translate) : ("pages.nutritionModal.servingsPlural" | translate) }})
+        }
+      } @else {
+        {{ servings }} {{ servings === 1 ? ("pages.nutritionModal.servingSingular" | translate) : ("pages.nutritionModal.servingsPlural" | translate) }}
+      }
     } @else {
       {{ "pages.nutritionModal.unknownYield" | translate }}
     }

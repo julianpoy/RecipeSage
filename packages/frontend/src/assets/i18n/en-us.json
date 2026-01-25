@@ -222,6 +222,8 @@
   "pages.recipeDetails.linkedRecipes": "Linked Recipes",
   "pages.recipeDetails.nutritionPerServing": "Nutrition per serving",
   "pages.recipeDetails.nutritionDetails": "Details",
+  "pages.recipeDetails.serving": "Serving",
+  "pages.recipeDetails.perRecipe": "per recipe",
 
   "pages.nutritionModal.title": "Nutrition Facts",
   "pages.nutritionModal.perServing": "Per serving",
@@ -255,6 +257,8 @@
   "pages.nutritionModal.carbsColumn": "Carb (g)",
   "pages.nutritionModal.proteinColumn": "Pro (g)",
   "pages.nutritionModal.totalRow": "Total",
+  "pages.nutritionModal.servingSingular": "serving",
+  "pages.nutritionModal.servingsPlural": "servings",
 
   "pages.recipeDetailsPopover.options": "Options",
   "pages.recipeDetailsPopover.keepScreenOn": "Keep Screen On",

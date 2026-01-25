@@ -56,6 +56,10 @@ export class NutritionModalComponent {
     return optional?.name ?? "optional ingredients";
   }
 
+  get yieldContainsServings(): boolean {
+    return /serving|serves/i.test(this.nutrition.yield ?? "");
+  }
+
   get displayData(): NutritionInfo {
     if (this.scope === "serving") {
       return this.nutrition;

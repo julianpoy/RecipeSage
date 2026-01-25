@@ -114,7 +114,6 @@ export class EditRecipePage {
   }[] = [];
 
   isAutoclipPopoverOpen = false;
-  showDetailedNutrition = false;
 
   constructor() {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";

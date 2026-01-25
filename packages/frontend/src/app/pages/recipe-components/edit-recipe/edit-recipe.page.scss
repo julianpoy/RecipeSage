@@ -18,6 +18,11 @@
     margin-right: 10px;
     min-width: 260px;
   }
+
+  &.four-col > * {
+    flex: 1 1 22%;
+    min-width: 140px;
+  }
 }
 
 .rating-lastMadeAt {

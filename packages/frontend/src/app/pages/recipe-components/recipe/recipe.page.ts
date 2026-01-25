@@ -731,7 +731,11 @@ export class RecipePage {
       componentProps: {
         nutrition: this.nutrition,
         ingredientNutrition: this.ingredientNutritionList,
-        servings: this.parseServings(this.recipe?.yield) * this.scale,
+        servings:
+          this.parseServings(
+            this.recipe?.yield,
+            this.recipe?.nutritionServingSize,
+          ) * this.scale,
         hasYield: !!this.recipe?.yield,
       },
     });
@@ -739,11 +743,42 @@ export class RecipePage {
     modal.present();
   }
 
-  parseServings(yieldStr: string | undefined | null): number {
+  parseServings(
+    yieldStr: string | undefined | null,
+    servingSizeStr: string | undefined | null,
+  ): number {
     // Default to 1 when yield is unknown to avoid misleading per-recipe totals
     if (!yieldStr) return 1;
-    const match = yieldStr.match(/(\d+)/);
-    return match ? parseInt(match[1], 10) : 1;
+
+    // If yield explicitly mentions "serving(s)" or "serves", extract that number
+    const servingMatch = yieldStr.match(/(\d+)\s*(?:servings?|serves)/i);
+    if (servingMatch) {
+      return parseInt(servingMatch[1], 10);
+    }
+
+    // Extract number and unit from yield (e.g., "12 eggs" -> 12, "eggs")
+    const yieldMatch = yieldStr.match(/(\d+(?:\.\d+)?)\s*(\w+)?/);
+    if (!yieldMatch) return 1;
+
+    const yieldNum = parseFloat(yieldMatch[1]);
+    const yieldUnit = yieldMatch[2]?.toLowerCase();
+
+    // If we have a serving size with matching unit, divide to get servings
+    if (servingSizeStr && yieldUnit) {
+      const servingMatch = servingSizeStr.match(/(\d+(?:\.\d+)?)\s*(\w+)?/);
+      if (servingMatch) {
+        const servingNum = parseFloat(servingMatch[1]);
+        const servingUnit = servingMatch[2]?.toLowerCase();
+
+        // Units match (e.g., "12 eggs" / "3 eggs" = 4 servings)
+        if (servingUnit === yieldUnit && servingNum > 0) {
+          return Math.round(yieldNum / servingNum);
+        }
+      }
+    }
+
+    // No serving size or units don't match - default to 1 (conservative)
+    return 1;
   }
 
   pinRecipe() {
@@ -786,3 +821,4 @@ export class RecipePage {
     return recipeLabel.id;
   }
 }
+
