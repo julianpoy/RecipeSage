@@ -8,7 +8,7 @@
   },
   "private": true,
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.1",
+    "@ai-sdk/anthropic": "^3.0.23",
     "@ai-sdk/google": "^3.0.1",
     "@ai-sdk/openai": "^3.0.1",
     "@angular/common": "21.1.1",
