@@ -28,6 +28,58 @@ const recipeClipperPath =
   require.resolve("@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js");
 const recipeClipperUMD = readFileSync(recipeClipperPath, "utf-8");
 
+const stepLineRegex = /^\s*\d+[.)\-:]?\s+/;
+
+const stripRepeatedCaptionNoise = (instructions: string): string => {
+  const lines = instructions.split(/\r?\n/);
+  const normalizedLineCounts = new Map<string, number>();
+  const normalizedLineIndexes = new Map<string, number[]>();
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const normalized = lines[i].trim();
+    if (!normalized) continue;
+    if (stepLineRegex.test(normalized)) continue;
+    if (normalized.length > 80) continue;
+    if (/\d/.test(normalized)) continue;
+    if (/[:.;!?]$/.test(normalized)) continue;
+
+    const key = normalized.toLocaleLowerCase();
+    normalizedLineCounts.set(key, (normalizedLineCounts.get(key) || 0) + 1);
+
+    const existingIndexes = normalizedLineIndexes.get(key) || [];
+    existingIndexes.push(i);
+    normalizedLineIndexes.set(key, existingIndexes);
+  }
+
+  const noisyLineKeys = new Set<string>();
+
+  for (const [key, count] of normalizedLineCounts.entries()) {
+    if (count < 3) continue;
+
+    const indexes = normalizedLineIndexes.get(key) || [];
+    const isInsertedBetweenSteps = indexes.every((lineIndex) => {
+      const previous = lines[lineIndex - 1]?.trim() || "";
+      const next = lines[lineIndex + 1]?.trim() || "";
+      return stepLineRegex.test(previous) || stepLineRegex.test(next);
+    });
+
+    if (isInsertedBetweenSteps) {
+      noisyLineKeys.add(key);
+    }
+  }
+
+  if (noisyLineKeys.size === 0) {
+    return instructions;
+  }
+
+  const cleanedLines = lines.filter((line) => {
+    const normalized = line.trim().toLocaleLowerCase();
+    return !normalized || !noisyLineKeys.has(normalized);
+  });
+
+  return cleanedLines.join("\n");
+};
+
 const disconnectPuppeteer = async (browser: Browser) => {
   try {
     await browser.disconnect();
@@ -180,7 +232,9 @@ const clipRecipeUrlWithPuppeteer = async (
         activeTime: he.decode(result?.activeTime || ""),
         totalTime: he.decode(result?.totalTime || ""),
         ingredients: he.decode(result?.ingredients || ""),
-        instructions: he.decode(result?.instructions || ""),
+        instructions: stripRepeatedCaptionNoise(
+          he.decode(result?.instructions || ""),
+        ),
         notes: he.decode(result?.notes || ""),
       },
       images: result?.imageURL ? [result.imageURL] : [],
@@ -209,7 +263,9 @@ const clipRecipeHtmlWithJSDOM = async (document: string) => {
       activeTime: he.decode(result?.activeTime || ""),
       totalTime: he.decode(result?.totalTime || ""),
       ingredients: he.decode(result?.ingredients || ""),
-      instructions: he.decode(result?.instructions || ""),
+      instructions: stripRepeatedCaptionNoise(
+        he.decode(result?.instructions || ""),
+      ),
       notes: he.decode(result?.notes || ""),
     },
     images: result?.imageURL ? [result.imageURL] : [],
