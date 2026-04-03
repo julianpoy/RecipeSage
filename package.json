@@ -147,7 +147,7 @@
     "@sentry/webpack-plugin": "^5.1.1",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "1.15.21",
-    "@swc/helpers": "0.5.20",
+    "@swc/helpers": "0.5.21",
     "@types/ahocorasick": "^1.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
