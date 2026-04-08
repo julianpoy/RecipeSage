@@ -125,7 +125,7 @@
     "@angular-eslint/schematics": "21.3.0",
     "@angular-eslint/template-parser": "21.3.0",
     "@angular/cli": "21.2.1",
-    "@angular/compiler": "21.2.1",
+    "@angular/compiler": "21.2.8",
     "@angular/compiler-cli": "21.2.1",
     "@angular/language-service": "21.2.1",
     "@babel/preset-env": "^7.29.0",
