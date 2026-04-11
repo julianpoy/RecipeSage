@@ -12,7 +12,7 @@
     "@ai-sdk/google": "^3.0.61",
     "@ai-sdk/openai": "^3.0.52",
     "@angular/common": "21.2.1",
-    "@angular/core": "21.2.1",
+    "@angular/core": "21.2.4",
     "@angular/forms": "21.2.1",
     "@angular/platform-browser": "21.2.1",
     "@angular/platform-browser-dynamic": "21.2.1",
