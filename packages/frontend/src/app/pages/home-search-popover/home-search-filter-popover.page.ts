@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, inject } from "@angular/core";
-import { IonSelect, PopoverController } from "@ionic/angular";
+import { IonSelect, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { PreferencesService } from "~/services/preferences.service";

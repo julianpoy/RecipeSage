@@ -9,7 +9,7 @@ export function provideTranslate() {
     }),
     ...provideTranslateHttpLoader({
       prefix: "assets/i18n/",
-      suffix: `.json?version=${(window as any).version}`,
+      suffix: `.json?version=${APP_VERSION}`,
     }),
   ];
 }

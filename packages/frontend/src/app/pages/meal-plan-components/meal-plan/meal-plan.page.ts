@@ -5,7 +5,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
 

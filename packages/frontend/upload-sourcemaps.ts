@@ -31,7 +31,7 @@ if (!process.env.APP_VERSION) {
 const org = "recipesage";
 const project = "recipesage-frontend";
 const release = process.env.APP_VERSION;
-const distPath = path.resolve(__dirname, "www");
+const distPath = path.resolve(__dirname, "www/browser");
 
 console.log(`Uploading sourcemaps for release: ${release}`);
 console.log(`Organization: ${org}`);

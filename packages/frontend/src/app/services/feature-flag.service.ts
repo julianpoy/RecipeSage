@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, PLATFORM_ID, REQUEST, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { IS_SELFHOST } from "../../environments/environment";
 
 export enum FeatureFlagKeys {
@@ -17,6 +18,10 @@ export interface FeatureFlagTypes {
   providedIn: "root",
 })
 export class FeatureFlagService {
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
+  private request = inject(REQUEST, { optional: true });
+
   flags = {
     [FeatureFlagKeys.EnableAssistant]: true,
     [FeatureFlagKeys.EnableContribution]:
@@ -29,13 +34,21 @@ export class FeatureFlagService {
     ]),
   } satisfies Record<FeatureFlagKeys, boolean>;
 
-  constructor() {}
+  private currentHostname(): string | null {
+    if (this.isBrowser) return window.location.hostname;
+    const url = this.request?.url;
+    if (!url) return null;
+    try {
+      return new URL(url).hostname;
+    } catch {
+      return null;
+    }
+  }
 
   private isHost(host: string | string[]) {
-    if (typeof host === "object") {
-      return host.includes(window.location.hostname);
-    }
-
-    return window.location.hostname === host;
+    const hostname = this.currentHostname();
+    if (!hostname) return false;
+    if (Array.isArray(host)) return host.includes(hostname);
+    return hostname === host;
   }
 }

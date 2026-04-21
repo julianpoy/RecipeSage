@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular";
+import { PopoverController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { RatingComponent } from "../rating/rating.component";
 

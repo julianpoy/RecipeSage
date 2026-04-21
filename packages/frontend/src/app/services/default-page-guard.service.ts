@@ -1,8 +1,14 @@
 import { Injectable, inject } from "@angular/core";
-import { NavController } from "@ionic/angular";
+import { ActivatedRouteSnapshot } from "@angular/router";
+import { NavController } from "@ionic/angular/standalone";
 import { UtilService, RouteMap } from "./util.service";
 import { PreferencesService } from "./preferences.service";
-import { GlobalPreferenceKey, StartPageOptions } from "@recipesage/util/shared";
+import { SUPPORTED_LOCALES } from "./locale.service";
+import {
+  GlobalPreferenceKey,
+  StartPageOptions,
+  SupportedLanguages,
+} from "@recipesage/util/shared";
 
 @Injectable()
 export class DefaultPageGuardService {
@@ -10,7 +16,7 @@ export class DefaultPageGuardService {
   private utilService = inject(UtilService);
   private preferencesService = inject(PreferencesService);
 
-  canActivate() {
+  canActivate(route: ActivatedRouteSnapshot) {
     const isLoggedIn = this.utilService.isLoggedIn();
 
     if (isLoggedIn) {
@@ -36,9 +42,31 @@ export class DefaultPageGuardService {
 
       this.navCtrl.navigateRoot(targetPath);
     } else {
-      this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
+      const localeParam = this.findLocaleParam(route);
+      const welcomePath = RouteMap.WelcomePage.getPath();
+      const target = localeParam
+        ? `/${localeParam}${welcomePath}`
+        : welcomePath;
+      this.navCtrl.navigateRoot(target);
     }
 
     return false;
+  }
+
+  private findLocaleParam(route: ActivatedRouteSnapshot): string | null {
+    let current: ActivatedRouteSnapshot | null = route;
+    while (current) {
+      const candidate = current.params["locale"];
+      if (
+        typeof candidate === "string" &&
+        SUPPORTED_LOCALES.includes(
+          candidate.toLowerCase() as SupportedLanguages,
+        )
+      ) {
+        return candidate.toLowerCase();
+      }
+      current = current.parent;
+    }
+    return null;
   }
 }

@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 import { deletePropertiesInObjectByReference } from "../utils/deletePropertiesInObjectByReference";
+import { StorageService } from "./storage.service";
 
 const COMPLETION_TRACKER_LOCALSTORAGE_KEY = "completionTracker";
 const COMPLETION_TRACKER_LOCALSTORAGE_VERSION = "1";
@@ -10,6 +11,8 @@ const COMPLETION_TRACKER_EXPIRY_DAYS = 3;
   providedIn: "root",
 })
 export class RecipeCompletionTrackerService {
+  private storage = inject(StorageService);
+
   scaleByRecipeId: { [key: string]: number } = {};
   ingredientCompletionByRecipeId: { [key: string]: number[] } = {};
   instructionCompletionByRecipeId: { [key: string]: number[] } = {};
@@ -17,7 +20,7 @@ export class RecipeCompletionTrackerService {
 
   constructor() {
     try {
-      const savedValue = localStorage.getItem(
+      const savedValue = this.storage.getItem(
         COMPLETION_TRACKER_LOCALSTORAGE_KEY,
       );
       if (savedValue) {
@@ -111,7 +114,7 @@ export class RecipeCompletionTrackerService {
   }
 
   save() {
-    localStorage.setItem(
+    this.storage.setItem(
       COMPLETION_TRACKER_LOCALSTORAGE_KEY,
       JSON.stringify({
         scaleByRecipeId: this.scaleByRecipeId,
@@ -129,6 +132,6 @@ export class RecipeCompletionTrackerService {
     deletePropertiesInObjectByReference(this.instructionCompletionByRecipeId);
     deletePropertiesInObjectByReference(this.lastTouchedByRecipeId);
 
-    localStorage.removeItem(COMPLETION_TRACKER_LOCALSTORAGE_KEY);
+    this.storage.removeItem(COMPLETION_TRACKER_LOCALSTORAGE_KEY);
   }
 }

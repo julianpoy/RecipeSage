@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 
 import { LoadingService } from "~/services/loading.service";
 import { TRPCService } from "../../../services/trpc.service";

@@ -58,10 +58,13 @@ services:
       - ./packages:/app/packages
     ports:
       - "8100:8100"
-    command: npx nx start frontend
+    command: npx nx serve:ssr frontend
     environment:
       - ENVIRONMENT=development
       - APP_VERSION=development
+      - SITE_ORIGIN=http://localhost
+      - SSR_API_BASE_URL=http://backend:3000/
+      - PORT=8100
     ulimits:
       core:
         soft: 0

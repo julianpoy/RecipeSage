@@ -717,7 +717,7 @@ router.post(
 
     const session = await SessionService.generateSession(user.id, "user");
 
-    const link = `${origin}/#/settings/account?token=${session.token}`;
+    const link = `${origin}/settings/account?token=${session.token}`;
 
     await sendPasswordReset([user.email], [], { resetLink: link });
 

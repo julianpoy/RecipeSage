@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { NavController } from "@ionic/angular";
+import { NavController } from "@ionic/angular/standalone";
 
 import { RouteMap } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

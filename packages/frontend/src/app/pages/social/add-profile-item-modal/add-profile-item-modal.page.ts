@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 
 import { Recipe } from "../../../services/recipe.service";
 import { RouteMap } from "~/services/util.service";

@@ -1,17 +1,24 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 
 import { SW_BROADCAST_CHANNEL_NAME } from "../utils/SW_BROADCAST_CHANNEL_NAME";
 import { TranslateService } from "@ngx-translate/core";
-
-const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 @Injectable({
   providedIn: "root",
 })
 export class SwCommunicationService {
   private translate = inject(TranslateService);
+  private platformId = inject(PLATFORM_ID);
+  private broadcastChannel: BroadcastChannel | null = isPlatformBrowser(
+    this.platformId,
+  )
+    ? new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME)
+    : null;
 
   async triggerFullCacheSync(notify = false) {
+    if (!this.broadcastChannel) return;
+
     let notification:
       | {
           title: string;
@@ -32,7 +39,7 @@ export class SwCommunicationService {
         tag: undefined,
       };
     }
-    broadcastChannel.postMessage({
+    this.broadcastChannel.postMessage({
       type: "triggerFullSync",
       notification,
     });

@@ -26,7 +26,7 @@ if (process.env.ENVIRONMENT !== "selfhost") {
   });
 }
 
-import { registerRoute } from "workbox-routing";
+import { registerRoute, NavigationRoute } from "workbox-routing";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
 import { CacheFirst, NetworkFirst } from "workbox-strategies";
@@ -35,11 +35,7 @@ import { getLocalDb } from "./app/utils/localDb";
 import { SearchManager } from "./app/utils/SearchManager";
 import { SyncManager } from "./app/utils/SyncManager";
 import { initializeApp } from "firebase/app";
-import {
-  getMessaging,
-  onBackgroundMessage,
-  isSupported as isMessagingSupported,
-} from "firebase/messaging/sw";
+import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
 import {
   registerGetRecipesRoute,
   registerGetRecipeRoute,
@@ -76,7 +72,7 @@ import {
   registerGetMyStatsRoute,
 } from "./app/utils/serviceWorker/routes/users";
 import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
-import { DebugStoreService } from "./app/services/debugStore.service";
+import { createSWDebugDump } from "./app/services/debugStore";
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
@@ -114,7 +110,6 @@ self.addEventListener("install", async (event) => {
   self.skipWaiting();
 });
 
-const debugStore = new DebugStoreService();
 const searchManagerP = getLocalDb().then(
   (localDb) => new SearchManager(localDb),
 );
@@ -162,7 +157,7 @@ addEventListener("message", async (event) => {
         return;
       }
 
-      const debugDump = debugStore.createSWDebugDump();
+      const debugDump = createSWDebugDump();
       responsePort.postMessage(JSON.parse(JSON.stringify(debugDump)));
 
       break;
@@ -184,6 +179,19 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
       }),
     ],
+  }),
+);
+
+registerRoute(
+  new NavigationRoute(async ({ request }) => {
+    try {
+      return await fetch(request);
+    } catch {
+      const cache = await caches.open(BASE_CACHE_NAME);
+      const shell =
+        (await cache.match("/index.html")) || (await cache.match("/"));
+      return shell || Response.error();
+    }
   }),
 );
 
@@ -275,7 +283,36 @@ registerRoute(
   }),
 );
 
-const initializeFirebase = async () => {
+self.addEventListener("notificationclick", (event: any) => {
+  event.notification.close();
+
+  event.waitUntil(
+    self.clients
+      .matchAll({
+        type: "window",
+      })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (client.url == "/") {
+            return client.focus();
+          }
+        }
+        if (event.notification.data?.recipeId) {
+          return self.clients.openWindow(
+            `${self.registration.scope}recipe/${event.notification.data.recipeId}`,
+          );
+        } else if (event.notification.data?.otherUserId) {
+          return self.clients.openWindow(
+            `${self.registration.scope}messages/${event.notification.data.otherUserId}`,
+          );
+        } else {
+          return self.clients.openWindow(self.registration.scope);
+        }
+      }),
+  );
+});
+
+try {
   const firebaseApp = initializeApp({
     appId: "1:1064631313987:android:b6ca7a14265a6a01",
     apiKey: "AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0",
@@ -283,17 +320,8 @@ const initializeFirebase = async () => {
     messagingSenderId: "1064631313987",
   });
 
-  const isSupported = await isMessagingSupported();
-  if (!isSupported) {
-    console.log("Firebase cloud messaging is not supported");
-    return;
-  }
-
   const messaging = getMessaging(firebaseApp);
-
   onBackgroundMessage(messaging, (message) => {
-    console.log("Received background message ", message);
-
     switch (message.data?.type) {
       case "update:available": {
         return self.registration.update();
@@ -313,42 +341,8 @@ const initializeFirebase = async () => {
       }
     }
   });
-
-  self.addEventListener("notificationclick", (event: any) => {
-    // Android doesn't close the notification when you click on it
-    // See: http://crbug.com/463146
-    event.notification.close();
-
-    event.waitUntil(
-      self.clients
-        .matchAll({
-          type: "window",
-        })
-        .then((clientList) => {
-          for (const client of clientList) {
-            // This looks to see if the app is already open at the root page and focuses if it is
-            if (client.url == "/") {
-              return client.focus();
-            }
-          }
-          if (event.notification.data?.recipeId) {
-            return self.clients.openWindow(
-              `${self.registration.scope}#/recipe/${event.notification.data.recipeId}`,
-            );
-          } else if (event.notification.data?.otherUserId) {
-            return self.clients.openWindow(
-              `${self.registration.scope}#/messages/${event.notification.data.otherUserId}`,
-            );
-          } else {
-            return self.clients.openWindow(self.registration.scope);
-          }
-        }),
-    );
-  });
-};
-
-initializeFirebase().catch((e) => {
-  console.error(e);
-});
+} catch (e) {
+  console.error("Firebase messaging unavailable", e);
+}
 
 console.log("Service worker mounted");

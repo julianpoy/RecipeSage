@@ -11,13 +11,26 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "www",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "server.ts"
+            },
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.json",
+            "security": {
+              "allowedHosts": [
+                "localhost",
+                "recipesage.com",
+                "www.recipesage.com",
+                "beta.recipesage.com"
+              ]
+            },
             "assets": [
               "src/manifest.json",
               "src/service-worker.js",
@@ -43,7 +56,10 @@
                 "input": "src/app/app.scss"
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "define": {
+              "APP_VERSION": "\"development\""
+            }
           },
           "configurations": {
             "development": {
@@ -52,9 +68,7 @@
               "sourceMap": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "production": {
               "fileReplacements": [
@@ -73,8 +87,6 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -96,8 +108,6 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

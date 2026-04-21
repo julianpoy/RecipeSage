@@ -20,11 +20,14 @@ if (!IS_SELFHOST) {
   }
 
   Sentry.init({
-    release: (window as any).version,
+    release: APP_VERSION,
     environment: sentryEnvironment,
     dsn: "https://aaf472dea32adeb2a30335c9781361ed@o158500.ingest.us.sentry.io/4510138104741888",
     transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
     tracesSampleRate: SENTRY_SAMPLE_RATE,
+    initialScope: {
+      tags: { runtime: "csr" },
+    },
     beforeSend(event, hint) {
       const error = hint.originalException as Error;
       if (checkChunkLoadError(error)) return null;

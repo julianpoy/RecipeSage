@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { ToastController, PopoverController } from "@ionic/angular";
+import { ToastController, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UtilService } from "~/services/util.service";

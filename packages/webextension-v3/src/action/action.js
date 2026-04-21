@@ -229,7 +229,7 @@ const saveClip = async (clipData) => {
 
   const recipeData = await recipeCreateResponse.json();
 
-  const url = `https://recipesage.com/#/recipe/${recipeData.id}`;
+  const url = `https://recipesage.com/recipe/${recipeData.id}`;
   chrome.tabs.create({
     url,
     active: true,

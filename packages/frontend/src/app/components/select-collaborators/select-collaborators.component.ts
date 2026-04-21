@@ -10,7 +10,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../services/loading.service";
 import { MessagingService } from "../../services/messaging.service";
-import { ToastController, ModalController } from "@ionic/angular";
+import { ToastController, ModalController } from "@ionic/angular/standalone";
 import { UtilService } from "../../services/util.service";
 import { UserService } from "../../services/user.service";
 import { TRPCService } from "../../services/trpc.service";

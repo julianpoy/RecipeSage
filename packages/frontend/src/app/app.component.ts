@@ -1,4 +1,5 @@
-import { Component, inject } from "@angular/core";
+import { Component, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
@@ -10,11 +11,13 @@ import {
   ToastController,
   AlertController,
   NavController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { LocaleService } from "~/services/locale.service";
+import { HeadService } from "~/services/head.service";
 import { RecipeService } from "~/services/recipe.service";
 import { MessagingService } from "~/services/messaging.service";
 import { WebsocketService } from "~/services/websocket.service";
@@ -65,6 +68,8 @@ export class AppComponent {
   private toastCtrl = inject(ToastController);
   private alertCtrl = inject(AlertController);
   private utilService = inject(UtilService);
+  private localeService = inject(LocaleService);
+  private headService = inject(HeadService);
   private recipeService = inject(RecipeService);
   private messagingService = inject(MessagingService);
   private websocketService = inject(WebsocketService);
@@ -75,25 +80,27 @@ export class AppComponent {
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
   debugStoreService = inject(DebugStoreService);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
 
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
-  enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
+  enableAnimations =
+    !this.isBrowser || !navigator.userAgent.toLowerCase().includes("firefox");
 
   navList?: { id: string; title: string; icon: string; url: string }[];
 
   inboxCount?: number;
   friendRequestCount?: number;
 
-  version: number = (window as any).version;
+  version = APP_VERSION;
 
   unsupportedBrowser: boolean =
-    !!window.navigator.userAgent.match(/(MSIE|Trident)/);
-  seenOldBrowserWarning: boolean = !!localStorage.getItem(
-    "seenOldBrowserWarning",
-  );
+    this.isBrowser && !!window.navigator.userAgent.match(/(MSIE|Trident)/);
+  seenOldBrowserWarning: boolean =
+    this.isBrowser && !!localStorage.getItem("seenOldBrowserWarning");
 
   aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
 
@@ -101,16 +108,29 @@ export class AppComponent {
   preferenceKeys = GlobalPreferenceKey;
 
   constructor() {
-    const languagePref =
-      this.preferencesService.preferences[GlobalPreferenceKey.Language];
-    const language = languagePref || this.utilService.getAppBrowserLang();
+    const language = this.localeService.getActiveLanguage();
     this.translate.setDefaultLang(SupportedLanguages.EN_US);
     this.translate.use(language);
     this.utilService.setHtmlBrowserLang(language);
+    this.headService.init();
+
+    this.router.events.subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+      const next = this.localeService.getActiveLanguage();
+      if (this.translate.currentLang !== next) {
+        this.translate.use(next);
+        this.utilService.setHtmlBrowserLang(next);
+      }
+    });
 
     const fontSize =
       this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
     this.utilService.setFontSize(fontSize);
+
+    this.updateNavList();
+    this.updateIsLoggedIn();
+
+    if (!this.isBrowser) return;
 
     if (ENABLE_ANALYTICS) {
       this.initAnalytics();
@@ -131,8 +151,6 @@ export class AppComponent {
       this.messagingService.requestNotifications();
     }
 
-    this.updateNavList();
-    this.updateIsLoggedIn();
     this.migrateSession();
 
     this.versionCheckService.checkVersion();
@@ -543,7 +561,7 @@ export class AppComponent {
         if (!_paq) return;
 
         if (currentUrl) _paq.push(["setReferrerUrl", currentUrl]);
-        currentUrl = "" + window.location.hash.substring(1);
+        currentUrl = window.location.pathname + window.location.search;
         _paq.push(["setCustomUrl", currentUrl]);
         _paq.push(["setDocumentTitle", viewName]);
 

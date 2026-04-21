@@ -3,7 +3,7 @@ import {
   ModalController,
   AlertController,
   ToggleCustomEvent,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";

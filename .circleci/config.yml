@@ -101,9 +101,18 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: api-hosted.sh
-          command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
-  push_backend_selfhost_amd64:
+          name: build and push recipesage.com image
+          command: |
+            VERSION=${CIRCLE_TAG:=stg}
+            docker build \
+            --build-arg VERSION=$VERSION \
+            --build-arg FRONTEND_BUILD_TARGET=build \
+            -f production.Dockerfile \
+            -t julianpoy/recipesage:$VERSION \
+            .
+
+            docker push julianpoy/recipesage:$VERSION
+  push_selfhost_amd64:
     resource_class: large
     docker:
       - image: cimg/node:24.13
@@ -116,16 +125,16 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: build and push api amd64
+          name: build and push selfhost amd64
           command: |
             docker buildx build . \
               --push \
               --platform linux/amd64 \
               -f production.Dockerfile \
               --build-arg VERSION=${CIRCLE_TAG:=stg} \
-              -t julianpoy/recipesage-selfhost:api-${CIRCLE_TAG:=stg}-amd64 \
-              -t julianpoy/recipesage-selfhost:api-latest-amd64
-  push_backend_selfhost_arm64:
+              --build-arg FRONTEND_BUILD_TARGET=build:selfhost \
+              -t julianpoy/recipesage-selfhost:${CIRCLE_TAG:=stg}-amd64
+  push_selfhost_arm64:
     resource_class: arm.large
     machine:
       image: ubuntu-2404:current
@@ -135,16 +144,16 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: build and push api arm64
+          name: build and push selfhost arm64
           command: |
             docker buildx build . \
               --push \
               --platform linux/arm64/v8 \
               -f production.Dockerfile \
               --build-arg VERSION=${CIRCLE_TAG:=stg} \
-              -t julianpoy/recipesage-selfhost:api-${CIRCLE_TAG:=stg}-arm64 \
-              -t julianpoy/recipesage-selfhost:api-latest-arm64
-  push_backend_selfhost_manifest:
+              --build-arg FRONTEND_BUILD_TARGET=build:selfhost \
+              -t julianpoy/recipesage-selfhost:${CIRCLE_TAG:=stg}-arm64
+  push_selfhost_manifest:
     docker:
       - image: cimg/base:stable
     steps:
@@ -152,25 +161,18 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: create and push api manifest
+          name: create and push selfhost merged image
           command: |
-            docker buildx imagetools create -t julianpoy/recipesage-selfhost:api-${CIRCLE_TAG:=stg} \
-              julianpoy/recipesage-selfhost:api-${CIRCLE_TAG:=stg}-amd64 \
-              julianpoy/recipesage-selfhost:api-${CIRCLE_TAG:=stg}-arm64
-
-            docker buildx imagetools create -t julianpoy/recipesage-selfhost:api-latest \
-              julianpoy/recipesage-selfhost:api-latest-amd64 \
-              julianpoy/recipesage-selfhost:api-latest-arm64
-  push_frontend:
+            docker buildx imagetools create -t julianpoy/recipesage-selfhost:${CIRCLE_TAG:=stg} \
+              julianpoy/recipesage-selfhost:${CIRCLE_TAG:=stg}-amd64 \
+              julianpoy/recipesage-selfhost:${CIRCLE_TAG:=stg}-arm64
+  upload_static:
     resource_class: large
     docker:
       - image: cimg/node:24.13
     steps:
       - checkout
       - aws-cli/setup
-      - setup_remote_docker:
-          version: docker24
-          docker_layer_caching: true
       - install-dependencies
       - run:
           name: build-frontend
@@ -181,42 +183,44 @@ jobs:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
       - run:
-          name: set-frontend-version
-          command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
-      - run:
           name: webapp-hosted.sh
-          command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
-  push_frontend_selfhost:
-    resource_class: large
-    docker:
-      - image: cimg/node:24.13
-    steps:
-      - checkout
-      - aws-cli/setup
-      - setup_remote_docker:
-          version: docker24
-          docker_layer_caching: true
-      - run:
-          name: docker-login
-          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
-      - run:
-          name: setup buildx
-          command: ./scripts/circleci_buildx.sh
-      - install-dependencies
-      - run:
-          name: build-frontend
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build:selfhost frontend --skip-nx-cache)
-          environment:
-            ENVIRONMENT: production
-      - run:
-          name: move-frontend-build
-          command: mv packages/frontend/www ./www
-      - run:
-          name: set-frontend-version
-          command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
-      - run:
-          name: webapp-selfhost.sh
-          command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}
+          command: |
+            APP_VERSION=${CIRCLE_TAG:=stg}
+            BUCKET="s3://chefbook-static/frontend/$APP_VERSION/"
+
+            find www/browser/ -type f -name "*.map" -delete
+
+            aws s3 sync www/browser "$BUCKET" \
+              --exclude "*" \
+              --include "chunk-????????.*" \
+              --include "main-????????.*" \
+              --include "polyfills-????????.*" \
+              --include "styles-????????.*" \
+              --include "media/*-????????.*" \
+              --acl public-read \
+              --cache-control "public, max-age=2592000, immutable"
+
+            aws s3 sync www/browser "$BUCKET" \
+              --exclude "*" \
+              --include "index.html" \
+              --include "index.csr.html" \
+              --include "service-worker.js" \
+              --include "*/index.html" \
+              --acl public-read \
+              --cache-control "public, max-age=3600, must-revalidate"
+
+            aws s3 sync www/browser "$BUCKET" \
+              --exclude "chunk-????????.*" \
+              --exclude "main-????????.*" \
+              --exclude "polyfills-????????.*" \
+              --exclude "styles-????????.*" \
+              --exclude "media/*-????????.*" \
+              --exclude "index.html" \
+              --exclude "index.csr.html" \
+              --exclude "service-worker.js" \
+              --exclude "*/index.html" \
+              --acl public-read \
+              --cache-control "public, max-age=604800, must-revalidate"
 
 workflows:
   version: 2
@@ -236,7 +240,7 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
               ignore: /.*/
-      - push_backend_selfhost_amd64:
+      - push_selfhost_amd64:
           requires:
             - build_and_test
           filters:
@@ -245,7 +249,7 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
-      - push_backend_selfhost_arm64:
+      - push_selfhost_arm64:
           requires:
             - build_and_test
           filters:
@@ -254,30 +258,21 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
-      - push_backend_selfhost_manifest:
+      - push_selfhost_manifest:
           requires:
-            - push_backend_selfhost_amd64
-            - push_backend_selfhost_arm64
+            - push_selfhost_amd64
+            - push_selfhost_arm64
           filters:
             tags:
               # We do not publish -beta versions for selfhost
               only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
-      - push_frontend:
+      - upload_static:
           requires:
             - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
-            branches:
-              ignore: /.*/
-      - push_frontend_selfhost:
-          requires:
-            - build_and_test
-          filters:
-            tags:
-              # We do not publish -beta versions for selfhost
-              only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/

@@ -6,7 +6,7 @@ import {
   ViewChild,
   inject,
 } from "@angular/core";
-import { IonicSlides, ModalController } from "@ionic/angular";
+import { IonicSlides, ModalController } from "@ionic/angular/standalone";
 import { SwiperContainer } from "swiper/element";
 import { Swiper } from "swiper/types";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";

@@ -4,10 +4,12 @@ import {
   Output,
   EventEmitter,
   ElementRef,
+  PLATFORM_ID,
   ViewChild,
   type AfterViewInit,
   inject,
 } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { TRPCService } from "../../services/trpc.service";
 import {
   GOOGLE_GSI_CLIENT_ID,
@@ -29,6 +31,7 @@ const getGoogleRef = () => {
 })
 export class SignInWithGoogleComponent implements AfterViewInit {
   private trpcService = inject(TRPCService);
+  private platformId = inject(PLATFORM_ID);
 
   // Can be use to hide the button and only use for prompting
   @Input() showButton = true;
@@ -40,6 +43,7 @@ export class SignInWithGoogleComponent implements AfterViewInit {
   googleButtonContainer!: ElementRef<HTMLDivElement>;
 
   ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (IS_SELFHOST) return;
 
     const googleScriptNodeId = "google-auth-script";

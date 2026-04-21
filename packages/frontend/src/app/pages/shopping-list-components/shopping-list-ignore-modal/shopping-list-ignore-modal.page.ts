@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";

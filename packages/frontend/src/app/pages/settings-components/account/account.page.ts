@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { AlertController, NavController } from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 

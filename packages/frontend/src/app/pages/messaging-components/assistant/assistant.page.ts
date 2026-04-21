@@ -3,7 +3,7 @@ import {
   AlertController,
   NavController,
   ToastController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";

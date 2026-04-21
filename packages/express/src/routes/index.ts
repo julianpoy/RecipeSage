@@ -7,7 +7,6 @@ import { metricsRouter } from "./metrics";
 import { wsRouter } from "./ws";
 import { stripeRouter } from "./stripe";
 import { printRouter } from "./print";
-import { shareRouter } from "./share";
 import { mlRouter } from "./ml";
 
 const router = express.Router();
@@ -19,7 +18,6 @@ router.use("/mealplans", mealPlansRouter);
 router.use("/metrics", metricsRouter);
 router.use("/stripe", stripeRouter);
 router.use("/print", printRouter);
-router.use("/share", shareRouter);
 router.use("/ws", wsRouter);
 router.use("/ml", mlRouter);
 

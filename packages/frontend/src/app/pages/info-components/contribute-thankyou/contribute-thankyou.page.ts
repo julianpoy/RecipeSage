@@ -19,7 +19,7 @@ export class ContributeThankYouPage {
   aboutHref: string = RouteMap.AboutPage.getPath();
   accountPath: string = RouteMap.AccountPage.getPath();
 
-  constructor() {
+  ionViewWillEnter() {
     this.capabilitiesService.updateCapabilities();
   }
 }

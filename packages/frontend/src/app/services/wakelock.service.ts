@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 
 interface WakelockRequest {
   release: () => void;
@@ -8,11 +9,16 @@ interface WakelockRequest {
   providedIn: "root",
 })
 export class WakeLockService {
-  isCapable = "wakeLock" in navigator;
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
+
+  isCapable = this.isBrowser && "wakeLock" in navigator;
   wakeLock: WakeLockSentinel | null = null;
   wakeLockRequests: WakelockRequest[] = [];
 
   constructor() {
+    if (!this.isBrowser) return;
+
     document.addEventListener("visibilitychange", () =>
       this.onVisiblityChange(),
     );

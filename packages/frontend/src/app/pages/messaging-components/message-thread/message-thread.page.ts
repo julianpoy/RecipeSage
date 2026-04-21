@@ -1,6 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { NavController } from "@ionic/angular/standalone";
 
 import { linkifyStr } from "~/utils/linkify";
 import { Message, MessagingService } from "~/services/messaging.service";

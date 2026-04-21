@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular";
+import { PopoverController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 export interface ResettableSelectOption {

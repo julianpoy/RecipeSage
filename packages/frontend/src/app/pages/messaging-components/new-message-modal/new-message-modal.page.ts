@@ -3,7 +3,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { MessagingService } from "~/services/messaging.service";

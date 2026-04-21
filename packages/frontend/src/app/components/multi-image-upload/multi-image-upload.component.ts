@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { AlertController, ToastController } from "@ionic/angular";
+import { AlertController, ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ImageService } from "~/services/image.service";

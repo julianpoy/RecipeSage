@@ -474,7 +474,7 @@ if (window[extensionContainerId]) {
                 `Recipe Saved!`,
                 `Click to open`,
                 4000,
-                `https://recipesage.com/#/recipe/${data.id}`,
+                `https://recipesage.com/recipe/${data.id}`,
               );
             });
           } else {

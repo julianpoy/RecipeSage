@@ -1,5 +1,5 @@
 import { TRPCClientError } from "@trpc/client";
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PendingTasks, inject } from "@angular/core";
 import {
   ErrorHandlers,
   HttpErrorHandlerService,
@@ -11,16 +11,23 @@ import { trpcClient } from "../utils/trpcClient";
 })
 export class TRPCService {
   private httpErrorHandler = inject(HttpErrorHandlerService);
+  private pendingTasks = inject(PendingTasks);
 
   public trpc = trpcClient;
 
   async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
-    return result.catch((e) => {
+    const handledResult = result.catch((e) => {
       if (e instanceof TRPCClientError) {
         this.httpErrorHandler.handleTrpcError(e, errorHandlers);
       } else {
         throw e;
       }
     });
+
+    this.pendingTasks.run(() => {
+      return handledResult;
+    });
+
+    return handledResult;
   }
 }

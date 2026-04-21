@@ -4,7 +4,7 @@ import {
   ModalController,
   ToastController,
   AlertController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UserService } from "~/services/user.service";

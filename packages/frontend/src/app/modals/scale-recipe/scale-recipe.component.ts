@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import fractionjs from "fraction.js";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 

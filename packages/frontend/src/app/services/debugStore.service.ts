@@ -1,33 +1,27 @@
-import { Injectable } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { getLocalDb, ObjectStoreName } from "../utils/localDb/localDb";
 import {
   sendMessageToSW,
   SWMessageType,
 } from "../utils/localDb/sendMessageToSW";
 import { environment } from "../../environments/environment";
-
-const CONSOLE_LOGS_HISTORY_MAX = 500;
-const TRPC_REQUEST_HISTORY_MAX = 200;
-
-const store = {
-  logs: [],
-  trpc: [],
-} as {
-  logs: {
-    type: string;
-    datetime: string;
-    value: any;
-  }[];
-  trpc: unknown[];
-};
+import {
+  CONSOLE_LOGS_HISTORY_MAX,
+  createSWDebugDump,
+  store,
+} from "./debugStore";
+export { captureTrpcRequest } from "./debugStore";
 
 @Injectable({
   providedIn: "root",
 })
 export class DebugStoreService {
   private store = store;
+  private platformId = inject(PLATFORM_ID);
 
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
     this.initDebugStoreMonkeypatch();
   }
 
@@ -39,7 +33,7 @@ export class DebugStoreService {
       userAgent: navigator.userAgent,
       windowWidth: self.innerWidth,
       windowHeight: self.innerHeight,
-      version: (window as any).version,
+      version: APP_VERSION,
       sw: {
         isPresent: !!navigator.serviceWorker.controller,
         state: navigator.serviceWorker.controller?.state,
@@ -84,9 +78,7 @@ export class DebugStoreService {
   }
 
   createSWDebugDump() {
-    return {
-      logs: this.store.logs,
-    };
+    return createSWDebugDump();
   }
 
   private initDebugStoreMonkeypatch() {
@@ -152,12 +144,5 @@ export class DebugStoreService {
     }
 
     return value;
-  }
-}
-
-export function captureTrpcRequest(entry: unknown) {
-  store.trpc.push(entry);
-  if (store.trpc.length > TRPC_REQUEST_HISTORY_MAX) {
-    store.trpc.splice(TRPC_REQUEST_HISTORY_MAX);
   }
 }

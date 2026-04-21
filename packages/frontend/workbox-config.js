@@ -1,5 +1,5 @@
 module.exports = {
-  globDirectory: "www/",
+  globDirectory: "www/browser/",
   globPatterns: [
     // "assets/fonts/roboto*.woff2",
     // "assets/**/*.{png,jpg}",
@@ -9,8 +9,8 @@ module.exports = {
     // "index.html",
     "manifest.json",
   ],
-  dontCacheBustURLsMatching: new RegExp(".+.[a-f0-9]{20}..+"),
+  dontCacheBustURLsMatching: /-[A-Za-z0-9]{8}\.[^.]+$/,
   maximumFileSizeToCacheInBytes: 5000000,
   swSrc: "src/service-worker.js",
-  swDest: "www/service-worker.js",
+  swDest: "www/browser/service-worker.js",
 };

@@ -4,7 +4,7 @@ import {
   AlertController,
   ModalController,
   NavController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { isHandleValid } from "@recipesage/util/shared";

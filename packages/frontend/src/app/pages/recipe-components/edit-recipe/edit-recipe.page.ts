@@ -10,7 +10,7 @@ import {
   AlertController,
   PopoverController,
   LoadingController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import {
   Camera,

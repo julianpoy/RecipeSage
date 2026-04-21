@@ -10,7 +10,7 @@ import {
 import { UtilService } from "~/services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { TranslateService } from "@ngx-translate/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController } from "@ionic/angular/standalone";
 
 @Component({
   standalone: true,

@@ -28,12 +28,20 @@
       "options": {
         "cwd": "packages/frontend",
         "commands": [
-          "ng build --configuration=production",
+          "ng build --configuration=production --define=APP_VERSION=\"\\\"${APP_VERSION:-development}\\\"\"",
           "webpack -c sw-webpack.config.js",
           "workbox injectManifest",
           "tsx upload-sourcemaps.ts"
         ],
         "parallel": false
+      }
+    },
+    "serve:ssr": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "node www/server/server.mjs"
       }
     },
     "build:selfhost": {
@@ -42,7 +50,7 @@
         "cwd": "packages/frontend",
         "commands": [
           "webpack -c sw-webpack.config.js",
-          "ng build --configuration=selfhost",
+          "ng build --configuration=selfhost --define=APP_VERSION=\"\\\"${APP_VERSION:-development}\\\"\"",
           "workbox injectManifest"
         ],
         "parallel": false

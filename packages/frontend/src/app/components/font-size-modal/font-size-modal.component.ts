@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { PreferencesService } from "../../services/preferences.service";
 import {
   GlobalPreferenceKey,

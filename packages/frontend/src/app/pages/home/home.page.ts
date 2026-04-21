@@ -5,7 +5,7 @@ import {
   NavController,
   AlertController,
   PopoverController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
 import { Recipe, RecipeFolderName } from "~/services/recipe.service";

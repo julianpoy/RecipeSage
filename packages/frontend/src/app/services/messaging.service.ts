@@ -7,9 +7,10 @@ import {
   onMessage,
 } from "firebase/messaging";
 
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 
-import { AlertController } from "@ionic/angular";
+import { AlertController } from "@ionic/angular/standalone";
 
 import { UserService } from "./user.service";
 import { HttpService } from "./http.service";
@@ -75,6 +76,7 @@ export class MessagingService {
   private httpService = inject(HttpService);
   private userService = inject(UserService);
   private alertCtrl = inject(AlertController);
+  private platformId = inject(PLATFORM_ID);
 
   private messaging: Messaging | null = null;
   private fcmToken: any;
@@ -83,6 +85,8 @@ export class MessagingService {
   private isFCMSupportedPromise: Promise<boolean> | undefined;
 
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.updateFCMSupported();
 
     const onSWRegsitration = async () => {

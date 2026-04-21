@@ -1,4 +1,5 @@
-import { Component, inject } from "@angular/core";
+import { Component, OnInit, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformServer } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -6,7 +7,7 @@ import {
   ToastController,
   ModalController,
   PopoverController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -47,7 +48,7 @@ import type {
   UserPublic,
 } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
-import { Title } from "@angular/platform-browser";
+import { Title, Meta } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 
@@ -59,7 +60,7 @@ import { RatingComponent } from "../../../components/rating/rating.component";
   providers: [RecipeService],
   imports: [...SHARED_UI_IMPORTS, RatingComponent],
 })
-export class RecipePage {
+export class RecipePage implements OnInit {
   private navCtrl = inject(NavController);
   private alertCtrl = inject(AlertController);
   private toastCtrl = inject(ToastController);
@@ -78,6 +79,8 @@ export class RecipePage {
   private translate = inject(TranslateService);
   private trpcService = inject(TRPCService);
   private titleService = inject(Title);
+  private metaService = inject(Meta);
+  private platformId = inject(PLATFORM_ID);
 
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
@@ -108,7 +111,7 @@ export class RecipePage {
 
   ratingVisual = new Array<string>(5).fill("star-outline");
 
-  isLoggedIn: boolean = !!localStorage.getItem("token");
+  isLoggedIn: boolean = this.utilService.isLoggedIn();
 
   hasNutrition(): boolean {
     return [
@@ -150,13 +153,21 @@ export class RecipePage {
     this.applyScale();
   }
 
-  ionViewWillEnter() {
-    this.recipe = null;
-    this.me = null;
-    this.similarRecipes = [];
-    this.linkedRecipes = [];
+  async ngOnInit() {
+    if (isPlatformServer(this.platformId)) {
+      await this.load();
+    }
+  }
 
-    this.loadWithBar();
+  ionViewWillEnter() {
+    if (this.recipe?.id !== this.recipeId) {
+      this.recipe = null;
+      this.me = null;
+      this.similarRecipes = [];
+      this.linkedRecipes = [];
+
+      this.loadWithBar();
+    }
 
     this.setupWakeLock();
   }
@@ -172,7 +183,7 @@ export class RecipePage {
   }
 
   updateIsLoggedIn() {
-    this.isLoggedIn = !!localStorage.getItem("token");
+    this.isLoggedIn = this.utilService.isLoggedIn();
   }
 
   async load() {
@@ -241,6 +252,53 @@ export class RecipePage {
     this.applyScale();
 
     this.updateRatingVisual();
+
+    this.setMetaTags();
+  }
+
+  private setMetaTags() {
+    if (!this.recipe) return;
+
+    const description = this.recipe.description || "";
+    const image = this.sortedRecipeImages()[0]?.image.location;
+
+    this.metaService.updateTag({ name: "description", content: description });
+    this.metaService.updateTag({
+      property: "og:title",
+      content: this.recipe.title,
+    });
+    this.metaService.updateTag({
+      property: "og:type",
+      content: "article",
+    });
+    this.metaService.updateTag({
+      property: "og:site_name",
+      content: "RecipeSage",
+    });
+    this.metaService.updateTag({
+      property: "og:description",
+      content: description,
+    });
+    this.metaService.updateTag({
+      name: "twitter:card",
+      content: image ? "summary_large_image" : "summary",
+    });
+    this.metaService.updateTag({
+      name: "twitter:title",
+      content: this.recipe.title,
+    });
+    this.metaService.updateTag({
+      name: "twitter:description",
+      content: description,
+    });
+    if (image) {
+      this.metaService.updateTag({ property: "og:image", content: image });
+      this.metaService.updateTag({
+        property: "og:image:alt",
+        content: this.recipe.title,
+      });
+      this.metaService.updateTag({ name: "twitter:image", content: image });
+    }
   }
 
   recipeLabelsForGroupId(labelGroupId: string | null) {

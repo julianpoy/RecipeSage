@@ -1,4 +1,5 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -8,11 +9,14 @@ import { TranslateService } from "@ngx-translate/core";
 export class UnsavedChangesService {
   private router = inject(Router);
   private translate = inject(TranslateService);
+  private platformId = inject(PLATFORM_ID);
 
   private pendingChanges = false;
   public unsavedChangesMessage = "";
 
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.translate
       .get("services.unsavedChanges.message")
       .toPromise()

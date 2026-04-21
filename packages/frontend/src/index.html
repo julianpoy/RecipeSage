@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>RecipeSage - The Personal Recipe Keeper</title>
 
-    <base href="." />
+    <base href="/" />
 
     <meta
       name="viewport"
@@ -15,8 +15,36 @@
     <meta name="msapplication-config" content="assets/icon/browserconfig.xml" />
 
     <meta
-      name="Description"
+      name="description"
       content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly."
+    />
+    <meta
+      property="og:title"
+      content="RecipeSage - The Personal Recipe Keeper"
+    />
+    <meta property="og:site_name" content="RecipeSage" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly."
+    />
+    <meta
+      property="og:image"
+      content="https://recipesage.com/assets/imgs/logo_green.png"
+    />
+    <meta property="og:image:alt" content="RecipeSage" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="RecipeSage - The Personal Recipe Keeper"
+    />
+    <meta
+      name="twitter:description"
+      content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly."
+    />
+    <meta
+      name="twitter:image"
+      content="https://recipesage.com/assets/imgs/logo_green.png"
     />
 
     <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
@@ -51,16 +79,22 @@
     <meta name="color-scheme" content="light dark" />
 
     <!-- add to homescreen for ios -->
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <script>
-      if (window.location.search) {
-        if (window.location.hash && window.location.hash.includes("#/")) {
-          window.location.href =
-            window.location.href.replace(window.location.search, "") +
-            window.location.search;
-        }
+      if (window.location.hash && window.location.hash.indexOf("#/") === 0) {
+        var hashPath = window.location.hash.slice(1);
+        var outerSearch = window.location.search.slice(1);
+        var hashQueryIndex = hashPath.indexOf("?");
+        var pathPart =
+          hashQueryIndex >= 0 ? hashPath.slice(0, hashQueryIndex) : hashPath;
+        var hashQuery =
+          hashQueryIndex >= 0 ? hashPath.slice(hashQueryIndex + 1) : "";
+        var combinedQuery = [hashQuery, outerSearch].filter(Boolean).join("&");
+        var url = combinedQuery ? pathPart + "?" + combinedQuery : pathPart;
+        window.location.replace(url);
       }
     </script>
 
@@ -97,10 +131,6 @@
           },
         );
       }
-    </script>
-
-    <script>
-      window.version = "development";
     </script>
   </head>
 

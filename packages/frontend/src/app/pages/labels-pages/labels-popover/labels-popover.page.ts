@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular";
+import { PopoverController } from "@ionic/angular/standalone";
 
 import { UtilService } from "~/services/util.service";
 import {

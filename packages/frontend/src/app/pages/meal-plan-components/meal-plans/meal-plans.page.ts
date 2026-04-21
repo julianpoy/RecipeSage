@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController, ModalController } from "@ionic/angular/standalone";
 
 import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";

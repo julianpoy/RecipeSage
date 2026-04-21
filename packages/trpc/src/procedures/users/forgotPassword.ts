@@ -31,7 +31,7 @@ export const forgotPassword = publicProcedure
     const session = await generateSession(user.id, SessionType.User);
 
     const appuiOrigin = process.env.APP_UI_BASE_URL || "https://recipesage.com";
-    const resetLink = `${appuiOrigin}/#/settings/account?token=${session.token}`;
+    const resetLink = `${appuiOrigin}/settings/account?token=${session.token}`;
 
     await sendPasswordResetEmail({
       toAddresses: [user.email],

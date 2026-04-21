@@ -1,4 +1,4 @@
-import { AlertController } from "@ionic/angular";
+import { AlertController } from "@ionic/angular/standalone";
 import { Injectable, inject } from "@angular/core";
 
 import { HttpService } from "./http.service";

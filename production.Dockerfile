@@ -31,14 +31,19 @@ COPY fonts fonts
 # Prisma must be regenerated since schema is not present during install stage
 RUN npx prisma generate
 
-RUN npx nx run-many -t build -p backend,queue-worker --parallel=6
-
 ARG VERSION
+ARG FRONTEND_BUILD_TARGET=build
 ENV VERSION=$VERSION
+ENV APP_VERSION=$VERSION
 ENV NX_SKIP_NX_CACHE=true
 ENV NX_NO_CLOUD=true
+
+RUN npx nx run-many -t build -p backend,queue-worker --parallel=6
+RUN npx nx $FRONTEND_BUILD_TARGET frontend
+
 ENV FONTS_PATH=/app/fonts
 ENV EXPRESS_VIEWS_PATH=/app/dist/apps/backend/views
 ENV FRONTEND_I18N_PATH=/app/packages/frontend/src/assets/i18n
 ENV JOB_QUEUE_WORKER_PATH=/app/dist/apps/queue-worker/worker.cjs
 
+CMD ["node", "packages/frontend/www/server/server.mjs"]

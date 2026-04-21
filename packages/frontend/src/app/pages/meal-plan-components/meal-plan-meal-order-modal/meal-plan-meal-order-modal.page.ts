@@ -7,7 +7,10 @@ import {
   QueryList,
   ViewChildren,
 } from "@angular/core";
-import { type ItemReorderEventDetail, ModalController } from "@ionic/angular";
+import {
+  type ItemReorderEventDetail,
+  ModalController,
+} from "@ionic/angular/standalone";
 import {
   DEFAULT_MEALS,
   DEFAULT_MEAL_COLORS,

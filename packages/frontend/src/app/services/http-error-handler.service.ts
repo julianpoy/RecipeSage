@@ -1,5 +1,6 @@
-import { Injectable, inject } from "@angular/core";
-import { ModalController, AlertController } from "@ionic/angular";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { ModalController, AlertController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";
@@ -20,6 +21,7 @@ export class HttpErrorHandlerService {
   private modalCtrl = inject(ModalController);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
+  private platformId = inject(PLATFORM_ID);
 
   isAuthOpen: boolean = false; // Track auth modal so we don't open multiple stacks
   defaultErrorHandlers: Record<number, (error: Error) => void> = {
@@ -122,6 +124,11 @@ export class HttpErrorHandlerService {
     error: Error,
     errorHandlers?: ErrorHandlers,
   ) {
+    if (!isPlatformBrowser(this.platformId)) {
+      console.error(error);
+      return;
+    }
+
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode](error);

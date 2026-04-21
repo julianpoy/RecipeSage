@@ -5,7 +5,7 @@ import {
   AlertController,
   NavController,
   ModalController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";

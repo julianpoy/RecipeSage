@@ -3,7 +3,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";

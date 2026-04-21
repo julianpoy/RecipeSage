@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { ToastController, ModalController } from "@ionic/angular";
+import { ToastController, ModalController } from "@ionic/angular/standalone";
 
 import { LoadingService } from "~/services/loading.service";
 

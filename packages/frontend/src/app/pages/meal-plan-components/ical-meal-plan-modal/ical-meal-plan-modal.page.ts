@@ -1,6 +1,6 @@
 import { MealPlanService } from "~/services/meal-plan.service";
 import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 

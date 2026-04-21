@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { ParsedIngredient } from "~/services/recipe.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";

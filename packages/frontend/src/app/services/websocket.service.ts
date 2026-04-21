@@ -1,4 +1,5 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { UtilService } from "./util.service";
 import { GRIP_WS_URL } from "../../environments/environment";
 import { trpcClient } from "../utils/trpcClient";
@@ -9,6 +10,7 @@ import { TRPCClientError } from "@trpc/client";
 })
 export class WebsocketService {
   utilService = inject(UtilService);
+  private platformId = inject(PLATFORM_ID);
 
   connection: WebSocket | undefined;
   reconnectTimeout: NodeJS.Timeout | undefined;
@@ -16,6 +18,8 @@ export class WebsocketService {
   listeners: Record<string, Set<(msg: Record<string, any>) => void>> = {};
 
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.connect();
 
     // Before tab close, cleanup WS handler and connection

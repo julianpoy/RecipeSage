@@ -5,6 +5,7 @@ import {
   QuickTutorialService,
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
+import { StorageService } from "./storage.service";
 
 const COOKING_TOOLBAR_LOCALSTORAGE_KEY = "cookingToolbar";
 const COOKING_TOOLBAR_LOCALSTORAGE_VERSION = "1";
@@ -20,12 +21,13 @@ export interface PinnedRecipe {
 })
 export class CookingToolbarService {
   private quickTutorialService = inject(QuickTutorialService);
+  private storage = inject(StorageService);
 
   pinnedRecipes: PinnedRecipe[] = [];
 
   constructor() {
     try {
-      const savedValue = localStorage.getItem(COOKING_TOOLBAR_LOCALSTORAGE_KEY);
+      const savedValue = this.storage.getItem(COOKING_TOOLBAR_LOCALSTORAGE_KEY);
       if (savedValue) {
         const parsed = JSON.parse(savedValue);
         this.pinnedRecipes = parsed.pinnedRecipes;
@@ -63,7 +65,7 @@ export class CookingToolbarService {
   }
 
   save() {
-    localStorage.setItem(
+    this.storage.setItem(
       COOKING_TOOLBAR_LOCALSTORAGE_KEY,
       JSON.stringify({
         pinnedRecipes: this.pinnedRecipes,

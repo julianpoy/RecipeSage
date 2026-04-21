@@ -3,7 +3,7 @@ import {
   NavController,
   AlertController,
   ModalController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";

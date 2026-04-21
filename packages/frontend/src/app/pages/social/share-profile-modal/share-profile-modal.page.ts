@@ -1,5 +1,5 @@
 import { Component, Input, type OnInit, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UserService } from "~/services/user.service";
@@ -55,7 +55,7 @@ export class ShareProfileModalPage implements OnInit {
 
   getProfileUrl() {
     if (!this.profile) return "Error loading profile url";
-    return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(
+    return `https://${window.location.host}/${RouteMap.ProfilePage.getPath(
       `@${this.profile.handle}`,
     )}`;
   }

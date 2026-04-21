@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { NavController } from "@ionic/angular";
+import { NavController } from "@ionic/angular/standalone";
 import * as Sentry from "@sentry/browser";
 
 import { RouteMap, UtilService } from "~/services/util.service";

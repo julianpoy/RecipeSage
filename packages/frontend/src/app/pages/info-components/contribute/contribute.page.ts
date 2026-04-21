@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { ToastController } from "@ionic/angular";
+import { ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -50,19 +50,17 @@ export class ContributePage {
   enableAssistant =
     this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
 
-  constructor() {
+  ionViewWillEnter() {
     if (IS_SELFHOST) {
       window.alert(
         "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",
       );
-      window.location.href = `https://recipesage.com/#${RouteMap.ContributePage.getPath()}`;
+      window.location.href = `https://recipesage.com${RouteMap.ContributePage.getPath()}`;
     }
 
-    this.capabilitiesService.updateCapabilities();
-  }
-
-  ionViewWillEnter() {
     this.buildBillingPortalUrl().then((url) => (this.billingPortalUrl = url));
+
+    this.capabilitiesService.updateCapabilities();
   }
 
   setAmount(amount: number) {

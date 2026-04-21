@@ -1,4 +1,5 @@
-import { Injectable, Injector, inject } from "@angular/core";
+import { Injectable, Injector, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import {
   AppPreferenceTypes,
   AppTheme,
@@ -22,6 +23,7 @@ import { TRPCService } from "./trpc.service";
 import { UtilService } from "./util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { EventName, EventService } from "./event.service";
+import { StorageService } from "./storage.service";
 
 const PREFERENCE_LOCALSTORAGE_KEY = "preferences";
 
@@ -33,8 +35,15 @@ export class PreferencesService {
   private injector = inject(Injector);
   private translate = inject(TranslateService);
   private events = inject(EventService);
+  private storage = inject(StorageService);
+  private platformId = inject(PLATFORM_ID);
 
-  // Preference defaults - user preferences loaded locally will override
+  private defaultViewType =
+    isPlatformBrowser(this.platformId) &&
+    Math.min(window.innerWidth, window.innerHeight) < 440
+      ? MyRecipesViewTypeOptions.List
+      : MyRecipesViewTypeOptions.Tiles;
+
   preferences: AppPreferenceTypes = {
     preferencesVersion: 0,
 
@@ -51,11 +60,7 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowImages]: true,
     [MyRecipesPreferenceKey.ShowSource]: false,
     [MyRecipesPreferenceKey.ShowRecipeDescription]: true,
-    // Show list by default on small screens
-    [MyRecipesPreferenceKey.ViewType]:
-      Math.min(window.innerWidth, window.innerHeight) < 440
-        ? MyRecipesViewTypeOptions.List
-        : MyRecipesViewTypeOptions.Tiles,
+    [MyRecipesPreferenceKey.ViewType]: this.defaultViewType,
     [MyRecipesPreferenceKey.SortBy]: MyRecipesSortOptions.TitleAsc,
     [MyRecipesPreferenceKey.IncludeFriends]: MyRecipesIncludeFriendsOptions.No,
 
@@ -86,7 +91,7 @@ export class PreferencesService {
   save(localOnly?: boolean) {
     try {
       const serialized = JSON.stringify(this.preferences);
-      localStorage.setItem(PREFERENCE_LOCALSTORAGE_KEY, serialized);
+      this.storage.setItem(PREFERENCE_LOCALSTORAGE_KEY, serialized);
     } catch (e) {
       console.error(e);
     }
@@ -99,7 +104,7 @@ export class PreferencesService {
       return;
 
     // Do not sync remote preferences if not logged in
-    if (!localStorage.getItem("token")) return;
+    if (!this.storage.getItem("token")) return;
     this.trpcService.trpc.users.updatePreferences.mutate(this.preferences);
   }
 
@@ -115,10 +120,10 @@ export class PreferencesService {
       mutatedPreferences["myRecipes.sortBy"] = MyRecipesSortOptions.TitleAsc; // In past, the sort was accidentally flipped
     }
 
-    const oldTheme = localStorage.getItem("theme");
+    const oldTheme = this.storage.getItem("theme");
     if (oldTheme) {
       mutatedPreferences["global.theme"] = oldTheme as AppTheme;
-      localStorage.removeItem("theme");
+      this.storage.removeItem("theme");
     }
 
     return mutatedPreferences;
@@ -143,7 +148,7 @@ export class PreferencesService {
 
   load() {
     try {
-      const serialized = localStorage.getItem(PREFERENCE_LOCALSTORAGE_KEY);
+      const serialized = this.storage.getItem(PREFERENCE_LOCALSTORAGE_KEY);
       const savedPreferences = serialized ? JSON.parse(serialized) || {} : {};
 
       const patchedPreferences = this.patchPreferences(savedPreferences);
@@ -160,7 +165,7 @@ export class PreferencesService {
       return;
 
     // Do not sync remote preferences if not logged in
-    if (!localStorage.getItem("token")) return;
+    if (!this.storage.getItem("token")) return;
     this.trpcService
       .handle(this.trpcService.trpc.users.getPreferences.query(), {
         "*": () => {},
@@ -204,7 +209,9 @@ export class PreferencesService {
   }
 
   resetToDefaults() {
-    localStorage.removeItem(PREFERENCE_LOCALSTORAGE_KEY);
-    window.location.reload();
+    this.storage.removeItem(PREFERENCE_LOCALSTORAGE_KEY);
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.reload();
+    }
   }
 }

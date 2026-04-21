@@ -1,12 +1,14 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { TranslateService } from "@ngx-translate/core";
 import {
   AppTheme,
   SupportedFontSize,
   SupportedLanguages,
 } from "@recipesage/util/shared";
-import { NavController } from "@ionic/angular";
+import { NavController } from "@ionic/angular/standalone";
 import { getBase } from "../utils/getBase";
+import { StorageService } from "./storage.service";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -330,16 +332,22 @@ const rtlLanguages = [SupportedLanguages.HE];
 })
 export class UtilService {
   private translate = inject(TranslateService);
+  private storage = inject(StorageService);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
+  private document = inject(DOCUMENT, { optional: true });
 
   memoizedFormattedDates: Map<string, string> = new Map();
 
   constructor() {
-    setInterval(
-      () => {
-        this.memoizedFormattedDates.clear();
-      },
-      1000 * 60 * 5,
-    ); // Clear every 5 minutes
+    if (this.isBrowser) {
+      setInterval(
+        () => {
+          this.memoizedFormattedDates.clear();
+        },
+        1000 * 60 * 5,
+      );
+    }
   }
 
   getAppBrowserLang(): string {
@@ -349,32 +357,33 @@ export class UtilService {
       return Object.values(SupportedLanguages).some((el) => el === lang);
     };
 
-    // Navigator language can be in the form 'en', or 'en-us' for any given language
-    const navLang = window.navigator.language.toLowerCase();
-    const navLangNoRegion = navLang.split("-")[0];
-    const defaultLocalized =
-      navLangNoRegion in defaultLocality
-        ? defaultLocality[navLangNoRegion as keyof typeof defaultLocality]
-        : undefined;
+    const resolve = (lang: string): string | null => {
+      const lower = lang.toLowerCase();
+      const noRegion = lower.split("-")[0];
+      const defaultLocalized =
+        noRegion in defaultLocality
+          ? defaultLocality[noRegion as keyof typeof defaultLocality]
+          : undefined;
 
-    // We always prefer to return the exact language the navigator requested if we have it
-    if (isSupported(navLang)) return navLang;
+      if (isSupported(lower)) return lower;
+      if (isSupported(noRegion)) return noRegion;
+      if (isSupported(defaultLocalized)) return defaultLocalized;
+      return null;
+    };
 
-    // Look for a language with no locality ('en')
-    if (isSupported(navLangNoRegion)) return navLangNoRegion;
+    if (!this.isBrowser) return SupportedLanguages.EN_US;
 
-    // Look for a language with a locality we have a 'default locality' mapping for as a last resort
-    if (isSupported(defaultLocalized)) return defaultLocalized;
-
-    return SupportedLanguages.EN_US;
+    return resolve(window.navigator.language) || SupportedLanguages.EN_US;
   }
 
   setHtmlBrowserLang(lang: string) {
-    document.documentElement.lang = lang;
+    const doc = this.document;
+    if (!doc) return;
+    doc.documentElement.lang = lang;
     if (rtlLanguages.includes(lang as SupportedLanguages)) {
-      document.documentElement.dir = "rtl";
+      doc.documentElement.dir = "rtl";
     } else {
-      document.documentElement.dir = "ltr";
+      doc.documentElement.dir = "ltr";
     }
   }
 
@@ -383,16 +392,18 @@ export class UtilService {
   }
 
   setFontSize(fontSize: SupportedFontSize) {
+    if (!this.isBrowser) return;
     window.document.documentElement.style.fontSize = fontSize;
   }
 
   setAppTheme(theme: AppTheme) {
+    if (!this.isBrowser) return;
     const bodyClasses = document.body.className.replace(/theme-\S*/, "");
     document.body.className = `${bodyClasses} theme-${theme}`;
   }
 
   getToken(): string | null {
-    return localStorage.getItem("token");
+    return this.storage.getItem("token");
   }
 
   isLoggedIn(): boolean {
@@ -413,9 +424,7 @@ export class UtilService {
       preferredLanguage?: string;
     },
   ) {
-    let query = `${this.getTokenQuery()}&version=${
-      (window as any).version
-    }&print=true`;
+    let query = `${this.getTokenQuery()}&version=${APP_VERSION}&print=true`;
 
     if (options.groupSimilar) query += "&groupSimilar=true";
     if (options.groupCategories) query += "&groupCategories=true";
@@ -436,9 +445,7 @@ export class UtilService {
       preferredLanguage?: string;
     },
   ) {
-    let query = `${this.getTokenQuery()}&version=${
-      (window as any).version
-    }&print=true`;
+    let query = `${this.getTokenQuery()}&version=${APP_VERSION}&print=true`;
 
     query += `&viewType=${options.viewType}`;
     if (options.calendarMonth !== undefined)
@@ -456,7 +463,7 @@ export class UtilService {
     recipeId: string,
     modifiers: RecipeTemplateModifiers,
   ): string {
-    modifiers = { version: (window as any).version, ...modifiers };
+    modifiers = { version: APP_VERSION, ...modifiers };
     const modifierQuery = Object.entries(modifiers)
       .filter(([_, value]) => value)
       .map(([key, value]) => `${key}=${value}`)
@@ -511,15 +518,17 @@ export class UtilService {
       if (today) return today;
     }
 
+    const locale = this.browserLocale();
+
     if (options.times && todayAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(locale, {
         hour: "numeric",
         minute: "numeric",
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(locale, {
         weekday: "long",
         hour: "numeric",
         minute: "numeric",
@@ -527,19 +536,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(locale, {
         weekday: "long",
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(locale, {
         month: "numeric",
         day: "numeric",
         year: "numeric",
       });
     } else {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(locale, {
         hour: "numeric",
         minute: "numeric",
         month: "numeric",
@@ -549,8 +558,16 @@ export class UtilService {
     }
   }
 
+  private browserLocale(): string {
+    if (!this.isBrowser) return "en-us";
+    return window.navigator.language;
+  }
+
   buildPublicRoutePath(hashlessRoutePath: string) {
-    return `${window.location.origin}/#/${hashlessRoutePath}`;
+    const path = hashlessRoutePath.startsWith("/")
+      ? hashlessRoutePath
+      : `/${hashlessRoutePath}`;
+    return `${window.location.origin}${path}`;
   }
 
   truncate(str: String, maxLength: number) {
@@ -567,7 +584,7 @@ export class UtilService {
     event?: MouseEvent | KeyboardEvent,
   ) {
     if (event && (event.metaKey || event.ctrlKey)) {
-      window.open(`#${RouteMap.RecipePage.getPath(recipeId)}`);
+      window.open(RouteMap.RecipePage.getPath(recipeId));
       return;
     }
     navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipeId));

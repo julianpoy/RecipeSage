@@ -1,4 +1,5 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { UserService } from "./user.service";
 import { UtilService } from "./util.service";
 
@@ -10,6 +11,7 @@ const CAPABILITY_RETRY_RATE = 5000;
 export class CapabilitiesService {
   private userService = inject(UserService);
   private utilService = inject(UtilService);
+  private platformId = inject(PLATFORM_ID);
 
   retryTimeout: any;
 
@@ -22,6 +24,7 @@ export class CapabilitiesService {
   };
 
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
     this.updateCapabilities();
   }
 

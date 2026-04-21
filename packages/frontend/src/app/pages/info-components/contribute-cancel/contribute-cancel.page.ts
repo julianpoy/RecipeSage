@@ -19,7 +19,7 @@ export class ContributeCancelPage {
   aboutHref: string = RouteMap.AboutPage.getPath();
   contributePath: string = RouteMap.ContributePage.getPath();
 
-  constructor() {
+  ionViewWillEnter() {
     this.capabilitiesService.updateCapabilities();
   }
 }

@@ -1,10 +1,20 @@
-import { Routes } from "@angular/router";
+import { CanMatchFn, Routes, UrlSegment } from "@angular/router";
+import { SupportedLanguages } from "@recipesage/util/shared";
 
 import { RouteMap } from "./services/util.service";
 import { DefaultPageGuardService } from "./services/default-page-guard.service";
 import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.service";
 
-export const appRoutes: Routes = [
+const SUPPORTED_LOCALE_SET: ReadonlySet<string> = new Set(
+  Object.values(SupportedLanguages),
+);
+
+const localeCanMatch: CanMatchFn = (_route, segments: UrlSegment[]) => {
+  if (segments.length === 0) return false;
+  return SUPPORTED_LOCALE_SET.has(segments[0].path);
+};
+
+const coreRoutes: Routes = [
   {
     path: "",
     loadComponent: () =>
@@ -378,9 +388,9 @@ export const appRoutes: Routes = [
     title: "pages.shoppingList.tabTitle",
   },
   // Legacy redirects
-  { path: "about-details", redirectTo: "/about/details", pathMatch: "full" },
-  { path: "login", redirectTo: "/auth/login", pathMatch: "full" },
-  { path: "edit-recipe", redirectTo: "/", pathMatch: "full" },
+  { path: "about-details", redirectTo: "about/details", pathMatch: "full" },
+  { path: "login", redirectTo: "auth/login", pathMatch: "full" },
+  { path: "edit-recipe", redirectTo: "", pathMatch: "full" },
   // Catchall
   {
     path: "**",
@@ -389,4 +399,13 @@ export const appRoutes: Routes = [
         (m) => m.NotFoundPage,
       ),
   },
+];
+
+export const appRoutes: Routes = [
+  {
+    path: ":locale",
+    canMatch: [localeCanMatch],
+    children: coreRoutes,
+  },
+  ...coreRoutes,
 ];

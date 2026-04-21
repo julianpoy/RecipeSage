@@ -1,4 +1,4 @@
-@import "../../../theme/shared-variables.scss";
+@use "../../../theme/shared-variables.scss" as *;
 
 .homegrid {
   display: grid;

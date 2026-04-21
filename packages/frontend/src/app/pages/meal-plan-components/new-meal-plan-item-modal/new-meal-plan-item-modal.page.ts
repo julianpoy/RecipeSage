@@ -1,6 +1,6 @@
 import { Input, Component, inject } from "@angular/core";
 import dayjs from "dayjs";
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";

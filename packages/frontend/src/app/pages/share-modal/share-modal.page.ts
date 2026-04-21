@@ -3,7 +3,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular";
+} from "@ionic/angular/standalone";
 
 import { MessagingService } from "~/services/messaging.service";
 import { User, UserService } from "~/services/user.service";
@@ -74,7 +74,7 @@ export class ShareModalPage {
     setTimeout(() => {
       this.recipeURL =
         `${window.location.protocol}//${window.location.host}` +
-        `/api/share/recipe/${this.recipe.id}`;
+        `/recipe/${this.recipe.id}`;
 
       this.loadThreads().then(
         () => {},

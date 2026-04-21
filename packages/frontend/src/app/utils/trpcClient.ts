@@ -3,7 +3,7 @@ import { getBase } from "./getBase";
 import type { AppRouter } from "@recipesage/trpc";
 import { appIdbStorageManager } from "./appIdbStorageManager";
 import { customTrpcTransformer } from "@recipesage/util/shared";
-import { captureTrpcRequest } from "../services/debugStore.service";
+import { captureTrpcRequest } from "../services/debugStore";
 
 export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
@@ -71,6 +71,10 @@ export const trpcClient = createTRPCProxyClient<AppRouter>({
     httpLink({
       url: getBase() + "trpc",
       headers: async () => {
+        if (typeof window === "undefined") {
+          return {};
+        }
+
         let token: string | undefined;
         try {
           token = localStorage.getItem("token") || undefined;
