@@ -129,7 +129,7 @@
     "@angular-eslint/schematics": "21.3.0",
     "@angular-eslint/template-parser": "21.3.0",
     "@angular/cli": "21.2.1",
-    "@angular/compiler": "21.2.1",
+    "@angular/compiler": "21.2.4",
     "@angular/compiler-cli": "21.2.1",
     "@angular/language-service": "21.2.1",
     "@astrojs/check": "^0.9.8",
