@@ -43,7 +43,7 @@
     "@aws-sdk/client-ses": "^3.1036.0",
     "@aws-sdk/lib-storage": "^3.1036.0",
     "@aws-sdk/s3-request-presigner": "^3.1036.0",
-    "@capacitor/camera": "^8.1.0",
+    "@capacitor/camera": "^8.2.0",
     "@capacitor/core": "8.3.1",
     "@capacitor/ios": "8.3.1",
     "@capawesome/capacitor-file-picker": "^8.0.2",
