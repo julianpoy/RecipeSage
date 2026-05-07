@@ -1,5 +1,8 @@
 import type { Prisma } from "../prisma/generated/client";
+import { z } from "zod";
 import { userPublic } from "./userPublic";
+import { mealPlanSummarySchema } from "./mealPlanSummary";
+import { mealPlanItemSummarySchema } from "./mealPlanItemSummary";
 
 /**
  * Provides fields necessary for displaying a summary about a meal plan
@@ -89,3 +92,15 @@ export type MealPlanSummaryWithItems = Omit<
     scheduledDate: string;
   })[];
 };
+
+export const mealPlanSummaryWithItemsSchema = mealPlanSummarySchema.extend({
+  items: z.array(mealPlanItemSummarySchema),
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof mealPlanSummaryWithItemsSchema
+> satisfies MealPlanSummaryWithItems;
+const _checkTypeSatisfiesSchema =
+  {} as MealPlanSummaryWithItems satisfies z.infer<
+    typeof mealPlanSummaryWithItemsSchema
+  >;

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { LoadingService } from "~/services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
-import { LabelSummary } from "@recipesage/prisma";
+import type { LabelSummary } from "@recipesage/prisma";
 import {
   IonItem,
   IonIcon,

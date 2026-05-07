@@ -12,9 +12,24 @@ import {
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 import { createShoppingListItemsInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 export const createShoppingListItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/createShoppingListItems",
+      tags: ["shoppingLists"],
+      summary: "Create multiple shopping list items",
+      protect: true,
+    },
+  })
   .input(createShoppingListItemsInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

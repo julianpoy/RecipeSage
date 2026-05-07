@@ -1,4 +1,4 @@
-import { prisma, SessionDTO } from "@recipesage/prisma";
+import { prisma, SessionDTO, sessionDTOSchema } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { OAuth2Client } from "google-auth-library";
@@ -11,12 +11,22 @@ import {
 } from "@recipesage/util/server/general";
 
 export const signInWithGoogle = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/signInWithGoogle",
+      tags: ["users"],
+      summary:
+        "Authenticate with a Google ID token and receive a session token",
+    },
+  })
   .input(
     z.object({
       clientId: z.string(),
       credential: z.string(),
     }),
   )
+  .output(sessionDTOSchema)
   .mutation(async ({ input }) => {
     if (!config.google.gsi.clientId || !config.google.gsi.clientSecret) {
       throw new Error("GSI clientId or clientSecret missing");

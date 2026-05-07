@@ -12,7 +12,11 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import { trpcExpressMiddleware } from "@recipesage/trpc";
+import {
+  trpcExpressMiddleware,
+  openApiDocument,
+  openApiExpressMiddleware,
+} from "@recipesage/trpc";
 
 import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
 setupInvalidateStaleJobsInterval();
@@ -135,6 +139,10 @@ app.disable("x-powered-by");
 app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
+app.get("/api/openapi.json", (_req, res) => {
+  res.json(openApiDocument);
+});
+app.use("/api/v2", openApiExpressMiddleware);
 app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/labels", labels);

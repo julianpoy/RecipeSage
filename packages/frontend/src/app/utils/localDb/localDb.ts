@@ -1,17 +1,17 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 import * as Sentry from "@sentry/browser";
-import {
+import type {
   AssistantMessageSummary,
   JobSummary,
   LabelGroupSummary,
   LabelSummary,
+  MealPlanItemSummary,
   MealPlanSummaryWithItems,
   RecipeSummary,
   SessionDTO,
+  ShoppingListItemSummary,
   ShoppingListSummaryWithItems,
   UserPublic,
-  type MealPlanItemSummary,
-  type ShoppingListItemSummary,
 } from "@recipesage/prisma";
 import { trpcClient as trpc } from "../trpcClient";
 import { localDBMigration_1 } from "./migrations/localDBMigration_1";

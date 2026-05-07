@@ -15,6 +15,15 @@ import { SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared"
 
 /** @deprecated Use updateShoppingListItems instead */
 export const updateShoppingListItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/updateShoppingListItem",
+      tags: ["shoppingLists"],
+      summary: "Update a single shopping list item (deprecated)",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -26,6 +35,12 @@ export const updateShoppingListItem = publicProcedure
       recipeId: z.uuid().nullable().optional(),
       completed: z.boolean().optional(),
       categoryTitle: z.string().optional(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

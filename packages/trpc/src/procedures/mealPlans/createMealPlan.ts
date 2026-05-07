@@ -13,6 +13,15 @@ import {
 } from "@recipesage/util/shared";
 
 export const createMealPlan = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/createMealPlan",
+      tags: ["mealPlans"],
+      summary: "Create a meal plan",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       title: z.string().min(1).max(MEAL_PLAN_TITLE_LENGTH_LIMIT),
@@ -22,6 +31,12 @@ export const createMealPlan = publicProcedure
         .max(MEAL_PLAN_CUSTOM_MEAL_OPTIONS_LENGTH_LIMIT)
         .nullable()
         .optional(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

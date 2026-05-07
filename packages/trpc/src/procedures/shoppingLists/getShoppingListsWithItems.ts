@@ -7,10 +7,22 @@ import {
   prisma,
   prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItems,
   shoppingListSummaryWithItems,
+  shoppingListSummaryWithItemsSchema,
 } from "@recipesage/prisma";
+import { z } from "zod";
 
-export const getShoppingListsWithItems = publicProcedure.query(
-  async ({ ctx }) => {
+export const getShoppingListsWithItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/shoppingLists/getShoppingListsWithItems",
+      tags: ["shoppingLists"],
+      summary: "Get the caller's shopping lists, including items",
+      protect: true,
+    },
+  })
+  .output(z.array(shoppingListSummaryWithItemsSchema))
+  .query(async ({ ctx }) => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -53,5 +65,4 @@ export const getShoppingListsWithItems = publicProcedure.query(
     });
 
     return summaries;
-  },
-);
+  });

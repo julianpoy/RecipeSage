@@ -12,12 +12,23 @@ const MAX_DUPE_RENAMES = 1001;
 const MAX_DUPES_RETRIEVED = 1000;
 
 export const getUniqueRecipeTitle = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/recipes/getUniqueRecipeTitle",
+      tags: ["recipes"],
+      summary:
+        "Suggest a non-conflicting title for a new recipe (e.g. 'Spaghetti (2)')",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       ignoreIds: z.array(z.uuid()).optional(),
       title: z.string().min(1),
     }),
   )
+  .output(z.string().optional())
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

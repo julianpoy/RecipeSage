@@ -1,4 +1,4 @@
-import { prisma, UserPublic } from "@recipesage/prisma";
+import { prisma, UserPublic, userPublicSchema } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { userPublic } from "@recipesage/prisma";
 import { validateTrpcSession } from "@recipesage/util/server/general";
@@ -8,6 +8,7 @@ import {
   subscriptionsForUser,
 } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
+import { z } from "zod";
 
 export interface UserPrivate {
   email: string;
@@ -19,8 +20,36 @@ export interface UserPrivate {
   }[];
 }
 
-export const getMe = publicProcedure.query(
-  async ({ ctx }): Promise<UserPublic & UserPrivate> => {
+const userMeSchema = userPublicSchema.extend({
+  email: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  subscriptions: z.array(
+    z.object({
+      expires: z.date().nullable(),
+      capabilities: z.array(z.enum(Capabilities)),
+    }),
+  ),
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof userMeSchema
+> satisfies UserPublic & UserPrivate;
+const _checkTypeSatisfiesSchema = {} as UserPublic &
+  UserPrivate satisfies z.infer<typeof userMeSchema>;
+
+export const getMe = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/users/getMe",
+      tags: ["users"],
+      summary: "Get the caller's user profile and subscription info",
+      protect: true,
+    },
+  })
+  .output(userMeSchema)
+  .query(async ({ ctx }): Promise<UserPublic & UserPrivate> => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -58,5 +87,4 @@ export const getMe = publicProcedure.query(
       profileImages: profile.profileImages,
       subscriptions,
     };
-  },
-);
+  });

@@ -1,4 +1,5 @@
 import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { OpenApiMeta } from "trpc-to-openapi";
 import { createContext } from "./context";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 import { customTrpcTransformer } from "@recipesage/util/shared";
@@ -9,7 +10,7 @@ import * as Sentry from "@sentry/node";
  * Should be done only once per backend!
  */
 type Context = inferAsyncReturnType<typeof createContext>;
-const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<Context>().meta<OpenApiMeta>().create({
   transformer: customTrpcTransformer,
 });
 

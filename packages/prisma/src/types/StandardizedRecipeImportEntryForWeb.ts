@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface StandardizedRecipeImportEntryForWeb {
   recipe: {
     title: string;
@@ -36,3 +38,50 @@ export interface StandardizedRecipeImportEntryForWeb {
   labels: string[];
   images: string[];
 }
+
+export const standardizedRecipeImportEntryForWebSchema = z.object({
+  recipe: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    yield: z.string().optional(),
+    activeTime: z.string().optional(),
+    totalTime: z.string().optional(),
+    source: z.string().optional(),
+    url: z.string().optional(),
+    notes: z.string().optional(),
+    ingredients: z.string().optional(),
+    instructions: z.string().optional(),
+    folder: z.string().optional(),
+    rating: z.number().optional(),
+    nutritionInfo: z.string().optional(),
+    nutritionServingSize: z.string().nullable().optional(),
+    nutritionCalories: z.number().nullable().optional(),
+    nutritionTotalFat: z.number().nullable().optional(),
+    nutritionSaturatedFat: z.number().nullable().optional(),
+    nutritionTransFat: z.number().nullable().optional(),
+    nutritionPolyunsaturatedFat: z.number().nullable().optional(),
+    nutritionMonounsaturatedFat: z.number().nullable().optional(),
+    nutritionCholesterol: z.number().nullable().optional(),
+    nutritionSodium: z.number().nullable().optional(),
+    nutritionTotalCarbs: z.number().nullable().optional(),
+    nutritionDietaryFiber: z.number().nullable().optional(),
+    nutritionTotalSugars: z.number().nullable().optional(),
+    nutritionAddedSugars: z.number().nullable().optional(),
+    nutritionProtein: z.number().nullable().optional(),
+    nutritionVitaminD: z.number().nullable().optional(),
+    nutritionCalcium: z.number().nullable().optional(),
+    nutritionIron: z.number().nullable().optional(),
+    nutritionPotassium: z.number().nullable().optional(),
+    nutritionOtherDetails: z.string().nullable().optional(),
+  }),
+  labels: z.array(z.string()),
+  images: z.array(z.string()),
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof standardizedRecipeImportEntryForWebSchema
+> satisfies StandardizedRecipeImportEntryForWeb;
+const _checkTypeSatisfiesSchema =
+  {} as StandardizedRecipeImportEntryForWeb satisfies z.infer<
+    typeof standardizedRecipeImportEntryForWebSchema
+  >;

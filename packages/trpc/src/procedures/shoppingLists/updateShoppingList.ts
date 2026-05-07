@@ -18,6 +18,15 @@ import {
 } from "@recipesage/util/shared";
 
 export const updateShoppingList = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/updateShoppingList",
+      tags: ["shoppingLists"],
+      summary: "Update a shopping list",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -28,6 +37,12 @@ export const updateShoppingList = publicProcedure
         .max(SHOPPING_LIST_CATEGORY_ORDER_LENGTH_LIMIT)
         .nullable()
         .optional(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

@@ -7,16 +7,27 @@ import { publicProcedure } from "../../trpc";
 import { assertCreditsAvailableTrpc } from "../../util/assertCreditsAvailableTrpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 
 /**
  * @deprecated Please use express routes which support file streaming rather than base64
  */
 export const getRecipeFromPDF = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/ml/getRecipeFromPDF",
+      tags: ["ml"],
+      summary: "Extract a recipe from a base64-encoded PDF (deprecated)",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       pdf: z.string(),
     }),
   )
+  .output(standardizedRecipeImportEntryForWebSchema)
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     if (!session) {
@@ -42,5 +53,10 @@ export const getRecipeFromPDF = publicProcedure
       await recordCreditsSpent(session.userId, "mlPdf");
     }
 
-    return recognizedRecipe;
+    return {
+      ...recognizedRecipe,
+      images: recognizedRecipe.images.filter(
+        (img): img is string => typeof img === "string",
+      ),
+    };
   });

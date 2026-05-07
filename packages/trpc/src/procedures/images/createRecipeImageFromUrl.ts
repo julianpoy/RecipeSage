@@ -1,4 +1,4 @@
-import { imageSummary, prisma } from "@recipesage/prisma";
+import { imageSummary, imageSummarySchema, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { publicProcedure } from "../../trpc";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
@@ -13,11 +13,21 @@ import type { InputJsonValue } from "@prisma/client/runtime/client";
 import { ObjectTypes, writeImageURL } from "@recipesage/util/server/storage";
 
 export const createRecipeImageFromUrl = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/images/createRecipeImageFromUrl",
+      tags: ["images"],
+      summary: "Download an image from a URL and store it as a recipe image",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       url: z.string().min(1).max(4096),
     }),
   )
+  .output(imageSummarySchema)
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

@@ -7,8 +7,17 @@ import {
 import { sortRecipeImages } from "@recipesage/util/server/general";
 import { searchRecipes as _searchRecipes } from "@recipesage/util/server/search";
 import { TRPCError } from "@trpc/server";
+import { recipeSummaryLiteSchema } from "@recipesage/prisma";
 
 export const searchRecipes = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/recipes/searchRecipes",
+      tags: ["recipes"],
+      summary: "Full-text search over recipes",
+    },
+  })
   .input(
     z.object({
       searchTerm: z.string().min(1).max(255),
@@ -20,6 +29,12 @@ export const searchRecipes = publicProcedure
       ratings: z
         .array(z.union([z.number().min(0).max(5), z.null()]))
         .optional(),
+    }),
+  )
+  .output(
+    z.object({
+      recipes: z.array(recipeSummaryLiteSchema),
+      totalCount: z.number().int(),
     }),
   )
   .query(async ({ ctx, input }) => {

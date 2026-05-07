@@ -2,12 +2,26 @@ import { prisma } from "@recipesage/prisma";
 import { Capabilities } from "@recipesage/util/shared";
 import { userHasCapability } from "../../capabilities";
 import { CONTRIBUTOR_DAILY_CREDITS, FREE_DAILY_CREDITS } from "./creditCosts";
+import { z } from "zod";
 
 export interface DailyCreditUsage {
   used: number;
   limit: number;
   resetsAt: Date;
 }
+
+export const dailyCreditUsageSchema = z.object({
+  used: z.number().int(),
+  limit: z.number().int(),
+  resetsAt: z.date(),
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof dailyCreditUsageSchema
+> satisfies DailyCreditUsage;
+const _checkTypeSatisfiesSchema = {} as DailyCreditUsage satisfies z.infer<
+  typeof dailyCreditUsageSchema
+>;
 
 export const getDailyCreditUsage = async (
   userId: string,

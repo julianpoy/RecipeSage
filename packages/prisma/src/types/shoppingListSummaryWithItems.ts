@@ -1,6 +1,11 @@
 import type { Prisma } from "../prisma/generated/client";
+import { z } from "zod";
 import { userPublic } from "./userPublic";
-import { ShoppingListItemSummary } from "./shoppingListItemSummary";
+import {
+  ShoppingListItemSummary,
+  shoppingListItemSummarySchema,
+} from "./shoppingListItemSummary";
+import { shoppingListSummarySchema } from "./shoppingListSummary";
 
 /**
  * Provides fields necessary for displaying a summary about a shopping list
@@ -79,3 +84,16 @@ export const prismaShoppingListSummaryWithItemsToShoppingListItemSummaryWithItem
       items: itemSummaries,
     };
   };
+
+export const shoppingListSummaryWithItemsSchema =
+  shoppingListSummarySchema.extend({
+    items: z.array(shoppingListItemSummarySchema),
+  });
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof shoppingListSummaryWithItemsSchema
+> satisfies ShoppingListSummaryWithItems;
+const _checkTypeSatisfiesSchema =
+  {} as ShoppingListSummaryWithItems satisfies z.infer<
+    typeof shoppingListSummaryWithItemsSchema
+  >;

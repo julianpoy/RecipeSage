@@ -12,7 +12,7 @@ import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shoppin
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
-import { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
+import type { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import {
   IonHeader,

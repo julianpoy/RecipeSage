@@ -9,11 +9,20 @@ import {
 } from "@recipesage/util/server/general";
 
 export const forgotPassword = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/forgotPassword",
+      tags: ["users"],
+      summary: "Send a password-reset email to the given address",
+    },
+  })
   .input(
     z.object({
       email: z.string(),
     }),
   )
+  .output(z.string())
   .mutation(async ({ input }) => {
     const user = await prisma.user.findFirst({
       where: {

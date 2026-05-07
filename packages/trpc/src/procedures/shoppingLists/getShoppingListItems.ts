@@ -7,6 +7,7 @@ import {
   prisma,
   ShoppingListItemSummary,
   shoppingListItemSummary,
+  shoppingListItemSummarySchema,
 } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -16,11 +17,21 @@ import {
 } from "@recipesage/util/server/db";
 
 export const getShoppingListItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/shoppingLists/getShoppingListItems",
+      tags: ["shoppingLists"],
+      summary: "Get the items belonging to a shopping list",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       shoppingListId: z.uuid(),
     }),
   )
+  .output(z.array(shoppingListItemSummarySchema))
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

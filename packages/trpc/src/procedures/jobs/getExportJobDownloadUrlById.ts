@@ -10,9 +10,23 @@ import {
 } from "@recipesage/util/server/storage";
 
 export const getExportJobDownloadUrlById = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/jobs/getExportJobDownloadUrlById",
+      tags: ["jobs"],
+      summary: "Get a signed download URL for the result of an export job",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
+    }),
+  )
+  .output(
+    z.object({
+      signedUrl: z.string(),
     }),
   )
   .query(async ({ input, ctx }) => {

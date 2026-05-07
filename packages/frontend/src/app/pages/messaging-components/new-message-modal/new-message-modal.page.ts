@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { MessagingService } from "~/services/messaging.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
-import { UserPublic } from "@recipesage/prisma";
+import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 import {

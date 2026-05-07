@@ -11,9 +11,24 @@ import {
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 import { deleteShoppingListItemsInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 export const deleteShoppingListItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/deleteShoppingListItems",
+      tags: ["shoppingLists"],
+      summary: "Delete multiple shopping list items",
+      protect: true,
+    },
+  })
   .input(deleteShoppingListItemsInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

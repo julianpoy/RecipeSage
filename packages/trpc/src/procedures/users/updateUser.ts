@@ -9,6 +9,15 @@ import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 
 export const updateUser = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/updateUser",
+      tags: ["users"],
+      summary: "Update the caller's name, email, and/or password",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       name: z.string().min(1).max(254).optional(),
@@ -16,6 +25,7 @@ export const updateUser = publicProcedure
       password: z.string().min(6).max(1000).optional(),
     }),
   )
+  .output(z.string())
   .mutation(async ({ input, ctx }): Promise<string> => {
     const session = ctx.session;
     validateTrpcSession(session);

@@ -12,6 +12,15 @@ import { TRPCError } from "@trpc/server";
 import { getFriendshipIds } from "@recipesage/util/server/db";
 
 export const createRecipe = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/recipes/createRecipe",
+      tags: ["recipes"],
+      summary: "Create a recipe",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       title: z.string().min(1).max(254),
@@ -53,6 +62,11 @@ export const createRecipe = publicProcedure
       nutritionIron: z.number().min(0).nullable().optional(),
       nutritionPotassium: z.number().min(0).nullable().optional(),
       nutritionOtherDetails: z.string().nullable().optional(),
+    }),
+  )
+  .output(
+    z.object({
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

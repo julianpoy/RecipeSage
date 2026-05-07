@@ -19,6 +19,15 @@ import {
 
 /** @deprecated Use updateMealPlanItems instead */
 export const updateMealPlanItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/updateMealPlanItem",
+      tags: ["mealPlans"],
+      summary: "Update a single meal plan item (deprecated)",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -27,6 +36,12 @@ export const updateMealPlanItem = publicProcedure
       meal: z.string().min(1).max(MEAL_PLAN_ITEMS_MEAL_LENGTH_LIMIT),
       recipeId: z.uuid().nullable(),
       notes: z.string().max(MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT).optional(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

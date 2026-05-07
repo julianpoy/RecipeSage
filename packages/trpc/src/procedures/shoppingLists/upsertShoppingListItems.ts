@@ -18,6 +18,16 @@ import {
 } from "@recipesage/util/shared";
 
 export const upsertShoppingListItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/upsertShoppingListItems",
+      tags: ["shoppingLists"],
+      summary:
+        "Create or update multiple shopping list items via id-keyed upsert",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       shoppingListId: z.uuid(),
@@ -32,12 +42,17 @@ export const upsertShoppingListItems = publicProcedure
             recipeId: z.uuid().nullable(),
             completed: z.boolean().optional(),
             categoryTitle: z.string().optional(),
-            createdAt: z.date().optional(),
-            updatedAt: z.date(),
+            createdAt: z.coerce.date().optional(),
+            updatedAt: z.coerce.date(),
           }),
         )
         .min(1)
         .max(UPSERT_SHOPPING_LIST_ITEMS_PAGINATION_LIMIT),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

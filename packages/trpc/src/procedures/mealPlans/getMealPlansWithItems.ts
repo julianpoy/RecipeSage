@@ -4,14 +4,26 @@ import {
   mealPlanItemSummary,
   mealPlanSummary,
   MealPlanSummaryWithItems,
+  mealPlanSummaryWithItemsSchema,
   prisma,
 } from "@recipesage/prisma";
 import { convertPrismaDateToDatestamp } from "@recipesage/util/server/db";
+import { z } from "zod";
 
 const HISTORICAL_DATE_LIMIT_DAYS = 30; // We return this number of past days of meal plan items
 
-export const getMealPlansWithItems = publicProcedure.query(
-  async ({ ctx }): Promise<MealPlanSummaryWithItems[]> => {
+export const getMealPlansWithItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/mealPlans/getMealPlansWithItems",
+      tags: ["mealPlans"],
+      summary: "Get the caller's meal plans, including recent items",
+      protect: true,
+    },
+  })
+  .output(z.array(mealPlanSummaryWithItemsSchema))
+  .query(async ({ ctx }): Promise<MealPlanSummaryWithItems[]> => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -86,5 +98,4 @@ export const getMealPlansWithItems = publicProcedure.query(
     });
 
     return resultMealPlans satisfies MealPlanSummaryWithItems[];
-  },
-);
+  });

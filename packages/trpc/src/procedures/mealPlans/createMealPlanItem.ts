@@ -11,10 +11,26 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 import { createMealPlanItemInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 /** @deprecated Use createMealPlanItems instead */
 export const createMealPlanItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/createMealPlanItem",
+      tags: ["mealPlans"],
+      summary: "Create a single meal plan item (deprecated)",
+      protect: true,
+    },
+  })
   .input(createMealPlanItemInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

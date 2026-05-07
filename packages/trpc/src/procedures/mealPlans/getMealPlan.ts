@@ -1,6 +1,10 @@
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { mealPlanSummary, prisma } from "@recipesage/prisma";
+import {
+  mealPlanSummary,
+  mealPlanSummarySchema,
+  prisma,
+} from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
@@ -9,11 +13,21 @@ import {
 } from "@recipesage/util/server/db";
 
 export const getMealPlan = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/mealPlans/getMealPlan",
+      tags: ["mealPlans"],
+      summary: "Get a single meal plan by id",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
     }),
   )
+  .output(mealPlanSummarySchema)
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

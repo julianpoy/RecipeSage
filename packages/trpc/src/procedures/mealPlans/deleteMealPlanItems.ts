@@ -11,9 +11,24 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 import { deleteMealPlanItemsInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 export const deleteMealPlanItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/deleteMealPlanItems",
+      tags: ["mealPlans"],
+      summary: "Delete multiple meal plan items",
+      protect: true,
+    },
+  })
   .input(deleteMealPlanItemsInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

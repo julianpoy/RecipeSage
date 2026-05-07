@@ -1,16 +1,29 @@
-import { prisma } from "@recipesage/prisma";
+import {
+  labelGroupSummary,
+  labelGroupSummarySchema,
+  prisma,
+} from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelGroupSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const deleteLabelGroup = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labelGroups/deleteLabelGroup",
+      tags: ["labelGroups"],
+      summary: "Delete a label group",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid().min(1).max(100),
     }),
   )
+  .output(labelGroupSummarySchema)
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

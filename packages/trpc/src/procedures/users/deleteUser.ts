@@ -4,9 +4,20 @@ import { prisma } from "@recipesage/prisma";
 import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
 import { deleteRecipes as deleteRecipesFromSearch } from "@recipesage/util/server/search";
 import * as Sentry from "@sentry/node";
+import { z } from "zod";
 
-export const deleteUser = publicProcedure.mutation(
-  async ({ ctx }): Promise<string> => {
+export const deleteUser = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/deleteUser",
+      tags: ["users"],
+      summary: "Delete the caller's account and all associated data",
+      protect: true,
+    },
+  })
+  .output(z.string())
+  .mutation(async ({ ctx }): Promise<string> => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -52,5 +63,4 @@ export const deleteUser = publicProcedure.mutation(
     );
 
     return "Deleted";
-  },
-);
+  });

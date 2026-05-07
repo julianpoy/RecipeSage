@@ -5,6 +5,15 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const updateLabel = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labels/updateLabel",
+      tags: ["labels"],
+      summary: "Update a label",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -12,6 +21,7 @@ export const updateLabel = publicProcedure
       labelGroupId: z.uuid().nullable().optional(),
     }),
   )
+  .output(z.string())
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

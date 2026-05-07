@@ -1,12 +1,26 @@
-import { LabelSummary, prisma } from "@recipesage/prisma";
+import {
+  LabelSummary,
+  labelSummary,
+  labelSummarySchema,
+  prisma,
+} from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelSummary } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const upsertLabel = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labels/upsertLabel",
+      tags: ["labels"],
+      summary: "Create or update a label",
+      protect: true,
+    },
+  })
+  .output(labelSummarySchema)
   .input(
     z.object({
       title: z.string().min(1).max(100),

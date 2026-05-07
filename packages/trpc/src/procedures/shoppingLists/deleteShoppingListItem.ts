@@ -14,8 +14,23 @@ import {
 
 /** @deprecated Use deleteShoppingListItems instead */
 export const deleteShoppingListItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/deleteShoppingListItem",
+      tags: ["shoppingLists"],
+      summary: "Delete a single shopping list item (deprecated)",
+      protect: true,
+    },
+  })
   .input(
     z.object({
+      id: z.uuid(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
       id: z.uuid(),
     }),
   )

@@ -1,4 +1,4 @@
-import { prisma, SessionDTO } from "@recipesage/prisma";
+import { prisma, SessionDTO, sessionDTOSchema } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -12,12 +12,22 @@ import { indexRecipes } from "@recipesage/util/server/search";
 import * as Sentry from "@sentry/node";
 
 export const login = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/login",
+      tags: ["users"],
+      summary:
+        "Authenticate with email and password and receive a session token",
+    },
+  })
   .input(
     z.object({
       email: z.string(),
       password: z.string(),
     }),
   )
+  .output(sessionDTOSchema)
   .mutation(async ({ input }) => {
     const user = await prisma.user.findFirst({
       where: {
