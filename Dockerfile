@@ -11,6 +11,9 @@ RUN apk add --no-cache mdbtools mdbtools-utils
 # pdftotext
 RUN apk add --no-cache poppler-utils
 
+# pandoc (rtf/odt/docx text extraction)
+RUN apk add --no-cache pandoc
+
 # dev watch script
 RUN apk add --no-cache inotify-tools
 

@@ -5,7 +5,7 @@ import { importJobFinishCommon } from "../../../index";
 import { ocrImagesToRecipe } from "../../../../ml/index";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readdir, readFile, mkdtempDisposable } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
 import type { JobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
@@ -16,6 +16,17 @@ import { ImportTooManyRecipesError } from "../../../jobs/jobErrors";
  * A sanity limit so that we don't overload the service or run up a huge bill.
  */
 const MAX_COUNT_LIMIT = 100;
+
+const SUPPORTED_EXTENSIONS = new Set([
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".heic",
+  ".heif",
+  ".avif",
+]);
 
 export async function imagesImportJobHandler(
   job: JobSummary,
@@ -33,9 +44,13 @@ export async function imagesImportJobHandler(
 
   await using extractDir = await mkdtempDisposable("/tmp/");
   const extractPath = extractDir.path;
-  await extract(zipPath, { dir: extractPath });
+  await safeExtractZip(zipPath, extractPath);
 
   const fileNames = await readdir(extractPath);
+
+  const imageFileNames = fileNames.filter((fileName) =>
+    SUPPORTED_EXTENSIONS.has(path.extname(fileName).toLowerCase()),
+  );
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
@@ -44,22 +59,14 @@ export async function imagesImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = fileNames.length;
+  const totalCount = imageFileNames.length;
   if (totalCount > MAX_COUNT_LIMIT) {
     throw new ImportTooManyRecipesError();
   }
 
   let processedCount = 0;
-  for (const fileName of fileNames) {
+  for (const fileName of imageFileNames) {
     const filePath = path.join(extractPath, fileName);
-
-    if (
-      !filePath.endsWith(".jpg") &&
-      !filePath.endsWith(".jpeg") &&
-      !filePath.endsWith(".png")
-    ) {
-      continue;
-    }
 
     const recipeImageBuffer = await readFile(filePath);
     const images = [];

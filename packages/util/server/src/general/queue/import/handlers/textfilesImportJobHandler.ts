@@ -4,9 +4,14 @@ import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { textToRecipe, TextToRecipeInputType } from "../../../../ml/index";
 import { downloadS3ToTemp } from "./shared/s3Download";
+import { readSideCarImages } from "./shared/sideCarImages";
 import { readdir, readFile, mkdtempDisposable } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
+import {
+  extractTextFromDocument,
+  isExtractableDocumentExtension,
+} from "../../../extractTextFromDocument";
 import type { JobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
@@ -33,9 +38,14 @@ export async function textfilesImportJobHandler(
 
   await using extractDir = await mkdtempDisposable("/tmp/");
   const extractPath = extractDir.path;
-  await extract(zipPath, { dir: extractPath });
+  await safeExtractZip(zipPath, extractPath);
 
   const fileNames = await readdir(extractPath);
+
+  const documentFileNames = fileNames.filter((fileName) => {
+    const extension = path.extname(fileName).toLowerCase();
+    return extension === ".txt" || isExtractableDocumentExtension(extension);
+  });
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
@@ -44,40 +54,22 @@ export async function textfilesImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = fileNames.length;
+  const totalCount = documentFileNames.length;
   if (totalCount > MAX_COUNT_LIMIT) {
     throw new ImportTooManyRecipesError();
   }
 
   let processedCount = 0;
-  for (const fileName of fileNames) {
+  for (const fileName of documentFileNames) {
     const filePath = path.join(extractPath, fileName);
+    const extension = path.extname(fileName).toLowerCase();
 
-    if (!filePath.endsWith(".txt")) {
-      continue;
-    }
+    const recipeText =
+      extension === ".txt"
+        ? await readFile(filePath, "utf-8")
+        : await extractTextFromDocument(filePath);
 
-    const recipeText = await readFile(filePath, "utf-8");
-
-    const images = [];
-    const baseName = path.basename(fileName);
-    const possibleImageNames = [
-      `${baseName}.png`,
-      `${baseName}.jpg`,
-      `${baseName}.jpeg`,
-    ];
-
-    for (const possibleImageName of possibleImageNames) {
-      try {
-        const fileContents = await readFile(
-          path.join(extractPath, possibleImageName),
-          "base64",
-        );
-        images.push(fileContents);
-      } catch (_e) {
-        // Image doesn't exist
-      }
-    }
+    const images = await readSideCarImages(extractPath, fileName);
 
     const recipe = await textToRecipe(
       recipeText,

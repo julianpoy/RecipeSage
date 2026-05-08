@@ -8,7 +8,7 @@ import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readdir, readFile, mkdtempDisposable, stat } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip, ZipMalformedError } from "../../../safeExtractZip";
 import xmljs from "xml-js";
 import path from "path";
 import type { JobQueueItem } from "../../JobQueueItem";
@@ -78,14 +78,12 @@ export async function fdxzImportJobHandler(
   const tempExtractPath = extractDir.path;
 
   try {
-    await extract(downloaded.filePath, { dir: tempExtractPath });
+    await safeExtractZip(downloaded.filePath, tempExtractPath);
 
-    // Was compressed, therefore was likely FDXZ
     xmlPath = path.join(tempExtractPath, "Data.xml");
     extractPath = tempExtractPath;
-  } catch (e: any) {
-    if (e.message === "end of central directory record signature not found") {
-      // Was not compressed - likely just FDX instead of FDXZ
+  } catch (e) {
+    if (e instanceof ZipMalformedError) {
       xmlPath = downloaded.filePath;
       extractPath = undefined;
     } else {

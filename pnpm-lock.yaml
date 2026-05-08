@@ -169,9 +169,6 @@ importers:
       express:
         specifier: ~5.2.1
         version: 5.2.1
-      extract-zip:
-        specifier: ^2.0.1
-        version: 2.0.1
       firebase:
         specifier: ^12.9.0
         version: 12.12.1
@@ -340,6 +337,9 @@ importers:
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
+      yauzl-promise:
+        specifier: ^4.0.0
+        version: 4.0.0
       zip-stream:
         specifier: ^7.0.2
         version: 7.0.2
@@ -515,6 +515,9 @@ importers:
       "@types/supertest":
         specifier: ^6.0.2
         version: 6.0.3
+      "@types/yauzl-promise":
+        specifier: ^4.0.1
+        version: 4.0.1
       "@types/zip-stream":
         specifier: ^7.0.0
         version: 7.0.0
@@ -5076,6 +5079,142 @@ packages:
         integrity: sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA==,
       }
 
+  "@node-rs/crc32-android-arm-eabi@1.10.6":
+    resolution:
+      {
+        integrity: sha512-vZAMuJXm3TpWPOkkhxdrofWDv+Q+I2oO7ucLRbXyAPmXFNDhHtBxbO1rk9Qzz+M3eep8ieS4/+jCL1Q0zacNMQ==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm]
+    os: [android]
+
+  "@node-rs/crc32-android-arm64@1.10.6":
+    resolution:
+      {
+        integrity: sha512-Vl/JbjCinCw/H9gEpZveWCMjxjcEChDcDBM8S4hKay5yyoRCUHJPuKr4sjVDBeOm+1nwU3oOm6Ca8dyblwp4/w==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm64]
+    os: [android]
+
+  "@node-rs/crc32-darwin-arm64@1.10.6":
+    resolution:
+      {
+        integrity: sha512-kARYANp5GnmsQiViA5Qu74weYQ3phOHSYQf0G+U5wB3NB5JmBHnZcOc46Ig21tTypWtdv7u63TaltJQE41noyg==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm64]
+    os: [darwin]
+
+  "@node-rs/crc32-darwin-x64@1.10.6":
+    resolution:
+      {
+        integrity: sha512-Q99bevJVMfLTISpkpKBlXgtPUItrvTWKFyiqoKH5IvscZmLV++NH4V13Pa17GTBmv9n18OwzgQY4/SRq6PQNVA==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [x64]
+    os: [darwin]
+
+  "@node-rs/crc32-freebsd-x64@1.10.6":
+    resolution:
+      {
+        integrity: sha512-66hpawbNjrgnS9EDMErta/lpaqOMrL6a6ee+nlI2viduVOmRZWm9Rg9XdGTK/+c4bQLdtC6jOd+Kp4EyGRYkAg==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [x64]
+    os: [freebsd]
+
+  "@node-rs/crc32-linux-arm-gnueabihf@1.10.6":
+    resolution:
+      {
+        integrity: sha512-E8Z0WChH7X6ankbVm8J/Yym19Cq3otx6l4NFPS6JW/cWdjv7iw+Sps2huSug+TBprjbcEA+s4TvEwfDI1KScjg==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm]
+    os: [linux]
+
+  "@node-rs/crc32-linux-arm64-gnu@1.10.6":
+    resolution:
+      {
+        integrity: sha512-LmWcfDbqAvypX0bQjQVPmQGazh4dLiVklkgHxpV4P0TcQ1DT86H/SWpMBMs/ncF8DGuCQ05cNyMv1iddUDugoQ==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  "@node-rs/crc32-linux-arm64-musl@1.10.6":
+    resolution:
+      {
+        integrity: sha512-k8ra/bmg0hwRrIEE8JL1p32WfaN9gDlUUpQRWsbxd1WhjqvXea7kKO6K4DwVxyxlPhBS9Gkb5Urq7Y4mXANzaw==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  "@node-rs/crc32-linux-x64-gnu@1.10.6":
+    resolution:
+      {
+        integrity: sha512-IfjtqcuFK7JrSZ9mlAFhb83xgium30PguvRjIMI45C3FJwu18bnLk1oR619IYb/zetQT82MObgmqfKOtgemEKw==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  "@node-rs/crc32-linux-x64-musl@1.10.6":
+    resolution:
+      {
+        integrity: sha512-LbFYsA5M9pNunOweSt6uhxenYQF94v3bHDAQRPTQ3rnjn+mK6IC7YTAYoBjvoJP8lVzcvk9hRj8wp4Jyh6Y80g==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  "@node-rs/crc32-wasm32-wasi@1.10.6":
+    resolution:
+      {
+        integrity: sha512-KaejdLgHMPsRaxnM+OG9L9XdWL2TabNx80HLdsCOoX9BVhEkfh39OeahBo8lBmidylKbLGMQoGfIKDjq0YMStw==,
+      }
+    engines: { node: ">=14.0.0" }
+    cpu: [wasm32]
+
+  "@node-rs/crc32-win32-arm64-msvc@1.10.6":
+    resolution:
+      {
+        integrity: sha512-x50AXiSxn5Ccn+dCjLf1T7ZpdBiV1Sp5aC+H2ijhJO4alwznvXgWbopPRVhbp2nj0i+Gb6kkDUEyU+508KAdGQ==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [arm64]
+    os: [win32]
+
+  "@node-rs/crc32-win32-ia32-msvc@1.10.6":
+    resolution:
+      {
+        integrity: sha512-DpDxQLaErJF9l36aghe1Mx+cOnYLKYo6qVPqPL9ukJ5rAGLtCdU0C+Zoi3gs9ySm8zmbFgazq/LvmsZYU42aBw==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [ia32]
+    os: [win32]
+
+  "@node-rs/crc32-win32-x64-msvc@1.10.6":
+    resolution:
+      {
+        integrity: sha512-5B1vXosIIBw1m2Rcnw62IIfH7W9s9f7H7Ma0rRuhT8HR4Xh8QCgw6NJSI2S2MCngsGktYnAhyUvs81b7efTyQw==,
+      }
+    engines: { node: ">= 10" }
+    cpu: [x64]
+    os: [win32]
+
+  "@node-rs/crc32@1.10.6":
+    resolution:
+      {
+        integrity: sha512-+llXfqt+UzgoDzT9of5vPQPGqTAVCohU74I9zIBkNo5TH6s2P31DFJOGsJQKN207f0GHnYv5pV3wh3BCY/un/A==,
+      }
+    engines: { node: ">= 10" }
+
   "@nodelib/fs.scandir@2.1.5":
     resolution:
       {
@@ -8682,6 +8821,12 @@ packages:
     resolution:
       {
         integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==,
+      }
+
+  "@types/yauzl-promise@4.0.1":
+    resolution:
+      {
+        integrity: sha512-qYEC3rJwqiJpdQ9b+bPNeuSY0c3JUM8vIuDy08qfuVN7xHm3ZDsHn2kGphUIB0ruEXrPGNXZ64nMUcu4fDjViQ==,
       }
 
   "@types/yauzl@2.10.3":
@@ -14617,6 +14762,13 @@ packages:
       }
     engines: { node: ">=12" }
 
+  is-it-type@5.1.3:
+    resolution:
+      {
+        integrity: sha512-AX2uU0HW+TxagTgQXOJY7+2fbFHemC7YFBwN1XqD8qQMKdtfbOC8OC3fUb4s5NU59a3662Dzwto8tWDdZYRXxg==,
+      }
+    engines: { node: ">=12" }
+
   is-map@2.0.3:
     resolution:
       {
@@ -19791,6 +19943,13 @@ packages:
       }
     engines: { node: ^20.17.0 || >=22.9.0 }
 
+  simple-invariant@2.0.1:
+    resolution:
+      {
+        integrity: sha512-1sbhsxqI+I2tqlmjbz99GXNmZtr6tKIyEgGGnJw/MKGblalqk/XoOYYFJlBzTKZCxx8kLaD3FD5s9BEEjx5Pyg==,
+      }
+    engines: { node: ">=10" }
+
   sirv@3.0.2:
     resolution:
       {
@@ -22690,6 +22849,13 @@ packages:
         integrity: sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==,
       }
     engines: { node: ^20.19.0 || ^22.12.0 || >=23 }
+
+  yauzl-promise@4.0.0:
+    resolution:
+      {
+        integrity: sha512-/HCXpyHXJQQHvFq9noqrjfa/WpQC2XYs3vI7tBiAi4QiIU1knvYhZGaO1QPjwIVMdqflxbmwgMXtYeaRiAE0CA==,
+      }
+    engines: { node: ">=16" }
 
   yauzl@2.10.0:
     resolution:
@@ -26655,6 +26821,67 @@ snapshots:
 
   "@nodable/entities@2.1.0": {}
 
+  "@node-rs/crc32-android-arm-eabi@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-android-arm64@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-darwin-arm64@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-darwin-x64@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-freebsd-x64@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-linux-arm-gnueabihf@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-linux-arm64-gnu@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-linux-arm64-musl@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-linux-x64-gnu@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-linux-x64-musl@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-wasm32-wasi@1.10.6":
+    dependencies:
+      "@napi-rs/wasm-runtime": 0.2.12
+    optional: true
+
+  "@node-rs/crc32-win32-arm64-msvc@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-win32-ia32-msvc@1.10.6":
+    optional: true
+
+  "@node-rs/crc32-win32-x64-msvc@1.10.6":
+    optional: true
+
+  "@node-rs/crc32@1.10.6":
+    optionalDependencies:
+      "@node-rs/crc32-android-arm-eabi": 1.10.6
+      "@node-rs/crc32-android-arm64": 1.10.6
+      "@node-rs/crc32-darwin-arm64": 1.10.6
+      "@node-rs/crc32-darwin-x64": 1.10.6
+      "@node-rs/crc32-freebsd-x64": 1.10.6
+      "@node-rs/crc32-linux-arm-gnueabihf": 1.10.6
+      "@node-rs/crc32-linux-arm64-gnu": 1.10.6
+      "@node-rs/crc32-linux-arm64-musl": 1.10.6
+      "@node-rs/crc32-linux-x64-gnu": 1.10.6
+      "@node-rs/crc32-linux-x64-musl": 1.10.6
+      "@node-rs/crc32-wasm32-wasi": 1.10.6
+      "@node-rs/crc32-win32-arm64-msvc": 1.10.6
+      "@node-rs/crc32-win32-ia32-msvc": 1.10.6
+      "@node-rs/crc32-win32-x64-msvc": 1.10.6
+
   "@nodelib/fs.scandir@2.1.5":
     dependencies:
       "@nodelib/fs.stat": 2.0.5
@@ -29178,6 +29405,10 @@ snapshots:
   "@types/validator@13.15.10": {}
 
   "@types/ws@8.18.1":
+    dependencies:
+      "@types/node": 24.9.1
+
+  "@types/yauzl-promise@4.0.1":
     dependencies:
       "@types/node": 24.9.1
 
@@ -33270,6 +33501,10 @@ snapshots:
 
   is-interactive@2.0.0: {}
 
+  is-it-type@5.1.3:
+    dependencies:
+      globalthis: 1.0.4
+
   is-map@2.0.3: {}
 
   is-module@1.0.0: {}
@@ -36972,6 +37207,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  simple-invariant@2.0.1: {}
+
   sirv@3.0.2:
     dependencies:
       "@polka/url": 1.0.0-next.29
@@ -38936,6 +39173,12 @@ snapshots:
       string-width: 7.2.0
       y18n: 5.0.8
       yargs-parser: 22.0.0
+
+  yauzl-promise@4.0.0:
+    dependencies:
+      "@node-rs/crc32": 1.10.6
+      is-it-type: 5.1.3
+      simple-invariant: 2.0.1
 
   yauzl@2.10.0:
     dependencies:

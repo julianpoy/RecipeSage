@@ -6,7 +6,7 @@ import { gunzipPromise } from "../../../../storage/index";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readdir, readFile, mkdtempDisposable } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
 import type { JobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
@@ -28,7 +28,7 @@ export async function paprikaImportJobHandler(
 
   await using extractDir = await mkdtempDisposable("/tmp/");
   const extractPath = extractDir.path;
-  await extract(zipPath, { dir: extractPath });
+  await safeExtractZip(zipPath, extractPath);
 
   const fileNames = await readdir(extractPath);
 

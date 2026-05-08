@@ -5,7 +5,7 @@ import { importJobFinishCommon } from "../../../index";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile, stat, mkdtempDisposable } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip } from "../../../safeExtractZip";
 import * as cheerio from "cheerio";
 import type { JobQueueItem } from "../../JobQueueItem";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
@@ -28,7 +28,7 @@ export async function recipekeeperImportJobHandler(
 
   await using extractDir = await mkdtempDisposable("/tmp/");
   const extractPath = extractDir.path;
-  await extract(zipPath, { dir: extractPath });
+  await safeExtractZip(zipPath, extractPath);
 
   const indexHtmlPath = extractPath + "/recipes.html";
   try {
