@@ -207,7 +207,7 @@
     "astro-eslint-parser": "^1.4.0",
     "copy-webpack-plugin": "^13.0.1",
     "esbuild": "^0.27.2",
-    "eslint": "9.39.2",
+    "eslint": "10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.0.0",
