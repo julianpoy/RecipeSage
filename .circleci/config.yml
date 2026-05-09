@@ -67,7 +67,7 @@ jobs:
             SENTRY_RELEASE=$CIRCLE_TAG \
             SOURCEMAP_UPLOAD=${CIRCLE_TAG:+true} \
             NX_SKIP_NX_CACHE=${CIRCLE_TAG:+true} \
-            pnpm exec nx run-many --targets=build,lint,typecheck --output-style=static
+            pnpm exec nx run-many --targets=build,lint,typecheck --output-style=static --parallel=2
           environment:
             ENVIRONMENT: production
       - run:
@@ -89,7 +89,7 @@ jobs:
           command: dockerize -wait tcp://localhost:3001 -timeout 30s
       - run:
           name: test
-          command: pnpm exec nx run-many --targets=test --output-style=static
+          command: pnpm exec nx run-many --targets=test --output-style=static --parallel=2
           environment:
             APP_VERSION: ci
   push_backend:
@@ -175,7 +175,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build frontend --skip-nx-cache)
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build frontend --skip-nx-cache --parallel=2)
           environment:
             ENVIRONMENT: production
       - run:
@@ -217,7 +217,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-www
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build www --skip-nx-cache)
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build www --skip-nx-cache --parallel=2)
           environment:
             ENVIRONMENT: production
       - run:
@@ -247,7 +247,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build:selfhost frontend --skip-nx-cache)
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build:selfhost frontend --skip-nx-cache --parallel=2)
           environment:
             ENVIRONMENT: production
       - run:
