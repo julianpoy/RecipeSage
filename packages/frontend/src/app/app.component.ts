@@ -626,9 +626,9 @@ export class AppComponent {
       const currentIdbSession = await appIdbStorageManager.getSession();
       if (currentIdbSession) return;
 
-      const me = await this.serverActionsService.users.getMe({
-        "*": () => {},
-      });
+      const me = await this.trpcService.trpc.users.getMe
+        .query()
+        .catch(() => undefined);
 
       if (!me) return;
 

@@ -1,4 +1,12 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  EffectRef,
+  Injector,
+  Input,
+  effect,
+  inject,
+  signal,
+} from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular/standalone";
 
 import { LoadingService } from "~/services/loading.service";
@@ -6,6 +14,7 @@ import { LoadingService } from "~/services/loading.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { RefreshableSignal } from "../../../services/server-actions/actions-base";
 import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 import { MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -54,18 +63,19 @@ import { addIcons } from "ionicons";
   ],
 })
 export class AddRecipeToMealPlanModalPage {
-  constructor() {
-    addIcons({ calendar, close });
-  }
-
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
   private loadingService = inject(LoadingService);
   private toastCtrl = inject(ToastController);
   private modalCtrl = inject(ModalController);
+  private injector = inject(Injector);
 
   @Input() recipe: any;
 
+  private mealPlansQuery = this.serverActionsService.mealPlans.getMealPlans();
+  private mealPlanItemsQuerySig = signal<
+    RefreshableSignal<MealPlanItemSummary[]> | undefined
+  >(undefined);
   mealPlans?: MealPlanSummary[];
 
   selectedMealPlan?: MealPlanSummary;
@@ -79,16 +89,30 @@ export class AddRecipeToMealPlanModalPage {
 
   selectedDays: string[] = [];
 
+  constructor() {
+    addIcons({ calendar, close });
+    effect(() => {
+      const mealPlans = this.mealPlansQuery.value();
+      if (!mealPlans) return;
+      this.mealPlans = [...mealPlans].sort((a, b) =>
+        a.title.localeCompare(b.title),
+      );
+      const selected = this.selectedMealPlan;
+      if (selected && !this.mealPlans.some((mp) => mp.id === selected.id)) {
+        this.selectedMealPlan = undefined;
+        this.selectedMealPlanItems = undefined;
+      }
+      if (!this.selectedMealPlan) this.selectLastUsedMealPlan();
+    });
+    effect(() => {
+      const items = this.mealPlanItemsQuerySig()?.value();
+      if (!items) return;
+      this.selectedMealPlanItems = items;
+    });
+  }
+
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
-    this.loadMealPlans().then(
-      () => {
-        loading.dismiss();
-      },
-      () => {
-        loading.dismiss();
-      },
-    );
+    this.mealPlansQuery.refresh();
   }
 
   selectLastUsedMealPlan() {
@@ -113,24 +137,13 @@ export class AddRecipeToMealPlanModalPage {
     localStorage.setItem("lastUsedMealPlanId", this.selectedMealPlan.id);
   }
 
-  async loadMealPlans() {
-    const mealPlans = await this.serverActionsService.mealPlans.getMealPlans();
-    if (!mealPlans) return;
-
-    this.mealPlans = mealPlans.sort((a, b) => a.title.localeCompare(b.title));
-
-    this.selectLastUsedMealPlan();
-  }
-
-  async loadMealPlan(id: string) {
-    const mealPlanItems =
-      await this.serverActionsService.mealPlans.getMealPlanItems({
+  loadMealPlan(id: string) {
+    this.selectedMealPlanItems = undefined;
+    this.mealPlanItemsQuerySig.set(
+      this.serverActionsService.mealPlans.getMealPlanItems({
         mealPlanId: id,
-      });
-
-    if (!mealPlanItems) return;
-
-    this.selectedMealPlanItems = mealPlanItems;
+      }),
+    );
   }
 
   isFormValid() {
@@ -174,22 +187,33 @@ export class AddRecipeToMealPlanModalPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.success) return;
+      if (!data || !data.success || typeof data.id !== "string") return;
+      const newId = data.id;
 
-      // Check for new meal plans
-      this.loadMealPlans().then(async () => {
-        if (this.mealPlans?.length === 1) {
-          this.selectedMealPlan = this.mealPlans[0];
-          this.loadMealPlan(this.mealPlans[0].id);
-        } else {
-          (
-            await this.toastCtrl.create({
-              message,
-              duration: 6000,
-            })
-          ).present();
-        }
-      });
+      this.mealPlansQuery.refresh();
+
+      let ref: EffectRef;
+      ref = effect(
+        () => {
+          const mealPlans = this.mealPlansQuery.value();
+          if (!mealPlans) return;
+          const newMealPlan = mealPlans.find((mp) => mp.id === newId);
+          if (!newMealPlan) return;
+          ref.destroy();
+          if (mealPlans.length === 1) {
+            this.selectedMealPlan = newMealPlan;
+            this.loadMealPlan(newMealPlan.id);
+          } else {
+            void this.toastCtrl
+              .create({
+                message,
+                duration: 6000,
+              })
+              .then((toast) => toast.present());
+          }
+        },
+        { injector: this.injector },
+      );
     });
   }
 

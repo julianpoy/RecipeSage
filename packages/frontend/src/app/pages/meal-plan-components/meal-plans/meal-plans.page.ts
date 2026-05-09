@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, computed, inject } from "@angular/core";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 
 import { WebsocketService } from "~/services/websocket.service";
@@ -6,7 +6,6 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { ServerActionsService } from "../../../services/server-actions.service";
-import type { MealPlanSummary, UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import {
@@ -64,17 +63,18 @@ export class MealPlansPage {
   private loadingService = inject(LoadingService);
   private utilService = inject(UtilService);
 
-  me?: UserPublic;
-  mealPlans?: MealPlanSummary[] = [];
+  private meQuery = this.serverActionsService.users.getMe();
+  me = this.meQuery.value;
+  private mealPlansQuery = this.serverActionsService.mealPlans.getMealPlans();
+  mealPlans = computed(() => {
+    const plans = this.mealPlansQuery.value();
+    if (!plans) return plans;
+    return [...plans].sort((a, b) => a.title.localeCompare(b.title));
+  });
 
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
-
-    this.mealPlans = undefined;
-
-    Promise.all([this.loadPlans(), this.loadMe()]).finally(() => {
-      loading.dismiss();
-    });
+    this.loadPlans();
+    this.meQuery.refresh();
 
     this.websocketService.on("mealplan:updated", this.onWSEvent);
   }
@@ -87,20 +87,8 @@ export class MealPlansPage {
     this.loadPlans();
   };
 
-  async loadMe() {
-    const me = await this.serverActionsService.users.getMe();
-    if (!me) return;
-
-    this.me = me;
-  }
-
-  async loadPlans() {
-    const mealPlans = await this.serverActionsService.mealPlans.getMealPlans();
-    if (!mealPlans) return;
-
-    this.mealPlans = mealPlans.sort((a, b) => {
-      return a.title.localeCompare(b.title);
-    });
+  loadPlans() {
+    this.mealPlansQuery.refresh();
   }
 
   async newMealPlan() {

@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 
 import { ErrorHandlers } from "../http-error-handler.service";
-import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
+import {
+  ActionsBase,
+  RefreshableSignal,
+  RouterInputs,
+  RouterOutputs,
+} from "./actions-base";
 import { getKvStoreEntry, KVStoreKeys } from "../../utils/localDb";
 
 @Injectable({
@@ -10,8 +15,8 @@ import { getKvStoreEntry, KVStoreKeys } from "../../utils/localDb";
 export class UsersActionsService extends ActionsBase {
   getMe(
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["users"]["getMe"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["users"]["getMe"]> {
+    return this.executeQueryAsSignal(
       () => this.trpc.users.getMe.query(),
       async () => getKvStoreEntry(KVStoreKeys.MyUserProfile),
       errorHandlers,

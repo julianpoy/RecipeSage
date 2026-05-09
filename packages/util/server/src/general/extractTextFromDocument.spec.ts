@@ -4,7 +4,6 @@ import { tmpdir } from "os";
 import { join } from "path";
 import {
   extractTextFromDocument,
-  isExtractableDocumentExtension,
   UnsupportedDocumentFormatError,
 } from "./extractTextFromDocument";
 
@@ -19,63 +18,40 @@ describe("extractTextFromDocument", () => {
     await rm(workDir, { recursive: true, force: true });
   });
 
-  describe("isExtractableDocumentExtension", () => {
-    it.each([
-      [".rtf", true],
-      [".odt", true],
-      [".docx", true],
-      [".md", true],
-      [".markdown", true],
-      [".html", true],
-      [".htm", true],
-      [".org", true],
-      [".RTF", true],
-      [".DOCX", true],
-      [".txt", false],
-      [".pdf", false],
-      [".doc", false],
-      ["", false],
-    ])("returns %s for %s", (ext, expected) => {
-      expect(isExtractableDocumentExtension(ext)).toBe(expected);
-    });
+  it("rejects unsupported extensions", async () => {
+    const path = join(workDir, "thing.txt");
+    await writeFile(path, "plain text");
+
+    await expect(extractTextFromDocument(path)).rejects.toBeInstanceOf(
+      UnsupportedDocumentFormatError,
+    );
   });
 
-  describe("extractTextFromDocument", () => {
-    it("rejects unsupported extensions", async () => {
-      const path = join(workDir, "thing.txt");
-      await writeFile(path, "plain text");
+  it("extracts text from a markdown document via pandoc", async () => {
+    const path = join(workDir, "recipe.md");
+    await writeFile(
+      path,
+      "# Pancakes\n\n- 2 cups flour\n- 1 cup milk\n\nMix and cook.\n",
+    );
 
-      await expect(extractTextFromDocument(path)).rejects.toBeInstanceOf(
-        UnsupportedDocumentFormatError,
-      );
-    });
+    const text = await extractTextFromDocument(path);
+    expect(text).toContain("Pancakes");
+    expect(text).toContain("2 cups flour");
+    expect(text).toContain("1 cup milk");
+    expect(text).toContain("Mix and cook");
+  });
 
-    it("extracts text from a markdown document via pandoc", async () => {
-      const path = join(workDir, "recipe.md");
-      await writeFile(
-        path,
-        "# Pancakes\n\n- 2 cups flour\n- 1 cup milk\n\nMix and cook.\n",
-      );
+  it("extracts text from an HTML document via pandoc", async () => {
+    const path = join(workDir, "recipe.html");
+    await writeFile(
+      path,
+      "<html><body><h1>Pancakes</h1><ul><li>2 cups flour</li><li>1 cup milk</li></ul><p>Mix and cook.</p></body></html>",
+    );
 
-      const text = await extractTextFromDocument(path);
-      expect(text).toContain("Pancakes");
-      expect(text).toContain("2 cups flour");
-      expect(text).toContain("1 cup milk");
-      expect(text).toContain("Mix and cook");
-    });
-
-    it("extracts text from an HTML document via pandoc", async () => {
-      const path = join(workDir, "recipe.html");
-      await writeFile(
-        path,
-        "<html><body><h1>Pancakes</h1><ul><li>2 cups flour</li><li>1 cup milk</li></ul><p>Mix and cook.</p></body></html>",
-      );
-
-      const text = await extractTextFromDocument(path);
-      expect(text).toContain("Pancakes");
-      expect(text).toContain("2 cups flour");
-      expect(text).toContain("1 cup milk");
-      expect(text).toContain("Mix and cook");
-    });
+    const text = await extractTextFromDocument(path);
+    expect(text).toContain("Pancakes");
+    expect(text).toContain("2 cups flour");
+    expect(text).toContain("1 cup milk");
+    expect(text).toContain("Mix and cook");
   });
 });

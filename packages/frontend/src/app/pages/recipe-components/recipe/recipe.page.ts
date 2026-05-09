@@ -41,11 +41,7 @@ import {
   type UnitSystem,
 } from "~/modals/scale-recipe/scale-recipe.component";
 import { System } from "unitz-ts";
-import type {
-  RecipeSummary,
-  RecipeSummaryLite,
-  UserPublic,
-} from "@recipesage/prisma";
+import type { RecipeSummary, RecipeSummaryLite } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -141,7 +137,8 @@ export class RecipePage {
     release: () => void;
   } = null;
 
-  me: UserPublic | null = null;
+  private meQuery = this.serverActionsService.users.getMe({ 401: () => {} });
+  me = this.meQuery.value;
   recipe: RecipeSummary | null = null;
   similarRecipes: RecipeSummaryLite[] = [];
   linkedRecipes: Array<{
@@ -232,7 +229,6 @@ export class RecipePage {
     }
 
     this.recipe = null;
-    this.me = null;
     this.similarRecipes = [];
     this.linkedRecipes = [];
 
@@ -256,11 +252,8 @@ export class RecipePage {
   }
 
   async load() {
-    return Promise.all([
-      this._loadRecipe(),
-      this._loadSimilarRecipes(),
-      this._loadMyUserProfile(),
-    ]);
+    this.meQuery.refresh();
+    return Promise.all([this._loadRecipe(), this._loadSimilarRecipes()]);
   }
 
   async _loadRecipe() {
@@ -336,15 +329,6 @@ export class RecipePage {
     this.similarRecipes = response;
   }
 
-  async _loadMyUserProfile() {
-    if (!this.isLoggedIn) return;
-
-    const response = await this.serverActionsService.users.getMe();
-    if (!response) return;
-
-    this.me = response;
-  }
-
   updateRatingVisual() {
     if (!this.recipe) return;
 
@@ -358,7 +342,7 @@ export class RecipePage {
       component: RecipeDetailsPopoverPage,
       componentProps: {
         recipe: this.recipe,
-        me: this.me,
+        me: this.me(),
         isLoggedIn: this.isLoggedIn,
       },
       event,
@@ -684,7 +668,7 @@ export class RecipePage {
     const loading = this.loadingService.start();
 
     const labelIds =
-      this.me?.id === this.recipe.id
+      this.me()?.id === this.recipe.id
         ? this.recipe.recipeLabels.map((recipeLabel) => recipeLabel.label.id)
         : [];
 

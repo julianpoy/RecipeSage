@@ -18,15 +18,11 @@ export const readSideCarImages = async (
 ): Promise<string[]> => {
   const images: string[] = [];
   for (const extension of SIDE_CAR_IMAGE_EXTENSIONS) {
-    try {
-      const fileContents = await readFile(
-        path.join(extractPath, `${baseName}${extension}`),
-        "base64",
-      );
-      images.push(fileContents);
-    } catch (_e) {
-      // noop
-    }
+    const fileContents = await readFile(
+      path.join(extractPath, `${baseName}${extension}`),
+      "base64",
+    ).catch(() => null);
+    if (fileContents) images.push(fileContents);
   }
   return images;
 };

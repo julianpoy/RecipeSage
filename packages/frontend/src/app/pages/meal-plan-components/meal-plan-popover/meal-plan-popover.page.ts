@@ -225,7 +225,7 @@ export class MealPlanPopoverPage {
     const modal = await this.modalCtrl.create({
       component: UpdateMealPlanModalPage,
       componentProps: {
-        mealPlanId: this.mealPlanId,
+        mealPlan: this.mealPlan,
       },
     });
 

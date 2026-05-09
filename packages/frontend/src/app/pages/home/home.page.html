@@ -194,19 +194,23 @@
                     </p>
                   }
                 </div>
-                @if (!userId && myProfile && myProfile.id !== recipe.userId) {
-                  <ion-badge
-                    [ngClass]="{
-                      'no-image': !preferences[preferenceKeys.ShowImages],
-                    }"
-                  >
-                    @if (friendsById && friendsById[recipe.userId]) {
-                      &commat;{{ friendsById[recipe.userId].handle }}
-                    }
-                    @if (!friendsById || !friendsById[recipe.userId]) {
-                      {{ "pages.home.recipe.fromSharedCollection" | translate }}
-                    }
-                  </ion-badge>
+                @if (myProfile(); as myProfileValue) {
+                  @if (!userId && myProfileValue.id !== recipe.userId) {
+                    <ion-badge
+                      [ngClass]="{
+                        'no-image': !preferences[preferenceKeys.ShowImages],
+                      }"
+                    >
+                      @if (friendsById && friendsById[recipe.userId]) {
+                        &commat;{{ friendsById[recipe.userId].handle }}
+                      }
+                      @if (!friendsById || !friendsById[recipe.userId]) {
+                        {{
+                          "pages.home.recipe.fromSharedCollection" | translate
+                        }}
+                      }
+                    </ion-badge>
+                  }
                 }
                 @if (selectedRecipeIds.indexOf(recipe.id) > -1) {
                   <ion-badge>
@@ -324,15 +328,17 @@
               }
             </div>
           </div>
-          @if (!userId && myProfile && myProfile.id !== recipe.userId) {
-            <ion-badge>
-              @if (friendsById && friendsById[recipe.userId]) {
-                &commat;{{ friendsById[recipe.userId].handle }}
-              }
-              @if (!friendsById || !friendsById[recipe.userId]) {
-                {{ "pages.home.recipe.fromSharedCollection" | translate }}
-              }
-            </ion-badge>
+          @if (myProfile(); as myProfileValue) {
+            @if (!userId && myProfileValue.id !== recipe.userId) {
+              <ion-badge>
+                @if (friendsById && friendsById[recipe.userId]) {
+                  &commat;{{ friendsById[recipe.userId].handle }}
+                }
+                @if (!friendsById || !friendsById[recipe.userId]) {
+                  {{ "pages.home.recipe.fromSharedCollection" | translate }}
+                }
+              </ion-badge>
+            }
           }
           @if (selectedRecipeIds.indexOf(recipe.id) > -1) {
             <ion-badge>

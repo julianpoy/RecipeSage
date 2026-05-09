@@ -4,6 +4,7 @@ import {
   ToastController,
   NavController,
 } from "@ionic/angular/standalone";
+import type { ShoppingListSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "~/services/loading.service";
 import { MessagingService } from "~/services/messaging.service";
@@ -66,45 +67,26 @@ export class UpdateShoppingListModalPage {
   @Input({
     required: true,
   })
-  shoppingListId: string = "";
+  shoppingList!: Readonly<ShoppingListSummary>;
 
   loaded = false;
   listTitle = "";
   selectedCollaboratorIds: string[] = [];
 
-  async load() {
-    this.loaded = false;
-    if (!this.shoppingListId) throw new Error("Shopping list ID not present");
-
-    const loading = this.loadingService.start();
-
-    const response =
-      await this.serverActionsService.shoppingLists.getShoppingList({
-        id: this.shoppingListId,
-      });
-
-    loading.dismiss();
-    if (!response) return;
-
-    this.listTitle = response.title;
-    this.selectedCollaboratorIds = response.collaboratorUsers.map(
+  ionViewWillEnter() {
+    this.listTitle = this.shoppingList.title;
+    this.selectedCollaboratorIds = this.shoppingList.collaboratorUsers.map(
       (collaboratorUser) => collaboratorUser.user.id,
     );
     this.loaded = true;
   }
 
-  ionViewWillEnter() {
-    this.load();
-  }
-
   async save() {
-    if (!this.shoppingListId) throw new Error("Shopping list ID not present");
-
     const loading = this.loadingService.start();
 
     const response =
       await this.serverActionsService.shoppingLists.updateShoppingList({
-        id: this.shoppingListId,
+        id: this.shoppingList.id,
         title: this.listTitle,
         collaboratorUserIds: this.selectedCollaboratorIds,
       });

@@ -1,4 +1,4 @@
-import { inject } from "@angular/core";
+import { Signal, inject, signal } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 import { TRPCClientError } from "@trpc/client";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
@@ -11,6 +11,11 @@ import { SearchService } from "../search.service";
 
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type RefreshableSignal<T> = {
+  value: Signal<T | undefined>;
+  refresh: () => void;
+};
 
 export abstract class ActionsBase {
   protected trpcService = inject(TRPCService);
@@ -32,11 +37,30 @@ export abstract class ActionsBase {
     invoke: () => Promise<T>,
     fallback: () => Promise<T | undefined>,
     errorHandlers?: ErrorHandlers,
+    timeoutMs: number = 4000,
   ): Promise<T | undefined> {
-    try {
-      return await invoke();
-    } catch (e) {
-      if (this.shouldAttemptFallback(e)) {
+    const networkPromise = invoke();
+    networkPromise.catch(() => {});
+
+    const timeoutSentinel = Symbol("executeQueryTimeout");
+    const timeoutPromise = new Promise<typeof timeoutSentinel>((resolve) => {
+      setTimeout(() => resolve(timeoutSentinel), timeoutMs);
+    });
+
+    const winner = await Promise.race([
+      networkPromise.then(
+        (result) => ({ kind: "network" as const, result }),
+        (error) => ({ kind: "network-error" as const, error }),
+      ),
+      timeoutPromise.then(() => ({ kind: "timeout" as const })),
+    ]);
+
+    if (winner.kind === "network") {
+      return winner.result;
+    }
+
+    if (winner.kind === "network-error") {
+      if (this.shouldAttemptFallback(winner.error)) {
         try {
           const fallbackResult = await fallback();
           if (fallbackResult !== undefined) {
@@ -46,6 +70,24 @@ export abstract class ActionsBase {
           console.warn("Local fallback failed", fe);
         }
       }
+      return this.trpcService.handle(
+        Promise.reject(winner.error),
+        errorHandlers,
+      );
+    }
+
+    try {
+      const fallbackResult = await fallback();
+      if (fallbackResult !== undefined) {
+        return fallbackResult;
+      }
+    } catch (fe) {
+      console.warn("Local fallback failed", fe);
+    }
+
+    try {
+      return await networkPromise;
+    } catch (e) {
       return this.trpcService.handle(Promise.reject(e), errorHandlers);
     }
   }
@@ -92,5 +134,53 @@ export abstract class ActionsBase {
     errorHandlers?: ErrorHandlers,
   ): Promise<T | undefined> {
     return this.trpcService.handle(invoke(), errorHandlers);
+  }
+
+  protected executeQueryAsSignal<T>(
+    invoke: () => Promise<T>,
+    fallback: () => Promise<T | undefined>,
+    errorHandlers?: ErrorHandlers,
+  ): RefreshableSignal<T> {
+    const result = signal<T | undefined>(undefined);
+    let generation = 0;
+
+    const run = () => {
+      const myGeneration = ++generation;
+      const isCurrent = () => myGeneration === generation;
+
+      const networkPromise = invoke();
+      const cachePromise = fallback().catch((fe) => {
+        console.warn("Local fallback failed", fe);
+        return undefined;
+      });
+
+      void cachePromise.then((cached) => {
+        if (!isCurrent()) return;
+        if (cached !== undefined && result() === undefined) {
+          result.set(cached);
+        }
+      });
+
+      void networkPromise.then(
+        (fresh) => {
+          if (!isCurrent()) return;
+          result.set(fresh);
+        },
+        async (e) => {
+          if (!isCurrent()) return;
+          await cachePromise;
+          if (!isCurrent()) return;
+          if (result() === undefined || !this.shouldAttemptFallback(e)) {
+            this.trpcService.handle(Promise.reject(e), errorHandlers);
+          } else {
+            console.warn("Network fetch failed; using cached value", e);
+          }
+        },
+      );
+    };
+
+    run();
+
+    return { value: result.asReadonly(), refresh: run };
   }
 }

@@ -88,6 +88,7 @@ export class NewShoppingListModalPage {
 
     this.modalCtrl.dismiss({
       success: true,
+      id: response.id,
     });
     if (this.openAfterCreate) {
       this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));

@@ -5,7 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{ "pages.mealPlan.title" | translate: { name: mealPlan?.title } }}
+      {{ "pages.mealPlan.title" | translate: { name: mealPlan()?.title } }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -18,7 +18,7 @@
 
 <ion-content>
   <br />
-  @if (!mealPlanItems) {
+  @if (!mealPlanItems()) {
     <null-state>
       <ion-spinner virtualSlot="header"></ion-spinner>
       <ion-label virtualSlot="body">
@@ -26,7 +26,7 @@
       </ion-label>
     </null-state>
   }
-  @if (mealPlanItems) {
+  @if (mealPlanItems(); as mealPlanItemsValue) {
     @if (preferences[preferenceKeys.ViewType] === viewTypeOptions.List) {
       @if (upcomingDates.length === 0 && pastDates.length === 0) {
         <null-state>
@@ -120,8 +120,8 @@
     } @else {
       <div class="mealplan-flex">
         <meal-calendar
-          [customMealOptions]="mealPlan?.customMealOptions ?? null"
-          [mealPlanItems]="mealPlanItems"
+          [customMealOptions]="mealPlan()?.customMealOptions ?? null"
+          [mealPlanItems]="mealPlanItemsValue"
           (selectedDaysChange)="setSelectedDays($event)"
           (itemClicked)="itemClicked($event)"
           (itemMoved)="itemMoved($event)"

@@ -228,7 +228,7 @@ export class ShoppingListPopoverPage {
     const modal = await this.modalCtrl.create({
       component: UpdateShoppingListModalPage,
       componentProps: {
-        shoppingListId: this.shoppingListId,
+        shoppingList: this.shoppingList,
       },
     });
 

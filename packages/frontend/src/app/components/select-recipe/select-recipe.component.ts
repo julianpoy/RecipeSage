@@ -39,7 +39,10 @@ export class SelectRecipeComponent {
   private loadingService = inject(LoadingService);
   private serverActionsService = inject(ServerActionsService);
 
-  myProfile?: UserPublic;
+  private myProfileQuery = this.serverActionsService.users.getMe({
+    401: () => {},
+  });
+  myProfile = this.myProfileQuery.value;
   friendsById?: {
     [key: string]: UserPublic;
   };
@@ -69,17 +72,7 @@ export class SelectRecipeComponent {
 
   constructor() {
     addIcons({ folderOpen });
-    this.fetchMyProfile();
     this.fetchFriends();
-  }
-
-  async fetchMyProfile() {
-    const response = await this.serverActionsService.users.getMe({
-      401: () => {},
-    });
-    if (!response) return;
-
-    this.myProfile = response;
   }
 
   async fetchFriends() {
