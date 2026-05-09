@@ -15,7 +15,8 @@
         "tsConfig": "packages/util/server/tsconfig.lib.json",
         "declaration": true,
         "assets": [],
-        "platform": "node"
+        "platform": "node",
+        "external": ["yauzl-promise"]
       },
       "configurations": {
         "development": {
