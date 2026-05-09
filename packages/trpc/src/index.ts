@@ -41,7 +41,7 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
   description:
     "Public REST surface generated from RecipeSage's tRPC router. Procedures are grouped by tRPC sub-router (tag).",
   version: "1.0.0",
-  baseUrl: "/api/v2",
+  baseUrl: "/compat/v2",
 });
 
 export const openApiExpressMiddleware = createOpenApiExpressMiddleware({

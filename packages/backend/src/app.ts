@@ -139,10 +139,10 @@ app.disable("x-powered-by");
 app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
-app.get("/api/openapi.json", (_req, res) => {
+app.get("/compat/openapi.json", (_req, res) => {
   res.json(openApiDocument);
 });
-app.use("/api/v2", openApiExpressMiddleware);
+app.use("/compat/v2", openApiExpressMiddleware);
 app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/labels", labels);
