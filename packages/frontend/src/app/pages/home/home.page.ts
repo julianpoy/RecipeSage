@@ -280,7 +280,6 @@ export class HomePage implements OnDestroy {
       });
     }
 
-    this.myProfileQuery.refresh();
     this.fetchFriends();
   }
 

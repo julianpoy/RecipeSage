@@ -87,7 +87,6 @@ export class ShoppingListsPage {
 
   ionViewWillEnter() {
     this.shoppingListsQuery.refresh();
-    this.meQuery.refresh();
 
     this.websocketService.on(
       "shoppinglist:updated",

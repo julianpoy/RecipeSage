@@ -37,14 +37,15 @@ export abstract class ActionsBase {
     invoke: () => Promise<T>,
     fallback: () => Promise<T | undefined>,
     errorHandlers?: ErrorHandlers,
-    timeoutMs: number = 4000,
+    timeoutMs: number = 10000,
   ): Promise<T | undefined> {
     const networkPromise = invoke();
     networkPromise.catch(() => {});
 
     const timeoutSentinel = Symbol("executeQueryTimeout");
+    let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
     const timeoutPromise = new Promise<typeof timeoutSentinel>((resolve) => {
-      setTimeout(() => resolve(timeoutSentinel), timeoutMs);
+      timeoutHandle = setTimeout(() => resolve(timeoutSentinel), timeoutMs);
     });
 
     const winner = await Promise.race([
@@ -54,6 +55,10 @@ export abstract class ActionsBase {
       ),
       timeoutPromise.then(() => ({ kind: "timeout" as const })),
     ]);
+
+    if (winner.kind !== "timeout") {
+      clearTimeout(timeoutHandle);
+    }
 
     if (winner.kind === "network") {
       return winner.result;

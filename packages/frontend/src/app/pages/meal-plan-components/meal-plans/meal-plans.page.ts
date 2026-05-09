@@ -74,7 +74,6 @@ export class MealPlansPage {
 
   ionViewWillEnter() {
     this.loadPlans();
-    this.meQuery.refresh();
 
     this.websocketService.on("mealplan:updated", this.onWSEvent);
   }

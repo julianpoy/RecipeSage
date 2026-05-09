@@ -173,7 +173,6 @@ export class MealPlanPage {
 
   ionViewWillEnter() {
     this.loadWithProgress();
-    this.meQuery.refresh();
 
     this.websocketService.on("mealplan:updated", this.onWSEvent);
   }
@@ -191,11 +190,6 @@ export class MealPlanPage {
       this.loadMealPlan();
     }
   };
-
-  refresh(loader: any) {
-    this.loadMealPlan();
-    loader.target.complete();
-  }
 
   loadWithProgress() {
     this.loadMealPlan();

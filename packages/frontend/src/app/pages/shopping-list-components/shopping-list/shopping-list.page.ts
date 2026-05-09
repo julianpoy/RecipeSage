@@ -169,7 +169,6 @@ export class ShoppingListPage {
 
   ionViewWillEnter() {
     this.loadList();
-    this.meQuery.refresh();
 
     this.websocketService.on("shoppinglist:updated", this.onWSEvent);
   }

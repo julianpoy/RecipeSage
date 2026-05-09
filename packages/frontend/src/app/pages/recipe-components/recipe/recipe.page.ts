@@ -252,7 +252,6 @@ export class RecipePage {
   }
 
   async load() {
-    this.meQuery.refresh();
     return Promise.all([this._loadRecipe(), this._loadSimilarRecipes()]);
   }
 
