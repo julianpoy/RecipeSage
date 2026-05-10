@@ -14,7 +14,7 @@ const options: esbuild.BuildOptions = {
   platform: "browser",
   format: "iife",
   target: "es2020",
-  minify: true,
+  minify: !watch,
   sourcemap: enableSourcemapUpload ? true : false,
   define: {
     "process.env.ENVIRONMENT": JSON.stringify(process.env.ENVIRONMENT ?? ""),
