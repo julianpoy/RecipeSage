@@ -238,6 +238,10 @@ export class AuthPage {
     this.close();
   }
 
+  onGoogleAccountNotFound() {
+    this.presentAlert("generic.error", "pages.auth.error.incorrectEmail");
+  }
+
   async signInWithGoogleComplete(session: SessionDTO) {
     localStorage.setItem("token", session.token);
     const lastUserId = await appIdbStorageManager.getLastSessionUserId();

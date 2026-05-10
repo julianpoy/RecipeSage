@@ -160,6 +160,8 @@
       @if (!isSelfHost) {
         <div class="ion-padding-start ion-padding-end ion-padding-bottom">
           <sign-in-with-google
+            [allowRegistration]="!showLogin"
+            (accountNotFound)="onGoogleAccountNotFound()"
             (signInComplete)="signInWithGoogleComplete($event)"
           ></sign-in-with-google>
         </div>

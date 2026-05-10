@@ -24,6 +24,7 @@ export const signInWithGoogle = publicProcedure
     z.object({
       clientId: z.string(),
       credential: z.string(),
+      allowRegistration: z.boolean().default(true),
     }),
   )
   .output(sessionDTOSchema)
@@ -54,6 +55,14 @@ export const signInWithGoogle = publicProcedure
         email: email.toLowerCase(),
       },
     });
+
+    if (!existingUser && !input.allowRegistration) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "An account with that email address was not found",
+      });
+    }
+
     const user = await prisma.user.upsert({
       where: {
         email: email.toLowerCase(),

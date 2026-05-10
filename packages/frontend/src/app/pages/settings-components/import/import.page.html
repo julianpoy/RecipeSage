@@ -82,19 +82,16 @@
     </div>
   }
   @if (!getRunningJob()) {
-    <div>
+    <div class="ion-margin-top">
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
-          <br />
-          <p>{{ "pages.import.description1" | translate }}</p>
-          <br />
           <p>
-            {{ "pages.import.description2" | translate }}<br />
+            {{ "pages.import.description" | translate }}<br />
             <a
               href="https://docs.recipesage.com/docs/tutorials/settings/import/"
               target="_blank"
               rel="noopener"
-              >{{ "pages.import.description3" | translate }}</a
+              >{{ "pages.import.viewDocumentation" | translate }}</a
             >
           </p>
         </ion-label>
