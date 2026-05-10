@@ -90,7 +90,12 @@
           <br />
           <p>
             {{ "pages.import.description2" | translate }}<br />
-            {{ "pages.import.description3" | translate }}
+            <a
+              href="https://docs.recipesage.com/docs/tutorials/settings/import/"
+              target="_blank"
+              rel="noopener"
+              >{{ "pages.import.description3" | translate }}</a
+            >
           </p>
         </ion-label>
       </ion-item>
@@ -98,28 +103,6 @@
         <ion-item (click)="startImport('jsonld')" detail button>
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.jsonld" | translate }} </ion-label>
-        </ion-item>
-        <ion-item (click)="startImport('pepperplate')" detail button>
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          <ion-label> {{ "pages.import.pepperplate" | translate }} </ion-label>
-        </ion-item>
-        <ion-item (click)="startImport('livingcookbook')" detail button>
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          <ion-label>
-            {{ "pages.import.livingCookbook" | translate }}
-          </ion-label>
-        </ion-item>
-        <ion-item (click)="startImport('paprika')" detail button>
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          <ion-label> {{ "pages.import.paprika" | translate }} </ion-label>
-        </ion-item>
-        <ion-item (click)="startImport('cookmate')" detail button>
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          <ion-label> {{ "pages.import.cookmate" | translate }} </ion-label>
-        </ion-item>
-        <ion-item (click)="startImport('recipekeeper')" detail button>
-          <ion-icon name="cloud-upload" slot="start"></ion-icon>
-          <ion-label> {{ "pages.import.recipeKeeper" | translate }} </ion-label>
         </ion-item>
         <ion-item (click)="startImport('textfiles')" detail button>
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
@@ -141,6 +124,14 @@
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.csv" | translate }} </ion-label>
         </ion-item>
+        <ion-item (click)="startImport('paprika')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.paprika" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('recipekeeper')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.recipeKeeper" | translate }} </ion-label>
+        </ion-item>
         <ion-item (click)="startImport('enex')" detail button>
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.enex" | translate }} </ion-label>
@@ -148,6 +139,20 @@
         <ion-item (click)="startImport('copymethat')" detail button>
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.copymethat" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('cookmate')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.cookmate" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('pepperplate')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.pepperplate" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('livingcookbook')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.import.livingCookbook" | translate }}
+          </ion-label>
         </ion-item>
       </ion-list>
     </div>
