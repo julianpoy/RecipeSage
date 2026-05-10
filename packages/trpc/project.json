@@ -22,7 +22,8 @@
             "output": "."
           }
         ],
-        "platform": "node"
+        "platform": "node",
+        "external": ["yauzl-promise"]
       },
       "configurations": {
         "development": {
