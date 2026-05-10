@@ -200,6 +200,8 @@ export class HomePage implements OnDestroy {
       trash,
     });
 
+    console.log("hi", "hi2", "hi3", "hi4");
+
     this.applyRouteParams();
     if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
