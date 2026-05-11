@@ -114,21 +114,6 @@ export class UserService {
     });
   }
 
-  getUserByEmail(
-    params: {
-      email: string;
-    },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this.httpService.requestWithWrapper<User>({
-      path: "users/by-email",
-      method: "GET",
-      payload: undefined,
-      query: params,
-      errorHandlers,
-    });
-  }
-
   me(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<User>({
       path: "users/",

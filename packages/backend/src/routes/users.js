@@ -11,11 +11,9 @@ import {
   User,
   User_Profile_Image,
   FCMToken,
-  Session,
   Recipe,
   Label,
   Image,
-  Message,
   Friendship,
   ProfileItem,
 } from "../models";
@@ -25,8 +23,6 @@ import * as SessionService from "../services/sessions.js";
 import * as MiddlewareService from "../services/middleware.js";
 import * as UtilService from "../services/util.js";
 import * as SubscriptionService from "../services/subscriptions.js";
-import { sendWelcome } from "../services/email/welcome.ts";
-import { sendPasswordReset } from "../services/email/passwordReset.ts";
 import { getFriendships } from "../utils/getFriendships.js";
 
 import * as SharedUtils from "@recipesage/util/shared";
@@ -496,76 +492,6 @@ router.get(
   }),
 );
 
-router.get(
-  "/stats",
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  MiddlewareService.validateUser,
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const userId = res.locals.session.userId;
-
-    const recipeCount = await Recipe.count({
-      where: {
-        userId,
-      },
-    });
-
-    const recipeImageCount = await Recipe.count({
-      where: {
-        userId,
-      },
-      include: [
-        {
-          model: Image,
-          as: "images",
-          required: true,
-        },
-      ],
-    });
-
-    const messageCount = await Message.count({
-      where: {
-        [Op.or]: [
-          {
-            toUserId: userId,
-          },
-          {
-            fromUserId: userId,
-          },
-        ],
-      },
-    });
-
-    res.status(200).json({
-      recipeCount,
-      recipeImageCount,
-      messageCount,
-      createdAt: res.locals.user.createdAt,
-      lastLogin: res.locals.user.lastLogin,
-    });
-  }),
-);
-
-/* Get public user listing by email */
-router.get(
-  "/by-email",
-  cors(),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const user = await User.findOne({
-      where: {
-        email: UtilService.sanitizeEmail(req.query.email),
-      },
-      attributes: ["id", "name", "handle"],
-    });
-
-    if (!user) {
-      throw NotFound("No user with that email!");
-    }
-
-    res.status(200).json(user);
-  }),
-);
-
 /* Log in user */
 router.post(
   "/login",
@@ -612,211 +538,6 @@ router.post(
 
     res.status(200).json({
       token,
-    });
-  }),
-);
-
-/* Register as a user */
-router.post(
-  "/register",
-  cors(),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    if (process.env.DISABLE_REGISTRATION === "true")
-      throw new Error("Registration is disabled");
-
-    const sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
-
-    const token = await sequelize.transaction(async (transaction) => {
-      if (!UtilService.validateEmail(sanitizedEmail)) {
-        const e = new Error("Email is not valid!");
-        e.status = 412;
-        throw e;
-      }
-
-      if (!UtilService.validatePassword(req.body.password)) {
-        const e = new Error("Password is not valid!");
-        e.status = 411;
-        throw e;
-      }
-
-      const user = await User.findOne({
-        where: {
-          email: sanitizedEmail,
-        },
-        attributes: ["id"],
-        transaction,
-      });
-
-      if (user) {
-        const e = new Error("Account with that email address already exists!");
-        e.status = 406;
-        throw e;
-      }
-
-      const hashedPasswordData = User.generateHashedPassword(req.body.password);
-
-      const newUser = await User.create(
-        {
-          name: (req.body.name || sanitizedEmail).trim(),
-          email: sanitizedEmail,
-          passwordHash: hashedPasswordData.hash,
-          passwordSalt: hashedPasswordData.salt,
-          passwordVersion: hashedPasswordData.version,
-        },
-        {
-          transaction,
-        },
-      );
-
-      const session = await SessionService.generateSession(
-        newUser.id,
-        "user",
-        transaction,
-      );
-
-      return session.token;
-    });
-
-    res.status(200).json({
-      token,
-    });
-
-    sendWelcome([sanitizedEmail], []).catch((err) => {
-      Sentry.captureException(err);
-    });
-  }),
-);
-
-/* Forgot password */
-router.post(
-  "/forgot",
-  cors(),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const standardStatus = 200;
-    const standardResponse = {
-      msg: "",
-    };
-
-    let origin;
-    if (process.env.NODE_ENV === "production") {
-      origin = "https://recipesage.com";
-    } else {
-      // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
-      origin = req.get("origin");
-    }
-
-    const user = await User.findOne({
-      where: {
-        email: UtilService.sanitizeEmail(req.body.email),
-      },
-    });
-
-    if (!user) {
-      res.status(standardStatus).json(standardResponse);
-    }
-
-    const session = await SessionService.generateSession(user.id, "user");
-
-    const link = `${origin}/#/settings/account?token=${session.token}`;
-
-    await sendPasswordReset([user.email], [], { resetLink: link });
-
-    res.status(standardStatus).json(standardResponse);
-  }),
-);
-
-/* Update user */
-router.put(
-  "/",
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  MiddlewareService.validateUser,
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const updatedUser = await sequelize.transaction(async (transaction) => {
-      const updates = {};
-
-      if (req.body.password) {
-        if (!UtilService.validatePassword(req.body.password)) {
-          throw PreconditionFailed("Password is not valid!");
-        }
-
-        const hashedPasswordData = User.generateHashedPassword(
-          req.body.password,
-        );
-
-        updates.passwordHash = hashedPasswordData.hash;
-        updates.passwordSalt = hashedPasswordData.salt;
-        updates.passwordVersion = hashedPasswordData.version;
-
-        await FCMToken.destroy({
-          where: {
-            userId: res.locals.session.userId,
-          },
-          transaction,
-        });
-
-        await Session.destroy({
-          where: {
-            userId: res.locals.session.userId,
-          },
-          transaction,
-        });
-      }
-
-      if (req.body.email) {
-        const sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
-
-        if (!UtilService.validateEmail(sanitizedEmail)) {
-          throw PreconditionFailed("Email is not valid!");
-        }
-
-        const existingUserWithEmail = await User.findOne({
-          where: {
-            id: { [Op.ne]: res.locals.session.userId },
-            email: sanitizedEmail,
-          },
-          attributes: ["id"],
-          transaction,
-        });
-
-        if (existingUserWithEmail) {
-          const e = new Error(
-            "Account with that email address already exists!",
-          );
-          e.status = 406;
-          throw e;
-        }
-
-        updates.email = sanitizedEmail;
-      }
-
-      if (
-        req.body.name &&
-        typeof req.body.name === "string" &&
-        req.body.name.length > 0
-      ) {
-        updates.name = req.body.name;
-      }
-
-      const updatedUser = await User.update(updates, {
-        where: {
-          id: res.locals.session.userId,
-        },
-        returning: true,
-        transaction,
-      });
-
-      return updatedUser;
-    });
-
-    const { id, name, email, createdAt, updatedAt } = updatedUser;
-
-    res.status(200).json({
-      id,
-      name,
-      email,
-      createdAt,
-      updatedAt,
     });
   }),
 );
