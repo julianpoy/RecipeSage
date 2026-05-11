@@ -47,6 +47,7 @@ const otelMiddleware = t.middleware(async ({ path, next }) => {
  * that can be used throughout the router
  */
 export const router = t.router;
+export const createCallerFactory = t.createCallerFactory;
 export const publicProcedure = t.procedure
   .use(otelMiddleware)
   .use(sentryMiddleware);

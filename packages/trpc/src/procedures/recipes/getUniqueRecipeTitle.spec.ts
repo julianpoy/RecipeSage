@@ -1,86 +1,73 @@
-import { trpcSetup, tearDown } from "../../testutils";
-import { recipeFactory } from "../../factories/recipeFactory";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { recipeFactory } from "@recipesage/util/server/general";
+import { test } from "../../testutils";
 
 describe("getUniqueRecipeTitle", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("gets a unique recipe title", async () => {
+    test("appends a numeric suffix when the title is taken", async ({
+      trpc,
+      user,
+    }) => {
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
-          title: "Spagetti",
+          title: "Spaghetti",
         },
       });
 
-      const response = await trpc.recipes.getUniqueRecipeTitle.query({
-        title: "Spagetti",
+      const response = await trpc.recipes.getUniqueRecipeTitle({
+        title: "Spaghetti",
       });
-      expect(response).toEqual("Spagetti (1)");
+      expect(response).toEqual("Spaghetti (1)");
 
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
-          title: "Spagetti (1)",
+          title: "Spaghetti (1)",
         },
       });
-      const response2 = await trpc.recipes.getUniqueRecipeTitle.query({
-        title: "Spagetti",
+      const response2 = await trpc.recipes.getUniqueRecipeTitle({
+        title: "Spaghetti",
+      });
+      expect(response2).toEqual("Spaghetti (2)");
+    });
+
+    test("ignores recipes whose ids are passed in ignoreIds", async ({
+      trpc,
+      user,
+    }) => {
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          title: "Spaghetti with meatballs",
+        },
+      });
+      const ignored = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          title: "Spaghetti with meatballs (1)",
+        },
       });
 
-      expect(response2).toEqual("Spagetti (2)");
-    });
-  });
-
-  it("gets a unique recipe title with ignoring ID", async () => {
-    await prisma.recipe.create({
-      data: {
-        ...recipeFactory(user.id),
-        title: "Spagetti with meatballs",
-      },
+      const response = await trpc.recipes.getUniqueRecipeTitle({
+        title: "Spaghetti with meatballs",
+        ignoreIds: [ignored.id],
+      });
+      expect(response).toEqual("Spaghetti with meatballs (1)");
     });
 
-    const recipe2 = await prisma.recipe.create({
-      data: {
-        ...recipeFactory(user.id),
-        title: "Spagetti with meatballs (1)",
-      },
-    });
-    const response2 = await trpc.recipes.getUniqueRecipeTitle.query({
-      title: "Spagetti with meatballs",
-      ignoreIds: [recipe2.id],
-    });
-    expect(response2).toEqual("Spagetti with meatballs (1)");
-  });
+    test("scopes uniqueness to the calling user", async ({ trpc, user2 }) => {
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user2.id),
+          title: "Spaghetti with tomatoes",
+        },
+      });
 
-  it("seperate recipies by user", async () => {
-    const { user: user2, user2: user3 } = await trpcSetup();
-    await prisma.recipe.create({
-      data: {
-        ...recipeFactory(user2.id),
-        title: "Spagetti with tomatos",
-      },
+      const response = await trpc.recipes.getUniqueRecipeTitle({
+        title: "Spaghetti with tomatoes",
+      });
+      expect(response).toEqual("Spaghetti with tomatoes");
     });
-
-    const response = await trpc.recipes.getUniqueRecipeTitle.query({
-      title: "Spagetti with tomatos",
-    });
-    expect(response).toEqual("Spagetti with tomatos");
-
-    return tearDown(user2.id, user3.id);
   });
 });

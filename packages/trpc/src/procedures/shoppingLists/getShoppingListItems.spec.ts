@@ -1,26 +1,10 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
 import { faker } from "@faker-js/faker";
+import { test } from "../../testutils";
 
 describe("getShoppingListItems", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-  let trpc2: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("gets shopping list items as the owner", async () => {
+    test("gets shopping list items as the owner", async ({ trpc, user }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -37,7 +21,7 @@ describe("getShoppingListItems", () => {
         },
       });
 
-      const response = await trpc.shoppingLists.getShoppingListItems.query({
+      const response = await trpc.shoppingLists.getShoppingListItems({
         shoppingListId: shoppingList.id,
       });
 
@@ -45,7 +29,10 @@ describe("getShoppingListItems", () => {
       expect(response[0].title).toEqual("Apples");
     });
 
-    it("returns items ordered by createdAt descending", async () => {
+    test("returns items ordered by createdAt descending", async ({
+      trpc,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -73,7 +60,7 @@ describe("getShoppingListItems", () => {
         },
       });
 
-      const response = await trpc.shoppingLists.getShoppingListItems.query({
+      const response = await trpc.shoppingLists.getShoppingListItems({
         shoppingListId: shoppingList.id,
       });
 
@@ -82,7 +69,11 @@ describe("getShoppingListItems", () => {
       expect(response[1].title).toEqual("Apples");
     });
 
-    it("gets shopping list items as a collaborator", async () => {
+    test("gets shopping list items as a collaborator", async ({
+      trpc2,
+      user,
+      user2,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -104,14 +95,17 @@ describe("getShoppingListItems", () => {
         },
       });
 
-      const response = await trpc2.shoppingLists.getShoppingListItems.query({
+      const response = await trpc2.shoppingLists.getShoppingListItems({
         shoppingListId: shoppingList.id,
       });
       expect(response.length).toEqual(1);
       expect(response[0].title).toEqual("Apples");
     });
 
-    it("returns an empty array when the shopping list has no items", async () => {
+    test("returns an empty array when the shopping list has no items", async ({
+      trpc,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -119,7 +113,7 @@ describe("getShoppingListItems", () => {
         },
       });
 
-      const response = await trpc.shoppingLists.getShoppingListItems.query({
+      const response = await trpc.shoppingLists.getShoppingListItems({
         shoppingListId: shoppingList.id,
       });
       expect(response.length).toEqual(0);
@@ -127,15 +121,18 @@ describe("getShoppingListItems", () => {
   });
 
   describe("error", () => {
-    it("throws when shopping list not found", async () => {
-      return expect(async () => {
-        await trpc.shoppingLists.getShoppingListItems.query({
+    test("throws when the shopping list does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.shoppingLists.getShoppingListItems({
           shoppingListId: "00000000-0c70-4718-aacc-05add19096b5",
-        });
-      }).rejects.toThrow("Shopping list not found or you do not have access");
+        }),
+      ).rejects.toThrow("Shopping list not found or you do not have access");
     });
 
-    it("throws when user has no access to the shopping list", async () => {
+    test("throws when the user has no access to the shopping list", async ({
+      trpc2,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -143,11 +140,11 @@ describe("getShoppingListItems", () => {
         },
       });
 
-      await expect(async () => {
-        await trpc2.shoppingLists.getShoppingListItems.query({
+      await expect(
+        trpc2.shoppingLists.getShoppingListItems({
           shoppingListId: shoppingList.id,
-        });
-      }).rejects.toThrow("Shopping list not found or you do not have access");
+        }),
+      ).rejects.toThrow("Shopping list not found or you do not have access");
     });
   });
 });

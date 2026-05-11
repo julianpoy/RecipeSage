@@ -1,56 +1,38 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("createMealPlan", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("creates a meal plan", async () => {
-      const collaboratorUsers = [user2];
-      const response = await prisma.mealPlan.create({
-        data: {
-          title: "Protein",
-          userId: user.id,
-          collaboratorUsers: {
-            createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
-            },
-          },
-        },
+    test("creates a meal plan with collaborators", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      const response = await trpc.mealPlans.createMealPlan({
+        title: "Protein",
+        collaboratorUserIds: [user2.id],
       });
-      expect(typeof response?.id).toBe("string");
 
-      const updatedMealPlan = await prisma.mealPlan.findUnique({
-        where: {
-          id: response.id,
-        },
+      const mealPlan = await prisma.mealPlan.findUnique({
+        where: { id: response.id },
+        include: { collaboratorUsers: true },
       });
-      expect(updatedMealPlan?.title).toEqual("Protein");
+      expect(mealPlan?.title).toEqual("Protein");
+      expect(mealPlan?.userId).toEqual(user.id);
+      expect(mealPlan?.collaboratorUsers.map((c) => c.userId)).toEqual([
+        user2.id,
+      ]);
     });
   });
+
   describe("error", () => {
-    it("must throw on meal plan not found", async () => {
-      return expect(async () => {
-        await trpc.mealPlans.createMealPlan.mutate({
+    test("throws when a collaborator user id is invalid", async ({ trpc }) => {
+      await expect(
+        trpc.mealPlans.createMealPlan({
           title: "Protein",
           collaboratorUserIds: ["00000ca5-50e7-4144-bc11-e82925837a14"],
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "One or more of the collaborators you specified are not valid",
       );
     });

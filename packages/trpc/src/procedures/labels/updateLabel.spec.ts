@@ -1,24 +1,9 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
-describe("updateslabel", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeEach(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterEach(() => {
-    return tearDown(user.id, user2.id);
-  });
-
+describe("updateLabel", () => {
   describe("success", () => {
-    it("updates label", async () => {
+    test("updates the label", async ({ trpc, user }) => {
       const label = await prisma.label.create({
         data: {
           userId: user.id,
@@ -26,42 +11,44 @@ describe("updateslabel", () => {
         },
       });
 
-      await trpc.labels.updateLabel.mutate({
+      await trpc.labels.updateLabel({
         id: label.id,
         title: "fish",
         labelGroupId: null,
       });
 
       const updatedLabel = await prisma.label.findUnique({
-        where: {
-          id: label.id,
-        },
+        where: { id: label.id },
       });
       expect(updatedLabel?.title).toEqual("fish");
     });
   });
 
   describe("error", () => {
-    it("throws on conflicting label title", async () => {
-      return expect(async () => {
-        const label = await prisma.label.create({
-          data: {
-            userId: user.id,
-            title: "meat",
-          },
-        });
-        await prisma.label.create({
-          data: {
-            userId: user.id,
-            title: "fish",
-          },
-        });
-        await trpc.labels.updateLabel.mutate({
+    test("throws when another label already has the new title", async ({
+      trpc,
+      user,
+    }) => {
+      const label = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "meat",
+        },
+      });
+      await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "fish",
+        },
+      });
+
+      await expect(
+        trpc.labels.updateLabel({
           id: label.id,
           title: "fish",
           labelGroupId: null,
-        });
-      }).rejects.toThrow("Conflicting label title");
+        }),
+      ).rejects.toThrow("Conflicting label title");
     });
   });
 });

@@ -1,42 +1,19 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("createLabel", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("creates a label with all parameters provided", async () => {
-      const label = await trpc.labels.createLabel.mutate({
+    test("creates a label", async ({ trpc, user }) => {
+      const response = await trpc.labels.createLabel({
         title: "diners",
         labelGroupId: null,
       });
-      expect(typeof label.id).toBe("string");
-      const response = await prisma.label.findFirst({
-        where: {
-          id: label.id,
-        },
-      });
-      expect(typeof response?.id).toBe("string");
 
-      const updatedLabel = await prisma.label.findUnique({
-        where: {
-          id: label.id,
-        },
+      const label = await prisma.label.findUnique({
+        where: { id: response.id },
       });
-      expect(updatedLabel?.title).toEqual("diners");
+      expect(label?.title).toEqual("diners");
+      expect(label?.userId).toEqual(user.id);
     });
   });
 });

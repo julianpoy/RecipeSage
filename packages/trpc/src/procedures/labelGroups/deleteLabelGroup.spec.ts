@@ -1,24 +1,9 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("deleteLabelGroup", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("deletes a label group with all parameters provided", async () => {
+    test("deletes a label group", async ({ trpc, user }) => {
       const labelGroup = await prisma.labelGroup.create({
         data: {
           title: "soup",
@@ -26,33 +11,25 @@ describe("deleteLabelGroup", () => {
           warnWhenNotPresent: true,
         },
       });
-      const labelGroupD = await trpc.labelGroups.deleteLabelGroup.mutate({
+
+      await trpc.labelGroups.deleteLabelGroup({
         id: labelGroup.id,
       });
 
-      const updatedLabelGroup = await prisma.labelGroup.findUnique({
-        where: {
-          id: labelGroupD.id,
-        },
+      const deletedLabelGroup = await prisma.labelGroup.findUnique({
+        where: { id: labelGroup.id },
       });
-      expect(updatedLabelGroup).toEqual(null);
+      expect(deletedLabelGroup).toEqual(null);
     });
   });
 
   describe("error", () => {
-    it("must throw on label group not found", async () => {
-      await prisma.labelGroup.create({
-        data: {
-          title: "Fish",
-          userId: user.id,
-          warnWhenNotPresent: true,
-        },
-      });
-      return expect(async () => {
-        await trpc.labelGroups.deleteLabelGroup.mutate({
+    test("throws when the label group does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.labelGroups.deleteLabelGroup({
           id: "00000ca5-50e7-4144-bc11-e82925837a14",
-        });
-      }).rejects.toThrow("Label group not found");
+        }),
+      ).rejects.toThrow("Label group not found");
     });
   });
 });

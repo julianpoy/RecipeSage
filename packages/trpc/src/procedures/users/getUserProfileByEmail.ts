@@ -26,7 +26,7 @@ export const getUserProfileByEmail = publicProcedure
 
     const profile = await prisma.user.findFirst({
       where: {
-        email: input.email,
+        email: input.email.toLowerCase(),
       },
       ...userPublic,
     });

@@ -17,7 +17,7 @@ import { assistantRouter } from "./procedures/assistant/assistantRouter";
 import { paymentsRouter } from "./procedures/payments/paymentsRouter";
 import { imagesRouter } from "./procedures/images/imagesRouter";
 
-const appRouter = router({
+export const appRouter = router({
   labelGroups: labelGroupsRouter,
   labels: labelsRouter,
   payments: paymentsRouter,

@@ -1,66 +1,48 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("createMealPlanItem", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("creates a meal plan item", async () => {
-      const collaboratorUsers = [user2];
+    test("creates a meal plan item", async ({ trpc, user, user2 }) => {
       const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
           collaboratorUsers: {
             createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+              data: [{ userId: user2.id }],
             },
           },
         },
       });
-      expect(typeof mealPlan?.id).toBe("string");
-      const mealPlanItem = await trpc.mealPlans.createMealPlanItem.mutate({
+
+      const response = await trpc.mealPlans.createMealPlanItem({
         mealPlanId: mealPlan.id,
         title: "Protein",
         scheduledDate: "2024-05-26",
         meal: "dinner",
         recipeId: null,
       });
-      expect(typeof mealPlanItem?.id).toBe("string");
-      const updatedMealPlanItem = await prisma.mealPlanItem.findUnique({
-        where: {
-          id: mealPlanItem.id,
-        },
+
+      const mealPlanItem = await prisma.mealPlanItem.findUnique({
+        where: { id: response.id },
       });
-      expect(updatedMealPlanItem?.title).toEqual("Protein");
+      expect(mealPlanItem?.title).toEqual("Protein");
+      expect(mealPlanItem?.mealPlanId).toEqual(mealPlan.id);
     });
   });
+
   describe("error", () => {
-    it("must throw on meal plan not found", async () => {
-      return expect(async () => {
-        await trpc.mealPlans.createMealPlanItem.mutate({
+    test("throws when the meal plan does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.mealPlans.createMealPlanItem({
           mealPlanId: "00008495-d189-4a99-98bb-8888442de945",
           title: "Protein",
           scheduledDate: "2024-05-26",
           meal: "dinner",
           recipeId: null,
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "Meal plan with that id does not exist or you do not have access",
       );
     });

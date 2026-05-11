@@ -1,83 +1,69 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("updateMealPlan", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("updates a meal plan", async () => {
-      const collaboratorUsers = [user2];
-      const createdMealPlan = await prisma.mealPlan.create({
+    test("updates the meal plan's title", async ({ trpc, user, user2 }) => {
+      const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
           collaboratorUsers: {
             createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+              data: [{ userId: user2.id }],
             },
           },
         },
       });
-      const response = await trpc.mealPlans.updateMealPlan.mutate({
+
+      await trpc.mealPlans.updateMealPlan({
         title: "not protein",
-        id: createdMealPlan.id,
+        id: mealPlan.id,
         collaboratorUserIds: [user2.id],
       });
+
       const updatedMealPlan = await prisma.mealPlan.findUnique({
-        where: {
-          id: response.id,
-        },
+        where: { id: mealPlan.id },
       });
       expect(updatedMealPlan?.title).toEqual("not protein");
     });
   });
+
   describe("error", () => {
-    it("throws when meal plan not found", async () => {
-      return expect(async () => {
-        await trpc.mealPlans.updateMealPlan.mutate({
+    test("throws when the meal plan does not exist", async ({ trpc, user }) => {
+      await expect(
+        trpc.mealPlans.updateMealPlan({
           id: "00000000-0c70-4718-aacc-05add19096b5",
           title: "Protein",
           collaboratorUserIds: [user.id],
-        });
-      }).rejects.toThrow("Meal plan not found or you do not own it");
+        }),
+      ).rejects.toThrow("Meal plan not found or you do not own it");
     });
-    it("must throw on meal plan not owned", async () => {
-      const collaboratorUsers = [user2];
-      await prisma.mealPlan.create({
+
+    test("throws when the calling user is only a collaborator", async ({
+      trpc2,
+      user,
+      user2,
+    }) => {
+      const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
           collaboratorUsers: {
             createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+              data: [{ userId: user2.id }],
             },
           },
         },
       });
-      return expect(async () => {
-        await trpc.mealPlans.updateMealPlan.mutate({
-          id: user2.id,
+
+      await expect(
+        trpc2.mealPlans.updateMealPlan({
+          id: mealPlan.id,
           title: "Protein",
           collaboratorUserIds: [user2.id],
-        });
-      }).rejects.toThrow("Meal plan not found or you do not own it");
+        }),
+      ).rejects.toThrow("Meal plan not found or you do not own it");
     });
   });
 });

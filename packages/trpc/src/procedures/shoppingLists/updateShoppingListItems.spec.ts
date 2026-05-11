@@ -1,26 +1,10 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
 import { faker } from "@faker-js/faker";
+import { test } from "../../testutils";
 
 describe("updateShoppingListItems", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-  let trpc2: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("updates multiple shopping list items", async () => {
+    test("updates multiple shopping list items", async ({ trpc, user }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -46,7 +30,7 @@ describe("updateShoppingListItems", () => {
         },
       });
 
-      await trpc.shoppingLists.updateShoppingListItems.mutate({
+      await trpc.shoppingLists.updateShoppingListItems({
         shoppingListId: shoppingList.id,
         items: [
           {
@@ -75,7 +59,10 @@ describe("updateShoppingListItems", () => {
   });
 
   describe("error", () => {
-    it("throws when one of the items does not exist", async () => {
+    test("throws when one of the items does not exist", async ({
+      trpc,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -92,8 +79,8 @@ describe("updateShoppingListItems", () => {
         },
       });
 
-      await expect(async () => {
-        await trpc.shoppingLists.updateShoppingListItems.mutate({
+      await expect(
+        trpc.shoppingLists.updateShoppingListItems({
           shoppingListId: shoppingList.id,
           items: [
             { id: item.id, title: "Pears" },
@@ -102,13 +89,16 @@ describe("updateShoppingListItems", () => {
               title: "Bread",
             },
           ],
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "One or more of the items you've passed do not exist, or do not belong to the shopping list id",
       );
     });
 
-    it("throws when an item belongs to a different shopping list", async () => {
+    test("throws when an item belongs to a different shopping list", async ({
+      trpc,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -131,17 +121,20 @@ describe("updateShoppingListItems", () => {
         },
       });
 
-      await expect(async () => {
-        await trpc.shoppingLists.updateShoppingListItems.mutate({
+      await expect(
+        trpc.shoppingLists.updateShoppingListItems({
           shoppingListId: shoppingList.id,
           items: [{ id: otherItem.id, title: "Pears" }],
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "One or more of the items you've passed do not exist, or do not belong to the shopping list id",
       );
     });
 
-    it("throws when user does not have access to the shopping list", async () => {
+    test("throws when the user does not have access to the shopping list", async ({
+      trpc2,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -158,12 +151,12 @@ describe("updateShoppingListItems", () => {
         },
       });
 
-      await expect(async () => {
-        await trpc2.shoppingLists.updateShoppingListItems.mutate({
+      await expect(
+        trpc2.shoppingLists.updateShoppingListItems({
           shoppingListId: shoppingList.id,
           items: [{ id: item.id, title: "Pears" }],
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "Shopping list with that id does not exist or you do not have access",
       );
     });

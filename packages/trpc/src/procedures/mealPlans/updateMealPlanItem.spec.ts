@@ -1,39 +1,20 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("updateMealPlanItem", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("updates a meal plan item", async () => {
-      const collaboratorUsers = [user2];
+    test("updates a meal plan item", async ({ trpc, user, user2 }) => {
       const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
           collaboratorUsers: {
             createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+              data: [{ userId: user2.id }],
             },
           },
         },
       });
-      expect(typeof mealPlan?.id).toBe("string");
       const mealPlanItem = await prisma.mealPlanItem.create({
         data: {
           userId: user.id,
@@ -44,47 +25,33 @@ describe("updateMealPlanItem", () => {
           recipeId: null,
         },
       });
-      const mealPlanItemU = await trpc.mealPlans.updateMealPlanItem.mutate({
+
+      await trpc.mealPlans.updateMealPlanItem({
         id: mealPlanItem.id,
         title: "NoProtein",
         scheduledDate: "2024-05-28",
         meal: "dinner",
         recipeId: null,
       });
+
       const updatedMealPlanItem = await prisma.mealPlanItem.findUnique({
-        where: {
-          id: mealPlanItemU.id,
-        },
+        where: { id: mealPlanItem.id },
       });
       expect(updatedMealPlanItem?.title).toEqual("NoProtein");
     });
+  });
 
-    describe("error", () => {
-      it("must throw on meal plan not found", async () => {
-        const collaboratorUsers = [user2];
-        await prisma.mealPlan.create({
-          data: {
-            title: "Protein",
-            userId: user.id,
-            collaboratorUsers: {
-              createMany: {
-                data: collaboratorUsers.map((collaboratorUser) => ({
-                  userId: collaboratorUser.id,
-                })),
-              },
-            },
-          },
-        });
-        return expect(async () => {
-          await trpc.mealPlans.updateMealPlanItem.mutate({
-            id: "00000ca5-50e7-4144-bc11-e82925837a14",
-            title: "NoProtein",
-            scheduledDate: "2024-05-28",
-            meal: "dinner",
-            recipeId: null,
-          });
-        }).rejects.toThrow("NOT_FOUND");
-      });
+  describe("error", () => {
+    test("throws when the meal plan item does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.mealPlans.updateMealPlanItem({
+          id: "00000ca5-50e7-4144-bc11-e82925837a14",
+          title: "NoProtein",
+          scheduledDate: "2024-05-28",
+          meal: "dinner",
+          recipeId: null,
+        }),
+      ).rejects.toThrow("NOT_FOUND");
     });
   });
 });

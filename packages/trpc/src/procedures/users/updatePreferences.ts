@@ -9,6 +9,7 @@ import {
   ManageLabelsPreferenceKey,
   MealPlanPreferenceKey,
   MealPlanStartOfWeekOptions,
+  MealPlanViewTypeOptions,
   MyRecipesIncludeFriendsOptions,
   MyRecipesPreferenceKey,
   MyRecipesSortOptions,
@@ -67,6 +68,7 @@ export const updatePreferences = publicProcedure
       [MealPlanPreferenceKey.StartOfWeek]: z.nativeEnum(
         MealPlanStartOfWeekOptions,
       ),
+      [MealPlanPreferenceKey.ViewType]: z.nativeEnum(MealPlanViewTypeOptions),
 
       [ShoppingListPreferenceKey.SortBy]: z.nativeEnum(ShoppingListSortOptions),
       [ShoppingListPreferenceKey.ShowAddedBy]: z.boolean(),
