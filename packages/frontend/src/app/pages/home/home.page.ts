@@ -240,7 +240,7 @@ export class HomePage implements OnDestroy {
   }
 
   ionViewWillEnter() {
-    window.addEventListener("resize", this.updateTileColCount);
+    window.addEventListener("resize", this.onWindowResize);
     this.events.subscribe(
       EventName.ApplicationSplitPaneChanged,
       this.updateTileColCount,
@@ -282,12 +282,25 @@ export class HomePage implements OnDestroy {
   }
 
   ionViewWillLeave() {
-    window.removeEventListener("resize", this.updateTileColCount);
+    window.removeEventListener("resize", this.onWindowResize);
     this.events.unsubscribe(
       EventName.ApplicationSplitPaneChanged,
       this.updateTileColCount,
     );
+    if (this.resizeFrame !== null) {
+      cancelAnimationFrame(this.resizeFrame);
+      this.resizeFrame = null;
+    }
   }
+
+  private resizeFrame: number | null = null;
+  private onWindowResize = () => {
+    if (this.resizeFrame !== null) return;
+    this.resizeFrame = requestAnimationFrame(() => {
+      this.resizeFrame = null;
+      this.updateTileColCount();
+    });
+  };
 
   onWSEvent = (data: Record<string, string>) => {
     if (data.recipe && this.folder === "inbox") {
@@ -397,9 +410,13 @@ export class HomePage implements OnDestroy {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
+      const previousLabels = this.selectedLabels;
       this.selectedLabels = this.selectedLabels.filter(
         (e) => labelNames.has(e) || e === "unlabeled",
       );
+      if (this.selectedLabels.length !== previousLabels.length) {
+        this.syncFiltersToUrl();
+      }
 
       return this.resetAndLoadRecipes(scrollToLastPosition);
     });
@@ -415,17 +432,25 @@ export class HomePage implements OnDestroy {
     this.loading = true;
     this.resetRecipes();
 
-    await this._resetAndLoadRecipes(scrollToLastPosition);
-    if (this.recipeLoadGeneration !== generation) return;
-    this.loading = false;
+    try {
+      await this._resetAndLoadRecipes(scrollToLastPosition);
+    } finally {
+      if (this.recipeLoadGeneration === generation) {
+        this.loading = false;
+      }
+    }
   }
 
   async _resetAndLoadRecipes(scrollToLastPosition?: boolean) {
+    const generation = this.recipeLoadGeneration;
+
     if (this.searchText && this.searchText.trim().length > 0) {
-      await this.search(this.searchText, this.recipeLoadGeneration);
+      await this.search(this.searchText, generation);
     } else {
       await this.loadRecipes(0);
     }
+
+    if (this.recipeLoadGeneration !== generation) return;
 
     const startIndex = scrollToLastPosition
       ? (this.datasource.adapter.firstVisible.$index ?? 0)
@@ -554,7 +579,21 @@ export class HomePage implements OnDestroy {
     labelIdx > -1
       ? this.selectedLabels.splice(labelIdx, 1)
       : this.selectedLabels.push(labelTitle);
+    this.syncFiltersToUrl();
     this.resetAndLoadRecipes();
+  }
+
+  private syncFiltersToUrl() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        labels: this.selectedLabels.length
+          ? this.selectedLabels.join(",")
+          : null,
+      },
+      queryParamsHandling: "merge",
+      replaceUrl: true,
+    });
   }
 
   openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
@@ -781,8 +820,9 @@ export class HomePage implements OnDestroy {
     const recipeNames = this.selectedRecipeIds
       .map(
         (recipeId) =>
-          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title,
+          this.recipes.find((recipe) => recipe?.id === recipeId)?.title,
       )
+      .filter((title): title is string => !!title)
       .join(", ");
 
     const header = await this.translate
@@ -808,15 +848,17 @@ export class HomePage implements OnDestroy {
           cssClass: "alertDanger",
           handler: async () => {
             const loading = this.loadingService.start();
-            const response =
-              await this.serverActionsService.recipes.deleteRecipesByIds({
-                ids: this.selectedRecipeIds,
-              });
-            if (!response) return loading.dismiss();
-            this.clearSelectedRecipes();
-
-            this.resetAndLoadAll();
-            loading.dismiss();
+            try {
+              const response =
+                await this.serverActionsService.recipes.deleteRecipesByIds({
+                  ids: this.selectedRecipeIds,
+                });
+              if (!response) return;
+              this.clearSelectedRecipes();
+              await this.resetAndLoadAll();
+            } finally {
+              loading.dismiss();
+            }
           },
         },
       ],
@@ -873,6 +915,7 @@ export class HomePage implements OnDestroy {
 
     if (data.selectedLabels) this.selectedLabels = data.selectedLabels;
     if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
+    this.syncFiltersToUrl();
     if (data.refreshSearch) this.resetAndLoadAll();
   }
 }
