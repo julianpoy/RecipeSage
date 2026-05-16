@@ -134,11 +134,11 @@
     "typesense": "^3.0.1",
     "unitz-ts": "^1.0.1",
     "uuid": "^14.0.0",
-    "workbox-core": "^7.4.0",
-    "workbox-expiration": "^7.4.0",
-    "workbox-precaching": "^7.4.0",
-    "workbox-routing": "^7.4.0",
-    "workbox-strategies": "^7.4.0",
+    "workbox-core": "^7.4.1",
+    "workbox-expiration": "^7.4.1",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1",
+    "workbox-strategies": "^7.4.1",
     "xml-js": "^1.6.11",
     "yauzl-promise": "^4.0.0",
     "zip-stream": "^7.0.2",
@@ -229,7 +229,7 @@
     "vitest": "4.0.18",
     "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
-    "workbox-cli": "^7.4.0"
+    "workbox-cli": "^7.4.1"
   },
   "prisma": {
     "schema": "packages/prisma/src/prisma/schema.prisma"
