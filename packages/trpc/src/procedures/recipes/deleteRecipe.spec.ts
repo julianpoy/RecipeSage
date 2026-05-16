@@ -1,93 +1,53 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
-import { faker } from "@faker-js/faker";
+import { recipeFactory } from "@recipesage/util/server/general";
+import { test } from "../../testutils";
 
 describe("deleteRecipe", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("deletes a recipe", async () => {
+    test("deletes a recipe", async ({ trpc, user }) => {
       const recipe = await prisma.recipe.create({
         data: {
-          userId: user.id,
-          title: faker.string.alphanumeric(10),
-          description: faker.string.alphanumeric(10),
-          yield: faker.string.alphanumeric(10),
+          ...recipeFactory(user.id),
           folder: "inbox",
-          activeTime: faker.string.alphanumeric(10),
-          totalTime: faker.string.alphanumeric(10),
-          source: faker.string.alphanumeric(10),
-          url: faker.string.alphanumeric(10),
-          notes: faker.string.alphanumeric(10),
-          ingredients: faker.string.alphanumeric(10),
-          instructions: faker.string.alphanumeric(10),
-          rating: faker.number.int({ min: 1, max: 5 }),
         },
       });
 
-      const response = await trpc.recipes.deleteRecipe.mutate({
+      await trpc.recipes.deleteRecipe({
         id: recipe.id,
       });
 
-      expect(response).toEqual("Ok");
-
-      const response2 = await prisma.recipe.findUnique({
-        where: {
-          id: recipe.id,
-        },
+      const deletedRecipe = await prisma.recipe.findUnique({
+        where: { id: recipe.id },
       });
-      expect(response2).toEqual(null);
+      expect(deletedRecipe).toEqual(null);
     });
   });
 
   describe("error", () => {
-    it("must throw on recipe not found", async () => {
-      return expect(async () => {
-        await trpc.recipes.deleteRecipe.mutate({
+    test("throws when the recipe does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.recipes.deleteRecipe({
           id: "00000000-0c70-4718-aacc-05add19096b5",
-        });
-      }).rejects.toThrow("Recipe not found");
+        }),
+      ).rejects.toThrow("Recipe not found");
     });
 
-    it("must throw on invalid ownership", async () => {
-      const { user: user2 } = await trpcSetup();
-
+    test("throws when the recipe belongs to another user", async ({
+      trpc,
+      user2,
+    }) => {
       const recipe = await prisma.recipe.create({
         data: {
-          userId: user2.id,
-          title: faker.string.alphanumeric(10),
-          description: faker.string.alphanumeric(10),
-          yield: faker.string.alphanumeric(10),
+          ...recipeFactory(user2.id),
           folder: "inbox",
-          activeTime: faker.string.alphanumeric(10),
-          totalTime: faker.string.alphanumeric(10),
-          source: faker.string.alphanumeric(10),
-          url: faker.string.alphanumeric(10),
-          notes: faker.string.alphanumeric(10),
-          ingredients: faker.string.alphanumeric(10),
-          instructions: faker.string.alphanumeric(10),
-          rating: faker.number.int({ min: 1, max: 5 }),
         },
       });
 
-      await expect(async () => {
-        await trpc.recipes.deleteRecipe.mutate({
+      await expect(
+        trpc.recipes.deleteRecipe({
           id: recipe.id,
-        });
-      }).rejects.toThrow("Recipe not found");
+        }),
+      ).rejects.toThrow("Recipe not found");
     });
   });
 });

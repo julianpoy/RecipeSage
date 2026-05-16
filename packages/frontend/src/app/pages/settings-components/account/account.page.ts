@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, EffectRef, effect, inject } from "@angular/core";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
@@ -66,7 +66,8 @@ export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   contributePath: string = RouteMap.ContributePage.getPath();
 
-  me: RouterOutputs["users"]["getMe"] | null = null;
+  private meQuery = this.serverActionsService.users.getMe();
+  me = this.meQuery.value;
 
   myStats: RouterOutputs["users"]["getMyStats"] | null = null;
 
@@ -96,53 +97,60 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
+    let meRef: EffectRef;
+    meRef = effect(() => {
+      const me = this.me();
+      if (!me) return;
+      meRef.destroy();
+
+      void (async () => {
+        if (resetToken) {
+          const lastUserId = await appIdbStorageManager.getLastSessionUserId();
+          if (lastUserId !== me.id) {
+            await appIdbStorageManager.deleteAllData();
+          }
+          await appIdbStorageManager.setSession({
+            userId: me.id,
+            email: me.email,
+            token: resetToken,
+          });
+        }
+
+        this.name = me.name;
+        this.email = me.email;
+      })();
+    });
+
     Promise.all([
-      this.serverActionsService.users.getMe(),
       this.serverActionsService.users.getMyStats(),
       this.serverActionsService.users.getMyCreditUsage(),
       this.capabilitiesService.updateCapabilities(),
-    ]).then(async ([me, myStats, myCreditUsage]) => {
-      loading.dismiss();
+    ])
+      .then(([myStats, myCreditUsage]) => {
+        if (!myStats || !myCreditUsage) return;
 
-      if (!me || !myStats || !myCreditUsage) return;
+        this.myStats = myStats;
+        this.myCreditUsage = myCreditUsage;
 
-      this.me = me;
-
-      if (resetToken) {
-        const lastUserId = await appIdbStorageManager.getLastSessionUserId();
-        if (lastUserId !== me.id) {
-          await appIdbStorageManager.deleteAllData();
-        }
-        await appIdbStorageManager.setSession({
-          userId: me.id,
-          email: me.email,
-          token: resetToken,
-        });
-      }
-
-      this.name = me.name;
-      this.email = me.email;
-
-      this.myStats = myStats;
-      this.myCreditUsage = myCreditUsage;
-
-      Object.entries(this.capabilitiesService.capabilities).map(
-        ([name, enabled]) => {
-          this.capabilitySubscriptions[name] = {
-            enabled,
-            expired: this.getExpiryForCapability(name).expired,
-            expires: this.getExpiryForCapability(name).expires,
-          };
-        },
-      );
-    });
+        Object.entries(this.capabilitiesService.capabilities).map(
+          ([name, enabled]) => {
+            this.capabilitySubscriptions[name] = {
+              enabled,
+              expired: this.getExpiryForCapability(name).expired,
+              expires: this.getExpiryForCapability(name).expires,
+            };
+          },
+        );
+      })
+      .finally(() => loading.dismiss());
   }
 
   getSubscriptionForCapability(capabilityName: string) {
-    if (!this.me || !this.me.subscriptions) return null;
+    const me = this.me();
+    if (!me || !me.subscriptions) return null;
 
     try {
-      const matchingSubscriptions = this.me.subscriptions
+      const matchingSubscriptions = me.subscriptions
         .filter((subscription) =>
           subscription.capabilities.includes(
             capabilityName as (typeof subscription.capabilities)[0],

@@ -1,4 +1,4 @@
-import { prisma, SessionDTO } from "@recipesage/prisma";
+import { prisma, SessionDTO, sessionDTOSchema } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { OAuth2Client } from "google-auth-library";
@@ -11,12 +11,23 @@ import {
 } from "@recipesage/util/server/general";
 
 export const signInWithGoogle = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/signInWithGoogle",
+      tags: ["users"],
+      summary:
+        "Authenticate with a Google ID token and receive a session token",
+    },
+  })
   .input(
     z.object({
       clientId: z.string(),
       credential: z.string(),
+      allowRegistration: z.boolean().default(true),
     }),
   )
+  .output(sessionDTOSchema)
   .mutation(async ({ input }) => {
     if (!config.google.gsi.clientId || !config.google.gsi.clientSecret) {
       throw new Error("GSI clientId or clientSecret missing");
@@ -44,6 +55,14 @@ export const signInWithGoogle = publicProcedure
         email: email.toLowerCase(),
       },
     });
+
+    if (!existingUser && !input.allowRegistration) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "An account with that email address was not found",
+      });
+    }
+
     const user = await prisma.user.upsert({
       where: {
         email: email.toLowerCase(),

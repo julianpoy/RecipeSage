@@ -16,7 +16,7 @@ import {
 } from "@recipesage/util/shared";
 import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
-import {
+import type {
   ShoppingListItemSummary,
   ShoppingListSummary,
 } from "@recipesage/prisma";
@@ -228,7 +228,7 @@ export class ShoppingListPopoverPage {
     const modal = await this.modalCtrl.create({
       component: UpdateShoppingListModalPage,
       componentProps: {
-        shoppingListId: this.shoppingListId,
+        shoppingList: this.shoppingList,
       },
     });
 

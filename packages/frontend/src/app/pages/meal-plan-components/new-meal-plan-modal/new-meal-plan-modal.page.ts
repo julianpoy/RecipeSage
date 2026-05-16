@@ -87,6 +87,7 @@ export class NewMealPlanModalPage {
 
     this.modalCtrl.dismiss({
       success: true,
+      id: result.id,
     });
     this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(result.id));
   }

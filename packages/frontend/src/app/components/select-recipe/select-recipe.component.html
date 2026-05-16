@@ -54,17 +54,19 @@
                       {{ "components.selectRecipe.select" | translate }}
                     </p>
                   </ion-label>
-                  @if (myProfile && myProfile.id !== recipe.userId) {
-                    <ion-badge>
-                      @if (friendsById && friendsById[recipe.userId]) {
-                        &commat;{{ friendsById[recipe.userId].handle }}
-                      }
-                      @if (!friendsById || !friendsById[recipe.userId]) {
-                        {{
-                          "pages.home.recipe.fromSharedCollection" | translate
-                        }}
-                      }
-                    </ion-badge>
+                  @if (myProfile(); as myProfileValue) {
+                    @if (myProfileValue.id !== recipe.userId) {
+                      <ion-badge>
+                        @if (friendsById && friendsById[recipe.userId]) {
+                          &commat;{{ friendsById[recipe.userId].handle }}
+                        }
+                        @if (!friendsById || !friendsById[recipe.userId]) {
+                          {{
+                            "pages.home.recipe.fromSharedCollection" | translate
+                          }}
+                        }
+                      </ion-badge>
+                    }
                   }
                 </ion-item>
               }

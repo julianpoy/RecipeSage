@@ -1,7 +1,6 @@
 import express from "express";
 const router = express.Router();
 import cors from "cors";
-import xmljs from "xml-js";
 import moment from "moment";
 
 // DB
@@ -29,7 +28,6 @@ import { getRecipesWithConstraints } from "../services/database/getRecipesWithCo
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
 import {
   BadRequest,
-  Unauthorized,
   NotFound,
   PreconditionFailed,
   InternalServerError,
@@ -38,15 +36,7 @@ import { joiValidator } from "../middleware/joiValidator.js";
 import Joi from "joi";
 import { getFriendships } from "../utils/getFriendships.js";
 
-const VALID_RECIPE_FOLDERS = ["main", "inbox"];
 const VALID_RATING_FILTERS = /^(\d|null)(,(\d|null))*$/;
-const VALID_RECIPE_SORT = [
-  "-title",
-  "createdAt",
-  "-createdAt",
-  "updatedAt",
-  "-updatedAt",
-];
 
 const parseRatingFilter = (ratingFilter) => {
   return ratingFilter
@@ -246,95 +236,6 @@ router.get(
   }),
 );
 
-//Get all of a user's recipes (paginated)
-router.get(
-  "/by-page",
-  joiValidator(
-    Joi.object({
-      query: Joi.object({
-        sort: Joi.string()
-          .valid(...VALID_RECIPE_SORT)
-          .optional(),
-        userId: Joi.string().uuid().optional(),
-        includeFriends: Joi.boolean().optional(),
-        folder: Joi.string()
-          .valid(...VALID_RECIPE_FOLDERS)
-          .optional(),
-        labels: Joi.string().optional(),
-        labelIntersection: Joi.boolean().optional(),
-        ratingFilter: Joi.string().regex(VALID_RATING_FILTERS).optional(),
-        count: Joi.number().optional(),
-        offset: Joi.number().optional(),
-      }),
-    }),
-  ),
-  cors(),
-  MiddlewareService.validateSession(["user"], true),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    if (!res.locals.session && !req.query.userId) {
-      throw Unauthorized("You must be logged in to request this resource");
-    }
-
-    const offset = req.query.offset || 0;
-    const limit = Math.min(parseInt(req.query.count) || 100, 500);
-    const folder = req.query.folder || "main";
-
-    let sortBy = ["title", "ASC"];
-    if (req.query.sort) {
-      switch (req.query.sort) {
-        case "-title": // TODO: This seems to be backwards...
-          sortBy = ["title", "ASC"];
-          break;
-        case "createdAt":
-          sortBy = ["createdAt", "ASC"];
-          break;
-        case "-createdAt":
-          sortBy = ["createdAt", "DESC"];
-          break;
-        case "updatedAt":
-          sortBy = ["updatedAt", "ASC"];
-          break;
-        case "-updatedAt":
-          sortBy = ["updatedAt", "DESC"];
-          break;
-      }
-    }
-
-    const ratings = parseRatingFilter(req.query.ratingFilter);
-
-    const labels = req.query.labels?.split(",");
-    const labelIntersection = req.query.labelIntersection === "true";
-
-    const userIds = [];
-    if (res.locals.session?.userId && !req.query.userId)
-      userIds.push(res.locals.session.userId);
-    if (req.query.userId) userIds.push(req.query.userId);
-    if (res.locals.session?.userId && req.query.includeFriends === "true") {
-      const friendships = await getFriendships(res.locals.session.userId);
-
-      userIds.push(...friendships.friends.map((friend) => friend.otherUser.id));
-    }
-
-    const recipes = await getRecipesWithConstraints({
-      userId: res.locals.session.userId,
-      userIds,
-      folder,
-      sortBy,
-      limit,
-      offset,
-      ratings,
-      labels,
-      labelIntersection,
-    });
-
-    recipes.data = recipes.data
-      .map(UtilService.sortRecipeImages)
-      .map(applyLegacyImageField);
-
-    res.status(200).send(recipes);
-  }),
-);
-
 router.get(
   "/search",
   joiValidator(
@@ -399,111 +300,6 @@ router.get(
       });
 
     res.status(200).send(recipes);
-  }),
-);
-
-router.get(
-  "/export",
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const recipes = await Recipe.findAll({
-      where: {
-        userId: res.locals.session.userId,
-      },
-      attributes: [
-        "id",
-        "title",
-        "description",
-        "yield",
-        "activeTime",
-        "totalTime",
-        "source",
-        "url",
-        "notes",
-        "ingredients",
-        "instructions",
-        "rating",
-        "folder",
-        "createdAt",
-        "updatedAt",
-        "userId",
-      ],
-      include: [
-        {
-          model: User,
-          as: "fromUser",
-          attributes: ["name", "handle"],
-        },
-        {
-          model: Label,
-          as: "labels",
-          attributes: ["title"],
-        },
-        {
-          model: Image,
-          as: "images",
-          attributes: ["id", "location"],
-        },
-      ],
-      order: [["title", "ASC"]],
-    });
-
-    const recipes_j = recipes.map((e) => e.toJSON());
-
-    let data;
-    let mimetype;
-
-    switch (req.query.format) {
-      case "json":
-        data = JSON.stringify(recipes_j);
-        mimetype = "application/json";
-        break;
-      case "xml":
-        data = xmljs.json2xml(recipes_j, {
-          compact: true,
-          ignoreComment: true,
-          spaces: 4,
-        });
-        mimetype = "text/xml";
-        break;
-      case "txt":
-        data = "";
-
-        for (let i = 0; i < recipes_j.length; i++) {
-          const recipe = recipes_j[i];
-
-          recipe.labels = recipe.labels.map((label) => label.title).join(", ");
-
-          recipe.images = recipe.images
-            .map((image) => image.location)
-            .join(", ");
-
-          delete recipe.fromUser;
-
-          for (const key in recipe) {
-            data += key + ": ";
-            data += recipe[key] + "\r\n";
-          }
-          data += "\r\n";
-        }
-
-        res.charset = "UTF-8";
-        mimetype = "text/plain";
-        break;
-      default:
-        throw BadRequest(
-          "Unknown export format. Please send json, xml, or txt.",
-        );
-    }
-
-    res.setHeader(
-      "Content-disposition",
-      "attachment; filename=recipes-" + Date.now() + "." + req.query.format,
-    );
-    res.setHeader("Content-type", mimetype);
-    res.write(data);
-    res.end();
   }),
 );
 
@@ -593,138 +389,6 @@ router.get(
   }),
 );
 
-//Update a recipe
-router.put(
-  "/:id",
-  joiValidator(
-    Joi.object({
-      body: Joi.object({
-        title: Joi.string().optional(),
-        description: Joi.string().allow("").optional(),
-        yield: Joi.string().allow("").optional(),
-        activeTime: Joi.string().allow("").optional(),
-        totalTime: Joi.string().allow("").optional(),
-        source: Joi.string().allow("").optional(),
-        url: Joi.string().allow("").optional(),
-        notes: Joi.string().allow("").optional(),
-        ingredients: Joi.string().allow("").optional(),
-        instructions: Joi.string().allow("").optional(),
-        rating: Joi.number().min(1).max(5).allow(null).optional(),
-        folder: Joi.string()
-          .valid(...VALID_RECIPE_FOLDERS)
-          .optional(),
-        imageIds: Joi.array().items(Joi.string().uuid()).optional(),
-      }),
-    }),
-  ),
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const updatedRecipe = await sequelize.transaction(async (transaction) => {
-      const recipe = await Recipe.findOne({
-        where: {
-          id: req.params.id,
-          userId: res.locals.session.userId,
-        },
-        transaction,
-      });
-
-      if (!recipe) {
-        throw NotFound("Recipe with that ID does not exist!");
-      }
-
-      if (typeof req.body.description === "string")
-        recipe.description = req.body.description;
-      if (typeof req.body.yield === "string") recipe.yield = req.body.yield;
-      if (typeof req.body.activeTime === "string")
-        recipe.activeTime = req.body.activeTime;
-      if (typeof req.body.totalTime === "string")
-        recipe.totalTime = req.body.totalTime;
-      if (typeof req.body.source === "string") recipe.source = req.body.source;
-      if (typeof req.body.url === "string") recipe.url = req.body.url;
-      if (typeof req.body.notes === "string") recipe.notes = req.body.notes;
-      if (typeof req.body.ingredients === "string")
-        recipe.ingredients = req.body.ingredients;
-      if (typeof req.body.instructions === "string")
-        recipe.instructions = req.body.instructions;
-      if (typeof req.body.rating === "number" || req.body.rating === null)
-        recipe.rating = req.body.rating;
-      if (typeof req.body.folder === "string") recipe.folder = req.body.folder;
-
-      const adjustedTitle = await Recipe.findTitle(
-        res.locals.session.userId,
-        recipe.id,
-        req.body.title || recipe.title,
-        transaction,
-      );
-
-      recipe.title = adjustedTitle.slice(0, 254);
-
-      const updatedRecipe = await recipe.save({
-        transaction,
-      });
-
-      if (req.body.imageIds) {
-        const canUploadMultipleImages =
-          await SubscriptionsService.userHasCapability(
-            res.locals.session.userId,
-            SubscriptionsService.Capabilities.MultipleImages,
-          );
-
-        if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
-          const images = await Image.findAll({
-            where: {
-              id: {
-                [Op.in]: req.body.imageIds,
-              },
-            },
-            transaction,
-          });
-          const imagesById = images.reduce(
-            (acc, img) => ({ ...acc, [img.id]: img }),
-            {},
-          );
-
-          req.body.imageIds = req.body.imageIds.filter(
-            (imageId, idx) =>
-              idx === 0 || // Allow first image always (users can always upload the first image)
-              imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
-              moment(imagesById[imageId].createdAt)
-                .add(1, "day")
-                .isBefore(moment()), // Allow old images (user's subscription expired)
-          );
-        }
-
-        if (req.body.imageIds.length > 10) req.body.imageIds.splice(10); // Limit to 10 images per recipe max
-
-        await Recipe_Image.destroy({
-          where: {
-            recipeId: recipe.id,
-          },
-          transaction,
-        });
-
-        await Recipe_Image.bulkCreate(
-          req.body.imageIds.map((imageId, idx) => ({
-            recipeId: recipe.id,
-            imageId: imageId,
-            order: idx,
-          })),
-          {
-            transaction,
-          },
-        );
-      }
-
-      await Search.indexRecipes([updatedRecipe]);
-
-      return updatedRecipe;
-    });
-
-    res.status(200).json(updatedRecipe);
-  }),
-);
-
 const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
   if (!recipeIds && !labelIds) {
     throw new Error("Must pass recipeIds or labelIds");
@@ -809,58 +473,6 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
 
   await Search.deleteRecipes(recipeIds);
 };
-
-router.post(
-  "/delete-by-labelIds",
-  joiValidator(
-    Joi.object({
-      body: Joi.object({
-        labelIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
-      }),
-    }),
-  ),
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    await sequelize.transaction(async (transaction) => {
-      await deleteRecipes(
-        res.locals.session.userId,
-        {
-          labelIds: req.body.labelIds,
-        },
-        transaction,
-      );
-    });
-
-    res.sendStatus(200);
-  }),
-);
-
-router.post(
-  "/delete-bulk",
-  joiValidator(
-    Joi.object({
-      body: Joi.object({
-        recipeIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
-      }),
-    }),
-  ),
-  cors(),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    await sequelize.transaction(async (transaction) => {
-      await deleteRecipes(
-        res.locals.session.userId,
-        {
-          recipeIds: req.body.recipeIds,
-        },
-        transaction,
-      );
-    });
-
-    res.sendStatus(200);
-  }),
-);
 
 router.delete(
   "/:id",

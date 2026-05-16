@@ -1,11 +1,23 @@
-import { prisma } from "@recipesage/prisma";
+import {
+  labelGroupSummary,
+  labelGroupSummarySchema,
+  prisma,
+} from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelGroupSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const updateLabelGroup = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labelGroups/updateLabelGroup",
+      tags: ["labelGroups"],
+      summary: "Update a label group",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -14,6 +26,7 @@ export const updateLabelGroup = publicProcedure
       warnWhenNotPresent: z.boolean(),
     }),
   )
+  .output(labelGroupSummarySchema)
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

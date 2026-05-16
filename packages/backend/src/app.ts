@@ -12,7 +12,11 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import { trpcExpressMiddleware } from "@recipesage/trpc";
+import {
+  trpcExpressMiddleware,
+  openApiDocument,
+  openApiExpressMiddleware,
+} from "@recipesage/trpc";
 
 import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
 setupInvalidateStaleJobsInterval();
@@ -22,12 +26,8 @@ import { metrics } from "@recipesage/util/server/general";
 import index from "./routes/index.js";
 import users from "./routes/users.js";
 import recipes from "./routes/recipes.js";
-import labels from "./routes/labels.js";
 import messages from "./routes/messages.js";
-import print from "./routes/print.js";
-import payments from "./routes/payments.js";
 import images from "./routes/images.js";
-import data from "./routes/data.js";
 import proxy from "./routes/proxy.js";
 
 import { ErrorRequestHandler } from "express";
@@ -96,10 +96,7 @@ app.use(
     verify: (req, res, buf) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;
-      if (
-        url.startsWith("/payments/stripe/webhooks") ||
-        url.startsWith("/stripe/webhook")
-      ) {
+      if (url.startsWith("/stripe/webhook")) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (req as any).rawBody = buf.toString();
       }
@@ -135,15 +132,15 @@ app.disable("x-powered-by");
 app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
+app.get("/compat/openapi.json", (_req, res) => {
+  res.json(openApiDocument);
+});
+app.use("/compat/v2", openApiExpressMiddleware);
 app.use("/users", users);
 app.use("/recipes", recipes);
-app.use("/labels", labels);
 app.use("/messages", messages);
-app.use("/print", print);
-app.use("/payments", payments);
 app.use("/images", images);
 app.use("/proxy", proxy);
-app.use("/data", data);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

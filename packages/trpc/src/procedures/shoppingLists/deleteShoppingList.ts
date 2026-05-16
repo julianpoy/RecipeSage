@@ -13,8 +13,23 @@ import {
 } from "@recipesage/util/server/db";
 
 export const deleteShoppingList = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/deleteShoppingList",
+      tags: ["shoppingLists"],
+      summary: "Delete a shopping list",
+      protect: true,
+    },
+  })
   .input(
     z.object({
+      id: z.uuid(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
       id: z.uuid(),
     }),
   )

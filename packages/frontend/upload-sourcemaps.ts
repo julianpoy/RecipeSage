@@ -39,7 +39,6 @@ console.log(`Project: ${project}`);
 console.log(`Distribution path: ${distPath}`);
 
 try {
-  // Use the Sentry CLI from @sentry/webpack-plugin
   const sentryCliPath = path.resolve(
     __dirname,
     "../../node_modules/@sentry/cli/bin/sentry-cli",

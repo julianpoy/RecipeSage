@@ -3,7 +3,6 @@ import { Injectable, inject } from "@angular/core";
 
 import { HttpService } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
-import { UtilService } from "./util.service";
 import { EventName, EventService } from "./event.service";
 import { Image } from "./image.service";
 
@@ -87,11 +86,6 @@ export class RecipeService {
   alertCtrl = inject(AlertController);
   events = inject(EventService);
   httpService = inject(HttpService);
-  utilService = inject(UtilService);
-
-  getExportURL(format: ExportFormat) {
-    return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
-  }
 
   count(
     params: {

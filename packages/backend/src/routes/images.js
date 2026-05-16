@@ -2,25 +2,19 @@ import express from "express";
 import multer from "multer";
 const router = express.Router();
 import * as Sentry from "@sentry/node";
-import Joi from "joi";
 
 // DB
 import { Image } from "../models/index.js";
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import {
-  writeImageBuffer,
-  writeImageURL,
-  ObjectTypes,
-} from "@recipesage/util/server/storage";
+import { writeImageBuffer, ObjectTypes } from "@recipesage/util/server/storage";
 import { FileTransformError } from "@recipesage/util/server/general";
 import * as SubscriptionsService from "../services/subscriptions.js";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
-import { BadRequest, NotFound } from "../utils/errors.js";
-import { joiValidator } from "../middleware/joiValidator.js";
+import { BadRequest } from "../utils/errors.js";
 
 router.post(
   "/",
@@ -64,100 +58,6 @@ router.post(
     });
 
     res.status(200).send(image);
-  }),
-);
-
-router.post(
-  "/url",
-  joiValidator(
-    Joi.object({
-      body: Joi.object({
-        url: Joi.string().min(1).max(2048),
-      }),
-    }),
-  ),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const encodeInHighRes = await SubscriptionsService.userHasCapability(
-      res.locals.session.userId,
-      SubscriptionsService.Capabilities.HighResImages,
-    );
-
-    let file;
-    try {
-      file = await writeImageURL(
-        ObjectTypes.RECIPE_IMAGE,
-        req.body.url,
-        encodeInHighRes,
-      );
-    } catch (e) {
-      e.status = 415;
-      throw e;
-    }
-
-    const image = await Image.create({
-      userId: res.locals.session.userId,
-      location: file.location,
-      key: file.key,
-      json: file,
-    });
-
-    res.status(200).send(image);
-  }),
-);
-
-router.post(
-  "/b64",
-  joiValidator(
-    Joi.object({
-      body: Joi.object({
-        data: Joi.string().min(1),
-      }),
-    }),
-  ),
-  MiddlewareService.validateSession(["user"]),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const encodeInHighRes = await SubscriptionsService.userHasCapability(
-      res.locals.session.userId,
-      SubscriptionsService.Capabilities.HighResImages,
-    );
-
-    const buffer = Buffer.from(req.body.data, "base64");
-
-    let file;
-    try {
-      file = await writeImageBuffer(
-        ObjectTypes.RECIPE_IMAGE,
-        buffer,
-        encodeInHighRes,
-      );
-    } catch (e) {
-      e.status = 415;
-      Sentry.captureException(e);
-      throw e;
-    }
-
-    const image = await Image.create({
-      userId: res.locals.session.userId,
-      location: file.location,
-      key: file.key,
-      json: file,
-    });
-
-    res.status(200).send(image);
-  }),
-);
-
-router.get(
-  "/link/:imageId",
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const image = await Image.findByPk(req.params.imageId);
-
-    if (!image) {
-      throw NotFound("Image with that id not found");
-    }
-
-    return res.redirect(image.location);
   }),
 );
 

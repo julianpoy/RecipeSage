@@ -12,6 +12,15 @@ import { indexRecipes } from "@recipesage/util/server/search";
 import { getFriendshipIds } from "@recipesage/util/server/db";
 
 export const updateRecipe = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/recipes/updateRecipe",
+      tags: ["recipes"],
+      summary: "Update a recipe",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -54,6 +63,11 @@ export const updateRecipe = publicProcedure
       nutritionIron: z.number().min(0).nullable().optional(),
       nutritionPotassium: z.number().min(0).nullable().optional(),
       nutritionOtherDetails: z.string().nullable().optional(),
+    }),
+  )
+  .output(
+    z.object({
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

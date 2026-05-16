@@ -1,46 +1,33 @@
-import { trpcSetup, tearDown } from "../../testutils";
-import { recipeFactory } from "../../factories/recipeFactory";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { recipeFactory } from "@recipesage/util/server/general";
+import { test } from "../../testutils";
 
 describe("getRecipe", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("gets a valid recipe", async () => {
+    test("returns a recipe owned by the calling user", async ({
+      trpc,
+      user,
+    }) => {
       const recipe = await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
         },
       });
 
-      const response = await trpc.recipes.getRecipe.query({
+      const response = await trpc.recipes.getRecipe({
         id: recipe.id,
       });
-
       expect(response.id).toEqual(recipe.id);
     });
   });
 
   describe("error", () => {
-    it("throws when recipe not found", async () => {
-      return expect(async () => {
-        await trpc.recipes.getRecipe.query({
+    test("throws when the recipe does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.recipes.getRecipe({
           id: "00000000-0c70-4718-aacc-05add19096b5",
-        });
-      }).rejects.toThrow("Recipe not found");
+        }),
+      ).rejects.toThrow("Recipe not found");
     });
   });
 });

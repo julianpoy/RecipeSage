@@ -11,7 +11,12 @@ import {
 } from "@recipesage/util/shared";
 
 import { ErrorHandlers } from "../http-error-handler.service";
-import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
+import {
+  ActionsBase,
+  RefreshableSignal,
+  RouterInputs,
+  RouterOutputs,
+} from "./actions-base";
 import {
   getKvStoreEntry,
   getLocalDb,
@@ -80,8 +85,8 @@ export class ShoppingListsActionsService extends ActionsBase {
   getShoppingList(
     input: RouterInputs["shoppingLists"]["getShoppingList"],
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["shoppingLists"]["getShoppingList"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["shoppingLists"]["getShoppingList"]> {
+    return this.executeQueryAsSignal(
       () => this.trpc.shoppingLists.getShoppingList.query(input),
       async () => {
         const localDb = await getLocalDb();
@@ -106,8 +111,8 @@ export class ShoppingListsActionsService extends ActionsBase {
 
   getShoppingLists(
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["shoppingLists"]["getShoppingLists"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["shoppingLists"]["getShoppingLists"]> {
+    return this.executeQueryAsSignal(
       () => this.trpc.shoppingLists.getShoppingLists.query(),
       async () => {
         const localDb = await getLocalDb();
@@ -120,10 +125,8 @@ export class ShoppingListsActionsService extends ActionsBase {
   getShoppingListItems(
     input: RouterInputs["shoppingLists"]["getShoppingListItems"],
     errorHandlers?: ErrorHandlers,
-  ): Promise<
-    RouterOutputs["shoppingLists"]["getShoppingListItems"] | undefined
-  > {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["shoppingLists"]["getShoppingListItems"]> {
+    return this.executeQueryAsSignal(
       async () => {
         const items =
           await this.trpc.shoppingLists.getShoppingListItems.query(input);

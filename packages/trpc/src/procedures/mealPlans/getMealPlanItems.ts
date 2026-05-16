@@ -3,6 +3,7 @@ import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   MealPlanItemSummary,
   mealPlanItemSummary,
+  mealPlanItemSummarySchema,
   prisma,
 } from "@recipesage/prisma";
 import { z } from "zod";
@@ -14,12 +15,22 @@ import {
 } from "@recipesage/util/server/db";
 
 export const getMealPlanItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/mealPlans/getMealPlanItems",
+      tags: ["mealPlans"],
+      summary: "Get the items belonging to a meal plan",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       mealPlanId: z.uuid(),
       limit: z.number().min(1).max(4000).default(1000),
     }),
   )
+  .output(z.array(mealPlanItemSummarySchema))
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

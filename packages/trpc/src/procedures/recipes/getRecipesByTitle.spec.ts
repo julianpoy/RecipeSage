@@ -1,25 +1,13 @@
-import { trpcSetup, tearDown } from "../../testutils";
-import { recipeFactory } from "../../factories/recipeFactory";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { recipeFactory } from "@recipesage/util/server/general";
+import { test } from "../../testutils";
 
 describe("getRecipesByTitle", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("gets a recipe with a title", async () => {
+    test("returns recipes that match the given title", async ({
+      trpc,
+      user,
+    }) => {
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
@@ -27,42 +15,45 @@ describe("getRecipesByTitle", () => {
         },
       });
 
-      const response = await trpc.recipes.getRecipesByTitle.query({
+      const response = await trpc.recipes.getRecipesByTitle({
         title: "Mexican chicken",
       });
       expect(response.length).toEqual(1);
       expect(response[0].title).toEqual("Mexican chicken");
     });
-  });
 
-  describe("error", () => {
-    it("fails to get recipe with a different title", async () => {
+    test("returns an empty list when no recipes match the title", async ({
+      trpc,
+      user,
+    }) => {
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
-          title: "Mexican espanadas",
+          title: "Mexican empanadas",
         },
       });
 
-      const response = await trpc.recipes.getRecipesByTitle.query({
+      const response = await trpc.recipes.getRecipesByTitle({
         title: "Spanish pork",
       });
       expect(response.length).toEqual(0);
     });
-  });
 
-  it("fails to get a recipe with differrent user", async () => {
-    const { user: user2 } = await trpcSetup();
-    await prisma.recipe.create({
-      data: {
-        ...recipeFactory(user2.id),
+    test("does not return recipes belonging to another user", async ({
+      trpc,
+      user2,
+    }) => {
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user2.id),
+          title: "caviar",
+        },
+      });
+
+      const response = await trpc.recipes.getRecipesByTitle({
         title: "caviar",
-      },
+      });
+      expect(response.length).toEqual(0);
     });
-
-    const response = await trpc.recipes.getRecipesByTitle.query({
-      title: "caviar",
-    });
-    expect(response.length).toEqual(0);
   });
 });

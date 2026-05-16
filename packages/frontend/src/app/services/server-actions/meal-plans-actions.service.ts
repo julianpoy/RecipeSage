@@ -7,7 +7,12 @@ import {
 } from "@recipesage/util/shared";
 
 import { ErrorHandlers } from "../http-error-handler.service";
-import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
+import {
+  ActionsBase,
+  RefreshableSignal,
+  RouterInputs,
+  RouterOutputs,
+} from "./actions-base";
 import {
   getKvStoreEntry,
   getLocalDb,
@@ -71,8 +76,8 @@ export class MealPlansActionsService extends ActionsBase {
   getMealPlan(
     input: RouterInputs["mealPlans"]["getMealPlan"],
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["mealPlans"]["getMealPlan"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["mealPlans"]["getMealPlan"]> {
+    return this.executeQueryAsSignal(
       () => this.trpc.mealPlans.getMealPlan.query(input),
       async () => {
         const localDb = await getLocalDb();
@@ -97,8 +102,8 @@ export class MealPlansActionsService extends ActionsBase {
 
   getMealPlans(
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["mealPlans"]["getMealPlans"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["mealPlans"]["getMealPlans"]> {
+    return this.executeQueryAsSignal(
       () => this.trpc.mealPlans.getMealPlans.query(),
       async () => {
         const localDb = await getLocalDb();
@@ -111,8 +116,8 @@ export class MealPlansActionsService extends ActionsBase {
   getMealPlanItems(
     input: RouterInputs["mealPlans"]["getMealPlanItems"],
     errorHandlers?: ErrorHandlers,
-  ): Promise<RouterOutputs["mealPlans"]["getMealPlanItems"] | undefined> {
-    return this.executeQuery(
+  ): RefreshableSignal<RouterOutputs["mealPlans"]["getMealPlanItems"]> {
+    return this.executeQueryAsSignal(
       async () => {
         const items = await this.trpc.mealPlans.getMealPlanItems.query(input);
         const localDb = await getLocalDb();

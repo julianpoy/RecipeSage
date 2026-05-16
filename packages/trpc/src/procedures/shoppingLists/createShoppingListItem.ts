@@ -12,10 +12,26 @@ import {
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 import { createShoppingListItemInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 /** @deprecated Use createShoppingListItems instead */
 export const createShoppingListItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/createShoppingListItem",
+      tags: ["shoppingLists"],
+      summary: "Create a single shopping list item (deprecated)",
+      protect: true,
+    },
+  })
   .input(createShoppingListItemInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

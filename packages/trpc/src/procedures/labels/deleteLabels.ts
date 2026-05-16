@@ -5,12 +5,22 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const deleteLabels = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labels/deleteLabels",
+      tags: ["labels"],
+      summary: "Delete multiple labels",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       ids: z.array(z.uuid()).min(1).max(100),
       includeAttachedRecipes: z.boolean().optional(),
     }),
   )
+  .output(z.string())
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

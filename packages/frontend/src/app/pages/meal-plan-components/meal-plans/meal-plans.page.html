@@ -10,7 +10,7 @@
 
 <ion-content>
   <ion-list>
-    @for (mealPlan of mealPlans; track mealPlan) {
+    @for (mealPlan of mealPlans(); track mealPlan) {
       <ion-item
         button
         class="ion-text-wrap"
@@ -35,23 +35,23 @@
                 let isLast = $last
               ) {
                 <span>
-                  @if (me?.id !== collaboratorUser.user.id) {
+                  @if (me()?.id !== collaboratorUser.user.id) {
                     <span>
                       {{ collaboratorUser.user.name }}
-                      @if (!isLast || me?.id !== mealPlan.user.id) {
+                      @if (!isLast || me()?.id !== mealPlan.user.id) {
                         <span>,</span>
                       }
                     </span>
                   }
                 </span>
               }
-              @if (me?.id !== mealPlan.user.id) {
+              @if (me()?.id !== mealPlan.user.id) {
                 <span> {{ mealPlan.user.name }} </span>
               }
             </p>
           }
           <p>
-            @if (me?.id !== mealPlan.user.id) {
+            @if (me()?.id !== mealPlan.user.id) {
               <span>
                 {{
                   "pages.mealPlans.metadata.createdBy"
@@ -59,7 +59,7 @@
                 }}
               </span>
             }
-            @if (me?.id === mealPlan.user.id) {
+            @if (me()?.id === mealPlan.user.id) {
               <span> {{ "pages.mealPlans.metadata.youOwn" | translate }} </span>
             }
           </p>
@@ -67,7 +67,7 @@
         <ion-badge slot="end">{{ mealPlan._count.items }}</ion-badge>
       </ion-item>
     }
-    @if (mealPlans === undefined) {
+    @if (mealPlans() === undefined) {
       <null-state>
         <ion-spinner virtualSlot="header"></ion-spinner>
         <ion-label virtualSlot="body">
@@ -75,7 +75,7 @@
         </ion-label>
       </null-state>
     }
-    @if (mealPlans?.length === 0) {
+    @if (mealPlans()?.length === 0) {
       <null-state>
         <ion-icon
           name="calendar"

@@ -14,8 +14,23 @@ import {
 
 /** @deprecated Use deleteMealPlanItems instead */
 export const deleteMealPlanItem = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/deleteMealPlanItem",
+      tags: ["mealPlans"],
+      summary: "Delete a single meal plan item (deprecated)",
+      protect: true,
+    },
+  })
   .input(
     z.object({
+      id: z.uuid(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
       id: z.uuid(),
     }),
   )

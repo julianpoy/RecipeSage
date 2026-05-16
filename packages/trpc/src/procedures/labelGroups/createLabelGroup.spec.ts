@@ -1,81 +1,70 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("createLabelGroup", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("creates a label group with all parameters provided", async () => {
+    test("creates a label group with a single label attached", async ({
+      trpc,
+      user,
+    }) => {
       const label = await prisma.label.create({
         data: {
           userId: user.id,
           title: "burger",
         },
       });
-      const labelGroup = await trpc.labelGroups.createLabelGroup.mutate({
+
+      const response = await trpc.labelGroups.createLabelGroup({
         title: "soup",
         labelIds: [label.id],
         warnWhenNotPresent: true,
       });
-      expect(labelGroup.title).toEqual("soup");
-      const response = await prisma.labelGroup.findFirst({
-        where: {
-          id: labelGroup.id,
+      expect(response.title).toEqual("soup");
+
+      const labelGroup = await prisma.labelGroup.findUnique({
+        where: { id: response.id },
+        include: { labels: true },
+      });
+      expect(labelGroup?.userId).toEqual(user.id);
+      expect(labelGroup?.labels.map((l) => l.id)).toEqual([label.id]);
+    });
+
+    test("creates a label group with multiple labels attached", async ({
+      trpc,
+      user,
+    }) => {
+      const meatLabel = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "meat",
         },
       });
-      expect(typeof response?.id).toBe("string");
-
-      const updatedLabelGroup = await prisma.labelGroup.findUnique({
-        where: {
-          id: labelGroup.id,
+      const fishLabel = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "fish",
         },
       });
-      expect(updatedLabelGroup?.title).toEqual("soup");
-    });
-  });
 
-  it("creates a label group with two labels parameters provided", async () => {
-    const label = await prisma.label.create({
-      data: {
-        userId: user.id,
-        title: "meat",
-      },
+      const response = await trpc.labelGroups.createLabelGroup({
+        title: "pizza",
+        labelIds: [meatLabel.id, fishLabel.id],
+        warnWhenNotPresent: true,
+      });
+      expect(response.title).toEqual("pizza");
+
+      const labelGroup = await prisma.labelGroup.findUnique({
+        where: { id: response.id },
+        include: { labels: true },
+      });
+      expect(labelGroup?.labels.map((l) => l.id).sort()).toEqual(
+        [meatLabel.id, fishLabel.id].sort(),
+      );
     });
-    const label2 = await prisma.label.create({
-      data: {
-        userId: user2.id,
-        title: "fish",
-      },
-    });
-    const labelGroup = await trpc.labelGroups.createLabelGroup.mutate({
-      title: "pizza",
-      labelIds: [label.id, label2.id],
-      warnWhenNotPresent: true,
-    });
-    expect(labelGroup.title).toEqual("pizza");
-    const response = await prisma.labelGroup.findFirst({
-      where: {
-        id: labelGroup.id,
-      },
-    });
-    expect(typeof response?.id).toBe("string");
   });
 
   describe("error", () => {
-    it("fails to create a label group with not existing label", async () => {
+    test("throws when the title is already taken", async ({ trpc, user }) => {
       await prisma.labelGroup.create({
         data: {
           userId: user.id,
@@ -83,13 +72,14 @@ describe("createLabelGroup", () => {
           warnWhenNotPresent: true,
         },
       });
-      return expect(async () => {
-        await trpc.labelGroups.createLabelGroup.mutate({
+
+      await expect(
+        trpc.labelGroups.createLabelGroup({
           title: "hotdog",
-          labelIds: ["00008495-d189-4a99-98bb-8888442de945"],
+          labelIds: [],
           warnWhenNotPresent: true,
-        });
-      }).rejects.toThrow("Conflicting labelGroup title");
+        }),
+      ).rejects.toThrow("Conflicting labelGroup title");
     });
   });
 });

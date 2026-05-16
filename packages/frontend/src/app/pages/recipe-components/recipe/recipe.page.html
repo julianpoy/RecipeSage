@@ -724,7 +724,7 @@
           <br />
         </div>
       }
-      @if (recipe.userId === me?.id && recipe.folder === "inbox") {
+      @if (recipe.userId === me()?.id && recipe.folder === "inbox") {
         <div class="ion-padding">
           <ion-item lines="none" class="ion-no-padding">
             <ion-label>
@@ -755,7 +755,7 @@
           </ion-grid>
         </div>
       }
-      @if (recipe.userId !== me?.id && isLoggedIn) {
+      @if (recipe.userId !== me()?.id && isLoggedIn) {
         <div class="ion-padding">
           <ion-item lines="none" class="ion-no-padding">
             <ion-label>
@@ -770,7 +770,7 @@
           </ion-button>
         </div>
       }
-      @if (recipe.userId !== me?.id && !isLoggedIn) {
+      @if (recipe.userId !== me()?.id && !isLoggedIn) {
         <div class="ion-padding">
           <ion-item lines="none" class="ion-no-padding">
             <ion-label>
@@ -803,7 +803,7 @@
         </ion-label>
       </ion-item>
       <br />
-      @if (recipe.userId === me?.id && recipe.folder === "main") {
+      @if (recipe.userId === me()?.id && recipe.folder === "main") {
         <ion-row class="action-buttons ion-justify-content-around">
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="editRecipe()" fill="clear" size="small">

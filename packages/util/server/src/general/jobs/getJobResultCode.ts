@@ -6,6 +6,11 @@ import {
   ImportTooManyRecipesError,
 } from "./jobErrors";
 import { ImportStandardizedRecipesTooManyRecipesError } from "../../db/importStandardizedRecipes";
+import {
+  ZipMalformedError,
+  ZipTooLargeError,
+  ZipUnsafePathError,
+} from "../safeExtractZip";
 
 export const jobErrorsToReport: (typeof JOB_RESULT_CODES)[keyof typeof JOB_RESULT_CODES][] =
   [JOB_RESULT_CODES.unknown];
@@ -15,8 +20,9 @@ export const jobErrorToResultCode = (error: unknown) => {
 
   if (
     error instanceof ImportBadFormatError ||
-    error.message === "end of central directory record signature not found" ||
-    error.name === "Bad format"
+    error instanceof ZipMalformedError ||
+    error instanceof ZipTooLargeError ||
+    error instanceof ZipUnsafePathError
   ) {
     return JOB_RESULT_CODES.badFile;
   }

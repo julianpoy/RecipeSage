@@ -1,11 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { prisma, User } from "@recipesage/prisma";
 import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
-import { userFactory } from "../factories/userFactory";
-import { recipeFactory } from "../factories/recipeFactory";
-import { labelFactory } from "../factories/labelFactory";
-import { friendshipFactory } from "../factories/friendshipFactory";
-import { profileItemFactory } from "../factories/profileItemFactory";
+import {
+  userFactory,
+  recipeFactory,
+  labelFactory,
+  friendshipFactory,
+  profileItemFactory,
+} from "../general/factories";
 
 async function materialize(args: {
   userId?: string;

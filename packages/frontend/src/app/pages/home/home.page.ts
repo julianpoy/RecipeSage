@@ -134,7 +134,10 @@ export class HomePage implements OnDestroy {
 
   userId?: string;
 
-  myProfile?: UserPublic;
+  private myProfileQuery = this.serverActionsService.users.getMe({
+    401: () => {},
+  });
+  myProfile = this.myProfileQuery.value;
   friendsById?: {
     [key: string]: UserPublic;
   };
@@ -196,6 +199,8 @@ export class HomePage implements OnDestroy {
       search,
       trash,
     });
+
+    console.log("hi", "hi2", "hi3", "hi4");
 
     this.applyRouteParams();
     if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
@@ -277,7 +282,6 @@ export class HomePage implements OnDestroy {
       });
     }
 
-    this.fetchMyProfile();
     this.fetchFriends();
   }
 
@@ -523,15 +527,6 @@ export class HomePage implements OnDestroy {
 
       this.labels = response.sort((a, b) => a.title.localeCompare(b.title));
     }
-  }
-
-  async fetchMyProfile() {
-    const response = await this.serverActionsService.users.getMe({
-      401: () => {},
-    });
-    if (!response) return;
-
-    this.myProfile = response;
   }
 
   async fetchFriends() {
@@ -858,7 +853,7 @@ export class HomePage implements OnDestroy {
       event,
       component: HomeSearchFilterPopoverPage,
       componentProps: {
-        contextUserId: this.myProfile?.id || null,
+        contextUserId: this.myProfile()?.id || null,
         guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,

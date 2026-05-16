@@ -1,4 +1,11 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  EffectRef,
+  Injector,
+  Input,
+  effect,
+  inject,
+} from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -56,10 +63,6 @@ import { addIcons } from "ionicons";
   ],
 })
 export class AddRecipeToShoppingListModalPage {
-  constructor() {
-    addIcons({ close, list });
-  }
-
   navCtrl = inject(NavController);
   translate = inject(TranslateService);
   recipeService = inject(RecipeService);
@@ -69,6 +72,7 @@ export class AddRecipeToShoppingListModalPage {
   alertCtrl = inject(AlertController);
   modalCtrl = inject(ModalController);
   serverActionsService = inject(ServerActionsService);
+  private injector = inject(Injector);
 
   @Input({
     required: true,
@@ -78,22 +82,28 @@ export class AddRecipeToShoppingListModalPage {
   selectedIngredientsByRecipe: { [key: string]: ParsedIngredient[] } = {};
   selectedIngredients: ParsedIngredient[] = [];
 
+  private shoppingListsQuery =
+    this.serverActionsService.shoppingLists.getShoppingLists();
   shoppingLists?: ShoppingListSummary[];
 
   destinationShoppingList?: ShoppingListSummary;
 
   saving = false;
 
+  constructor() {
+    addIcons({ close, list });
+    effect(() => {
+      const lists = this.shoppingListsQuery.value();
+      if (!lists) return;
+      this.shoppingLists = [...lists].sort((a, b) =>
+        a.title.localeCompare(b.title),
+      );
+      if (!this.destinationShoppingList) this.selectLastUsedShoppingList();
+    });
+  }
+
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
-    this.loadLists().then(
-      () => {
-        loading.dismiss();
-      },
-      () => {
-        loading.dismiss();
-      },
-    );
+    this.shoppingListsQuery.refresh();
   }
 
   selectLastUsedShoppingList() {
@@ -114,18 +124,6 @@ export class AddRecipeToShoppingListModalPage {
       "lastUsedShoppingListId",
       this.destinationShoppingList.id,
     );
-  }
-
-  async loadLists() {
-    const response =
-      await this.serverActionsService.shoppingLists.getShoppingLists();
-    if (!response) return;
-
-    this.shoppingLists = response.sort((a, b) =>
-      a.title.localeCompare(b.title),
-    );
-
-    this.selectLastUsedShoppingList();
   }
 
   selectedIngredientsChange(
@@ -199,21 +197,32 @@ export class AddRecipeToShoppingListModalPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.success) return;
+      if (!data || !data.success || typeof data.id !== "string") return;
+      const newId = data.id;
 
-      // Check for new lists
-      this.loadLists().then(async () => {
-        if (this.shoppingLists?.length === 1) {
-          this.destinationShoppingList = this.shoppingLists[0];
-        } else {
-          (
-            await this.toastCtrl.create({
-              message,
-              duration: 6000,
-            })
-          ).present();
-        }
-      });
+      this.shoppingListsQuery.refresh();
+
+      let ref: EffectRef;
+      ref = effect(
+        () => {
+          const lists = this.shoppingListsQuery.value();
+          if (!lists) return;
+          const newList = lists.find((l) => l.id === newId);
+          if (!newList) return;
+          ref.destroy();
+          if (lists.length === 1) {
+            this.destinationShoppingList = newList;
+          } else {
+            void this.toastCtrl
+              .create({
+                message,
+                duration: 6000,
+              })
+              .then((toast) => toast.present());
+          }
+        },
+        { injector: this.injector },
+      );
     });
   }
 

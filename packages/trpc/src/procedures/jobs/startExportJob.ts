@@ -7,6 +7,15 @@ import {
 import { z } from "zod";
 
 export const startExportJob = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/jobs/startExportJob",
+      tags: ["jobs"],
+      summary: "Start an export job",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       format: z.union([
@@ -15,6 +24,11 @@ export const startExportJob = publicProcedure
         z.literal("jsonld"),
       ]),
       recipeIds: z.array(z.uuid()).min(1).max(5000).optional(),
+    }),
+  )
+  .output(
+    z.object({
+      jobId: z.uuid(),
     }),
   )
   .mutation(async ({ input, ctx }) => {

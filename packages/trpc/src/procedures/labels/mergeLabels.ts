@@ -5,12 +5,22 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const mergeLabels = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labels/mergeLabels",
+      tags: ["labels"],
+      summary: "Merge a source label into a target label",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       sourceId: z.uuid(),
       targetId: z.uuid(),
     }),
   )
+  .output(z.string())
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

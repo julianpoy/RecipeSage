@@ -1,26 +1,13 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
 import { faker } from "@faker-js/faker";
+import { test } from "../../testutils";
 
 describe("getShoppingListsWithItems", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-  let trpc2: TRPCClient<AppRouter>;
-
-  beforeEach(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
-  });
-
-  afterEach(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("returns owned shopping lists with their items", async () => {
+    test("returns owned shopping lists with their items", async ({
+      trpc,
+      user,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -37,8 +24,7 @@ describe("getShoppingListsWithItems", () => {
         },
       });
 
-      const response =
-        await trpc.shoppingLists.getShoppingListsWithItems.query();
+      const response = await trpc.shoppingLists.getShoppingListsWithItems();
 
       expect(response.length).toEqual(1);
       expect(response[0].id).toEqual(shoppingList.id);
@@ -46,7 +32,11 @@ describe("getShoppingListsWithItems", () => {
       expect(response[0].items[0].title).toEqual("Apples");
     });
 
-    it("returns shopping lists where the user is a collaborator", async () => {
+    test("returns shopping lists where the user is a collaborator", async ({
+      trpc2,
+      user,
+      user2,
+    }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
           title: faker.string.alphanumeric(10),
@@ -59,15 +49,13 @@ describe("getShoppingListsWithItems", () => {
         },
       });
 
-      const response =
-        await trpc2.shoppingLists.getShoppingListsWithItems.query();
+      const response = await trpc2.shoppingLists.getShoppingListsWithItems();
       expect(response.length).toEqual(1);
       expect(response[0].id).toEqual(shoppingList.id);
     });
 
-    it("returns an empty array when the user has none", async () => {
-      const response =
-        await trpc.shoppingLists.getShoppingListsWithItems.query();
+    test("returns an empty array when the user has none", async ({ trpc }) => {
+      const response = await trpc.shoppingLists.getShoppingListsWithItems();
       expect(response.length).toEqual(0);
     });
   });

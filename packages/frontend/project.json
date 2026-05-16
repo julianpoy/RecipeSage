@@ -16,8 +16,8 @@
       "options": {
         "cwd": "packages/frontend",
         "commands": [
-          "webpack -c sw-webpack.config.js --watch",
-          "webpack -c sw-webpack.config.js && ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100 --serve-path=/app/"
+          "tsx build-service-worker.ts --watch",
+          "tsx build-service-worker.ts && ng serve --host 0.0.0.0 --port 8100 --serve-path=/app/"
         ],
         "parallel": true
       }
@@ -29,7 +29,7 @@
         "cwd": "packages/frontend",
         "commands": [
           "ng build --configuration=production",
-          "webpack -c sw-webpack.config.js",
+          "tsx build-service-worker.ts",
           "workbox injectManifest",
           "tsx upload-sourcemaps.ts"
         ],
@@ -41,7 +41,7 @@
       "options": {
         "cwd": "packages/frontend",
         "commands": [
-          "webpack -c sw-webpack.config.js",
+          "tsx build-service-worker.ts",
           "ng build --configuration=selfhost",
           "workbox injectManifest"
         ],

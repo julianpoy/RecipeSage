@@ -7,6 +7,15 @@ import {
 } from "@recipesage/util/server/capabilities";
 
 export const createStripeCheckoutSession = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/payments/createStripeCheckoutSession",
+      tags: ["payments"],
+      summary:
+        "Create a Stripe checkout session for a one-time or recurring payment",
+    },
+  })
   .input(
     z.object({
       frequency: z.enum(["monthly", "yearly", "single"]).optional(), // Backwards compat - field marked as optional
@@ -14,6 +23,12 @@ export const createStripeCheckoutSession = publicProcedure
       amount: z.number().min(0).max(1000000),
       successUrl: z.string(),
       cancelUrl: z.string(),
+    }),
+  )
+  .output(
+    z.object({
+      id: z.string(),
+      url: z.string().nullable(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

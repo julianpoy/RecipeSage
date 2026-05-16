@@ -11,9 +11,24 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 import { createMealPlanItemsInput } from "@recipesage/util/shared";
+import { z } from "zod";
 
 export const createMealPlanItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/createMealPlanItems",
+      tags: ["mealPlans"],
+      summary: "Create multiple meal plan items",
+      protect: true,
+    },
+  })
   .input(createMealPlanItemsInput)
+  .output(
+    z.object({
+      reference: z.uuid(),
+    }),
+  )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

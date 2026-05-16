@@ -10,11 +10,21 @@ import { TRPCError } from "@trpc/server";
 const assistant = new Assistant();
 
 export const sendAssistantMessage = publicProcedure
+  .meta({
+    openapi: {
+      method: "GET",
+      path: "/assistant/sendAssistantMessage",
+      tags: ["assistant"],
+      summary: "Send a message to the assistant and process the response",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       content: z.string().max(1500),
     }),
   )
+  .output(z.string())
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
     if (!session) {

@@ -34,7 +34,7 @@
   </ion-popover>
 
   <ion-list>
-    @for (shoppingList of shoppingLists; track shoppingList) {
+    @for (shoppingList of shoppingLists(); track shoppingList) {
       <ion-item
         button
         class="ion-text-wrap"
@@ -59,23 +59,23 @@
                 let isLast = $last
               ) {
                 <span>
-                  @if (me?.id !== collaboratorUser.user.id) {
+                  @if (me()?.id !== collaboratorUser.user.id) {
                     <span>
                       {{ collaboratorUser.user.name }}
-                      @if (!isLast || me?.id !== shoppingList.userId) {
+                      @if (!isLast || me()?.id !== shoppingList.userId) {
                         <span>,</span>
                       }
                     </span>
                   }
                 </span>
               }
-              @if (me?.id !== shoppingList.userId) {
+              @if (me()?.id !== shoppingList.userId) {
                 <span> {{ shoppingList.user.name }} </span>
               }
             </p>
           }
           <p>
-            @if (me?.id !== shoppingList.userId) {
+            @if (me()?.id !== shoppingList.userId) {
               <span>
                 {{
                   "pages.shoppingLists.createdBy"
@@ -83,7 +83,7 @@
                 }}
               </span>
             }
-            @if (me?.id === shoppingList.userId) {
+            @if (me()?.id === shoppingList.userId) {
               <span> {{ "pages.shoppingLists.owner" | translate }} </span>
             }
           </p>
@@ -91,7 +91,7 @@
         <ion-badge slot="end">{{ shoppingList._count.items }}</ion-badge>
       </ion-item>
     }
-    @if (shoppingLists === undefined) {
+    @if (shoppingLists() === undefined) {
       <null-state>
         <ion-spinner virtualSlot="header"></ion-spinner>
         <ion-label virtualSlot="body">
@@ -99,7 +99,7 @@
         </ion-label>
       </null-state>
     }
-    @if (shoppingLists?.length === 0) {
+    @if (shoppingLists()?.length === 0) {
       <null-state>
         <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">

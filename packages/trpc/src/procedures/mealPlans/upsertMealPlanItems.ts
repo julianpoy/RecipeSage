@@ -19,6 +19,15 @@ import {
 } from "@recipesage/util/shared";
 
 export const upsertMealPlanItems = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/upsertMealPlanItems",
+      tags: ["mealPlans"],
+      summary: "Create or update multiple meal plan items via id-keyed upsert",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       mealPlanId: z.uuid(),
@@ -34,12 +43,17 @@ export const upsertMealPlanItems = publicProcedure
               .string()
               .max(MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT)
               .optional(),
-            createdAt: z.date().optional(),
-            updatedAt: z.date(),
+            createdAt: z.coerce.date().optional(),
+            updatedAt: z.coerce.date(),
           }),
         )
         .min(1)
         .max(UPSERT_MEAL_PLAN_ITEMS_PAGINATION_LIMIT),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

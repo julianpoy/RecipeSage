@@ -1,18 +1,27 @@
-import { prisma } from "@recipesage/prisma";
+import { labelSummary, labelSummarySchema, prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { labelSummary } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const createLabel = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/labels/createLabel",
+      tags: ["labels"],
+      summary: "Create a label",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       title: z.string().min(1).max(100),
       labelGroupId: z.uuid().nullable(),
     }),
   )
+  .output(labelSummarySchema)
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

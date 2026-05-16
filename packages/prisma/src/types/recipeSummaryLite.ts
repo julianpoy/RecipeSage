@@ -1,5 +1,6 @@
 import type { Prisma } from "../prisma/generated/client";
-import { userPublic } from "./userPublic";
+import { z } from "zod";
+import { userPublic, userPublicSchema } from "./userPublic";
 
 /**
  * Provides fields necessary for displaying a summary about a recipe,
@@ -60,3 +61,45 @@ export type RecipeSummaryLite = Omit<
 > & {
   lastMadeAt: string | null;
 };
+
+export const recipeSummaryLiteSchema = z.object({
+  id: z.uuid(),
+  userId: z.uuid(),
+  fromUserId: z.uuid().nullable(),
+  title: z.string(),
+  description: z.string(),
+  yield: z.string(),
+  activeTime: z.string(),
+  totalTime: z.string(),
+  source: z.string(),
+  url: z.string(),
+  folder: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  lastMadeAt: z.string().nullable(),
+  rating: z.number().int().nullable(),
+  recipeLabels: z.array(
+    z.object({
+      label: z.object({
+        title: z.string(),
+      }),
+    }),
+  ),
+  recipeImages: z.array(
+    z.object({
+      order: z.number().int(),
+      image: z.object({
+        location: z.string(),
+      }),
+    }),
+  ),
+  fromUser: userPublicSchema.nullable(),
+  user: userPublicSchema,
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof recipeSummaryLiteSchema
+> satisfies RecipeSummaryLite;
+const _checkTypeSatisfiesSchema = {} as RecipeSummaryLite satisfies z.infer<
+  typeof recipeSummaryLiteSchema
+>;

@@ -13,8 +13,23 @@ import {
 } from "@recipesage/util/server/db";
 
 export const detachMealPlan = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/detachMealPlan",
+      tags: ["mealPlans"],
+      summary: "Detach the caller as a collaborator from a meal plan",
+      protect: true,
+    },
+  })
   .input(
     z.object({
+      id: z.uuid(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
       id: z.uuid(),
     }),
   )

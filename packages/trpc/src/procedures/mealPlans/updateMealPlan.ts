@@ -17,6 +17,15 @@ import {
 } from "@recipesage/util/shared";
 
 export const updateMealPlan = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/mealPlans/updateMealPlan",
+      tags: ["mealPlans"],
+      summary: "Update a meal plan",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       id: z.uuid(),
@@ -27,6 +36,12 @@ export const updateMealPlan = publicProcedure
         .max(MEAL_PLAN_CUSTOM_MEAL_OPTIONS_LENGTH_LIMIT)
         .nullable()
         .optional(),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

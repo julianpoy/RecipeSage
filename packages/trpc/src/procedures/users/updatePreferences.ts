@@ -9,6 +9,7 @@ import {
   ManageLabelsPreferenceKey,
   MealPlanPreferenceKey,
   MealPlanStartOfWeekOptions,
+  MealPlanViewTypeOptions,
   MyRecipesIncludeFriendsOptions,
   MyRecipesPreferenceKey,
   MyRecipesSortOptions,
@@ -23,6 +24,15 @@ import {
 } from "@recipesage/util/shared";
 
 export const updatePreferences = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/users/updatePreferences",
+      tags: ["users"],
+      summary: "Replace the caller's stored app preferences",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       preferencesVersion: z.number().min(0),
@@ -58,6 +68,7 @@ export const updatePreferences = publicProcedure
       [MealPlanPreferenceKey.StartOfWeek]: z.nativeEnum(
         MealPlanStartOfWeekOptions,
       ),
+      [MealPlanPreferenceKey.ViewType]: z.nativeEnum(MealPlanViewTypeOptions),
 
       [ShoppingListPreferenceKey.SortBy]: z.nativeEnum(ShoppingListSortOptions),
       [ShoppingListPreferenceKey.ShowAddedBy]: z.boolean(),
@@ -71,6 +82,7 @@ export const updatePreferences = publicProcedure
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) satisfies z.ZodSchema<AppPreferenceTypes, any, any>,
   )
+  .output(z.string())
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

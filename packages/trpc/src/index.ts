@@ -1,9 +1,10 @@
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import {
+  generateOpenApiDocument,
+  createOpenApiExpressMiddleware,
+} from "trpc-to-openapi";
 import { router } from "./trpc";
 import { createContext } from "./context";
-import { getRecipes } from "./procedures/recipes/getRecipes";
-import { searchRecipes } from "./procedures/recipes/searchRecipes";
-import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
 import { usersRouter } from "./procedures/users/usersRouter";
 import { shoppingListsRouter } from "./procedures/shoppingLists/shoppingListsRouter";
 import { recipesRouter } from "./procedures/recipes/recipesRouter";
@@ -16,7 +17,7 @@ import { assistantRouter } from "./procedures/assistant/assistantRouter";
 import { paymentsRouter } from "./procedures/payments/paymentsRouter";
 import { imagesRouter } from "./procedures/images/imagesRouter";
 
-const appRouter = router({
+export const appRouter = router({
   labelGroups: labelGroupsRouter,
   labels: labelsRouter,
   payments: paymentsRouter,
@@ -28,13 +29,22 @@ const appRouter = router({
   ml: mlRouter,
   jobs: jobsRouter,
   images: imagesRouter,
-
-  getRecipes,
-  searchRecipes,
-  getSimilarRecipes,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({
+  router: appRouter,
+  createContext,
+});
+
+export const openApiDocument = generateOpenApiDocument(appRouter, {
+  title: "RecipeSage API",
+  description:
+    "Public REST surface generated from RecipeSage's tRPC router. Procedures are grouped by tRPC sub-router (tag).",
+  version: "1.0.0",
+  baseUrl: "/compat/v2",
+});
+
+export const openApiExpressMiddleware = createOpenApiExpressMiddleware({
   router: appRouter,
   createContext,
 });

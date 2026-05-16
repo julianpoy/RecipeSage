@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, effect, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -27,11 +27,7 @@ import { ShoppingListItemComponent } from "../../../components/shopping-list-ite
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { ServerActionsService } from "../../../services/server-actions.service";
-import type {
-  ShoppingListItemSummary,
-  ShoppingListSummary,
-  UserPublic,
-} from "@recipesage/prisma";
+import type { ShoppingListItemSummary } from "@recipesage/prisma";
 import {
   IonHeader,
   IonToolbar,
@@ -119,10 +115,26 @@ export class ShoppingListPage {
 
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
 
-  me?: UserPublic;
-  shoppingListId: string = "";
-  shoppingList?: ShoppingListSummary;
-  shoppingListItems?: ShoppingListItemSummary[];
+  private meQuery = this.serverActionsService.users.getMe();
+  me = this.meQuery.value;
+  shoppingListId: string = (() => {
+    const id = this.route.snapshot.paramMap.get("shoppingListId");
+    if (!id) {
+      this.navCtrl.navigateRoot(RouteMap.ShoppingListsPage.getPath());
+      throw new Error("Shopping list ID not provided");
+    }
+    return id;
+  })();
+  private shoppingListQuery =
+    this.serverActionsService.shoppingLists.getShoppingList({
+      id: this.shoppingListId,
+    });
+  private shoppingListItemsQuery =
+    this.serverActionsService.shoppingLists.getShoppingListItems({
+      shoppingListId: this.shoppingListId,
+    });
+  shoppingList = this.shoppingListQuery.value;
+  shoppingListItems = this.shoppingListItemsQuery.value;
 
   items: ShoppingListItemSummary[] = [];
   completedItems: ShoppingListItemSummary[] = [];
@@ -143,37 +155,20 @@ export class ShoppingListPage {
 
   constructor() {
     addIcons({ add, arrowUndo, caretDown, caretUp, cart, options, trash });
-    this.applyRouteParams();
-  }
-
-  private applyRouteParams() {
-    const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
-    if (shoppingListId) {
-      this.shoppingListId = shoppingListId;
-    } else {
-      this.navCtrl.navigateRoot(RouteMap.ShoppingListsPage.getPath());
-      throw new Error("Shopping list ID not provided");
-    }
+    effect(() => {
+      const shoppingList = this.shoppingList();
+      const shoppingListItems = this.shoppingListItems();
+      if (!shoppingList || !shoppingListItems) return;
+      this.processList(shoppingListItems, shoppingList.categoryOrder);
+      void this.translate
+        .get("generic.labeledPageTitle", { title: shoppingList.title })
+        .toPromise()
+        .then((title) => this.titleService.setTitle(title));
+    });
   }
 
   ionViewWillEnter() {
-    const snapshotShoppingListId =
-      this.route.snapshot.paramMap.get("shoppingListId");
-    if (
-      snapshotShoppingListId &&
-      snapshotShoppingListId !== this.shoppingListId
-    ) {
-      this.applyRouteParams();
-      this.shoppingList = undefined;
-      this.shoppingListItems = undefined;
-      this.reference = "0";
-    }
-
-    const loading = this.loadingService.start();
-
-    Promise.all([this.loadList(), this.loadMe()]).finally(() => {
-      loading.dismiss();
-    });
+    this.loadList();
 
     this.websocketService.on("shoppinglist:updated", this.onWSEvent);
   }
@@ -191,13 +186,6 @@ export class ShoppingListPage {
       this.loadList();
     }
   };
-
-  async loadMe() {
-    const me = await this.serverActionsService.users.getMe();
-    if (!me) return;
-
-    this.me = me;
-  }
 
   async processList(
     _items: ShoppingListItemSummary[],
@@ -267,31 +255,13 @@ export class ShoppingListPage {
     this.completedItems = sortedCompletedItems;
   }
 
-  async loadList() {
-    const [shoppingList, shoppingListItems] = await Promise.all([
-      this.serverActionsService.shoppingLists.getShoppingList({
-        id: this.shoppingListId,
-      }),
-      this.serverActionsService.shoppingLists.getShoppingListItems({
-        shoppingListId: this.shoppingListId,
-      }),
-    ]);
-    if (!shoppingList || !shoppingListItems) return;
-    this.shoppingList = shoppingList;
-    this.shoppingListItems = shoppingListItems;
-
-    const title = await this.translate
-      .get("generic.labeledPageTitle", {
-        title: this.shoppingList.title,
-      })
-      .toPromise();
-    this.titleService.setTitle(title);
-
-    this.processList(shoppingListItems, shoppingList.categoryOrder);
+  loadList() {
+    this.shoppingListQuery.refresh();
+    this.shoppingListItemsQuery.refresh();
   }
 
   async completeItems(items: ShoppingListItemSummary[], completed: boolean) {
-    if (!this.shoppingList) return;
+    if (!this.shoppingList()) return;
 
     if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
       return this.removeItems(items);
@@ -311,7 +281,7 @@ export class ShoppingListPage {
 
     if (this.reference !== response.reference) {
       this.reference = response.reference;
-      await this.loadList();
+      this.loadList();
     }
 
     loading.dismiss();
@@ -321,7 +291,7 @@ export class ShoppingListPage {
     items: ShoppingListItemSummary[],
     categoryTitle: string,
   ) {
-    if (!this.shoppingList) return;
+    if (!this.shoppingList()) return;
 
     const loading = this.loadingService.start();
 
@@ -337,7 +307,7 @@ export class ShoppingListPage {
 
     if (this.reference !== response.reference) {
       this.reference = response.reference;
-      await this.loadList();
+      this.loadList();
     }
 
     loading.dismiss();
@@ -379,7 +349,7 @@ export class ShoppingListPage {
   }
 
   async removeItems(items: ShoppingListItemSummary[]) {
-    if (!this.shoppingList) return;
+    if (!this.shoppingList()) return;
     if (!items.length) return;
 
     const loading = this.loadingService.start();
@@ -393,7 +363,7 @@ export class ShoppingListPage {
 
     if (this.reference !== response.reference) {
       this.reference = response.reference;
-      await this.loadList();
+      this.loadList();
     }
     loading.dismiss();
 
@@ -431,7 +401,7 @@ export class ShoppingListPage {
       recipeId: string | null;
     }[],
   ) {
-    if (!this.shoppingList) return;
+    if (!this.shoppingList()) return;
 
     const sanitizedItems = items
       .map((el) => ({
@@ -454,7 +424,7 @@ export class ShoppingListPage {
 
     if (this.reference !== response.reference) {
       this.reference = response.reference;
-      await this.loadList();
+      this.loadList();
     }
     loading.dismiss();
   }
@@ -475,15 +445,16 @@ export class ShoppingListPage {
   }
 
   async presentPopover(event: Event): Promise<void> {
-    if (!this.shoppingList) return;
+    const shoppingList = this.shoppingList();
+    if (!shoppingList) return;
 
     const popover = await this.popoverCtrl.create({
       component: ShoppingListPopoverPage,
       componentProps: {
         shoppingListId: this.shoppingListId,
-        shoppingList: this.shoppingList,
-        shoppingListItems: this.shoppingListItems,
-        isOwner: this.me?.id === this.shoppingList?.user.id,
+        shoppingList,
+        shoppingListItems: this.shoppingListItems(),
+        isOwner: this.me()?.id === shoppingList.user.id,
       },
       event,
     });
@@ -494,11 +465,7 @@ export class ShoppingListPage {
     if (data.reference) this.reference = data.reference;
     if (data.doNotLoad) return;
 
-    const loading = this.loadingService.start();
-
-    this.loadList().finally(() => {
-      loading.dismiss();
-    });
+    this.loadList();
   }
 
   openRecipe(id: string): void {

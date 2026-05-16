@@ -1,25 +1,9 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("getLabelGroups", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-  let trpc2: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("get label groups", async () => {
+    test("returns the calling user's label groups", async ({ trpc, user }) => {
       await prisma.labelGroup.create({
         data: {
           title: "meat",
@@ -27,12 +11,15 @@ describe("getLabelGroups", () => {
           warnWhenNotPresent: true,
         },
       });
-      const response = await trpc.labelGroups.getLabelGroups.query();
+
+      const response = await trpc.labelGroups.getLabelGroups();
       expect(response[0].title).toEqual("meat");
     });
 
-    it("does not find a label group", async () => {
-      const response = await trpc2.labelGroups.getLabelGroups.query();
+    test("returns an empty list when the user has no label groups", async ({
+      trpc,
+    }) => {
+      const response = await trpc.labelGroups.getLabelGroups();
       expect(response.length).toEqual(0);
     });
   });

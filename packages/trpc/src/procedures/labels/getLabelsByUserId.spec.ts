@@ -1,47 +1,43 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("getLabelsByUserId", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("get label by userId", async () => {
+    test("returns the labels owned by the given user", async ({
+      trpc,
+      user,
+    }) => {
       const label = await prisma.label.create({
         data: {
           userId: user.id,
           title: "meat",
         },
       });
-      const response = await trpc.labels.getLabelsByUserId.query({
+
+      const response = await trpc.labels.getLabelsByUserId({
         userIds: [user.id],
       });
       expect(response[0].id).toEqual(label.id);
     });
   });
-  it("fails to get lebels with differrent user", async () => {
-    const { user: user2, trpc: trpc2 } = await trpcSetup();
-    await prisma.label.create({
-      data: {
-        userId: user.id,
-        title: "fish",
-      },
+
+  describe("error", () => {
+    test("does not return another user's labels", async ({
+      trpc2,
+      user,
+      user2,
+    }) => {
+      await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "fish",
+        },
+      });
+
+      const response = await trpc2.labels.getLabelsByUserId({
+        userIds: [user2.id],
+      });
+      expect(response.length).toEqual(0);
     });
-    const response = await trpc2.labels.getLabelsByUserId.query({
-      userIds: [user2.id],
-    });
-    expect(response.length).toEqual(0);
   });
 });

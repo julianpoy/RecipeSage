@@ -18,7 +18,13 @@
         "format": ["cjs"],
         "bundle": true,
         "minify": false,
-        "external": ["@sentry/profiling-node", "jsdom", "pdfmake", "bullmq"],
+        "external": [
+          "@sentry/profiling-node",
+          "jsdom",
+          "pdfmake",
+          "bullmq",
+          "yauzl-promise"
+        ],
         "generatePackageJson": true,
         "esbuildConfig": "packages/queue-worker/esbuild.config.js"
       },

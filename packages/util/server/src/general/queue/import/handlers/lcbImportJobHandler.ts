@@ -8,7 +8,7 @@ import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readdir, mkdtempDisposable, stat } from "fs/promises";
-import extract from "extract-zip";
+import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
 import { spawn } from "child_process";
 import type { JobQueueItem } from "../../JobQueueItem";
@@ -110,7 +110,7 @@ export async function lcbImportJobHandler(
   await using extractDir = await mkdtempDisposable("/tmp/");
   const extractPath = extractDir.path;
 
-  await extract(downloaded.filePath, { dir: extractPath });
+  await safeExtractZip(downloaded.filePath, extractPath);
 
   const mdbFiles = await findFilesByRegex(extractPath, /\.mdb$/i);
   if (mdbFiles.length === 0) {

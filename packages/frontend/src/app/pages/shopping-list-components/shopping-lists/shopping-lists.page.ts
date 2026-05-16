@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, computed, inject } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -12,7 +12,6 @@ import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shoppin
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
-import { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import {
   IonHeader,
@@ -72,45 +71,35 @@ export class ShoppingListsPage {
   loadingService = inject(LoadingService);
   utilService = inject(UtilService);
 
-  me?: UserPublic;
-  shoppingLists?: ShoppingListSummary[] = [];
+  private meQuery = this.serverActionsService.users.getMe();
+  me = this.meQuery.value;
+  private shoppingListsQuery =
+    this.serverActionsService.shoppingLists.getShoppingLists();
+  shoppingLists = computed(() => {
+    const lists = this.shoppingListsQuery.value();
+    if (!lists) return lists;
+    return [...lists].sort((a, b) => a.title.localeCompare(b.title));
+  });
 
   constructor() {
     addIcons({ add, ban, cart, list, options });
   }
 
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
+    this.shoppingListsQuery.refresh();
 
-    this.shoppingLists = undefined;
-
-    Promise.all([this.loadLists(), this.loadMe()]).finally(() => {
-      loading.dismiss();
-    });
-
-    this.websocketService.on("shoppinglist:updated", this.loadLists);
+    this.websocketService.on(
+      "shoppinglist:updated",
+      this.shoppingListsQuery.refresh,
+    );
   }
 
   ionViewWillLeave() {
-    this.websocketService.off("shoppinglist:updated", this.loadLists);
+    this.websocketService.off(
+      "shoppinglist:updated",
+      this.shoppingListsQuery.refresh,
+    );
   }
-
-  async loadMe() {
-    const me = await this.serverActionsService.users.getMe();
-    if (!me) return;
-
-    this.me = me;
-  }
-
-  loadLists = async () => {
-    const response =
-      await this.serverActionsService.shoppingLists.getShoppingLists();
-    if (!response) return;
-
-    this.shoppingLists = response.sort((a, b) => {
-      return a.title.localeCompare(b.title);
-    });
-  };
 
   async newShoppingList() {
     const modal = await this.modalCtrl.create({

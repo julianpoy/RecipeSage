@@ -10,10 +10,25 @@ import { TRPCError } from "@trpc/server";
 import { SHOPPING_LIST_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared";
 
 export const createShoppingList = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/shoppingLists/createShoppingList",
+      tags: ["shoppingLists"],
+      summary: "Create a shopping list",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       title: z.string().min(1).max(SHOPPING_LIST_TITLE_LENGTH_LIMIT),
       collaboratorUserIds: z.array(z.uuid()),
+    }),
+  )
+  .output(
+    z.object({
+      reference: z.uuid(),
+      id: z.uuid(),
     }),
   )
   .mutation(async ({ ctx, input }) => {

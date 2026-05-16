@@ -1,77 +1,58 @@
-import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { User } from "@recipesage/prisma";
-import type { TRPCClient } from "@trpc/client";
-import type { AppRouter } from "../../index";
+import { test } from "../../testutils";
 
 describe("deleteMealPlan", () => {
-  let user: User;
-  let user2: User;
-  let trpc: TRPCClient<AppRouter>;
-  let trpc2: TRPCClient<AppRouter>;
-
-  beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
-  });
-
-  afterAll(() => {
-    return tearDown(user.id, user2.id);
-  });
-
   describe("success", () => {
-    it("deletes a meal plan", async () => {
-      const collaboratorUsers = [user2];
-      const response = await prisma.mealPlan.create({
+    test("deletes a meal plan", async ({ trpc, user, user2 }) => {
+      const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
           collaboratorUsers: {
             createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+              data: [{ userId: user2.id }],
             },
           },
         },
       });
 
-      await trpc.mealPlans.deleteMealPlan.mutate({
-        id: response.id,
+      await trpc.mealPlans.deleteMealPlan({
+        id: mealPlan.id,
       });
 
-      const updatedResponse = await prisma.mealPlan.findUnique({
-        where: {
-          id: response.id,
-        },
+      const deletedMealPlan = await prisma.mealPlan.findUnique({
+        where: { id: mealPlan.id },
       });
-      expect(updatedResponse).toEqual(null);
+      expect(deletedMealPlan).toEqual(null);
     });
   });
+
   describe("error", () => {
-    it("must throw on meal plan not found", async () => {
-      await trpc.mealPlans.createMealPlan.mutate({
-        title: "Protein",
-        collaboratorUserIds: [user2.id],
-      });
-      return expect(async () => {
-        await trpc.mealPlans.deleteMealPlan.mutate({
+    test("throws when the meal plan does not exist", async ({ trpc }) => {
+      await expect(
+        trpc.mealPlans.deleteMealPlan({
           id: "00000ca5-50e7-4144-bc11-e82925837a14",
-        });
-      }).rejects.toThrow(
+        }),
+      ).rejects.toThrow(
         "Meal plan with that id does not exist or you do not own it",
       );
     });
 
-    it("must throw on meal plan not owned", async () => {
-      const response = await trpc.mealPlans.createMealPlan.mutate({
+    test("throws when the calling user is only a collaborator", async ({
+      trpc,
+      trpc2,
+      user2,
+    }) => {
+      const mealPlan = await trpc.mealPlans.createMealPlan({
         title: "Protein",
         collaboratorUserIds: [user2.id],
       });
-      return expect(async () => {
-        await trpc2.mealPlans.deleteMealPlan.mutate({
-          id: response.id,
-        });
-      }).rejects.toThrow(
+
+      await expect(
+        trpc2.mealPlans.deleteMealPlan({
+          id: mealPlan.id,
+        }),
+      ).rejects.toThrow(
         "Meal plan with that id does not exist or you do not own it",
       );
     });

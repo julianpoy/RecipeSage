@@ -33,8 +33,10 @@ export class SignInWithGoogleComponent implements AfterViewInit {
   // Can be use to hide the button and only use for prompting
   @Input() showButton = true;
   @Input() autoPrompt = false;
+  @Input() allowRegistration = false;
 
   @Output() signInComplete = new EventEmitter<SessionDTO>();
+  @Output() accountNotFound = new EventEmitter<void>();
 
   @ViewChild("googleButtonContainer", { static: true })
   googleButtonContainer!: ElementRef<HTMLDivElement>;
@@ -62,8 +64,15 @@ export class SignInWithGoogleComponent implements AfterViewInit {
   }
 
   async afterSignInComplete(args: any) {
-    const session =
-      await this.serverActionsService.users.signInWithGoogle(args);
+    const session = await this.serverActionsService.users.signInWithGoogle(
+      {
+        ...args,
+        allowRegistration: this.allowRegistration,
+      },
+      {
+        404: () => this.accountNotFound.emit(),
+      },
+    );
 
     if (session) {
       this.signInComplete.emit(session);

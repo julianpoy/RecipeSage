@@ -7,7 +7,7 @@
     <ion-title>
       {{
         "pages.shoppingList.title"
-          | translate: { title: shoppingList?.title || "" }
+          | translate: { title: shoppingList()?.title || "" }
       }}
     </ion-title>
 
@@ -61,7 +61,7 @@
                       [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
                       [showAddedBy]="
                         preferences[preferenceKeys.ShowAddedBy] &&
-                        !!shoppingList?.collaboratorUsers?.length
+                        !!shoppingList()?.collaboratorUsers?.length
                       "
                       (completeToggle)="completeItems($event, true)"
                       (recategorize)="recategorizeItems($event[0], $event[1])"
@@ -91,7 +91,7 @@
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="
                 preferences[preferenceKeys.ShowAddedBy] &&
-                !!shoppingList?.collaboratorUsers?.length
+                !!shoppingList()?.collaboratorUsers?.length
               "
               (completeToggle)="completeItems($event, true)"
               (recategorize)="recategorizeItems($event[0], $event[1])"
@@ -143,7 +143,7 @@
                       "
                       [ownerName]="
                         (preferences[preferenceKeys.ShowAddedBy] &&
-                          shoppingList?.collaboratorUsers?.length &&
+                          shoppingList()?.collaboratorUsers?.length &&
                           item.user.name) ||
                         undefined
                       "
@@ -180,7 +180,7 @@
               "
               [ownerName]="
                 (preferences[preferenceKeys.ShowAddedBy] &&
-                  shoppingList?.collaboratorUsers?.length &&
+                  shoppingList()?.collaboratorUsers?.length &&
                   item.user.name) ||
                 undefined
               "
@@ -191,7 +191,7 @@
         }
       </div>
     }
-    @if (shoppingListItems === undefined) {
+    @if (shoppingListItems() === undefined) {
       <null-state>
         <ion-spinner virtualSlot="header"></ion-spinner>
         <ion-label virtualSlot="body">
@@ -199,7 +199,7 @@
         </ion-label>
       </null-state>
     }
-    @if (shoppingListItems?.length === 0) {
+    @if (shoppingListItems()?.length === 0) {
       <null-state>
         <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">
@@ -289,7 +289,7 @@
           "
           [ownerName]="
             (preferences[preferenceKeys.ShowAddedBy] &&
-              shoppingList?.collaboratorUsers?.length &&
+              shoppingList()?.collaboratorUsers?.length &&
               item.user.name) ||
             undefined
           "

@@ -1,7 +1,11 @@
 import type { Prisma } from "../prisma/generated/client";
-import { userPublic } from "./userPublic";
-import { labelSummary } from "./labelSummary";
-import { recipeSummaryLite } from "./recipeSummaryLite";
+import { z } from "zod";
+import { userPublic, userPublicSchema } from "./userPublic";
+import { labelSummary, labelSummarySchema } from "./labelSummary";
+import {
+  recipeSummaryLite,
+  recipeSummaryLiteSchema,
+} from "./recipeSummaryLite";
 
 /**
  * All recipe fields including labels, user profile, images, etc
@@ -88,3 +92,83 @@ type InternalRecipeSummary = Prisma.RecipeGetPayload<typeof recipeSummary>;
 export type RecipeSummary = Omit<InternalRecipeSummary, "lastMadeAt"> & {
   lastMadeAt: string | null;
 };
+
+const linkedRecipeSchema = recipeSummaryLiteSchema.extend({
+  lastMadeAt: z.date().nullable(),
+});
+
+export const recipeSummarySchema = z.object({
+  id: z.uuid(),
+  userId: z.uuid(),
+  fromUserId: z.uuid().nullable(),
+  title: z.string(),
+  description: z.string(),
+  yield: z.string(),
+  activeTime: z.string(),
+  totalTime: z.string(),
+  source: z.string(),
+  url: z.string(),
+  folder: z.string(),
+  ingredients: z.string(),
+  instructions: z.string(),
+  notes: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  lastMadeAt: z.string().nullable(),
+  rating: z.number().int().nullable(),
+  nutritionServingSize: z.string().nullable(),
+  nutritionCalories: z.number().nullable(),
+  nutritionTotalFat: z.number().nullable(),
+  nutritionSaturatedFat: z.number().nullable(),
+  nutritionTransFat: z.number().nullable(),
+  nutritionPolyunsaturatedFat: z.number().nullable(),
+  nutritionMonounsaturatedFat: z.number().nullable(),
+  nutritionCholesterol: z.number().nullable(),
+  nutritionSodium: z.number().nullable(),
+  nutritionTotalCarbs: z.number().nullable(),
+  nutritionDietaryFiber: z.number().nullable(),
+  nutritionTotalSugars: z.number().nullable(),
+  nutritionAddedSugars: z.number().nullable(),
+  nutritionProtein: z.number().nullable(),
+  nutritionVitaminD: z.number().nullable(),
+  nutritionCalcium: z.number().nullable(),
+  nutritionIron: z.number().nullable(),
+  nutritionPotassium: z.number().nullable(),
+  nutritionOtherDetails: z.string().nullable(),
+  recipeLabels: z.array(
+    z.object({
+      id: z.uuid(),
+      labelId: z.uuid(),
+      recipeId: z.uuid(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
+      label: labelSummarySchema,
+    }),
+  ),
+  recipeImages: z.array(
+    z.object({
+      id: z.uuid(),
+      order: z.number().int(),
+      imageId: z.uuid(),
+      image: z.object({
+        id: z.uuid(),
+        location: z.string(),
+      }),
+    }),
+  ),
+  recipeLinks: z.array(
+    z.object({
+      id: z.uuid(),
+      linkedRecipe: linkedRecipeSchema,
+    }),
+  ),
+  fromUser: userPublicSchema.nullable(),
+  user: userPublicSchema,
+});
+
+const _checkSchemaSatisfiesType = {} as z.infer<
+  typeof recipeSummarySchema
+> satisfies RecipeSummary;
+const _checkTypeSatisfiesSchema = {} as RecipeSummary satisfies z.infer<
+  typeof recipeSummarySchema
+>;

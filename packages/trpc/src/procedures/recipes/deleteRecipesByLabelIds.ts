@@ -5,11 +5,21 @@ import { validateTrpcSession } from "@recipesage/util/server/general";
 import { deleteRecipes } from "@recipesage/util/server/search";
 
 export const deleteRecipesByLabelIds = publicProcedure
+  .meta({
+    openapi: {
+      method: "POST",
+      path: "/recipes/deleteRecipesByLabelIds",
+      tags: ["recipes"],
+      summary: "Delete every recipe that has at least one of the given labels",
+      protect: true,
+    },
+  })
   .input(
     z.object({
       labelIds: z.array(z.uuid()).min(1),
     }),
   )
+  .output(z.string())
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);

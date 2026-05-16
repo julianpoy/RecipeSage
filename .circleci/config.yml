@@ -58,6 +58,9 @@ jobs:
       - checkout
       - install-dependencies
       - run:
+          name: install-pandoc
+          command: sudo apt-get update && sudo apt-get install -y pandoc
+      - run:
           name: prettier
           command: pnpm exec prettier --check .
       - run:
@@ -70,6 +73,7 @@ jobs:
             pnpm exec nx run-many --targets=build,lint,typecheck --output-style=static
           environment:
             ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=4096
       - run:
           name: migrate
           command: pnpm exec prisma migrate dev
@@ -178,6 +182,7 @@ jobs:
           command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build frontend --skip-nx-cache)
           environment:
             ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=4096
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
@@ -250,6 +255,7 @@ jobs:
           command: (export APP_VERSION=${CIRCLE_TAG:=stg} && pnpm exec nx build:selfhost frontend --skip-nx-cache)
           environment:
             ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=4096
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
