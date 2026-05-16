@@ -10,6 +10,7 @@ export interface ClipResult {
   ingredients?: string;
   instructions?: string;
   imageURL?: string;
+  nutritionInfo?: string;
 }
 
 export class ClipError extends Error {

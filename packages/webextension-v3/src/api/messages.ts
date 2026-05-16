@@ -1,5 +1,9 @@
 import type { ClipResult } from "./clip";
-import type { SaveRecipeInput, SaveRecipeResult } from "./saveRecipe";
+import type {
+  Nutrition,
+  SaveRecipeInput,
+  SaveRecipeResult,
+} from "./saveRecipe";
 
 export interface SignInResult {
   status: "ok" | "cancelled" | "error";
@@ -38,12 +42,21 @@ export interface SaveRecipeRequest {
   recipe: SaveRecipeInput;
 }
 
+export interface GetNutritionFromTextRequest {
+  type: "getNutritionFromText";
+  text: string;
+}
+
 export type ClipRecipeResponse =
   | { ok: true; data: ClipResult }
   | { ok: false; error: BridgeError };
 
 export type SaveRecipeResponse =
   | { ok: true; data: SaveRecipeResult }
+  | { ok: false; error: BridgeError };
+
+export type GetNutritionFromTextResponse =
+  | { ok: true; data: Nutrition }
   | { ok: false; error: BridgeError };
 
 const isBridgeError = (value: unknown): value is BridgeError => {
@@ -84,6 +97,22 @@ export const isSaveRecipeResponse = (
     if (!("data" in value)) return false;
     if (typeof value.data !== "object" || value.data === null) return false;
     return "id" in value.data && typeof value.data.id === "string";
+  }
+  if (value.ok === false) {
+    return "error" in value && isBridgeError(value.error);
+  }
+  return false;
+};
+
+export const isGetNutritionFromTextResponse = (
+  value: unknown,
+): value is GetNutritionFromTextResponse => {
+  if (typeof value !== "object" || value === null) return false;
+  if (!("ok" in value)) return false;
+  if (value.ok === true) {
+    return (
+      "data" in value && typeof value.data === "object" && value.data !== null
+    );
   }
   if (value.ok === false) {
     return "error" in value && isBridgeError(value.error);

@@ -33,7 +33,9 @@
   position: fixed;
   right: 10px;
   top: 20%;
-  width: 300px;
+  width: clamp(280px, 28vw, 480px);
+  max-height: 80vh;
+  overflow-y: auto;
   padding: 10px;
 
   z-index: 9999999999999999999999999 !important;
@@ -49,30 +51,32 @@
   color: black;
 }
 
-@media only screen and (min-width: 1400px) {
-  .rs-chrome-container {
-    width: 325px;
-  }
+label.field {
+  display: block;
+  position: relative;
+  margin-top: 14px;
 }
 
-@media only screen and (min-width: 1700px) {
-  .rs-chrome-container {
-    width: 350px;
-  }
-}
-
-label {
-  display: flex;
+label.field .field-name {
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  font-size: 10px;
+  color: #888;
+  background: white;
+  padding: 0 4px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 input,
 textarea {
-  min-width: 0;
-  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
   background: none;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  padding: 8px 6px;
   transition: 0.3s;
   background: transparent;
   color: black;
@@ -81,14 +85,15 @@ textarea {
 }
 
 textarea {
-  height: 30px;
-  min-height: 16px;
+  height: 50px;
+  min-height: 30px;
+  resize: vertical;
   margin-bottom: 5px;
 }
 
 @media only screen and (min-height: 950px) {
   textarea {
-    height: 40px;
+    height: 60px;
   }
 }
 
@@ -119,41 +124,21 @@ button {
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
-button.icon-button {
-  padding: 0 8px;
-}
-
 button.clear {
   background: none;
   box-shadow: none;
   color: #00a8ff;
 }
 
-button .icon {
-  display: inline-flex;
-  vertical-align: middle;
-}
-
-button .icon svg {
-  width: 16px;
-  height: 16px;
-}
-
 .logo {
   height: 35px;
-}
-
-.tip {
-  margin-top: 8px;
-  margin-bottom: 16px;
-  text-align: center;
-  font-size: 12px;
 }
 
 .headline {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 6px;
 }
 
 .headline-left {
@@ -172,7 +157,56 @@ button .icon svg {
   height: 18px;
 }
 
+.nutrition-section {
+  margin-top: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.nutrition-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+  padding: 12px 14px;
+  margin: 0;
+  background: #f5f7fa;
+  color: #333;
+  border: none;
+  border-radius: 0;
+  text-transform: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.nutrition-header:hover {
+  background: #eef1f5;
+}
+
+.nutrition-caret {
+  font-size: 10px;
+  color: #555;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  width: 10px;
+}
+
+.nutrition-section.open .nutrition-caret {
+  transform: rotate(90deg);
+}
+
+.nutrition-body {
+  padding: 4px 14px 14px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
 .save {
   width: 100%;
-  margin: 5px 0 0;
+  margin: 16px 0 0;
 }

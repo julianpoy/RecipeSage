@@ -2,7 +2,50 @@ import { TRPCClientError } from "@trpc/client";
 import { createTrpc } from "./trpc";
 import type { ClipResult } from "./clip";
 
-export interface SaveRecipeInput extends ClipResult {
+export interface Nutrition {
+  servingSize: string | null;
+  calories: number | null;
+  totalFat: number | null;
+  saturatedFat: number | null;
+  transFat: number | null;
+  polyunsaturatedFat: number | null;
+  monounsaturatedFat: number | null;
+  cholesterol: number | null;
+  sodium: number | null;
+  totalCarbs: number | null;
+  dietaryFiber: number | null;
+  totalSugars: number | null;
+  addedSugars: number | null;
+  protein: number | null;
+  vitaminD: number | null;
+  calcium: number | null;
+  iron: number | null;
+  potassium: number | null;
+}
+
+export interface NutritionFields {
+  nutritionServingSize?: string | null;
+  nutritionCalories?: number | null;
+  nutritionTotalFat?: number | null;
+  nutritionSaturatedFat?: number | null;
+  nutritionTransFat?: number | null;
+  nutritionPolyunsaturatedFat?: number | null;
+  nutritionMonounsaturatedFat?: number | null;
+  nutritionCholesterol?: number | null;
+  nutritionSodium?: number | null;
+  nutritionTotalCarbs?: number | null;
+  nutritionDietaryFiber?: number | null;
+  nutritionTotalSugars?: number | null;
+  nutritionAddedSugars?: number | null;
+  nutritionProtein?: number | null;
+  nutritionVitaminD?: number | null;
+  nutritionCalcium?: number | null;
+  nutritionIron?: number | null;
+  nutritionPotassium?: number | null;
+  nutritionOtherDetails?: string | null;
+}
+
+export interface SaveRecipeInput extends ClipResult, NutritionFields {
   url: string;
 }
 
@@ -64,6 +107,27 @@ export const saveRecipe = async (
       folder: "main",
       labelIds: [],
       imageIds,
+      nutritionServingSize: recipe.nutritionServingSize ?? undefined,
+      nutritionCalories: recipe.nutritionCalories ?? undefined,
+      nutritionTotalFat: recipe.nutritionTotalFat ?? undefined,
+      nutritionSaturatedFat: recipe.nutritionSaturatedFat ?? undefined,
+      nutritionTransFat: recipe.nutritionTransFat ?? undefined,
+      nutritionPolyunsaturatedFat:
+        recipe.nutritionPolyunsaturatedFat ?? undefined,
+      nutritionMonounsaturatedFat:
+        recipe.nutritionMonounsaturatedFat ?? undefined,
+      nutritionCholesterol: recipe.nutritionCholesterol ?? undefined,
+      nutritionSodium: recipe.nutritionSodium ?? undefined,
+      nutritionTotalCarbs: recipe.nutritionTotalCarbs ?? undefined,
+      nutritionDietaryFiber: recipe.nutritionDietaryFiber ?? undefined,
+      nutritionTotalSugars: recipe.nutritionTotalSugars ?? undefined,
+      nutritionAddedSugars: recipe.nutritionAddedSugars ?? undefined,
+      nutritionProtein: recipe.nutritionProtein ?? undefined,
+      nutritionVitaminD: recipe.nutritionVitaminD ?? undefined,
+      nutritionCalcium: recipe.nutritionCalcium ?? undefined,
+      nutritionIron: recipe.nutritionIron ?? undefined,
+      nutritionPotassium: recipe.nutritionPotassium ?? undefined,
+      nutritionOtherDetails: recipe.nutritionOtherDetails ?? undefined,
     });
   } catch (e) {
     if (e instanceof TRPCClientError && e.data?.httpStatus === 401) {

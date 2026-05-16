@@ -1,6 +1,8 @@
 export interface ExtensionPreferences {
   disableAutoSnip?: boolean;
   seenTutorial?: boolean;
+  autoClipNutrition?: boolean;
+  autoOpenAfterImport?: boolean;
 }
 
 export const getToken = async (): Promise<string | undefined> => {
@@ -15,6 +17,8 @@ export const getPreferences = async (): Promise<ExtensionPreferences> => {
   const result = await chrome.storage.local.get([
     "disableAutoSnip",
     "seenTutorial",
+    "autoClipNutrition",
+    "autoOpenAfterImport",
   ]);
   return {
     disableAutoSnip:
@@ -24,6 +28,14 @@ export const getPreferences = async (): Promise<ExtensionPreferences> => {
     seenTutorial:
       typeof result.seenTutorial === "boolean"
         ? result.seenTutorial
+        : undefined,
+    autoClipNutrition:
+      typeof result.autoClipNutrition === "boolean"
+        ? result.autoClipNutrition
+        : undefined,
+    autoOpenAfterImport:
+      typeof result.autoOpenAfterImport === "boolean"
+        ? result.autoOpenAfterImport
         : undefined,
   };
 };

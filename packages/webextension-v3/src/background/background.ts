@@ -6,9 +6,16 @@ import {
   NotLoggedInError,
   saveRecipe,
 } from "../api/saveRecipe";
+import {
+  NutritionAuthError,
+  NutritionRateLimitError,
+  getNutritionFromText,
+} from "../api/nutrition";
 import type {
   ClipRecipeRequest,
   ClipRecipeResponse,
+  GetNutritionFromTextRequest,
+  GetNutritionFromTextResponse,
   SaveRecipeRequest,
   SaveRecipeResponse,
   SignInResult,
@@ -126,6 +133,32 @@ const handleSaveRecipe = async (
   }
 };
 
+const handleGetNutritionFromText = async (
+  req: GetNutritionFromTextRequest,
+): Promise<GetNutritionFromTextResponse> => {
+  const token = await getToken();
+  if (!token) return { ok: false, error: { code: "not-logged-in" } };
+  const { apiBase } = await getEffectiveBases();
+  try {
+    const data = await getNutritionFromText(apiBase, token, req.text);
+    return { ok: true, data };
+  } catch (e) {
+    if (e instanceof NutritionAuthError) {
+      return { ok: false, error: { code: "not-logged-in" } };
+    }
+    if (e instanceof NutritionRateLimitError) {
+      return { ok: false, error: { code: "rate-limited" } };
+    }
+    return {
+      ok: false,
+      error: {
+        code: "unknown",
+        message: e instanceof Error ? e.message : String(e),
+      },
+    };
+  }
+};
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "startExtensionAuth") {
     void (async () => {
@@ -152,6 +185,17 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "saveRecipe") {
     void (async () => {
       const result = await handleSaveRecipe(message);
+      try {
+        sendResponse(result);
+      } catch {
+        // channel closed
+      }
+    })();
+    return true;
+  }
+  if (message?.type === "getNutritionFromText") {
+    void (async () => {
+      const result = await handleGetNutritionFromText(message);
       try {
         sendResponse(result);
       } catch {

@@ -8,20 +8,24 @@
       }
 
       body {
-        padding: 16px;
+        padding: 16px 16px 8px;
         font-size: 14px;
+        margin: 0;
 
         font-family: Arial, Helvetica, sans-serif;
       }
 
       .container {
-        min-width: 400px;
-        min-height: 200px;
+        min-width: 320px;
+        max-width: 360px;
       }
 
-      .container h2 {
-        margin-top: 0;
-        margin-bottom: 32px;
+      .headline {
+        text-align: center;
+      }
+
+      .headline img {
+        height: 45px;
       }
 
       input,
@@ -42,10 +46,11 @@
         outline: none;
       }
 
-      button {
-        height: 32px;
-        padding: 0 11px;
-        margin: 4px;
+      button.primary {
+        display: block;
+        width: 100%;
+        height: 36px;
+        margin: 0;
 
         font-size: 14px;
         font-weight: 500;
@@ -63,6 +68,49 @@
           0 1px 5px 0 rgba(0, 0, 0, 0.12);
       }
 
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+
+      .option:first-child {
+        margin-top: 4px;
+      }
+
+      .option:last-of-type {
+        margin-bottom: 12px;
+      }
+
+      .option input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+        padding: 0;
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        margin: 16px 0;
+      }
+
+      .docs-link-row {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 16px;
+      }
+
+      .docs-link-row a {
+        color: #00a8ff;
+        text-decoration: none;
+      }
+
+      .docs-link-row a:hover {
+        text-decoration: underline;
+      }
+
       #tutorial {
         display: none;
       }
@@ -76,17 +124,8 @@
         padding-top: 10px;
       }
 
-      .headline {
-        text-align: center;
-      }
-
-      .headline h2,
-      .headline p {
-        text-align: left;
-      }
-
-      .headline img {
-        height: 45px;
+      .headline-block {
+        margin-bottom: 12px;
       }
     </style>
     <script type="text/javascript" src="action.js"></script>
@@ -94,16 +133,37 @@
   <body>
     <div class="container">
       <div id="start">
-        <div class="headline">
+        <div class="headline headline-block">
           <a href="https://recipesage.com" target="_blank">
             <img class="logo" />
           </a>
-          <br /><br />
-          <h2>Import Site</h2>
         </div>
-        <button id="auto-import">&nbsp;Auto Import&nbsp;</button>&nbsp;
-        <button id="interactive-import">&nbsp;Interactive Import&nbsp;</button
-        >&nbsp;
+
+        <label class="option">
+          <input type="checkbox" id="auto-include-nutrition" />
+          <span>Include nutrition</span>
+        </label>
+        <label class="option">
+          <input type="checkbox" id="auto-open-tab" />
+          <span>Open recipe in new tab after import</span>
+        </label>
+
+        <button id="auto-import" class="primary">Auto Import</button>
+
+        <hr />
+
+        <button id="interactive-import" class="primary">
+          Interactive Import
+        </button>
+
+        <div class="docs-link-row">
+          <a
+            id="docs-link"
+            href="https://docs.recipesage.com/docs/tutorials/browser-extension"
+            target="_blank"
+            >Documentation</a
+          >
+        </div>
       </div>
       <div id="importing">
         <div class="headline">
@@ -118,7 +178,7 @@
           <h2>Welcome!</h2>
           <p>You are logged out.</p>
         </div>
-        <button id="login-submit">&nbsp;Sign in&nbsp;</button>
+        <button id="login-submit" class="primary">Sign in</button>
       </div>
       <div id="tutorial">
         <div class="headline">
@@ -149,7 +209,7 @@
         </ol>
 
         <br />
-        <button id="tutorial-submit">Dismiss</button>
+        <button id="tutorial-submit" class="primary">Dismiss</button>
       </div>
       <span id="message"></span>
     </div>

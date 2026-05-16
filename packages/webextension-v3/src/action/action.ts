@@ -4,10 +4,22 @@ import {
   NotLoggedInError,
   saveRecipe,
 } from "../api/saveRecipe";
-import { getPreferences, getToken, setToken } from "../api/storage";
+import type { Nutrition, NutritionFields } from "../api/saveRecipe";
+import {
+  ExtensionPreferences,
+  getPreferences,
+  getToken,
+  setPreferences,
+  setToken,
+} from "../api/storage";
 import { getEffectiveBases } from "../config";
 import { isSignInResult } from "../api/messages";
 import { validateSession } from "../api/session";
+import {
+  NutritionAuthError,
+  NutritionRateLimitError,
+  getNutritionFromText,
+} from "../api/nutrition";
 
 const setMessage = (text: string) => {
   const el = document.getElementById("message");
@@ -80,6 +92,27 @@ const handleNotLoggedIn = async () => {
   );
 };
 
+const nutritionToFields = (n: Nutrition): NutritionFields => ({
+  nutritionServingSize: n.servingSize,
+  nutritionCalories: n.calories,
+  nutritionTotalFat: n.totalFat,
+  nutritionSaturatedFat: n.saturatedFat,
+  nutritionTransFat: n.transFat,
+  nutritionPolyunsaturatedFat: n.polyunsaturatedFat,
+  nutritionMonounsaturatedFat: n.monounsaturatedFat,
+  nutritionCholesterol: n.cholesterol,
+  nutritionSodium: n.sodium,
+  nutritionTotalCarbs: n.totalCarbs,
+  nutritionDietaryFiber: n.dietaryFiber,
+  nutritionTotalSugars: n.totalSugars,
+  nutritionAddedSugars: n.addedSugars,
+  nutritionProtein: n.protein,
+  nutritionVitaminD: n.vitaminD,
+  nutritionCalcium: n.calcium,
+  nutritionIron: n.iron,
+  nutritionPotassium: n.potassium,
+});
+
 const autoClip = async () => {
   showOnly("importing");
 
@@ -94,6 +127,10 @@ const autoClip = async () => {
     await handleNotLoggedIn();
     return;
   }
+
+  const prefs = await getPreferences();
+  const includeNutrition = prefs.autoClipNutrition !== false;
+  const openAfterImport = prefs.autoOpenAfterImport !== false;
 
   const { apiBase, webBase } = await getEffectiveBases();
 
@@ -131,18 +168,50 @@ const autoClip = async () => {
     return;
   }
 
+  let nutritionFields: NutritionFields = {};
+  if (
+    includeNutrition &&
+    clip.nutritionInfo &&
+    clip.nutritionInfo.trim().length > 0
+  ) {
+    try {
+      const nutrition = await getNutritionFromText(
+        apiBase,
+        token,
+        clip.nutritionInfo,
+      );
+      nutritionFields = nutritionToFields(nutrition);
+    } catch (e) {
+      if (e instanceof NutritionAuthError) {
+        await handleNotLoggedIn();
+        return;
+      }
+      if (e instanceof NutritionRateLimitError) {
+        console.warn("Nutrition rate-limited; saving without nutrition");
+      } else {
+        console.warn("Failed to parse nutrition; saving without nutrition", e);
+      }
+    }
+  }
+
   try {
     const saved = await saveRecipe(apiBase, token, {
       ...clip,
+      ...nutritionFields,
       title: clip.title || tab.title || "",
       url: tab.url || "",
     });
 
-    await chrome.tabs.create({
-      url: `${webBase}/app/recipe/${saved.id}`,
-      active: true,
-    });
-    window.close();
+    if (openAfterImport) {
+      await chrome.tabs.create({
+        url: `${webBase}/app/recipe/${saved.id}`,
+        active: true,
+      });
+      window.close();
+    } else {
+      setMessage("Recipe imported successfully.");
+      setTimeout(() => window.close(), 2000);
+    }
   } catch (e) {
     if (e instanceof NotLoggedInError) {
       await handleNotLoggedIn();
@@ -175,6 +244,20 @@ const interactiveClip = async () => {
   window.close();
 };
 
+const bindOptionCheckbox = (
+  id: string,
+  prefKey: keyof ExtensionPreferences,
+  prefs: ExtensionPreferences,
+) => {
+  const el = document.getElementById(id);
+  if (!(el instanceof HTMLInputElement)) return;
+  const stored = prefs[prefKey];
+  el.checked = typeof stored === "boolean" ? stored : true;
+  el.onchange = () => {
+    void setPreferences({ [prefKey]: el.checked });
+  };
+};
+
 const wireUp = async () => {
   for (const logo of document.querySelectorAll(".logo")) {
     if (logo instanceof HTMLImageElement) {
@@ -192,6 +275,10 @@ const wireUp = async () => {
   if (autoBtn) autoBtn.onclick = () => void autoClip();
   const interactiveBtn = document.getElementById("interactive-import");
   if (interactiveBtn) interactiveBtn.onclick = () => void interactiveClip();
+
+  const prefs = await getPreferences();
+  bindOptionCheckbox("auto-include-nutrition", "autoClipNutrition", prefs);
+  bindOptionCheckbox("auto-open-tab", "autoOpenAfterImport", prefs);
 
   const token = await getToken();
   if (!token) {
