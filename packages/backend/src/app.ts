@@ -45,8 +45,7 @@ const defaultCorsAllowlist = [
   "https://localhost",
   "capacitor://localhost",
   "moz-extension://*",
-  "chrome-extension://oepplnnfceidfaaacjpdpobnjkcpgcpo",
-  "*", // Temporary fix for 1401, circle back and fix webextension manifests
+  "chrome-extension://*",
 ];
 
 const hostMatch = (pattern: string, origin: string) => {

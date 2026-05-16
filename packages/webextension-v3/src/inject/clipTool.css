@@ -129,9 +129,14 @@ button.clear {
   color: #00a8ff;
 }
 
-button i {
-  font-size: 16px;
-  vertical-align: bottom;
+button .icon {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+button .icon svg {
+  width: 16px;
+  height: 16px;
 }
 
 .logo {
@@ -156,9 +161,15 @@ button i {
   align-self: flex-start;
 }
 
-.headline-left > .ion-md-move {
+.headline-left > .move-handle {
+  display: inline-flex;
   margin-right: 5px;
   cursor: grab;
+}
+
+.headline-left > .move-handle svg {
+  width: 18px;
+  height: 18px;
 }
 
 .save {
