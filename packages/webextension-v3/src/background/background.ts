@@ -94,7 +94,7 @@ const handleClipRecipe = async (
     if (e instanceof ClipError && e.status === 401) {
       return { ok: false, error: { code: "not-logged-in" } };
     }
-    if (e instanceof ClipError && e.status === 429) {
+    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
       return { ok: false, error: { code: "rate-limited" } };
     }
     return {

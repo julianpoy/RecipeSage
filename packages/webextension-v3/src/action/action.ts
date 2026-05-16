@@ -21,6 +21,12 @@ import {
   getNutritionFromText,
 } from "../api/nutrition";
 
+const CREDIT_LIMIT_ALERT = `Sorry, limit reached
+
+The autoimport feature is particularly costly to host, so I've had to place a gentle limit on the number of times per day this feature can be used (sorry!). Your usage limit for automatic import & cooking assistant messages resets at 0:00GMT.
+
+Contributing unlocks a larger daily allowance (10x the limit) since it helps to cover the costs. Sorry for the inconvenience!`;
+
 const setMessage = (text: string) => {
   const el = document.getElementById("message");
   if (el) el.innerText = text;
@@ -155,10 +161,8 @@ const autoClip = async () => {
       await handleNotLoggedIn();
       return;
     }
-    if (e instanceof ClipError && e.status === 429) {
-      window.alert(
-        "Daily limit reached for clipping. Cooking credits reset at 0:00 GMT. Consider contributing for a larger daily allowance.",
-      );
+    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
+      window.alert(CREDIT_LIMIT_ALERT);
       return;
     }
     console.error(e);
@@ -187,7 +191,7 @@ const autoClip = async () => {
         return;
       }
       if (e instanceof NutritionRateLimitError) {
-        console.warn("Nutrition rate-limited; saving without nutrition");
+        window.alert(CREDIT_LIMIT_ALERT);
       } else {
         console.warn("Failed to parse nutrition; saving without nutrition", e);
       }

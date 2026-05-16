@@ -2,6 +2,7 @@ import { ClipError } from "../api/clip";
 import type { ClipResult } from "../api/clip";
 import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
+import { NutritionRateLimitError } from "../api/nutrition";
 import {
   clipFromHtmlViaBg,
   getNutritionFromTextViaBg,
@@ -14,6 +15,12 @@ import {
   setToken,
 } from "../api/storage";
 import { getEffectiveBases } from "../config";
+
+const CREDIT_LIMIT_ALERT = `Sorry, limit reached
+
+The autoimport feature is particularly costly to host, so I've had to place a gentle limit on the number of times per day this feature can be used (sorry!). Your usage limit for automatic import & cooking assistant messages resets at 0:00GMT.
+
+Contributing unlocks a larger daily allowance (10x the limit) since it helps to cover the costs. Sorry for the inconvenience!`;
 
 const EXTENSION_CONTAINER_ID = "recipeSageBrowserExtensionRootContainer";
 
@@ -77,6 +84,10 @@ async function bootstrap() {
     try {
       return await getNutritionFromTextViaBg(text);
     } catch (e) {
+      if (e instanceof NutritionRateLimitError) {
+        window.alert(CREDIT_LIMIT_ALERT);
+        return undefined;
+      }
       console.warn("Failed to parse nutrition from clip text", e);
       return undefined;
     }
@@ -94,32 +105,19 @@ async function bootstrap() {
 async function autoSnipFromPage(
   token: string | undefined,
 ): Promise<ClipResult | undefined> {
-  if (!token) {
-    window.alert(
-      "Please login. Click the RecipeSage icon to log in, then try again.",
-    );
-    return undefined;
-  }
+  if (!token) return undefined;
   try {
     return await clipFromHtmlViaBg(document.documentElement.outerHTML);
   } catch (e) {
     if (e instanceof ClipError && e.status === 401) {
       await setToken(null);
-      window.alert(
-        "Please login. It looks like you're logged out. Please close and re-open the clip tool to login.",
-      );
       return undefined;
     }
-    if (e instanceof ClipError && e.status === 429) {
-      window.alert(
-        "Daily limit reached for clipping. Cooking credits reset at 0:00 GMT. Consider contributing for a larger daily allowance.",
-      );
+    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
+      window.alert(CREDIT_LIMIT_ALERT);
       return undefined;
     }
-    console.error(e);
-    window.alert(
-      "Error while attempting to automatically clip recipe from page",
-    );
+    console.warn("Auto-fill from page failed; opening empty editor", e);
     return undefined;
   }
 }
