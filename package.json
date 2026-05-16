@@ -206,7 +206,7 @@
     "@vitest/coverage-v8": "4.0.18",
     "@vitest/eslint-plugin": "^1.6.9",
     "@vitest/ui": "4.0.18",
-    "astro": "^6.1.9",
+    "astro": "^6.1.10",
     "astro-eslint-parser": "^1.4.0",
     "copy-webpack-plugin": "^13.0.1",
     "esbuild": "^0.27.2",
