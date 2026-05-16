@@ -70,7 +70,7 @@ jobs:
             SENTRY_RELEASE=$CIRCLE_TAG \
             SOURCEMAP_UPLOAD=${CIRCLE_TAG:+true} \
             NX_SKIP_NX_CACHE=${CIRCLE_TAG:+true} \
-            pnpm exec nx run-many --targets=build,lint,typecheck --output-style=static
+            pnpm exec nx run-many --targets=build,lint,typecheck --output-style=static --parallel=2
           environment:
             ENVIRONMENT: production
             NODE_OPTIONS: --max-old-space-size=4096
@@ -93,7 +93,7 @@ jobs:
           command: dockerize -wait tcp://localhost:3001 -timeout 30s
       - run:
           name: test
-          command: pnpm exec nx run-many --targets=test --output-style=static
+          command: pnpm exec nx run-many --targets=test --output-style=static --parallel=2
           environment:
             APP_VERSION: ci
   push_backend:

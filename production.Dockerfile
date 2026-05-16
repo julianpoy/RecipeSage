@@ -34,7 +34,7 @@ COPY fonts fonts
 # Prisma must be regenerated since schema is not present during install stage
 RUN pnpm exec prisma generate
 
-RUN pnpm exec nx run-many -t build -p backend,queue-worker,cli --parallel=6
+RUN pnpm exec nx run-many -t build -p backend,queue-worker,cli --parallel=3
 
 ARG VERSION
 ENV VERSION=$VERSION
