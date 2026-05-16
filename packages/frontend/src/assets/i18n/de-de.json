@@ -1193,7 +1193,7 @@
     "pages.editRecipe.nutritionInvalid": "Mindestens ein Nährwert-Feld enthält ungültige Werte. Nährwert-Felder unterstützen nur Ganz‑ und Dezimalzahlen.",
     "pages.editRecipe.clip.includeNutrition": "Versuchen, Nährwerte zu erfassen (Genauigkeit variiert!)",
     "pages.account.credits.usageValue": "Heute {{used}}/{{limit}} Koch-Tokens verwendet",
-    "errors.creditsLimitReached": "Tägliches Budget für Scannen/Importieren von Rezepten und Kochassistent ist erschöpft (sorry, KI ist teuer!). Koch-Tokens werden um 0:00 GMT zurückgesetzt. Werde Unterstützer, um ein höheres Budget zu erhalten.",
+    "errors.creditsLimitReached": "Das Hosten der Auto-Importfunktion ist teuer, darum musste ich die tägliche Benutzung etwas limitieren (sorry!). Dein tägliches Budget für automatische Importe und Nachrichten an den Kochassistenten wird um 0:00 GMT zurückgesetzt.\n\nDurch eine Spende können die Kosten gedeckt werden und dein tägliches Budget wird verzehnfacht.",
     "pages.account.bonus.moreUsageCredits": "Höheres Budget mit Koch-Tokens",
     "pages.settings.autoExpandNutrition": "Nährwerte beim Bearbeiten von Rezepten automatisch ausklappen",
     "components.multiImageUpload.imageFormatError": "Mindestens ein Bild konnte nicht verarbeitet werden, da das Format nicht unterstützt wird. Bitte lade JPEG‑, PNG‑ oder HEIC-Dateien hoch.",
@@ -1241,5 +1241,7 @@
     "pages.downloadAndInstall.extension.installFirefox": "Für Firefox installieren",
     "pages.downloadAndInstall.extension.installChrome": "Für Chrome installieren",
     "pages.downloadAndInstall.icon.menuDots": "vertikales Drei-Punkte-Symbol",
-    "pages.downloadAndInstall.icon.share": "Teilen-Symbol"
+    "pages.downloadAndInstall.icon.share": "Teilen-Symbol",
+    "errors.creditsLimitReached.title": "Sorry, Limit wurde erreicht",
+    "generic.moreInfo": "Mehr Infos"
 }
