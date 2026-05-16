@@ -358,7 +358,7 @@
   "pages.contribute.bonus.feature.3": "Unlimited cooking assistant messages",
   "pages.contribute.bonus.feature.4": "Higher daily usage allowance for recipe clipping, OCR/image & PDF recognition, URL & text-file imports, and nutrition autofill",
   "pages.contribute.bonus.enabled": "Enabled",
-  "pages.contribute.bonus.reason": "Bonus features features are accessible only to contributors because these particular features are costly for me to host.",
+  "pages.contribute.bonus.reason": "Bonus features are accessible only to contributors because these particular features are costly for me to host.",
   "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
   "pages.contribute.cta.2": "Please consider contributing toward the ongoing maintenance of RecipeSage.",
   "pages.contribute.minimum": "Unfortunately the minimum amount is ${{amount}} due to transaction fees - apologies",
