@@ -115,6 +115,9 @@ export const clipUrl = async (
       cachedRecipe.recipe.ingredients &&
       cachedRecipe.recipe.instructions
     ) {
+      metrics.clipCacheLookup.inc({
+        result: "hit",
+      });
       metrics.clipSuccess.inc({
         form: "url",
         method: "cached",
@@ -122,6 +125,10 @@ export const clipUrl = async (
       return cachedRecipe;
     }
   }
+
+  metrics.clipCacheLookup.inc({
+    result: "miss",
+  });
 
   const response = await (async () => {
     const timeout = parseInt(
