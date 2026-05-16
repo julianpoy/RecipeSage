@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-title>{{ "pages.extensionAuth.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="auth-container">
+    <ion-list>
+      <div class="auth-entry">
+        <br />
+        @if (!isSelfHost) {
+          <logo-icon [noBg]="true"></logo-icon>
+        }
+
+        @if (invalidRequest) {
+          <div class="welcome">
+            <h2>
+              {{ "pages.extensionAuth.invalidRequest.title" | translate }}
+            </h2>
+            <span>{{
+              "pages.extensionAuth.invalidRequest.message" | translate
+            }}</span>
+          </div>
+        } @else if (loadingSession) {
+          <div class="welcome">
+            <h2>{{ "pages.extensionAuth.title" | translate }}</h2>
+            <span>{{ "pages.extensionAuth.loading" | translate }}</span>
+          </div>
+        } @else if (existingSession) {
+          <div class="welcome">
+            <h2>{{ "pages.extensionAuth.title" | translate }}</h2>
+            <span>{{ "pages.extensionAuth.banner" | translate }}</span>
+          </div>
+
+          <br /><br />
+
+          @if (isOfficial) {
+            <div class="extension-trust extension-trust-official">
+              {{ "pages.extensionAuth.officialBadge" | translate }}
+            </div>
+          } @else {
+            <div class="extension-trust extension-trust-unofficial">
+              <strong>{{
+                "pages.extensionAuth.unofficialWarning.title" | translate
+              }}</strong>
+              <br />
+              {{ "pages.extensionAuth.unofficialWarning.body" | translate }}
+            </div>
+          }
+
+          <div class="signed-in-as">
+            {{
+              "pages.extensionAuth.signedInAs"
+                | translate: { email: existingSession.email }
+            }}
+          </div>
+
+          <div class="ion-padding">
+            <ion-button expand="block" (click)="continueWithSession()">
+              {{ "pages.extensionAuth.continue" | translate }}
+            </ion-button>
+            <ion-button
+              fill="clear"
+              expand="block"
+              (click)="useDifferentAccount()"
+            >
+              {{ "pages.extensionAuth.useDifferentAccount" | translate }}
+            </ion-button>
+          </div>
+        }
+      </div>
+    </ion-list>
+  </div>
+</ion-content>

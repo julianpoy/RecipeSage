@@ -70,6 +70,13 @@ export const metrics = {
       "form", // Either 'html' or 'url'
     ],
   }),
+  clipCacheLookup: new client.Counter({
+    name: "clip_cache_lookup",
+    help: "A lookup against the clip cache during a url clip",
+    labelNames: [
+      "result", // One of: 'hit' | 'miss'
+    ],
+  }),
   clipStartedProcessing: new client.Counter({
     name: "clip_started_processing",
     help: "A clip started with a given processor. This can happen multiple times for a single clip",

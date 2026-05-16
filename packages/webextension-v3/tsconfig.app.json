@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["chrome"],
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src/**/*.ts"]
+}

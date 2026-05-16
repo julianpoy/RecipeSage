@@ -1,0 +1,39 @@
+.auth-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--content-max-width);
+
+  .welcome {
+    color: var(--ion-text-color);
+    text-align: center;
+  }
+
+  logo-icon {
+    text-align: center;
+  }
+
+  .extension-trust {
+    padding: 12px 16px;
+    border-radius: 6px;
+    text-align: center;
+    margin: 12px 0;
+  }
+
+  .extension-trust-official {
+    background: rgba(46, 184, 113, 0.12);
+    color: #1e7e44;
+  }
+
+  .extension-trust-unofficial {
+    background: rgba(217, 87, 65, 0.12);
+    color: #a8351b;
+  }
+
+  .signed-in-as {
+    margin-top: 16px;
+    text-align: center;
+    color: var(--ion-text-color);
+    font-size: 14px;
+    word-break: break-word;
+  }
+}
