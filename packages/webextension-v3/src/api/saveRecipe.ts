@@ -67,6 +67,30 @@ export class MissingTitleError extends Error {
   }
 }
 
+export interface FindRecipesByUrlResult {
+  recipes: { id: string }[];
+}
+
+export const findRecipesByUrl = async (
+  apiBase: string,
+  token: string,
+  url: string,
+): Promise<FindRecipesByUrlResult> => {
+  const trimmed = url.trim();
+  if (!trimmed) return { recipes: [] };
+
+  const trpc = createTrpc(apiBase, token);
+  try {
+    const results = await trpc.recipes.getRecipesByUrl.query({ url: trimmed });
+    return { recipes: results.map((r) => ({ id: r.id })) };
+  } catch (e) {
+    if (e instanceof TRPCClientError && e.data?.httpStatus === 401) {
+      throw new NotLoggedInError();
+    }
+    throw e;
+  }
+};
+
 export const saveRecipe = async (
   apiBase: string,
   token: string,

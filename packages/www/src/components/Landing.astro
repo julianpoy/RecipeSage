@@ -18,8 +18,28 @@ interface Props {
 
 const { t, locale } = Astro.props;
 
-const featureKeys = Array.from({ length: 11 }, (_, i) => i + 1);
-const ctaKeys = [1, 2, 3, 4, 5];
+const featureSlugs = [
+  "import",
+  "nutrition",
+  "cookingAssistant",
+  "offline",
+  "mealPlanning",
+  "shoppingLists",
+  "scaling",
+  "search",
+  "sharing",
+  "migration",
+  "export",
+  "browserExtension",
+];
+const ctaSlugs = [
+  "noAds",
+  "crossPlatform",
+  "autoImport",
+  "aiAssistant",
+  "collaboration",
+  "selfHost",
+];
 
 const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
 ---
@@ -106,11 +126,13 @@ const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
   <h2>{t("pages.welcome.description.features")}</h2>
   <ul class="features">
     {
-      featureKeys.map((n) => (
+      featureSlugs.map((slug) => (
         <li>
-          <strong>{t(`pages.welcome.description.features.${n}.title`)}</strong>
+          <strong>
+            {t(`pages.welcome.description.features.${slug}.title`)}
+          </strong>
           <span>
-            {t(`pages.welcome.description.features.${n}.description`)}
+            {t(`pages.welcome.description.features.${slug}.description`)}
           </span>
         </li>
       ))
@@ -137,7 +159,7 @@ const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
 
   <h2>{t("pages.welcome.description.cta")}</h2>
   <ul class="reasons">
-    {ctaKeys.map((n) => <li>{t(`pages.welcome.description.cta.${n}`)}</li>)}
+    {ctaSlugs.map((slug) => <li>{t(`pages.welcome.description.cta.${slug}`)}</li>)}
   </ul>
 
   <div class="cta">

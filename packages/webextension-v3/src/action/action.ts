@@ -2,6 +2,7 @@ import { ClipError, clipFromHtml } from "../api/clip";
 import {
   MissingTitleError,
   NotLoggedInError,
+  findRecipesByUrl,
   saveRecipe,
 } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
@@ -20,6 +21,9 @@ import {
   NutritionRateLimitError,
   getNutritionFromText,
 } from "../api/nutrition";
+import { initI18n, t } from "../i18n/t";
+import { applyI18nToDom } from "../i18n/applyDom";
+import { initLangSwitcher } from "../i18n/langSwitcher";
 
 const setMessage = (text: string) => {
   const el = document.getElementById("message");
@@ -41,35 +45,33 @@ const showTutorial = async () => {
 };
 
 const login = async () => {
-  setMessage("Signing in...");
+  setMessage(t("webextension.action.signingIn"));
 
   let raw: unknown;
   try {
     raw = await chrome.runtime.sendMessage({ type: "startExtensionAuth" });
   } catch {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   if (!isSignInResult(raw)) {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   if (raw.status === "cancelled") {
-    setMessage("Sign-in was cancelled.");
+    setMessage(t("webextension.action.signInCancelled"));
     return;
   }
   if (raw.status === "error") {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   const { seenTutorial } = await getPreferences();
   if (seenTutorial) {
-    setMessage(
-      "You are now logged in. Click the RecipeSage icon again to clip this website.",
-    );
+    setMessage(t("webextension.action.signInSuccessful"));
     setTimeout(() => window.close(), 5000);
   } else {
     await showTutorial();
@@ -87,9 +89,7 @@ const fetchActivePageHtml = async (tabId: number): Promise<string | null> => {
 
 const handleNotLoggedIn = async () => {
   await setToken(null);
-  window.alert(
-    "Please login. It looks like you're logged out. Please close and re-open the clip tool to login.",
-  );
+  window.alert(t("webextension.action.notLoggedInPrompt"));
 };
 
 const nutritionToFields = (n: Nutrition): NutritionFields => ({
@@ -134,16 +134,36 @@ const autoClip = async () => {
 
   const { apiBase, webBase } = await getEffectiveBases();
 
+  const sourceUrl = tab.url ?? "";
+  if (sourceUrl) {
+    try {
+      const { recipes } = await findRecipesByUrl(apiBase, token, sourceUrl);
+      if (
+        recipes.length > 0 &&
+        !window.confirm(t("webextension.action.duplicateConfirm"))
+      ) {
+        window.close();
+        return;
+      }
+    } catch (e) {
+      if (e instanceof NotLoggedInError) {
+        await handleNotLoggedIn();
+        return;
+      }
+      console.warn("Duplicate-URL check failed; continuing", e);
+    }
+  }
+
   let html: string | null;
   try {
     html = await fetchActivePageHtml(tab.id);
   } catch (e) {
     console.error(e);
-    window.alert("Failed to fetch page content.");
+    window.alert(t("webextension.action.fetchFailed"));
     return;
   }
   if (!html) {
-    window.alert("Failed to fetch page content.");
+    window.alert(t("webextension.action.fetchFailed"));
     return;
   }
 
@@ -155,16 +175,12 @@ const autoClip = async () => {
       await handleNotLoggedIn();
       return;
     }
-    if (e instanceof ClipError && e.status === 429) {
-      window.alert(
-        "Daily limit reached for clipping. Cooking credits reset at 0:00 GMT. Consider contributing for a larger daily allowance.",
-      );
+    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
+      window.alert(t("webextension.creditLimitAlert"));
       return;
     }
     console.error(e);
-    window.alert(
-      "Failed to clip recipe. If this continues, please report a bug.",
-    );
+    window.alert(t("webextension.action.clipFailed"));
     return;
   }
 
@@ -187,7 +203,7 @@ const autoClip = async () => {
         return;
       }
       if (e instanceof NutritionRateLimitError) {
-        console.warn("Nutrition rate-limited; saving without nutrition");
+        window.alert(t("webextension.creditLimitAlert"));
       } else {
         console.warn("Failed to parse nutrition; saving without nutrition", e);
       }
@@ -209,7 +225,7 @@ const autoClip = async () => {
       });
       window.close();
     } else {
-      setMessage("Recipe imported successfully.");
+      setMessage(t("webextension.action.importSuccess"));
       setTimeout(() => window.close(), 2000);
     }
   } catch (e) {
@@ -218,15 +234,11 @@ const autoClip = async () => {
       return;
     }
     if (e instanceof MissingTitleError) {
-      window.alert(
-        "Could not save recipe: no recipe title was detected on the page.",
-      );
+      window.alert(t("webextension.action.missingTitle"));
       return;
     }
     console.error(e);
-    window.alert(
-      "An error occurred while saving the recipe. Please try again.",
-    );
+    window.alert(t("webextension.action.saveFailed"));
   }
 };
 
@@ -244,9 +256,17 @@ const interactiveClip = async () => {
   window.close();
 };
 
+type BooleanPrefKey = {
+  [K in keyof ExtensionPreferences]-?: NonNullable<
+    ExtensionPreferences[K]
+  > extends boolean
+    ? K
+    : never;
+}[keyof ExtensionPreferences];
+
 const bindOptionCheckbox = (
   id: string,
-  prefKey: keyof ExtensionPreferences,
+  prefKey: BooleanPrefKey,
   prefs: ExtensionPreferences,
 ) => {
   const el = document.getElementById(id);
@@ -259,6 +279,14 @@ const bindOptionCheckbox = (
 };
 
 const wireUp = async () => {
+  await initI18n();
+  applyI18nToDom();
+  await initLangSwitcher({
+    onChange: () => {
+      applyI18nToDom();
+    },
+  });
+
   for (const logo of document.querySelectorAll(".logo")) {
     if (logo instanceof HTMLImageElement) {
       logo.src = chrome.runtime.getURL("./images/recipesage-black-trimmed.png");
@@ -295,7 +323,7 @@ const wireUp = async () => {
     const startEl = document.getElementById("start");
     if (!startEl || startEl.style.display !== "block") return;
     showOnly("login");
-    setMessage("Your session has expired. Please sign in again.");
+    setMessage(t("webextension.action.sessionExpired"));
   })();
 };
 

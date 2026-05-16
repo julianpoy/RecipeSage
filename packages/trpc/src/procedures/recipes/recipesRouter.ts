@@ -10,6 +10,7 @@ import { getRecipe } from "./getRecipe";
 import { getRecipes } from "./getRecipes";
 import { getRecipesByIds } from "./getRecipesByIds";
 import { getRecipesByTitle } from "./getRecipesByTitle";
+import { getRecipesByUrl } from "./getRecipesByUrl";
 import { getSimilarRecipes } from "./getSimilarRecipes";
 import { getUniqueRecipeTitle } from "./getUniqueRecipeTitle";
 import { searchRecipes } from "./searchRecipes";
@@ -30,5 +31,6 @@ export const recipesRouter = router({
   searchRecipes,
   getSimilarRecipes,
   getRecipesByTitle,
+  getRecipesByUrl,
   getUniqueRecipeTitle,
 });

@@ -2,8 +2,10 @@ import { ClipError } from "../api/clip";
 import type { ClipResult } from "../api/clip";
 import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
+import { NutritionRateLimitError } from "../api/nutrition";
 import {
   clipFromHtmlViaBg,
+  findRecipesByUrlViaBg,
   getNutritionFromTextViaBg,
   saveRecipeViaBg,
 } from "../api/clipBridge";
@@ -14,6 +16,7 @@ import {
   setToken,
 } from "../api/storage";
 import { getEffectiveBases } from "../config";
+import { initI18n, t } from "../i18n/t";
 
 const EXTENSION_CONTAINER_ID = "recipeSageBrowserExtensionRootContainer";
 
@@ -36,10 +39,14 @@ if (w[EXTENSION_CONTAINER_ID]) {
   w[EXTENSION_CONTAINER_ID] = true;
   console.log("Loading RecipeSage Browser Extension");
 
-  void bootstrap();
+  void bootstrap().catch((e) => {
+    console.error("RecipeSage extension bootstrap failed", e);
+  });
 }
 
 async function bootstrap() {
+  await initI18n();
+
   const shadowRootContainer = document.createElement("div");
   shadowRootContainer.id = EXTENSION_CONTAINER_ID;
   const shadowRoot = shadowRootContainer.attachShadow({ mode: "closed" });
@@ -61,7 +68,7 @@ async function bootstrap() {
 
   const autoSnipPending = document.createElement("div");
   autoSnipPending.className = "autoSnipPending";
-  autoSnipPending.innerText = "Grabbing Recipe Content...";
+  autoSnipPending.innerText = t("webextension.inject.grabbing");
   autoSnipPendingContainer.appendChild(autoSnipPending);
 
   const autoSnipResults = (await autoSnipFromPage(token)) ?? {};
@@ -77,6 +84,10 @@ async function bootstrap() {
     try {
       return await getNutritionFromTextViaBg(text);
     } catch (e) {
+      if (e instanceof NutritionRateLimitError) {
+        window.alert(t("webextension.creditLimitAlert"));
+        return undefined;
+      }
       console.warn("Failed to parse nutrition from clip text", e);
       return undefined;
     }
@@ -94,32 +105,19 @@ async function bootstrap() {
 async function autoSnipFromPage(
   token: string | undefined,
 ): Promise<ClipResult | undefined> {
-  if (!token) {
-    window.alert(
-      "Please login. Click the RecipeSage icon to log in, then try again.",
-    );
-    return undefined;
-  }
+  if (!token) return undefined;
   try {
     return await clipFromHtmlViaBg(document.documentElement.outerHTML);
   } catch (e) {
     if (e instanceof ClipError && e.status === 401) {
       await setToken(null);
-      window.alert(
-        "Please login. It looks like you're logged out. Please close and re-open the clip tool to login.",
-      );
       return undefined;
     }
     if (e instanceof ClipError && e.status === 429) {
-      window.alert(
-        "Daily limit reached for clipping. Cooking credits reset at 0:00 GMT. Consider contributing for a larger daily allowance.",
-      );
+      window.alert(t("webextension.creditLimitAlert"));
       return undefined;
     }
-    console.error(e);
-    window.alert(
-      "Error while attempting to automatically clip recipe from page",
-    );
+    console.warn("Auto-fill from page failed; opening empty editor", e);
     return undefined;
   }
 }
@@ -149,61 +147,113 @@ type NumberFieldKey = {
 interface NutritionStringSpec {
   kind: "string";
   field: StringFieldKey & keyof NutritionFields;
-  title: string;
+  titleKey: string;
   textArea?: boolean;
 }
 
 interface NutritionNumberSpec {
   kind: "number";
   field: NumberFieldKey & keyof NutritionFields;
-  title: string;
+  titleKey: string;
 }
 
 type NutritionFieldSpec = NutritionStringSpec | NutritionNumberSpec;
 
 const NUTRITION_FIELDS: NutritionFieldSpec[] = [
-  { kind: "string", field: "nutritionServingSize", title: "Serving Size" },
-  { kind: "number", field: "nutritionCalories", title: "Calories (kcal)" },
-  { kind: "number", field: "nutritionTotalFat", title: "Total Fat (g)" },
+  {
+    kind: "string",
+    field: "nutritionServingSize",
+    titleKey: "webextension.inject.nutrition.servingSize",
+  },
+  {
+    kind: "number",
+    field: "nutritionCalories",
+    titleKey: "webextension.inject.nutrition.calories",
+  },
+  {
+    kind: "number",
+    field: "nutritionTotalFat",
+    titleKey: "webextension.inject.nutrition.totalFat",
+  },
   {
     kind: "number",
     field: "nutritionSaturatedFat",
-    title: "Saturated Fat (g)",
+    titleKey: "webextension.inject.nutrition.saturatedFat",
   },
-  { kind: "number", field: "nutritionTransFat", title: "Trans Fat (g)" },
+  {
+    kind: "number",
+    field: "nutritionTransFat",
+    titleKey: "webextension.inject.nutrition.transFat",
+  },
   {
     kind: "number",
     field: "nutritionPolyunsaturatedFat",
-    title: "Polyunsaturated Fat (g)",
+    titleKey: "webextension.inject.nutrition.polyunsaturatedFat",
   },
   {
     kind: "number",
     field: "nutritionMonounsaturatedFat",
-    title: "Monounsaturated Fat (g)",
+    titleKey: "webextension.inject.nutrition.monounsaturatedFat",
   },
-  { kind: "number", field: "nutritionCholesterol", title: "Cholesterol (mg)" },
-  { kind: "number", field: "nutritionSodium", title: "Sodium (mg)" },
+  {
+    kind: "number",
+    field: "nutritionCholesterol",
+    titleKey: "webextension.inject.nutrition.cholesterol",
+  },
+  {
+    kind: "number",
+    field: "nutritionSodium",
+    titleKey: "webextension.inject.nutrition.sodium",
+  },
   {
     kind: "number",
     field: "nutritionTotalCarbs",
-    title: "Total Carbohydrates (g)",
+    titleKey: "webextension.inject.nutrition.totalCarbs",
   },
   {
     kind: "number",
     field: "nutritionDietaryFiber",
-    title: "Dietary Fiber (g)",
+    titleKey: "webextension.inject.nutrition.dietaryFiber",
   },
-  { kind: "number", field: "nutritionTotalSugars", title: "Total Sugars (g)" },
-  { kind: "number", field: "nutritionAddedSugars", title: "Added Sugars (g)" },
-  { kind: "number", field: "nutritionProtein", title: "Protein (g)" },
-  { kind: "number", field: "nutritionVitaminD", title: "Vitamin D (mcg)" },
-  { kind: "number", field: "nutritionCalcium", title: "Calcium (mg)" },
-  { kind: "number", field: "nutritionIron", title: "Iron (mg)" },
-  { kind: "number", field: "nutritionPotassium", title: "Potassium (mg)" },
+  {
+    kind: "number",
+    field: "nutritionTotalSugars",
+    titleKey: "webextension.inject.nutrition.totalSugars",
+  },
+  {
+    kind: "number",
+    field: "nutritionAddedSugars",
+    titleKey: "webextension.inject.nutrition.addedSugars",
+  },
+  {
+    kind: "number",
+    field: "nutritionProtein",
+    titleKey: "webextension.inject.nutrition.protein",
+  },
+  {
+    kind: "number",
+    field: "nutritionVitaminD",
+    titleKey: "webextension.inject.nutrition.vitaminD",
+  },
+  {
+    kind: "number",
+    field: "nutritionCalcium",
+    titleKey: "webextension.inject.nutrition.calcium",
+  },
+  {
+    kind: "number",
+    field: "nutritionIron",
+    titleKey: "webextension.inject.nutrition.iron",
+  },
+  {
+    kind: "number",
+    field: "nutritionPotassium",
+    titleKey: "webextension.inject.nutrition.potassium",
+  },
   {
     kind: "string",
     field: "nutritionOtherDetails",
-    title: "Other Nutrition Details",
+    titleKey: "webextension.inject.nutrition.otherDetails",
     textArea: true,
   },
 ];
@@ -220,7 +270,6 @@ function initEditor(
     ...autoSnipResults,
   };
   let isDirty = false;
-  let imageURLInput: HTMLInputElement | undefined;
   let container: HTMLDivElement | undefined;
   const pos = { lastX: 0, lastY: 0 };
   const alertCtx: AlertContext = {};
@@ -355,6 +404,7 @@ function initEditor(
     const logoLink = document.createElement("a");
     logoLink.href = "https://recipesage.com";
     logoLink.target = "_blank";
+    logoLink.rel = "noopener noreferrer";
     logoLink.onmousedown = (e) => e.stopPropagation();
     leftHeadline.appendChild(logoLink);
 
@@ -365,70 +415,66 @@ function initEditor(
     logoLink.appendChild(logo);
 
     const closeButton = document.createElement("button");
-    closeButton.innerText = "CLOSE";
+    closeButton.innerText = t("webextension.inject.close");
     closeButton.onclick = hide;
     closeButton.onmousedown = (e) => e.stopPropagation();
     closeButton.className = "close clear";
     headline.appendChild(closeButton);
 
-    const imageField = createStringField({
-      title: "Image URL",
+    createStringField({
+      title: t("webextension.inject.field.imageUrl"),
       field: "imageURL",
       initialValue: currentSnip.imageURL,
     });
-    if (!(imageField.input instanceof HTMLInputElement)) {
-      throw new Error("imageURL field must be an input");
-    }
-    imageURLInput = imageField.input;
     createStringField({
-      title: "Title",
+      title: t("webextension.inject.field.title"),
       field: "title",
       initialValue: currentSnip.title,
     });
     createStringField({
-      title: "Description",
+      title: t("webextension.inject.field.description"),
       field: "description",
       initialValue: currentSnip.description,
     });
     createStringField({
-      title: "Yield",
+      title: t("webextension.inject.field.yield"),
       field: "yield",
       initialValue: currentSnip.yield,
     });
     createStringField({
-      title: "Active Time",
+      title: t("webextension.inject.field.activeTime"),
       field: "activeTime",
       initialValue: currentSnip.activeTime,
     });
     createStringField({
-      title: "Total Time",
+      title: t("webextension.inject.field.totalTime"),
       field: "totalTime",
       initialValue: currentSnip.totalTime,
     });
     createStringField({
-      title: "Source",
+      title: t("webextension.inject.field.source"),
       field: "source",
       initialValue: currentSnip.source,
     });
     createStringField({
-      title: "Source URL",
+      title: t("webextension.inject.field.sourceUrl"),
       field: "url",
       initialValue: currentSnip.url,
     });
     createStringField({
-      title: "Ingredients",
+      title: t("webextension.inject.field.ingredients"),
       field: "ingredients",
       initialValue: currentSnip.ingredients,
       textArea: true,
     });
     createStringField({
-      title: "Instructions",
+      title: t("webextension.inject.field.instructions"),
       field: "instructions",
       initialValue: currentSnip.instructions,
       textArea: true,
     });
     createStringField({
-      title: "Notes",
+      title: t("webextension.inject.field.notes"),
       field: "notes",
       initialValue: currentSnip.notes,
       textArea: true,
@@ -437,7 +483,7 @@ function initEditor(
     buildNutritionSection();
 
     const save = document.createElement("button");
-    save.innerText = "Save";
+    save.innerText = t("webextension.inject.save");
     save.onclick = () => void submit();
     save.onmousedown = (e) => e.stopPropagation();
     save.className = "save";
@@ -445,7 +491,7 @@ function initEditor(
 
     window.addEventListener("beforeunload", (e) => {
       if (!isDirty) return undefined;
-      const confirmationMessage = `You've made changes in the RecipeSage editor. If you leave before saving, your changes will be lost.`;
+      const confirmationMessage = t("webextension.inject.beforeUnload");
       e.returnValue = confirmationMessage;
       return confirmationMessage;
     });
@@ -551,6 +597,7 @@ function initEditor(
     const header = document.createElement("button");
     header.type = "button";
     header.className = "nutrition-header";
+    header.setAttribute("aria-expanded", "false");
     header.onmousedown = (e) => e.stopPropagation();
     section.appendChild(header);
 
@@ -560,7 +607,7 @@ function initEditor(
     header.appendChild(caret);
 
     const headerText = document.createElement("span");
-    headerText.innerText = "Nutrition (per serving)";
+    headerText.innerText = t("webextension.inject.nutritionHeading");
     header.appendChild(headerText);
 
     const body = document.createElement("div");
@@ -573,13 +620,14 @@ function initEditor(
       open = !open;
       body.style.display = open ? "block" : "none";
       section.classList.toggle("open", open);
+      header.setAttribute("aria-expanded", open ? "true" : "false");
     };
 
     for (const spec of NUTRITION_FIELDS) {
       if (spec.kind === "string") {
         const initial = currentSnip[spec.field];
         const { input } = createStringField({
-          title: spec.title,
+          title: t(spec.titleKey),
           field: spec.field,
           initialValue: initial,
           textArea: spec.textArea,
@@ -589,7 +637,7 @@ function initEditor(
       } else {
         const initial = currentSnip[spec.field];
         const { input } = createNumberField({
-          title: spec.title,
+          title: t(spec.titleKey),
           field: spec.field,
           initialValue: initial,
           parent: body,
@@ -649,6 +697,7 @@ function initEditor(
     if (bodyLink) {
       const alertBodyLink = document.createElement("a");
       alertBodyLink.target = "_blank";
+      alertBodyLink.rel = "noopener noreferrer";
       alertBodyLink.href = bodyLink;
       alertBodyLink.innerText = body;
       alertBody.appendChild(alertBodyLink);
@@ -668,19 +717,42 @@ function initEditor(
     const token = await getToken();
     if (!token) {
       displayAlert(
-        "Please Login",
-        "It looks like you're logged out. Please click the RecipeSage icon to login again.",
+        t("webextension.inject.pleaseLoginTitle"),
+        t("webextension.inject.pleaseLoginBody"),
         4000,
       );
       return;
+    }
+
+    if (currentSnip.url) {
+      try {
+        const { recipes } = await findRecipesByUrlViaBg(currentSnip.url);
+        if (
+          recipes.length > 0 &&
+          !window.confirm(t("webextension.inject.duplicateConfirm"))
+        ) {
+          return;
+        }
+      } catch (e) {
+        if (e instanceof NotLoggedInError) {
+          await setToken(null);
+          displayAlert(
+            t("webextension.inject.pleaseLoginTitle"),
+            t("webextension.inject.pleaseLoginBody"),
+            4000,
+          );
+          return;
+        }
+        console.warn("Duplicate-URL check failed; continuing", e);
+      }
     }
 
     try {
       const saved = await saveRecipeViaBg(currentSnip);
       hide();
       displayAlert(
-        "Recipe Saved!",
-        "Click to open",
+        t("webextension.inject.recipeSavedTitle"),
+        t("webextension.inject.clickToOpen"),
         4000,
         `${webBase}/app/recipe/${saved.id}`,
       );
@@ -688,38 +760,28 @@ function initEditor(
       if (e instanceof NotLoggedInError) {
         await setToken(null);
         displayAlert(
-          "Please Login",
-          "It looks like you're logged out. Please click the RecipeSage icon to login again.",
+          t("webextension.inject.pleaseLoginTitle"),
+          t("webextension.inject.pleaseLoginBody"),
           4000,
         );
         return;
       }
       if (e instanceof MissingTitleError) {
         displayAlert(
-          "Could Not Save Recipe",
-          "A recipe title is required.",
+          t("webextension.inject.saveFailedTitle"),
+          t("webextension.inject.missingTitleBody"),
           4000,
         );
         return;
       }
       console.error(e);
       displayAlert(
-        "Could Not Save Recipe",
-        "An error occurred while saving the recipe. Please try again.",
+        t("webextension.inject.saveFailedTitle"),
+        t("webextension.inject.saveFailedBody"),
         4000,
       );
     }
   };
-
-  chrome.runtime.onMessage.addListener((request) => {
-    if (request.action === "show") show();
-    if (request.action === "hide") hide();
-    if (request.action === "snipImage" && imageURLInput) {
-      show();
-      imageURLInput.value = request.event.srcUrl;
-      setStringField("imageURL", request.event.srcUrl);
-    }
-  });
 
   w.recipeSageBrowserExtensionRootTrigger = show;
   show();

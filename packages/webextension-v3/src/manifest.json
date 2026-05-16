@@ -40,7 +40,8 @@
         "inject/alert.css",
         "inject/clipTool.css",
         "icons/android-chrome-512x512.png",
-        "images/recipesage-black-trimmed.png"
+        "images/recipesage-black-trimmed.png",
+        "i18n/*.json"
       ],
       "matches": ["<all_urls>"]
     }

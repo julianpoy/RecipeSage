@@ -2,6 +2,7 @@ import { ClipError } from "./clip";
 import type { ClipResult } from "./clip";
 import { MissingTitleError, NotLoggedInError } from "./saveRecipe";
 import type {
+  FindRecipesByUrlResult,
   Nutrition,
   SaveRecipeInput,
   SaveRecipeResult,
@@ -9,6 +10,7 @@ import type {
 import { NutritionAuthError, NutritionRateLimitError } from "./nutrition";
 import {
   isClipRecipeResponse,
+  isFindRecipesByUrlResponse,
   isGetNutritionFromTextResponse,
   isSaveRecipeResponse,
   type BridgeError,
@@ -35,6 +37,20 @@ export const saveRecipeViaBg = async (
 ): Promise<SaveRecipeResult> => {
   const raw = await chrome.runtime.sendMessage({ type: "saveRecipe", recipe });
   if (!isSaveRecipeResponse(raw)) {
+    throw new Error("Invalid response from background");
+  }
+  if (!raw.ok) throw bridgeErrorToException(raw.error);
+  return raw.data;
+};
+
+export const findRecipesByUrlViaBg = async (
+  url: string,
+): Promise<FindRecipesByUrlResult> => {
+  const raw = await chrome.runtime.sendMessage({
+    type: "findRecipesByUrl",
+    url,
+  });
+  if (!isFindRecipesByUrlResponse(raw)) {
     throw new Error("Invalid response from background");
   }
   if (!raw.ok) throw bridgeErrorToException(raw.error);

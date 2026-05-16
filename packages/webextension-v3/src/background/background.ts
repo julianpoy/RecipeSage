@@ -4,6 +4,7 @@ import { ClipError, clipFromHtml } from "../api/clip";
 import {
   MissingTitleError,
   NotLoggedInError,
+  findRecipesByUrl,
   saveRecipe,
 } from "../api/saveRecipe";
 import {
@@ -14,6 +15,8 @@ import {
 import type {
   ClipRecipeRequest,
   ClipRecipeResponse,
+  FindRecipesByUrlRequest,
+  FindRecipesByUrlResponse,
   GetNutritionFromTextRequest,
   GetNutritionFromTextResponse,
   SaveRecipeRequest,
@@ -94,7 +97,7 @@ const handleClipRecipe = async (
     if (e instanceof ClipError && e.status === 401) {
       return { ok: false, error: { code: "not-logged-in" } };
     }
-    if (e instanceof ClipError && e.status === 429) {
+    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
       return { ok: false, error: { code: "rate-limited" } };
     }
     return {
@@ -122,6 +125,29 @@ const handleSaveRecipe = async (
     }
     if (e instanceof MissingTitleError) {
       return { ok: false, error: { code: "missing-title" } };
+    }
+    return {
+      ok: false,
+      error: {
+        code: "unknown",
+        message: e instanceof Error ? e.message : String(e),
+      },
+    };
+  }
+};
+
+const handleFindRecipesByUrl = async (
+  req: FindRecipesByUrlRequest,
+): Promise<FindRecipesByUrlResponse> => {
+  const token = await getToken();
+  if (!token) return { ok: false, error: { code: "not-logged-in" } };
+  const { apiBase } = await getEffectiveBases();
+  try {
+    const data = await findRecipesByUrl(apiBase, token, req.url);
+    return { ok: true, data };
+  } catch (e) {
+    if (e instanceof NotLoggedInError) {
+      return { ok: false, error: { code: "not-logged-in" } };
     }
     return {
       ok: false,
@@ -185,6 +211,17 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "saveRecipe") {
     void (async () => {
       const result = await handleSaveRecipe(message);
+      try {
+        sendResponse(result);
+      } catch {
+        // channel closed
+      }
+    })();
+    return true;
+  }
+  if (message?.type === "findRecipesByUrl") {
+    void (async () => {
+      const result = await handleFindRecipesByUrl(message);
       try {
         sendResponse(result);
       } catch {

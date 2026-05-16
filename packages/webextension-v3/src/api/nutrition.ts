@@ -27,7 +27,9 @@ export const getNutritionFromText = async (
   } catch (e) {
     if (e instanceof TRPCClientError) {
       if (e.data?.httpStatus === 401) throw new NutritionAuthError();
-      if (e.data?.httpStatus === 429) throw new NutritionRateLimitError();
+      if (e.data?.httpStatus === 420 || e.data?.httpStatus === 429) {
+        throw new NutritionRateLimitError();
+      }
     }
     throw e;
   }

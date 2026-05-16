@@ -1,6 +1,8 @@
 <html>
   <head>
-    <title>RecipeSage Browser Settings</title>
+    <title data-i18n="webextension.settings.pageTitle">
+      RecipeSage Browser Settings
+    </title>
     <style>
       body {
         width: 600px;
@@ -39,7 +41,8 @@
         font-weight: 500;
       }
 
-      input[type="url"] {
+      input[type="url"],
+      select {
         width: 100%;
         margin-top: 4px;
         padding: 8px;
@@ -101,31 +104,56 @@
   </head>
   <body>
     <section class="account">
-      <h2>RecipeSage Browser Extension Settings</h2>
+      <h2 data-i18n="webextension.settings.heading">
+        RecipeSage Browser Extension Settings
+      </h2>
       <div id="loggedInMessage">
-        You're currently logged in as
-        <span id="loggedInEmail">loading...</span>
+        <span data-i18n="webextension.settings.loggedInAs"
+          >You're currently logged in as</span
+        >
+        <span id="loggedInEmail" data-i18n="webextension.settings.loading"
+          >loading...</span
+        >
         <br /><br />
-        <button id="logoutButton">Logout</button>
+        <button id="logoutButton" data-i18n="webextension.settings.logout">
+          Logout
+        </button>
       </div>
       <div id="loggedOutMessage">
-        You're not logged in. Click the RecipeSage icon next to the address bar
-        to log in.<br /><br />
-        Note: If you don't see the RecipeSage icon next to the address bar, you
-        may need to enable it in your browser settings.
+        <span data-i18n="webextension.settings.loggedOutMessage">
+          You're not logged in. Click the RecipeSage icon next to the address
+          bar to log in.
+        </span>
+        <br /><br />
+        <span data-i18n="webextension.settings.loggedOutNote">
+          Note: If you don't see the RecipeSage icon next to the address bar,
+          you may need to enable it in your browser settings.
+        </span>
       </div>
     </section>
 
     <section>
-      <h3>Server</h3>
-      <p class="field-hint">
+      <h3
+        id="languageHeading"
+        data-i18n="webextension.settings.languageHeading"
+      >
+        Language
+      </h3>
+      <select id="languageSelect" aria-labelledby="languageHeading"></select>
+    </section>
+
+    <section>
+      <h3 data-i18n="webextension.settings.serverHeading">Server</h3>
+      <p class="field-hint" data-i18n="webextension.settings.serverHint">
         If you self-host RecipeSage, set the API and web URLs of your
         installation here. Leave a field blank to use the default. For a typical
         self-hosted install on yourdomain.com, the API URL is
         https://yourdomain.com/api and the Web URL is https://yourdomain.com.
       </p>
 
-      <label for="apiBaseInput">API URL</label>
+      <label for="apiBaseInput" data-i18n="webextension.settings.apiUrlLabel"
+        >API URL</label
+      >
       <input
         id="apiBaseInput"
         type="url"
@@ -134,7 +162,9 @@
       />
       <div id="apiBaseHint" class="field-hint"></div>
 
-      <label for="webBaseInput">Web URL</label>
+      <label for="webBaseInput" data-i18n="webextension.settings.webUrlLabel"
+        >Web URL</label
+      >
       <input
         id="webBaseInput"
         type="url"
@@ -144,8 +174,14 @@
       <div id="webBaseHint" class="field-hint"></div>
 
       <div class="actions">
-        <button id="saveServerButton">Save</button>
-        <button id="resetServerButton" class="secondary">
+        <button id="saveServerButton" data-i18n="webextension.settings.save">
+          Save
+        </button>
+        <button
+          id="resetServerButton"
+          class="secondary"
+          data-i18n="webextension.settings.resetToDefaults"
+        >
           Reset to defaults
         </button>
         <span id="serverStatus"></span>
