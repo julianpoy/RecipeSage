@@ -5,6 +5,7 @@ import type { Nutrition, NutritionFields } from "../api/saveRecipe";
 import { NutritionRateLimitError } from "../api/nutrition";
 import {
   clipFromHtmlViaBg,
+  findRecipesByUrlViaBg,
   getNutritionFromTextViaBg,
   saveRecipeViaBg,
 } from "../api/clipBridge";
@@ -721,6 +722,29 @@ function initEditor(
         4000,
       );
       return;
+    }
+
+    if (currentSnip.url) {
+      try {
+        const { recipes } = await findRecipesByUrlViaBg(currentSnip.url);
+        if (
+          recipes.length > 0 &&
+          !window.confirm(t("webextension.inject.duplicateConfirm"))
+        ) {
+          return;
+        }
+      } catch (e) {
+        if (e instanceof NotLoggedInError) {
+          await setToken(null);
+          displayAlert(
+            t("webextension.inject.pleaseLoginTitle"),
+            t("webextension.inject.pleaseLoginBody"),
+            4000,
+          );
+          return;
+        }
+        console.warn("Duplicate-URL check failed; continuing", e);
+      }
     }
 
     try {

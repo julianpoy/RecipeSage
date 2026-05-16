@@ -1,5 +1,6 @@
 import type { ClipResult } from "./clip";
 import type {
+  FindRecipesByUrlResult,
   Nutrition,
   SaveRecipeInput,
   SaveRecipeResult,
@@ -47,6 +48,11 @@ export interface GetNutritionFromTextRequest {
   text: string;
 }
 
+export interface FindRecipesByUrlRequest {
+  type: "findRecipesByUrl";
+  url: string;
+}
+
 export type ClipRecipeResponse =
   | { ok: true; data: ClipResult }
   | { ok: false; error: BridgeError };
@@ -57,6 +63,10 @@ export type SaveRecipeResponse =
 
 export type GetNutritionFromTextResponse =
   | { ok: true; data: Nutrition }
+  | { ok: false; error: BridgeError };
+
+export type FindRecipesByUrlResponse =
+  | { ok: true; data: FindRecipesByUrlResult }
   | { ok: false; error: BridgeError };
 
 const isBridgeError = (value: unknown): value is BridgeError => {
@@ -113,6 +123,29 @@ export const isGetNutritionFromTextResponse = (
     return (
       "data" in value && typeof value.data === "object" && value.data !== null
     );
+  }
+  if (value.ok === false) {
+    return "error" in value && isBridgeError(value.error);
+  }
+  return false;
+};
+
+export const isFindRecipesByUrlResponse = (
+  value: unknown,
+): value is FindRecipesByUrlResponse => {
+  if (typeof value !== "object" || value === null) return false;
+  if (!("ok" in value)) return false;
+  if (value.ok === true) {
+    if (!("data" in value)) return false;
+    if (typeof value.data !== "object" || value.data === null) return false;
+    if (!("recipes" in value.data) || !Array.isArray(value.data.recipes)) {
+      return false;
+    }
+    for (const r of value.data.recipes) {
+      if (typeof r !== "object" || r === null) return false;
+      if (!("id" in r) || typeof r.id !== "string") return false;
+    }
+    return true;
   }
   if (value.ok === false) {
     return "error" in value && isBridgeError(value.error);

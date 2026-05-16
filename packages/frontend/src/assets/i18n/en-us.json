@@ -1389,6 +1389,7 @@
   "webextension.action.fetchFailed": "Failed to fetch page content.",
   "webextension.action.importSuccess": "Recipe imported successfully.",
   "webextension.action.sessionExpired": "Your session has expired. Please sign in again.",
+  "webextension.action.duplicateConfirm": "You already have a recipe saved from this page. Click OK to save another copy, or Cancel to skip.",
   "webextension.action.languageLabel": "Language",
   "webextension.action.languageDefault": "Default (Browser)",
   "webextension.settings.pageTitle": "RecipeSage Browser Settings",
@@ -1452,5 +1453,6 @@
   "webextension.inject.clickToOpen": "Click to open",
   "webextension.inject.saveFailedTitle": "Could Not Save Recipe",
   "webextension.inject.missingTitleBody": "A recipe title is required.",
-  "webextension.inject.saveFailedBody": "An error occurred while saving the recipe. Please try again."
+  "webextension.inject.saveFailedBody": "An error occurred while saving the recipe. Please try again.",
+  "webextension.inject.duplicateConfirm": "You already have a recipe saved from this page. Click OK to save another copy, or Cancel to skip."
 }

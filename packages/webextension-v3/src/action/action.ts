@@ -2,6 +2,7 @@ import { ClipError, clipFromHtml } from "../api/clip";
 import {
   MissingTitleError,
   NotLoggedInError,
+  findRecipesByUrl,
   saveRecipe,
 } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
@@ -132,6 +133,26 @@ const autoClip = async () => {
   const openAfterImport = prefs.autoOpenAfterImport !== false;
 
   const { apiBase, webBase } = await getEffectiveBases();
+
+  const sourceUrl = tab.url ?? "";
+  if (sourceUrl) {
+    try {
+      const { recipes } = await findRecipesByUrl(apiBase, token, sourceUrl);
+      if (
+        recipes.length > 0 &&
+        !window.confirm(t("webextension.action.duplicateConfirm"))
+      ) {
+        window.close();
+        return;
+      }
+    } catch (e) {
+      if (e instanceof NotLoggedInError) {
+        await handleNotLoggedIn();
+        return;
+      }
+      console.warn("Duplicate-URL check failed; continuing", e);
+    }
+  }
 
   let html: string | null;
   try {
