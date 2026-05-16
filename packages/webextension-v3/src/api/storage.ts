@@ -9,7 +9,6 @@ const isLanguagePreference = (v: unknown): v is LanguagePreference => {
 };
 
 export interface ExtensionPreferences {
-  disableAutoSnip?: boolean;
   seenTutorial?: boolean;
   autoClipNutrition?: boolean;
   autoOpenAfterImport?: boolean;
@@ -26,17 +25,12 @@ export const setToken = (token: string | null): Promise<void> =>
 
 export const getPreferences = async (): Promise<ExtensionPreferences> => {
   const result = await chrome.storage.local.get([
-    "disableAutoSnip",
     "seenTutorial",
     "autoClipNutrition",
     "autoOpenAfterImport",
     "language",
   ]);
   return {
-    disableAutoSnip:
-      typeof result.disableAutoSnip === "boolean"
-        ? result.disableAutoSnip
-        : undefined,
     seenTutorial:
       typeof result.seenTutorial === "boolean"
         ? result.seenTutorial

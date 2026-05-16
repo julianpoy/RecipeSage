@@ -38,7 +38,9 @@ if (w[EXTENSION_CONTAINER_ID]) {
   w[EXTENSION_CONTAINER_ID] = true;
   console.log("Loading RecipeSage Browser Extension");
 
-  void bootstrap();
+  void bootstrap().catch((e) => {
+    console.error("RecipeSage extension bootstrap failed", e);
+  });
 }
 
 async function bootstrap() {
@@ -110,7 +112,7 @@ async function autoSnipFromPage(
       await setToken(null);
       return undefined;
     }
-    if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
+    if (e instanceof ClipError && e.status === 429) {
       window.alert(t("webextension.creditLimitAlert"));
       return undefined;
     }
@@ -267,7 +269,6 @@ function initEditor(
     ...autoSnipResults,
   };
   let isDirty = false;
-  let imageURLInput: HTMLInputElement | undefined;
   let container: HTMLDivElement | undefined;
   const pos = { lastX: 0, lastY: 0 };
   const alertCtx: AlertContext = {};
@@ -402,6 +403,7 @@ function initEditor(
     const logoLink = document.createElement("a");
     logoLink.href = "https://recipesage.com";
     logoLink.target = "_blank";
+    logoLink.rel = "noopener noreferrer";
     logoLink.onmousedown = (e) => e.stopPropagation();
     leftHeadline.appendChild(logoLink);
 
@@ -418,15 +420,11 @@ function initEditor(
     closeButton.className = "close clear";
     headline.appendChild(closeButton);
 
-    const imageField = createStringField({
+    createStringField({
       title: t("webextension.inject.field.imageUrl"),
       field: "imageURL",
       initialValue: currentSnip.imageURL,
     });
-    if (!(imageField.input instanceof HTMLInputElement)) {
-      throw new Error("imageURL field must be an input");
-    }
-    imageURLInput = imageField.input;
     createStringField({
       title: t("webextension.inject.field.title"),
       field: "title",
@@ -598,6 +596,7 @@ function initEditor(
     const header = document.createElement("button");
     header.type = "button";
     header.className = "nutrition-header";
+    header.setAttribute("aria-expanded", "false");
     header.onmousedown = (e) => e.stopPropagation();
     section.appendChild(header);
 
@@ -620,6 +619,7 @@ function initEditor(
       open = !open;
       body.style.display = open ? "block" : "none";
       section.classList.toggle("open", open);
+      header.setAttribute("aria-expanded", open ? "true" : "false");
     };
 
     for (const spec of NUTRITION_FIELDS) {
@@ -696,6 +696,7 @@ function initEditor(
     if (bodyLink) {
       const alertBodyLink = document.createElement("a");
       alertBodyLink.target = "_blank";
+      alertBodyLink.rel = "noopener noreferrer";
       alertBodyLink.href = bodyLink;
       alertBodyLink.innerText = body;
       alertBody.appendChild(alertBodyLink);
@@ -757,16 +758,6 @@ function initEditor(
       );
     }
   };
-
-  chrome.runtime.onMessage.addListener((request) => {
-    if (request.action === "show") show();
-    if (request.action === "hide") hide();
-    if (request.action === "snipImage" && imageURLInput) {
-      show();
-      imageURLInput.value = request.event.srcUrl;
-      setStringField("imageURL", request.event.srcUrl);
-    }
-  });
 
   w.recipeSageBrowserExtensionRootTrigger = show;
   show();

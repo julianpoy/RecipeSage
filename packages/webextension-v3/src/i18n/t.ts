@@ -40,23 +40,31 @@ const interpolate = (
 
 export const initI18n = async (): Promise<void> => {
   if (initPromise) return initPromise;
+  const emptyMessages = (): Messages => ({});
   initPromise = (async () => {
-    const target = await getEffectiveLanguage();
-    activeLang = target;
+    try {
+      const target = await getEffectiveLanguage();
+      activeLang = target;
 
-    if (target === FALLBACK_LANG) {
-      const messages = await fetchMessages(FALLBACK_LANG);
-      activeMessages = messages;
-      fallbackMessages = messages;
-      return;
+      if (target === FALLBACK_LANG) {
+        const messages =
+          await fetchMessages(FALLBACK_LANG).catch(emptyMessages);
+        activeMessages = messages;
+        fallbackMessages = messages;
+        return;
+      }
+
+      const [active, fallback] = await Promise.all([
+        fetchMessages(target).catch(emptyMessages),
+        fetchMessages(FALLBACK_LANG).catch(emptyMessages),
+      ]);
+      activeMessages = active;
+      fallbackMessages = fallback;
+    } catch (e) {
+      console.error("i18n init failed; falling back to raw keys", e);
+      activeMessages = {};
+      fallbackMessages = {};
     }
-
-    const [active, fallback] = await Promise.all([
-      fetchMessages(target).catch(() => ({}) as Messages),
-      fetchMessages(FALLBACK_LANG),
-    ]);
-    activeMessages = active;
-    fallbackMessages = fallback;
   })();
   return initPromise;
 };

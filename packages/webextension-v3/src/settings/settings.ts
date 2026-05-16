@@ -1,5 +1,4 @@
 import { TRPCClientError } from "@trpc/client";
-import { SupportedLanguages } from "@recipesage/util/shared";
 import { LANGUAGE_NAVIGATOR, getToken, setToken } from "../api/storage";
 import { createTrpc } from "../api/trpc";
 import {
@@ -14,7 +13,9 @@ import { initI18n, reloadI18n, t } from "../i18n/t";
 import { applyI18nToDom } from "../i18n/applyDom";
 import {
   ALL_LANGUAGES,
+  getLanguageDisplayName,
   getStoredLanguagePreference,
+  isSupportedLanguage,
   setLanguageOverride,
 } from "../i18n/language";
 
@@ -142,18 +143,6 @@ const resetServer = async () => {
   await refreshAccount();
 };
 
-const getLanguageDisplayName = (lang: SupportedLanguages): string => {
-  try {
-    const names = new Intl.DisplayNames(lang, {
-      type: "language",
-      fallback: "code",
-    });
-    return names.of(lang) || lang;
-  } catch {
-    return lang;
-  }
-};
-
 const populateLanguageSelect = async () => {
   const select = document.getElementById("languageSelect");
   if (!(select instanceof HTMLSelectElement)) return;
@@ -182,8 +171,10 @@ const populateLanguageSelect = async () => {
     const value = select.value;
     if (value === LANGUAGE_NAVIGATOR) {
       await setLanguageOverride(null);
+    } else if (isSupportedLanguage(value)) {
+      await setLanguageOverride(value);
     } else {
-      await setLanguageOverride(value as SupportedLanguages);
+      return;
     }
     await reloadI18n();
     applyI18nToDom();

@@ -25,6 +25,13 @@ export const applyI18nToDom = (root: ParentNode = document): void => {
     if (!key) continue;
     el.title = t(key);
   }
+  for (const el of Array.from(
+    root.querySelectorAll<HTMLElement>("[data-i18n-aria-label]"),
+  )) {
+    const key = el.dataset.i18nAriaLabel;
+    if (!key) continue;
+    el.setAttribute("aria-label", t(key));
+  }
 
   const lang = getActiveLanguage();
   document.documentElement.lang = lang;

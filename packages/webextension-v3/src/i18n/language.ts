@@ -43,27 +43,39 @@ const RTL_LANGUAGES: SupportedLanguages[] = [
   SupportedLanguages.AR_SA,
 ];
 
-const isSupported = (lang: string): lang is SupportedLanguages =>
+export const isSupportedLanguage = (lang: string): lang is SupportedLanguages =>
   Object.values(SupportedLanguages).some((el) => el === lang);
 
 const detectBrowserLanguage = (): SupportedLanguages => {
   const raw =
-    (typeof chrome !== "undefined" && chrome.i18n?.getUILanguage?.()) ||
     (typeof navigator !== "undefined" && navigator.language) ||
+    (typeof chrome !== "undefined" && chrome.i18n?.getUILanguage?.()) ||
     "";
   const navLang = raw.toLowerCase();
-  if (isSupported(navLang)) return navLang;
+  if (isSupportedLanguage(navLang)) return navLang;
 
   const regionDefault = defaultLocality[navLang];
   if (regionDefault) return regionDefault;
 
   const baseLang = navLang.split("-")[0];
-  if (isSupported(baseLang)) return baseLang as SupportedLanguages;
+  if (isSupportedLanguage(baseLang)) return baseLang;
 
   const baseDefault = defaultLocality[baseLang];
   if (baseDefault) return baseDefault;
 
   return SupportedLanguages.EN_US;
+};
+
+export const getLanguageDisplayName = (lang: SupportedLanguages): string => {
+  try {
+    const names = new Intl.DisplayNames(lang, {
+      type: "language",
+      fallback: "code",
+    });
+    return names.of(lang) || lang;
+  } catch {
+    return lang;
+  }
 };
 
 export const getEffectiveLanguage = async (): Promise<SupportedLanguages> => {

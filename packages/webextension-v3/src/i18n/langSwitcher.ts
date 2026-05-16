@@ -1,7 +1,8 @@
-import { SupportedLanguages } from "@recipesage/util/shared";
 import {
   ALL_LANGUAGES,
+  getLanguageDisplayName,
   getStoredLanguagePreference,
+  isSupportedLanguage,
   setLanguageOverride,
 } from "./language";
 import { applyI18nToDom } from "./applyDom";
@@ -10,26 +11,11 @@ import { LANGUAGE_NAVIGATOR } from "../api/storage";
 
 const LANG_SWITCHER_SELECTOR = "details.lang-switcher";
 
-const getLanguageDisplayName = (lang: SupportedLanguages): string => {
-  try {
-    const names = new Intl.DisplayNames(lang, {
-      type: "language",
-      fallback: "code",
-    });
-    return names.of(lang) || lang;
-  } catch {
-    return lang;
-  }
-};
-
 interface SwitcherOptions {
   onChange?: () => void | Promise<void>;
 }
 
-const buildMenuItems = async (
-  menu: HTMLUListElement,
-  options: SwitcherOptions,
-): Promise<void> => {
+const buildMenuItems = async (menu: HTMLUListElement): Promise<void> => {
   menu.replaceChildren();
 
   const storedPref = await getStoredLanguagePreference();
@@ -67,27 +53,6 @@ const buildMenuItems = async (
     li.appendChild(btn);
     menu.appendChild(li);
   }
-
-  menu.addEventListener("click", async (e) => {
-    const target = e.target;
-    if (!(target instanceof HTMLButtonElement)) return;
-    const lang = target.dataset.lang;
-    if (!lang) return;
-
-    const details = menu.closest<HTMLDetailsElement>(LANG_SWITCHER_SELECTOR);
-    if (details) details.open = false;
-
-    if (lang === LANGUAGE_NAVIGATOR) {
-      await setLanguageOverride(null);
-    } else {
-      await setLanguageOverride(lang as SupportedLanguages);
-    }
-    await reloadI18n();
-    applyI18nToDom();
-    updateCurrentLabel();
-    await buildMenuItems(menu, options);
-    if (options.onChange) await options.onChange();
-  });
 };
 
 const updateCurrentLabel = (): void => {
@@ -141,8 +106,31 @@ export const initLangSwitcher = async (
   const menu = details.querySelector<HTMLUListElement>("ul.lang-menu");
   if (!menu) return;
 
-  await buildMenuItems(menu, options);
+  await buildMenuItems(menu);
   updateCurrentLabel();
+
+  menu.addEventListener("click", async (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    const lang = target.dataset.lang;
+    if (!lang) return;
+
+    details.open = false;
+
+    if (lang === LANGUAGE_NAVIGATOR) {
+      await setLanguageOverride(null);
+    } else if (isSupportedLanguage(lang)) {
+      await setLanguageOverride(lang);
+    } else {
+      return;
+    }
+
+    await reloadI18n();
+    applyI18nToDom();
+    updateCurrentLabel();
+    await buildMenuItems(menu);
+    if (options.onChange) await options.onChange();
+  });
 
   const summary = details.querySelector<HTMLElement>("summary");
   if (summary) {
