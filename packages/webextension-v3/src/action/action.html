@@ -80,7 +80,8 @@
         text-align: center;
       }
 
-      .headline h2 {
+      .headline h2,
+      .headline p {
         text-align: left;
       }
 
@@ -107,29 +108,17 @@
       <div id="importing">
         <div class="headline">
           <img class="logo" /><br /><br />
-          <h2>Importing, please wait...</h2>
+          <h2>Importing...</h2>
+          <p>This may take up to 1 minute.</p>
         </div>
       </div>
       <div id="login">
         <div class="headline">
           <img class="logo" /><br />
-          <h2>Login</h2>
+          <h2>Welcome!</h2>
+          <p>You are logged out.</p>
         </div>
-        <label>
-          Email<br />
-          <input id="email" type="email" />
-        </label>
-        <br /><br />
-
-        <label>
-          Password<br />
-          <input id="password" type="password" />
-        </label>
-        <br /><br />
-        <button id="login-submit">&nbsp;Login&nbsp;</button>&nbsp;
-        <a href="https://recipesage.com/app/auth/register" target="_blank"
-          >Create an account</a
-        >
+        <button id="login-submit">&nbsp;Sign in&nbsp;</button>
       </div>
       <div id="tutorial">
         <div class="headline">
@@ -158,9 +147,6 @@
             complete.
           </li>
         </ol>
-
-        To get started, click the dismiss button below and then start with step
-        1.
 
         <br />
         <button id="tutorial-submit">Dismiss</button>

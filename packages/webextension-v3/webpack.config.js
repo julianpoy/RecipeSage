@@ -7,6 +7,10 @@ module.exports = {
     "action/action.js": path.resolve(__dirname, "src/action/action.ts"),
     "settings/settings.js": path.resolve(__dirname, "src/settings/settings.ts"),
     "inject/inject.js": path.resolve(__dirname, "src/inject/inject.ts"),
+    "background/background.js": path.resolve(
+      __dirname,
+      "src/background/background.ts",
+    ),
   },
   mode: "production",
   output: {

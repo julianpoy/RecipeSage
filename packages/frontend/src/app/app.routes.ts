@@ -119,6 +119,14 @@ export const appRoutes: Routes = [
     title: "pages.contributeThankYou.tabTitle",
   },
   {
+    path: "auth/extension",
+    loadComponent: () =>
+      import("./pages/auth/extension-auth/extension-auth.page").then(
+        (m) => m.ExtensionAuthPage,
+      ),
+    title: "pages.extensionAuth.title",
+  },
+  {
     path: RouteMap.AuthPage.path,
     loadComponent: () =>
       import("./pages/auth/auth.page").then((m) => m.AuthPage),

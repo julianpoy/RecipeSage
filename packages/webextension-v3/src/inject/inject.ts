@@ -1,9 +1,7 @@
-import { ClipError, clipFromHtml, ClipResult } from "../api/clip";
-import {
-  MissingTitleError,
-  NotLoggedInError,
-  saveRecipe,
-} from "../api/saveRecipe";
+import { ClipError } from "../api/clip";
+import type { ClipResult } from "../api/clip";
+import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
+import { clipFromHtmlViaBg, saveRecipeViaBg } from "../api/clipBridge";
 import {
   ExtensionPreferences,
   getPreferences,
@@ -52,7 +50,7 @@ async function bootstrap() {
 
   const preferences = await getPreferences();
   const token = await getToken();
-  const { apiBase, webBase } = await getEffectiveBases();
+  const { webBase } = await getEffectiveBases();
 
   let autoSnipPendingContainer: HTMLDivElement | undefined;
   let autoSnipPromise: Promise<ClipResult | undefined> =
@@ -68,7 +66,7 @@ async function bootstrap() {
     autoSnipPending.innerText = "Grabbing Recipe Content...";
     autoSnipPendingContainer.appendChild(autoSnipPending);
 
-    autoSnipPromise = autoSnipFromPage(apiBase, token);
+    autoSnipPromise = autoSnipFromPage(token);
   }
 
   const autoSnipResults = (await autoSnipPromise) ?? {};
@@ -78,11 +76,10 @@ async function bootstrap() {
     }, 250);
   }
 
-  initEditor(shadowRoot, preferences, autoSnipResults, apiBase, webBase);
+  initEditor(shadowRoot, preferences, autoSnipResults, webBase);
 }
 
 async function autoSnipFromPage(
-  apiBase: string,
   token: string | undefined,
 ): Promise<ClipResult | undefined> {
   if (!token) {
@@ -92,11 +89,7 @@ async function autoSnipFromPage(
     return undefined;
   }
   try {
-    return await clipFromHtml(
-      apiBase,
-      token,
-      document.documentElement.outerHTML,
-    );
+    return await clipFromHtmlViaBg(document.documentElement.outerHTML);
   } catch (e) {
     if (e instanceof ClipError && e.status === 401) {
       await setToken(null);
@@ -133,7 +126,6 @@ function initEditor(
   shadowRoot: ShadowRoot,
   preferences: ExtensionPreferences,
   autoSnipResults: ClipResult,
-  apiBase: string,
   webBase: string,
 ) {
   const currentSnip: CurrentSnip = {
@@ -465,7 +457,7 @@ function initEditor(
     }
 
     try {
-      const saved = await saveRecipe(apiBase, token, currentSnip);
+      const saved = await saveRecipeViaBg(currentSnip);
       hide();
       displayAlert(
         "Recipe Saved!",

@@ -1,13 +1,13 @@
-import { TRPCClientError } from "@trpc/client";
 import { ClipError, clipFromHtml } from "../api/clip";
 import {
   MissingTitleError,
   NotLoggedInError,
   saveRecipe,
 } from "../api/saveRecipe";
-import { getToken, setToken } from "../api/storage";
-import { createTrpc } from "../api/trpc";
-import { getApiBase, getEffectiveBases } from "../config";
+import { getPreferences, getToken, setToken } from "../api/storage";
+import { getEffectiveBases } from "../config";
+import { isSignInResult } from "../api/messages";
+import { validateSession } from "../api/session";
 
 const setMessage = (text: string) => {
   const el = document.getElementById("message");
@@ -20,6 +20,7 @@ const showOnly = (id: string) => {
     const el = document.getElementById(section);
     if (el) el.style.display = section === id ? "block" : "none";
   }
+  setMessage("");
 };
 
 const showTutorial = async () => {
@@ -27,48 +28,39 @@ const showTutorial = async () => {
   await chrome.storage.local.set({ seenTutorial: true });
 };
 
-const readLoginInputs = () => {
-  const emailEl = document.getElementById("email");
-  const passwordEl = document.getElementById("password");
-  if (
-    !(emailEl instanceof HTMLInputElement) ||
-    !(passwordEl instanceof HTMLInputElement)
-  ) {
-    return null;
-  }
-  return { email: emailEl.value, password: passwordEl.value };
-};
-
 const login = async () => {
-  const credentials = readLoginInputs();
-  if (!credentials) return;
+  setMessage("Signing in...");
 
+  let raw: unknown;
   try {
-    const apiBase = await getApiBase();
-    const result = await createTrpc(apiBase).users.login.mutate(credentials);
-    await setToken(result.token);
+    raw = await chrome.runtime.sendMessage({ type: "startExtensionAuth" });
+  } catch {
+    setMessage("Sign-in failed. Please try again.");
+    return;
+  }
 
-    const stored = await chrome.storage.local.get(["seenTutorial"]);
+  if (!isSignInResult(raw)) {
+    setMessage("Sign-in failed. Please try again.");
+    return;
+  }
 
-    if (stored.seenTutorial) {
-      setMessage(
-        "You are now logged in. Click the RecipeSage icon again to clip this website.",
-      );
-      setTimeout(() => window.close(), 5000);
-    } else {
-      await showTutorial();
-    }
-  } catch (e) {
-    if (e instanceof TRPCClientError) {
-      const code = e.data?.httpStatus;
-      if (code === 403 || code === 404) {
-        setMessage("It looks like that email or password isn't correct.");
-        return;
-      }
-    }
+  if (raw.status === "cancelled") {
+    setMessage("Sign-in was cancelled.");
+    return;
+  }
+  if (raw.status === "error") {
+    setMessage("Sign-in failed. Please try again.");
+    return;
+  }
+
+  const { seenTutorial } = await getPreferences();
+  if (seenTutorial) {
     setMessage(
-      "Something went wrong. Please check your internet connection and try again.",
+      "You are now logged in. Click the RecipeSage icon again to clip this website.",
     );
+    setTimeout(() => window.close(), 5000);
+  } else {
+    await showTutorial();
   }
 };
 
@@ -193,14 +185,6 @@ const wireUp = async () => {
   const submitLogin = document.getElementById("login-submit");
   if (submitLogin) submitLogin.onclick = () => void login();
 
-  const onEnter = (event: KeyboardEvent) => {
-    if (event.key === "Enter") void login();
-  };
-  for (const id of ["email", "password"]) {
-    const el = document.getElementById(id);
-    if (el instanceof HTMLInputElement) el.onkeydown = onEnter;
-  }
-
   const tutorialSubmit = document.getElementById("tutorial-submit");
   if (tutorialSubmit) tutorialSubmit.onclick = () => window.close();
 
@@ -210,7 +194,22 @@ const wireUp = async () => {
   if (interactiveBtn) interactiveBtn.onclick = () => void interactiveClip();
 
   const token = await getToken();
-  showOnly(token ? "start" : "login");
+  if (!token) {
+    showOnly("login");
+    return;
+  }
+  showOnly("start");
+
+  void (async () => {
+    const { apiBase } = await getEffectiveBases();
+    const result = await validateSession(apiBase, token);
+    if (result !== "invalid") return;
+    await setToken(null);
+    const startEl = document.getElementById("start");
+    if (!startEl || startEl.style.display !== "block") return;
+    showOnly("login");
+    setMessage("Your session has expired. Please sign in again.");
+  })();
 };
 
 document.addEventListener("DOMContentLoaded", () => void wireUp());
