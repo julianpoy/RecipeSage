@@ -1,5 +1,6 @@
 import { TRPCClientError } from "@trpc/client";
-import { getToken, setToken } from "../api/storage";
+import { SupportedLanguages } from "@recipesage/util/shared";
+import { LANGUAGE_NAVIGATOR, getToken, setToken } from "../api/storage";
 import { createTrpc } from "../api/trpc";
 import {
   DEFAULT_API_BASE,
@@ -9,6 +10,13 @@ import {
   isValidBaseUrl,
   setBaseOverrides,
 } from "../config";
+import { initI18n, reloadI18n, t } from "../i18n/t";
+import { applyI18nToDom } from "../i18n/applyDom";
+import {
+  ALL_LANGUAGES,
+  getStoredLanguagePreference,
+  setLanguageOverride,
+} from "../i18n/language";
 
 const showAccountSection = (loggedIn: boolean, email?: string) => {
   const loggedInMessage = document.getElementById("loggedInMessage");
@@ -43,7 +51,7 @@ const refreshAccount = async () => {
       return;
     }
     console.error(e);
-    window.alert("There was an error while fetching your account data.");
+    window.alert(t("webextension.settings.accountFetchError"));
     showAccountSection(false);
   }
 };
@@ -82,8 +90,16 @@ const populateServerInputs = async () => {
     webInput.value = webBaseOverride || "";
     webInput.placeholder = DEFAULT_WEB_BASE;
   }
-  showHint("apiBaseHint", `Default: ${DEFAULT_API_BASE}`, false);
-  showHint("webBaseHint", `Default: ${DEFAULT_WEB_BASE}`, false);
+  showHint(
+    "apiBaseHint",
+    t("webextension.settings.defaultUrl", { url: DEFAULT_API_BASE }),
+    false,
+  );
+  showHint(
+    "webBaseHint",
+    t("webextension.settings.defaultUrl", { url: DEFAULT_WEB_BASE }),
+    false,
+  );
 };
 
 const saveServer = async () => {
@@ -95,11 +111,11 @@ const saveServer = async () => {
   const webValue = webInput.value.trim();
 
   if (apiValue && !isValidBaseUrl(apiValue)) {
-    showHint("apiBaseHint", "Must be a valid http(s) URL", true);
+    showHint("apiBaseHint", t("webextension.settings.invalidUrl"), true);
     return;
   }
   if (webValue && !isValidBaseUrl(webValue)) {
-    showHint("webBaseHint", "Must be a valid http(s) URL", true);
+    showHint("webBaseHint", t("webextension.settings.invalidUrl"), true);
     return;
   }
 
@@ -108,7 +124,7 @@ const saveServer = async () => {
     webBaseOverride: webValue ? webValue : null,
   });
 
-  setStatus("Saved.");
+  setStatus(t("webextension.settings.saved"));
   setTimeout(() => setStatus(""), 3000);
 
   await populateServerInputs();
@@ -121,21 +137,77 @@ const resetServer = async () => {
     webBaseOverride: null,
   });
   await populateServerInputs();
-  setStatus("Reset to defaults.");
+  setStatus(t("webextension.settings.reset"));
   setTimeout(() => setStatus(""), 3000);
   await refreshAccount();
 };
 
+const getLanguageDisplayName = (lang: SupportedLanguages): string => {
+  try {
+    const names = new Intl.DisplayNames(lang, {
+      type: "language",
+      fallback: "code",
+    });
+    return names.of(lang) || lang;
+  } catch {
+    return lang;
+  }
+};
+
+const populateLanguageSelect = async () => {
+  const select = document.getElementById("languageSelect");
+  if (!(select instanceof HTMLSelectElement)) return;
+
+  select.replaceChildren();
+
+  const navigatorOption = document.createElement("option");
+  navigatorOption.value = LANGUAGE_NAVIGATOR;
+  navigatorOption.textContent = t("webextension.settings.languageDefault");
+  select.appendChild(navigatorOption);
+
+  const sorted = ALL_LANGUAGES.slice().sort((a, b) =>
+    getLanguageDisplayName(a).localeCompare(getLanguageDisplayName(b)),
+  );
+  for (const lang of sorted) {
+    const opt = document.createElement("option");
+    opt.value = lang;
+    opt.textContent = getLanguageDisplayName(lang);
+    select.appendChild(opt);
+  }
+
+  const stored = await getStoredLanguagePreference();
+  select.value = stored ?? LANGUAGE_NAVIGATOR;
+
+  select.onchange = async () => {
+    const value = select.value;
+    if (value === LANGUAGE_NAVIGATOR) {
+      await setLanguageOverride(null);
+    } else {
+      await setLanguageOverride(value as SupportedLanguages);
+    }
+    await reloadI18n();
+    applyI18nToDom();
+    await populateServerInputs();
+    await populateLanguageSelect();
+  };
+};
+
 document.addEventListener("DOMContentLoaded", () => {
-  const logoutButton = document.getElementById("logoutButton");
-  if (logoutButton) logoutButton.onclick = () => void logout();
+  void (async () => {
+    await initI18n();
+    applyI18nToDom();
+    await populateLanguageSelect();
 
-  const saveButton = document.getElementById("saveServerButton");
-  if (saveButton) saveButton.onclick = () => void saveServer();
+    const logoutButton = document.getElementById("logoutButton");
+    if (logoutButton) logoutButton.onclick = () => void logout();
 
-  const resetButton = document.getElementById("resetServerButton");
-  if (resetButton) resetButton.onclick = () => void resetServer();
+    const saveButton = document.getElementById("saveServerButton");
+    if (saveButton) saveButton.onclick = () => void saveServer();
 
-  void populateServerInputs();
-  void refreshAccount();
+    const resetButton = document.getElementById("resetServerButton");
+    if (resetButton) resetButton.onclick = () => void resetServer();
+
+    await populateServerInputs();
+    await refreshAccount();
+  })();
 });

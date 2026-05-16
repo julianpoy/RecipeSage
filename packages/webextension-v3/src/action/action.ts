@@ -20,12 +20,9 @@ import {
   NutritionRateLimitError,
   getNutritionFromText,
 } from "../api/nutrition";
-
-const CREDIT_LIMIT_ALERT = `Sorry, limit reached
-
-The autoimport feature is particularly costly to host, so I've had to place a gentle limit on the number of times per day this feature can be used (sorry!). Your usage limit for automatic import & cooking assistant messages resets at 0:00GMT.
-
-Contributing unlocks a larger daily allowance (10x the limit) since it helps to cover the costs. Sorry for the inconvenience!`;
+import { initI18n, t } from "../i18n/t";
+import { applyI18nToDom } from "../i18n/applyDom";
+import { initLangSwitcher } from "../i18n/langSwitcher";
 
 const setMessage = (text: string) => {
   const el = document.getElementById("message");
@@ -47,35 +44,33 @@ const showTutorial = async () => {
 };
 
 const login = async () => {
-  setMessage("Signing in...");
+  setMessage(t("webextension.action.signingIn"));
 
   let raw: unknown;
   try {
     raw = await chrome.runtime.sendMessage({ type: "startExtensionAuth" });
   } catch {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   if (!isSignInResult(raw)) {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   if (raw.status === "cancelled") {
-    setMessage("Sign-in was cancelled.");
+    setMessage(t("webextension.action.signInCancelled"));
     return;
   }
   if (raw.status === "error") {
-    setMessage("Sign-in failed. Please try again.");
+    setMessage(t("webextension.action.signInFailed"));
     return;
   }
 
   const { seenTutorial } = await getPreferences();
   if (seenTutorial) {
-    setMessage(
-      "You are now logged in. Click the RecipeSage icon again to clip this website.",
-    );
+    setMessage(t("webextension.action.signInSuccessful"));
     setTimeout(() => window.close(), 5000);
   } else {
     await showTutorial();
@@ -93,9 +88,7 @@ const fetchActivePageHtml = async (tabId: number): Promise<string | null> => {
 
 const handleNotLoggedIn = async () => {
   await setToken(null);
-  window.alert(
-    "Please login. It looks like you're logged out. Please close and re-open the clip tool to login.",
-  );
+  window.alert(t("webextension.action.notLoggedInPrompt"));
 };
 
 const nutritionToFields = (n: Nutrition): NutritionFields => ({
@@ -145,11 +138,11 @@ const autoClip = async () => {
     html = await fetchActivePageHtml(tab.id);
   } catch (e) {
     console.error(e);
-    window.alert("Failed to fetch page content.");
+    window.alert(t("webextension.action.fetchFailed"));
     return;
   }
   if (!html) {
-    window.alert("Failed to fetch page content.");
+    window.alert(t("webextension.action.fetchFailed"));
     return;
   }
 
@@ -162,13 +155,11 @@ const autoClip = async () => {
       return;
     }
     if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
-      window.alert(CREDIT_LIMIT_ALERT);
+      window.alert(t("webextension.creditLimitAlert"));
       return;
     }
     console.error(e);
-    window.alert(
-      "Failed to clip recipe. If this continues, please report a bug.",
-    );
+    window.alert(t("webextension.action.clipFailed"));
     return;
   }
 
@@ -191,7 +182,7 @@ const autoClip = async () => {
         return;
       }
       if (e instanceof NutritionRateLimitError) {
-        window.alert(CREDIT_LIMIT_ALERT);
+        window.alert(t("webextension.creditLimitAlert"));
       } else {
         console.warn("Failed to parse nutrition; saving without nutrition", e);
       }
@@ -213,7 +204,7 @@ const autoClip = async () => {
       });
       window.close();
     } else {
-      setMessage("Recipe imported successfully.");
+      setMessage(t("webextension.action.importSuccess"));
       setTimeout(() => window.close(), 2000);
     }
   } catch (e) {
@@ -222,15 +213,11 @@ const autoClip = async () => {
       return;
     }
     if (e instanceof MissingTitleError) {
-      window.alert(
-        "Could not save recipe: no recipe title was detected on the page.",
-      );
+      window.alert(t("webextension.action.missingTitle"));
       return;
     }
     console.error(e);
-    window.alert(
-      "An error occurred while saving the recipe. Please try again.",
-    );
+    window.alert(t("webextension.action.saveFailed"));
   }
 };
 
@@ -248,9 +235,17 @@ const interactiveClip = async () => {
   window.close();
 };
 
+type BooleanPrefKey = {
+  [K in keyof ExtensionPreferences]-?: NonNullable<
+    ExtensionPreferences[K]
+  > extends boolean
+    ? K
+    : never;
+}[keyof ExtensionPreferences];
+
 const bindOptionCheckbox = (
   id: string,
-  prefKey: keyof ExtensionPreferences,
+  prefKey: BooleanPrefKey,
   prefs: ExtensionPreferences,
 ) => {
   const el = document.getElementById(id);
@@ -263,6 +258,14 @@ const bindOptionCheckbox = (
 };
 
 const wireUp = async () => {
+  await initI18n();
+  applyI18nToDom();
+  await initLangSwitcher({
+    onChange: () => {
+      applyI18nToDom();
+    },
+  });
+
   for (const logo of document.querySelectorAll(".logo")) {
     if (logo instanceof HTMLImageElement) {
       logo.src = chrome.runtime.getURL("./images/recipesage-black-trimmed.png");
@@ -299,7 +302,7 @@ const wireUp = async () => {
     const startEl = document.getElementById("start");
     if (!startEl || startEl.style.display !== "block") return;
     showOnly("login");
-    setMessage("Your session has expired. Please sign in again.");
+    setMessage(t("webextension.action.sessionExpired"));
   })();
 };
 
