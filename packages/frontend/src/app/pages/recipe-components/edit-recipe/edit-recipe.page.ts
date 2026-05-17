@@ -1003,7 +1003,21 @@ export class EditRecipePage {
     return fileName.substring(dotIndex).toLowerCase();
   }
 
-  async scanDocument() {
+  isClipDocumentModalOpen = false;
+  clipDocumentIncludeNutrition = false;
+
+  scanDocument() {
+    this.clipDocumentIncludeNutrition = false;
+    this.isClipDocumentModalOpen = true;
+  }
+
+  submitClipDocument() {
+    const includeNutrition = this.clipDocumentIncludeNutrition;
+    this.isClipDocumentModalOpen = false;
+    this._scanDocument(includeNutrition);
+  }
+
+  async _scanDocument(includeNutrition: boolean) {
     let filePickerResult: PickFilesResult;
     try {
       filePickerResult = await FilePicker.pickFiles({
@@ -1066,9 +1080,10 @@ export class EditRecipePage {
         ? await this.mlService.getRecipeFromPDF(webFile, errorHandlers)
         : await this.mlService.getRecipeFromDocument(webFile, errorHandlers);
 
-    loading.dismiss();
-
-    if (!response.success) return;
+    if (!response.success) {
+      loading.dismiss();
+      return;
+    }
 
     this.recipe.title = response.data.recipe.title || "";
     this.recipe.description = response.data.recipe.description || "";
@@ -1079,6 +1094,12 @@ export class EditRecipePage {
     this.recipe.ingredients = response.data.recipe.ingredients || "";
     this.recipe.instructions = response.data.recipe.instructions || "";
     this.recipe.notes = response.data.recipe.notes || "";
+
+    if (includeNutrition && response.data.recipe.nutritionInfo) {
+      await this.parseAndApplyNutrition(response.data.recipe.nutritionInfo);
+    }
+
+    loading.dismiss();
   }
 
   async scanImage() {

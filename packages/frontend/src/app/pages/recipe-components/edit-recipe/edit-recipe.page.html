@@ -139,6 +139,31 @@
       </ng-template>
     </ion-modal>
 
+    <ion-modal
+      cssClass="alert-modal"
+      [isOpen]="isClipDocumentModalOpen"
+      (didDismiss)="isClipDocumentModalOpen = false"
+    >
+      <ng-template>
+        <div class="alert-modal-inner">
+          <h2>{{ "pages.editRecipe.clipDocument.header" | translate }}</h2>
+          <p>{{ "pages.editRecipe.clipDocument.message" | translate }}</p>
+          <label class="alert-modal-checkbox">
+            <input type="checkbox" [(ngModel)]="clipDocumentIncludeNutrition" />
+            {{ "pages.editRecipe.clip.includeNutrition" | translate }}
+          </label>
+          <div class="alert-modal-buttons">
+            <button (click)="isClipDocumentModalOpen = false">
+              {{ "generic.cancel" | translate }}
+            </button>
+            <button (click)="submitClipDocument()">
+              {{ "pages.editRecipe.clipDocument.choose" | translate }}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+
     <br />
     <br />
     <br />
