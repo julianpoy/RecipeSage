@@ -72,6 +72,13 @@
     />
   </ion-item>
 
+  @if (!isEditing) {
+    <recurrence-editor
+      [baseDate]="scheduledDate"
+      (ruleChange)="recurrenceChange($event)"
+    ></recurrence-editor>
+  }
+
   <br /><br />
 
   <select-meal

@@ -131,7 +131,7 @@ export const clipUrl = async (
   }
 
   metrics.clipCacheLookup.inc({
-    result: "miss",
+    result: skipCache ? "skipped" : "miss",
   });
 
   const response = await (async () => {

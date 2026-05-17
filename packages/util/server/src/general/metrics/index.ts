@@ -74,7 +74,7 @@ export const metrics = {
     name: "clip_cache_lookup",
     help: "A lookup against the clip cache during a url clip",
     labelNames: [
-      "result", // One of: 'hit' | 'miss'
+      "result", // One of: 'hit' | 'miss' | 'skipped'
     ],
   }),
   clipStartedProcessing: new client.Counter({

@@ -20,6 +20,7 @@ import {
   getMealColors,
   DEFAULT_MEAL_COLORS,
 } from "@recipesage/util/shared";
+import type { MealPlanItemDraft } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
 
 import { MealCalendarComponent } from "~/components/meal-calendar/meal-calendar.component";
 import { NullStateComponent } from "~/components/null-state/null-state.component";
@@ -200,27 +201,15 @@ export class MealPlanPage {
     this.mealPlanItemsQuery.refresh();
   }
 
-  async _addItem(item: {
-    title: string;
-    recipeId?: string;
-    meal: string;
-    notes?: string;
-    scheduledDate: string;
-  }) {
+  async _addItems(items: MealPlanItemDraft[]) {
+    if (items.length === 0) return;
+
     const loading = this.loadingService.start();
 
     const response =
       await this.serverActionsService.mealPlans.createMealPlanItems({
         mealPlanId: this.mealPlanId,
-        items: [
-          {
-            title: item.title,
-            recipeId: item.recipeId || null,
-            meal: item.meal,
-            notes: item.notes,
-            scheduledDate: item.scheduledDate,
-          },
-        ],
+        items,
       });
     if (response) this.reference = response.reference;
 
@@ -239,8 +228,8 @@ export class MealPlanPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.item) return;
-      this._addItem(data.item);
+      if (!data?.items) return;
+      this._addItems(data.items);
     });
   }
 
@@ -310,23 +299,14 @@ export class MealPlanPage {
     modal.present();
 
     const { data } = await modal.onDidDismiss();
-    if (!data || !data.item) return;
-    const item = data.item;
+    const item = data?.items?.[0];
+    if (!item) return;
 
     const loading = this.loadingService.start();
     const response =
       await this.serverActionsService.mealPlans.updateMealPlanItems({
         mealPlanId: this.mealPlanId,
-        items: [
-          {
-            id: mealItem.id,
-            title: item.title,
-            recipeId: item.recipeId,
-            scheduledDate: item.scheduledDate,
-            meal: item.meal,
-            notes: item.notes,
-          },
-        ],
+        items: [{ id: mealItem.id, ...item }],
       });
     if (response) this.reference = response.reference;
     loading.dismiss();
