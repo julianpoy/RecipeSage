@@ -610,7 +610,7 @@
     "pages.editRecipe.autoclip": "URL에서 자동 입력",
     "pages.editRecipe.clipText": "텍스트에서 자동 입력",
     "pages.editRecipe.scanImage": "사진에서 스캔",
-    "pages.editRecipe.scanPDF": "PDF에서 스캔",
+    "pages.editRecipe.scanDocument": "PDF에서 스캔",
     "pages.editRecipe.input.title": "제목",
     "pages.editRecipe.input.description": "설명",
     "pages.editRecipe.input.yield": "분량",

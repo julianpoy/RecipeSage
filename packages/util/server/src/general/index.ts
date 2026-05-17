@@ -29,6 +29,7 @@ export * from "./grip";
 export * from "./fetch";
 export * from "./jsonLD";
 export * from "./multerAutoCleanup";
+export * from "./extractTextFromDocument";
 export * from "./decryptWithRSAKey";
 export * from "./deletePathsSilent";
 export * from "./throttleDropPromise";

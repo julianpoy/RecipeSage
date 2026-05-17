@@ -518,7 +518,7 @@
     "pages.editRecipe.autoclip": "Automaattitäyttö URL-osoitteesta",
     "pages.editRecipe.clipText": "Automaattitäyttö tekstistä",
     "pages.editRecipe.scanImage": "Skannaa kuvasta",
-    "pages.editRecipe.scanPDF": "Skannaa PDF:stä",
+    "pages.editRecipe.scanDocument": "Skannaa PDF:stä",
     "pages.editRecipe.input.title": "Otsikko",
     "pages.editRecipe.input.description": "Kuvaus",
     "pages.editRecipe.input.yield": "Annosmäärä",

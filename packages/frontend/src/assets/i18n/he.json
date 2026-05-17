@@ -902,7 +902,7 @@
     "pages.editRecipe.showClipOptions": "מילוי אוטומטי מ...",
     "pages.editRecipe.clipText": "מילוי אוטומטי מטקסט",
     "pages.editRecipe.scanImage": "סרוק מתמונה",
-    "pages.editRecipe.scanPDF": "סרוק מPDF",
+    "pages.editRecipe.scanDocument": "סרוק מPDF",
     "pages.editRecipe.input.lastMadeAt": "הוכן לאחרונה",
     "pages.editRecipe.input.lastMadeAt.never": "אף פעם. לחץ כדי לשנות",
     "pages.editRecipe.input.labels.noSelectedItems": "אין תוויות מסומנות",

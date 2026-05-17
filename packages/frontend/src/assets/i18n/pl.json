@@ -936,7 +936,7 @@
     "pages.messageThread.recipeCopySent": "Kopia tego przepisu została wysłana",
     "pages.messages.loading": "Ładowanie Twoich wiadomości...",
     "pages.editRecipe.autoclip": "Automatycznie uzupełnij z adresu URL",
-    "pages.editRecipe.scanPDF": "Skanuj z pliku PDF",
+    "pages.editRecipe.scanDocument": "Skanuj z pliku PDF",
     "pages.editRecipe.input.title": "Tytuł",
     "pages.editRecipe.input.activeTime": "Czas aktywny",
     "pages.editRecipe.input.nutrition": "Wartości odżywcze (na porcję)",

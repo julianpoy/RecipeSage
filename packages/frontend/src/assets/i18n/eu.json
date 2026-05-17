@@ -1031,7 +1031,7 @@
     "pages.editRecipe.autoclip": "Bete automatikoki URLtik",
     "pages.editRecipe.clipText": "Bete automatikoki testutik",
     "pages.editRecipe.scanImage": "Eskaneatu argazki batetik",
-    "pages.editRecipe.scanPDF": "Eskaneatu PDF batetik",
+    "pages.editRecipe.scanDocument": "Eskaneatu PDF batetik",
     "pages.editRecipe.input.yield": "Kantitatea",
     "pages.editRecipe.input.totalTime": "Denbora guztira",
     "pages.editRecipe.input.instructions": "Jarraibideak",

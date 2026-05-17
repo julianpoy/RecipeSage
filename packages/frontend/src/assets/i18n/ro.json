@@ -460,7 +460,7 @@
     "pages.editRecipe.showClipOptions": "Adu rețeta din...",
     "pages.editRecipe.autoclip": "Link URL",
     "pages.editRecipe.scanImage": "Scanare poză",
-    "pages.editRecipe.scanPDF": "Scanare PDF",
+    "pages.editRecipe.scanDocument": "Scanare PDF",
     "pages.editRecipe.input.title": "Nume",
     "pages.editRecipe.input.description": "Descriere",
     "pages.editRecipe.input.activeTime": "Timp de preparare",

@@ -487,7 +487,7 @@
     "pages.editRecipe.showClipOptions": "Recept automatisch vullen van...",
     "pages.editRecipe.clipText": "Automatisch vullen van tekst",
     "pages.editRecipe.scanImage": "Scannen van foto",
-    "pages.editRecipe.scanPDF": "Scannen van PDF",
+    "pages.editRecipe.scanDocument": "Scannen van PDF",
     "pages.editRecipe.input.title": "Titel",
     "pages.editRecipe.input.description": "Omschrijving",
     "pages.editRecipe.input.yield": "Hoeveelheid",

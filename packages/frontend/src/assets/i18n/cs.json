@@ -157,7 +157,7 @@
     "pages.editRecipe.title.edit": "Upravit recept",
     "pages.editRecipe.title.new": "Nový recept",
     "pages.editRecipe.scanImage": "Naskenovat z fotografie",
-    "pages.editRecipe.scanPDF": "Naskenovat z PDF",
+    "pages.editRecipe.scanDocument": "Naskenovat z PDF",
     "pages.editRecipe.input.title": "Název",
     "pages.editRecipe.input.description": "Popis",
     "pages.editRecipe.input.notes": "Poznámky",

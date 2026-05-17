@@ -531,7 +531,7 @@
     "pages.editRecipe.autoclip": "Αυτόματη συμπλήρωση από URL",
     "pages.editRecipe.clipText": "Αυτόματη συμπλήρωση από κείμενο",
     "pages.editRecipe.scanImage": "Σάρωση από φωτογραφία",
-    "pages.editRecipe.scanPDF": "Σάρωση από PDF",
+    "pages.editRecipe.scanDocument": "Σάρωση από PDF",
     "pages.editRecipe.input.title": "Τίτλος",
     "pages.editRecipe.input.description": "Περιγραφή",
     "pages.editRecipe.input.yield": "Μερίδες",

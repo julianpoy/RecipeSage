@@ -297,7 +297,7 @@
     "pages.editRecipe.autoclip": "URLからの自動入力",
     "pages.editRecipe.clipText": "テキストからの自動入力",
     "pages.editRecipe.scanImage": "写真からスキャン",
-    "pages.editRecipe.scanPDF": "PDFからスキャン",
+    "pages.editRecipe.scanDocument": "PDFからスキャン",
     "pages.editRecipe.input.title": "タイトル",
     "pages.editRecipe.input.description": "説明",
     "pages.editRecipe.input.yield": "収率",

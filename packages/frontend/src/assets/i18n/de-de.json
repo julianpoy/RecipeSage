@@ -835,7 +835,7 @@
     "generic.ignore": "Ignorieren",
     "generic.options": "Optionen",
     "pages.assistant.welcome.documentation": "Kochassistent-Dokumentation lesen",
-    "pages.editRecipe.scanPDF": "PDF scannen",
+    "pages.editRecipe.scanDocument": "PDF scannen",
     "pages.editRecipe.input.labels.noSelectedItems": "Keine Labels ausgewählt",
     "pages.editRecipe.input.labels.search": "Nach Label suchen",
     "pages.editRecipe.clipURL.header": "Rezept automatisch via URL ausfüllen",

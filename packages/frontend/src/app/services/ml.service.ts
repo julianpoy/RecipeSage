@@ -49,4 +49,19 @@ export class MlService {
       },
     );
   }
+
+  getRecipeFromDocument(file: File, errorHandlers?: ErrorHandlers) {
+    const formData: FormData = new FormData();
+    formData.append("file", file, file.name);
+
+    return this.httpService.multipartRequestWithWrapper<StandardizedRecipeImportEntryForWeb>(
+      {
+        path: "ml/getRecipeFromDocument",
+        method: "POST",
+        payload: formData,
+        query: {},
+        errorHandlers,
+      },
+    );
+  }
 }

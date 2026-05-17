@@ -1154,7 +1154,7 @@
     "pages.mealPlanItemDetailsModal.actions.addToShoppingList": "Adicionar esta receita à lista de compras",
     "pages.mealPlanItemDetailsModal.actions.unpinRecipe": "Desafixar esta receita",
     "pages.assistant.welcome.1": "Bem-vindo ao assistente de culinária do RecipeSage!",
-    "pages.editRecipe.scanPDF": "Escanear a partir de PDF",
+    "pages.editRecipe.scanDocument": "Escanear a partir de PDF",
     "pages.editRecipe.input.title": "Título",
     "pages.editRecipe.input.description": "Descrição",
     "pages.editRecipe.input.yield": "Rendimento",

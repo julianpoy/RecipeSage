@@ -855,7 +855,7 @@
     "pages.editRecipe.showClipOptions": "Autofyld opskrift fra...",
     "pages.editRecipe.clipText": "Autofyld fra tekst",
     "pages.editRecipe.scanImage": "Scan fra foto",
-    "pages.editRecipe.scanPDF": "Scan fra PDF",
+    "pages.editRecipe.scanDocument": "Scan fra PDF",
     "pages.homepopover.labelShared": "Delt",
     "pages.editRecipe.clipURL.message": "Indtast en website-URL for at hente opskriftsindhold",
     "pages.editRecipe.clipURL.placeholder": "Opskrift-URL",

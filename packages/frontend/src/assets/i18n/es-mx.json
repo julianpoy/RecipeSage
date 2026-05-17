@@ -610,7 +610,7 @@
     "pages.editRecipe.autoclip": "Autocompletar desde URL",
     "pages.editRecipe.clipText": "Autocompletar desde texto",
     "pages.editRecipe.scanImage": "Escanear desde foto",
-    "pages.editRecipe.scanPDF": "Escanear desde PDF",
+    "pages.editRecipe.scanDocument": "Escanear desde PDF",
     "pages.editRecipe.input.title": "Título",
     "pages.editRecipe.input.description": "Descripción",
     "pages.editRecipe.input.yield": "Porciones",

@@ -485,7 +485,7 @@
     "pages.editRecipe.missingLabelGroup.title": "缺少标签组",
     "pages.addRecipeToMealPlanModal.selectMeal": "选择一个膳食",
     "pages.editRecipe.scanImage": "从照片扫描",
-    "pages.editRecipe.scanPDF": "从PDF扫描",
+    "pages.editRecipe.scanDocument": "从PDF扫描",
     "pages.editRecipe.input.title": "标题",
     "pages.editRecipe.input.description": "描述",
     "pages.editRecipe.input.yield": "份量",
