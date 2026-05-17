@@ -849,7 +849,7 @@
     "pages.homepopover.labelSharedCollection": "Метки, отмеченные как \"Общие\", принадлежат другим пользователям",
     "pages.editRecipe.clipText": "Автозаполнение из текста",
     "pages.editRecipe.scanImage": "Сканирование с фотографии",
-    "pages.editRecipe.scanPDF": "Сканирование из PDF",
+    "pages.editRecipe.scanDocument": "Сканирование из PDF",
     "pages.editRecipe.clipURL.header": "Автозаполнение рецепта из URL",
     "pages.editRecipe.clipURL.message": "Введите URL веб-сайта, чтобы получить содержимое рецепта",
     "pages.editRecipe.clipURL.placeholder": "URL рецепта",

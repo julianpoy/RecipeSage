@@ -610,7 +610,7 @@
     "pages.editRecipe.autoclip": "從 URL 自動填入",
     "pages.editRecipe.clipText": "從文字自動填入",
     "pages.editRecipe.scanImage": "從照片掃描",
-    "pages.editRecipe.scanPDF": "從 PDF 掃描",
+    "pages.editRecipe.scanDocument": "從 PDF 掃描",
     "pages.editRecipe.input.title": "標題",
     "pages.editRecipe.input.description": "描述",
     "pages.editRecipe.input.yield": "份量",

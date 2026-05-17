@@ -987,11 +987,27 @@ export class EditRecipePage {
       : {};
   }
 
-  async scanPDF() {
+  private readonly SUPPORTED_DOCUMENT_MIME_TYPES = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/rtf",
+    "application/vnd.oasis.opendocument.text",
+    "text/markdown",
+    "text/html",
+    "text/plain",
+  ];
+
+  private getDocumentExtension(fileName: string): string {
+    const dotIndex = fileName.lastIndexOf(".");
+    if (dotIndex < 0) return "";
+    return fileName.substring(dotIndex).toLowerCase();
+  }
+
+  async scanDocument() {
     let filePickerResult: PickFilesResult;
     try {
       filePickerResult = await FilePicker.pickFiles({
-        types: ["application/pdf"],
+        types: this.SUPPORTED_DOCUMENT_MIME_TYPES,
         limit: 1,
       });
     } catch (e) {
@@ -1000,6 +1016,8 @@ export class EditRecipePage {
 
     const file = filePickerResult.files.at(0);
     if (!file) return;
+
+    const extension = this.getDocumentExtension(file.name);
 
     const pleaseWait = await this.translate
       .get("pages.editRecipe.clip.loading")
@@ -1022,11 +1040,11 @@ export class EditRecipePage {
       const response = await fetch(webPath);
       return response.blob();
     })();
-    const webFile = new File([blob], "scan.pdf", {
-      type: "application/pdf",
+    const webFile = new File([blob], `scan${extension}`, {
+      type: file.mimeType || "application/octet-stream",
     });
 
-    const response = await this.mlService.getRecipeFromPDF(webFile, {
+    const errorHandlers = {
       ...this.getSelfhostErrorHandlers(),
       400: async () => {
         (
@@ -1041,7 +1059,12 @@ export class EditRecipePage {
           })
         ).present();
       },
-    });
+    };
+
+    const response =
+      extension === ".pdf"
+        ? await this.mlService.getRecipeFromPDF(webFile, errorHandlers)
+        : await this.mlService.getRecipeFromDocument(webFile, errorHandlers);
 
     loading.dismiss();
 

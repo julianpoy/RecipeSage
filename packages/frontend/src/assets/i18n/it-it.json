@@ -842,7 +842,7 @@
     "pages.editRecipe.clipText": "Autocompilazione da un testo",
     "pages.editRecipe.showClipOptions": "Autocompila ricetta da...",
     "pages.editRecipe.scanImage": "Scansione da foto",
-    "pages.editRecipe.scanPDF": "Scansione da PDF",
+    "pages.editRecipe.scanDocument": "Scansione da PDF",
     "pages.editRecipe.input.labels.noSelectedItems": "Nessuna etichetta selezionata",
     "pages.editRecipe.input.labels.noItems": "Nessuna etichetta. Digitare per creare un'etichetta",
     "pages.editRecipe.input.labels.search": "Ricerca di un'etichetta",

@@ -885,7 +885,7 @@
     "pages.editRecipe.clipURL.invalidUrl": "Debes proporcionar una URL válida",
     "pages.editRecipe.clipText.message": "Ingresa un bloque de texto que contenga una receta",
     "pages.home.exportSelected.message": "¿En qué formato desea descargar estas recetas?",
-    "pages.editRecipe.scanPDF": "Escanear desde PDF",
+    "pages.editRecipe.scanDocument": "Escanear desde PDF",
     "pages.aboutDetails.1.1": "Soy un desarrollador de software en el sur de California. Trabajo mucho en código libre y dedico mucho tiempo a trabajar en proyectos pequeños.",
     "pages.assistant.welcome.4": "Solo los mensajes enviados por usted cuentan para su uso diario, no las respuestas del asistente.",
     "pages.aboutDetails.1.2": "RecipeSage es uno de mis pasatiempos y trabajo en el en mi tiempo libre así como con otros proyectos. No es mi trabajo pago y no gano dinero por el, pero me trae mucha alegría dedicar tiempo al proyecto.",

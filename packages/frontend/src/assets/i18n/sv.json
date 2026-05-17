@@ -675,7 +675,7 @@
     "pages.addRecipeToShoppingListModal.loading": "Läser in inköpslistor...",
     "pages.addRecipeToShoppingListModal.destination": "Inköpslista som destination",
     "pages.addRecipeToShoppingListModal.noShoppingLists": "Du har inga inköpslistor.",
-    "pages.editRecipe.scanPDF": "Skanna från PDF",
+    "pages.editRecipe.scanDocument": "Skanna från PDF",
     "pages.editRecipe.input.title": "Titel",
     "pages.editRecipe.input.source": "Källa",
     "pages.editRecipe.input.sourceUrl": "Käll-URL",

@@ -513,7 +513,7 @@
     "pages.profile.decline": "Atmesti prašymą draugauti",
     "pages.profile.setup": "Nustatykite savo profilį, kad galėtumėte pridėti draugą",
     "pages.profile.alreadyRequested": "Atrodo, kad jau vyksta draugystės užmezgimo procesas. Bandykite dar kartą.",
-    "pages.editRecipe.scanPDF": "Nuskaityti iš PDF",
+    "pages.editRecipe.scanDocument": "Nuskaityti iš PDF",
     "pages.editRecipe.input.title": "Pavadinimas",
     "pages.editRecipe.input.description": "Aprašymas",
     "pages.editRecipe.input.instructions": "Instrukcijos",

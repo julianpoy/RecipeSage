@@ -856,7 +856,7 @@
     "pages.updateMealPlanModal.update": "Frissítés",
     "pages.updateMealPlanModal.updateAndShare": "Frissítés és megosztás",
     "pages.editRecipe.scanImage": "Beolvasás fényképről",
-    "pages.editRecipe.scanPDF": "Beolvasás PDF-ből",
+    "pages.editRecipe.scanDocument": "Beolvasás PDF-ből",
     "pages.editRecipe.input.labels.noItemsGroup": "Nincsenek címkék ebben a kategóriában. Írjon be szöveget a címke létrehozásához",
     "pages.editRecipe.clipURL.header": "Recept automatikus kitöltése URL-ből",
     "pages.editRecipe.clipURL.placeholder": "Recept URL",

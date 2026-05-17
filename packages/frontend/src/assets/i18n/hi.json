@@ -610,7 +610,7 @@
     "pages.editRecipe.autoclip": "URL से स्वतः भरें",
     "pages.editRecipe.clipText": "पाठ से स्वतः भरें",
     "pages.editRecipe.scanImage": "फ़ोटो से स्कैन करें",
-    "pages.editRecipe.scanPDF": "PDF से स्कैन करें",
+    "pages.editRecipe.scanDocument": "PDF से स्कैन करें",
     "pages.editRecipe.input.title": "शीर्षक",
     "pages.editRecipe.input.description": "विवरण",
     "pages.editRecipe.input.yield": "उपज",

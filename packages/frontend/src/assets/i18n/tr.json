@@ -917,7 +917,7 @@
     "pages.editRecipe.autoclip": "URL’den otomatik doldur",
     "pages.editRecipe.clipText": "Metinden otomatik doldur",
     "pages.editRecipe.scanImage": "Fotoğraftan tara",
-    "pages.editRecipe.scanPDF": "PDF’den tara",
+    "pages.editRecipe.scanDocument": "PDF’den tara",
     "pages.editRecipe.input.title": "Başlık",
     "pages.editRecipe.input.description": "Açıklama",
     "pages.editRecipe.input.yield": "Porsiyon",

@@ -459,7 +459,7 @@
     "pages.editRecipe.autoclip": "Автозаповнення із URL-адреси",
     "pages.editRecipe.clipText": "Автозаповнення із тексту",
     "pages.editRecipe.scanImage": "Сканувати з фото",
-    "pages.editRecipe.scanPDF": "Сканувати із PDF",
+    "pages.editRecipe.scanDocument": "Сканувати із PDF",
     "pages.editRecipe.input.title": "Назва",
     "pages.editRecipe.input.description": "Описання",
     "pages.editRecipe.input.yield": "Вихід",

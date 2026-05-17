@@ -358,7 +358,7 @@
     "pages.settings.resetCompletion": "إعادة تعيين اكتمال مكونات الوصفة وتعليماتها + المقياس",
     "pages.manageLabelModal.warning": "ملاحظة: هذه الإجراءات دائمة",
     "pages.shoppingListCategoryOrderModal.label": "ترتيب الفئات",
-    "pages.editRecipe.scanPDF": "المسح من ملف PDF",
+    "pages.editRecipe.scanDocument": "المسح من ملف PDF",
     "pages.newLabelItemModal.labelDescription": "الوسوم هي الطريقة الأساسية للتنظيم داخل RecipeSage. يمكن إرفاقها بالوصفات لتنظيمها وتصفيتها لاحقًا. من الأمثلة الشائعة على الوسوم: \"الفطور\" و\"الحلوى\" و\"نباتي\".",
     "pages.mealPlanMealOrderModal.entryPlaceholder": "اسم الوجبة",
     "pages.recipeDetails.delete": "حذف",

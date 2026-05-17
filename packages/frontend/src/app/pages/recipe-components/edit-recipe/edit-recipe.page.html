@@ -63,9 +63,12 @@
               <ion-icon name="camera" slot="start"></ion-icon>
               {{ "pages.editRecipe.scanImage" | translate }}
             </ion-item>
-            <ion-item button (click)="isAutoclipPopoverOpen = false; scanPDF()">
+            <ion-item
+              button
+              (click)="isAutoclipPopoverOpen = false; scanDocument()"
+            >
               <ion-icon name="document-text-outline" slot="start"></ion-icon>
-              {{ "pages.editRecipe.scanPDF" | translate }}
+              {{ "pages.editRecipe.scanDocument" | translate }}
             </ion-item>
           </ion-list>
         </ion-content>

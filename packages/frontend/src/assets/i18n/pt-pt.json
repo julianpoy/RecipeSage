@@ -497,7 +497,7 @@
     "pages.editRecipe.autoclip": "Preencher automaticamente a partir do URL",
     "pages.editRecipe.clipText": "Preencher automaticamente a partir do texto",
     "pages.editRecipe.scanImage": "Digitalizar a partir de foto",
-    "pages.editRecipe.scanPDF": "Digitalizar a partir de PDF",
+    "pages.editRecipe.scanDocument": "Digitalizar a partir de PDF",
     "pages.editRecipe.input.title": "Título",
     "pages.editRecipe.input.description": "Descrição",
     "pages.editRecipe.input.yield": "Rendimento",

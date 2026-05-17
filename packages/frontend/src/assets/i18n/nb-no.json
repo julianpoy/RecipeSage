@@ -610,7 +610,7 @@
     "pages.editRecipe.autoclip": "Fyll ut automatisk fra URL",
     "pages.editRecipe.clipText": "Fyll ut automatisk fra tekst",
     "pages.editRecipe.scanImage": "Skann fra bilde",
-    "pages.editRecipe.scanPDF": "Skann fra PDF",
+    "pages.editRecipe.scanDocument": "Skann fra PDF",
     "pages.editRecipe.input.title": "Tittel",
     "pages.editRecipe.input.description": "Beskrivelse",
     "pages.editRecipe.input.yield": "Porsjoner",

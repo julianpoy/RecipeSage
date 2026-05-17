@@ -855,7 +855,7 @@
     "pages.editRecipe.showClipOptions": "Remplir automatiquement la recette depuis...",
     "pages.editRecipe.clipText": "Remplir automatiquement depuis du texte",
     "pages.editRecipe.scanImage": "Scanner depuis une photo",
-    "pages.editRecipe.scanPDF": "Scanner depuis un PDF",
+    "pages.editRecipe.scanDocument": "Scanner depuis un PDF",
     "pages.editRecipe.clipURL.header": "Remplir automatiquement la recette depuis une URL",
     "pages.editRecipe.clipURL.message": "Entrer l'URL d'un site Web pour collecter le contenu de la recette",
     "pages.editRecipe.clipURL.placeholder": "URL de la recette",

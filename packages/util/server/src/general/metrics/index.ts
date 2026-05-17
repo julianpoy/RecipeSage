@@ -116,6 +116,11 @@ export const metrics = {
     help: "PDF was converted to a recipe",
     labelNames: [],
   }),
+  convertDocumentToRecipe: new client.Counter({
+    name: "convert_document_to_recipe",
+    help: "A document was converted to a recipe",
+    labelNames: [],
+  }),
   convertImageToText: new client.Counter({
     name: "convert_image_to_text",
     help: "Image was converted to text",
