@@ -932,7 +932,7 @@
     "pages.import.uploading": "Téléchargement en cours, veuillez ne pas quitter cette page...",
     "pages.import.uploading.hint": "Progression du téléchargement de fichier",
     "pages.import.processing": "Traitement et importation des recettes...",
-    "pages.import.textFiles": "Importation à partir de fichiers texte",
+    "pages.import.textFiles": "Importer depuis des documents (.txt, .rtf, .odt, .docx, .md, .html)",
     "pages.import.urls": "Importer à partir d'une liste d'URL",
     "pages.import.csv": "Importation à partir d'un fichier CSV (PlanToEat, MyRecipeNox et autres)",
     "pages.import.fileTooLarge": "Ce fichier est trop volumineux pour être importé dans RecipeSage.",
@@ -953,8 +953,8 @@
     "pages.importPepperplate.incorrectCredentials.message": "Il semble que le nom d'utilisateur ou le mot de passe que vous avez saisi pour Pepperplate soit incorrect.",
     "pages.importPepperplate.username.helperText": "L'adresse e-mail ou le nom d'utilisateur de votre compte Pepperplate",
     "pages.importPepperplate.password.helperText": "Le mot de passe de votre compte Pepperplate",
-    "pages.importTextfiles.title": "Importer des recettes à partir de fichiers texte zippés",
-    "pages.importTextfiles.description": "Cela importera un ensemble de fichiers texte compressés dans un fichier zip (se terminant par .zip) dans votre compte RecipeSage. Veuillez vous référer au guide de l'utilisateur pour savoir comment créer un fichier dans le format correct à importer ici. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
+    "pages.importTextfiles.title": "Importer des recettes depuis une archive ZIP de documents",
+    "pages.importTextfiles.description": "Ceci importera dans votre compte RecipeSage un ensemble de documents compressés dans un fichier zip (se terminant par .zip). Formats pris en charge dans le zip : .txt, .rtf, .odt, .docx, .md, .markdown, .html, .htm, .org. Chaque document doit contenir une seule recette, et le zip peut contenir jusqu’à 100 documents (un mélange de ces formats est pris en charge). Veuillez consulter le guide d’utilisation pour savoir comment créer un fichier au format approprié afin de l’importer ici. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d’images.",
     "pages.importUrls.title": "Importer des recettes à partir d'une liste d'URL",
     "pages.importUrls.description": "Ceci tentera d'importer tous les URLs spécifiés dans votre compte RecipeSage à l'aide de la fonctionnalité autoclip. N'oubliez pas que certaines URL peuvent être inaccessibles ou incompréhensibles et qu'elles ne seront pas importées. Veuillez vous référer au guide de l'utilisateur pour tout problème. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
     "pages.importUrls.urls": "URL des recettes",
@@ -1056,7 +1056,7 @@
     "pages.importLivingCookbook.tabTitle": "Importer depuis Living Cookbook - RecipeSage",
     "pages.importPaprika.tabTitle": "Importer depuis Paprika - RecipeSage",
     "pages.importPepperplate.tabTitle": "Importer depuis Pepperplate - RecipeSage",
-    "pages.importTextfiles.tabTitle": "Importer depuis un Fichier Texte - RecipeSage",
+    "pages.importTextfiles.tabTitle": "Importer depuis Documents - RecipeSage",
     "pages.importEnex.tabTitle": "Importer depuis Evernote - RecipeSage",
     "pages.importPDFs.tabTitle": "Importer à partir de PDFs - RecipeSage",
     "pages.importCSV.tabTitle": "Importer à partir d'un CSV - RecipeSage",
@@ -1240,5 +1240,7 @@
     "pages.downloadAndInstall.icon.menuDots": "icône à trois points verticaux",
     "pages.downloadAndInstall.icon.share": "icône de partage",
     "errors.creditsLimitReached.title": "Désolé, la limite est atteinte",
-    "generic.moreInfo": "Plus d’informations"
+    "generic.moreInfo": "Plus d’informations",
+    "pages.import.description": "RecipeSage prend en charge l’importation de plusieurs formats",
+    "pages.import.viewDocumentation": "Consulter la documentation"
 }
