@@ -1,5 +1,10 @@
 @import "../../../../theme/shared-variables.scss";
 
+.page-wrapper {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
 @media only screen and (max-width: $desktop-breakpoint) {
   .metacontainer-desktop {
     display: none;
