@@ -38,6 +38,7 @@ import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
+import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DebugStoreService } from "./services/debugStore.service";
 import {
   IonApp,
@@ -128,6 +129,7 @@ export class AppComponent {
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
+  private nativePrintTutorialService = inject(NativePrintTutorialService);
   debugStoreService = inject(DebugStoreService);
 
   isSelfHost = IS_SELFHOST;

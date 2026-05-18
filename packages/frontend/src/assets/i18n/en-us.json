@@ -2121,6 +2121,8 @@
   "services.quickTutorial.splitPaneView.message": "Split pane view is only visible on devices with large screens (laptops, large tablets, etc). When split pane view is enabled, the side menu will always be visible. This feature is useful for optimizing the experience on larger devices.",
   "services.quickTutorial.pinnedRecipes.header": "Pinned Recipes",
   "services.quickTutorial.pinnedRecipes.message": "This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking. Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until you close the application.",
+  "services.quickTutorial.nativePrintView.header": "Print-Friendly View Available",
+  "services.quickTutorial.nativePrintView.message": "For a better printing experience use the native print option supported by this page via the options menu in the top corner.",
 
   "services.util.justNow": "just now",
   "services.util.today": "today",
