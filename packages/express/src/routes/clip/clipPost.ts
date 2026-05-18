@@ -12,6 +12,7 @@ import {
   recordCreditsSpent,
 } from "@recipesage/util/server/general";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
+import { stripBlankLines } from "@recipesage/util/shared";
 
 const schema = {
   body: z.object({
@@ -37,6 +38,13 @@ export const clipPostHandler = defineHandler(
       try {
         const results = await clipUrl(url);
 
+        results.recipe.ingredients = stripBlankLines(
+          results.recipe.ingredients || "",
+        );
+        results.recipe.instructions = stripBlankLines(
+          results.recipe.instructions || "",
+        );
+
         if (isRecipeRecognitionSuccess(results.recipe)) {
           await recordCreditsSpent(userId, "clipUrl");
         }
@@ -57,6 +65,13 @@ export const clipPostHandler = defineHandler(
       await assertCreditsAvailableExpress(userId, "clipHtml");
 
       const results = await clipHtml(html);
+
+      results.recipe.ingredients = stripBlankLines(
+        results.recipe.ingredients || "",
+      );
+      results.recipe.instructions = stripBlankLines(
+        results.recipe.instructions || "",
+      );
 
       if (isRecipeRecognitionSuccess(results.recipe)) {
         await recordCreditsSpent(userId, "clipHtml");

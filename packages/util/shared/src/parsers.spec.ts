@@ -14,6 +14,7 @@ import {
   stripInlineFormatting,
   stripImageTokens,
   isRtlText,
+  stripBlankLines,
 } from "./parsers";
 
 describe("parsers", () => {
@@ -2168,6 +2169,40 @@ describe("parsers", () => {
         const result = isRtlText("مرحبا Hello world");
         expect(result).toBe(true);
       });
+    });
+  });
+
+  describe("stripBlankLines", () => {
+    it("removes a blank line between entries", () => {
+      const result = stripBlankLines("1 cup flour\n\n2 eggs");
+      expect(result).toBe("1 cup flour\n2 eggs");
+    });
+
+    it("removes leading, trailing, and whitespace-only lines", () => {
+      const result = stripBlankLines("\n\na\n  \n\t\nb\n\n");
+      expect(result).toBe("a\nb");
+    });
+
+    it("treats carriage-return blank lines as blank", () => {
+      const result = stripBlankLines("a\r\n\r\nb");
+      expect(result).toBe("a\nb");
+    });
+
+    it("keeps section headers intact", () => {
+      const result = stripBlankLines(
+        "[Sauce]\n1 tbsp oil\n\n[Dough]\n2 cups flour",
+      );
+      expect(result).toBe("[Sauce]\n1 tbsp oil\n[Dough]\n2 cups flour");
+    });
+
+    it("preserves backslash line continuations", () => {
+      const result = stripBlankLines("1 cup flour, \\\nsifted\n\n2 eggs");
+      expect(result).toBe("1 cup flour, \\\nsifted\n2 eggs");
+    });
+
+    it("returns an empty string unchanged", () => {
+      const result = stripBlankLines("");
+      expect(result).toBe("");
     });
   });
 });

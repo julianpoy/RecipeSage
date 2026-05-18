@@ -4,7 +4,7 @@ import {
 } from "@recipesage/prisma";
 import { Prisma } from "@recipesage/prisma";
 import pLimit from "p-limit";
-import { cleanLabelTitle } from "@recipesage/util/shared";
+import { cleanLabelTitle, stripBlankLines } from "@recipesage/util/shared";
 import { userHasCapability } from "../capabilities";
 import { Capabilities } from "@recipesage/util/shared";
 import {
@@ -131,8 +131,8 @@ export const importStandardizedRecipes = async (
           source: entry.recipe.source || "",
           url: entry.recipe.url || "",
           notes: entry.recipe.notes || "",
-          ingredients: entry.recipe.ingredients || "",
-          instructions: entry.recipe.instructions || "",
+          ingredients: stripBlankLines(entry.recipe.ingredients || ""),
+          instructions: stripBlankLines(entry.recipe.instructions || ""),
           rating: entry.recipe.rating,
           nutritionServingSize: entry.recipe.nutritionServingSize ?? undefined,
           nutritionCalories: entry.recipe.nutritionCalories ?? undefined,
