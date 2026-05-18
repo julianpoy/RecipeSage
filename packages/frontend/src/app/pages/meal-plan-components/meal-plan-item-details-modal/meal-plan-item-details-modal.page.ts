@@ -17,6 +17,7 @@ import { AddRecipeToShoppingListModalPage } from "../../recipe-components/add-re
 import dayjs from "dayjs";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { parseNotes } from "@recipesage/util/shared";
+import { linkifyHtml } from "../../../utils/linkify";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
@@ -103,7 +104,10 @@ export class MealPlanItemDetailsModalPage {
 
   ngOnInit() {
     if (this.mealItem.notes) {
-      this.parsedNotes = parseNotes(this.mealItem.notes);
+      this.parsedNotes = parseNotes(this.mealItem.notes).map((note) => ({
+        ...note,
+        htmlContent: linkifyHtml(note.htmlContent),
+      }));
     }
   }
 
