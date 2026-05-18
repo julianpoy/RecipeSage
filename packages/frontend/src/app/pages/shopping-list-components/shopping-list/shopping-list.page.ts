@@ -464,6 +464,13 @@ export class ShoppingListPage {
     if (!data) return;
     if (data.reference) this.reference = data.reference;
     if (data.doNotLoad) return;
+    if (data.reprocessOnly) {
+      const shoppingListItems = this.shoppingListItems();
+      if (shoppingListItems) {
+        this.processList(shoppingListItems, shoppingList.categoryOrder);
+      }
+      return;
+    }
 
     this.loadList();
   }

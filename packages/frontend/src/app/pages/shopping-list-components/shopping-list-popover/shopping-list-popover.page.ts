@@ -96,7 +96,9 @@ export class ShoppingListPopoverPage {
   savePreferences() {
     this.preferencesService.save();
 
-    this.dismiss();
+    this.popoverCtrl.dismiss({
+      reprocessOnly: true,
+    });
   }
 
   dismiss() {
