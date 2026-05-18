@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
 
-import { serveGrip, validateSession } from "@recipesage/util/server/general";
+import {
+  serveGrip,
+  validateSession,
+  extendSession,
+} from "@recipesage/util/server/general";
 
 router.use(serveGrip);
 
@@ -25,6 +29,8 @@ router.all(
       ws.close();
       return;
     }
+
+    extendSession(session);
 
     // If this is a new connection, accept it and subscribe it to a channel
     if (ws.isOpening()) {
