@@ -661,7 +661,12 @@
                     recipeLabel of recipeLabelsForGroupId(null);
                     track recipeLabelTrackBy($index, recipeLabel)
                   ) {
-                    <ion-chip> {{ recipeLabel.label.title }} </ion-chip>
+                    <ion-chip
+                      [class.clickable]="isOwner"
+                      (click)="openLabel(recipeLabel.label.title)"
+                    >
+                      {{ recipeLabel.label.title }}
+                    </ion-chip>
                   }
                 </div>
               </div>
@@ -676,7 +681,12 @@
                     recipeLabel of recipeLabelsForGroupId(labelGroupId);
                     track recipeLabel
                   ) {
-                    <ion-chip> {{ recipeLabel.label.title }} </ion-chip>
+                    <ion-chip
+                      [class.clickable]="isOwner"
+                      (click)="openLabel(recipeLabel.label.title)"
+                    >
+                      {{ recipeLabel.label.title }}
+                    </ion-chip>
                   }
                 </div>
               </div>

@@ -312,6 +312,23 @@ export class RecipePage {
       .sort((a, b) => a.label.title.localeCompare(b.label.title));
   }
 
+  get isOwner() {
+    return !!this.recipe && this.recipe.userId === this.me()?.id;
+  }
+
+  openLabel(labelTitle: string) {
+    if (!this.isOwner) return;
+
+    this.navCtrl.navigateForward(
+      RouteMap.HomePage.getPath("main", { selectedLabels: [labelTitle] }),
+      {
+        state: {
+          showBack: true,
+        },
+      },
+    );
+  }
+
   async _loadSimilarRecipes() {
     if (!this.isLoggedIn) return;
 

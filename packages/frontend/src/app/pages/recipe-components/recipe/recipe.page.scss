@@ -190,6 +190,11 @@ h2.recipeTitle {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+
+  ion-chip:not(.clickable) {
+    pointer-events: none;
+    cursor: default;
+  }
 }
 
 :host ::ng-deep .inlineImage {
