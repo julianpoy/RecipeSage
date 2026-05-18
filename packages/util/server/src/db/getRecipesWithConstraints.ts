@@ -3,6 +3,8 @@ import {
   prisma,
   RecipeSummaryLite,
   recipeSummaryLite,
+  type NutritionFilter,
+  type NutritionRange,
 } from "@recipesage/prisma";
 import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
 import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "./convertPrismaRecipeSummaries";
@@ -19,6 +21,7 @@ export const getRecipesWithConstraints = async (args: {
   labels?: string[];
   labelIntersection?: boolean;
   ratings?: (number | null)[];
+  nutritionFilter?: NutritionFilter;
   friendIds?: Set<string>;
 }): Promise<{ recipes: RecipeSummaryLite[]; totalCount: number }> => {
   const {
@@ -29,11 +32,11 @@ export const getRecipesWithConstraints = async (args: {
     orderBy,
     offset,
     limit,
-    recipeIds: filterByRecipeIds,
+    recipeIds,
     labels: _labels,
     labelIntersection,
     ratings,
-    recipeIds,
+    nutritionFilter,
   } = args;
 
   const labels = _labels?.filter((label) => label !== "unlabeled");
@@ -75,9 +78,55 @@ export const getRecipesWithConstraints = async (args: {
     });
   }
 
-  if (filterByRecipeIds) {
-    where.AND.push({ id: { in: filterByRecipeIds } });
-  }
+  const addNutritionFilter = (
+    range: NutritionRange | undefined,
+    rangeClause: (gtelte: {
+      gte?: number;
+      lte?: number;
+    }) => Prisma.RecipeWhereInput,
+    missingClause: () => Prisma.RecipeWhereInput,
+  ) => {
+    if (!range) return;
+    const hasRange = range.min != null || range.max != null;
+    if (!hasRange && !range.matchMissing) return;
+    const ors: Prisma.RecipeWhereInput[] = [];
+    if (hasRange) {
+      const gtelte: { gte?: number; lte?: number } = {};
+      if (range.min != null) gtelte.gte = range.min;
+      if (range.max != null) gtelte.lte = range.max;
+      ors.push(rangeClause(gtelte));
+    }
+    if (range.matchMissing) {
+      ors.push(missingClause());
+    }
+    where.AND.push({ OR: ors });
+  };
+
+  addNutritionFilter(
+    nutritionFilter?.calories,
+    (gtelte) => ({ nutritionCalories: gtelte }),
+    () => ({ nutritionCalories: null }),
+  );
+  addNutritionFilter(
+    nutritionFilter?.protein,
+    (gtelte) => ({ nutritionProtein: gtelte }),
+    () => ({ nutritionProtein: null }),
+  );
+  addNutritionFilter(
+    nutritionFilter?.totalCarbs,
+    (gtelte) => ({ nutritionTotalCarbs: gtelte }),
+    () => ({ nutritionTotalCarbs: null }),
+  );
+  addNutritionFilter(
+    nutritionFilter?.totalFat,
+    (gtelte) => ({ nutritionTotalFat: gtelte }),
+    () => ({ nutritionTotalFat: null }),
+  );
+  addNutritionFilter(
+    nutritionFilter?.sodium,
+    (gtelte) => ({ nutritionSodium: gtelte }),
+    () => ({ nutritionSodium: null }),
+  );
 
   if (mustBeUnlabeled) {
     where.AND.push({

@@ -10,7 +10,9 @@ import {
   ResettableSelectPopoverPage,
 } from "../resettable-select-popover/resettable-select-popover.page";
 import { RatingFilterPopoverComponent } from "../../components/rating-filter-popover/rating-filter-popover.component";
-import type { LabelSummary } from "@recipesage/prisma";
+import { NutritionFilterPopoverComponent } from "../../components/nutrition-filter-popover/nutrition-filter-popover.component";
+import type { LabelSummary, NutritionFilter } from "@recipesage/prisma";
+import { countActiveNutritionRanges } from "../../utils/nutritionFilter";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonList,
@@ -83,6 +85,11 @@ export class HomeSearchFilterPopoverPage {
   })
   contextUserId!: string | null;
 
+  @Input({
+    required: true,
+  })
+  nutritionFilter!: NutritionFilter;
+
   savePreferences(refreshSearch?: boolean) {
     this.preferencesService.save();
 
@@ -94,7 +101,12 @@ export class HomeSearchFilterPopoverPage {
       refreshSearch,
       ratingFilter: this.ratingFilter,
       selectedLabels: this.selectedLabels,
+      nutritionFilter: this.nutritionFilter,
     });
+  }
+
+  get nutritionFilterActiveCount(): number {
+    return countActiveNutritionRanges(this.nutritionFilter);
   }
 
   async openLabelFilter() {
@@ -192,6 +204,27 @@ export class HomeSearchFilterPopoverPage {
     if (!data) return;
 
     this.ratingFilter = data.ratingFilter;
+
+    setTimeout(() => {
+      this.dismiss(true);
+    });
+  }
+
+  async openNutritionFilter() {
+    const nutritionFilterPopover = await this.popoverCtrl.create({
+      component: NutritionFilterPopoverComponent,
+      cssClass: "nutritionFilterPopover",
+      componentProps: {
+        nutritionFilter: this.nutritionFilter,
+      },
+    });
+
+    await nutritionFilterPopover.present();
+
+    const { data } = await nutritionFilterPopover.onDidDismiss();
+    if (!data) return;
+
+    this.nutritionFilter = data.nutritionFilter;
 
     setTimeout(() => {
       this.dismiss(true);
