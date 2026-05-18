@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content #content class="ion-padding">
-  <div>
+  <div class="page-wrapper">
     @for (message of messages; track trackByFn(i, message); let i = $index) {
       <div
         class="message"
@@ -129,22 +129,29 @@
 
 <ion-footer>
   <form ng-submit="sendMessage()">
-    <ion-item>
-      <ion-textarea
-        autocomplete="“true”"
-        spellcheck="“true”"
-        autocorrect="“on”"
-        name="body"
-        fill="solid"
-        [(ngModel)]="pendingMessage"
-        (keydown)="onMessageKeyDown($event)"
-        type="text"
-        placeholder="{{ messagePlaceholder }}"
-        (ionFocus)="keyboardOpened()"
-      ></ion-textarea>
-      <ion-button type="submit" (click)="sendMessage()" fill="clear" slot="end">
-        <ion-icon name="send" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item>
+    <div class="page-wrapper">
+      <ion-item>
+        <ion-textarea
+          autocomplete="“true”"
+          spellcheck="“true”"
+          autocorrect="“on”"
+          name="body"
+          fill="solid"
+          [(ngModel)]="pendingMessage"
+          (keydown)="onMessageKeyDown($event)"
+          type="text"
+          placeholder="{{ messagePlaceholder }}"
+          (ionFocus)="keyboardOpened()"
+        ></ion-textarea>
+        <ion-button
+          type="submit"
+          (click)="sendMessage()"
+          fill="clear"
+          slot="end"
+        >
+          <ion-icon name="send" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
   </form>
 </ion-footer>

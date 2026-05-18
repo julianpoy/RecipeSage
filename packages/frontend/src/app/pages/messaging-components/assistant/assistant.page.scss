@@ -1,3 +1,8 @@
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
 .assistant-recipe-image {
   --border-radius: 0;
 }
