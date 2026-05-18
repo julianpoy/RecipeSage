@@ -20,7 +20,7 @@ import { ImportTooManyRecipesError } from "../../../jobs/jobErrors";
 /**
  * A sanity limit so that we don't overload the service or run up a huge bill.
  */
-const MAX_COUNT_LIMIT = 100;
+const MAX_COUNT_LIMIT = 500;
 
 export async function textfilesImportJobHandler(
   job: ImportJobSummary,
