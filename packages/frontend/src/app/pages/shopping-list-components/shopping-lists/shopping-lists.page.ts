@@ -4,9 +4,9 @@ import {
   ModalController,
   ToastController,
 } from "@ionic/angular/standalone";
-import { WebsocketService } from "~/services/websocket.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { WebsocketService } from "../../../services/websocket.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
 
 import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shopping-list-modal.page";
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";

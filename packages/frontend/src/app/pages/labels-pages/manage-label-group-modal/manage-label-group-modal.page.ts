@@ -4,7 +4,7 @@ import {
   AlertController,
   ToggleCustomEvent,
 } from "@ionic/angular/standalone";
-import { LoadingService } from "~/services/loading.service";
+import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";

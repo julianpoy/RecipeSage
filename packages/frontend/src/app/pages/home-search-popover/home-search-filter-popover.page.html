@@ -49,6 +49,25 @@
     </ion-toggle>
   </ion-item>
 
+  <ion-item
+    lines="full"
+    class="cursor-pointer"
+    (click)="openNutritionFilter()"
+    button
+    detail="false"
+  >
+    <ion-label>{{
+      "pages.homeSearchFilterPopover.filterByNutrition" | translate
+    }}</ion-label>
+    @if (nutritionFilterActiveCount > 0) {
+      <ion-badge slot="end">
+        {{ nutritionFilterActiveCount }}
+        <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+      </ion-badge>
+    }
+    <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+  </ion-item>
+
   @if (!guestMode) {
     <ion-item lines="full">
       <ion-select

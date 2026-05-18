@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "components.nutritionFilterPopover.title" | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (macro of macros; track macro.key) {
+      <div class="macro-group">
+        <ion-item-divider class="macro-title">
+          <ion-label>{{ macro.labelKey | translate }}</ion-label>
+        </ion-item-divider>
+
+        <div class="range-row">
+          <ion-input
+            type="number"
+            min="0"
+            inputmode="decimal"
+            fill="outline"
+            labelPlacement="stacked"
+            label="{{ 'components.nutritionFilterPopover.min' | translate }}"
+            [ngModel]="state[macro.key].min"
+            (ngModelChange)="onInputChange(macro.key, 'min', $event)"
+          ></ion-input>
+          <ion-input
+            type="number"
+            min="0"
+            inputmode="decimal"
+            fill="outline"
+            labelPlacement="stacked"
+            label="{{ 'components.nutritionFilterPopover.max' | translate }}"
+            [ngModel]="state[macro.key].max"
+            (ngModelChange)="onInputChange(macro.key, 'max', $event)"
+          ></ion-input>
+        </div>
+
+        <ion-item lines="none">
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [(ngModel)]="state[macro.key].matchMissing"
+          >
+            {{ checkboxLabelKey(macro.key) | translate }}
+          </ion-checkbox>
+        </ion-item>
+      </div>
+    }
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="apply()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ "components.nutritionFilterPopover.apply" | translate }}
+    </ion-label>
+  </ion-button>
+  <ion-button (click)="reset()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ "components.nutritionFilterPopover.reset" | translate }}
+    </ion-label>
+  </ion-button>
+</ion-footer>

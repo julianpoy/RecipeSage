@@ -14,18 +14,18 @@ import {
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { MessagingService } from "~/services/messaging.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { UserService } from "~/services/user.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { UtilService, RouteMap, AuthType } from "./services/util.service";
+import { RecipeService } from "./services/recipe.service";
+import { MessagingService } from "./services/messaging.service";
+import { WebsocketService } from "./services/websocket.service";
+import { UserService } from "./services/user.service";
+import { PreferencesService } from "./services/preferences.service";
 import {
   GlobalPreferenceKey,
   SupportedLanguages,
 } from "@recipesage/util/shared";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { EventName, EventService } from "~/services/event.service";
+import { CookingToolbarService } from "./services/cooking-toolbar.service";
+import { EventName, EventService } from "./services/event.service";
 import {
   FeatureFlagKeys,
   FeatureFlagService,

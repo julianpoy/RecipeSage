@@ -21,15 +21,15 @@ import {
   type Photo,
 } from "@capacitor/camera";
 
-import { RouteMap } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { UnsavedChangesService } from "~/services/unsaved-changes.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
-import { ImageService } from "~/services/image.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { RouteMap } from "../../../services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
+import { ImageService } from "../../../services/image.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
-import { getQueryParam } from "~/utils/queryParams";
+import { getQueryParam } from "../../../utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
 import type {

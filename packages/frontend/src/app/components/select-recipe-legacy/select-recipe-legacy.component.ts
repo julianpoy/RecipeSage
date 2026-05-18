@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService } from "~/services/util.service";
-import { Recipe, RecipeService } from "~/services/recipe.service";
+import { LoadingService } from "../../services/loading.service";
+import { UtilService } from "../../services/util.service";
+import { Recipe, RecipeService } from "../../services/recipe.service";
 import { ToastController, NavController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {

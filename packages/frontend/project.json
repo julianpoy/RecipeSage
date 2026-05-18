@@ -64,6 +64,13 @@
           "pnpm dlx @julianpoy/ngx-translate-lint --config ./ngx-translate-lint.config.json"
         ]
       }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/frontend"
+      }
     }
   }
 }

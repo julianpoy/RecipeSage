@@ -2,7 +2,7 @@ import { Component, Input, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import type { MealPlanSummary } from "@recipesage/prisma";
 
-import { LoadingService } from "~/services/loading.service";
+import { LoadingService } from "../../../services/loading.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";

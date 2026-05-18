@@ -10,14 +10,14 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { UserProfile, UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
-import { NewMessageModalPage } from "~/pages/messaging-components/new-message-modal/new-message-modal.page";
+import { UserProfile, UserService } from "../../../services/user.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
+import { ImageViewerComponent } from "../../../modals/image-viewer/image-viewer.component";
+import { NewMessageModalPage } from "../../messaging-components/new-message-modal/new-message-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
-import { AuthPage } from "~/pages/auth/auth.page";
+import { AuthPage } from "../../auth/auth.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";

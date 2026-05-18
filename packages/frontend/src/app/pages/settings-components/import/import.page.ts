@@ -2,7 +2,7 @@ import { Component, inject } from "@angular/core";
 import { NavController } from "@ionic/angular/standalone";
 import * as Sentry from "@sentry/browser";
 
-import { RouteMap, UtilService } from "~/services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { JobSummary } from "@recipesage/prisma";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";

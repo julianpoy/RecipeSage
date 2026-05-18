@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
-import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import { ScaleRecipeComponent } from "../../modals/scale-recipe/scale-recipe.component";
 import { PreferencesService } from "../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";

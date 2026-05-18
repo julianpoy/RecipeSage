@@ -7,7 +7,10 @@ import {
 import { sortRecipeImages } from "@recipesage/util/server/general";
 import { searchRecipes as _searchRecipes } from "@recipesage/util/server/search";
 import { TRPCError } from "@trpc/server";
-import { recipeSummaryLiteSchema } from "@recipesage/prisma";
+import {
+  nutritionFilterSchema,
+  recipeSummaryLiteSchema,
+} from "@recipesage/prisma";
 
 export const searchRecipes = publicProcedure
   .meta({
@@ -29,6 +32,7 @@ export const searchRecipes = publicProcedure
       ratings: z
         .array(z.union([z.number().min(0).max(5), z.null()]))
         .optional(),
+      nutritionFilter: nutritionFilterSchema.optional(),
     }),
   )
   .output(
@@ -74,6 +78,7 @@ export const searchRecipes = publicProcedure
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
+      nutritionFilter: input.nutritionFilter,
       recipeIds,
     });
 

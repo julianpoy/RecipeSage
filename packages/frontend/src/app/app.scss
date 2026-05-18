@@ -263,6 +263,12 @@ ion-button.button-outline {
   --max-height: 360px;
 }
 
+.nutritionFilterPopover {
+  --width: 360px;
+  --max-width: 90vw;
+  --max-height: 80vh;
+}
+
 ion-modal.alert-modal {
   --width: 280px;
   --min-width: 280px;

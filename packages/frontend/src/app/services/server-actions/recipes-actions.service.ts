@@ -1,6 +1,37 @@
 import { Injectable } from "@angular/core";
-import type { RecipeSummary } from "@recipesage/prisma";
+import type {
+  NutritionFilter,
+  NutritionRange,
+  RecipeSummary,
+} from "@recipesage/prisma";
 import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
+
+const passesNutritionRange = (
+  value: number | null,
+  range: NutritionRange | undefined,
+): boolean => {
+  if (!range) return true;
+  const hasRange = range.min != null || range.max != null;
+  if (!hasRange && !range.matchMissing) return true;
+  if (value == null) return !!range.matchMissing;
+  if (range.min != null && value < range.min) return false;
+  if (range.max != null && value > range.max) return false;
+  return hasRange;
+};
+
+const passesNutritionFilter = (
+  recipe: RecipeSummary,
+  filter: NutritionFilter | undefined,
+): boolean => {
+  if (!filter) return true;
+  return (
+    passesNutritionRange(recipe.nutritionCalories, filter.calories) &&
+    passesNutritionRange(recipe.nutritionProtein, filter.protein) &&
+    passesNutritionRange(recipe.nutritionTotalCarbs, filter.totalCarbs) &&
+    passesNutritionRange(recipe.nutritionTotalFat, filter.totalFat) &&
+    passesNutritionRange(recipe.nutritionSodium, filter.sodium)
+  );
+};
 
 import { ErrorHandlers } from "../http-error-handler.service";
 import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
@@ -49,6 +80,7 @@ export class RecipesActionsService extends ActionsBase {
           labelIntersection,
           includeAllFriends,
           ratings,
+          nutritionFilter,
         } = input;
 
         const localDb = await getLocalDb();
@@ -121,6 +153,12 @@ export class RecipesActionsService extends ActionsBase {
           recipes = recipes.filter((recipe) => {
             return ratings.includes(recipe.rating);
           });
+        }
+
+        if (nutritionFilter) {
+          recipes = recipes.filter((recipe) =>
+            passesNutritionFilter(recipe, nutritionFilter),
+          );
         }
 
         const totalCount = recipes.length;
@@ -283,6 +321,7 @@ export class RecipesActionsService extends ActionsBase {
           labelIntersection,
           includeAllFriends,
           ratings,
+          nutritionFilter,
         } = input;
 
         const localDb = await getLocalDb();
@@ -344,6 +383,12 @@ export class RecipesActionsService extends ActionsBase {
           recipes = recipes.filter((recipe) => {
             return ratings.includes(recipe.rating);
           });
+        }
+
+        if (nutritionFilter) {
+          recipes = recipes.filter((recipe) =>
+            passesNutritionFilter(recipe, nutritionFilter),
+          );
         }
 
         return { recipes, totalCount: recipes.length };

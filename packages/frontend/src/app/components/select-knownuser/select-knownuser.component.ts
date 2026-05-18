@@ -1,7 +1,10 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 
-import { UserService } from "~/services/user.service";
-import { MessageThread, MessagingService } from "~/services/messaging.service";
+import { UserService } from "../../services/user.service";
+import {
+  MessageThread,
+  MessagingService,
+} from "../../services/messaging.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonList,

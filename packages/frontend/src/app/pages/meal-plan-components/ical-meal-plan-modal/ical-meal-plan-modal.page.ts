@@ -1,4 +1,4 @@
-import { MealPlanService } from "~/services/meal-plan.service";
+import { MealPlanService } from "../../../services/meal-plan.service";
 import { Component, Input, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

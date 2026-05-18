@@ -1,0 +1,186 @@
+<ion-item lines="full">
+  <ion-label>
+    {{ "components.recurrenceEditor.repeat" | translate }}
+  </ion-label>
+  <ion-toggle
+    slot="end"
+    [(ngModel)]="enabled"
+    (ngModelChange)="onChange()"
+  ></ion-toggle>
+</ion-item>
+
+@if (enabled) {
+  <div class="rec-body">
+    <ion-item lines="none">
+      <ion-label>
+        {{ "components.recurrenceEditor.frequency" | translate }}
+      </ion-label>
+      <ion-select
+        slot="end"
+        interface="popover"
+        [(ngModel)]="frequency"
+        (ngModelChange)="onChange()"
+      >
+        <ion-select-option value="daily">
+          {{ "components.recurrenceEditor.frequency.daily" | translate }}
+        </ion-select-option>
+        <ion-select-option value="weekly">
+          {{ "components.recurrenceEditor.frequency.weekly" | translate }}
+        </ion-select-option>
+        <ion-select-option value="monthly">
+          {{ "components.recurrenceEditor.frequency.monthly" | translate }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="rec-body__sub">
+      <div class="interval-row">
+        <span class="interval-row__label">
+          {{ "components.recurrenceEditor.every" | translate }}
+        </span>
+        <ion-input
+          type="number"
+          min="1"
+          max="365"
+          [value]="interval"
+          (ionInput)="setIntervalFromInput($event.detail.value)"
+          class="interval-row__count"
+        ></ion-input>
+        <span class="interval-row__unit">
+          @switch (frequency) {
+            @case ("daily") {
+              {{ "components.recurrenceEditor.unit.day" | translate }}
+            }
+            @case ("weekly") {
+              {{ "components.recurrenceEditor.unit.week" | translate }}
+            }
+            @case ("monthly") {
+              {{ "components.recurrenceEditor.unit.month" | translate }}
+            }
+          }
+        </span>
+      </div>
+
+      @if (frequency === "weekly") {
+        <div class="weekday-section">
+          <div class="weekday-section__label">
+            {{ "components.recurrenceEditor.repeatOn" | translate }}
+          </div>
+          <div class="weekday-section__chips">
+            @for (entry of weekdayLabels; track entry.weekday) {
+              <button
+                type="button"
+                class="weekday-chip"
+                [class.weekday-chip--selected]="
+                  isWeekdaySelected(entry.weekday)
+                "
+                [disabled]="isBaseWeekday(entry.weekday)"
+                (click)="toggleWeekday(entry.weekday)"
+              >
+                {{ entry.label | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @if (frequency === "monthly") {
+        <ion-radio-group
+          [(ngModel)]="monthlyPattern"
+          (ngModelChange)="onChange()"
+        >
+          <div class="monthly-row">
+            <ion-radio value="dayOfMonth" labelPlacement="end">
+              {{ monthlyDayOfMonthLabel }}
+            </ion-radio>
+          </div>
+          <div class="monthly-row">
+            <ion-radio value="weekdayOfMonth" labelPlacement="end">
+              {{ monthlyWeekdayOfMonthLabel }}
+            </ion-radio>
+          </div>
+        </ion-radio-group>
+      }
+    </div>
+
+    <ion-item lines="none">
+      <ion-label>
+        {{ "components.recurrenceEditor.ends" | translate }}
+      </ion-label>
+    </ion-item>
+    <div class="rec-body__sub">
+      <ion-radio-group [(ngModel)]="endsType" (ngModelChange)="onChange()">
+        <div class="ends-row">
+          <ion-radio
+            value="onDate"
+            labelPlacement="end"
+            class="ends-row__radio"
+          >
+            {{ "components.recurrenceEditor.ends.onDate" | translate }}
+          </ion-radio>
+          @if (endsType === "onDate") {
+            <input
+              class="rs-date ends-row__date"
+              type="date"
+              [min]="baseDate"
+              [(ngModel)]="endsOnDate"
+              (ngModelChange)="onChange()"
+              (click)="$event.stopPropagation()"
+              (mousedown)="$event.stopPropagation()"
+            />
+          }
+        </div>
+
+        <div class="ends-row">
+          <ion-radio
+            value="afterOccurrences"
+            labelPlacement="end"
+            class="ends-row__radio"
+          >
+            {{
+              "components.recurrenceEditor.ends.afterOccurrences" | translate
+            }}
+          </ion-radio>
+          @if (endsType === "afterOccurrences") {
+            <ion-input
+              type="number"
+              min="1"
+              [max]="maxOccurrences"
+              [value]="endsAfterCount"
+              (ionInput)="setEndsAfterCountFromInput($event.detail.value)"
+              (click)="$event.stopPropagation()"
+              class="ends-row__count"
+            ></ion-input>
+            <span class="ends-row__suffix">
+              {{ "components.recurrenceEditor.ends.occurrences" | translate }}
+            </span>
+          }
+        </div>
+      </ion-radio-group>
+
+      <div class="ends-preview">
+        @if (preview.error) {
+          <ion-note color="danger">{{ preview.error }}</ion-note>
+        } @else if (preview.count === 0) {
+          <ion-note color="danger">
+            {{ "components.recurrenceEditor.preview.empty" | translate }}
+          </ion-note>
+        } @else if (preview.truncated) {
+          <ion-note color="warning">
+            {{
+              "components.recurrenceEditor.preview.truncated"
+                | translate: { count: preview.count, max: maxOccurrences }
+            }}
+          </ion-note>
+        } @else {
+          <ion-note>
+            {{
+              "components.recurrenceEditor.preview.count"
+                | translate: { count: preview.count }
+            }}
+          </ion-note>
+        }
+      </div>
+    </div>
+  </div>
+}

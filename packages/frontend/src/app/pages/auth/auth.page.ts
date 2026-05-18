@@ -9,12 +9,12 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../environments/environment";
 
-import { EventName, EventService } from "~/services/event.service";
-import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { MessagingService } from "~/services/messaging.service";
-import { RouteMap, AuthType } from "~/services/util.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
+import { EventName, EventService } from "../../services/event.service";
+import { UserService } from "../../services/user.service";
+import { LoadingService } from "../../services/loading.service";
+import { MessagingService } from "../../services/messaging.service";
+import { RouteMap, AuthType } from "../../services/util.service";
+import { CapabilitiesService } from "../../services/capabilities.service";
 import { ServerActionsService } from "../../services/server-actions.service";
 import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
 import type { SessionDTO } from "@recipesage/prisma";

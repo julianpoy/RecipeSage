@@ -1,8 +1,8 @@
 import { Component, inject } from "@angular/core";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 
-import { LoadingService } from "~/services/loading.service";
-import { RouteMap } from "~/services/util.service";
+import { LoadingService } from "../../../services/loading.service";
+import { RouteMap } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";

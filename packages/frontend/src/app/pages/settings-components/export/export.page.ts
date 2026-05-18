@@ -1,8 +1,8 @@
 import { Component, inject } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 
-import { ExportFormat } from "~/services/recipe.service";
-import { RouteMap, UtilService } from "~/services/util.service";
+import { ExportFormat } from "../../../services/recipe.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import type { JobSummary } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

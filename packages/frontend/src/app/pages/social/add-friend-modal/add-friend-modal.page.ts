@@ -7,9 +7,9 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { RouteMap } from "~/services/util.service";
+import { UserService } from "../../../services/user.service";
+import { LoadingService } from "../../../services/loading.service";
+import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 import {

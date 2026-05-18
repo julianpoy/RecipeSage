@@ -412,7 +412,8 @@
               userId &&
               !totalRecipeCount &&
               !selectedLabels.length &&
-              !ratingFilter.length
+              !ratingFilter.length &&
+              !hasActiveNutritionFilter
             ) {
               <null-state>
                 <logo-icon
@@ -435,7 +436,8 @@
               !userId &&
               !totalRecipeCount &&
               !selectedLabels.length &&
-              !ratingFilter.length
+              !ratingFilter.length &&
+              !hasActiveNutritionFilter
             ) {
               <null-state>
                 <logo-icon
@@ -481,7 +483,11 @@
                 </ion-label>
               </null-state>
             }
-            @if (selectedLabels.length || ratingFilter.length) {
+            @if (
+              selectedLabels.length ||
+              ratingFilter.length ||
+              hasActiveNutritionFilter
+            ) {
               <null-state>
                 <ion-icon
                   name="funnel"

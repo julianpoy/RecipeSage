@@ -5,7 +5,10 @@ import {
   getFriendshipIds,
 } from "@recipesage/util/server/db";
 import { TRPCError } from "@trpc/server";
-import { recipeSummaryLiteSchema } from "@recipesage/prisma";
+import {
+  nutritionFilterSchema,
+  recipeSummaryLiteSchema,
+} from "@recipesage/prisma";
 
 export const getRecipes = publicProcedure
   .meta({
@@ -31,6 +34,7 @@ export const getRecipes = publicProcedure
       ratings: z
         .array(z.union([z.number().min(0).max(5), z.null()]))
         .optional(),
+      nutritionFilter: nutritionFilterSchema.optional(),
     }),
   )
   .output(
@@ -71,6 +75,7 @@ export const getRecipes = publicProcedure
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
+      nutritionFilter: input.nutritionFilter,
       friendIds,
     });
 

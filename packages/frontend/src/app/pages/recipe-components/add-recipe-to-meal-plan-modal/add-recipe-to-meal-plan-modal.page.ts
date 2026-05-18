@@ -9,9 +9,9 @@ import {
 } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular/standalone";
 
-import { LoadingService } from "~/services/loading.service";
+import { LoadingService } from "../../../services/loading.service";
 
-import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
+import { NewMealPlanModalPage } from "../../meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { RefreshableSignal } from "../../../services/server-actions/actions-base";

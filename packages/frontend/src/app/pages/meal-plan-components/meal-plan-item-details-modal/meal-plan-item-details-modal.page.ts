@@ -6,13 +6,13 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RecipeService } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { RouteMap } from "~/services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
+import { LoadingService } from "../../../services/loading.service";
+import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
+import { RouteMap } from "../../../services/util.service";
 
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
-import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
+import { AddRecipeToShoppingListModalPage } from "../../recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 
 import dayjs from "dayjs";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
@@ -135,24 +135,15 @@ export class MealPlanItemDetailsModalPage {
     modal.present();
 
     const { data } = await modal.onDidDismiss();
-    if (!data || !data.item) return;
-    const item = data.item;
+    const item = data?.items?.[0];
+    if (!item) return;
 
     const loading = this.loadingService.start();
 
     const result =
       await this.serverActionsService.mealPlans.updateMealPlanItems({
         mealPlanId: this.mealPlanId,
-        items: [
-          {
-            id: this.mealItem.id,
-            title: item.title,
-            recipeId: item.recipeId,
-            scheduledDate: item.scheduledDate,
-            meal: item.meal,
-            notes: item.notes,
-          },
-        ],
+        items: [{ id: this.mealItem.id, ...item }],
       });
     loading.dismiss();
     if (!result) return;
@@ -179,23 +170,14 @@ export class MealPlanItemDetailsModalPage {
     modal.present();
 
     const { data } = await modal.onDidDismiss();
-    if (!data || !data.item) return;
-    const item = data.item;
+    if (!data?.items?.length) return;
 
     const loading = this.loadingService.start();
 
     const result =
       await this.serverActionsService.mealPlans.createMealPlanItems({
         mealPlanId: this.mealPlanId,
-        items: [
-          {
-            title: item.title,
-            recipeId: item.recipeId,
-            scheduledDate: item.scheduledDate,
-            meal: item.meal,
-            notes: item.notes,
-          },
-        ],
+        items: data.items,
       });
 
     loading.dismiss();

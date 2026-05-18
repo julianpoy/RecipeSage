@@ -2,7 +2,7 @@ import { Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 
 import { Recipe } from "../../../services/recipe.service";
-import { RouteMap } from "~/services/util.service";
+import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectLabelComponent } from "../../../components/select-label/select-label.component";
 import { SelectRecipeLegacyComponent } from "../../../components/select-recipe-legacy/select-recipe-legacy.component";

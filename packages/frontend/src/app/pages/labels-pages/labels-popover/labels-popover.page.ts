@@ -1,12 +1,12 @@
 import { Component, Input, inject } from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 
-import { UtilService } from "~/services/util.service";
+import { UtilService } from "../../../services/util.service";
 import {
   QuickTutorialService,
   QuickTutorialOptions,
-} from "~/services/quick-tutorial.service";
-import { PreferencesService } from "~/services/preferences.service";
+} from "../../../services/quick-tutorial.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {

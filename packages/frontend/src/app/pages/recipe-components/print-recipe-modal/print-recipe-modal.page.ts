@@ -2,8 +2,11 @@ import { Component, Input, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { Recipe } from "~/services/recipe.service";
-import { UtilService, RecipeTemplateModifiers } from "~/services/util.service";
+import { Recipe } from "../../../services/recipe.service";
+import {
+  UtilService,
+  RecipeTemplateModifiers,
+} from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RecipePreviewComponent } from "../../../components/recipe-preview/recipe-preview.component";
 import {

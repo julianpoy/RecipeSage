@@ -101,33 +101,37 @@ export const clipUrl = async (
     });
   };
 
+  const skipCache = url.includes("?") || url.includes("#");
+
   const urlHash = hashUrl(url);
 
-  const cached = await prisma.clipCache.findUnique({
-    where: { urlHash },
-  });
+  if (!skipCache) {
+    const cached = await prisma.clipCache.findUnique({
+      where: { urlHash },
+    });
 
-  if (cached && cached.url === url) {
-    const cachedRecipe =
-      cached.recipe as unknown as StandardizedRecipeImportEntry;
-    if (
-      cachedRecipe.recipe.title &&
-      cachedRecipe.recipe.ingredients &&
-      cachedRecipe.recipe.instructions
-    ) {
-      metrics.clipCacheLookup.inc({
-        result: "hit",
-      });
-      metrics.clipSuccess.inc({
-        form: "url",
-        method: "cached",
-      });
-      return cachedRecipe;
+    if (cached && cached.url === url) {
+      const cachedRecipe =
+        cached.recipe as unknown as StandardizedRecipeImportEntry;
+      if (
+        cachedRecipe.recipe.title &&
+        cachedRecipe.recipe.ingredients &&
+        cachedRecipe.recipe.instructions
+      ) {
+        metrics.clipCacheLookup.inc({
+          result: "hit",
+        });
+        metrics.clipSuccess.inc({
+          form: "url",
+          method: "cached",
+        });
+        return cachedRecipe;
+      }
     }
   }
 
   metrics.clipCacheLookup.inc({
-    result: "miss",
+    result: skipCache ? "skipped" : "miss",
   });
 
   const response = await (async () => {
@@ -167,6 +171,7 @@ export const clipUrl = async (
   });
 
   const cacheResult = async (result: StandardizedRecipeImportEntry) => {
+    if (skipCache) return;
     await prisma.clipCache.upsert({
       where: { urlHash },
       create: {

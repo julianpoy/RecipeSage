@@ -8,26 +8,28 @@ import {
 } from "@ionic/angular/standalone";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
-import { Recipe, RecipeFolderName } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { EventName, EventService } from "~/services/event.service";
-import { RouteMap, UtilService } from "~/services/util.service";
+import { Recipe, RecipeFolderName } from "../../services/recipe.service";
+import { LoadingService } from "../../services/loading.service";
+import { WebsocketService } from "../../services/websocket.service";
+import { EventName, EventService } from "../../services/event.service";
+import { RouteMap, UtilService } from "../../services/util.service";
 
-import { PreferencesService } from "~/services/preferences.service";
+import { PreferencesService } from "../../services/preferences.service";
 import {
   MyRecipesPreferenceKey,
   GlobalPreferenceKey,
   isRtlText,
 } from "@recipesage/util/shared";
-import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
-import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
-import { ServerActionsService } from "~/services/server-actions.service";
+import { HomePopoverPage } from "../home-popover/home-popover.page";
+import { HomeSearchFilterPopoverPage } from "../home-search-popover/home-search-filter-popover.page";
+import { ServerActionsService } from "../../services/server-actions.service";
 import type {
   LabelSummary,
+  NutritionFilter,
   RecipeSummaryLite,
   UserPublic,
 } from "@recipesage/prisma";
+import { countActiveNutritionRanges } from "../../utils/nutritionFilter";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { NullStateComponent } from "../../components/null-state/null-state.component";
@@ -144,6 +146,7 @@ export class HomePage implements OnDestroy {
   otherUserProfile?: UserPublic;
 
   ratingFilter: (number | null)[] = [];
+  nutritionFilter: NutritionFilter = {};
 
   tileColCount: number = 1;
 
@@ -509,6 +512,7 @@ export class HomePage implements OnDestroy {
         this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       includeAllFriends: this.isIncludeFriendsEnabled(),
       ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+      nutritionFilter: this.activeNutritionFilter(),
       userIds: this.userId ? [this.userId] : undefined,
     });
 
@@ -653,6 +657,7 @@ export class HomePage implements OnDestroy {
           this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
         includeAllFriends,
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+        nutritionFilter: this.activeNutritionFilter(),
         userIds: this.userId ? [this.userId] : undefined,
       })
       .finally(loading.dismiss);
@@ -898,6 +903,7 @@ export class HomePage implements OnDestroy {
         labels: this.labels,
         selectedLabels: this.selectedLabels,
         ratingFilter: this.ratingFilter,
+        nutritionFilter: this.nutritionFilter,
       },
     });
 
@@ -908,7 +914,16 @@ export class HomePage implements OnDestroy {
 
     if (data.selectedLabels) this.selectedLabels = data.selectedLabels;
     if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
+    if (data.nutritionFilter) this.nutritionFilter = data.nutritionFilter;
     this.syncFiltersToUrl();
     if (data.refreshSearch) this.resetAndLoadAll();
+  }
+
+  get hasActiveNutritionFilter(): boolean {
+    return countActiveNutritionRanges(this.nutritionFilter) > 0;
+  }
+
+  private activeNutritionFilter(): NutritionFilter | undefined {
+    return this.hasActiveNutritionFilter ? this.nutritionFilter : undefined;
   }
 }

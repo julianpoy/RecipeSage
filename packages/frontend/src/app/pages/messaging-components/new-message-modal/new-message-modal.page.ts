@@ -6,8 +6,8 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { MessagingService } from "~/services/messaging.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { MessagingService } from "../../../services/messaging.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

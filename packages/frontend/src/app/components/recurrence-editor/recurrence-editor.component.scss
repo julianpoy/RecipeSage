@@ -1,0 +1,113 @@
+.rec-body {
+  padding: 8px 0 8px 24px;
+}
+
+.rec-body__sub {
+  padding-left: 24px;
+}
+
+.interval-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 16px;
+
+  &__label {
+    flex: 0 1 auto;
+  }
+
+  &__count {
+    flex: 0 0 80px;
+    max-width: 80px;
+    --padding-start: 8px;
+    --padding-end: 4px;
+  }
+
+  &__unit {
+    color: var(--ion-color-medium);
+    font-size: 0.9em;
+  }
+}
+
+.monthly-row {
+  padding: 8px 16px;
+}
+
+.weekday-section {
+  padding: 10px 0 10px 16px;
+
+  &__label {
+    font-size: 0.85em;
+    color: var(--ion-color-medium);
+    margin-bottom: 6px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+.weekday-chip {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex: 0 0 36px;
+  border-radius: 50%;
+  border: 1px solid var(--ion-color-step-400, #999);
+  background: transparent;
+  color: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1;
+
+  &--selected {
+    border-color: var(--ion-color-primary);
+    border-width: 2px;
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+.ends-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 16px;
+
+  &__radio {
+    flex: 0 1 auto;
+  }
+
+  &__date {
+    flex: 0 1 auto;
+  }
+
+  &__count {
+    flex: 0 0 80px;
+    max-width: 80px;
+    --padding-start: 8px;
+    --padding-end: 4px;
+  }
+
+  &__suffix {
+    color: var(--ion-color-medium);
+    font-size: 0.9em;
+  }
+}
+
+.ends-preview {
+  padding: 0 16px 4px 38px;
+  font-size: 0.85em;
+  line-height: 1.2;
+}

@@ -1,9 +1,9 @@
 import { Component, Input, inject } from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
-import { PreferencesService } from "~/services/preferences.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
-import { WakeLockService } from "~/services/wakelock.service";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
+import { WakeLockService } from "../../../services/wakelock.service";
+import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
