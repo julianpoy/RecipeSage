@@ -132,8 +132,8 @@ importers:
         specifier: ^6.0.168
         version: 6.0.168(zod@4.3.6)
       axios:
-        specifier: ^1.16.0
-        version: 1.16.0(debug@4.4.3)
+        specifier: ^1.16.1
+        version: 1.16.1(debug@4.4.3)
       body-parser:
         specifier: ~2.2.2
         version: 2.2.2
@@ -6471,8 +6471,8 @@ packages:
   axios@1.13.6:
     resolution: {integrity: sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==}
 
-  axios@1.16.0:
-    resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
+  axios@1.16.1:
+    resolution: {integrity: sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -18174,6 +18174,7 @@ snapshots:
       - '@swc-node/register'
       - '@swc/core'
       - debug
+      - supports-color
 
   '@openrouter/ai-sdk-provider@2.8.0(ai@6.0.168(zod@4.3.6))(zod@4.3.6)':
     dependencies:
@@ -21270,13 +21271,15 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.16.0(debug@4.4.3):
+  axios@1.16.1(debug@4.4.3):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.5
+      https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   axobject-query@4.1.0: {}
 
@@ -26315,7 +26318,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.16.0(debug@4.4.3)
+      axios: 1.16.1(debug@4.4.3)
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -26361,6 +26364,7 @@ snapshots:
       '@swc/core': 1.15.26(@swc/helpers@0.5.21)
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   oauth-sign@0.9.0: {}
 
@@ -29062,11 +29066,12 @@ snapshots:
   typesense@3.0.6(@babel/runtime@7.29.2)(debug@4.4.3):
     dependencies:
       '@babel/runtime': 7.29.2
-      axios: 1.16.0(debug@4.4.3)
+      axios: 1.16.1(debug@4.4.3)
       loglevel: 1.9.2
       tslib: 2.8.1
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   typical@7.3.0: {}
 
