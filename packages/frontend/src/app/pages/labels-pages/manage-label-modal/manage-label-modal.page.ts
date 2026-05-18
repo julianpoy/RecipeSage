@@ -5,8 +5,8 @@ import {
   AlertController,
   ToastController,
 } from "@ionic/angular/standalone";
-import { UtilService, RouteMap } from "~/services/util.service";
-import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

@@ -1,6 +1,6 @@
 import { Input, Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
+import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {

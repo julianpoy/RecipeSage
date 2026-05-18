@@ -8,21 +8,21 @@ import {
 } from "@ionic/angular/standalone";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
-import { Recipe, RecipeFolderName } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { EventName, EventService } from "~/services/event.service";
-import { RouteMap, UtilService } from "~/services/util.service";
+import { Recipe, RecipeFolderName } from "../../services/recipe.service";
+import { LoadingService } from "../../services/loading.service";
+import { WebsocketService } from "../../services/websocket.service";
+import { EventName, EventService } from "../../services/event.service";
+import { RouteMap, UtilService } from "../../services/util.service";
 
-import { PreferencesService } from "~/services/preferences.service";
+import { PreferencesService } from "../../services/preferences.service";
 import {
   MyRecipesPreferenceKey,
   GlobalPreferenceKey,
   isRtlText,
 } from "@recipesage/util/shared";
-import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
-import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
-import { ServerActionsService } from "~/services/server-actions.service";
+import { HomePopoverPage } from "../home-popover/home-popover.page";
+import { HomeSearchFilterPopoverPage } from "../home-search-popover/home-search-filter-popover.page";
+import { ServerActionsService } from "../../services/server-actions.service";
 import type {
   LabelSummary,
   RecipeSummaryLite,

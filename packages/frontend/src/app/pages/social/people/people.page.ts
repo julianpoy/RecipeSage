@@ -9,10 +9,14 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { User, UserProfile, UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
+import { User, UserProfile, UserService } from "../../../services/user.service";
+import { LoadingService } from "../../../services/loading.service";
+import {
+  UtilService,
+  RouteMap,
+  AuthType,
+} from "../../../services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
 import { AddFriendModalPage } from "../add-friend-modal/add-friend-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";

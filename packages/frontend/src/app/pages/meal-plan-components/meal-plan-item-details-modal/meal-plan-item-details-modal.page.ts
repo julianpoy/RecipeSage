@@ -6,13 +6,13 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RecipeService } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { RouteMap } from "~/services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
+import { LoadingService } from "../../../services/loading.service";
+import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
+import { RouteMap } from "../../../services/util.service";
 
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
-import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
+import { AddRecipeToShoppingListModalPage } from "../../recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 
 import dayjs from "dayjs";
 import type { MealPlanItemSummary } from "@recipesage/prisma";

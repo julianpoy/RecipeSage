@@ -1,7 +1,7 @@
 import { Component, inject } from "@angular/core";
 
-import { RouteMap } from "~/services/util.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
+import { RouteMap } from "../../../services/util.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.component";
 import {

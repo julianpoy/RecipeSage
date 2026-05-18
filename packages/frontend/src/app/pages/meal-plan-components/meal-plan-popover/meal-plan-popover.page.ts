@@ -7,9 +7,9 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from "~/services/loading.service";
-import { RouteMap, UtilService } from "~/services/util.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { LoadingService } from "../../../services/loading.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import {
   GlobalPreferenceKey,
   MealPlanPreferenceKey,

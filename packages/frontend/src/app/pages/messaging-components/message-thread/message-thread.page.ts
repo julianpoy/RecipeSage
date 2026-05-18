@@ -2,12 +2,12 @@ import { Component, ViewChild, ChangeDetectorRef, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController } from "@ionic/angular/standalone";
 
-import { linkifyStr } from "~/utils/linkify";
-import { Message, MessagingService } from "~/services/messaging.service";
-import { LoadingService } from "~/services/loading.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { EventName, EventService } from "~/services/event.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { linkifyStr } from "../../../utils/linkify";
+import { Message, MessagingService } from "../../../services/messaging.service";
+import { LoadingService } from "../../../services/loading.service";
+import { WebsocketService } from "../../../services/websocket.service";
+import { EventName, EventService } from "../../../services/event.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {

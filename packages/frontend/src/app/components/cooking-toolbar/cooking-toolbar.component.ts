@@ -2,8 +2,8 @@ import { Component, inject } from "@angular/core";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RouteMap } from "~/services/util.service";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
+import { RouteMap } from "../../services/util.service";
+import { CookingToolbarService } from "../../services/cooking-toolbar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon, IonRippleEffect } from "@ionic/angular/standalone";
 import { close, pin } from "ionicons/icons";

@@ -2,12 +2,12 @@ import { Component, Input, inject } from "@angular/core";
 import { ToastController, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UtilService } from "~/services/util.service";
+import { UtilService } from "../../services/util.service";
 import {
   QuickTutorialService,
   QuickTutorialOptions,
-} from "~/services/quick-tutorial.service";
-import { PreferencesService } from "~/services/preferences.service";
+} from "../../services/quick-tutorial.service";
+import { PreferencesService } from "../../services/preferences.service";
 import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {

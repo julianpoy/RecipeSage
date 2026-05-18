@@ -17,12 +17,16 @@ import {
   UserProfile,
   User,
   ProfileItem,
-} from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { ImageService } from "~/services/image.service";
-import { UnsavedChangesService } from "~/services/unsaved-changes.service";
+} from "../../../services/user.service";
+import { LoadingService } from "../../../services/loading.service";
+import {
+  UtilService,
+  RouteMap,
+  AuthType,
+} from "../../../services/util.service";
+import { RecipeService } from "../../../services/recipe.service";
+import { ImageService } from "../../../services/image.service";
+import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";

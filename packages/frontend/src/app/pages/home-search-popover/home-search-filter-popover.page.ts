@@ -2,14 +2,14 @@ import { Component, ViewChild, Input, inject } from "@angular/core";
 import { IonSelect, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { PreferencesService } from "~/services/preferences.service";
+import { PreferencesService } from "../../services/preferences.service";
 import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
 import {
   ResettableSelectGroupedOptions,
   ResettableSelectOption,
   ResettableSelectPopoverPage,
-} from "~/pages/resettable-select-popover/resettable-select-popover.page";
-import { RatingFilterPopoverComponent } from "~/components/rating-filter-popover/rating-filter-popover.component";
+} from "../resettable-select-popover/resettable-select-popover.page";
+import { RatingFilterPopoverComponent } from "../../components/rating-filter-popover/rating-filter-popover.component";
 import type { LabelSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {

@@ -4,8 +4,8 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { UtilService, RouteMap } from "~/services/util.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
 import {
   FeatureFlagKeys,
   FeatureFlagService,

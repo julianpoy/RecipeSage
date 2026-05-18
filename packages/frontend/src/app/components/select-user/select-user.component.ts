@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, inject } from "@angular/core";
 
-import { LoadingService } from "~/services/loading.service";
+import { LoadingService } from "../../services/loading.service";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";

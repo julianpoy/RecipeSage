@@ -6,7 +6,7 @@ import { TRPCClientError } from "@trpc/client";
 import { AxiosError } from "axios";
 import * as Sentry from "@sentry/browser";
 
-import { AuthPage } from "~/pages/auth/auth.page";
+import { AuthPage } from "../pages/auth/auth.page";
 import { IS_SELFHOST } from "../../environments/environment";
 
 export interface ErrorHandlers {

@@ -1,10 +1,10 @@
 import { Component, computed, inject } from "@angular/core";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 
-import { WebsocketService } from "~/services/websocket.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
-import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
+import { WebsocketService } from "../../../services/websocket.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { NewMealPlanModalPage } from "../new-meal-plan-modal/new-meal-plan-modal.page";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";

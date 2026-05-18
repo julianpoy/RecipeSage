@@ -5,8 +5,8 @@ import {
   ToastController,
 } from "@ionic/angular/standalone";
 
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type {

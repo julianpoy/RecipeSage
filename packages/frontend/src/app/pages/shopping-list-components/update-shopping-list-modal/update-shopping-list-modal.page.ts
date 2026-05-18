@@ -6,10 +6,10 @@ import {
 } from "@ionic/angular/standalone";
 import type { ShoppingListSummary } from "@recipesage/prisma";
 
-import { LoadingService } from "~/services/loading.service";
-import { MessagingService } from "~/services/messaging.service";
-import { UserService } from "~/services/user.service";
-import { UtilService } from "~/services/util.service";
+import { LoadingService } from "../../../services/loading.service";
+import { MessagingService } from "../../../services/messaging.service";
+import { UserService } from "../../../services/user.service";
+import { UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";

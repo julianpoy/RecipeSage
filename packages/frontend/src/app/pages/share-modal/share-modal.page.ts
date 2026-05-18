@@ -5,15 +5,15 @@ import {
   ToastController,
 } from "@ionic/angular/standalone";
 
-import { MessagingService } from "~/services/messaging.service";
-import { User, UserService } from "~/services/user.service";
-import { RecipeService, Recipe } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
+import { MessagingService } from "../../services/messaging.service";
+import { User, UserService } from "../../services/user.service";
+import { RecipeService, Recipe } from "../../services/recipe.service";
+import { LoadingService } from "../../services/loading.service";
 import {
   UtilService,
   RecipeTemplateModifiers,
   RouteMap,
-} from "~/services/util.service";
+} from "../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserKnownUserComponent } from "../../components/select-user-knownuser/select-user-knownuser.component";
 import { CopyWithWebshareComponent } from "../../components/copy-with-webshare/copy-with-webshare.component";

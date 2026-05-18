@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/browser";
 import {
   QuickTutorialService,
   QuickTutorialOptions,
-} from "~/services/quick-tutorial.service";
+} from "./quick-tutorial.service";
 
 const COOKING_TOOLBAR_LOCALSTORAGE_KEY = "cookingToolbar";
 const COOKING_TOOLBAR_LOCALSTORAGE_VERSION = "1";

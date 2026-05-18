@@ -9,10 +9,10 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from "~/services/loading.service";
-import { WebsocketService } from "~/services/websocket.service";
-import { UtilService, RouteMap } from "~/services/util.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { LoadingService } from "../../../services/loading.service";
+import { WebsocketService } from "../../../services/websocket.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import {
   ShoppingListItemSummariesByGroupAndCategory,
   ShoppingListPreferenceKey,

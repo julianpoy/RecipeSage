@@ -10,21 +10,21 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
-import { linkifyHtml } from "~/utils/linkify";
+import { linkifyHtml } from "../../../utils/linkify";
 import {
   RecipeService,
   ParsedInstruction,
   ParsedIngredient,
   ParsedNote,
   RecipeFolderName,
-} from "~/services/recipe.service";
-import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
-import { WakeLockService } from "~/services/wakelock.service";
-import { PreferencesService } from "~/services/preferences.service";
+} from "../../../services/recipe.service";
+import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
+import { LoadingService } from "../../../services/loading.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
+import { WakeLockService } from "../../../services/wakelock.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
-import { RecipeCompletionTrackerService } from "~/services/recipe-completion-tracker.service";
+import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { AddRecipeToMealPlanModalPage } from "../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page";
@@ -33,13 +33,13 @@ import {
   RecipeDetailsPopoverPage,
   type RecipeDetailsPopoverActionTypes,
 } from "../recipe-details-popover/recipe-details-popover.page";
-import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
-import { AuthPage } from "~/pages/auth/auth.page";
-import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
+import { ShareModalPage } from "../../share-modal/share-modal.page";
+import { AuthPage } from "../../auth/auth.page";
+import { ImageViewerComponent } from "../../../modals/image-viewer/image-viewer.component";
 import {
   ScaleRecipeComponent,
   type UnitSystem,
-} from "~/modals/scale-recipe/scale-recipe.component";
+} from "../../../modals/scale-recipe/scale-recipe.component";
 import { System } from "unitz-ts";
 import type { RecipeSummary, RecipeSummaryLite } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";

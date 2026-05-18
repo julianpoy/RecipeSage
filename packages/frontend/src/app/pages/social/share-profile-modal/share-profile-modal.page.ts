@@ -2,8 +2,8 @@ import { Component, Input, type OnInit, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from "~/services/user.service";
-import { RouteMap } from "~/services/util.service";
+import { UserService } from "../../../services/user.service";
+import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 import {

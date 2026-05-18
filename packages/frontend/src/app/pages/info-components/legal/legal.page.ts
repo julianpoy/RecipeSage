@@ -9,7 +9,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { RouteMap } from "~/services/util.service";
+import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
   IonHeader,

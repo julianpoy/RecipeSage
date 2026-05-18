@@ -7,12 +7,12 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from "~/services/loading.service";
-import { RouteMap, UtilService } from "~/services/util.service";
+import { LoadingService } from "../../../services/loading.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 
-import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
-import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
-import { PreferencesService } from "~/services/preferences.service";
+import { LabelsPopoverPage } from "../labels-popover/labels-popover.page";
+import { ManageLabelModalPage } from "../manage-label-modal/manage-label-modal.page";
+import { PreferencesService } from "../../../services/preferences.service";
 import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";

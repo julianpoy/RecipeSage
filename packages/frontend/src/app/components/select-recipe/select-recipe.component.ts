@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { LoadingService } from "~/services/loading.service";
+import { LoadingService } from "../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type {
