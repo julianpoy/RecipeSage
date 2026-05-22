@@ -27,6 +27,7 @@ interface Props {
   structuredData?: unknown;
   breadcrumbs?: Breadcrumb[];
   redirectLoggedIn?: boolean;
+  availableLocales?: string[];
 }
 
 const {
@@ -40,6 +41,7 @@ const {
   structuredData = null,
   breadcrumbs,
   redirectLoggedIn = false,
+  availableLocales = WWW_SUPPORTED_LOCALES,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -67,9 +69,9 @@ const localeHomeURL = new URL(homeHref, Astro.site).toString();
 const htmlLang = toBcp47(locale);
 const htmlDir = isRtl(locale) ? "rtl" : "ltr";
 const ogLocale = toOgLocale(locale);
-const ogLocaleAlternates = WWW_SUPPORTED_LOCALES.filter((loc) => loc !== locale).map(
-  (loc) => toOgLocale(loc),
-);
+const ogLocaleAlternates = availableLocales
+  .filter((loc) => loc !== locale)
+  .map((loc) => toOgLocale(loc));
 const aboutHref = localePath(locale, "/about");
 
 const withTrailingSlash = (url: string) =>
@@ -175,7 +177,7 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
 
     <link rel="canonical" href={canonicalURL} />
     {
-      WWW_SUPPORTED_LOCALES.map((loc) => (
+      availableLocales.map((loc) => (
         <link
           rel="alternate"
           hreflang={toBcp47(loc)}

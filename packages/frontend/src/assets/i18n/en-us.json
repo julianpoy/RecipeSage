@@ -65,7 +65,7 @@
   "pages.welcome.description.features.migration.description": "Bring your collection from Pepperplate, Living Cookbook, Paprika, Cookmate, Recipe Keeper, CopyMeThat, Evernote, Plan to Eat, MyRecipeBox, or any JSON-LD / CSV export",
   "pages.welcome.description.features.export.title": "Export and data portability",
   "pages.welcome.description.features.export.description": "Back up your digital cookbook to PDF, JSON-LD, or text at any time: your data belongs to you",
-  "pages.welcome.description.features.browserExtension.title": "Browser extension for Chrome and Firefox",
+  "pages.welcome.description.features.browserExtension.title": "Browser extension for Firefox and Chrome",
   "pages.welcome.description.features.browserExtension.description": "Clip recipes from any webpage in one click with the RecipeSage Clip Tool browser extension",
   "pages.welcome.description.cta": "Why RecipeSage?",
   "pages.welcome.description.cta.noAds": "Free and open source: no ads, no subscriptions, no tracking",

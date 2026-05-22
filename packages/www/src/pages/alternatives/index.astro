@@ -1,0 +1,171 @@
+---
+import Hero from "../../components/Hero.astro";
+import RootLayout from "../../components/RootLayout.astro";
+import { competitorList } from "../../data/competitors";
+import { DEFAULT_LOCALE, makeTranslator } from "../../i18n/translations";
+
+const locale = DEFAULT_LOCALE;
+const t = makeTranslator(locale);
+
+const title =
+  "Free, Open Source Alternatives to Paid Recipe Apps - RecipeSage";
+const description =
+  "Side-by-side comparisons between RecipeSage and Paprika, Plan to Eat, CopyMeThat, Pepperplate, BigOven, and Samsung Food.";
+
+const breadcrumbs = [
+  { name: "RecipeSage", url: "/" },
+  { name: "Alternatives", url: "/alternatives" },
+];
+---
+
+<RootLayout
+  locale={locale}
+  t={t}
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  availableLocales={[DEFAULT_LOCALE]}
+  redirectLoggedIn
+>
+  <Hero>
+    <p class="hub-eyebrow">Switching to RecipeSage</p>
+    <h1 class="hub-h1">A free, open source alternative to your recipe app</h1>
+    <p class="hub-lead">
+      Side-by-side comparisons with the recipe apps people switch from most
+      often. RecipeSage is free, open source, and you can take your data with
+      you whenever you want.
+    </p>
+  </Hero>
+
+  <article class="hub-body">
+    <section class="hub-list">
+      <h2>Pick your current app</h2>
+      <ul>
+        {
+          competitorList.map((competitor) => (
+            <li>
+              <a href={`/alternatives/${competitor.slug}`}>
+                <strong>RecipeSage vs {competitor.name}</strong>
+                <span>{competitor.cardSummary}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="hub-cta">
+      <h2>Not sure which app to compare?</h2>
+      <p>
+        RecipeSage is free so there's really no reason not to give it a try. If we don't currently support importing from your favorite app, just shoot us a message. We'd love to help you.
+      </p>
+      <div class="hub-cta-row">
+        <a class="hub-btn primary" href="/app/auth/register">
+          Create a free account
+        </a>
+      </div>
+    </section>
+  </article>
+
+  <style>
+    .hub-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      opacity: 0.85;
+      margin: 0 0 12px;
+    }
+
+    .hub-h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 16px;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .hub-lead {
+      font-size: 1.15rem;
+      margin: 0;
+      opacity: 0.95;
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    .hub-body {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 24px 0;
+      line-height: 1.65;
+    }
+
+    .hub-body h2 {
+      font-size: 1.6rem;
+      margin: 0 0 16px;
+    }
+
+    .hub-body section {
+      margin-bottom: 60px;
+    }
+
+    .hub-list ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .hub-list a {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--surface);
+      padding: 18px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      height: 100%;
+    }
+
+    .hub-list a:hover {
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .hub-list strong {
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .hub-list span {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .hub-cta p {
+      color: var(--text-muted);
+      margin: 0 0 16px;
+    }
+
+    .hub-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hub-btn {
+      display: inline-block;
+      padding: 12px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hub-btn.primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</RootLayout>
