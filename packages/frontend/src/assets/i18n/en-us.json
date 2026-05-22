@@ -62,7 +62,7 @@
   "pages.welcome.description.features.sharing.title": "Sharing and collaboration",
   "pages.welcome.description.features.sharing.description": "Share recipes publicly or with friends, and collaborate on meal plans and shopping lists",
   "pages.welcome.description.features.migration.title": "Migrate from other recipe apps",
-  "pages.welcome.description.features.migration.description": "Bring your collection from Pepperplate, Living Cookbook, Paprika, Cookmate, Recipe Keeper, CopyMeThat, Evernote, Plan to Eat, MyRecipeBox, or any JSON-LD / CSV export",
+  "pages.welcome.description.features.migration.description": "Bring your collection from Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, Evernote, Plan to Eat, MyRecipeBox, or any JSON-LD / CSV export",
   "pages.welcome.description.features.export.title": "Export and data portability",
   "pages.welcome.description.features.export.description": "Back up your digital cookbook to PDF, JSON-LD, or text at any time: your data belongs to you",
   "pages.welcome.description.features.browserExtension.title": "Browser extension for Firefox and Chrome",
@@ -337,6 +337,8 @@
   "pages.contact.discord.link": "Discord Link",
   "pages.contact.github": "While Discord is preferred, you can also report things directly on GitHub (slower response time): ",
   "pages.contact.github.link": "GitHub Link",
+  "pages.contact.cantUseDiscord": "I can't use Discord and the documentation doesn't answer the issue/question I have",
+  "pages.contact.emailMe": "I'm slow to respond to email (sorry!):",
 
   "pages.contact.socialTitle": "Social Media",
 
@@ -880,6 +882,8 @@
   "pages.import.pepperplate": "Import from Pepperplate account",
   "pages.import.livingCookbook": "Import from Living Cookbook file",
   "pages.import.paprika": "Import from Paprika Recipes file",
+  "pages.import.mela": "Import from Mela file",
+  "pages.import.crouton": "Import from Crouton file",
   "pages.import.textFiles": "Import from documents (.txt, .rtf, .odt, .docx, .md, .html)",
   "pages.import.enex": "Import from Evernote file",
   "pages.import.urls": "Import from a list of URLs",
@@ -920,6 +924,14 @@
   "pages.importPaprika.tabTitle": "Import from Paprika - RecipeSage",
   "pages.importPaprika.title": "Import Recipes from Paprika File",
   "pages.importPaprika.description": "This will import a Paprika export file (ends in .paprikarecipes) file into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importMela.tabTitle": "Import from Mela - RecipeSage",
+  "pages.importMela.title": "Import Recipes from Mela File",
+  "pages.importMela.description": "This will import a Mela export file (ends in .melarecipes, or a single .melarecipe) into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importCrouton.tabTitle": "Import from Crouton - RecipeSage",
+  "pages.importCrouton.title": "Import Recipes from Crouton File",
+  "pages.importCrouton.description": "This will import a Crouton export (a .zip archive containing .crumb recipe files) into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.importPepperplate.tabTitle": "Import from Pepperplate - RecipeSage",
   "pages.importPepperplate.title": "Import Recipes from Pepperplate",

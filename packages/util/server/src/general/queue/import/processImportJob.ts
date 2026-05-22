@@ -15,6 +15,8 @@ import { cookmateImportJobHandler } from "./handlers/cookmateImportJobHandler";
 import { copymethatImportJobHandler } from "./handlers/copymethatImportJobHandler";
 import { fdxzImportJobHandler } from "./handlers/fdxzImportJobHandler";
 import { lcbImportJobHandler } from "./handlers/lcbImportJobHandler";
+import { melaImportJobHandler } from "./handlers/melaImportJobHandler";
+import { croutonImportJobHandler } from "./handlers/croutonImportJobHandler";
 
 export const IMPORT_JOB_STEP_COUNT = 3;
 
@@ -70,6 +72,12 @@ export const processImportJob = async (
       break;
     case "lcb":
       await lcbImportJobHandler(job, jobQueueItem);
+      break;
+    case "mela":
+      await melaImportJobHandler(job, jobQueueItem);
+      break;
+    case "crouton":
+      await croutonImportJobHandler(job, jobQueueItem);
       break;
     default:
       throw new Error(`Unsupported import type: ${job.meta.importType}`);

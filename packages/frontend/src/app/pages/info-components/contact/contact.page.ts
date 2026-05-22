@@ -30,6 +30,11 @@ import {
 })
 export class ContactPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
+  showEmail = false;
 
   constructor() {}
+
+  revealEmail() {
+    this.showEmail = true;
+  }
 }

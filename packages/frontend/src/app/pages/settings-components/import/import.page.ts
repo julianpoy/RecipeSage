@@ -51,6 +51,8 @@ type ImportFormat =
   | "pepperplate"
   | "livingcookbook"
   | "paprika"
+  | "mela"
+  | "crouton"
   | "cookmate"
   | "recipekeeper"
   | "textfiles"
@@ -167,6 +169,14 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportPaprikaPage.getPath());
         break;
       }
+      case "mela": {
+        this.navCtrl.navigateForward(RouteMap.ImportMelaPage.getPath());
+        break;
+      }
+      case "crouton": {
+        this.navCtrl.navigateForward(RouteMap.ImportCroutonPage.getPath());
+        break;
+      }
       case "cookmate": {
         this.navCtrl.navigateForward(RouteMap.ImportCookmatePage.getPath());
         break;
@@ -240,6 +250,12 @@ export class ImportPage {
       }
       case "paprika": {
         return "pages.import.paprika";
+      }
+      case "mela": {
+        return "pages.import.mela";
+      }
+      case "crouton": {
+        return "pages.import.crouton";
       }
       case "jsonld": {
         return "pages.import.jsonld";

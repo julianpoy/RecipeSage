@@ -30,7 +30,9 @@ export interface JobMeta {
     | "pdfs"
     | "images"
     | "enex"
-    | "copymethat";
+    | "copymethat"
+    | "mela"
+    | "crouton";
   importLabels?: string[];
   importStorageKey?: string;
   importStorageBucket?: string;
@@ -78,6 +80,8 @@ const jobMetaSchema = z
         "images",
         "enex",
         "copymethat",
+        "mela",
+        "crouton",
       ])
       .optional(),
     importLabels: z.array(z.string()).optional(),
