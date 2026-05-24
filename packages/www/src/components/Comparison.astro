@@ -1,0 +1,669 @@
+---
+import Hero from "./Hero.astro";
+import { competitorList } from "../data/competitors";
+import type { CompetitorData, RowValue } from "../data/competitors/types";
+
+interface Props {
+  competitor: CompetitorData;
+}
+
+const { competitor } = Astro.props;
+
+const otherCompetitors = competitorList.filter((c) => c.slug !== competitor.slug);
+
+const renderValue = (value: RowValue): { kind: "yes" | "no" | "partial" | "text"; label: string } => {
+  if (value === true) return { kind: "yes", label: "Yes" };
+  if (value === false) return { kind: "no", label: "No" };
+  if (value === "partial") return { kind: "partial", label: "Partial" };
+  return { kind: "text", label: value };
+};
+---
+
+<Hero>
+  <p class="cmp-eyebrow">RecipeSage vs {competitor.name}</p>
+  <h1 class="cmp-h1">{competitor.tagline}</h1>
+  <p class="cmp-lead">{competitor.subtitle}</p>
+  <div class="cmp-hero-cta">
+    <a class="cmp-btn primary" href="/app/auth/register">
+      Create a free account
+    </a>
+    {
+      competitor.migration.importUrl ? (
+        <a class="cmp-btn outline" href={competitor.migration.importUrl}>
+          Import from {competitor.name}
+        </a>
+      ) : (
+        <a class="cmp-btn outline" href="#cmp-migration">
+          See how to migrate
+        </a>
+      )
+    }
+  </div>
+</Hero>
+
+<article class="cmp-body">
+  <section class="cmp-intro">
+    {competitor.intro.map((para) => <p>{para}</p>)}
+  </section>
+
+  <section class="cmp-pricing">
+    <h2>How they price</h2>
+    <div class="cmp-price-cards">
+      <div class="cmp-price-card cmp-price-us">
+        <h3>RecipeSage</h3>
+        <p>{competitor.pricingSummary.recipesage}</p>
+      </div>
+      <div class="cmp-price-card cmp-price-them">
+        <h3>{competitor.name}</h3>
+        <p>{competitor.pricingSummary.competitor}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cmp-table-wrap">
+    <h2>Feature by feature</h2>
+    <p class="cmp-section-lead">
+      We've tried to be fair here. Where {competitor.name} is genuinely
+      stronger, we say so. Numbers and feature claims are sourced from each
+      product's own documentation as of May 2026.
+    </p>
+    <div class="cmp-table-scroll">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col">RecipeSage</th>
+            <th scope="col">{competitor.name}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            competitor.table.map((row) => {
+              const rs = renderValue(row.recipesage);
+              const comp = renderValue(row.competitor);
+              return (
+                <tr>
+                  <th scope="row">
+                    {row.feature}
+                    {row.note && <span class="cmp-row-note">{row.note}</span>}
+                  </th>
+                  <td class={`cmp-cell cmp-cell-${rs.kind}`} data-label="RecipeSage">
+                    <span class="cmp-cell-pill">{rs.label}</span>
+                  </td>
+                  <td class={`cmp-cell cmp-cell-${comp.kind}`} data-label={competitor.name}>
+                    <span class="cmp-cell-pill">{comp.label}</span>
+                  </td>
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cmp-why">
+    <h2>Why people switch from {competitor.name} to RecipeSage</h2>
+    <ul class="cmp-card-list">
+      {
+        competitor.whySwitch.map((item) => (
+          <li>
+            <strong>{item.title}</strong>
+            <span>{item.body}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    competitor.competitorWins.length > 0 && (
+      <section class="cmp-honest">
+        <h2>Where {competitor.name} is honestly stronger</h2>
+        <p class="cmp-section-lead">
+          We're not pretending RecipeSage wins on everything. Here's what
+          {competitor.name} does better than us today.
+        </p>
+        <ul class="cmp-card-list cmp-card-list-muted">
+          {competitor.competitorWins.map((item) => (
+            <li>
+              <strong>{item.title}</strong>
+              <span>{item.body}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="cmp-migration" id="cmp-migration">
+    <h2>{competitor.migration.headline}</h2>
+    <p class="cmp-section-lead">{competitor.migration.summary}</p>
+    <ol class="cmp-steps">
+      {
+        competitor.migration.steps.map((step, idx) => (
+          <li>
+            <span class="cmp-step-num">{idx + 1}</span>
+            <span class="cmp-step-body">{step.body}</span>
+          </li>
+        ))
+      }
+    </ol>
+    {competitor.migration.note && (
+      <p class="cmp-migration-note">{competitor.migration.note}</p>
+    )}
+    <div class="cmp-migration-cta">
+      {competitor.migration.importUrl && (
+        <a class="cmp-btn primary" href={competitor.migration.importUrl}>
+          Start importing
+        </a>
+      )}
+      {competitor.migration.docsUrl && (
+        <a
+          class="cmp-btn outline"
+          href={competitor.migration.docsUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          {competitor.migration.docsLabel ?? "Read the import guide"}
+        </a>
+      )}
+    </div>
+  </section>
+
+  <section class="cmp-makers">
+    <h2>About the people behind RecipeSage</h2>
+    <p>
+      My wife and I built and run RecipeSage. We're not a venture-backed
+      startup. We cook every night, we got tired of paying subscriptions
+      and losing access to recipes when an app changed hands, so we built
+      the app we wanted to use. Hosting is funded by donations and has
+      been since 2018, and the source code is on GitHub under the AGPL.
+    </p>
+    <p>
+      If you ever want to leave RecipeSage, you can export everything in
+      standard formats or run the whole thing on your own server. Your
+      recipes are yours.
+    </p>
+  </section>
+
+  <section class="cmp-faq">
+    <h2>Common questions about switching from {competitor.name}</h2>
+    <div class="cmp-faq-list">
+      {
+        competitor.faqs.map((item) => (
+          <details class="cmp-faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="cmp-closing">
+    {competitor.closing.map((para) => <p>{para}</p>)}
+    <div class="cmp-final-cta">
+      <a class="cmp-btn primary" href="/app/auth/register">
+        Create a free account
+      </a>
+    </div>
+  </section>
+
+  <section class="cmp-other">
+    <h2>Switching from a different app?</h2>
+    <ul class="cmp-other-list">
+      {
+        otherCompetitors.map((other) => (
+          <li>
+            <a href={`/alternatives/${other.slug}`}>
+              RecipeSage vs {other.name}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href="/alternatives">See all comparisons</a>
+      </li>
+    </ul>
+  </section>
+</article>
+
+<style>
+  .cmp-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin: 0 0 12px;
+  }
+
+  .cmp-h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 0 0 16px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .cmp-lead {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+    opacity: 0.95;
+    line-height: 1.5;
+    max-width: 720px;
+  }
+
+  .cmp-hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cmp-btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .cmp-btn.primary {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .cmp-btn.outline {
+    background: transparent;
+    color: inherit;
+    border: 1px solid var(--btn-border);
+  }
+
+  .cmp-body {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 0;
+    line-height: 1.65;
+  }
+
+  .cmp-body h2 {
+    font-size: 1.6rem;
+    margin: 0 0 16px;
+  }
+
+  .cmp-body p {
+    color: var(--text-muted);
+    margin: 0 0 14px;
+  }
+
+  .cmp-body section {
+    margin-bottom: 64px;
+  }
+
+  .cmp-intro p {
+    font-size: 1.05rem;
+  }
+
+  .cmp-section-lead {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .cmp-price-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    .cmp-price-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cmp-price-card {
+    background: var(--surface);
+    padding: 20px 22px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .cmp-price-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .cmp-price-card p {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .cmp-price-us {
+    border-left: 4px solid var(--btn-primary-bg);
+  }
+
+  .cmp-price-them {
+    border-left: 4px solid var(--text-muted);
+  }
+
+  .cmp-table-scroll {
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .cmp-table thead th {
+    background: var(--surface);
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid rgba(127, 127, 127, 0.25);
+  }
+
+  .cmp-table thead th:nth-child(2) {
+    color: var(--accent-text);
+  }
+
+  .cmp-table tbody th {
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 500;
+    color: var(--text);
+    vertical-align: top;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.15);
+  }
+
+  .cmp-table tbody td {
+    padding: 14px 16px;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.15);
+    width: 22%;
+  }
+
+  @media (max-width: 640px) {
+    .cmp-table,
+    .cmp-table thead,
+    .cmp-table tbody,
+    .cmp-table tr,
+    .cmp-table tbody th,
+    .cmp-table tbody td {
+      display: block;
+      width: auto;
+    }
+
+    .cmp-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .cmp-table tr {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(127, 127, 127, 0.18);
+    }
+
+    .cmp-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .cmp-table tbody th {
+      padding: 0 0 8px;
+      border-bottom: none;
+    }
+
+    .cmp-table tbody td {
+      padding: 4px 0;
+      border-bottom: none;
+      display: grid;
+      grid-template-columns: minmax(96px, auto) 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .cmp-table tbody td::before {
+      content: attr(data-label);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .cmp-table tbody td .cmp-cell-pill {
+      justify-self: start;
+    }
+  }
+
+  .cmp-row-note {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .cmp-cell-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .cmp-cell-yes .cmp-cell-pill {
+    background: rgba(94, 139, 86, 0.18);
+    color: var(--accent-text);
+  }
+
+  .cmp-cell-no .cmp-cell-pill {
+    background: rgba(140, 140, 140, 0.18);
+    color: var(--text-muted);
+  }
+
+  .cmp-cell-partial .cmp-cell-pill {
+    background: rgba(216, 165, 60, 0.25);
+    color: #6b4f0d;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .cmp-cell-partial .cmp-cell-pill {
+      color: #f2d27a;
+    }
+  }
+
+  .cmp-cell-text .cmp-cell-pill {
+    background: transparent;
+    color: var(--text);
+    padding: 0;
+    font-weight: 500;
+  }
+
+  .cmp-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .cmp-card-list li {
+    background: var(--surface);
+    padding: 18px 20px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cmp-card-list li strong {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .cmp-card-list li span {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .cmp-card-list-muted li {
+    background: transparent;
+    box-shadow: none;
+    border: 1px dashed rgba(127, 127, 127, 0.4);
+  }
+
+  .cmp-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .cmp-steps li {
+    display: flex;
+    gap: 14px;
+    background: var(--surface);
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+    align-items: flex-start;
+  }
+
+  .cmp-step-num {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .cmp-step-body {
+    color: var(--text-muted);
+  }
+
+  .cmp-migration-note {
+    font-style: italic;
+    color: var(--text-muted);
+    margin: 8px 0 16px;
+  }
+
+  .cmp-migration-cta,
+  .cmp-final-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .cmp-migration-cta .cmp-btn.outline,
+  .cmp-final-cta .cmp-btn.outline {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  .cmp-makers p {
+    font-size: 1rem;
+  }
+
+  .cmp-faq-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .cmp-faq-item {
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .cmp-faq-item summary {
+    cursor: pointer;
+    padding: 14px 44px 14px 18px;
+    font-weight: 600;
+    list-style: none;
+    color: var(--text);
+    position: relative;
+  }
+
+  .cmp-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .cmp-faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  .cmp-faq-item[open] summary::after {
+    content: "\2212";
+  }
+
+  .cmp-faq-item p {
+    padding: 0 18px 16px;
+    margin: 0;
+  }
+
+  .cmp-closing {
+    text-align: center;
+  }
+
+  .cmp-closing p {
+    max-width: 640px;
+    margin: 0 auto 14px;
+  }
+
+  .cmp-final-cta {
+    justify-content: center;
+  }
+
+  .cmp-other {
+    text-align: center;
+    border-top: 1px solid rgba(127, 127, 127, 0.2);
+    padding-top: 32px;
+  }
+
+  .cmp-other-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: center;
+  }
+
+  .cmp-other-list a {
+    color: var(--accent-text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cmp-other-list a:hover {
+    text-decoration: underline;
+  }
+</style>

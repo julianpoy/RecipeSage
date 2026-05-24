@@ -13,6 +13,8 @@ import { csvHandler } from "./csv";
 import { pdfsHandler } from "./pdfs";
 import { imagesHandler } from "./images";
 import { enexHandler } from "./enex";
+import { melaHandler } from "./mela";
+import { croutonHandler } from "./crouton";
 
 const router = express.Router();
 
@@ -30,5 +32,7 @@ router.post("/urls", ...urlsHandler);
 router.post("/csv", ...csvHandler);
 router.post("/pdfs", ...pdfsHandler);
 router.post("/images", ...imagesHandler);
+router.post("/mela", ...melaHandler);
+router.post("/crouton", ...croutonHandler);
 
 export { router as importJobRouter };

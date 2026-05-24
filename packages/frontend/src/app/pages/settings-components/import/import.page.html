@@ -125,6 +125,14 @@
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.paprika" | translate }} </ion-label>
         </ion-item>
+        <ion-item (click)="startImport('mela')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.mela" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="startImport('crouton')" detail button>
+          <ion-icon name="cloud-upload" slot="start"></ion-icon>
+          <ion-label> {{ "pages.import.crouton" | translate }} </ion-label>
+        </ion-item>
         <ion-item (click)="startImport('recipekeeper')" detail button>
           <ion-icon name="cloud-upload" slot="start"></ion-icon>
           <ion-label> {{ "pages.import.recipeKeeper" | translate }} </ion-label>

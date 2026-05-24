@@ -274,6 +274,24 @@ export const appRoutes: Routes = [
     title: "pages.importPaprika.tabTitle",
   },
   {
+    path: RouteMap.ImportMelaPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/import-mela/import-mela.page").then(
+        (m) => m.ImportMelaPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.importMela.tabTitle",
+  },
+  {
+    path: RouteMap.ImportCroutonPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/import-crouton/import-crouton.page").then(
+        (m) => m.ImportCroutonPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.importCrouton.tabTitle",
+  },
+  {
     path: RouteMap.ImportJSONLDPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import-json-ld/import-json-ld.page").then(

@@ -210,6 +210,18 @@ export const RouteMap = {
     },
     path: "settings/import/paprika",
   },
+  ImportMelaPage: {
+    getPath() {
+      return `/settings/import/mela`;
+    },
+    path: "settings/import/mela",
+  },
+  ImportCroutonPage: {
+    getPath() {
+      return `/settings/import/crouton`;
+    },
+    path: "settings/import/crouton",
+  },
   ImportJSONLDPage: {
     getPath() {
       return `/settings/import/json-ld`;

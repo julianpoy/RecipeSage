@@ -1,0 +1,72 @@
+---
+import { Picture } from "astro:assets";
+
+interface Props {
+  bgUrl?: string;
+}
+
+const {
+  bgUrl = "https://static.recipesage.com/assets/art/chicken-salad-2025-05-03.jpg",
+} = Astro.props;
+---
+
+<section class="rs-hero">
+  <Picture
+    src={bgUrl}
+    widths={[640, 1280, 1920]}
+    sizes="100vw"
+    formats={["avif", "webp"]}
+    fallbackFormat="jpg"
+    alt=""
+    class="rs-hero-bg"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+    inferSize
+  />
+  <div class="rs-hero-overlay" aria-hidden="true"></div>
+  <div class="rs-hero-inner">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .rs-hero {
+    position: relative;
+    color: var(--hero-text);
+    overflow: hidden;
+    padding: 120px 24px 80px;
+  }
+
+  .rs-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
+  .rs-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, transparent 180px),
+      var(--hero-overlay);
+    z-index: 1;
+  }
+
+  @media (max-width: 800px) {
+    .rs-hero {
+      padding: 40px 24px 60px;
+    }
+  }
+
+  .rs-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+</style>

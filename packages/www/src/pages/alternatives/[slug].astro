@@ -1,0 +1,98 @@
+---
+import RootLayout from "../../components/RootLayout.astro";
+import Comparison from "../../components/Comparison.astro";
+import { competitors, competitorSlugs } from "../../data/competitors";
+import { DEFAULT_LOCALE, makeTranslator } from "../../i18n/translations";
+
+export function getStaticPaths() {
+  return competitorSlugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+if (!slug || !(slug in competitors)) {
+  throw new Error(`Unknown competitor slug: ${slug}`);
+}
+const competitor = competitors[slug];
+
+const locale = DEFAULT_LOCALE;
+const t = makeTranslator(locale);
+
+const title = `The Free, Open Source ${competitor.name} Alternative - RecipeSage`;
+const description = competitor.subtitle;
+
+const homeURL = new URL("/", Astro.site).toString();
+const hubURL = new URL("/alternatives/", Astro.site).toString();
+const pageURL = new URL(`/alternatives/${competitor.slug}/`, Astro.site).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://recipesage.com/#organization",
+      "name": "RecipeSage",
+      "url": "https://recipesage.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://static.recipesage.com/assets/icons/logo-black-trimmed-2025-05-03.png",
+      },
+      "sameAs": [
+        "https://github.com/julianpoy/recipesage",
+        "https://discord.gg/yCfzBft",
+        "https://www.facebook.com/recipesageofficial/",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${homeURL}#website`,
+      "url": homeURL,
+      "name": "RecipeSage",
+      "publisher": { "@id": "https://recipesage.com/#organization" },
+      "inLanguage": "en-US",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "RecipeSage", "item": homeURL },
+        { "@type": "ListItem", "position": 2, "name": "Alternatives", "item": hubURL },
+        { "@type": "ListItem", "position": 3, "name": competitor.name, "item": pageURL },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": competitor.faqs.map((item) => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.a,
+        },
+      })),
+    },
+    {
+      "@type": "WebPage",
+      "name": title,
+      "description": description,
+      "url": pageURL,
+      "inLanguage": "en-US",
+      "isPartOf": { "@id": `${homeURL}#website` },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://static.recipesage.com/assets/icons/logo-black-trimmed-2025-05-03.png",
+      },
+    },
+  ],
+};
+---
+
+<RootLayout
+  locale={locale}
+  t={t}
+  title={title}
+  description={description}
+  structuredData={structuredData}
+  availableLocales={[DEFAULT_LOCALE]}
+  redirectLoggedIn
+>
+  <Comparison competitor={competitor} />
+</RootLayout>

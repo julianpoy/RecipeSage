@@ -32,6 +32,21 @@
     </a>
   </p>
 
+  @if (!showEmail) {
+    <p>
+      <a (click)="$event.preventDefault(); revealEmail()" href="">
+        {{ "pages.contact.cantUseDiscord" | translate }}
+      </a>
+    </p>
+  } @else {
+    <p>
+      {{ "pages.contact.emailMe" | translate }}
+      <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+        julian&#64;recipesage.com
+      </a>
+    </p>
+  }
+
   <br />
   <p>
     <b>{{ "pages.contact.socialTitle" | translate }}</b>
