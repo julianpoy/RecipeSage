@@ -17,7 +17,7 @@
     "pages.app.nav.settings": "Paramètres",
     "pages.welcome.selfhostTitle": "RecipeSage Auto-hébergé !",
     "pages.welcome.title": "Toutes vos recettes à un endroit",
-    "pages.welcome.subtitle": "Un organisateur de recettes gratuit, un planificateur de repas et un organisateur de listes de courses pour le Web, iOS et Android",
+    "pages.welcome.subtitle": "Un gestionnaire de recettes gratuit et open source, planificateur de repas et gestionnaire de liste de courses pour Web, iOS et Android. Fonctionne en ligne ou hors ligne.",
     "pages.welcome.registerButton": "Créer un compte",
     "pages.welcome.loginButton": "Se connecter",
     "pages.welcome.description.welcome": "Bienvenue sur RecipeSage !",
@@ -1242,5 +1242,14 @@
     "errors.creditsLimitReached.title": "Désolé, la limite est atteinte",
     "generic.moreInfo": "Plus d’informations",
     "pages.import.description": "RecipeSage prend en charge l’importation de plusieurs formats",
-    "pages.import.viewDocumentation": "Consulter la documentation"
+    "pages.import.viewDocumentation": "Consulter la documentation",
+    "pages.welcome.description.features.browserExtension.title": "Extension de navigateur pour Chrome et Firefox",
+    "pages.welcome.description.features.browserExtension.description": "Capturez les recettes de n'importe quel site web en un seul clic avec l'extension navigateur RecipeSage Clip Tool",
+    "pages.welcome.description.cta.selfHost": "Hébergez-la sur votre propre serveur, ou utilisez la version gratuite hébergée à RecipeSage.com",
+    "pages.extensionAuth.title": "Connectez l'extension navigateur",
+    "pages.extensionAuth.banner": "Vous êtes en train de connecter l'extension navigateur RecipeSage à ce compte.",
+    "pages.extensionAuth.loading": "Vérification en cours de votre session...",
+    "pages.extensionAuth.signedInAs": "Vous êtes connecté en tant que {{email}}",
+    "pages.extensionAuth.continue": "Suivant",
+    "pages.extensionAuth.useDifferentAccount": "Utilisez un autre compte"
 }
