@@ -1251,5 +1251,18 @@
     "pages.extensionAuth.loading": "Vérification en cours de votre session...",
     "pages.extensionAuth.signedInAs": "Vous êtes connecté en tant que {{email}}",
     "pages.extensionAuth.continue": "Suivant",
-    "pages.extensionAuth.useDifferentAccount": "Utilisez un autre compte"
+    "pages.extensionAuth.useDifferentAccount": "Utilisez un autre compte",
+    "pages.editRecipe.clipDocument.message": "Choisissez un fichier document (PDF, DOCX, RTF, ODT, Markdown, HTML, OrgMode ou texte brut) et RecipeSage tentera d'extraire les détails de la recette.",
+    "pages.editRecipe.clipDocument.choose": "Sélectionner un fichier",
+    "pages.import.mela": "Importer depuis un fichier Mela",
+    "pages.import.crouton": "Importer depuis un fichier Crouton",
+    "pages.importMela.tabTitle": "Importer depuis Mela - RecipeSage",
+    "pages.importMela.title": "Importer des recettes depuis un fichier Mela",
+    "pages.importMela.description": "Cette fonction importera un fichier d'export Mela (extension .melarecipes ou .melarecipe) dans votre compte RecipeSage. Nous vous encourageons à devenir contributeur si votre fichier contient de nombreuses recettes ou images.",
+    "pages.importCrouton.tabTitle": "Importer depuis Crouton - RecipeSage",
+    "pages.importCrouton.title": "Importer des recettes depuis un fichier Crouton",
+    "pages.importCrouton.description": "Cette fonction importera un fichier d'export Crouton (une archive .zip contenant des fichiers de recettes .crumb) dans votre compte RecipeSage. Nous vous encourageons à devenir contributeur si votre fichier contient de nombreuses recettes ou images.",
+    "components.recurrenceEditor.repeat": "Répéter",
+    "components.recurrenceEditor.frequency": "Fréquence",
+    "components.recurrenceEditor.frequency.daily": "Quotidien"
 }
