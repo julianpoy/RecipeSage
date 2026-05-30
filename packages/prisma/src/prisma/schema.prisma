@@ -498,6 +498,7 @@ model Job {
 enum JobType {
   IMPORT
   EXPORT
+  COOKBOOK
 }
 
 enum JobStatus {

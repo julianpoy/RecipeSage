@@ -1,4 +1,9 @@
-import { JobStatus, JobType, prisma, type JobMeta } from "@recipesage/prisma";
+import {
+  JobStatus,
+  JobType,
+  prisma,
+  type ExportJobMeta,
+} from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import {
   enqueueJob,
@@ -24,6 +29,7 @@ export const startExportJob = publicProcedure
         z.literal("jsonld"),
       ]),
       recipeIds: z.array(z.uuid()).min(1).max(5000).optional(),
+      language: z.string().max(254).optional(),
     }),
   )
   .output(
@@ -45,7 +51,8 @@ export const startExportJob = publicProcedure
           exportType: input.format,
           exportScope: input.recipeIds ? "recipeids" : "all",
           recipeIds: input.recipeIds,
-        } satisfies JobMeta,
+          language: input.language,
+        } satisfies ExportJobMeta,
       },
     });
 

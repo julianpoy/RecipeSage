@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ "pages.cookbook.addRecipe.title" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <select-recipe
+    [enableSelectedState]="false"
+    (selectedRecipeChange)="onSelect($event)"
+  ></select-recipe>
+</ion-content>

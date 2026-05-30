@@ -40,11 +40,8 @@
                 <ion-label class="ion-text-wrap">
                   {{ p.title }}
                 </ion-label>
-                @if (p.id === "people" && friendRequestCount) {
-                  <ion-badge>{{ friendRequestCount }}</ion-badge>
-                }
-                @if (p.id === "inbox" && inboxCount) {
-                  <ion-badge>{{ inboxCount }}</ion-badge>
+                @if (p.id === "people" && peopleBadgeCount) {
+                  <ion-badge>{{ peopleBadgeCount }}</ion-badge>
                 }
               </ion-item>
             </ion-menu-toggle>

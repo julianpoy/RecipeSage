@@ -247,6 +247,31 @@ export const appRoutes: Routes = [
     title: "pages.export.tabTitle",
   },
   {
+    path: RouteMap.JobsPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/jobs/jobs.page").then(
+        (m) => m.JobsPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.jobs.tabTitle",
+  },
+  {
+    path: RouteMap.ToolsPage.path,
+    loadComponent: () =>
+      import("./pages/tools/tools.page").then((m) => m.ToolsPage),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.tools.tabTitle",
+  },
+  {
+    path: RouteMap.CookbookGeneratorPage.path,
+    loadComponent: () =>
+      import("./pages/tools/cookbook-generator/cookbook-generator.page").then(
+        (m) => m.CookbookGeneratorPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.cookbook.tabTitle",
+  },
+  {
     path: RouteMap.ImportPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import/import.page").then(

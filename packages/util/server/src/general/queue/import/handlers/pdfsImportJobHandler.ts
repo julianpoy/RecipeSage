@@ -1,5 +1,5 @@
-import type { JobSummary } from "@recipesage/prisma";
-import { type JobMeta } from "@recipesage/prisma";
+import type { ImportJobSummary } from "@recipesage/prisma";
+
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { pdfToRecipe } from "../../../../ml/index";
@@ -19,10 +19,10 @@ import { ImportTooManyRecipesError } from "../../../jobs/jobErrors";
 const MAX_COUNT_LIMIT = 100;
 
 export async function pdfsImportJobHandler(
-  job: JobSummary,
+  job: ImportJobSummary,
   queueItem: JobQueueItem,
 ): Promise<void> {
-  const jobMeta = job.meta as JobMeta;
+  const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
 
   if (!queueItem.storageKey) {

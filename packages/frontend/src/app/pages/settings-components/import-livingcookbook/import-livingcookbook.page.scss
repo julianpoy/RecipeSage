@@ -3,3 +3,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}

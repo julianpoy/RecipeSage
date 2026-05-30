@@ -24,10 +24,8 @@ export const processImportJob = async (
   job: JobSummary,
   jobQueueItem: JobQueueItem,
 ) => {
-  if (!job.meta || job.type !== JobType.IMPORT) {
-    throw new Error(
-      "Import processor received a non-import job or job without meta",
-    );
+  if (job.type !== JobType.IMPORT) {
+    throw new Error("Import processor received a non-import job");
   }
 
   switch (job.meta.importType) {

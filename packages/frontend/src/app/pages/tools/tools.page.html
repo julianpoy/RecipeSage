@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.tools.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    <ion-list>
+      <ion-item (click)="goToCookbookGenerator()" button detail>
+        <ion-icon name="book" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          {{ "pages.cookbook.title" | translate }}
+          <p>{{ "pages.tools.cookbook.subtitle" | translate }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item (click)="goToAssistant()" button detail>
+        <ion-icon name="chatbox-ellipses" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          {{ "pages.assistant.title" | translate }}
+          <p>{{ "pages.tools.assistant.subtitle" | translate }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

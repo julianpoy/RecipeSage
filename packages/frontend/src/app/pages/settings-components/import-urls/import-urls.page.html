@@ -9,38 +9,40 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      {{ "pages.importUrls.description" | translate }}
-      <br /><br />
-      <a
-        href="https://docs.recipesage.com/docs/tutorials/settings/import/urls"
-        target="_blank"
-        rel="noopener"
-        >{{ "pages.import.viewDocumentation" | translate }}</a
-      >
-    </ion-label>
-  </ion-item>
+  <div class="page-wrapper">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        {{ "pages.importUrls.description" | translate }}
+        <br /><br />
+        <a
+          href="https://docs.recipesage.com/docs/tutorials/settings/import/urls"
+          target="_blank"
+          rel="noopener"
+          >{{ "pages.import.viewDocumentation" | translate }}</a
+        >
+      </ion-label>
+    </ion-item>
 
-  <br />
+    <br />
 
-  <ion-item lines="none">
-    <ion-textarea
-      [autoGrow]="true"
-      labelPlacement="stacked"
-      label="{{ 'pages.importUrls.urls' | translate }}"
-      helperText="{{ 'pages.importUrls.urls.helperText' | translate }}"
-      (ionInput)="urls = $event.detail.value || ''"
-      [value]="urls"
-      autocomplete="off"
-    ></ion-textarea>
-  </ion-item>
+    <ion-item lines="none">
+      <ion-textarea
+        [autoGrow]="true"
+        labelPlacement="stacked"
+        label="{{ 'pages.importUrls.urls' | translate }}"
+        helperText="{{ 'pages.importUrls.urls.helperText' | translate }}"
+        (ionInput)="urls = $event.detail.value || ''"
+        [value]="urls"
+        autocomplete="off"
+      ></ion-textarea>
+    </ion-item>
 
-  <ion-item lines="none" [disabled]="!urls.trim().length">
-    <ion-label>
-      <ion-button (click)="submit()">
-        {{ "generic.submit" | translate }}
-      </ion-button>
-    </ion-label>
-  </ion-item>
+    <ion-item lines="none" [disabled]="!urls.trim().length">
+      <ion-label>
+        <ion-button (click)="submit()">
+          {{ "generic.submit" | translate }}
+        </ion-button>
+      </ion-label>
+    </ion-item>
+  </div>
 </ion-content>

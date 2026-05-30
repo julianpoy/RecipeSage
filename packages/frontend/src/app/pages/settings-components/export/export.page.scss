@@ -10,3 +10,8 @@
 .job-success {
   color: var(--ion-color-success);
 }
+
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}

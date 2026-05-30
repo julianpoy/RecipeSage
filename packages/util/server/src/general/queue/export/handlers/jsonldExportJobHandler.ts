@@ -1,4 +1,4 @@
-import type { JobSummary } from "@recipesage/prisma";
+import type { ExportJobSummary } from "@recipesage/prisma";
 import { RecipeSummary } from "@recipesage/prisma";
 import { PassThrough, Readable } from "stream";
 import {
@@ -45,7 +45,7 @@ async function* process(
 }
 
 export async function jsonldExportJobHandler(
-  job: JobSummary,
+  job: ExportJobSummary,
   recipes: AsyncIterable<RecipeSummary>,
   onProgress: (processedCount: number) => void,
 ): Promise<StorageObjectRecord> {

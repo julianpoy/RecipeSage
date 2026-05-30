@@ -20,7 +20,7 @@ import {
   IonHeader,
   IonToolbar,
   IonButtons,
-  IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonButton,
   IonIcon,
@@ -47,7 +47,7 @@ import { addIcons } from "ionicons";
     IonHeader,
     IonToolbar,
     IonButtons,
-    IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonButton,
     IonIcon,
@@ -72,6 +72,8 @@ export class AssistantPage {
   private loadingService = inject(LoadingService);
   private utilService = inject(UtilService);
   private serverActionsService = inject(ServerActionsService);
+
+  defaultBackHref: string = RouteMap.ToolsPage.getPath();
 
   @ViewChild("content", { static: true }) content: any;
 

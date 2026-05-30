@@ -9,38 +9,51 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    @for (thread of threads; track thread) {
-      <ion-item class="thread" (click)="openThread(thread)" button>
-        <ion-icon name="chatbox" slot="start"></ion-icon>
-        <ion-label>
-          <h2>{{ thread.otherUser.name }}</h2>
-          <p>
-            @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
-              <b> {{ "pages.messages.history.you" | translate }} </b>
-            }
-            @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
-              <b> {{ thread.messages[0].fromUser.name }} </b>
-            }
-            :
-            @if (thread.messages[0].recipe) {
-              <span>{{ "pages.messages.history.sentRecipe" | translate }}</span>
-            }
-            @if (!thread.messages[0].recipe) {
-              <span>{{ thread.messages[0].body }}</span>
-            }
-          </p>
-          <p>{{ prettyDate(thread.messages[0].updatedAt) }}</p>
-        </ion-label>
-      </ion-item>
+  <div class="page-wrapper">
+    @if (isNotificationsCapable() && !isNotificationsEnabled()) {
+      <div class="ion-text-center ion-padding">
+        <b class="notificationWarning">{{
+          "pages.messages.warning" | translate
+        }}</b>
+        {{ "pages.messages.notificationsRequired" | translate }}<br />
+        <a
+          href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1"
+          target="_blank"
+        >
+          {{ "pages.messages.notificationsInstructions" | translate }}
+        </a>
+      </div>
     }
-    @if (loading) {
-      <null-state>
-        <ion-spinner virtualSlot="header"></ion-spinner>
-        <ion-label virtualSlot="body">
-          <p>{{ "pages.messages.loading" | translate }}</p>
-        </ion-label>
-      </null-state>
+
+    @if (threads.length && !loading) {
+      <ion-list>
+        @for (thread of threads; track thread) {
+          <ion-item class="thread" (click)="openThread(thread)" button>
+            <ion-icon name="chatbox" slot="start"></ion-icon>
+            <ion-label>
+              <h2>{{ thread.otherUser.name }}</h2>
+              <p>
+                @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
+                  <b> {{ "pages.messages.history.you" | translate }} </b>
+                }
+                @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
+                  <b> {{ thread.messages[0].fromUser.name }} </b>
+                }
+                :
+                @if (thread.messages[0].recipe) {
+                  <span>{{
+                    "pages.messages.history.sentRecipe" | translate
+                  }}</span>
+                }
+                @if (!thread.messages[0].recipe) {
+                  <span>{{ thread.messages[0].body }}</span>
+                }
+              </p>
+              <p>{{ prettyDate(thread.messages[0].updatedAt) }}</p>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
     }
     @if (threads.length === 0 && !loading) {
       <null-state>
@@ -57,26 +70,19 @@
         </ion-label>
       </null-state>
     }
-  </ion-list>
+    @if (threads.length && loading) {
+      <null-state>
+        <ion-spinner virtualSlot="header"></ion-spinner>
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.messages.loading" | translate }}</p>
+        </ion-label>
+      </null-state>
+    }
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="newThread()" color="primary">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  @if (isNotificationsCapable() && !isNotificationsEnabled()) {
-    <ion-footer class="ion-text-center ion-padding">
-      <b class="notificationWarning">{{
-        "pages.messages.warning" | translate
-      }}</b>
-      {{ "pages.messages.notificationsRequired" | translate }}<br />
-      <a
-        href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1"
-        target="_blank"
-      >
-        {{ "pages.messages.notificationsInstructions" | translate }}
-      </a>
-    </ion-footer>
-  }
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="newThread()" color="primary">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
 </ion-content>

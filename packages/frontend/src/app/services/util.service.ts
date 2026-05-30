@@ -192,6 +192,24 @@ export const RouteMap = {
     },
     path: "settings/export",
   },
+  JobsPage: {
+    getPath() {
+      return `/settings/jobs`;
+    },
+    path: "settings/jobs",
+  },
+  ToolsPage: {
+    getPath() {
+      return `/tools`;
+    },
+    path: "tools",
+  },
+  CookbookGeneratorPage: {
+    getPath() {
+      return `/tools/cookbook`;
+    },
+    path: "tools/cookbook",
+  },
   ImportPage: {
     getPath() {
       return `/settings/import`;
