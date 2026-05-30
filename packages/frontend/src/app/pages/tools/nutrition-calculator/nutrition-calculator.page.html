@@ -1,0 +1,335 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.nutritionCalculator.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    <ion-item lines="full" class="info-note">
+      <ion-icon
+        name="information-circle-outline"
+        slot="start"
+        color="medium"
+      ></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          {{ "pages.nutritionCalculator.basisNote" | translate }}
+        </ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label>{{
+          "pages.nutritionCalculator.recipes.title" | translate
+        }}</ion-label>
+        <ion-button size="small" (click)="addRecipe()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          {{ "pages.nutritionCalculator.addRecipe.title" | translate }}
+        </ion-button>
+        <ion-button size="small" (click)="addLabel()">
+          <ion-icon name="pricetag" slot="start"></ion-icon>
+          {{ "pages.nutritionCalculator.addLabel.title" | translate }}
+        </ion-button>
+      </ion-list-header>
+
+      @if (recipes.length) {
+        <ion-item lines="none" class="servings-help">
+          <ion-label class="ion-text-wrap">
+            <ion-text color="medium">
+              {{ "pages.nutritionCalculator.servings.help" | translate }}
+            </ion-text>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" class="servings-column-header">
+          <ion-label></ion-label>
+          <div slot="end" class="servings-column-label">
+            {{ "pages.nutritionCalculator.servings.label" | translate }}
+          </div>
+        </ion-item>
+      }
+
+      @if (loadingRecipes) {
+        <ion-item lines="none">
+          <ion-spinner slot="start"></ion-spinner>
+          <ion-label>{{
+            "pages.nutritionCalculator.recipes.loading" | translate
+          }}</ion-label>
+        </ion-item>
+      }
+
+      @if (recipes.length) {
+        @for (recipe of recipes; track recipe.id) {
+          <ion-item>
+            <ion-button
+              slot="start"
+              fill="clear"
+              color="danger"
+              (click)="removeRecipe(recipe)"
+              aria-label="{{
+                'pages.nutritionCalculator.recipes.remove' | translate
+              }}"
+            >
+              <ion-icon name="remove-circle" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-label class="ion-text-wrap">
+              <a
+                class="recipe-link"
+                [href]="recipeHref(recipe)"
+                (click)="openRecipe(recipe, $event)"
+                >{{ recipe.title }}</a
+              >
+              @if (recipe.servingSize) {
+                <p>
+                  {{
+                    "pages.nutritionCalculator.recipes.servingBasis"
+                      | translate: { servingSize: recipe.servingSize }
+                  }}
+                </p>
+              }
+              @if (recipeHasNoNutrition(recipe)) {
+                <div class="no-data-badge">
+                  <ion-badge color="warning">
+                    {{ "pages.nutritionCalculator.recipes.noData" | translate }}
+                  </ion-badge>
+                </div>
+              }
+            </ion-label>
+            <div class="servings-stepper" slot="end">
+              <ion-button
+                fill="clear"
+                size="small"
+                (click)="stepServings(recipe, -1)"
+                aria-label="{{
+                  'pages.nutritionCalculator.servings.decrease' | translate
+                }}"
+              >
+                <ion-icon name="remove" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-input
+                type="number"
+                inputmode="decimal"
+                step="any"
+                min="0"
+                [(ngModel)]="recipe.servings"
+                (ionBlur)="clampServings(recipe)"
+                aria-label="{{
+                  'pages.nutritionCalculator.servings.label' | translate
+                }}"
+              ></ion-input>
+              <ion-button
+                fill="clear"
+                size="small"
+                (click)="stepServings(recipe, 1)"
+                aria-label="{{
+                  'pages.nutritionCalculator.servings.increase' | translate
+                }}"
+              >
+                <ion-icon name="add" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+        }
+      } @else if (!loadingRecipes) {
+        <ion-item lines="none">
+          <ion-label class="ion-text-wrap">
+            {{ "pages.nutritionCalculator.recipes.empty" | translate }}
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+
+    @if (recipes.length) {
+      <div class="bulk-servings">
+        <ion-input
+          type="number"
+          inputmode="decimal"
+          step="any"
+          min="0"
+          fill="outline"
+          labelPlacement="stacked"
+          [(ngModel)]="bulkServings"
+          (ionInput)="onBulkServingsInput()"
+          (ionBlur)="clampBulkServings()"
+          label="{{ 'pages.nutritionCalculator.servings.setAll' | translate }}"
+        ></ion-input>
+      </div>
+    }
+
+    @if (hasResults()) {
+      <ion-segment
+        class="mode-segment"
+        [(ngModel)]="displayMode"
+        (ionChange)="refresh()"
+      >
+        <ion-segment-button value="total">
+          <ion-label>{{
+            "pages.nutritionCalculator.mode.total" | translate
+          }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="perServing">
+          <ion-label>{{
+            "pages.nutritionCalculator.mode.perServing" | translate
+          }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <div class="coverage">
+        <span class="coverage-chip">
+          {{
+            "pages.nutritionCalculator.coverage.nutrients"
+              | translate
+                : { present: nutrientsPresentCount, total: totalNutrientCount }
+          }}
+        </span>
+        <span class="coverage-chip">
+          {{
+            "pages.nutritionCalculator.coverage.recipes"
+              | translate
+                : { withData: recipesWithDataCount, total: recipes.length }
+          }}
+        </span>
+        <span class="coverage-chip">
+          {{
+            "pages.nutritionCalculator.coverage.servings"
+              | translate: { servings: totalServings }
+          }}
+        </span>
+      </div>
+
+      @if (macros) {
+        <div class="macro-card">
+          <p class="macro-title">
+            {{ "pages.nutritionCalculator.macros.title" | translate }}
+          </p>
+          <div class="macro-bar">
+            @if (macros.fatPercent > 0) {
+              <div
+                class="macro-segment macro-fat"
+                [style.width.%]="macros.fatPercent"
+              ></div>
+            }
+            @if (macros.carbsPercent > 0) {
+              <div
+                class="macro-segment macro-carbs"
+                [style.width.%]="macros.carbsPercent"
+              ></div>
+            }
+            @if (macros.proteinPercent > 0) {
+              <div
+                class="macro-segment macro-protein"
+                [style.width.%]="macros.proteinPercent"
+              ></div>
+            }
+          </div>
+          <div class="macro-legend">
+            <span class="macro-legend-item">
+              <span class="macro-swatch macro-fat"></span>
+              {{
+                "pages.nutritionCalculator.macros.fat"
+                  | translate: { percent: macros.fatPercent }
+              }}
+            </span>
+            <span class="macro-legend-item">
+              <span class="macro-swatch macro-carbs"></span>
+              {{
+                "pages.nutritionCalculator.macros.carbs"
+                  | translate: { percent: macros.carbsPercent }
+              }}
+            </span>
+            <span class="macro-legend-item">
+              <span class="macro-swatch macro-protein"></span>
+              {{
+                "pages.nutritionCalculator.macros.protein"
+                  | translate: { percent: macros.proteinPercent }
+              }}
+            </span>
+          </div>
+        </div>
+      }
+
+      <div class="nutrition-facts">
+        <div class="nutrition-facts-header">
+          <p class="nutrition-facts-title">
+            @if (displayMode === "total") {
+              {{ "pages.nutritionCalculator.facts.titleTotal" | translate }}
+            } @else {
+              {{
+                "pages.nutritionCalculator.facts.titlePerServing" | translate
+              }}
+            }
+          </p>
+          @if (displayMode === "perServing") {
+            <ion-input
+              class="divide-among"
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="0"
+              fill="outline"
+              labelPlacement="stacked"
+              [(ngModel)]="divideAmong"
+              (ionInput)="onDivideAmongInput()"
+              (ionBlur)="clampDivideAmong()"
+              label="{{
+                'pages.nutritionCalculator.facts.divideAmong' | translate
+              }}"
+            ></ion-input>
+            <p class="nutrition-facts-subtitle">
+              {{
+                "pages.nutritionCalculator.facts.perServingBasis"
+                  | translate: { servings: averageDivisor() }
+              }}
+            </p>
+          }
+          <p class="nutrition-facts-dv-header">
+            {{ "pages.nutritionCalculator.facts.dvHeader" | translate }}
+          </p>
+        </div>
+
+        @for (field of fields; track field.key) {
+          <div class="nutrition-fact-row" [class.indent]="field.indent">
+            <div class="nutrition-fact-line">
+              <span class="nutrition-fact-label">{{
+                "pages.recipeDetails." + field.key | translate
+              }}</span>
+              <span class="nutrition-fact-value">{{
+                "pages.recipeDetails.units." + field.unit
+                  | translate: { value: field.value }
+              }}</span>
+              <span class="nutrition-fact-dv">
+                @if (field.dvPercent !== null) {
+                  {{
+                    "pages.nutritionCalculator.facts.dvValue"
+                      | translate: { percent: field.dvPercent }
+                  }}
+                }
+              </span>
+            </div>
+            @if (field.missingCount > 0) {
+              <ion-note class="nutrition-fact-missing">
+                {{
+                  "pages.nutritionCalculator.facts.missing"
+                    | translate
+                      : {
+                          missing: field.missingCount,
+                          total: recipes.length,
+                        }
+                }}
+              </ion-note>
+            }
+          </div>
+        }
+
+        <p class="nutrition-facts-footnote">
+          {{ "pages.nutritionCalculator.facts.dvFootnote" | translate }}
+        </p>
+      </div>
+    }
+  </div>
+</ion-content>

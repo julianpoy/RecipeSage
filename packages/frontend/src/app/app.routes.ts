@@ -272,6 +272,15 @@ export const appRoutes: Routes = [
     title: "pages.cookbook.tabTitle",
   },
   {
+    path: RouteMap.NutritionCalculatorPage.path,
+    loadComponent: () =>
+      import("./pages/tools/nutrition-calculator/nutrition-calculator.page").then(
+        (m) => m.NutritionCalculatorPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.nutritionCalculator.tabTitle",
+  },
+  {
     path: RouteMap.ImportPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import/import.page").then(

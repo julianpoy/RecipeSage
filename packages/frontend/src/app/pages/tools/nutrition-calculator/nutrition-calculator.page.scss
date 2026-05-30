@@ -1,0 +1,228 @@
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+.servings-help {
+  font-size: 0.8rem;
+
+  ion-label {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}
+
+.recipe-link {
+  color: var(--ion-color-primary, #3880ff);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.servings-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+
+  ion-input {
+    max-width: 56px;
+    text-align: center;
+    --padding-start: 4px;
+    --padding-end: 4px;
+  }
+
+  ion-button {
+    margin: 0;
+  }
+}
+
+.servings-column-header {
+  --min-height: 24px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+.servings-column-label {
+  width: 140px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.bulk-servings {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px 0;
+
+  ion-input {
+    max-width: 220px;
+  }
+}
+
+.mode-segment {
+  margin-top: 20px;
+}
+
+.coverage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 16px 0;
+}
+
+.coverage-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+  border: 1px solid var(--ion-color-step-200, #cccccc);
+  border-radius: 12px;
+}
+
+.macro-card {
+  margin: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 8px;
+
+  .macro-title {
+    margin: 0 0 8px 0;
+    font-weight: 600;
+  }
+
+  .macro-bar {
+    display: flex;
+    width: 100%;
+    height: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--ion-color-step-100, #f0f0f0);
+  }
+
+  .macro-segment {
+    height: 100%;
+  }
+
+  .macro-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+
+  .macro-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .macro-swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+}
+
+.macro-fat {
+  background: var(--ion-color-warning, #ffc409);
+}
+
+.macro-carbs {
+  background: var(--ion-color-primary, #3880ff);
+}
+
+.macro-protein {
+  background: var(--ion-color-success, #2dd36f);
+}
+
+.nutrition-facts {
+  margin: 16px;
+  padding: 12px 16px;
+  border: 2px solid var(--ion-text-color, #000);
+  border-radius: 4px;
+
+  .nutrition-facts-header {
+    border-bottom: 4px solid var(--ion-text-color, #000);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  .nutrition-facts-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .divide-among {
+    max-width: 160px;
+    margin-top: 18px;
+  }
+
+  .nutrition-facts-subtitle {
+    margin: 6px 0 0 0;
+    font-size: 0.8rem;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+
+  .nutrition-facts-dv-header {
+    margin: 8px 0 0 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .nutrition-fact-row {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--ion-color-step-150, #e0e0e0);
+
+    &.indent {
+      padding-left: 20px;
+    }
+  }
+
+  .nutrition-fact-line {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .nutrition-fact-label {
+    flex: 1;
+  }
+
+  .nutrition-fact-value {
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .nutrition-fact-dv {
+    flex: 0 0 52px;
+    text-align: right;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .nutrition-fact-missing {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.75rem;
+  }
+
+  .nutrition-facts-footnote {
+    margin: 10px 0 0 0;
+    font-size: 0.7rem;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+}
+
+.no-data-badge {
+  margin-top: 4px;
+}

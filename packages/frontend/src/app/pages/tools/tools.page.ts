@@ -16,7 +16,7 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
-import { book, chatboxEllipses } from "ionicons/icons";
+import { book, chatboxEllipses, fitness } from "ionicons/icons";
 
 @Component({
   standalone: true,
@@ -41,11 +41,15 @@ export class ToolsPage {
   private navCtrl = inject(NavController);
 
   constructor() {
-    addIcons({ book, chatboxEllipses });
+    addIcons({ book, chatboxEllipses, fitness });
   }
 
   goToCookbookGenerator() {
     this.navCtrl.navigateForward(RouteMap.CookbookGeneratorPage.getPath());
+  }
+
+  goToNutritionCalculator() {
+    this.navCtrl.navigateForward(RouteMap.NutritionCalculatorPage.getPath());
   }
 
   goToAssistant() {

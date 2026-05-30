@@ -27,6 +27,32 @@ describe("updateRecipe", () => {
       expect(updatedRecipe?.title).toEqual("marmalade");
     });
 
+    test("clears a populated nutrition field when set to null", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          nutritionCalories: 250,
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        ...recipeFactory(user.id),
+        id: recipe.id,
+        labelIds: [],
+        imageIds: [],
+        folder: "main",
+        nutritionCalories: null,
+      });
+
+      const updatedRecipe = await prisma.recipe.findUnique({
+        where: { id: recipe.id },
+      });
+      expect(updatedRecipe?.nutritionCalories).toBeNull();
+    });
+
     test("attaches an image to the recipe", async ({ trpc, user }) => {
       const image = await prisma.image.create({
         data: {

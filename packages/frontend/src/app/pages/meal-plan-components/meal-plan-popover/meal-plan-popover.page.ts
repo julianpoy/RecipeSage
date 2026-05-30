@@ -33,6 +33,7 @@ import {
   cart,
   copy,
   cut,
+  nutrition,
   pencil,
   pin,
   print,
@@ -59,7 +60,7 @@ import { addIcons } from "ionicons";
 })
 export class MealPlanPopoverPage {
   constructor() {
-    addIcons({ cart, copy, cut, pencil, pin, print, share, trash });
+    addIcons({ cart, copy, cut, nutrition, pencil, pin, print, share, trash });
   }
 
   private popoverCtrl = inject(PopoverController);
@@ -141,6 +142,12 @@ export class MealPlanPopoverPage {
   bulkAddToShoppingList() {
     this.popoverCtrl.dismiss({
       bulkAddToShoppingList: true,
+    });
+  }
+
+  calculateNutrition() {
+    this.popoverCtrl.dismiss({
+      calculateNutrition: true,
     });
   }
 
