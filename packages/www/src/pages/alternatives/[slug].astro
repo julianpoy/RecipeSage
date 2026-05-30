@@ -17,8 +17,8 @@ const competitor = competitors[slug];
 const locale = DEFAULT_LOCALE;
 const t = makeTranslator(locale);
 
-const title = `The Free, Open Source ${competitor.name} Alternative - RecipeSage`;
-const description = competitor.subtitle;
+const title = `${competitor.name} Alternative - Free & Open Source | RecipeSage`;
+const description = competitor.seoDescription ?? competitor.subtitle;
 
 const homeURL = new URL("/", Astro.site).toString();
 const hubURL = new URL("/alternatives/", Astro.site).toString();
@@ -49,6 +49,20 @@ const structuredData = {
       "name": "RecipeSage",
       "publisher": { "@id": "https://recipesage.com/#organization" },
       "inLanguage": "en-US",
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "RecipeSage",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": ["Web", "iOS", "Android"],
+      "url": homeURL,
+      "inLanguage": "en-US",
+      "description": t("pages.welcome.subtitle"),
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+      },
     },
     {
       "@type": "BreadcrumbList",

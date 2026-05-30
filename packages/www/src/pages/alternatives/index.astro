@@ -10,7 +10,7 @@ const t = makeTranslator(locale);
 const title =
   "Free, Open Source Alternatives to Paid Recipe Apps - RecipeSage";
 const description =
-  "Side-by-side comparisons between RecipeSage and Paprika, Plan to Eat, CopyMeThat, Pepperplate, BigOven, and Samsung Food.";
+  "Side-by-side comparisons of RecipeSage with Paprika, AnyList, Mela, CopyMeThat, BigOven, Samsung Food, Plan to Eat, and more. Free and open source.";
 
 const breadcrumbs = [
   { name: "RecipeSage", url: "/" },
@@ -44,7 +44,7 @@ const breadcrumbs = [
         {
           competitorList.map((competitor) => (
             <li>
-              <a href={`/alternatives/${competitor.slug}`}>
+              <a href={`/alternatives/${competitor.slug}/`}>
                 <strong>RecipeSage vs {competitor.name}</strong>
                 <span>{competitor.cardSummary}</span>
               </a>

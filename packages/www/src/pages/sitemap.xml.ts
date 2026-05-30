@@ -9,8 +9,8 @@ import {
 const LOCALIZED_PAGES = ["/", "/about", "/pricing", "/download"];
 
 const EN_ONLY_PAGES = [
-  "/alternatives",
-  ...competitorSlugs.map((slug) => `/alternatives/${slug}`),
+  "/alternatives/",
+  ...competitorSlugs.map((slug) => `/alternatives/${slug}/`),
 ];
 
 const priorityFor = (path: string, loc: string) => {

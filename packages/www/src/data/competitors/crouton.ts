@@ -8,6 +8,8 @@ export const crouton: CompetitorData = {
     "The free, open source Crouton alternative for Android, Windows, Linux, and the web",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, so the whole household can use it even if not everyone is on Apple.",
+  seoDescription:
+    "A Crouton alternative that works beyond Apple devices. RecipeSage is free and open source, with recipe import, meal planning, and sync on every device.",
   cardSummary:
     "Apple-only recipe app with a three-tier pricing model. AI photo import and the recipe-blog Discover feed are paywalled behind a $14.99/year subscription.",
   intro: [
@@ -102,7 +104,8 @@ export const crouton: CompetitorData = {
     {
       feature: "Built-in nutrition tracking (macros, vitamins, minerals)",
       recipesage: true,
-      competitor: true,
+      competitor: "partial",
+      note: "Crouton displays nutrition values pulled from the imported source but has no nutrition database, macro and micronutrient computation, or scaling-aware recalculation.",
     },
     {
       feature: "RSS-style recipe blog feed reader",
@@ -143,6 +146,18 @@ export const crouton: CompetitorData = {
       competitor: true,
       note: "Crouton exports a proprietary .crumb file and PDF. RecipeSage supports well-recognized standardized formats including JSON-LD.",
     },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: "partial",
+      note: "RecipeSage's public profile, link sharing, and website embeds are free. Crouton's shareable recipe links require the paid Discover tier, and it has no website embed.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -177,6 +192,10 @@ export const crouton: CompetitorData = {
       title: "Open source and self-hostable",
       body: "RecipeSage's code is on GitHub under the AGPL and you can run it on your own server. Crouton is closed source and runs on Apple's iCloud infrastructure.",
     },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Crouton has no built-in cookbook generator.",
+    },
   ],
   competitorWins: [
     {
@@ -200,7 +219,7 @@ export const crouton: CompetitorData = {
         body: "Open Crouton's settings.",
       },
       {
-        body: "Click Export Recipes.",
+        body: "Use Crouton's export option to save your recipes (the exact label varies by Crouton version).",
       },
       {
         body: "Select a destination to save the .zip archive.",
@@ -225,6 +244,10 @@ export const crouton: CompetitorData = {
     {
       q: "Can I use both Crouton and RecipeSage at the same time?",
       a: "Sure. Just keep in mind that one of the best features about RecipeSage is that all of your recipes are shared between all of your devices.",
+    },
+    {
+      q: "Is there a free alternative to Crouton?",
+      a: "Yes. RecipeSage is a free, open source alternative to Crouton, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [
