@@ -259,6 +259,7 @@ export class MealPlanPage {
     if (data?.delete) this.bulkDelete();
     if (data?.pinRecipes) this.bulkPinRecipes();
     if (data?.bulkAddToShoppingList) this.bulkAddToShoppingList();
+    if (data?.calculateNutrition) this.calculateDaysNutrition();
   }
 
   async itemClicked(mealItem: MealPlanItemSummary) {
@@ -525,6 +526,78 @@ export class MealPlanPage {
     });
 
     modal.present();
+  }
+
+  async calculateDaysNutrition() {
+    if (this.getSelectedMealItemCount() === 0) {
+      this.emptyDaysSelectedAlert();
+      return;
+    }
+
+    const selectedItems = this.selectedDays
+      .map((selectedDay) => this.getItemsOnDay(selectedDay))
+      .flat();
+
+    const recipeIds: string[] = [];
+    let manualEntryCount = 0;
+    for (const item of selectedItems) {
+      if (item.recipe) {
+        recipeIds.push(item.recipe.id);
+      } else {
+        manualEntryCount += 1;
+      }
+    }
+
+    if (recipeIds.length === 0) {
+      const header = await this.translate
+        .get("pages.mealPlan.modal.noRecipesNutrition.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.mealPlan.modal.noRecipesNutrition.message")
+        .toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
+
+      const noRecipesAlert = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [{ text: okay }],
+      });
+      await noRecipesAlert.present();
+      return;
+    }
+
+    if (manualEntryCount > 0) {
+      const header = await this.translate
+        .get("pages.mealPlan.modal.manualEntriesNutrition.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.mealPlan.modal.manualEntriesNutrition.message")
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const proceed = await this.translate.get("generic.confirm").toPromise();
+
+      const alert = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          { text: cancel, role: "cancel" },
+          {
+            text: proceed,
+            handler: () => this.launchNutritionCalculator(recipeIds),
+          },
+        ],
+      });
+      await alert.present();
+      return;
+    }
+
+    this.launchNutritionCalculator(recipeIds);
+  }
+
+  private launchNutritionCalculator(recipeIds: string[]) {
+    this.navCtrl.navigateForward(RouteMap.NutritionCalculatorPage.getPath(), {
+      state: { recipeIds },
+    });
   }
 
   async dayClicked(date: Date) {

@@ -17,8 +17,8 @@ import { addIcons } from "ionicons";
 import { RouteMap } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
-import { CookbookAddRecipeModalComponent } from "./add-recipe-modal/add-recipe-modal.component";
-import { CookbookAddLabelModalComponent } from "./add-label-modal/add-label-modal.component";
+import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
+import { SelectLabelModalComponent } from "../../../components/select-label-modal/select-label-modal.component";
 import {
   IonHeader,
   IonToolbar,
@@ -108,7 +108,7 @@ export class CookbookGeneratorPage {
 
   async addRecipe() {
     const modal = await this.modalCtrl.create({
-      component: CookbookAddRecipeModalComponent,
+      component: SelectRecipeModalComponent,
     });
     await modal.present();
     const { data } = await modal.onDidDismiss<RecipeSummary>();
@@ -118,7 +118,7 @@ export class CookbookGeneratorPage {
 
   async addLabel() {
     const modal = await this.modalCtrl.create({
-      component: CookbookAddLabelModalComponent,
+      component: SelectLabelModalComponent,
     });
     await modal.present();
     const { data } = await modal.onDidDismiss<LabelSummary>();

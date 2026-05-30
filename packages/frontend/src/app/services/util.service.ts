@@ -210,6 +210,12 @@ export const RouteMap = {
     },
     path: "tools/cookbook",
   },
+  NutritionCalculatorPage: {
+    getPath() {
+      return `/tools/nutrition`;
+    },
+    path: "tools/nutrition",
+  },
   ImportPage: {
     getPath() {
       return `/settings/import`;

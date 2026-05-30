@@ -9,17 +9,17 @@ import {
   IonIcon,
   IonContent,
 } from "@ionic/angular/standalone";
-import type { RecipeSummary } from "@recipesage/prisma";
+import type { LabelSummary } from "@recipesage/prisma";
 import { close } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
-import { SHARED_UI_IMPORTS } from "../../../../providers/shared-ui.provider";
-import { SelectRecipeComponent } from "../../../../components/select-recipe/select-recipe.component";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { SelectLabelComponent } from "../select-label/select-label.component";
 
 @Component({
   standalone: true,
-  selector: "page-cookbook-add-recipe-modal",
-  templateUrl: "add-recipe-modal.component.html",
+  selector: "select-label-modal",
+  templateUrl: "select-label-modal.component.html",
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,
@@ -29,18 +29,18 @@ import { SelectRecipeComponent } from "../../../../components/select-recipe/sele
     IonButton,
     IonIcon,
     IonContent,
-    SelectRecipeComponent,
+    SelectLabelComponent,
   ],
 })
-export class CookbookAddRecipeModalComponent {
+export class SelectLabelModalComponent {
   private modalCtrl = inject(ModalController);
 
   constructor() {
     addIcons({ close });
   }
 
-  onSelect(recipe: RecipeSummary) {
-    this.modalCtrl.dismiss(recipe);
+  onSelect(label: LabelSummary) {
+    this.modalCtrl.dismiss(label);
   }
 
   cancel() {

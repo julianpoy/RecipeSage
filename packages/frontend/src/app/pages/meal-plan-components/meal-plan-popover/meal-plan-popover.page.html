@@ -70,6 +70,15 @@
     {{ "pages.mealPlanPopover.actions.addToShoppingList" | translate }}
   </ion-button>
   <ion-button
+    (click)="calculateNutrition()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="nutrition" slot="start"></ion-icon>
+    {{ "pages.mealPlanPopover.actions.calculateNutrition" | translate }}
+  </ion-button>
+  <ion-button
     (click)="copySelected()"
     [disabled]="preferences[preferenceKeys.ViewType] === viewTypeOptions.List"
     expand="block"
