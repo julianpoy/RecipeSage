@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.jobs.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="page-wrapper">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>{{ "pages.jobs.subtitle" | translate }}</p>
+      </ion-label>
+    </ion-item>
+
+    @if (jobs.length) {
+      <ion-list>
+        @for (job of jobs.slice(0, showJobs); track job.id) {
+          <ion-item
+            (click)="downloadJob(job)"
+            target="_blank"
+            [detail]="isDownloadable(job)"
+            detailIcon="cloud-download"
+            [button]="isDownloadable(job)"
+          >
+            <ion-icon [name]="getJobIcon(job)" slot="start" />
+            <ion-label class="ion-text-wrap">
+              {{ getJobTitleI18n(job) | translate }}
+              <p>
+                <span>
+                  {{
+                    "pages.import.jobs.job.created"
+                      | translate
+                        : { timestamp: formatItemCreationDate(job.createdAt) }
+                  }}
+                </span>
+                <br />
+                @if (job.status === "CREATE") {
+                  <ion-text color="medium">
+                    {{ "pages.import.status.create" | translate }}
+                  </ion-text>
+                }
+                @if (job.status === "RUN") {
+                  <ion-text color="primary">
+                    {{ "pages.jobs.status.run" | translate }}
+                  </ion-text>
+                }
+                @if (job.status === "FAIL") {
+                  <ion-text color="danger">
+                    {{ "pages.jobs.status.fail" | translate }}
+                    {{ getJobFailureI18n(job) | translate }}
+                  </ion-text>
+                }
+                @if (job.status === "SUCCESS") {
+                  <ion-text color="success">
+                    {{ "pages.jobs.status.success" | translate }}
+                  </ion-text>
+                }
+                @if (job.status === "RUN") {
+                  <ion-progress-bar
+                    type="determinate"
+                    [value]="(job.progress || 0) * 0.01"
+                  ></ion-progress-bar>
+                }
+              </p>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+      @if (jobs.length > showJobs) {
+        <ion-item lines="none">
+          <ion-button (click)="showMoreJobs()" fill="clear">
+            {{ "generic.showMore" | translate }}
+          </ion-button>
+        </ion-item>
+      }
+    } @else {
+      <null-state>
+        <ion-icon name="list" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.jobs.empty" | translate }}</p>
+        </ion-label>
+      </null-state>
+    }
+  </div>
+</ion-content>

@@ -157,16 +157,14 @@
             }}</ion-badge>
           }
         </li>
-        @if (enableAssistant) {
-          <li>
-            {{ "pages.contribute.bonus.feature.3" | translate }} &nbsp;
-            @if (capabilitiesService.capabilities.assistantMoreMessages) {
-              <ion-badge slot="end">{{
-                "pages.contribute.bonus.enabled" | translate
-              }}</ion-badge>
-            }
-          </li>
-        }
+        <li>
+          {{ "pages.contribute.bonus.feature.3" | translate }} &nbsp;
+          @if (capabilitiesService.capabilities.assistantMoreMessages) {
+            <ion-badge slot="end">{{
+              "pages.contribute.bonus.enabled" | translate
+            }}</ion-badge>
+          }
+        </li>
         <li>
           {{ "pages.contribute.bonus.feature.4" | translate }} &nbsp;
           @if (capabilitiesService.capabilities.moreUsageCredits) {

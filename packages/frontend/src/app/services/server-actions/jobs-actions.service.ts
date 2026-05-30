@@ -50,12 +50,33 @@ export class JobsActionsService extends ActionsBase {
     );
   }
 
+  startCookbookJob(
+    input: RouterInputs["jobs"]["startCookbookJob"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["jobs"]["startCookbookJob"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.jobs.startCookbookJob.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  /** @deprecated Use getJobDownloadUrlById instead */
   getExportJobDownloadUrlById(
     input: RouterInputs["jobs"]["getExportJobDownloadUrlById"],
     errorHandlers?: ErrorHandlers,
   ): Promise<RouterOutputs["jobs"]["getExportJobDownloadUrlById"] | undefined> {
     return this.passThrough(
       () => this.trpc.jobs.getExportJobDownloadUrlById.query(input),
+      errorHandlers,
+    );
+  }
+
+  getJobDownloadUrlById(
+    input: RouterInputs["jobs"]["getJobDownloadUrlById"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["jobs"]["getJobDownloadUrlById"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.jobs.getJobDownloadUrlById.query(input),
       errorHandlers,
     );
   }

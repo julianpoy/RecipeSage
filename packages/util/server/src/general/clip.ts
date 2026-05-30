@@ -136,7 +136,7 @@ export const clipUrl = async (
 
   const response = await (async () => {
     const timeout = parseInt(
-      process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "10000",
+      process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "30000",
     );
 
     let _url = url;

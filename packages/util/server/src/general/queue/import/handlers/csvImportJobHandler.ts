@@ -1,5 +1,5 @@
-import type { JobSummary } from "@recipesage/prisma";
-import { type JobMeta } from "@recipesage/prisma";
+import type { ImportJobSummary } from "@recipesage/prisma";
+
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import {
@@ -15,10 +15,10 @@ import type { JobQueueItem } from "../../JobQueueItem";
 import { pipeline } from "stream/promises";
 
 export async function csvImportJobHandler(
-  job: JobSummary,
+  job: ImportJobSummary,
   queueItem: JobQueueItem,
 ): Promise<void> {
-  const jobMeta = job.meta as JobMeta;
+  const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
 
   if (!queueItem.storageKey) {

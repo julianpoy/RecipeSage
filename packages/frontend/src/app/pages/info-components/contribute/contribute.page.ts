@@ -6,10 +6,6 @@ import { IS_SELFHOST } from "../../../../environments/environment";
 
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { CapabilitiesService } from "../../../services/capabilities.service";
-import {
-  FeatureFlagKeys,
-  FeatureFlagService,
-} from "../../../services/feature-flag.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { TosClickwrapAgreementComponent } from "../../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
 import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.component";
@@ -55,7 +51,6 @@ const BILLING_PORTAL_URL =
 export class ContributePage {
   capabilitiesService = inject(CapabilitiesService);
   private serverActionsService = inject(ServerActionsService);
-  private featureFlagService = inject(FeatureFlagService);
   private translate = inject(TranslateService);
   private utilService = inject(UtilService);
   private toastCtrl = inject(ToastController);
@@ -68,9 +63,6 @@ export class ContributePage {
 
   amount?: number;
   customAmount?: string;
-
-  enableAssistant =
-    this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
 
   constructor() {
     addIcons({ arrowForward });

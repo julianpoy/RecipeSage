@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { JobSummary } from "@recipesage/prisma";
-import { type JobMeta } from "@recipesage/prisma";
+import type { ImportJobSummary } from "@recipesage/prisma";
+
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { userHasCapability } from "../../../../capabilities/index";
@@ -96,10 +96,10 @@ async function findFilesByRegex(
 }
 
 export async function lcbImportJobHandler(
-  job: JobSummary,
+  job: ImportJobSummary,
   queueItem: JobQueueItem,
 ): Promise<void> {
-  const jobMeta = job.meta as JobMeta;
+  const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
 
   if (!queueItem.storageKey) {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { JobSummary } from "@recipesage/prisma";
-import { type JobMeta } from "@recipesage/prisma";
+import type { ImportJobSummary } from "@recipesage/prisma";
+
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { cleanLabelTitle } from "@recipesage/util/shared";
@@ -15,10 +15,10 @@ import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 
 export async function cookmateImportJobHandler(
-  job: JobSummary,
+  job: ImportJobSummary,
   queueItem: JobQueueItem,
 ): Promise<void> {
-  const jobMeta = job.meta as JobMeta;
+  const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
 
   if (!queueItem.storageKey) {

@@ -27,3 +27,8 @@ ion-list-header {
 .delete-recipe:hover {
   color: var(--ion-color-danger);
 }
+
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}

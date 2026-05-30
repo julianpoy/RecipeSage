@@ -61,14 +61,12 @@ import {
   book,
   calendar,
   cart,
-  chatboxEllipses,
-  chatbubbles,
   cloudDownload,
+  construct,
   heart,
   helpBuoy,
   leaf,
   logIn,
-  mail,
   people,
   pricetag,
   settings,
@@ -143,6 +141,10 @@ export class AppComponent {
   inboxCount?: number;
   friendRequestCount?: number;
 
+  get peopleBadgeCount(): number {
+    return (this.inboxCount || 0) + (this.friendRequestCount || 0);
+  }
+
   version: number = (window as any).version;
 
   unsupportedBrowser: boolean =
@@ -162,14 +164,12 @@ export class AppComponent {
       book,
       calendar,
       cart,
-      chatboxEllipses,
-      chatbubbles,
       cloudDownload,
+      construct,
       heart,
       helpBuoy,
       leaf,
       logIn,
-      mail,
       people,
       pricetag,
       settings,
@@ -349,13 +349,6 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
-    const assistant = await this.translate
-      .get("pages.app.nav.assistant")
-      .toPromise();
-    const messages = await this.translate
-      .get("pages.app.nav.messages")
-      .toPromise();
-    const inbox = await this.translate.get("pages.app.nav.inbox").toPromise();
     const newrecipe = await this.translate
       .get("pages.app.nav.newrecipe")
       .toPromise();
@@ -363,14 +356,13 @@ export class AppComponent {
       .get("pages.app.nav.shopping")
       .toPromise();
     const meals = await this.translate.get("pages.app.nav.meals").toPromise();
+    const tools = await this.translate.get("pages.app.nav.tools").toPromise();
     const settings = await this.translate
       .get("pages.app.nav.settings")
       .toPromise();
 
     const enableInstallInstructions =
       this.featureFlagService.flags[FeatureFlagKeys.EnableInstallInstructions];
-    const enableAssistant =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
     const enableContribution =
       this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
     const loggedOutPages = [
@@ -443,6 +435,15 @@ export class AppComponent {
       [
         true,
         {
+          id: "newrecipe",
+          title: newrecipe,
+          icon: "add",
+          url: RouteMap.EditRecipePage.getPath("new"),
+        },
+      ],
+      [
+        true,
+        {
           id: "labels",
           title: labels,
           icon: "pricetag",
@@ -456,42 +457,6 @@ export class AppComponent {
           title: people,
           icon: "people",
           url: RouteMap.PeoplePage.getPath(),
-        },
-      ],
-      [
-        enableAssistant,
-        {
-          id: "assistant",
-          title: assistant,
-          icon: "chatbox-ellipses",
-          url: RouteMap.AssistantPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "messages",
-          title: messages,
-          icon: "chatbubbles",
-          url: RouteMap.MessagesPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "inbox",
-          title: inbox,
-          icon: "mail",
-          url: RouteMap.HomePage.getPath("inbox"),
-        },
-      ],
-      [
-        true,
-        {
-          id: "newrecipe",
-          title: newrecipe,
-          icon: "add",
-          url: RouteMap.EditRecipePage.getPath("new"),
         },
       ],
       [
@@ -510,6 +475,15 @@ export class AppComponent {
           title: meals,
           icon: "calendar",
           url: RouteMap.MealPlansPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
+          id: "tools",
+          title: tools,
+          icon: "construct",
+          url: RouteMap.ToolsPage.getPath(),
         },
       ],
       [

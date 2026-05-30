@@ -1,3 +1,8 @@
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
 .error {
   color: var(--ion-color-danger);
 }

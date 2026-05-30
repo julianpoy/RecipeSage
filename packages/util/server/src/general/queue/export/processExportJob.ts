@@ -1,5 +1,5 @@
 import type {
-  JobMeta,
+  ExportJobMeta,
   JobSummary,
   Prisma,
   RecipeSummary,
@@ -34,13 +34,11 @@ export const processExportJob = async (
   job: JobSummary,
   _jobQueueItem: JobQueueItem,
 ) => {
-  const jobMeta = job.meta;
-
-  if (!jobMeta || job.type !== JobType.EXPORT) {
-    throw new Error(
-      "Export processor received a non-export job or job without meta",
-    );
+  if (job.type !== JobType.EXPORT) {
+    throw new Error("Export processor received a non-export job");
   }
+
+  const jobMeta = job.meta;
 
   const whereClause: Prisma.RecipeWhereInput = {
     userId: job.userId,
@@ -112,7 +110,7 @@ export const processExportJob = async (
         exportStorageBucket: storageRecord.bucket,
         exportStorageKey: storageRecord.key,
         exportDownloadUrl: storageRecord.location,
-      } satisfies JobMeta,
+      } satisfies ExportJobMeta,
     },
   });
 };

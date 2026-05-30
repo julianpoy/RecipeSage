@@ -66,6 +66,7 @@ import {
   fitness,
   homeOutline,
   languageOutline,
+  list,
   logOut,
   person,
   sync,
@@ -145,6 +146,7 @@ export class SettingsPage {
       fitness,
       homeOutline,
       languageOutline,
+      list,
       logOut,
       person,
       sync,
@@ -474,6 +476,10 @@ export class SettingsPage {
 
   goToExport() {
     this.navCtrl.navigateForward(RouteMap.ExportPage.getPath());
+  }
+
+  goToJobs() {
+    this.navCtrl.navigateForward(RouteMap.JobsPage.getPath());
   }
 
   goToAccount() {

@@ -38,8 +38,16 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
+  IonBadge,
 } from "@ionic/angular/standalone";
-import { add, people, personCircle, search } from "ionicons/icons";
+import {
+  add,
+  chatbubbles,
+  mail,
+  people,
+  personCircle,
+  search,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -67,11 +75,12 @@ import { addIcons } from "ionicons";
     IonFab,
     IonFabButton,
     IonSpinner,
+    IonBadge,
   ],
 })
 export class PeoplePage {
   constructor() {
-    addIcons({ add, people, personCircle, search });
+    addIcons({ add, chatbubbles, mail, people, personCircle, search });
   }
 
   navCtrl = inject(NavController);
@@ -90,6 +99,7 @@ export class PeoplePage {
   friendships?: any;
   accountInfo?: User;
   myProfile?: UserProfile;
+  inboxCount?: number;
 
   ionViewWillEnter() {
     this.load();
@@ -111,6 +121,22 @@ export class PeoplePage {
       this.accountInfo = accountInfo.data;
       this.myProfile = myProfile.data;
     });
+
+    this.loadInboxCount();
+  }
+
+  async loadInboxCount() {
+    const response = await this.recipeService.count({ folder: "inbox" });
+    if (!response.success) return;
+    this.inboxCount = response.data.count;
+  }
+
+  goToMessages() {
+    this.navCtrl.navigateForward(RouteMap.MessagesPage.getPath());
+  }
+
+  goToInbox() {
+    this.navCtrl.navigateForward(RouteMap.HomePage.getPath("inbox"));
   }
 
   async findProfile() {

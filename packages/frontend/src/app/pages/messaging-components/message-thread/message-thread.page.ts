@@ -249,8 +249,9 @@ export class MessageThreadPage {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
-  onMessageKeyUp(event: KeyboardEvent) {
-    if (!(event.key === "10" || event.key === "13")) return;
+  onMessageKeyDown(event: KeyboardEvent) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
 
     if (event.ctrlKey || event.shiftKey || event.altKey) {
       this.pendingMessage += "\n";

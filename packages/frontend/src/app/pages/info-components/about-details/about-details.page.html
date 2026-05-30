@@ -9,30 +9,32 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p>
-    <b> {{ "pages.aboutDetails.1.title" | translate }} </b>
-  </p>
-  <p>{{ "pages.aboutDetails.1.1" | translate }}</p>
-  <p>{{ "pages.aboutDetails.1.2" | translate }}</p>
+  <div class="page-wrapper">
+    <p>
+      <b> {{ "pages.aboutDetails.1.title" | translate }} </b>
+    </p>
+    <p>{{ "pages.aboutDetails.1.1" | translate }}</p>
+    <p>{{ "pages.aboutDetails.1.2" | translate }}</p>
 
-  <br />
-  <p>
-    <b> {{ "pages.aboutDetails.2.title" | translate }} </b>
-  </p>
-  <p>{{ "pages.aboutDetails.2.1" | translate }}</p>
-  <p>{{ "pages.aboutDetails.2.2" | translate }}</p>
-  <p>
-    {{ "pages.aboutDetails.2.3" | translate }}
+    <br />
+    <p>
+      <b> {{ "pages.aboutDetails.2.title" | translate }} </b>
+    </p>
+    <p>{{ "pages.aboutDetails.2.1" | translate }}</p>
+    <p>{{ "pages.aboutDetails.2.2" | translate }}</p>
+    <p>
+      {{ "pages.aboutDetails.2.3" | translate }}
 
-    <a (click)="$event.preventDefault(); goToDonate()" href="">
-      {{ "pages.aboutDetails.contribute" | translate }}
-    </a>
-  </p>
+      <a (click)="$event.preventDefault(); goToDonate()" href="">
+        {{ "pages.aboutDetails.contribute" | translate }}
+      </a>
+    </p>
 
-  <br />
+    <br />
 
-  <p>
-    <b> {{ "pages.aboutDetails.social" | translate }} </b>
-  </p>
-  <social-links></social-links>
+    <p>
+      <b> {{ "pages.aboutDetails.social" | translate }} </b>
+    </p>
+    <social-links></social-links>
+  </div>
 </ion-content>

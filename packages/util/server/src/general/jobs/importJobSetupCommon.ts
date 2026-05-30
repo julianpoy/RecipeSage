@@ -1,9 +1,9 @@
 import { JobStatus, JobType } from "@recipesage/prisma";
-import { prisma, type JobMeta } from "@recipesage/prisma";
+import { prisma, type ImportJobMeta } from "@recipesage/prisma";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export async function importJobSetupCommon(args: {
-  importType: JobMeta["importType"];
+  importType: ImportJobMeta["importType"];
   labels: string[];
   userId: string;
   excludeImages?: boolean;
@@ -24,7 +24,7 @@ export async function importJobSetupCommon(args: {
           includeStockRecipes: args.includeStockRecipes,
           includeTechniques: args.includeTechniques,
         },
-      } satisfies JobMeta,
+      } satisfies ImportJobMeta,
     },
   });
 

@@ -5,11 +5,11 @@ import {
   jobSummary,
   prisma,
   prismaJobSummaryToJobSummary,
-  type JobMeta,
 } from "@recipesage/prisma";
 import { JobStatus, JobType } from "@recipesage/prisma";
 import { processImportJob } from "./import/processImportJob";
 import { processExportJob } from "./export/processExportJob";
+import { processCookbookJob } from "./cookbook/processCookbookJob";
 import {
   jobErrorsToReport,
   jobErrorToResultCode,
@@ -34,13 +34,6 @@ export const processWorkerJob = async (
     );
   }
 
-  console.log(
-    `Starting processing job ${args.id} with ${verify.type}.${
-      (verify.meta as JobMeta)?.importType ||
-      (verify.meta as JobMeta)?.exportType
-    }`,
-  );
-
   const _job = await prisma.job.update({
     where: {
       id: args.data.jobId,
@@ -52,6 +45,14 @@ export const processWorkerJob = async (
     ...jobSummary,
   });
   const job = prismaJobSummaryToJobSummary(_job);
+
+  const subType =
+    job.type === JobType.IMPORT
+      ? job.meta.importType
+      : job.type === JobType.EXPORT
+        ? job.meta.exportType
+        : undefined;
+  console.log(`Starting processing job ${args.id} with ${job.type}.${subType}`);
   await onJobUpdate({
     jobId: job.id,
     userId: job.userId,
@@ -67,8 +68,9 @@ export const processWorkerJob = async (
         await processExportJob(job, args.data);
         break;
       }
-      default: {
-        throw new Error(`Unsupported job type: ${job.type}`);
+      case JobType.COOKBOOK: {
+        await processCookbookJob(job, args.data);
+        break;
       }
     }
   } catch (e) {

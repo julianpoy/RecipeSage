@@ -1,5 +1,5 @@
-import type { JobSummary } from "@recipesage/prisma";
-import { type JobMeta } from "@recipesage/prisma";
+import type { ImportJobSummary } from "@recipesage/prisma";
+
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { cleanLabelTitle } from "@recipesage/util/shared";
@@ -31,10 +31,10 @@ const CROUTON_QUANTITY_UNITS: Record<string, string> = {
 };
 
 export async function croutonImportJobHandler(
-  job: JobSummary,
+  job: ImportJobSummary,
   queueItem: JobQueueItem,
 ): Promise<void> {
-  const jobMeta = job.meta as JobMeta;
+  const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
 
   if (!queueItem.storageKey) {

@@ -27,6 +27,7 @@ export const getJobs = publicProcedure
       where: {
         userId: session.userId,
       },
+      take: 200,
       ...jobSummary,
     });
 
