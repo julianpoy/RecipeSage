@@ -7,6 +7,8 @@ export const bigoven: CompetitorData = {
   tagline: "The free, open source BigOven alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no ads and no recipe cap.",
+  seoDescription:
+    "A BigOven alternative with no ads and no 200-recipe cap. RecipeSage is free and open source, with instant photo and PDF recipe import. Always free.",
   cardSummary:
     "A million-recipe community catalog wrapped in a free tier that shows ads and caps at 200 saved recipes.",
   intro: [
@@ -127,6 +129,12 @@ export const bigoven: CompetitorData = {
       recipesage: true,
       competitor: false,
     },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -148,6 +156,10 @@ export const bigoven: CompetitorData = {
     {
       title: "A real browser extension",
       body: "RecipeSage's Clip Tool is a proper Firefox and Chrome extension. BigOven's clipper is a bookmarklet you drag into your bookmarks bar.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. BigOven has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -192,6 +204,10 @@ export const bigoven: CompetitorData = {
     {
       q: "Will my BigOven meal plan come across?",
       a: "Recipe content can come across via the options above. Past meal plan history doesn't carry over, but drag-and-drop makes the upcoming week quick to rebuild.",
+    },
+    {
+      q: "Is there a free alternative to BigOven?",
+      a: "Yes. RecipeSage is a free, open source alternative to BigOven, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

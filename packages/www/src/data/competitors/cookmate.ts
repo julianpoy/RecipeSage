@@ -7,6 +7,8 @@ export const cookmate: CompetitorData = {
   tagline: "The free, open source Cookmate alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and no ads inside your recipes.",
+  seoDescription:
+    "A free, open source Cookmate alternative with no ads. RecipeSage offers recipe import, meal planning, smart shopping lists, and nutrition. Always free.",
   cardSummary:
     "Free tier caps you at 60 cloud recipes and shows ads inside the recipe you're cooking.",
   intro: [
@@ -26,8 +28,8 @@ export const cookmate: CompetitorData = {
       competitor: "Free up to 60 recipes, then paid",
     },
     { feature: "Web app", recipesage: true, competitor: true },
-    { feature: "iOS app", recipesage: "Free", competitor: "Paid" },
-    { feature: "Android app", recipesage: "Free", competitor: "Paid" },
+    { feature: "iOS app", recipesage: "Free", competitor: "Free" },
+    { feature: "Android app", recipesage: "Free", competitor: "Free" },
     {
       feature: "Unlimited recipes for free",
       recipesage: true,
@@ -102,7 +104,7 @@ export const cookmate: CompetitorData = {
     {
       feature: "Typo-tolerant search",
       recipesage: true,
-      competitor: false,
+      competitor: "partial",
     },
     {
       feature: "Real multi-user collaboration",
@@ -132,6 +134,18 @@ export const cookmate: CompetitorData = {
       competitor: "partial",
       note: "Cookmate exports a proprietary .mcb ZIP. RecipeSage supports well-recognized standardized formats.",
     },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Cookmate's friends feature is view-only between accounts, with no public profile or embed.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -153,6 +167,10 @@ export const cookmate: CompetitorData = {
     {
       title: "Collaboration with separate accounts",
       body: "Each family member can have their own RecipeSage account and still share recipes, plans, and shopping lists. Cookmate's friends are view-only and shared cookbooks mean sharing one login.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Cookmate has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -193,6 +211,10 @@ export const cookmate: CompetitorData = {
     {
       q: "I have a Cookmate Premium subscription. Is it worth switching?",
       a: "That's your call. $1.99/month isn't nothing! If you want nutrition tracking, an aisle-sorted shopping list, recurring meal plans, or separate accounts for each family member, RecipeSage covers those at no cost.",
+    },
+    {
+      q: "Is there a free alternative to Cookmate?",
+      a: "Yes. RecipeSage is a free, open source alternative to Cookmate, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

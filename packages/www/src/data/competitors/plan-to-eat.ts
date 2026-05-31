@@ -7,6 +7,8 @@ export const planToEat: CompetitorData = {
   tagline: "The free, open source Plan to Eat alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no subscription and no time limit.",
+  seoDescription:
+    "A free alternative to Plan to Eat's subscription. RecipeSage handles meal planning, shopping lists, and recipe import. Free and open source, no subscription.",
   cardSummary:
     "A $49 to $54.99 per year meal-planning subscription with no free tier.",
   intro: [
@@ -96,7 +98,7 @@ export const planToEat: CompetitorData = {
       feature: "AI cooking assistant",
       recipesage: true,
       competitor: "partial",
-      note: "Plan to Eat has AI substitution suggestions but that's it.",
+      note: "Plan to Eat's AI covers ingredient substitutions and beginner-mode directions, but not a conversational cooking assistant.",
     },
     {
       feature: "Typo-tolerant search",
@@ -117,6 +119,18 @@ export const planToEat: CompetitorData = {
       recipesage: true,
       competitor: "CSV export",
       note: "Plan to Eat lets you export your recipe book to CSV from the website, even after a subscription lapses. RecipeSage supports well-recognized standardized formats.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Plan to Eat sharing is limited to its Friends feature, where both people must be subscribers.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
     },
   ],
   whySwitch: [
@@ -140,6 +154,14 @@ export const planToEat: CompetitorData = {
       title: "Collaboration with separate accounts",
       body: "Each family member can have their own RecipeSage account and still share recipes, plans, and shopping lists. Plan to Eat's family sharing means using the same login.",
     },
+    {
+      title: "Share your recipes with anyone",
+      body: "RecipeSage gives you a public profile to share a single recipe, a whole label, or your entire collection by a link anyone can open without an account, plus embed codes to drop a recipe onto a website or blog. Plan to Eat sharing is limited to its Friends feature, where both people must be subscribers.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Plan to Eat has no built-in cookbook generator.",
+    },
   ],
   competitorWins: [
     {
@@ -157,7 +179,7 @@ export const planToEat: CompetitorData = {
       "RecipeSage lists Plan to Eat as a supported migration source. You can export your recipe book from Plan to Eat in minutes and import it into RecipeSage, even if your Plan to Eat subscription has lapsed.",
     steps: [
       {
-        body: "From the Plan to Eat website, open Settings then Account, scroll to Export, and choose Export to CSV. You'll get a single CSV with all of your recipes.",
+        body: "From the Plan to Eat website, find the export option in your account settings and choose Export to CSV. You'll get a single CSV with all of your recipes.",
       },
       {
         body: "Create a free RecipeSage account at recipesage.com.",
@@ -166,7 +188,7 @@ export const planToEat: CompetitorData = {
         body: "In RecipeSage, open Settings then Import then CSV, and upload the file Plan to Eat gave you.",
       },
       {
-        body: "Tags, ratings, course, cuisine, and main-ingredient fields map across to RecipeSage labels.",
+        body: "Tags, course, and cuisine fields map across to RecipeSage labels.",
       },
     ],
     importUrl: "/app/settings/import/csv",
@@ -188,6 +210,10 @@ export const planToEat: CompetitorData = {
     {
       q: "What happens to my recipes if RecipeSage shuts down?",
       a: "You can export everything to JSON-LD, PDF, or text any time. Because we're open source, anyone can keep running the code, including on your own server. We've been doing this since 2018 with no plans to stop anytime soon.",
+    },
+    {
+      q: "Is there a free alternative to Plan to Eat?",
+      a: "Yes. RecipeSage is a free, open source alternative to Plan to Eat, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

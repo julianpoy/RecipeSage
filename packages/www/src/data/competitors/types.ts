@@ -27,6 +27,7 @@ export interface CompetitorData {
   url: string;
   tagline: string;
   subtitle: string;
+  seoDescription?: string;
   cardSummary: string;
   intro: string[];
   pricingSummary: {

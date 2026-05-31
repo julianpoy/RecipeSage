@@ -7,6 +7,8 @@ export const samsungFood: CompetitorData = {
   tagline: "The free, open source Samsung Food alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no Samsung account required.",
+  seoDescription:
+    "A Samsung Food alternative with no ads and no Samsung account. RecipeSage is free, open source, with photo import, meal planning, and nutrition. Always free.",
   cardSummary:
     "Whisk after Samsung's 2019 acquisition. Best features need Samsung Food+ or Samsung hardware.",
   intro: [
@@ -39,8 +41,8 @@ export const samsungFood: CompetitorData = {
     {
       feature: "No Samsung account required",
       recipesage: true,
-      competitor: false,
-      note: "Deeper Samsung Food features require a linked Samsung Account.",
+      competitor: "partial",
+      note: "Basic Samsung Food use works without a Samsung Account, but deeper features require linking one.",
     },
     { feature: "Web app", recipesage: true, competitor: true },
     { feature: "iOS app", recipesage: true, competitor: true },
@@ -115,6 +117,12 @@ export const samsungFood: CompetitorData = {
       competitor: "Survives account deletion",
       note: "Samsung's Terms grant Samsung a continuing content license that survives account deletion. See RecipeSage's legal page for our terms.",
     },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -136,6 +144,10 @@ export const samsungFood: CompetitorData = {
     {
       title: "Premium features without a premium tier",
       body: "Photo and PDF import, drag-and-drop meal planning, smart shopping lists, recipe scaling, and typo-tolerant search are all in RecipeSage for free. Most of those require Samsung Food+ at $59.99/year.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Samsung Food has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -166,6 +178,7 @@ export const samsungFood: CompetitorData = {
         body: "Imported recipes land in your RecipeSage account tagged with an import label so the batch is easy to review.",
       },
     ],
+    note: "Some Samsung Food recipes link back to the original source rather than storing full instructions. For those, importing the original recipe URL into RecipeSage's URL importer gives a more complete result.",
   },
   faqs: [
     {
@@ -175,6 +188,10 @@ export const samsungFood: CompetitorData = {
     {
       q: "What about Samsung Food's calorie tracker?",
       a: "RecipeSage has built-in nutrition tracking with macros, vitamins, and minerals per serving, and you can auto-fill from a nutrition label. It's not a full diet-tracking app, but it covers what most cooks need.",
+    },
+    {
+      q: "Is there a free alternative to Samsung Food?",
+      a: "Yes. RecipeSage is a free, open source alternative to Samsung Food, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="cancel()"
+        [attr.aria-label]="'generic.close' | translate"
+      >
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    [placeholder]="
+      searchPlaceholder ||
+      ('components.searchableSelectModal.search' | translate)
+    "
+    autocomplete="off"
+  ></ion-searchbar>
+
+  <ion-list>
+    @for (option of filteredOptions; track option.value) {
+      <ion-item button (click)="select(option)">
+        <ion-label class="ion-text-wrap">
+          {{ option.label }}
+          @if (option.sublabel) {
+            <p>{{ option.sublabel }}</p>
+          }
+        </ion-label>
+        @if (option.value === selectedValue) {
+          <ion-icon name="checkmark" slot="end" color="primary"></ion-icon>
+        }
+      </ion-item>
+    } @empty {
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          {{
+            noResultsText ||
+              ("components.searchableSelectModal.noResults" | translate)
+          }}
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

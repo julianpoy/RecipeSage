@@ -216,14 +216,14 @@ const renderValue = (value: RowValue): { kind: "yes" | "no" | "partial" | "text"
       {
         otherCompetitors.map((other) => (
           <li>
-            <a href={`/alternatives/${other.slug}`}>
+            <a href={`/alternatives/${other.slug}/`}>
               RecipeSage vs {other.name}
             </a>
           </li>
         ))
       }
       <li>
-        <a href="/alternatives">See all comparisons</a>
+        <a href="/alternatives/">See all comparisons</a>
       </li>
     </ul>
   </section>

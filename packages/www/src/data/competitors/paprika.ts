@@ -7,6 +7,8 @@ export const paprika: CompetitorData = {
   tagline: "The free, open source Paprika alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no per-device fees.",
+  seoDescription:
+    "A free, open source Paprika alternative. RecipeSage imports recipes, plans meals, and syncs across web, iOS, and Android with no per-device fee. Always free.",
   cardSummary:
     "Paid per platform. $4.99 mobile, $29.99 desktop, no web app, no built-in nutrition.",
   intro: [
@@ -46,8 +48,7 @@ export const paprika: CompetitorData = {
     {
       feature: "Auto import from a URL",
       recipesage: true,
-      competitor: "partial",
-      note: "RecipeSage's URL importer supports a wider range of recipe sites, including many that other parsers miss.",
+      competitor: true,
     },
     {
       feature: "Import from a photo (OCR)",
@@ -124,6 +125,18 @@ export const paprika: CompetitorData = {
       competitor: "Proprietary",
       note: "Paprika's export is a non-standard .paprikarecipes archive. RecipeSage supports well-recognized standardized formats.",
     },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Paprika shares recipes only by emailing or AirDropping its proprietary files.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -149,6 +162,14 @@ export const paprika: CompetitorData = {
     {
       title: "Open source",
       body: "RecipeSage's code is on GitHub under the AGPL. You can export everything in standard formats.",
+    },
+    {
+      title: "Share your recipes with anyone",
+      body: "RecipeSage gives you a public profile to share a single recipe, a whole label, or your entire collection by a link anyone can open without an account, plus embed codes to drop a recipe onto a website or blog. Paprika only shares by emailing or AirDropping its proprietary files.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Paprika has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -195,6 +216,10 @@ export const paprika: CompetitorData = {
     {
       q: "Will my Paprika categories and ratings come across?",
       a: "Yes. Paprika categories map to RecipeSage labels, and ratings, notes, photos, and source URLs all come through. Custom aisles in the grocery list don't import, but you can rebuild them quickly.",
+    },
+    {
+      q: "Is there a free alternative to Paprika?",
+      a: "Yes. RecipeSage is a free, open source alternative to Paprika, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

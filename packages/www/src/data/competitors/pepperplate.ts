@@ -7,6 +7,8 @@ export const pepperplate: CompetitorData = {
   tagline: "A free, open source Pepperplate alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, and we'll move your Pepperplate library over in one click.",
+  seoDescription:
+    "A free, open source Pepperplate alternative. RecipeSage imports recipes, plans meals, and builds shopping lists across web, iOS, and Android. Always free.",
   cardSummary:
     "Still charges $33 per year, but the iOS app hasn't shipped an update since April 2023.",
   intro: [
@@ -36,7 +38,6 @@ export const pepperplate: CompetitorData = {
       feature: "Android app",
       recipesage: true,
       competitor: "partial",
-      note: "Android app also receiving very infrequent updates.",
     },
     {
       feature: "Actively developed",
@@ -47,7 +48,7 @@ export const pepperplate: CompetitorData = {
       feature: "Auto import from a URL",
       recipesage: true,
       competitor: "partial",
-      note: "Pepperplate's URL importer is broken for many modern recipe sites. RecipeSage's covers a wider range.",
+      note: "Pepperplate imports from a limited set of supported sites. RecipeSage's URL importer covers a wider range.",
     },
     {
       feature: "Import from a photo (OCR)",
@@ -115,6 +116,18 @@ export const pepperplate: CompetitorData = {
       competitor: "Plain .txt",
       note: "Pepperplate's only export is unstructured plain text that other apps can't reliably re-import. RecipeSage supports well-recognized standardized formats.",
     },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Pepperplate shares one recipe at a time by email or social post, with no public profile or embed.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -136,6 +149,10 @@ export const pepperplate: CompetitorData = {
     {
       title: "Future-proof and self-hostable",
       body: "RecipeSage is open source and can be self-hosted, so it'll be here for years to come with a community of open-source support backing it.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Pepperplate has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -160,7 +177,7 @@ export const pepperplate: CompetitorData = {
         body: "Open Settings then Import then Pepperplate, and enter your Pepperplate email and password.",
       },
       {
-        body: "RecipeSage signs in on your behalf, pulls every recipe (titles, ingredients, instructions, images, categories), and imports them as a background job. Your credentials are used only for the fetch and aren't stored.",
+        body: "RecipeSage signs in on your behalf, pulls every recipe (titles, ingredients, instructions, images, tags), and imports them as a background job. Your credentials are used only for the fetch and aren't stored.",
       },
       {
         body: "Every imported recipe is tagged with a timestamped label so the batch is easy to review or undo.",
@@ -179,7 +196,7 @@ export const pepperplate: CompetitorData = {
     },
     {
       q: "Will I lose my recipe categories and notes?",
-      a: "No. The Pepperplate importer pulls structured fields including titles, ingredients, instructions, images, source URLs, notes, and categories. Categories become RecipeSage labels.",
+      a: "No. The Pepperplate importer pulls structured fields including titles, ingredients, instructions, images, source URLs, notes, and tags. Pepperplate tags become RecipeSage labels.",
     },
     {
       q: "Why doesn't RecipeSage just use Pepperplate's export file?",
@@ -192,6 +209,10 @@ export const pepperplate: CompetitorData = {
     {
       q: "Will my meal plan come across?",
       a: "Recipe data comes across in full. Meal plan history doesn't come through, but you can rebuild your upcoming meal plan in RecipeSage in a few minutes using the drag-and-drop calendar.",
+    },
+    {
+      q: "Is there a free alternative to Pepperplate?",
+      a: "Yes. RecipeSage is a free, open source alternative to Pepperplate, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

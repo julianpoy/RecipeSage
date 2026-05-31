@@ -7,6 +7,8 @@ export const anylist: CompetitorData = {
   tagline: "The free, open source AnyList alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no paywall on web access and no Apple-only assumptions.",
+  seoDescription:
+    "An AnyList alternative with free web access and unlimited imports. RecipeSage is free and open source, with meal planning and nutrition built in. Always free.",
   cardSummary:
     "Free for shared shopping lists, but web access, meal planning, and more than 5 recipe imports require the AnyList Complete subscription.",
   intro: [
@@ -133,6 +135,24 @@ export const anylist: CompetitorData = {
       competitor: false,
       note: "AnyList has no bulk export. Recipes and lists can be emailed or printed one at a time. RecipeSage exports to JSON-LD, PDF, and text.",
     },
+    {
+      feature: "Recipe scaling with metric/imperial conversion",
+      recipesage: true,
+      competitor: "partial",
+      note: "AnyList scales the ingredient quantity field but doesn't convert between imperial and metric.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. AnyList sharing is account-to-account only, with no public link for non-users.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -155,6 +175,14 @@ export const anylist: CompetitorData = {
       title: "Cross-platform without Apple bias",
       body: "RecipeSage runs equally well in any browser, on iOS, and on Android. AnyList's deepest features assume the Apple ecosystem, and Chromebook, Windows, and Linux users can only reach AnyList through the Complete-gated web app.",
     },
+    {
+      title: "Share your recipes with anyone",
+      body: "RecipeSage gives you a public profile to share a single recipe, a whole label, or your entire collection by a link anyone can open without an account, plus embed codes to drop a recipe onto a website or blog. AnyList only shares account-to-account, with no public link for people without an account.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. AnyList has no built-in cookbook generator.",
+    },
   ],
   competitorWins: [
     {
@@ -169,7 +197,7 @@ export const anylist: CompetitorData = {
   migration: {
     headline: "Bringing your AnyList recipes over",
     summary:
-      "There's no dedicated AnyList importer, and AnyList itself doesn't offer a bulk recipe export. The practical path today is the RecipeSage Clip Tool browser extension, about two clicks per recipe.",
+      "There's no dedicated AnyList importer, and AnyList itself doesn't offer a bulk recipe export. The practical path today is to re-import each recipe from its original source, about one click per recipe with the RecipeSage Clip Tool browser extension.",
     steps: [
       {
         body: "Create a free RecipeSage account at recipesage.com.",
@@ -178,7 +206,7 @@ export const anylist: CompetitorData = {
         body: "Install the free RecipeSage Clip Tool extension for Firefox or Chrome.",
       },
       {
-        body: "Sign in to AnyList in the same browser, open a saved recipe, and click the RecipeSage extension icon to import it. About two clicks per recipe. Repeat for each one you want to bring over.",
+        body: "Open each recipe's original source web page and click the RecipeSage extension icon to import it, about one click per recipe. If you kept your source URLs, you can paste them into RecipeSage's URL importer to bring them in as a batch.",
       },
     ],
     note: "AnyList doesn't offer a bulk recipe export, so per-recipe re-clipping is the practical option today. If you've kept the original source URLs of your AnyList recipes, RecipeSage's URL importer accepts a list of URLs in one go, which can speed things up considerably.",
@@ -191,6 +219,10 @@ export const anylist: CompetitorData = {
     {
       q: "What about my AnyList shared list with my household?",
       a: "RecipeSage has shared shopping lists too, with real multi-account collaboration (each person has their own login). You'll need to rebuild the membership in RecipeSage by inviting the same people to a new shared list, but the day-to-day shared-shopping experience is there.",
+    },
+    {
+      q: "Is there a free alternative to AnyList?",
+      a: "Yes. RecipeSage is a free, open source alternative to AnyList, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

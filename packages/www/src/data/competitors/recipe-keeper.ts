@@ -7,6 +7,8 @@ export const recipeKeeper: CompetitorData = {
   tagline: "The free, open source Recipe Keeper alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and no per-platform upgrade fees.",
+  seoDescription:
+    "A free, open source Recipe Keeper alternative. RecipeSage adds web clipping, photo and PDF import, meal planning, and nutrition tracking. Always free.",
   cardSummary:
     "Freemium with a 20-recipe cap, then a one-time Pro upgrade purchased separately on each platform.",
   intro: [
@@ -82,7 +84,7 @@ export const recipeKeeper: CompetitorData = {
     {
       feature: "Recurring meal plan items",
       recipesage: true,
-      competitor: false,
+      competitor: "partial",
     },
     {
       feature: "Smart shopping list with aisle categorization",
@@ -127,6 +129,18 @@ export const recipeKeeper: CompetitorData = {
       competitor: "partial",
       note: "Recipe Keeper exports an undocumented .zip with an HTML file and an images folder. RecipeSage supports well-recognized standardized formats.",
     },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Recipe Keeper shares one recipe at a time by email or social, with no public profile or embed.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -143,7 +157,7 @@ export const recipeKeeper: CompetitorData = {
     },
     {
       title: "Automatic nutrition clipping",
-      body: "RecipeSage autofills nutrition label to auto-fill. Recipe Keeper's nutrition field is something you fill in by hand.",
+      body: "RecipeSage can auto-fill nutrition from a pasted nutrition label. Recipe Keeper's nutrition field is something you fill in by hand.",
     },
     {
       title: "Collaboration with separate accounts",
@@ -152,6 +166,10 @@ export const recipeKeeper: CompetitorData = {
     {
       title: "Open source and self-hostable",
       body: "RecipeSage's code is on GitHub under the AGPL, and exports use well-recognized standardized formats. Recipe Keeper is closed source with a proprietary undocumented .zip.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Recipe Keeper has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -195,6 +213,10 @@ export const recipeKeeper: CompetitorData = {
     {
       q: "Do I have to buy anything to use RecipeSage on every device?",
       a: "No. The web app, iOS app, and Android app are all free, with no per-platform upgrade. Your whole household can use it without anyone paying anything.",
+    },
+    {
+      q: "Is there a free alternative to Recipe Keeper?",
+      a: "Yes. RecipeSage is a free, open source alternative to Recipe Keeper, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

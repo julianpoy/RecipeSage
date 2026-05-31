@@ -216,6 +216,12 @@ export const RouteMap = {
     },
     path: "tools/nutrition",
   },
+  MeasurementConverterPage: {
+    getPath() {
+      return `/tools/conversions`;
+    },
+    path: "tools/conversions",
+  },
   ImportPage: {
     getPath() {
       return `/settings/import`;

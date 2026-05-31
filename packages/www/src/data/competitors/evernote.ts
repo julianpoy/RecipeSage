@@ -7,6 +7,8 @@ export const evernote: CompetitorData = {
   tagline: "Move your recipe notes into an app built for recipes",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. If you've been keeping recipes in Evernote notes, we'll import your .enex export and give your collection structured ingredients, automatic shopping lists, scaling, and nutrition.",
+  seoDescription:
+    "Using Evernote for recipes? RecipeSage is a free, open source recipe app with real recipe import, meal planning, and smart shopping lists. Always free.",
   cardSummary:
     "Great note app, not a recipe app. The free tier now caps at 50 notes total, and renewal prices have jumped roughly 70%.",
   intro: [
@@ -132,6 +134,12 @@ export const evernote: CompetitorData = {
       competitor: "Evernote .enex",
       note: "Evernote exports to .enex, which is a documented XML format but specific to Evernote. RecipeSage supports well-recognized standardized recipe formats like JSON-LD.",
     },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -157,6 +165,10 @@ export const evernote: CompetitorData = {
     {
       title: "One-click .enex import",
       body: "Export your Evernote notes to .enex from the Mac or Windows app, upload the file, and each note becomes a recipe. Your Evernote account is untouched.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Evernote has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -215,6 +227,10 @@ export const evernote: CompetitorData = {
     {
       q: "Do I need a paid Evernote plan to export?",
       a: "No. ENEX export is available on the free plan via the desktop apps, even for accounts over the 50-note cap. You can still export everything you already have.",
+    },
+    {
+      q: "Is there a free alternative to Evernote for recipes?",
+      a: "Yes. RecipeSage is a free, open source alternative to Evernote for recipes, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

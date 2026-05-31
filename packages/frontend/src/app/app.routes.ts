@@ -281,6 +281,15 @@ export const appRoutes: Routes = [
     title: "pages.nutritionCalculator.tabTitle",
   },
   {
+    path: RouteMap.MeasurementConverterPage.path,
+    loadComponent: () =>
+      import("./pages/tools/measurement-converter/measurement-converter.page").then(
+        (m) => m.MeasurementConverterPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.measurementConverter.tabTitle",
+  },
+  {
     path: RouteMap.ImportPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import/import.page").then(

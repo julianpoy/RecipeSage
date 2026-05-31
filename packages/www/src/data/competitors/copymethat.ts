@@ -7,6 +7,8 @@ export const copymethat: CompetitorData = {
   tagline: "The free, open source CopyMeThat alternative",
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and browser extension for grabbing recipes from any site.",
+  seoDescription:
+    "A CopyMeThat alternative with no 40-recipe cap. RecipeSage is free and open source, with web clipping plus photo and PDF import and nutrition. Always free.",
   cardSummary:
     "Web-clipper-first recipe app with a 40-recipe cap on the free tier.",
   intro: [
@@ -115,6 +117,24 @@ export const copymethat: CompetitorData = {
       competitor: "HTML zip",
       note: "CopyMeThat exports an HTML zip. RecipeSage supports well-recognized standardized formats.",
     },
+    {
+      feature: "Real multi-user collaboration with separate accounts",
+      recipesage: true,
+      competitor: false,
+      note: "CopyMeThat family sharing means logging into one shared account.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: "partial",
+      note: "CopyMeThat can share a recipe link, but people without an account see only the image, source link, and ingredients, and there's no website embed.",
+    },
+    {
+      feature: "Printable PDF cookbook generator",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
   ],
   whySwitch: [
     {
@@ -140,6 +160,14 @@ export const copymethat: CompetitorData = {
     {
       title: "Open source",
       body: "RecipeSage's source is on GitHub under the AGPL. CopyMeThat is closed-source proprietary software.",
+    },
+    {
+      title: "Share your recipes with anyone",
+      body: "RecipeSage gives you a public profile to share a single recipe, a whole label, or your entire collection by a link anyone can open without an account, plus embed codes to drop a recipe onto a website or blog. CopyMeThat's public share shows people without an account only the image, link, and ingredients, not the full recipe.",
+    },
+    {
+      title: "Turn your collection into a printable cookbook",
+      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. CopyMeThat has no built-in cookbook generator.",
     },
   ],
   competitorWins: [],
@@ -179,6 +207,10 @@ export const copymethat: CompetitorData = {
     {
       q: "Will my recipes stay private?",
       a: "Yes. Saved recipes are private to your account by default. You can choose to share specific recipes publicly or with friends, but nothing is public unless you make it so.",
+    },
+    {
+      q: "Is there a free alternative to CopyMeThat?",
+      a: "Yes. RecipeSage is a free, open source alternative to CopyMeThat, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [
