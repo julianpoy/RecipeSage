@@ -16,7 +16,13 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
-import { book, chatboxEllipses, fitness, swapHorizontal } from "ionicons/icons";
+import {
+  book,
+  chatboxEllipses,
+  fitness,
+  swapHorizontal,
+  thermometer,
+} from "ionicons/icons";
 
 @Component({
   standalone: true,
@@ -41,7 +47,13 @@ export class ToolsPage {
   private navCtrl = inject(NavController);
 
   constructor() {
-    addIcons({ book, chatboxEllipses, fitness, swapHorizontal });
+    addIcons({
+      book,
+      chatboxEllipses,
+      fitness,
+      swapHorizontal,
+      thermometer,
+    });
   }
 
   goToCookbookGenerator() {
@@ -54,6 +66,10 @@ export class ToolsPage {
 
   goToMeasurementConverter() {
     this.navCtrl.navigateForward(RouteMap.MeasurementConverterPage.getPath());
+  }
+
+  goToCookingTemperatures() {
+    this.navCtrl.navigateForward(RouteMap.CookingTemperaturesPage.getPath());
   }
 
   goToAssistant() {

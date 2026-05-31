@@ -290,6 +290,15 @@ export const appRoutes: Routes = [
     title: "pages.measurementConverter.tabTitle",
   },
   {
+    path: RouteMap.CookingTemperaturesPage.path,
+    loadComponent: () =>
+      import("./pages/tools/cooking-temperatures/cooking-temperatures.page").then(
+        (m) => m.CookingTemperaturesPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.cookingTemperatures.tabTitle",
+  },
+  {
     path: RouteMap.ImportPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import/import.page").then(

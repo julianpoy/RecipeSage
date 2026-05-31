@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.cookingTemperatures.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    <aside
+      class="safety-callout"
+      role="note"
+      [attr.aria-label]="'pages.cookingTemperatures.safety.title' | translate"
+    >
+      <div class="safety-icon">
+        <ion-icon name="shield" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="safety-text">
+        <p class="safety-title">
+          {{ "pages.cookingTemperatures.safety.title" | translate }}
+        </p>
+        <p>{{ "pages.cookingTemperatures.safety.safeMin" | translate }}</p>
+        <p>{{ "pages.cookingTemperatures.safety.preference" | translate }}</p>
+        <p>{{ "pages.cookingTemperatures.safety.carryover" | translate }}</p>
+        <p class="safety-source">
+          {{ "pages.cookingTemperatures.safety.source" | translate }}
+        </p>
+      </div>
+    </aside>
+
+    <ion-searchbar
+      class="temps-search"
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchInput()"
+      [placeholder]="'pages.cookingTemperatures.searchPlaceholder' | translate"
+      debounce="100"
+    ></ion-searchbar>
+
+    @if (visibleGroups.length === 0) {
+      <div class="empty-state" role="status" aria-live="polite">
+        <ion-icon name="information-circle" aria-hidden="true"></ion-icon>
+        <p>{{ "pages.cookingTemperatures.noResults" | translate }}</p>
+      </div>
+    }
+
+    @for (group of visibleGroups; track trackGroup($index, group)) {
+      <ion-list class="category-list">
+        <ion-item-divider sticky class="category-divider">
+          <ion-label role="heading" aria-level="2">{{ group.title }}</ion-label>
+        </ion-item-divider>
+        @for (display of group.entries; track trackEntry($index, display)) {
+          <ion-item lines="full" class="temp-row">
+            <ion-label class="temp-label">
+              <h3>{{ display.label }}</h3>
+              @if (display.state) {
+                <p class="temp-state">{{ display.state }}</p>
+              }
+            </ion-label>
+            <div slot="end" class="temp-value">
+              @if (display.entry.visualCueOnly) {
+                <p class="temp-cue">{{ display.cue }}</p>
+              } @else {
+                <p class="temp-number">{{ display.tempDisplay }}</p>
+              }
+              <div class="temp-chips">
+                @if (display.entry.tempKind === "oil") {
+                  <ion-chip color="tertiary" class="info-chip">
+                    <ion-icon name="water"></ion-icon>
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.oilTemp" | translate
+                    }}</ion-label>
+                  </ion-chip>
+                }
+                @if (display.entry.isDangerZone) {
+                  <ion-chip color="danger" class="info-chip">
+                    <ion-icon name="warning"></ion-icon>
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.bacteriaZone" | translate
+                    }}</ion-label>
+                  </ion-chip>
+                } @else if (display.entry.isSafetyMinimum) {
+                  <ion-chip color="success" class="info-chip">
+                    <ion-icon name="shield"></ion-icon>
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.usdaMinimum" | translate
+                    }}</ion-label>
+                  </ion-chip>
+                } @else if (
+                  !display.entry.tempKind && !display.entry.visualCueOnly
+                ) {
+                  <ion-chip color="medium" class="info-chip">
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.preference" | translate
+                    }}</ion-label>
+                  </ion-chip>
+                }
+                @if (display.entry.restMinutes) {
+                  <ion-chip color="warning" class="info-chip">
+                    <ion-icon name="timer"></ion-icon>
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.rest"
+                        | translate: { minutes: display.entry.restMinutes }
+                    }}</ion-label>
+                  </ion-chip>
+                }
+              </div>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  </div>
+</ion-content>

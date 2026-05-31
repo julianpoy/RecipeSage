@@ -222,6 +222,12 @@ export const RouteMap = {
     },
     path: "tools/conversions",
   },
+  CookingTemperaturesPage: {
+    getPath() {
+      return `/tools/cooking-temperatures`;
+    },
+    path: "tools/cooking-temperatures",
+  },
   ImportPage: {
     getPath() {
       return `/settings/import`;
