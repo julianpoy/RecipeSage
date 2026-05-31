@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
@@ -13,7 +12,7 @@ import {
 import { updateMealPlanItemsInput } from "@recipesage/util/shared";
 import { z } from "zod";
 
-export const updateMealPlanItems = publicProcedure
+export const updateMealPlanItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -30,9 +29,6 @@ export const updateMealPlanItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const mealPlanItems = await prisma.mealPlanItem.findMany({
       where: {
         id: {
@@ -53,7 +49,10 @@ export const updateMealPlanItems = publicProcedure
       });
     }
 
-    const access = await getAccessToMealPlan(session.userId, input.mealPlanId);
+    const access = await getAccessToMealPlan(
+      ctx.session.userId,
+      input.mealPlanId,
+    );
 
     if (access.level === MealPlanAccessLevel.None) {
       throw new TRPCError({

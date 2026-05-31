@@ -1,5 +1,4 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import {
   mealPlanSummary,
   mealPlanSummarySchema,
@@ -7,7 +6,7 @@ import {
 } from "@recipesage/prisma";
 import { z } from "zod";
 
-export const getMealPlans = publicProcedure
+export const getMealPlans = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -19,12 +18,9 @@ export const getMealPlans = publicProcedure
   })
   .output(z.array(mealPlanSummarySchema))
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const collabRelationships = await prisma.mealPlanCollaborator.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       select: {
         mealPlanId: true,
@@ -35,7 +31,7 @@ export const getMealPlans = publicProcedure
       where: {
         OR: [
           {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
           {
             id: {

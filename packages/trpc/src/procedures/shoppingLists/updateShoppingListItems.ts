@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
@@ -13,7 +12,7 @@ import {
 import { updateShoppingListItemsInput } from "@recipesage/util/shared";
 import { z } from "zod";
 
-export const updateShoppingListItems = publicProcedure
+export const updateShoppingListItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -30,9 +29,6 @@ export const updateShoppingListItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const shoppingListItems = await prisma.shoppingListItem.findMany({
       where: {
         id: {
@@ -54,7 +50,7 @@ export const updateShoppingListItems = publicProcedure
     }
 
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       input.shoppingListId,
     );
 

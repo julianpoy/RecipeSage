@@ -1,11 +1,10 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { labelSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const deleteLabel = publicProcedure
+export const deleteLabel = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -23,12 +22,9 @@ export const deleteLabel = publicProcedure
   )
   .output(z.string())
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const label = await prisma.label.findUnique({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: input.id,
       },
       ...labelSummary,
@@ -64,7 +60,7 @@ export const deleteLabel = publicProcedure
 
         await tx.label.delete({
           where: {
-            userId: session.userId,
+            userId: ctx.session.userId,
             id: input.id,
           },
         });

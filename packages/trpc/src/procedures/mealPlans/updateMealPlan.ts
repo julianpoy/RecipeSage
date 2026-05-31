@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -16,7 +15,7 @@ import {
   MEAL_PLAN_TITLE_LENGTH_LIMIT,
 } from "@recipesage/util/shared";
 
-export const updateMealPlan = publicProcedure
+export const updateMealPlan = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -45,10 +44,7 @@ export const updateMealPlan = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToMealPlan(session.userId, input.id);
+    const access = await getAccessToMealPlan(ctx.session.userId, input.id);
 
     if (access.level !== MealPlanAccessLevel.Owner) {
       throw new TRPCError({
@@ -90,7 +86,7 @@ export const updateMealPlan = publicProcedure
         data: {
           title: input.title,
           customMealOptions: input.customMealOptions,
-          userId: session.userId,
+          userId: ctx.session.userId,
           collaboratorUsers: {
             createMany: {
               data: collaboratorUsers.map((collaboratorUser) => ({
@@ -133,7 +129,7 @@ export const updateMealPlan = publicProcedure
       data: {
         title: input.title,
         customMealOptions: input.customMealOptions,
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
     });
 

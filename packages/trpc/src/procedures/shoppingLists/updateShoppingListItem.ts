@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -14,7 +13,7 @@ import {
 import { SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared";
 
 /** @deprecated Use updateShoppingListItems instead */
-export const updateShoppingListItem = publicProcedure
+export const updateShoppingListItem = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -44,9 +43,6 @@ export const updateShoppingListItem = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     if (
       input.title === undefined &&
       input.recipeId === undefined &&
@@ -75,7 +71,7 @@ export const updateShoppingListItem = publicProcedure
     }
 
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       shoppingListItem.shoppingListId,
     );
 

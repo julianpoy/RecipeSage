@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
@@ -13,7 +12,7 @@ import {
 import { deleteShoppingListItemsInput } from "@recipesage/util/shared";
 import { z } from "zod";
 
-export const deleteShoppingListItems = publicProcedure
+export const deleteShoppingListItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -30,11 +29,8 @@ export const deleteShoppingListItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       input.shoppingListId,
     );
 

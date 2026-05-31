@@ -3,11 +3,10 @@ import {
   labelGroupSummarySchema,
   prisma,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 
-export const getLabelGroups = publicProcedure
+export const getLabelGroups = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -19,12 +18,9 @@ export const getLabelGroups = publicProcedure
   })
   .output(z.array(labelGroupSummarySchema))
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const labelGroups = await prisma.labelGroup.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       ...labelGroupSummary,
       orderBy: {

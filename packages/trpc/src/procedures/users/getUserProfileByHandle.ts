@@ -1,10 +1,9 @@
 import { prisma, userPublic, userPublicSchema } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const getUserProfileByHandle = publicProcedure
+export const getUserProfileByHandle = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -20,10 +19,7 @@ export const getUserProfileByHandle = publicProcedure
     }),
   )
   .output(userPublicSchema)
-  .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
+  .query(async ({ input }) => {
     const profile = await prisma.user.findFirst({
       where: {
         handle: input.handle,

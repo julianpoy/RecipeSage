@@ -1,5 +1,4 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import {
   mealPlanItemSummary,
   mealPlanSummary,
@@ -12,7 +11,7 @@ import { z } from "zod";
 
 const HISTORICAL_DATE_LIMIT_DAYS = 30; // We return this number of past days of meal plan items
 
-export const getMealPlansWithItems = publicProcedure
+export const getMealPlansWithItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -24,12 +23,9 @@ export const getMealPlansWithItems = publicProcedure
   })
   .output(z.array(mealPlanSummaryWithItemsSchema))
   .query(async ({ ctx }): Promise<MealPlanSummaryWithItems[]> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const collabRelationships = await prisma.mealPlanCollaborator.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       select: {
         mealPlanId: true,
@@ -43,7 +39,7 @@ export const getMealPlansWithItems = publicProcedure
       where: {
         OR: [
           {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
           {
             id: {

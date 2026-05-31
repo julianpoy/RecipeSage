@@ -1,11 +1,10 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   dailyCreditUsageSchema,
   getDailyCreditUsage,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 
-export const getMyCreditUsage = publicProcedure
+export const getMyCreditUsage = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -17,8 +16,5 @@ export const getMyCreditUsage = publicProcedure
   })
   .output(dailyCreditUsageSchema)
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    return getDailyCreditUsage(session.userId);
+    return getDailyCreditUsage(ctx.session.userId);
   });

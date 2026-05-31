@@ -1,9 +1,8 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
   getShoppingListItemCategories,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -17,7 +16,7 @@ import {
   UPSERT_SHOPPING_LIST_ITEMS_PAGINATION_LIMIT,
 } from "@recipesage/util/shared";
 
-export const upsertShoppingListItems = publicProcedure
+export const upsertShoppingListItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -56,11 +55,8 @@ export const upsertShoppingListItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       input.shoppingListId,
     );
 
@@ -132,7 +128,7 @@ export const upsertShoppingListItems = publicProcedure
             id: item.id,
             shoppingListId: input.shoppingListId,
             title: item.title,
-            userId: session.userId,
+            userId: ctx.session.userId,
             recipeId: item.recipeId,
             completed: item.completed,
             categoryTitle: item.categoryTitle,

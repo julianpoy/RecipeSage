@@ -1,11 +1,10 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { deleteRecipes } from "@recipesage/util/server/search";
 
-export const deleteRecipe = publicProcedure
+export const deleteRecipe = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -22,13 +21,10 @@ export const deleteRecipe = publicProcedure
   )
   .output(z.string())
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const recipe = await prisma.recipe.findUnique({
       where: {
         id: input.id,
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
     });
 

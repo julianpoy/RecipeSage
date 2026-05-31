@@ -1,10 +1,9 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const mergeLabels = publicProcedure
+export const mergeLabels = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -22,9 +21,6 @@ export const mergeLabels = publicProcedure
   )
   .output(z.string())
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     if (input.sourceId === input.targetId) {
       throw new TRPCError({
         message: "Source label id cannot match destination label id",
@@ -36,7 +32,7 @@ export const mergeLabels = publicProcedure
       const sourceLabel = await tx.label.findUnique({
         where: {
           id: input.sourceId,
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
         select: {
           id: true,
@@ -58,7 +54,7 @@ export const mergeLabels = publicProcedure
       const targetLabel = await tx.label.findUnique({
         where: {
           id: input.targetId,
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
         select: {
           id: true,

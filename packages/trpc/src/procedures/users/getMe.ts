@@ -1,7 +1,6 @@
 import { prisma, UserPublic, userPublicSchema } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { userPublic } from "@recipesage/prisma";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   capabilitiesForSubscription,
   SubscriptionModelName,
@@ -38,7 +37,7 @@ const _checkSchemaSatisfiesType = {} as z.infer<
 const _checkTypeSatisfiesSchema = {} as UserPublic &
   UserPrivate satisfies z.infer<typeof userMeSchema>;
 
-export const getMe = publicProcedure
+export const getMe = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -50,12 +49,9 @@ export const getMe = publicProcedure
   })
   .output(userMeSchema)
   .query(async ({ ctx }): Promise<UserPublic & UserPrivate> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const profile = await prisma.user.findUniqueOrThrow({
       where: {
-        id: session.userId,
+        id: ctx.session.userId,
       },
       select: {
         ...userPublic.select,
@@ -66,7 +62,7 @@ export const getMe = publicProcedure
     });
 
     const subscriptions = (
-      await subscriptionsForUser(session.userId, true)
+      await subscriptionsForUser(ctx.session.userId, true)
     ).map((subscription) => {
       return {
         expires: subscription.expires,

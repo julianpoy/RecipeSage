@@ -1,10 +1,9 @@
 import { labelSummary, labelSummarySchema, prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const getLabelByTitle = publicProcedure
+export const getLabelByTitle = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -21,13 +20,10 @@ export const getLabelByTitle = publicProcedure
   )
   .output(labelSummarySchema)
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const label = await prisma.label.findUnique({
       where: {
         userId_title: {
-          userId: session.userId,
+          userId: ctx.session.userId,
           title: input.title,
         },
       },

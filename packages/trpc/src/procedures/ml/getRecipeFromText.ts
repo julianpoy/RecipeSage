@@ -6,13 +6,13 @@ import {
   isRecipeRecognitionSuccess,
   recordCreditsSpent,
 } from "@recipesage/util/server/general";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { assertCreditsAvailableTrpc } from "../../util/assertCreditsAvailableTrpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 
-export const getRecipeFromText = publicProcedure
+export const getRecipeFromText = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -29,15 +29,7 @@ export const getRecipeFromText = publicProcedure
   )
   .output(standardizedRecipeImportEntryForWebSchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    if (!session) {
-      throw new TRPCError({
-        message: "Must be logged in",
-        code: "UNAUTHORIZED",
-      });
-    }
-
-    await assertCreditsAvailableTrpc(session.userId, "mlTextRecipe");
+    await assertCreditsAvailableTrpc(ctx.session.userId, "mlTextRecipe");
 
     const recognizedRecipe = await textToRecipe(
       input.text,
@@ -51,7 +43,7 @@ export const getRecipeFromText = publicProcedure
     }
 
     if (isRecipeRecognitionSuccess(recognizedRecipe.recipe)) {
-      await recordCreditsSpent(session.userId, "mlTextRecipe");
+      await recordCreditsSpent(ctx.session.userId, "mlTextRecipe");
     }
 
     return {

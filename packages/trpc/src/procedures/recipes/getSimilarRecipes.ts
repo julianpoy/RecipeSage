@@ -1,10 +1,9 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { TRPCError } from "@trpc/server";
 import { getSimilarRecipes as _getSimilarRecipes } from "@recipesage/util/server/db";
 import { recipeSummaryLiteSchema } from "@recipesage/prisma";
 
-export const getSimilarRecipes = publicProcedure
+export const getSimilarRecipes = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -22,16 +21,8 @@ export const getSimilarRecipes = publicProcedure
   )
   .output(z.array(recipeSummaryLiteSchema))
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    if (!session) {
-      throw new TRPCError({
-        message: "Must be logged in",
-        code: "UNAUTHORIZED",
-      });
-    }
-
     const similarRecipes = await _getSimilarRecipes(
-      session.userId,
+      ctx.session.userId,
       input.recipeIds,
     );
 

@@ -4,14 +4,11 @@ import {
   prisma,
   type ExportJobMeta,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import {
-  enqueueJob,
-  validateTrpcSession,
-} from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
+import { enqueueJob } from "@recipesage/util/server/general";
 import { z } from "zod";
 
-export const startExportJob = publicProcedure
+export const startExportJob = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -37,12 +34,9 @@ export const startExportJob = publicProcedure
     }),
   )
   .mutation(async ({ input, ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const job = await prisma.job.create({
       data: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         type: JobType.EXPORT,
         status: JobStatus.CREATE,
         progress: 1,
