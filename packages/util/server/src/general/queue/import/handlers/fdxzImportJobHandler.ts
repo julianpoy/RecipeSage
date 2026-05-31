@@ -237,7 +237,7 @@ export async function fdxzImportJobHandler(
 
     standardizedRecipeImportInput.push({
       recipe: {
-        title: attrs.Name || "Untitled",
+        title: attrs.Name || "",
         description,
         notes: notes.filter((n) => n).join("\r\n\r\n"),
         ingredients,

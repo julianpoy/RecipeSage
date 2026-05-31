@@ -1,8 +1,7 @@
 .container {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   height: 60px;
 
   padding: 0 10px;
@@ -35,7 +34,7 @@ ion-icon {
 .letter {
   position: absolute;
   bottom: 3px;
-  right: -2px;
+  inset-inline-end: -2px;
 
   width: 20px;
   height: 20px;
@@ -58,7 +57,7 @@ img.placeholder {
 }
 
 .close {
-  margin-left: auto;
+  margin-inline-start: auto;
   cursor: pointer;
 }
 

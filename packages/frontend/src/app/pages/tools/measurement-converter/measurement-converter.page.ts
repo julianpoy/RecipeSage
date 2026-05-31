@@ -225,7 +225,10 @@ export class MeasurementConverterPage implements OnInit {
   get basisGrams(): string {
     const gramsPerMl = this.currentGramsPerMl();
     if (gramsPerMl === null) return "";
-    return formatDecimal(volumeToWeight(1, "cup", "gram", gramsPerMl));
+    return formatDecimal(
+      volumeToWeight(1, "cup", "gram", gramsPerMl),
+      this.translate.getCurrentLang(),
+    );
   }
 
   async openIngredientPicker() {
@@ -276,8 +279,8 @@ export class MeasurementConverterPage implements OnInit {
     const raw = isVolumeUnit(unit)
       ? this.volumeValues[unit]
       : this.weightValues[unit];
-    const value = parseQuantity(raw);
-    if (value === null) return;
+    const value = parseQuantity(raw, this.translate.getCurrentLang());
+    if (value === null || value <= 0) return;
 
     const panel = buildPanel(value, unit, this.currentGramsPerMl());
 
@@ -296,6 +299,7 @@ export class MeasurementConverterPage implements OnInit {
         if (weightUnit === unit) continue;
         this.weightValues[weightUnit] = formatDecimal(
           panel.weights[weightUnit],
+          this.translate.getCurrentLang(),
         );
       }
     }
@@ -305,9 +309,9 @@ export class MeasurementConverterPage implements OnInit {
     const showFractions =
       this.preferences[MeasurementConverterPreferenceKey.ShowFractions];
     if (showFractions && FRACTION_VOLUME_UNITS.includes(unit)) {
-      return formatFraction(value);
+      return formatFraction(value, this.translate.getCurrentLang());
     }
-    return formatDecimal(value);
+    return formatDecimal(value, this.translate.getCurrentLang());
   }
 
   get countItemVaries(): boolean {
@@ -322,52 +326,76 @@ export class MeasurementConverterPage implements OnInit {
   }
 
   onCountWeightInput(unit: WeightUnit) {
-    const value = parseQuantity(this.countWeightValues[unit]);
+    const value = parseQuantity(
+      this.countWeightValues[unit],
+      this.translate.getCurrentLang(),
+    );
     const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
-    if (value === null || !item) return;
+    if (value === null || value <= 0 || !item) return;
 
     const grams = convertWeight(value, unit, "gram");
-    this.countQuantity = formatDecimal(grams / item.gramsPerUnit);
+    this.countQuantity = formatDecimal(
+      grams / item.gramsPerUnit,
+      this.translate.getCurrentLang(),
+    );
 
     for (const weightUnit of WEIGHT_UNITS) {
       if (weightUnit === unit) continue;
       this.countWeightValues[weightUnit] = formatDecimal(
         convertWeight(grams, "gram", weightUnit),
+        this.translate.getCurrentLang(),
       );
     }
   }
 
   private recomputeCount() {
-    const quantity = parseQuantity(this.countQuantity);
+    const quantity = parseQuantity(
+      this.countQuantity,
+      this.translate.getCurrentLang(),
+    );
     const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
-    if (quantity === null || !item) return;
+    if (quantity === null || quantity <= 0 || !item) return;
 
     const grams = quantity * item.gramsPerUnit;
     for (const weightUnit of WEIGHT_UNITS) {
       this.countWeightValues[weightUnit] = formatDecimal(
         convertWeight(grams, "gram", weightUnit),
+        this.translate.getCurrentLang(),
       );
     }
   }
 
   onTemperatureInput(field: "celsius" | "fahrenheit" | "gasMark") {
+    const formatInt = (n: number) =>
+      Math.round(n).toLocaleString(this.translate.getCurrentLang(), {
+        useGrouping: false,
+      });
     if (field === "celsius") {
-      const celsius = parseQuantity(this.tempCelsius);
+      const celsius = parseQuantity(
+        this.tempCelsius,
+        this.translate.getCurrentLang(),
+      );
       if (celsius === null) return;
       const fahrenheit = celsiusToFahrenheit(celsius);
-      this.tempFahrenheit = String(Math.round(fahrenheit));
-      this.tempGasMark = String(fahrenheitToGasMark(fahrenheit));
+      this.tempFahrenheit = formatInt(fahrenheit);
+      this.tempGasMark = formatInt(fahrenheitToGasMark(fahrenheit));
     } else if (field === "fahrenheit") {
-      const fahrenheit = parseQuantity(this.tempFahrenheit);
+      const fahrenheit = parseQuantity(
+        this.tempFahrenheit,
+        this.translate.getCurrentLang(),
+      );
       if (fahrenheit === null) return;
-      this.tempCelsius = String(Math.round(fahrenheitToCelsius(fahrenheit)));
-      this.tempGasMark = String(fahrenheitToGasMark(fahrenheit));
+      this.tempCelsius = formatInt(fahrenheitToCelsius(fahrenheit));
+      this.tempGasMark = formatInt(fahrenheitToGasMark(fahrenheit));
     } else {
-      const mark = parseQuantity(this.tempGasMark);
+      const mark = parseQuantity(
+        this.tempGasMark,
+        this.translate.getCurrentLang(),
+      );
       if (mark === null) return;
       const fahrenheit = gasMarkToFahrenheit(mark);
-      this.tempFahrenheit = String(Math.round(fahrenheit));
-      this.tempCelsius = String(Math.round(fahrenheitToCelsius(fahrenheit)));
+      this.tempFahrenheit = formatInt(fahrenheit);
+      this.tempCelsius = formatInt(fahrenheitToCelsius(fahrenheit));
     }
   }
 }

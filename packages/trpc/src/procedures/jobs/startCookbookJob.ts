@@ -30,7 +30,6 @@ export const startCookbookJob = publicProcedure
       includeToc: z.boolean(),
       includeImages: z.boolean(),
       recipeIds: z.array(z.uuid()).min(1).max(1000),
-      language: z.string().max(35).optional(),
     }),
   )
   .output(
@@ -56,7 +55,7 @@ export const startCookbookJob = publicProcedure
           cookbookIncludeToc: input.includeToc,
           cookbookIncludeImages: input.includeImages,
           recipeIds: input.recipeIds,
-          language: input.language,
+          language: ctx.language,
         } satisfies CookbookJobMeta,
       },
     });

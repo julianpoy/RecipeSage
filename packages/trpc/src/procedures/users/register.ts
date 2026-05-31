@@ -1,6 +1,5 @@
 import { prisma, SessionDTO, sessionDTOSchema } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import * as Sentry from "@sentry/node";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
@@ -9,7 +8,6 @@ import {
   generateSession,
   metrics,
   sanitizeUserEmail,
-  sendWelcomeEmail,
 } from "@recipesage/util/server/general";
 
 export const register = publicProcedure
@@ -85,15 +83,6 @@ export const register = publicProcedure
         email: user.email,
       } satisfies SessionDTO;
     });
-
-    if (process.env.ENABLE_WELCOME_EMAIL === "true") {
-      sendWelcomeEmail({
-        toAddresses: [sanitizedEmail],
-        ccAddresses: [],
-      }).catch((err) => {
-        Sentry.captureException(err);
-      });
-    }
 
     metrics.userCreated.inc({
       auth_type: "password",

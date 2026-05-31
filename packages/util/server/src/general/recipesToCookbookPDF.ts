@@ -2,11 +2,7 @@ import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 import { RecipeSummary } from "@recipesage/prisma";
 import { setTimeout } from "node:timers/promises";
 import { PassThrough } from "stream";
-import {
-  pdfmake,
-  recipeToPDFMakeSchema,
-  type RecipePDFStrings,
-} from "./recipeSummariesToPDF";
+import { pdfmake, recipeToPDFMakeSchema } from "./recipeSummariesToPDF";
 
 export interface CookbookOptions {
   title: string;
@@ -15,7 +11,7 @@ export interface CookbookOptions {
   author?: string;
   includeToc: boolean;
   includeImages: boolean;
-  strings: RecipePDFStrings;
+  language: string;
   introductionLabel: string;
   contentsLabel: string;
   byAuthorTemplate: string;
@@ -82,7 +78,7 @@ export const generateCookbookPDFStream = async (
   for (const recipe of recipes) {
     content.push(
       await recipeToPDFMakeSchema(recipe, {
-        strings: options.strings,
+        language: options.language,
         includePrimaryImage: options.includeImages,
         renderInlineImages: options.includeImages,
         pageBreakBefore: true,

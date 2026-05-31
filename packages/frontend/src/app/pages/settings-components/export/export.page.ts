@@ -136,7 +136,6 @@ export class ExportPage {
   async export(format: ExportFormat) {
     const response = await this.serverActionsService.jobs.startExportJob({
       format,
-      language: this.translate.getCurrentLang(),
     });
 
     if (response) {

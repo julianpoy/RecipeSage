@@ -175,7 +175,7 @@
     margin: 8px 0 0 0;
     font-size: 0.75rem;
     font-weight: 700;
-    text-align: right;
+    text-align: end;
   }
 
   .nutrition-fact-row {
@@ -183,7 +183,7 @@
     border-bottom: 1px solid var(--ion-color-step-150, #e0e0e0);
 
     &.indent {
-      padding-left: 20px;
+      padding-inline-start: 20px;
     }
   }
 
@@ -200,12 +200,12 @@
   .nutrition-fact-value {
     font-weight: 600;
     white-space: nowrap;
-    text-align: right;
+    text-align: end;
   }
 
   .nutrition-fact-dv {
     flex: 0 0 52px;
-    text-align: right;
+    text-align: end;
     font-weight: 600;
     white-space: nowrap;
   }

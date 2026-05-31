@@ -29,7 +29,6 @@ export const startExportJob = publicProcedure
         z.literal("jsonld"),
       ]),
       recipeIds: z.array(z.uuid()).min(1).max(5000).optional(),
-      language: z.string().max(254).optional(),
     }),
   )
   .output(
@@ -51,7 +50,7 @@ export const startExportJob = publicProcedure
           exportType: input.format,
           exportScope: input.recipeIds ? "recipeids" : "all",
           recipeIds: input.recipeIds,
-          language: input.language,
+          language: ctx.language,
         } satisfies ExportJobMeta,
       },
     });

@@ -175,6 +175,9 @@ export class AppComponent {
       settings,
     });
 
+    this.translate.onLangChange.subscribe((params) => {
+      (window as any).currentRSLanguage = params.lang;
+    });
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
     const language = languagePref || this.utilService.getAppBrowserLang();

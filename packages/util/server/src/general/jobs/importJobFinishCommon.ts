@@ -1,5 +1,5 @@
 import { JobStatus } from "@recipesage/prisma";
-import { prisma, type JobSummary } from "@recipesage/prisma";
+import { prisma, type ImportJobSummary } from "@recipesage/prisma";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 import {
   importStandardizedRecipes,
@@ -12,7 +12,7 @@ import { IMPORT_JOB_STEP_COUNT } from "../queue/import/processImportJob";
 import { CreditOperation, recordCreditsSpent } from "../credits";
 
 export async function importJobFinishCommon(args: {
-  job: JobSummary;
+  job: ImportJobSummary;
   userId: string;
   standardizedRecipeImportInput: StandardizedRecipeImportEntry[];
   importTempDirectory: string | undefined;
@@ -35,6 +35,7 @@ export async function importJobFinishCommon(args: {
   const createdRecipeIds = await importStandardizedRecipes(
     args.userId,
     args.standardizedRecipeImportInput,
+    args.job.meta.language || "en-us",
     args.importTempDirectory,
   );
   const createdRecipeIdsSet = new Set(createdRecipeIds);

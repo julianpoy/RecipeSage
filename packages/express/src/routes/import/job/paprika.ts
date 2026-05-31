@@ -9,6 +9,7 @@ import {
   importJobSetupCommon,
   multerAutoCleanup,
 } from "@recipesage/util/server/general";
+import { getRequestLanguage } from "@recipesage/util/server/general";
 import {
   MAX_IMPORT_FILE_SIZE_MB,
   ObjectTypes,
@@ -53,6 +54,7 @@ export const paprikaHandler = defineHandler(
     const { job } = await importJobSetupCommon({
       userId,
       importType: "paprika",
+      language: getRequestLanguage(req),
       labels: req.query.labels?.split(",") || [],
     });
 

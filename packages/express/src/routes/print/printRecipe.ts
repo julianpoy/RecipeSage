@@ -114,7 +114,7 @@ export const printRecipeHandler = defineHandler(
           inlineImageRefs,
         ),
       },
-      recipeURL: `https://recipesage.com/#/recipe/${sorted.id}`,
+      recipeURL: `https://recipesage.com/app/recipe/${sorted.id}`,
       date: new Date().toDateString(),
       modifiers,
     });

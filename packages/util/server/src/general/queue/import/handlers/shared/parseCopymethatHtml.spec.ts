@@ -162,9 +162,9 @@ describe("parseCopymethatHtml", () => {
       expect(parsed[0].notes).toContain("Can also be served warm.");
     });
 
-    it("falls back to 'Untitled' when name is missing", () => {
+    it("returns an empty title when name is missing", () => {
       const html = wrap(recipe(`<div id="categories"></div>`));
-      expect(parseCopymethatHtml(html)[0].title).toBe("Untitled");
+      expect(parseCopymethatHtml(html)[0].title).toBe("");
     });
 
     it("returns multiple recipes from a multi-recipe document", () => {

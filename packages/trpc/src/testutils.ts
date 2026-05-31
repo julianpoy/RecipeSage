@@ -7,7 +7,7 @@ import { createCallerFactory } from "./trpc";
 
 export const createCaller = createCallerFactory(appRouter);
 
-export const anonymousTrpc = createCaller({ session: null });
+export const anonymousTrpc = createCaller({ session: null, language: "" });
 
 interface TrpcFixtures {
   user: User;
@@ -40,10 +40,10 @@ export const test = baseTest.extend<TrpcFixtures>({
     await use(session);
   },
   trpc: async ({ session }, use) => {
-    await use(createCaller({ session }));
+    await use(createCaller({ session, language: "" }));
   },
   trpc2: async ({ session2 }, use) => {
-    await use(createCaller({ session: session2 }));
+    await use(createCaller({ session: session2, language: "" }));
   },
 });
 

@@ -1,4 +1,16 @@
 {
+  "emails.passwordReset.subject": "RecipeSage Password Reset",
+  "emails.passwordReset.greeting": "Hello,",
+  "emails.passwordReset.intro": "Someone recently requested a password reset link for the RecipeSage account associated with this email address.",
+  "emails.passwordReset.disregardNotice": "If you did not request a password reset, please disregard this email.",
+  "emails.passwordReset.resetLinkText": "Click here to reset your password",
+  "emails.passwordReset.copyUrlFallback": "or paste this url into your browser: {{resetLink}}",
+  "emails.passwordReset.pasteUrlInstruction": "To reset your password, paste this url into your browser: {{resetLink}}",
+
+  "emails.signature.closing": "Best,",
+  "emails.signature.role": "Developer of RecipeSage",
+  "emails.signature.socialHeader": "Social:",
+
   "pages.app.oldBrowserAlert.header": "Unsupported Browser",
   "pages.app.oldBrowserAlert.message": "It looks like you're using an old browser that isn't supported. Some functionality may not work or may be broken. Please switch to a modern browser such as Firefox for full functionality.",
   "pages.app.browser.title": "RecipeSage - The Personal Recipe Keeper",
@@ -1777,6 +1789,7 @@
   "pages.shareProfileModal.close": "Close",
   "pages.shareProfileModal.shareTitle": "{{name}}'s RecipeSage profile",
   "pages.shareProfileModal.shareBody": "Click to view {{name}}'s public RecipeSage profile:",
+  "pages.shareProfileModal.errorLoadingProfileUrl": "Error loading profile url",
 
   "components.cookingToolbar.clear": "Clear All Pinned Recipes?",
 

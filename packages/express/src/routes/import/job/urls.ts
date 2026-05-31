@@ -7,6 +7,7 @@ import { importJobSetupCommon } from "@recipesage/util/server/general";
 import { ObjectTypes, writeBuffer } from "@recipesage/util/server/storage";
 import { enqueueJob } from "@recipesage/util/server/general";
 import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvailableExpress";
+import { getRequestLanguage } from "@recipesage/util/server/general";
 
 const schema = {
   body: z.object({
@@ -32,6 +33,7 @@ export const urlsHandler = defineHandler(
     const { job } = await importJobSetupCommon({
       userId,
       importType: "urls",
+      language: getRequestLanguage(req),
       labels: req.query.labels?.split(",") || [],
     });
 

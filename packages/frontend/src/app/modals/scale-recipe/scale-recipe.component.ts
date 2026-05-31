@@ -129,7 +129,7 @@ export class ScaleRecipeComponent implements OnInit {
   }
 
   private decimalSeparator(): string {
-    const lang = this.translate.currentLang || "en-us";
+    const lang = this.translate.getCurrentLang();
     return (1.1).toLocaleString(lang).charAt(1);
   }
 
@@ -168,7 +168,7 @@ export class ScaleRecipeComponent implements OnInit {
 
   private formatCount(value: number): string {
     if (!Number.isFinite(value)) return "";
-    const lang = this.translate.currentLang || "en-us";
+    const lang = this.translate.getCurrentLang();
     return value.toLocaleString(lang, { maximumFractionDigits: 2 });
   }
 

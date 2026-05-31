@@ -22,7 +22,7 @@ export function parseCopymethatHtml(html: string): ParsedCopymethatRecipe[] {
     .map((domItem) => {
       const $item = $(domItem);
 
-      const title = $item.find("#name").text().trim() || "Untitled";
+      const title = $item.find("#name").text().trim() || "";
       const description = $item.find("#description").text().trim() || undefined;
       const sourceUrl = $item.find("#original_link").attr("href") || undefined;
       const rating =

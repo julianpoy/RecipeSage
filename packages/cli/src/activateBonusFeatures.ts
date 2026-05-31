@@ -35,7 +35,7 @@ export const activateBonusFeatures = async (args: {
   console.log("");
   console.log("Thanks for activating RecipeSage's bonus features");
   console.log(
-    "Please consider contributing to RecipeSage's development & maintenance: https://recipesage.com/#/contribute",
+    "Please consider contributing to RecipeSage's development & maintenance: https://recipesage.com/app/contribute",
   );
   console.log("");
   console.log("- Julian");

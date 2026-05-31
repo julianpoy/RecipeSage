@@ -16,7 +16,7 @@ calendar-item {
   background-color: var(--ion-background-tint-color);
   border-radius: 4px;
   padding: 8px;
-  border-left: 4px solid var(--ion-text-color);
+  border-inline-start: 4px solid var(--ion-text-color);
 
   &:hover {
     background-color: var(--ion-background-tint-active-color);

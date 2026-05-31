@@ -9,7 +9,6 @@ export * from "./auth/sanitizeUserEmail";
 export * from "./categorize/getShoppingListItemCategories";
 export * from "./categorize/getShoppingListItemGroupTitles";
 
-export * from "./email/sendWelcomeEmail";
 export * from "./email/sendPasswordResetEmail";
 
 export * from "./jobs/getJobResultCode";
@@ -34,6 +33,7 @@ export * from "./decryptWithRSAKey";
 export * from "./deletePathsSilent";
 export * from "./throttleDropPromise";
 export * from "./translate";
+export * from "./getRequestLanguage";
 export * from "./sanitizeRemoveHtmlFromString";
 
 export * from "./factories";

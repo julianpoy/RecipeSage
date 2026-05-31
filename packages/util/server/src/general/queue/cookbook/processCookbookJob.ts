@@ -18,7 +18,6 @@ import {
 } from "../../jobs/updateJobProgress";
 import { ObjectTypes, writeStream } from "../../../storage";
 import { generateCookbookPDFStream } from "../../recipesToCookbookPDF";
-import { getRecipePDFStrings } from "../../recipeSummariesToPDF";
 import { translate } from "../../translate";
 
 const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
@@ -63,7 +62,6 @@ export const processCookbookJob = async (
   const totalCount = recipes.length;
 
   const language = jobMeta.language ?? "en-us";
-  const strings = await getRecipePDFStrings(language);
   const introductionLabel = await translate(
     language,
     "pages.cookbook.field.introduction",
@@ -103,7 +101,7 @@ export const processCookbookJob = async (
       author: jobMeta.cookbookAuthor,
       includeToc: jobMeta.cookbookIncludeToc ?? false,
       includeImages: jobMeta.cookbookIncludeImages ?? true,
-      strings,
+      language,
       introductionLabel,
       contentsLabel,
       byAuthorTemplate,
