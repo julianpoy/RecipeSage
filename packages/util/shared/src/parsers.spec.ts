@@ -2,11 +2,13 @@ import { describe, it, expect } from "vitest";
 import { System } from "unitz-ts";
 import {
   getMeasurementsForIngredient,
+  getSingleScalableMeasurement,
   getTitleForIngredient,
   stripIngredient,
   parseIngredients,
   parseInstructions,
   parseNotes,
+  parseYieldCount,
   applyInlineFormatting,
   applyInlineFormattingWithImages,
   stripInlineFormatting,
@@ -76,6 +78,102 @@ describe("parsers", () => {
         const result = getMeasurementsForIngredient("2 cups flour (sifted)");
         expect(result).toEqual(["2 cups"]);
       });
+    });
+  });
+
+  describe("getSingleScalableMeasurement", () => {
+    it("returns qty + unit for a clean line", () => {
+      expect(getSingleScalableMeasurement("2 cups flour")).toEqual({
+        qtyText: "2",
+        qtyValue: 2,
+        unit: "cups",
+      });
+    });
+
+    it("returns qty alone when no unit is present", () => {
+      expect(getSingleScalableMeasurement("3 eggs")).toEqual({
+        qtyText: "3",
+        qtyValue: 3,
+        unit: "",
+      });
+    });
+
+    it("parses fractions and mixed numbers", () => {
+      expect(getSingleScalableMeasurement("1/2 cup butter")).toEqual({
+        qtyText: "1/2",
+        qtyValue: 0.5,
+        unit: "cup",
+      });
+      expect(getSingleScalableMeasurement("1 1/2 tsp salt")).toEqual({
+        qtyText: "1 1/2",
+        qtyValue: 1.5,
+        unit: "tsp",
+      });
+    });
+
+    it("returns null for headers", () => {
+      expect(getSingleScalableMeasurement("[Sauce]")).toBeNull();
+    });
+
+    it("returns null for empty input", () => {
+      expect(getSingleScalableMeasurement("")).toBeNull();
+      expect(getSingleScalableMeasurement("   ")).toBeNull();
+    });
+
+    it("returns null for unquantified ingredients", () => {
+      expect(getSingleScalableMeasurement("salt to taste")).toBeNull();
+    });
+
+    it("returns null for ranges", () => {
+      expect(getSingleScalableMeasurement("1-2 tsp salt")).toBeNull();
+      expect(getSingleScalableMeasurement("1 to 2 cups flour")).toBeNull();
+      expect(getSingleScalableMeasurement("1 à 2 tasses de farine")).toBeNull();
+      expect(getSingleScalableMeasurement("1 bis 2 Tassen Mehl")).toBeNull();
+      expect(getSingleScalableMeasurement("1–2 cups flour")).toBeNull();
+      expect(getSingleScalableMeasurement("1—2 cups flour")).toBeNull();
+    });
+
+    it("returns null for multipart measurements", () => {
+      expect(
+        getSingleScalableMeasurement("1 cup + 2 tablespoons sugar"),
+      ).toBeNull();
+      expect(getSingleScalableMeasurement("1 cup or 250ml milk")).toBeNull();
+    });
+  });
+
+  describe("parseYieldCount", () => {
+    it("returns null for null/undefined/empty", () => {
+      expect(parseYieldCount(null)).toBeNull();
+      expect(parseYieldCount(undefined)).toBeNull();
+      expect(parseYieldCount("")).toBeNull();
+      expect(parseYieldCount("   ")).toBeNull();
+    });
+
+    it("extracts the first integer from common yield text", () => {
+      expect(parseYieldCount("4 servings")).toBe(4);
+      expect(parseYieldCount("Serves 6")).toBe(6);
+      expect(parseYieldCount("Makes 12 cookies")).toBe(12);
+      expect(parseYieldCount("1 loaf")).toBe(1);
+    });
+
+    it("uses the lower bound of a range", () => {
+      expect(parseYieldCount("Makes 8-10 cookies")).toBe(8);
+      expect(parseYieldCount("4 to 6 servings")).toBe(4);
+    });
+
+    it("handles decimal yields", () => {
+      expect(parseYieldCount("1.5 dozen")).toBe(1.5);
+      expect(parseYieldCount("2,5 portions")).toBe(2.5);
+    });
+
+    it("returns null when there is no number", () => {
+      expect(parseYieldCount("Two dozen cookies")).toBeNull();
+      expect(parseYieldCount("Several servings")).toBeNull();
+    });
+
+    it("returns null for non-positive numbers", () => {
+      expect(parseYieldCount("0 servings")).toBeNull();
+      expect(parseYieldCount("-3 servings")).toBeNull();
     });
   });
 

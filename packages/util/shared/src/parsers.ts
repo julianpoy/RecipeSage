@@ -174,7 +174,7 @@ const headerRegexp = /^\[.*\]$/;
  * Separates multipart measurements like "1 cup + 2 tablespoons",
  * "1 cup plus 2 tablespoons", or "1 cup or 250ml".
  */
-const multipartQuantifierRegexp = / \+ | plus | or /;
+const multipartQuantifierRegexp = / \+ | plus | or | oder | ou | und | et /;
 
 /**
  * Matches a measurement number, including mixed fractions ("1 1/2"),
@@ -182,7 +182,7 @@ const multipartQuantifierRegexp = / \+ | plus | or /;
  * joined by "-", " - ", or " to ".
  */
 const measurementRegexp =
-  /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
+  /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - )|( à )|( bis )|(–)|(—))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
@@ -258,6 +258,58 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
       return null;
     })
     .filter((measurement): measurement is string => !!measurement);
+};
+
+/**
+ * Returns the single scalable measurement for an ingredient line, or null if
+ * the line is empty, a header, multipart ("1 cup + 2 tbsp"), a range
+ * ("1 to 2 cups"), or otherwise has no numerically-parseable leading quantity.
+ */
+export const getSingleScalableMeasurement = (
+  ingredient: string,
+): { qtyText: string; qtyValue: number; unit: string } | null => {
+  const cleaned = stripNewlines(ingredient).trim();
+  if (!cleaned) return null;
+  if (headerRegexp.test(cleaned)) return null;
+
+  const withFractions = replaceFractionsInText(cleaned);
+  const parts = withFractions.split(multipartQuantifierRegexp);
+  if (parts.length !== 1) return null;
+
+  const noNotes = stripNotes(parts[0]);
+  if (/\d\s*(?:[–—]|\s(?:to|à|bis)\s)\s*\d/i.test(noNotes)) return null;
+  const match = noNotes.match(new RegExp(measurementQuantityRegExp, "i"));
+  if (!match || !match[1]) return null;
+
+  const qtyText = match[1].trim();
+  if (/-|\bto\b/i.test(qtyText)) return null;
+
+  let qtyValue: number;
+  try {
+    qtyValue = new FractionJS(qtyText).valueOf();
+  } catch {
+    return null;
+  }
+  if (!Number.isFinite(qtyValue) || qtyValue <= 0) return null;
+
+  const unit = match[0].substring(match[1].length).trim();
+  return { qtyText, qtyValue, unit };
+};
+
+/**
+ * Best-effort numeric extraction from free-text yield strings ("4 servings",
+ * "Makes 8-10 cookies"). Returns the first number found (so the lower bound
+ * of a range), or null if no value is present.
+ */
+export const parseYieldCount = (
+  yieldText: string | null | undefined,
+): number | null => {
+  if (!yieldText) return null;
+  const match = yieldText.match(/-?\d+(?:[.,]\d+)?/);
+  if (!match) return null;
+  const value = Number(match[0].replace(",", "."));
+  if (!Number.isFinite(value) || value <= 0) return null;
+  return value;
 };
 
 /**

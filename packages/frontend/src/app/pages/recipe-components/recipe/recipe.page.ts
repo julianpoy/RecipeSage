@@ -427,6 +427,8 @@ export class RecipePage {
       componentProps: {
         scale: this.scale.toString(),
         unitSystem: this.unitSystem,
+        yieldText: this.recipe?.yield ?? null,
+        ingredients: this.ingredients ?? [],
       },
       cssClass: "scaleRecipeModal",
     });
