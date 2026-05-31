@@ -34,6 +34,7 @@ export function preferencesFactory(): AppPreferenceTypes {
     "recipeDetails.enableWakeLock": true,
     "recipeDetails.autoExpandNutrition": false,
     "manageLabels.showCreatedAt": false,
+    "measurementConverter.showFractions": true,
     "MealPlan.showAddedBy": true,
     "MealPlan.showAddedOn": true,
     "MealPlan.startOfWeek": MealPlanStartOfWeekOptions.Monday,

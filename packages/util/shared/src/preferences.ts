@@ -139,6 +139,10 @@ export enum ManageLabelsPreferenceKey {
   ShowCreatedAt = "manageLabels.showCreatedAt",
 }
 
+export enum MeasurementConverterPreferenceKey {
+  ShowFractions = "measurementConverter.showFractions",
+}
+
 export enum MealPlanPreferenceKey {
   ShowAddedBy = "MealPlan.showAddedBy",
   ShowAddedOn = "MealPlan.showAddedOn",
@@ -181,6 +185,8 @@ export interface AppPreferenceTypes {
   [RecipeDetailsPreferenceKey.AutoExpandNutrition]: boolean;
 
   [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
+
+  [MeasurementConverterPreferenceKey.ShowFractions]: boolean;
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;

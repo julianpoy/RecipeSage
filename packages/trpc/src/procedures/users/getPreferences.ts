@@ -5,6 +5,7 @@ import {
   AppTheme,
   GlobalPreferenceKey,
   ManageLabelsPreferenceKey,
+  MeasurementConverterPreferenceKey,
   MealPlanPreferenceKey,
   MealPlanStartOfWeekOptions,
   MealPlanViewTypeOptions,
@@ -50,6 +51,8 @@ const appPreferencesSchema = z
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: z.boolean(),
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: z.boolean(),
+
+    [MeasurementConverterPreferenceKey.ShowFractions]: z.boolean(),
 
     [MealPlanPreferenceKey.ShowAddedBy]: z.boolean(),
     [MealPlanPreferenceKey.ShowAddedOn]: z.boolean(),

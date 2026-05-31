@@ -1,0 +1,16 @@
+<ion-list no-border>
+  <ion-list-header>
+    {{ "pages.measurementConverter.displayOptions" | translate }}
+  </ion-list-header>
+
+  <ion-item lines="none">
+    <ion-toggle
+      [(ngModel)]="preferences[preferenceKeys.ShowFractions]"
+      (ngModelChange)="savePreferences()"
+    >
+      <div class="ion-text-wrap">
+        {{ "pages.measurementConverter.showFractions" | translate }}
+      </div>
+    </ion-toggle>
+  </ion-item>
+</ion-list>

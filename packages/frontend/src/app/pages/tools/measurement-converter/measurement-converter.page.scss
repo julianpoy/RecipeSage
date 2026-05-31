@@ -1,0 +1,91 @@
+.page-wrapper {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+.mode-segment {
+  margin-top: 12px;
+}
+
+.ingredient-bridge {
+  --background: var(--ion-color-step-50, #f7f7f7);
+  margin: 8px 0;
+}
+
+.ingredient-bridge-scope {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.ingredient-bridge-name {
+  margin: 2px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.ingredient-bridge-basis {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.expand-toggle {
+  font-size: 0.85rem;
+  --min-height: 36px;
+
+  ion-icon {
+    margin-inline-end: 8px;
+  }
+}
+
+.value-input {
+  max-width: 140px;
+  text-align: right;
+  --padding-end: 4px;
+}
+
+.varies-note {
+  display: block;
+  padding: 8px 16px 0;
+  font-size: 0.78rem;
+}
+
+.reference {
+  margin: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 8px;
+}
+
+.reference-title {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.reference-footnote {
+  margin: 10px 0 0 0;
+  font-size: 0.72rem;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.oven-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.oven-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--ion-color-step-150, #e0e0e0);
+  text-align: center;
+}
+
+.oven-head {
+  font-weight: 700;
+  font-size: 0.85rem;
+}

@@ -5,6 +5,7 @@ import {
   GlobalPreferenceKey,
   ManageLabelsPreferenceKey,
   MealPlanPreferenceKey,
+  MeasurementConverterPreferenceKey,
   MealPlanStartOfWeekOptions,
   MealPlanViewTypeOptions,
   MyRecipesIncludeFriendsOptions,
@@ -63,6 +64,8 @@ export class PreferencesService {
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: false,
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
+
+    [MeasurementConverterPreferenceKey.ShowFractions]: true,
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,
