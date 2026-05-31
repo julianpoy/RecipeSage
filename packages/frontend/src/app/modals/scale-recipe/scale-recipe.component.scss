@@ -1,5 +1,20 @@
-.preselect-options {
+.preset-options {
+  padding-inline-start: 16px;
+
+  p {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
   ion-button {
     min-width: 40px;
   }
+}
+
+.anchor-qty-item {
+  margin-inline-start: 32px;
+}
+
+.unit-system-item {
+  margin-top: 16px;
 }
