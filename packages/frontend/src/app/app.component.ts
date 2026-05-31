@@ -444,24 +444,6 @@ export class AppComponent {
       [
         true,
         {
-          id: "labels",
-          title: labels,
-          icon: "pricetag",
-          url: RouteMap.LabelsPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "people",
-          title: people,
-          icon: "people",
-          url: RouteMap.PeoplePage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
           id: "shopping",
           title: shopping,
           icon: "cart",
@@ -480,10 +462,28 @@ export class AppComponent {
       [
         true,
         {
+          id: "people",
+          title: people,
+          icon: "people",
+          url: RouteMap.PeoplePage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "tools",
           title: tools,
           icon: "construct",
           url: RouteMap.ToolsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
+          id: "labels",
+          title: labels,
+          icon: "pricetag",
+          url: RouteMap.LabelsPage.getPath(),
         },
       ],
       [
