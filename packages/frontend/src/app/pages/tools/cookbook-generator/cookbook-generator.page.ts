@@ -197,7 +197,6 @@ export class CookbookGeneratorPage {
       includeToc: this.includeToc,
       includeImages: this.includeImages,
       recipeIds: this.recipes.map((recipe) => recipe.id),
-      language: this.translate.currentLang || undefined,
     });
     this.startingJob = false;
 

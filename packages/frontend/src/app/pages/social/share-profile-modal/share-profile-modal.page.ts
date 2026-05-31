@@ -88,7 +88,10 @@ export class ShareProfileModalPage implements OnInit {
   }
 
   getProfileUrl() {
-    if (!this.profile) return "Error loading profile url";
+    if (!this.profile)
+      return this.translate.instant(
+        "pages.shareProfileModal.errorLoadingProfileUrl",
+      );
     return `https://${window.location.host}/app/${RouteMap.ProfilePage.getPath(
       `@${this.profile.handle}`,
     )}`;

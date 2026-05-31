@@ -38,7 +38,7 @@ export const shareRecipeHandler = defineHandler(
 
     const appuiOrigin = process.env.APP_UI_BASE_URL || "https://recipesage.com";
     const shareURL = `${appuiOrigin}/api/share/recipe/${sorted.id}`;
-    const redirectURL = `${appuiOrigin}/#/recipe/${sorted.id}`;
+    const redirectURL = `${appuiOrigin}/app/recipe/${sorted.id}`;
 
     res.render("recipe-share", {
       recipe: {

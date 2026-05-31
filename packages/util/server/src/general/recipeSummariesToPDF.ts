@@ -113,7 +113,7 @@ export const getRecipePDFStrings = async (
 };
 
 export interface RecipePDFMakeOptions {
-  strings: RecipePDFStrings;
+  language: string;
   includePrimaryImage?: boolean;
   includeImageUrls?: boolean;
   renderInlineImages?: boolean;
@@ -303,43 +303,99 @@ const buildNotesTable = (noteContent: string): Content => {
   };
 };
 
-export const buildNutritionTableRows = (
+export const buildNutritionTableRows = async (
   recipe: RecipeSummary,
-  strings: RecipePDFStrings,
-): Content[][] => {
+  language: string,
+): Promise<Content[][]> => {
+  const strings = await getRecipePDFStrings(language);
+
   const labels = strings.nutritionLabels;
   const rows: [string, number | null, string][] = [
-    [labels.calories, recipe.nutritionCalories, "kcal"],
-    [labels.totalFat, recipe.nutritionTotalFat, "g"],
-    [labels.saturatedFat, recipe.nutritionSaturatedFat, "g"],
-    [labels.transFat, recipe.nutritionTransFat, "g"],
-    [labels.polyunsaturatedFat, recipe.nutritionPolyunsaturatedFat, "g"],
-    [labels.monounsaturatedFat, recipe.nutritionMonounsaturatedFat, "g"],
-    [labels.cholesterol, recipe.nutritionCholesterol, "mg"],
-    [labels.sodium, recipe.nutritionSodium, "mg"],
-    [labels.totalCarbs, recipe.nutritionTotalCarbs, "g"],
-    [labels.dietaryFiber, recipe.nutritionDietaryFiber, "g"],
-    [labels.totalSugars, recipe.nutritionTotalSugars, "g"],
-    [labels.addedSugars, recipe.nutritionAddedSugars, "g"],
-    [labels.protein, recipe.nutritionProtein, "g"],
-    [labels.vitaminD, recipe.nutritionVitaminD, "mcg"],
-    [labels.calcium, recipe.nutritionCalcium, "mg"],
-    [labels.iron, recipe.nutritionIron, "mg"],
-    [labels.potassium, recipe.nutritionPotassium, "mg"],
+    [
+      labels.calories,
+      recipe.nutritionCalories,
+      "pages.recipeDetails.units.kcal",
+    ],
+    [labels.totalFat, recipe.nutritionTotalFat, "pages.recipeDetails.units.g"],
+    [
+      labels.saturatedFat,
+      recipe.nutritionSaturatedFat,
+      "pages.recipeDetails.units.g",
+    ],
+    [labels.transFat, recipe.nutritionTransFat, "pages.recipeDetails.units.g"],
+    [
+      labels.polyunsaturatedFat,
+      recipe.nutritionPolyunsaturatedFat,
+      "pages.recipeDetails.units.g",
+    ],
+    [
+      labels.monounsaturatedFat,
+      recipe.nutritionMonounsaturatedFat,
+      "pages.recipeDetails.units.g",
+    ],
+    [
+      labels.cholesterol,
+      recipe.nutritionCholesterol,
+      "pages.recipeDetails.units.mg",
+    ],
+    [labels.sodium, recipe.nutritionSodium, "pages.recipeDetails.units.mg"],
+    [
+      labels.totalCarbs,
+      recipe.nutritionTotalCarbs,
+      "pages.recipeDetails.units.g",
+    ],
+    [
+      labels.dietaryFiber,
+      recipe.nutritionDietaryFiber,
+      "pages.recipeDetails.units.g",
+    ],
+    [
+      labels.totalSugars,
+      recipe.nutritionTotalSugars,
+      "pages.recipeDetails.units.g",
+    ],
+    [
+      labels.addedSugars,
+      recipe.nutritionAddedSugars,
+      "pages.recipeDetails.units.g",
+    ],
+    [labels.protein, recipe.nutritionProtein, "pages.recipeDetails.units.g"],
+    [
+      labels.vitaminD,
+      recipe.nutritionVitaminD,
+      "pages.recipeDetails.units.mcg",
+    ],
+    [labels.calcium, recipe.nutritionCalcium, "pages.recipeDetails.units.mg"],
+    [labels.iron, recipe.nutritionIron, "pages.recipeDetails.units.mg"],
+    [
+      labels.potassium,
+      recipe.nutritionPotassium,
+      "pages.recipeDetails.units.mg",
+    ],
   ];
-  return rows
-    .filter(([, value]) => value != null)
-    .map(([label, value, unit]) => [
-      { text: label, bold: true },
-      { text: `${value} ${unit}` },
-    ]);
+  const isVisible = (
+    row: [string, number | null, string],
+  ): row is [string, number, string] => row[1] !== null;
+  const visibleRows = rows.filter(isVisible);
+  return Promise.all(
+    visibleRows.map(async ([label, value, unitKey]) => {
+      const formattedValue = value.toLocaleString(language, {
+        useGrouping: false,
+      });
+      const valueText = await translate(language, unitKey, {
+        value: formattedValue,
+      });
+      return [{ text: label, bold: true }, { text: valueText }];
+    }),
+  );
 };
 
 export const recipeToPDFMakeSchema = async (
   recipe: RecipeSummary,
   options: RecipePDFMakeOptions,
 ): Promise<Content> => {
-  const { strings } = options;
+  const strings = await getRecipePDFStrings(options.language);
+
   const renderInlineImages = options.renderInlineImages ?? false;
   const imageLocations = getSortedImageLocations(recipe);
 
@@ -514,7 +570,7 @@ export const recipeToPDFMakeSchema = async (
     }
   }
 
-  const nutritionRows = buildNutritionTableRows(recipe, strings);
+  const nutritionRows = await buildNutritionTableRows(recipe, options.language);
   if (nutritionRows.length > 0 || recipe.nutritionOtherDetails) {
     schema.push({
       text: strings.nutrition + ":",

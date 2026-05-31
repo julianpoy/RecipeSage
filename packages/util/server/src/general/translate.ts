@@ -22,6 +22,7 @@ const loadPromise = (async () => {
 export const translate = async (
   acceptLanguageHeader: string,
   key: string,
+  values?: Record<string, string>,
 ): Promise<string> => {
   const lang = acceptLanguage.get(acceptLanguageHeader);
   if (!lang) return key;
@@ -30,7 +31,18 @@ export const translate = async (
 
   const translations = loadedLanguageFileMap[lang] || {};
 
-  if (translations[key]) return translations[key];
-  if (lang !== "en-us") return translate("en-us", key);
+  if (translations[key]) {
+    return values ? interpolate(translations[key], values) : translations[key];
+  }
+  if (lang !== "en-us") return translate("en-us", key, values);
   return key;
+};
+
+export const interpolate = (
+  template: string,
+  values: Record<string, string>,
+): string => {
+  return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name) =>
+    Object.prototype.hasOwnProperty.call(values, name) ? values[name] : match,
+  );
 };

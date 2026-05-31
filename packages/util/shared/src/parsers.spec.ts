@@ -79,6 +79,46 @@ describe("parsers", () => {
         expect(result).toEqual(["2 cups"]);
       });
     });
+
+    describe("non-English multipart connectors", () => {
+      it("splits on German oder", () => {
+        expect(getMeasurementsForIngredient("1 cup oder 250 ml Milch")).toEqual(
+          ["1 cup", "250 ml"],
+        );
+      });
+
+      it("splits on German und", () => {
+        expect(
+          getMeasurementsForIngredient("1 cup und 2 tablespoons sugar"),
+        ).toEqual(["1 cup", "2 tablespoons"]);
+      });
+    });
+
+    describe("dash range markers", () => {
+      it("handles en-dash range", () => {
+        const result = getMeasurementsForIngredient("1–2 cups flour");
+        expect(result).toEqual(["1–2 cups"]);
+      });
+
+      it("handles em-dash range", () => {
+        const result = getMeasurementsForIngredient("1—2 cups flour");
+        expect(result).toEqual(["1—2 cups"]);
+      });
+    });
+
+    describe("English false-positive guards", () => {
+      it("does not split 'et al.' as a connector", () => {
+        expect(getMeasurementsForIngredient("1 cup flour, et al.")).toEqual([
+          "1 cup",
+        ]);
+      });
+
+      it("does not split bare 'ou' as a connector", () => {
+        expect(getMeasurementsForIngredient("1 cup ou autre")).toEqual([
+          "1 cup",
+        ]);
+      });
+    });
   });
 
   describe("getSingleScalableMeasurement", () => {
@@ -173,7 +213,19 @@ describe("parsers", () => {
 
     it("returns null for non-positive numbers", () => {
       expect(parseYieldCount("0 servings")).toBeNull();
-      expect(parseYieldCount("-3 servings")).toBeNull();
+    });
+
+    it("ignores a leading minus and parses the magnitude", () => {
+      expect(parseYieldCount("-3 servings")).toBe(3);
+      expect(parseYieldCount("slice-2 servings")).toBe(2);
+    });
+
+    it("treats comma followed by exactly 3 digits as a thousand separator", () => {
+      expect(parseYieldCount("1,000 cookies")).toBe(1000);
+    });
+
+    it("treats comma followed by non-3 digits as a decimal", () => {
+      expect(parseYieldCount("1,5 dozen")).toBe(1.5);
     });
   });
 
@@ -206,6 +258,20 @@ describe("parsers", () => {
           "1 cup apples + 2 tablespoons sugar",
         );
         expect(result).toBe("apples + sugar");
+      });
+
+      it("splits on German oder connector", () => {
+        const result = getTitleForIngredient(
+          "1 cup apples oder 2 tablespoons sugar",
+        );
+        expect(result).toBe("apples oder sugar");
+      });
+
+      it("splits on German und connector", () => {
+        const result = getTitleForIngredient(
+          "1 cup apples und 2 tablespoons sugar",
+        );
+        expect(result).toBe("apples und sugar");
       });
     });
 
@@ -565,6 +631,16 @@ describe("parsers", () => {
             "1-2 cup cream",
           );
         });
+        it("preserves en-dash range delimiter while scaling", () => {
+          expect(parseIngredients("1–2 cups flour", "2")[0].content).toBe(
+            "2–4 cups flour",
+          );
+        });
+        it("preserves em-dash range delimiter while scaling", () => {
+          expect(parseIngredients("1—2 cups flour", "2")[0].content).toBe(
+            "2—4 cups flour",
+          );
+        });
       });
 
       describe("multipart", () => {
@@ -602,6 +678,16 @@ describe("parsers", () => {
           expect(
             parseIngredients("1 cup + 0.5 tablespoon butter", "2")[0].content,
           ).toBe("2 cup + 1 tablespoon butter");
+        });
+        it("preserves German 'oder' connector while scaling", () => {
+          expect(
+            parseIngredients("1 cup oder 250 ml Milch", "2")[0].content,
+          ).toBe("2 cup oder 500 ml Milch");
+        });
+        it("preserves German 'und' connector while scaling", () => {
+          expect(
+            parseIngredients("1 cup und 2 tablespoons sugar", "2")[0].content,
+          ).toBe("2 cup und 4 tablespoons sugar");
         });
       });
 

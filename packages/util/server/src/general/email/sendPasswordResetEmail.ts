@@ -1,38 +1,57 @@
-import { dedent } from "ts-dedent";
-import { emailSignatureHtml, emailSignaturePlain } from "./util/emailSignature";
+import { translate } from "../translate";
+import {
+  getEmailSignatureHtml,
+  getEmailSignaturePlain,
+} from "./util/emailSignature";
 import { sendEmail } from "./util/sendEmail";
 
 export const sendPasswordResetEmail = async (args: {
   toAddresses: string[];
   ccAddresses: string[];
   resetLink: string;
+  language: string;
 }) => {
-  const subject = "RecipeSage Password Reset";
+  const t = (key: string, values?: Record<string, string>) =>
+    translate(args.language, key, values);
 
-  const html = dedent`
-    Hello,
+  const [
+    subject,
+    greeting,
+    intro,
+    disregardNotice,
+    resetLinkText,
+    copyUrlFallback,
+    pasteUrlInstruction,
+    signatureHtml,
+    signaturePlain,
+  ] = await Promise.all([
+    t("emails.passwordReset.subject"),
+    t("emails.passwordReset.greeting"),
+    t("emails.passwordReset.intro"),
+    t("emails.passwordReset.disregardNotice"),
+    t("emails.passwordReset.resetLinkText"),
+    t("emails.passwordReset.copyUrlFallback", { resetLink: args.resetLink }),
+    t("emails.passwordReset.pasteUrlInstruction", {
+      resetLink: args.resetLink,
+    }),
+    getEmailSignatureHtml(args.language),
+    getEmailSignaturePlain(args.language),
+  ]);
 
-    <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
-    <br /><br />If you did not request a password reset, please disregard this email.
+  const html =
+    `${greeting}<br /><br />` +
+    `${intro}<br /><br />` +
+    `${disregardNotice}<br /><br />` +
+    `<a href="${args.resetLink}">${resetLinkText}</a><br />` +
+    `${copyUrlFallback}<br />` +
+    signatureHtml;
 
-    <br /><br /><a href="${args.resetLink}">Click here to reset your password</a>
-    <br />or paste this url into your browser: ${args.resetLink}
-
-    <br />
-
-    ${emailSignatureHtml}
-  `;
-
-  const plain = dedent`
-    Hello,
-
-    Someone recently requested a password reset link for the RecipeSage account associated with this email address.
-    If you did not request a password reset, please disregard this email.
-
-    To reset your password, paste this url into your browser: ${args.resetLink}
-
-    ${emailSignaturePlain}
-  `;
+  const plain =
+    `${greeting}\n\n` +
+    `${intro}\n` +
+    `${disregardNotice}\n\n` +
+    `${pasteUrlInstruction}\n\n` +
+    signaturePlain;
 
   await sendEmail({
     toAddresses: args.toAddresses,

@@ -397,7 +397,7 @@ export async function lcbImportJobHandler(
 
     standardizedRecipeImportInput.push({
       recipe: {
-        title: lcbRecipe.recipename || "Untitled",
+        title: lcbRecipe.recipename || "",
         description,
         notes: notes.filter((n) => n).join("\r\n\r\n"),
         ingredients,

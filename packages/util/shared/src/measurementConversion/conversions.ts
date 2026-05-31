@@ -253,11 +253,41 @@ export const OVEN_TEMPERATURES: OvenTemperature[] = (() => {
   return temperatures;
 })();
 
-export const parseQuantity = (input: string): number | null => {
+export const parseQuantity = (input: string, locale: string): number | null => {
   const trimmed = input.trim();
   if (!trimmed) return null;
   try {
-    const value = new FractionJS(trimmed).valueOf();
+    const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
+    const decimalSep = parts.find((p) => p.type === "decimal")?.value ?? ".";
+    const groupSep = parts.find((p) => p.type === "group")?.value ?? "";
+
+    let normalized = trimmed;
+    for (let i = 0; i < 10; i++) {
+      const localizedDigit = i.toLocaleString(locale);
+      if (localizedDigit !== String(i)) {
+        normalized = normalized.split(localizedDigit).join(String(i));
+      }
+    }
+
+    const hasDecimal = decimalSep !== "" && normalized.includes(decimalSep);
+    const hasGroup = groupSep !== "" && normalized.includes(groupSep);
+
+    if (hasDecimal && hasGroup) {
+      normalized = normalized.split(groupSep).join("");
+      normalized = normalized.split(decimalSep).join(".");
+    } else if (hasDecimal) {
+      normalized = normalized.split(decimalSep).join(".");
+    } else if (hasGroup) {
+      const groupParts = normalized.split(groupSep);
+      const isThousandsGrouping = groupParts
+        .slice(1)
+        .every((p) => p.length === 3);
+      if (isThousandsGrouping) {
+        normalized = groupParts.join("");
+      }
+    }
+
+    const value = new FractionJS(normalized).valueOf();
     return Number.isFinite(value) ? value : null;
   } catch {
     return null;
@@ -266,15 +296,15 @@ export const parseQuantity = (input: string): number | null => {
 
 const FRACTION_DENOMINATOR = 16;
 
-export const formatFraction = (value: number): string => {
+export const formatFraction = (value: number, locale: string): string => {
   if (!Number.isFinite(value)) return "";
   const snapped =
     Math.round(value * FRACTION_DENOMINATOR) / FRACTION_DENOMINATOR;
-  if (snapped === 0 && value !== 0) return formatDecimal(value);
+  if (snapped === 0 && value !== 0) return formatDecimal(value, locale);
   return new FractionJS(snapped).toFraction(true);
 };
 
-export const formatDecimal = (value: number): string => {
+export const formatDecimal = (value: number, locale: string): string => {
   if (!Number.isFinite(value)) return "";
   const abs = Math.abs(value);
   let digits: number;
@@ -283,5 +313,8 @@ export const formatDecimal = (value: number): string => {
   else if (abs < 10) digits = 2;
   else if (abs < 100) digits = 1;
   else digits = 0;
-  return String(Number(value.toFixed(digits)));
+  return value.toLocaleString(locale, {
+    maximumFractionDigits: digits,
+    useGrouping: false,
+  });
 };

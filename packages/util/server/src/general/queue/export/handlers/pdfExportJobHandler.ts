@@ -7,10 +7,7 @@ import {
   type StorageObjectRecord,
 } from "../../../../storage";
 import ZipStream from "zip-stream";
-import {
-  getRecipePDFStrings,
-  recipeAsyncIteratorToPDF,
-} from "../../../recipeSummariesToPDF";
+import { recipeAsyncIteratorToPDF } from "../../../recipeSummariesToPDF";
 import { pipeline } from "stream/promises";
 
 export async function pdfExportJobHandler(
@@ -33,11 +30,11 @@ export async function pdfExportJobHandler(
 
   const pipelineP = pipeline(zipStream, outputStream);
 
-  const strings = await getRecipePDFStrings(job.meta.language ?? "en-us");
+  const language = job.meta.language ?? "en-us";
 
   let processedCount = 0;
   for await (const result of recipeAsyncIteratorToPDF(recipes, {
-    strings,
+    language,
     includeImageUrls: true,
   })) {
     await new Promise<void>((resolve, reject) => {

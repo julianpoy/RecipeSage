@@ -79,9 +79,11 @@ export const trpcClient = createTRPCProxyClient<AppRouter>({
           token = session?.token;
         }
 
-        return {
-          Authorization: token ? `Bearer ${token}` : undefined,
-        };
+        const headers: Record<string, string> = {};
+        if (token) headers.Authorization = `Bearer ${token}`;
+        const language = (window as any).currentRSLanguage;
+        if (language) headers["X-RecipeSage-Language"] = language;
+        return headers;
       },
       transformer: customTrpcTransformer,
     }),

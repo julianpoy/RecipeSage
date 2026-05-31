@@ -174,7 +174,7 @@ const headerRegexp = /^\[.*\]$/;
  * Separates multipart measurements like "1 cup + 2 tablespoons",
  * "1 cup plus 2 tablespoons", or "1 cup or 250ml".
  */
-const multipartQuantifierRegexp = / \+ | plus | or | oder | ou | und | et /;
+const multipartQuantifierRegexp = / \+ | plus | or | oder | und /;
 
 /**
  * Matches a measurement number, including mixed fractions ("1 1/2"),
@@ -182,7 +182,7 @@ const multipartQuantifierRegexp = / \+ | plus | or | oder | ou | und | et /;
  * joined by "-", " - ", or " to ".
  */
 const measurementRegexp =
-  /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - )|( à )|( bis )|(–)|(—))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
+  /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - )|(–)|(—))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
@@ -277,7 +277,7 @@ export const getSingleScalableMeasurement = (
   if (parts.length !== 1) return null;
 
   const noNotes = stripNotes(parts[0]);
-  if (/\d\s*(?:[–—]|\s(?:to|à|bis)\s)\s*\d/i.test(noNotes)) return null;
+  if (/\d\s+(?:to|à|bis)\s+\d/i.test(noNotes)) return null;
   const match = noNotes.match(new RegExp(measurementQuantityRegExp, "i"));
   if (!match || !match[1]) return null;
 
@@ -305,9 +305,15 @@ export const parseYieldCount = (
   yieldText: string | null | undefined,
 ): number | null => {
   if (!yieldText) return null;
-  const match = yieldText.match(/-?\d+(?:[.,]\d+)?/);
+  const match = yieldText.match(/\d+(?:[.,]\d+)?/);
   if (!match) return null;
-  const value = Number(match[0].replace(",", "."));
+  const raw = match[0];
+  const commaGroup = raw.match(/,(\d+)$/);
+  const normalized =
+    commaGroup && commaGroup[1].length === 3
+      ? raw.replace(/,/g, "")
+      : raw.replace(",", ".");
+  const value = Number(normalized);
   if (!Number.isFinite(value) || value <= 0) return null;
   return value;
 };
@@ -740,8 +746,8 @@ export const parseIngredients = (
         try {
           const measurement = el[0];
           const measurementPartDelimiters =
-            measurement.match(/(-)|( to )|( - )/g);
-          const measurementParts = measurement.split(/-|to/);
+            measurement.match(/(-)|( to )|( - )|(–)|(—)/g) ?? [];
+          const measurementParts = measurement.split(/-|to|–|—/);
           const isRange = measurementParts.length > 1;
 
           // Locate the unit token attached to this measurement (if any) so we
@@ -775,13 +781,10 @@ export const parseIngredients = (
             );
             if (convertedEndpoints.every((c): c is string => c !== null)) {
               const wrappedEndpoints = convertedEndpoints.map(wrap);
-              const combined = measurementPartDelimiters
-                ? wrappedEndpoints.reduce(
-                    (acc, w, i) =>
-                      acc + w + (measurementPartDelimiters[i] || ""),
-                    "",
-                  )
-                : wrappedEndpoints.join(" to ");
+              const combined = wrappedEndpoints.reduce(
+                (acc, w, i) => acc + w + (measurementPartDelimiters[i] || ""),
+                "",
+              );
               return ingredientParts[idx].replace(
                 new RegExp(measurementQuantityRegExp.source, "i"),
                 combined + " ",
@@ -813,16 +816,11 @@ export const parseIngredients = (
 
           const wrapped = scaledParts.map(wrap);
 
-          let updatedMeasurement: string;
-          if (measurementPartDelimiters) {
-            updatedMeasurement = wrapped.reduce(
-              (acc, measurementPart, idx) =>
-                acc + measurementPart + (measurementPartDelimiters[idx] || ""),
-              "",
-            );
-          } else {
-            updatedMeasurement = wrapped.join(" to ");
-          }
+          const updatedMeasurement = wrapped.reduce(
+            (acc, measurementPart, idx) =>
+              acc + measurementPart + (measurementPartDelimiters[idx] || ""),
+            "",
+          );
 
           return ingredientParts[idx].replace(
             measurementRegexp,

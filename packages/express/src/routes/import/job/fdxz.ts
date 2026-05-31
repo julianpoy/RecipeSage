@@ -10,6 +10,7 @@ import {
   importJobSetupCommon,
   multerAutoCleanup,
 } from "@recipesage/util/server/general";
+import { getRequestLanguage } from "@recipesage/util/server/general";
 import {
   MAX_IMPORT_FILE_SIZE_MB,
   ObjectTypes,
@@ -54,6 +55,7 @@ export const fdxzHandler = defineHandler(
     const { job } = await importJobSetupCommon({
       userId,
       importType: "fdxz",
+      language: getRequestLanguage(req),
       labels: req.query.labels?.split(",") || [],
       excludeImages: req.query.excludeImages === "true",
     });

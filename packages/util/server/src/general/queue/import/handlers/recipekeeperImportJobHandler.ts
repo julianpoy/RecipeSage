@@ -53,7 +53,7 @@ export async function recipekeeperImportJobHandler(
   for (const domItem of domList) {
     const $item = $(domItem);
 
-    const title = $item.find('[itemprop="name"]').text().trim() || "Untitled";
+    const title = $item.find('[itemprop="name"]').text().trim() || "";
     const source =
       $item.find('[itemprop="recipeSource"]').text().trim() || undefined;
     const rating =

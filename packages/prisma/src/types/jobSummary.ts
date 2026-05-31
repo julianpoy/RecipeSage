@@ -46,6 +46,7 @@ export const importJobMetaSchema = z.object({
       includeTechniques: z.boolean().optional(),
     })
     .optional(),
+  language: z.string().max(254).optional(),
 });
 
 export const exportJobMetaSchema = z.object({
@@ -55,7 +56,7 @@ export const exportJobMetaSchema = z.object({
   exportStorageKey: z.string().optional(),
   exportDownloadUrl: z.string().optional(),
   recipeIds: z.array(z.string()).optional(),
-  language: z.string().optional(),
+  language: z.string().max(254).optional(),
 });
 
 export const cookbookJobMetaSchema = z.object({
@@ -69,7 +70,7 @@ export const cookbookJobMetaSchema = z.object({
   cookbookStorageKey: z.string().optional(),
   cookbookDownloadUrl: z.string().optional(),
   recipeIds: z.array(z.string()).optional(),
-  language: z.string().optional(),
+  language: z.string().max(254).optional(),
 });
 
 export type ImportJobMeta = z.infer<typeof importJobMetaSchema>;

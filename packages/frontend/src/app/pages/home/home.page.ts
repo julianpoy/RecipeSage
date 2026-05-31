@@ -780,7 +780,6 @@ export class HomePage implements OnDestroy {
     const result = await this.serverActionsService.jobs.startExportJob({
       format,
       recipeIds,
-      language: this.translate.getCurrentLang(),
     });
 
     if (!result) return;

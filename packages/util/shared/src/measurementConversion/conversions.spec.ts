@@ -180,28 +180,125 @@ describe("measurement conversions", () => {
 
   describe("formatting", () => {
     it("renders recipe-friendly fractions", () => {
-      expect(formatFraction(0.25)).toBe("1/4");
-      expect(formatFraction(1.5)).toBe("1 1/2");
-      expect(formatFraction(2)).toBe("2");
+      expect(formatFraction(0.25, "en-us")).toBe("1/4");
+      expect(formatFraction(1.5, "en-us")).toBe("1 1/2");
+      expect(formatFraction(2, "en-us")).toBe("2");
     });
 
     it("falls back to decimal when a non-zero value snaps below 1/16", () => {
-      expect(formatFraction(0.004)).toBe("0.004");
-      expect(formatFraction(0)).toBe("0");
+      expect(formatFraction(0.004, "en-us")).toBe("0.004");
+      expect(formatFraction(0, "en-us")).toBe("0");
     });
 
     it("renders adaptive decimals", () => {
-      expect(formatDecimal(236.588)).toBe("237");
-      expect(formatDecimal(3.527)).toBe("3.53");
-      expect(formatDecimal(0.262)).toBe("0.262");
+      expect(formatDecimal(236.588, "en-us")).toBe("237");
+      expect(formatDecimal(3.527, "en-us")).toBe("3.53");
+      expect(formatDecimal(0.262, "en-us")).toBe("0.262");
     });
 
     it("parses decimals and fractions", () => {
-      expect(parseQuantity("1.5")).toBeCloseTo(1.5, 9);
-      expect(parseQuantity("1 1/2")).toBeCloseTo(1.5, 9);
-      expect(parseQuantity("3/4")).toBeCloseTo(0.75, 9);
-      expect(parseQuantity("")).toBeNull();
-      expect(parseQuantity("abc")).toBeNull();
+      expect(parseQuantity("1.5", "en-us")).toBeCloseTo(1.5, 9);
+      expect(parseQuantity("1 1/2", "en-us")).toBeCloseTo(1.5, 9);
+      expect(parseQuantity("3/4", "en-us")).toBeCloseTo(0.75, 9);
+      expect(parseQuantity("", "en-us")).toBeNull();
+      expect(parseQuantity("abc", "en-us")).toBeNull();
+    });
+
+    describe("locale-aware formatting", () => {
+      it("uses en-us when locale is explicitly en-us", () => {
+        expect(formatDecimal(1.5, "en-us")).toBe("1.5");
+        expect(formatDecimal(3.527, "en-us")).toBe("3.53");
+      });
+
+      it("uses comma decimal separator for de-de", () => {
+        expect(formatDecimal(1.5, "de-de")).toBe("1,5");
+        expect(formatDecimal(3.527, "de-de")).toBe("3,53");
+      });
+
+      it("uses comma decimal separator for fr-fr", () => {
+        expect(formatDecimal(0.262, "fr-fr")).toBe("0,262");
+      });
+
+      it("suppresses grouping separators across locales", () => {
+        expect(formatDecimal(1234, "de-de")).toBe("1234");
+        expect(formatDecimal(1234, "en-us")).toBe("1234");
+      });
+
+      it("suppresses grouping for large numbers across locales", () => {
+        expect(formatDecimal(12345, "de-de")).toBe("12345");
+        expect(formatDecimal(12345, "en-us")).toBe("12345");
+      });
+
+      it("applies comma decimal for fractional values in de-de", () => {
+        expect(formatDecimal(1.234, "de-de")).toBe("1,23");
+      });
+
+      it("renders integers identically across locales", () => {
+        expect(formatDecimal(237, "de-de")).toBe("237");
+        expect(formatDecimal(237, "en-us")).toBe("237");
+      });
+
+      it("rounds half-away-from-zero at the .x5 boundary", () => {
+        expect(formatDecimal(3.525, "en-us")).toBe("3.53");
+        expect(formatDecimal(3.525, "de-de")).toBe("3,53");
+        expect(formatDecimal(2.675, "en-us")).toBe("2.68");
+      });
+
+      it("formatFraction passes locale through to its decimal fallback", () => {
+        expect(formatFraction(0.004, "de-de")).toBe("0,004");
+        expect(formatFraction(0.004, "en-us")).toBe("0.004");
+      });
+
+      it("formatFraction returns a fraction regardless of locale when snappable", () => {
+        expect(formatFraction(1.5, "de-de")).toBe("1 1/2");
+        expect(formatFraction(0.25, "fr-fr")).toBe("1/4");
+      });
+    });
+
+    describe("locale-aware parsing", () => {
+      it("accepts comma decimal in de-de", () => {
+        expect(parseQuantity("1,5", "de-de")).toBeCloseTo(1.5, 9);
+        expect(parseQuantity("0,75", "de-de")).toBeCloseTo(0.75, 9);
+      });
+
+      it("still accepts dot decimal in de-de when only one group of non-3 digits follows", () => {
+        expect(parseQuantity("1.5", "de-de")).toBeCloseTo(1.5, 9);
+      });
+
+      it("treats dot as thousand separator in de-de when followed by 3 digits", () => {
+        expect(parseQuantity("1.000", "de-de")).toBeCloseTo(1000, 9);
+      });
+
+      it("parses combined German thousand + decimal separators", () => {
+        expect(parseQuantity("1.500,5", "de-de")).toBeCloseTo(1500.5, 9);
+      });
+
+      it("rejects comma decimal in en-us (locale strictness)", () => {
+        expect(parseQuantity("1,5", "en-us")).toBeNull();
+      });
+
+      it("parses en-us thousand separator", () => {
+        expect(parseQuantity("1,000", "en-us")).toBeCloseTo(1000, 9);
+        expect(parseQuantity("1,000,000", "en-us")).toBeCloseTo(1000000, 9);
+      });
+
+      it("parses Arabic decimal separator in ar-sa with Latin digits", () => {
+        expect(parseQuantity("1٫5", "ar-sa")).toBeCloseTo(1.5, 9);
+      });
+
+      it("parses Arabic-Indic digits in ar-sa", () => {
+        expect(parseQuantity("١٫٥", "ar-sa")).toBeCloseTo(1.5, 9);
+      });
+
+      it("still accepts fractions in any locale", () => {
+        expect(parseQuantity("3/4", "de-de")).toBeCloseTo(0.75, 9);
+        expect(parseQuantity("1 1/2", "fr-fr")).toBeCloseTo(1.5, 9);
+      });
+
+      it("returns null for empty or non-numeric input in any locale", () => {
+        expect(parseQuantity("", "de-de")).toBeNull();
+        expect(parseQuantity("abc", "fr-fr")).toBeNull();
+      });
     });
   });
 

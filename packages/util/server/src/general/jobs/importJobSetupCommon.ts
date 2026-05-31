@@ -6,6 +6,7 @@ export async function importJobSetupCommon(args: {
   importType: ImportJobMeta["importType"];
   labels: string[];
   userId: string;
+  language: string;
   excludeImages?: boolean;
   includeStockRecipes?: boolean;
   includeTechniques?: boolean;
@@ -24,6 +25,7 @@ export async function importJobSetupCommon(args: {
           includeStockRecipes: args.includeStockRecipes,
           includeTechniques: args.includeTechniques,
         },
+        language: args.language,
       } satisfies ImportJobMeta,
     },
   });

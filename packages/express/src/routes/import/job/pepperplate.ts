@@ -5,6 +5,7 @@ import {
 import { z } from "zod";
 import { importJobSetupCommon } from "@recipesage/util/server/general";
 import { enqueueJob } from "@recipesage/util/server/general";
+import { getRequestLanguage } from "@recipesage/util/server/general";
 
 const schema = {
   body: z.object({
@@ -27,6 +28,7 @@ export const pepperplateHandler = defineHandler(
     const { job } = await importJobSetupCommon({
       userId,
       importType: "pepperplate",
+      language: getRequestLanguage(req),
       labels: req.query.labels?.split(",") || [],
     });
 
