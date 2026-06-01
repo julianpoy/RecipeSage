@@ -1264,5 +1264,11 @@
     "components.recurrenceEditor.frequency": "Fréquence",
     "components.recurrenceEditor.frequency.daily": "Quotidien",
     "pages.tools.cookingTemperatures.subtitle": "Températures minimales recommandées, degrés de cuisson, conseils pour la cuisson au four et à la friteuse",
-    "pages.measurementConverter.tabTitle": "Convertisseur d'unités - RecipeSage"
+    "pages.measurementConverter.tabTitle": "Convertisseur d'unités - RecipeSage",
+    "pages.tools.tabTitle": "Outils et utilitaires - RecipeSage",
+    "pages.tools.title": "Outils et utilitaires",
+    "pages.tools.cookbook.subtitle": "Créez un livre de recettes PDF imprimable à partir de vos recettes",
+    "pages.tools.nutritionCalculator.subtitle": "Additionnez les informations nutritionnelles de plusieurs recettes et ajustez les portions",
+    "pages.tools.assistant.subtitle": "Discutez avec un assistant IA sur la cuisine et vos recettes",
+    "pages.tools.measurementConverter.subtitle": "Convertissez les volumes, les poids, les quantités d'ingrédients et les températures de cuisson"
 }
