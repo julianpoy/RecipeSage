@@ -11,13 +11,15 @@ vi.mock("../general/extractTextFromDocument", () => ({
     extractTextFromDocumentMock(...args),
 }));
 
-vi.mock("./textToRecipe", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./textToRecipe")>();
-  return {
-    ...actual,
-    textToRecipe: (...args: unknown[]) => textToRecipeMock(...args),
-  };
-});
+vi.mock("./textToRecipe", () => ({
+  TextToRecipeInputType: {
+    OCR: "OCR",
+    Document: "Document",
+    Text: "Text",
+    Webpage: "Webpage",
+  },
+  textToRecipe: (...args: unknown[]) => textToRecipeMock(...args),
+}));
 
 describe("documentToRecipe", () => {
   beforeEach(() => {
