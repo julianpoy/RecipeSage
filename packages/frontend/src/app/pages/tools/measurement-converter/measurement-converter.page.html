@@ -21,6 +21,13 @@
 
 <ion-content>
   <div class="page-wrapper">
+    <info-block icon="bulb">
+      <ng-container virtualSlot="title">
+        {{ "pages.measurementConverter.intro.title" | translate }}
+      </ng-container>
+      <p>{{ "pages.measurementConverter.intro.body" | translate }}</p>
+    </info-block>
+
     <ion-segment class="mode-segment" [(ngModel)]="mode">
       <ion-segment-button value="ingredients">
         <ion-label>{{

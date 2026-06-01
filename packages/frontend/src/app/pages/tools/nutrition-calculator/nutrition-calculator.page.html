@@ -10,18 +10,12 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <ion-item lines="full" class="info-note">
-      <ion-icon
-        name="information-circle-outline"
-        slot="start"
-        color="medium"
-      ></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <ion-text color="medium">
-          {{ "pages.nutritionCalculator.basisNote" | translate }}
-        </ion-text>
-      </ion-label>
-    </ion-item>
+    <info-block icon="fitness">
+      <ng-container virtualSlot="title">
+        {{ "pages.nutritionCalculator.intro.title" | translate }}
+      </ng-container>
+      <p>{{ "pages.nutritionCalculator.intro.body" | translate }}</p>
+    </info-block>
 
     <ion-list>
       <ion-list-header>
@@ -46,12 +40,6 @@
             </ion-text>
           </ion-label>
         </ion-item>
-        <ion-item lines="none" class="servings-column-header">
-          <ion-label></ion-label>
-          <div slot="end" class="servings-column-label">
-            {{ "pages.nutritionCalculator.servings.label" | translate }}
-          </div>
-        </ion-item>
       }
 
       @if (loadingRecipes) {
@@ -64,77 +52,129 @@
       }
 
       @if (recipes.length) {
-        @for (recipe of recipes; track recipe.id) {
-          <ion-item>
+        <div class="recipes-grid">
+          <span></span>
+          <span></span>
+          <span class="servings-column-label">
+            {{ "pages.nutritionCalculator.servings.label" | translate }}
+          </span>
+
+          @for (recipe of recipes; track recipe.id) {
+            <div class="recipe-row">
+              <ion-button
+                class="recipe-remove"
+                fill="clear"
+                color="danger"
+                (click)="removeRecipe(recipe)"
+                aria-label="{{
+                  'pages.nutritionCalculator.recipes.remove' | translate
+                }}"
+              >
+                <ion-icon name="remove-circle" slot="icon-only"></ion-icon>
+              </ion-button>
+              <div class="recipe-meta">
+                <a
+                  class="recipe-link"
+                  [href]="recipeHref(recipe)"
+                  (click)="openRecipe(recipe, $event)"
+                  >{{ recipe.title }}</a
+                >
+                @if (recipe.servingSize) {
+                  <p>
+                    {{
+                      "pages.nutritionCalculator.recipes.servingBasis"
+                        | translate: { servingSize: recipe.servingSize }
+                    }}
+                  </p>
+                }
+                @if (recipeHasNoNutrition(recipe)) {
+                  <div class="no-data-badge">
+                    <ion-badge color="warning">
+                      {{
+                        "pages.nutritionCalculator.recipes.noData" | translate
+                      }}
+                    </ion-badge>
+                  </div>
+                }
+              </div>
+              <div class="servings-adjustment-container">
+                <ion-button
+                  class="step-button"
+                  fill="clear"
+                  size="small"
+                  (click)="stepServings(recipe, -1)"
+                  aria-label="{{
+                    'pages.nutritionCalculator.servings.decrease' | translate
+                  }}"
+                >
+                  <ion-icon name="remove" slot="icon-only"></ion-icon>
+                </ion-button>
+                <input
+                  class="qty"
+                  type="text"
+                  inputmode="decimal"
+                  [(ngModel)]="recipe.servings"
+                  (blur)="clampServings(recipe)"
+                  aria-label="{{
+                    'pages.nutritionCalculator.servings.label' | translate
+                  }}"
+                />
+                <ion-button
+                  class="step-button"
+                  fill="clear"
+                  size="small"
+                  (click)="stepServings(recipe, 1)"
+                  aria-label="{{
+                    'pages.nutritionCalculator.servings.increase' | translate
+                  }}"
+                >
+                  <ion-icon name="add" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              <hr />
+            </div>
+          }
+
+          <span></span>
+          <ion-label class="set-all-label">
+            {{ "pages.nutritionCalculator.servings.setAll" | translate }}
+          </ion-label>
+          <div class="servings-adjustment-container">
             <ion-button
-              slot="start"
+              class="step-button"
               fill="clear"
-              color="danger"
-              (click)="removeRecipe(recipe)"
+              size="small"
+              (click)="stepBulkServings(-1)"
               aria-label="{{
-                'pages.nutritionCalculator.recipes.remove' | translate
+                'pages.nutritionCalculator.servings.decrease' | translate
               }}"
             >
-              <ion-icon name="remove-circle" slot="icon-only"></ion-icon>
+              <ion-icon name="remove" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-label class="ion-text-wrap">
-              <a
-                class="recipe-link"
-                [href]="recipeHref(recipe)"
-                (click)="openRecipe(recipe, $event)"
-                >{{ recipe.title }}</a
-              >
-              @if (recipe.servingSize) {
-                <p>
-                  {{
-                    "pages.nutritionCalculator.recipes.servingBasis"
-                      | translate: { servingSize: recipe.servingSize }
-                  }}
-                </p>
-              }
-              @if (recipeHasNoNutrition(recipe)) {
-                <div class="no-data-badge">
-                  <ion-badge color="warning">
-                    {{ "pages.nutritionCalculator.recipes.noData" | translate }}
-                  </ion-badge>
-                </div>
-              }
-            </ion-label>
-            <div class="servings-stepper" slot="end">
-              <ion-button
-                fill="clear"
-                size="small"
-                (click)="stepServings(recipe, -1)"
-                aria-label="{{
-                  'pages.nutritionCalculator.servings.decrease' | translate
-                }}"
-              >
-                <ion-icon name="remove" slot="icon-only"></ion-icon>
-              </ion-button>
-              <ion-input
-                type="number"
-                inputmode="decimal"
-                step="any"
-                min="0"
-                [(ngModel)]="recipe.servings"
-                (ionBlur)="clampServings(recipe)"
-                aria-label="{{
-                  'pages.nutritionCalculator.servings.label' | translate
-                }}"
-              ></ion-input>
-              <ion-button
-                fill="clear"
-                size="small"
-                (click)="stepServings(recipe, 1)"
-                aria-label="{{
-                  'pages.nutritionCalculator.servings.increase' | translate
-                }}"
-              >
-                <ion-icon name="add" slot="icon-only"></ion-icon>
-              </ion-button>
-            </div>
-          </ion-item>
-        }
+            <input
+              class="qty"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="bulkServings"
+              (input)="onBulkServingsInput()"
+              (blur)="clampBulkServings()"
+              aria-label="{{
+                'pages.nutritionCalculator.servings.setAll' | translate
+              }}"
+            />
+            <ion-button
+              class="step-button"
+              fill="clear"
+              size="small"
+              (click)="stepBulkServings(1)"
+              aria-label="{{
+                'pages.nutritionCalculator.servings.increase' | translate
+              }}"
+            >
+              <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
       } @else if (!loadingRecipes) {
         <ion-item lines="none">
           <ion-label class="ion-text-wrap">
@@ -143,23 +183,6 @@
         </ion-item>
       }
     </ion-list>
-
-    @if (recipes.length) {
-      <div class="bulk-servings">
-        <ion-input
-          type="number"
-          inputmode="decimal"
-          step="any"
-          min="0"
-          fill="outline"
-          labelPlacement="stacked"
-          [(ngModel)]="bulkServings"
-          (ionInput)="onBulkServingsInput()"
-          (ionBlur)="clampBulkServings()"
-          label="{{ 'pages.nutritionCalculator.servings.setAll' | translate }}"
-        ></ion-input>
-      </div>
-    }
 
     @if (hasResults()) {
       <ion-segment

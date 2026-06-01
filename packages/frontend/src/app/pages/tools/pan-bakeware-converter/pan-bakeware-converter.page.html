@@ -10,17 +10,12 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <aside class="intro-callout" role="note">
-      <div class="intro-icon">
-        <ion-icon name="resize" aria-hidden="true"></ion-icon>
-      </div>
-      <div class="intro-text">
-        <p class="intro-title">
-          {{ "pages.panBakewareConverter.intro.title" | translate }}
-        </p>
-        <p>{{ "pages.panBakewareConverter.intro.body" | translate }}</p>
-      </div>
-    </aside>
+    <info-block icon="resize">
+      <ng-container virtualSlot="title">
+        {{ "pages.panBakewareConverter.intro.title" | translate }}
+      </ng-container>
+      <p>{{ "pages.panBakewareConverter.intro.body" | translate }}</p>
+    </info-block>
 
     <ion-segment
       class="unit-segment"
@@ -49,15 +44,17 @@
         </h2>
       </header>
 
-      <div class="shape-chip-row" role="radiogroup">
+      <div class="shape-chip-row">
         @for (option of shapeOptions; track option.key) {
           <ion-chip
             class="shape-chip"
             [color]="from.shape === option.key ? 'primary' : 'medium'"
             [outline]="from.shape !== option.key"
             (click)="onShapeChange('from', option.key)"
-            role="radio"
-            [attr.aria-checked]="from.shape === option.key"
+            (keydown)="onShapeKey($event, 'from', option.key)"
+            role="button"
+            tabindex="0"
+            [attr.aria-pressed]="from.shape === option.key"
           >
             <ion-icon [name]="option.iconName"></ion-icon>
             <ion-label>{{ shapeLabel(option.key) }}</ion-label>
@@ -75,6 +72,10 @@
               "
               [outline]="from.selectedPresetKey !== preset.key"
               (click)="selectPreset('from', preset.key)"
+              (keydown)="onPresetKey($event, 'from', preset.key)"
+              role="button"
+              tabindex="0"
+              [attr.aria-pressed]="from.selectedPresetKey === preset.key"
             >
               <ion-label>{{ presetLabel(preset) }}</ion-label>
             </ion-chip>
@@ -259,15 +260,17 @@
         </h2>
       </header>
 
-      <div class="shape-chip-row" role="radiogroup">
+      <div class="shape-chip-row">
         @for (option of shapeOptions; track option.key) {
           <ion-chip
             class="shape-chip"
             [color]="to.shape === option.key ? 'primary' : 'medium'"
             [outline]="to.shape !== option.key"
             (click)="onShapeChange('to', option.key)"
-            role="radio"
-            [attr.aria-checked]="to.shape === option.key"
+            (keydown)="onShapeKey($event, 'to', option.key)"
+            role="button"
+            tabindex="0"
+            [attr.aria-pressed]="to.shape === option.key"
           >
             <ion-icon [name]="option.iconName"></ion-icon>
             <ion-label>{{ shapeLabel(option.key) }}</ion-label>
@@ -285,6 +288,10 @@
               "
               [outline]="to.selectedPresetKey !== preset.key"
               (click)="selectPreset('to', preset.key)"
+              (keydown)="onPresetKey($event, 'to', preset.key)"
+              role="button"
+              tabindex="0"
+              [attr.aria-pressed]="to.selectedPresetKey === preset.key"
             >
               <ion-label>{{ presetLabel(preset) }}</ion-label>
             </ion-chip>
@@ -453,11 +460,8 @@
     </section>
 
     @if (fromVizPx() && toVizPx() && isFlatPan("from") && isFlatPan("to")) {
-      <section
-        class="viz-card"
-        [attr.aria-label]="'pages.panBakewareConverter.viz.title' | translate"
-      >
-        <p class="viz-title">
+      <section class="viz-card" aria-labelledby="viz-title">
+        <p id="viz-title" class="viz-title">
           {{ "pages.panBakewareConverter.viz.title" | translate }}
         </p>
         <div class="viz-stage">
@@ -614,8 +618,16 @@
               [attr.aria-label]="
                 'pages.panBakewareConverter.bake.suggestedTime' | translate
               "
-              >{{ suggestedBakeTime || "…" }}</span
             >
+              @if (suggestedBakeTime) {
+                {{
+                  "pages.panBakewareConverter.bake.timeResult"
+                    | translate: { value: suggestedBakeTime }
+                }}
+              } @else {
+                …
+              }
+            </span>
 
             <ion-label class="bake-row-label">{{
               bakeTempInputLabel()
@@ -638,65 +650,29 @@
               [attr.aria-label]="
                 'pages.panBakewareConverter.bake.suggestedTemp' | translate
               "
-              >{{ bakeTempResultLabel() }}</span
             >
+              @if (suggestedBakeTempF) {
+                @if (unit === "metric") {
+                  {{
+                    "pages.panBakewareConverter.bake.tempResultMetric"
+                      | translate
+                        : { f: suggestedBakeTempF, c: suggestedBakeTempC }
+                  }}
+                } @else {
+                  {{
+                    "pages.panBakewareConverter.bake.tempResultImperial"
+                      | translate
+                        : { f: suggestedBakeTempF, c: suggestedBakeTempC }
+                  }}
+                }
+              } @else {
+                …
+              }
+            </span>
           </div>
           <p class="bake-footnote">
             {{ "pages.panBakewareConverter.bake.footnote" | translate }}
           </p>
-        </section>
-      }
-
-      @if (showDepthComparator() && depthAdvisory) {
-        <section class="tool-card" aria-labelledby="depth-heading">
-          <header class="tool-card-header">
-            <h3 id="depth-heading" class="tool-card-title">
-              {{ "pages.panBakewareConverter.depth.title" | translate }}
-            </h3>
-            <p class="tool-card-subtitle">
-              {{ "pages.panBakewareConverter.depth.subtitle" | translate }}
-            </p>
-          </header>
-          <div class="depth-rows">
-            <div class="depth-row">
-              <span class="depth-label">{{
-                "pages.panBakewareConverter.depth.fromLabel" | translate
-              }}</span>
-              <div
-                class="depth-track"
-                [attr.aria-label]="
-                  'pages.panBakewareConverter.depth.fromLabel' | translate
-                "
-              >
-                <div
-                  class="depth-fill depth-fill-from"
-                  [style.height.%]="
-                    depthBarPercent(
-                      depthAdvisoryFromBatter(),
-                      panDepthIn('from')
-                    )
-                  "
-                ></div>
-                <span class="depth-pan-marker"></span>
-              </div>
-              <span class="depth-value">{{ depthRowValue("from") }}</span>
-            </div>
-            <div class="depth-row">
-              <span class="depth-label">{{
-                "pages.panBakewareConverter.depth.toLabel" | translate
-              }}</span>
-              <div class="depth-track">
-                <div
-                  class="depth-fill depth-fill-to"
-                  [style.height.%]="
-                    depthBarPercent(depthAdvisoryToBatter(), panDepthIn('to'))
-                  "
-                ></div>
-                <span class="depth-pan-marker"></span>
-              </div>
-              <span class="depth-value">{{ depthRowValue("to") }}</span>
-            </div>
-          </div>
         </section>
       }
 

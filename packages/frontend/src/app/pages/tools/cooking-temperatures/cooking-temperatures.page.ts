@@ -9,6 +9,7 @@ import {
   informationCircle,
   water,
   warning,
+  flame,
 } from "ionicons/icons";
 import {
   IonHeader,
@@ -29,6 +30,7 @@ import {
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import {
   COOKING_TEMPERATURES,
   COOKING_TEMPERATURE_CATEGORIES,
@@ -73,6 +75,7 @@ interface DisplayGroup {
     IonNote,
     IonIcon,
     IonChip,
+    InfoBlockComponent,
   ],
 })
 export class CookingTemperaturesPage implements OnInit {
@@ -92,6 +95,7 @@ export class CookingTemperaturesPage implements OnInit {
       informationCircle,
       water,
       warning,
+      flame,
     });
   }
 

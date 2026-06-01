@@ -20,6 +20,7 @@ import {
   book,
   chatboxEllipses,
   fitness,
+  help,
   resize,
   swapHorizontal,
   thermometer,
@@ -52,6 +53,7 @@ export class ToolsPage {
       book,
       chatboxEllipses,
       fitness,
+      help,
       resize,
       swapHorizontal,
       thermometer,
@@ -80,5 +82,9 @@ export class ToolsPage {
 
   goToAssistant() {
     this.navCtrl.navigateForward(RouteMap.AssistantPage.getPath());
+  }
+
+  goToUserGuide() {
+    window.open("https://docs.recipesage.com");
   }
 }

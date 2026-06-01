@@ -26,6 +26,7 @@ export const startCookbookJob = authenticatedProcedure
       author: z.string().trim().max(1000).optional(),
       includeToc: z.boolean(),
       includeImages: z.boolean(),
+      includeLabels: z.boolean(),
       recipeIds: z.array(z.uuid()).min(1).max(1000),
     }),
   )
@@ -48,6 +49,7 @@ export const startCookbookJob = authenticatedProcedure
           cookbookAuthor: input.author,
           cookbookIncludeToc: input.includeToc,
           cookbookIncludeImages: input.includeImages,
+          cookbookIncludeLabels: input.includeLabels,
           recipeIds: input.recipeIds,
           language: ctx.language,
         } satisfies CookbookJobMeta,

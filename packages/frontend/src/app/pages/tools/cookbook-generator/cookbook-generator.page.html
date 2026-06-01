@@ -10,18 +10,17 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <ion-item button lines="full" (click)="goToExport()" class="export-note">
-      <ion-icon
-        name="information-circle-outline"
-        slot="start"
-        color="medium"
-      ></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <ion-text color="medium">
-          {{ "pages.cookbook.exportNote" | translate }}
-        </ion-text>
-      </ion-label>
-    </ion-item>
+    <info-block icon="book">
+      <ng-container virtualSlot="title">
+        {{ "pages.cookbook.intro.title" | translate }}
+      </ng-container>
+      <p>{{ "pages.cookbook.intro.body" | translate }}</p>
+      <p>
+        <a [routerLink]="exportPath">{{
+          "pages.cookbook.intro.exportLink" | translate
+        }}</a>
+      </p>
+    </info-block>
 
     <ion-list>
       <ion-item>
@@ -66,6 +65,12 @@
       <ion-item>
         <ion-toggle [(ngModel)]="includeImages">
           {{ "pages.cookbook.field.includeImages" | translate }}
+        </ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-toggle [(ngModel)]="includeLabels">
+          {{ "pages.cookbook.field.includeLabels" | translate }}
         </ion-toggle>
       </ion-item>
     </ion-list>

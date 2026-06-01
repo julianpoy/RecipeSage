@@ -51,13 +51,14 @@ import {
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import {
   PAN_PRESETS,
   PAN_SHAPES,
   PRESETS_BY_SHAPE,
+  RECOMMENDED_FILL_FRACTION,
   computeBakeTimeAdvice,
   computeCapacityWarning,
-  computeDepthAdvisory,
   computeScaling,
   cmToInches,
   cupsToMl,
@@ -72,8 +73,8 @@ import {
   panCapacityCups,
   sqInToSqCm,
   type BakeTimeAdvice,
+  type BakeTimeDirection,
   type CapacityWarning,
-  type DepthAdvisory,
   type PanDimensions,
   type PanPreset,
   type PanShape,
@@ -123,6 +124,68 @@ const DEFAULT_DEPTH_BY_SHAPE: Record<PanShape, number> = {
   muffin: 1.25,
 };
 
+const SHAPE_LABEL_KEY: Record<PanShape, string> = {
+  round: "pages.panBakewareConverter.shapes.round",
+  square: "pages.panBakewareConverter.shapes.square",
+  rectangular: "pages.panBakewareConverter.shapes.rectangular",
+  loaf: "pages.panBakewareConverter.shapes.loaf",
+  springform: "pages.panBakewareConverter.shapes.springform",
+  sheet: "pages.panBakewareConverter.shapes.sheet",
+  bundtTube: "pages.panBakewareConverter.shapes.bundtTube",
+  muffin: "pages.panBakewareConverter.shapes.muffin",
+};
+
+const SHAPE_FORMAT_KEY: Record<PanShape, string> = {
+  round: "pages.panBakewareConverter.presets.format.round",
+  square: "pages.panBakewareConverter.presets.format.square",
+  rectangular: "pages.panBakewareConverter.presets.format.rectangular",
+  loaf: "pages.panBakewareConverter.presets.format.loaf",
+  springform: "pages.panBakewareConverter.presets.format.springform",
+  sheet: "pages.panBakewareConverter.presets.format.jellyRoll",
+  bundtTube: "pages.panBakewareConverter.presets.format.bundt",
+  muffin: "pages.panBakewareConverter.presets.format.muffin",
+};
+
+const PRESET_FORMAT_KEY_OVERRIDE: Record<string, string> = {
+  pie9x1_5: "pages.panBakewareConverter.presets.format.pie",
+  pie9x2DeepDish: "pages.panBakewareConverter.presets.format.pieDeepDish",
+  loafMini: "pages.panBakewareConverter.presets.format.loafMini",
+  quarterSheet: "pages.panBakewareConverter.presets.format.quarterSheet",
+  halfSheet: "pages.panBakewareConverter.presets.format.halfSheet",
+  fullSheet: "pages.panBakewareConverter.presets.format.fullSheet",
+  bundt6cup: "pages.panBakewareConverter.presets.format.bundtMini",
+  tube9: "pages.panBakewareConverter.presets.format.tube",
+  tube10: "pages.panBakewareConverter.presets.format.tube",
+  muffinMini24: "pages.panBakewareConverter.presets.format.muffinMini",
+  muffinStandard6: "pages.panBakewareConverter.presets.format.muffinStandard",
+  muffinStandard12: "pages.panBakewareConverter.presets.format.muffinStandard",
+  muffinJumbo6: "pages.panBakewareConverter.presets.format.muffinJumbo",
+};
+
+const BAKE_DIRECTION_LABEL_KEYS: Record<BakeTimeDirection, string> = {
+  similar: "pages.panBakewareConverter.bake.direction.similar",
+  shallower: "pages.panBakewareConverter.bake.direction.shallower",
+  deeper: "pages.panBakewareConverter.bake.direction.deeper",
+};
+
+const BAKE_DETAIL_KEYS: Record<
+  BakeTimeDirection,
+  Record<UnitSystem, string>
+> = {
+  similar: {
+    imperial: "pages.panBakewareConverter.bake.detail.similar",
+    metric: "pages.panBakewareConverter.bake.detail.similar",
+  },
+  shallower: {
+    imperial: "pages.panBakewareConverter.bake.detail.shallowerImperial",
+    metric: "pages.panBakewareConverter.bake.detail.shallowerMetric",
+  },
+  deeper: {
+    imperial: "pages.panBakewareConverter.bake.detail.deeperImperial",
+    metric: "pages.panBakewareConverter.bake.detail.deeperMetric",
+  },
+};
+
 const SHAPE_OPTIONS: ShapeOption[] = [
   { key: "round", iconName: "ellipse-outline" },
   { key: "square", iconName: "square-outline" },
@@ -159,6 +222,7 @@ const SHAPE_OPTIONS: ShapeOption[] = [
     IonSegmentButton,
     IonChip,
     IonTextarea,
+    InfoBlockComponent,
   ],
 })
 export class PanBakewareConverterPage implements OnInit {
@@ -299,6 +363,20 @@ export class PanBakewareConverterPage implements OnInit {
     this.recomputeAll();
   }
 
+  onShapeKey(event: KeyboardEvent, slot: PanSlot, shape: PanShape) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.onShapeChange(slot, shape);
+    }
+  }
+
+  onPresetKey(event: KeyboardEvent, slot: PanSlot, presetKey: string) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.selectPreset(slot, presetKey);
+    }
+  }
+
   onUnitToggle(newUnit: string | number | undefined) {
     if (newUnit !== "imperial" && newUnit !== "metric") return;
     if (newUnit === this.unit) return;
@@ -426,14 +504,6 @@ export class PanBakewareConverterPage implements OnInit {
     return computeScaling(from, to);
   }
 
-  get depthAdvisory(): DepthAdvisory | null {
-    const from = this.fromDimensions;
-    const to = this.toDimensions;
-    const sc = this.scaling;
-    if (!from || !to || !sc) return null;
-    return computeDepthAdvisory(from, to, sc.multiplier, null);
-  }
-
   get capacityWarning(): CapacityWarning | null {
     const to = this.toDimensions;
     const from = this.fromDimensions;
@@ -441,7 +511,7 @@ export class PanBakewareConverterPage implements OnInit {
     if (!from || !to || !sc) return null;
     const fromCap = panCapacityCups(from);
     if (fromCap === null) return null;
-    const fromUsable = fromCap * (2 / 3);
+    const fromUsable = fromCap * RECOMMENDED_FILL_FRACTION;
     const scaledBatter = fromUsable * sc.multiplier;
     return computeCapacityWarning(to, scaledBatter);
   }
@@ -476,13 +546,33 @@ export class PanBakewareConverterPage implements OnInit {
   }
 
   presetLabel(preset: PanPreset): string {
-    return this.translate.instant(
-      `pages.panBakewareConverter.presets.${preset.key}`,
-    );
+    const key =
+      PRESET_FORMAT_KEY_OVERRIDE[preset.key] ?? SHAPE_FORMAT_KEY[preset.shape];
+    return this.translate.instant(key, this.presetFormatParams(preset));
+  }
+
+  private presetFormatParams(preset: PanPreset): Record<string, string> {
+    const u = this.unitLabelShort();
+    const fmt = (inches: number | undefined): string => {
+      if (inches === undefined) return "";
+      return this.unit === "metric"
+        ? inchesToCm(inches).toFixed(1)
+        : formatInches(inches);
+    };
+    return {
+      u,
+      d: fmt(preset.diameterIn),
+      l: fmt(preset.lengthIn),
+      w: fmt(preset.widthIn),
+      s: fmt(preset.lengthIn),
+      h: fmt(preset.depthIn),
+      c: String(preset.capacityCupsOverride ?? ""),
+      n: String(preset.cavities ?? ""),
+    };
   }
 
   shapeLabel(shape: PanShape): string {
-    return this.translate.instant(`pages.panBakewareConverter.shapes.${shape}`);
+    return this.translate.instant(SHAPE_LABEL_KEY[shape]);
   }
 
   unitLabelShort(): string {
@@ -661,38 +751,26 @@ export class PanBakewareConverterPage implements OnInit {
     );
   }
 
-  bakeTempResultLabel(): string {
-    if (!this.suggestedBakeTempF) return "…";
-    return this.translate.instant(
-      this.unit === "metric"
-        ? "pages.panBakewareConverter.bake.tempResultMetric"
-        : "pages.panBakewareConverter.bake.tempResultImperial",
-      { f: this.suggestedBakeTempF, c: this.suggestedBakeTempC },
-    );
-  }
-
   bakeDirectionLabel(): string {
     const advice = this.bakeTimeAdvice;
     if (!advice) return "";
-    return this.translate.instant(
-      `pages.panBakewareConverter.bake.direction.${advice.direction}`,
-    );
+    return this.translate.instant(BAKE_DIRECTION_LABEL_KEYS[advice.direction]);
   }
 
   bakeDirectionDetail(): string {
     const advice = this.bakeTimeAdvice;
     if (!advice) return "";
     return this.translate.instant(
-      `pages.panBakewareConverter.bake.detail.${advice.direction}`,
+      BAKE_DETAIL_KEYS[advice.direction][this.unit],
     );
   }
 
   bakeDirectionColor(): string {
     const advice = this.bakeTimeAdvice;
     if (!advice) return "medium";
-    if (advice.direction === "shallower") return "warning";
-    if (advice.direction === "deeper") return "warning";
-    return "success";
+    if (advice.direction === "similar") return "success";
+    if (advice.suggestedTempDeltaF !== 0) return "warning";
+    return "primary";
   }
 
   applySubstitution(option: SubstitutionOption) {
@@ -769,50 +847,6 @@ export class PanBakewareConverterPage implements OnInit {
       };
     }
     return null;
-  }
-
-  depthBarPercent(depthIn: number, panDepthIn: number): number {
-    if (panDepthIn <= 0) return 0;
-    const pct = (depthIn / panDepthIn) * 100;
-    return Math.max(0, Math.min(100, pct));
-  }
-
-  panDepthIn(slot: PanSlot): number {
-    return this.dimensionsFor(slot)?.depthIn ?? 0;
-  }
-
-  depthAdvisoryFromBatter(): number {
-    const adv = this.depthAdvisory;
-    if (!adv || adv.fromBatterDepthIn === null) return 0;
-    return adv.fromBatterDepthIn;
-  }
-
-  depthAdvisoryToBatter(): number {
-    const adv = this.depthAdvisory;
-    if (!adv || adv.newBatterDepthIn === null) return 0;
-    return adv.newBatterDepthIn;
-  }
-
-  showDepthComparator(): boolean {
-    return this.isFlatPan("from") && this.isFlatPan("to");
-  }
-
-  depthRowValue(slot: PanSlot): string {
-    const dims = this.dimensionsFor(slot);
-    if (!dims) return "";
-    const batterIn =
-      slot === "from"
-        ? this.depthAdvisoryFromBatter()
-        : this.depthAdvisoryToBatter();
-    const toDisplay = (inches: number): string =>
-      this.unit === "metric"
-        ? inchesToCm(inches).toFixed(1)
-        : inches.toFixed(2);
-    return this.translate.instant("pages.panBakewareConverter.depth.value", {
-      batter: toDisplay(batterIn),
-      pan: toDisplay(dims.depthIn),
-      unit: this.unitLabelShort(),
-    });
   }
 
   private recomputeAll() {

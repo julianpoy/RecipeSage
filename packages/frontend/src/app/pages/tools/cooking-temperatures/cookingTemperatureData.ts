@@ -5,9 +5,10 @@ export type CookingTemperatureCategory =
   | "eggs"
   | "sugarCandy"
   | "chocolate"
-  | "other";
+  | "other"
+  | "oilSmokePoints";
 
-export type TemperatureKind = "oil";
+export type TemperatureKind = "oil" | "smokePoint";
 
 export interface CookingTemperatureEntry {
   key: string;
@@ -30,6 +31,7 @@ export const COOKING_TEMPERATURE_CATEGORIES: CookingTemperatureCategory[] = [
   "sugarCandy",
   "chocolate",
   "other",
+  "oilSmokePoints",
 ];
 
 export const COOKING_TEMPERATURES: CookingTemperatureEntry[] = [
@@ -576,5 +578,110 @@ export const COOKING_TEMPERATURES: CookingTemperatureEntry[] = [
     isSafetyMinimum: false,
     tempKind: "oil",
     searchAliases: ["corn fritter", "beignet", "hush puppies", "oil"],
+  },
+
+  {
+    key: "smokeAvocadoRefined",
+    category: "oilSmokePoints",
+    fahrenheit: 520,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["avocado", "high heat", "searing", "stir fry", "wok"],
+  },
+  {
+    key: "smokeGhee",
+    category: "oilSmokePoints",
+    fahrenheit: 485,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["ghee", "clarified butter", "indian", "high heat"],
+  },
+  {
+    key: "smokePeanut",
+    category: "oilSmokePoints",
+    fahrenheit: 450,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["peanut", "groundnut", "deep fry", "wok"],
+  },
+  {
+    key: "smokeSunflowerRefined",
+    category: "oilSmokePoints",
+    fahrenheit: 450,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["sunflower", "high oleic"],
+  },
+  {
+    key: "smokeOliveRefined",
+    category: "oilSmokePoints",
+    fahrenheitRange: [390, 465],
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["olive", "pure olive", "light olive", "refined olive"],
+  },
+  {
+    key: "smokeGrapeseed",
+    category: "oilSmokePoints",
+    fahrenheit: 420,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["grapeseed", "grape seed"],
+  },
+  {
+    key: "smokeCanola",
+    category: "oilSmokePoints",
+    fahrenheit: 400,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["canola", "rapeseed", "neutral"],
+  },
+  {
+    key: "smokeVegetable",
+    category: "oilSmokePoints",
+    fahrenheit: 400,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["vegetable oil", "soybean", "neutral oil"],
+  },
+  {
+    key: "smokeCoconutRefined",
+    category: "oilSmokePoints",
+    fahrenheit: 400,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["coconut", "refined coconut"],
+  },
+  {
+    key: "smokeOliveExtraVirgin",
+    category: "oilSmokePoints",
+    fahrenheitRange: [350, 410],
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["evoo", "extra virgin", "olive"],
+  },
+  {
+    key: "smokeSesameToasted",
+    category: "oilSmokePoints",
+    fahrenheit: 350,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["sesame", "toasted sesame", "finishing", "asian"],
+  },
+  {
+    key: "smokeCoconutVirgin",
+    category: "oilSmokePoints",
+    fahrenheit: 350,
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["coconut", "virgin coconut", "unrefined"],
+  },
+  {
+    key: "smokeButter",
+    category: "oilSmokePoints",
+    fahrenheitRange: [300, 350],
+    isSafetyMinimum: false,
+    tempKind: "smokePoint",
+    searchAliases: ["butter", "dairy"],
   },
 ];

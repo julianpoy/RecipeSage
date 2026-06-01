@@ -45,6 +45,8 @@ export interface PanPreset extends PanDimensions {
 
 const CUBIC_INCHES_PER_CUP = 14.4375;
 
+export const RECOMMENDED_FILL_FRACTION = 2 / 3;
+
 export const isFlatBottom = (shape: PanShape): boolean =>
   FLAT_BOTTOM_SHAPES.has(shape);
 
@@ -86,14 +88,6 @@ export const cupsToMl = (cups: number): number => cups * 236.5882365;
 export const inchesToCm = (inches: number): number => inches * 2.54;
 export const cmToInches = (cm: number): number => cm / 2.54;
 export const sqInToSqCm = (sqIn: number): number => sqIn * 6.4516;
-
-export const computedDepthFromBatter = (
-  batterCups: number,
-  area: number | null,
-): number | null => {
-  if (area === null || area <= 0) return null;
-  return (batterCups * CUBIC_INCHES_PER_CUP) / area;
-};
 
 export const PAN_PRESETS: PanPreset[] = [
   {
@@ -315,12 +309,14 @@ export const PAN_PRESETS: PanPreset[] = [
   {
     key: "tube9",
     shape: "bundtTube",
+    diameterIn: 9,
     depthIn: 4,
     capacityCupsOverride: 12,
   },
   {
     key: "tube10",
     shape: "bundtTube",
+    diameterIn: 10,
     depthIn: 4,
     capacityCupsOverride: 16,
   },
@@ -415,65 +411,6 @@ export const computeScaling = (
   return null;
 };
 
-export interface DepthAdvisory {
-  newBatterDepthIn: number | null;
-  fromBatterDepthIn: number | null;
-  depthRatio: number | null;
-}
-
-export const computeDepthAdvisory = (
-  from: PanDimensions,
-  to: PanDimensions,
-  multiplier: number,
-  originalBatterCups: number | null,
-): DepthAdvisory => {
-  if (!isFlatBottom(from.shape) || !isFlatBottom(to.shape)) {
-    return {
-      newBatterDepthIn: null,
-      fromBatterDepthIn: null,
-      depthRatio: null,
-    };
-  }
-
-  const fromArea = panArea(from);
-  const toArea = panArea(to);
-  if (fromArea === null || toArea === null || fromArea <= 0 || toArea <= 0) {
-    return {
-      newBatterDepthIn: null,
-      fromBatterDepthIn: null,
-      depthRatio: null,
-    };
-  }
-
-  if (originalBatterCups !== null && originalBatterCups > 0) {
-    const fromDepth = computedDepthFromBatter(originalBatterCups, fromArea);
-    const toDepth = computedDepthFromBatter(
-      originalBatterCups * multiplier,
-      toArea,
-    );
-    if (fromDepth === null || toDepth === null) {
-      return {
-        newBatterDepthIn: null,
-        fromBatterDepthIn: null,
-        depthRatio: null,
-      };
-    }
-    return {
-      fromBatterDepthIn: fromDepth,
-      newBatterDepthIn: toDepth,
-      depthRatio: toDepth / fromDepth,
-    };
-  }
-
-  const fromDepth = from.depthIn * (2 / 3);
-  const toDepth = (fromDepth * fromArea * multiplier) / toArea;
-  return {
-    fromBatterDepthIn: fromDepth,
-    newBatterDepthIn: toDepth,
-    depthRatio: toDepth / fromDepth,
-  };
-};
-
 export interface CapacityWarning {
   panCapacityCups: number;
   scaledBatterCups: number;
@@ -487,7 +424,7 @@ export const computeCapacityWarning = (
 ): CapacityWarning | null => {
   const capacity = panCapacityCups(to);
   if (capacity === null) return null;
-  const maxRecommended = capacity * (2 / 3);
+  const maxRecommended = capacity * RECOMMENDED_FILL_FRACTION;
   return {
     panCapacityCups: capacity,
     scaledBatterCups,
@@ -515,7 +452,7 @@ export const computeBakeTimeAdvice = (
     const fromArea = panArea(from);
     const toArea = panArea(to);
     if (fromArea !== null && toArea !== null && fromArea > 0 && toArea > 0) {
-      const fromBatter = from.depthIn * (2 / 3);
+      const fromBatter = from.depthIn * RECOMMENDED_FILL_FRACTION;
       const toBatter = (fromBatter * fromArea * multiplier) / toArea;
       depthRatio = toBatter / fromBatter;
     } else {

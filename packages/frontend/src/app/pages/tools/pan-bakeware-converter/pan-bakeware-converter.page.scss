@@ -4,43 +4,9 @@
   padding: 16px;
 }
 
-.intro-callout {
-  display: flex;
-  gap: 12px;
-  padding: 12px 16px;
+info-block {
+  display: block;
   margin-bottom: 16px;
-  border: 1px solid var(--ion-color-step-150, #e0e0e0);
-  border-radius: 8px;
-  background: var(--ion-color-step-50, #f7f7f7);
-}
-
-.intro-icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-
-  ion-icon {
-    font-size: 1.4rem;
-    color: var(--ion-color-primary);
-  }
-}
-
-.intro-text {
-  flex: 1;
-
-  p.intro-title {
-    margin: 0 0 6px 0;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ion-text-color);
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.45;
-    color: var(--ion-text-color);
-  }
 }
 
 .unit-segment {
@@ -89,6 +55,11 @@
   --padding-start: 8px;
   --padding-end: 10px;
 
+  &:focus-visible {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+
   ion-icon {
     font-size: 1rem;
     margin-inline-end: 4px;
@@ -112,6 +83,11 @@
   height: 28px;
   --padding-start: 10px;
   --padding-end: 10px;
+
+  &:focus-visible {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
 
   ion-label {
     font-size: 0.78rem;
@@ -441,64 +417,6 @@
   font-size: 0.72rem;
   color: var(--ion-color-medium-shade);
   line-height: 1.4;
-}
-
-.depth-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.depth-row {
-  display: grid;
-  grid-template-columns: minmax(90px, auto) 60px 1fr;
-  gap: 12px;
-  align-items: center;
-}
-
-.depth-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ion-text-color);
-}
-
-.depth-track {
-  position: relative;
-  height: 70px;
-  background: var(--ion-color-step-100, #ededed);
-  border: 1px solid var(--ion-color-step-200, #d0d0d0);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.depth-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  transition: height 0.2s ease-out;
-}
-
-.depth-fill-from {
-  background: color-mix(in srgb, var(--ion-color-medium) 60%, transparent);
-}
-
-.depth-fill-to {
-  background: color-mix(in srgb, var(--ion-color-primary) 60%, transparent);
-}
-
-.depth-pan-marker {
-  position: absolute;
-  inset: 0;
-  border: 1px dashed var(--ion-color-medium-shade);
-  pointer-events: none;
-}
-
-.depth-value {
-  font-size: 0.82rem;
-  color: var(--ion-color-medium-shade);
-  line-height: 1.35;
-  font-variant-numeric: tabular-nums;
 }
 
 .warning-callout {

@@ -6,17 +6,13 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
-import {
-  add,
-  informationCircleOutline,
-  pricetag,
-  removeCircle,
-} from "ionicons/icons";
+import { add, book, pricetag, removeCircle } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { RouteMap } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
 import { SelectLabelModalComponent } from "../../../components/select-label-modal/select-label-modal.component";
 import {
@@ -75,6 +71,7 @@ interface CookbookRecipe {
     IonIcon,
     IonSpinner,
     IonText,
+    InfoBlockComponent,
   ],
 })
 export class CookbookGeneratorPage {
@@ -84,6 +81,7 @@ export class CookbookGeneratorPage {
   private serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.ToolsPage.getPath();
+  exportPath: string = RouteMap.ExportPage.getPath();
 
   title = "";
   subtitle = "";
@@ -91,6 +89,7 @@ export class CookbookGeneratorPage {
   author = "";
   includeToc = true;
   includeImages = true;
+  includeLabels = false;
 
   recipes: CookbookRecipe[] = [];
   loadingRecipes = false;
@@ -99,11 +98,7 @@ export class CookbookGeneratorPage {
   maxRecipes = MAX_RECIPES;
 
   constructor() {
-    addIcons({ add, informationCircleOutline, pricetag, removeCircle });
-  }
-
-  goToExport() {
-    this.navCtrl.navigateForward(RouteMap.ExportPage.getPath());
+    addIcons({ add, book, pricetag, removeCircle });
   }
 
   async addRecipe() {
@@ -196,6 +191,7 @@ export class CookbookGeneratorPage {
       author: this.author.trim() || undefined,
       includeToc: this.includeToc,
       includeImages: this.includeImages,
+      includeLabels: this.includeLabels,
       recipeIds: this.recipes.map((recipe) => recipe.id),
     });
     this.startingJob = false;

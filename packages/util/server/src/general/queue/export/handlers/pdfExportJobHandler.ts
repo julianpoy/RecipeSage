@@ -36,6 +36,7 @@ export async function pdfExportJobHandler(
   for await (const result of recipeAsyncIteratorToPDF(recipes, {
     language,
     includeImageUrls: true,
+    includeLabels: true,
   })) {
     await new Promise<void>((resolve, reject) => {
       zipStream.entry(

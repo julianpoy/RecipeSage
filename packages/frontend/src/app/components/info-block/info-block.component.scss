@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.info-block {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 8px;
+  background: var(--ion-color-step-50, #f7f7f7);
+}
+
+.info-block-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+
+  ion-icon {
+    font-size: 1.2rem;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+}
+
+.info-block-text {
+  flex: 1;
+
+  .info-block-title {
+    margin: 0 0 6px 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-weight: 700;
+    color: var(--ion-text-color, #1f1f1f);
+  }
+}
+
+:host ::ng-deep .info-block-text > p {
+  margin: 0 0 6px 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--ion-text-color, #1f1f1f);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+:host ::ng-deep .info-block-text > [virtualSlot="source"] {
+  display: block;
+  margin: 4px 0 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+:host ::ng-deep .info-block-text a {
+  color: var(--ion-color-primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

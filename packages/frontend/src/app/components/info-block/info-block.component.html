@@ -1,0 +1,14 @@
+<aside class="info-block" role="note" [attr.aria-label]="ariaLabel">
+  @if (icon) {
+    <div class="info-block-icon">
+      <ion-icon [name]="icon" aria-hidden="true"></ion-icon>
+    </div>
+  }
+  <div class="info-block-text">
+    <p class="info-block-title">
+      <ng-content select="[virtualSlot=title]"></ng-content>
+    </p>
+    <ng-content></ng-content>
+    <ng-content select="[virtualSlot=source]"></ng-content>
+  </div>
+</aside>
