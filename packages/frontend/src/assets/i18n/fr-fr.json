@@ -8,7 +8,6 @@
     "pages.app.nav.home": "Mes Recettes",
     "pages.app.nav.labels": "Gérer les étiquettes",
     "pages.app.nav.people": "Personnes & Profil",
-    "pages.app.nav.assistant": "Assistant de cuisine",
     "pages.app.nav.messages": "Messages",
     "pages.app.nav.inbox": "Boîte de réception des recettes",
     "pages.app.nav.newrecipe": "Créer une recette",
@@ -467,7 +466,6 @@
     "pages.shareProfileModal.shareBody": "Cliquez pour voir le profil public RecipeSage de {{name}} :",
     "components.multiImageUpload.imageError": "Une erreur s'est produite lors du traitement de l'une ou plusieurs des images que vous avez sélectionnées",
     "components.selectIngredients.toggleAll": "Sélectionner/Désélectionner tout",
-    "components.scaleRecipe.change": "Ajustez l'échelle de la recette",
     "services.quickTutorial.splitPaneView.message": "La vue en panneaux séparés n'est visible que sur les appareils dotés d'écrans larges (ordinateurs portables, grandes tablettes, etc.). Lorsque la vue en panneaux séparés est activée, le menu latéral est toujours visible. Cette fonction est utile pour optimiser l'expérience sur les grands appareils.",
     "components.selectUser.placeholder": "Recherche par e-mail ou handle",
     "components.selfhostWarning.1": "Remarque : Il s'agit d'une version auto-hébergée de RecipeSage et n'est donc pas associée à",
@@ -1264,5 +1262,13 @@
     "pages.importCrouton.description": "Cette fonction importera un fichier d'export Crouton (une archive .zip contenant des fichiers de recettes .crumb) dans votre compte RecipeSage. Nous vous encourageons à devenir contributeur si votre fichier contient de nombreuses recettes ou images.",
     "components.recurrenceEditor.repeat": "Répéter",
     "components.recurrenceEditor.frequency": "Fréquence",
-    "components.recurrenceEditor.frequency.daily": "Quotidien"
+    "components.recurrenceEditor.frequency.daily": "Quotidien",
+    "pages.tools.cookingTemperatures.subtitle": "Températures minimales recommandées, degrés de cuisson, conseils pour la cuisson au four et à la friteuse",
+    "pages.measurementConverter.tabTitle": "Convertisseur d'unités - RecipeSage",
+    "pages.tools.tabTitle": "Outils et utilitaires - RecipeSage",
+    "pages.tools.title": "Outils et utilitaires",
+    "pages.tools.cookbook.subtitle": "Créez un livre de recettes PDF imprimable à partir de vos recettes",
+    "pages.tools.nutritionCalculator.subtitle": "Additionnez les informations nutritionnelles de plusieurs recettes et ajustez les portions",
+    "pages.tools.assistant.subtitle": "Discutez avec un assistant IA sur la cuisine et vos recettes",
+    "pages.tools.measurementConverter.subtitle": "Convertissez les volumes, les poids, les quantités d'ingrédients et les températures de cuisson"
 }
