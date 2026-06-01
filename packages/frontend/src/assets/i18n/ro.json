@@ -1481,5 +1481,9 @@
     "pages.measurementConverter.ingredients.cornPopped": "Popcorn (făcut)",
     "pages.measurementConverter.ingredients.cornmealWhole": "Turtă de mălai (intreagă)",
     "pages.measurementConverter.ingredients.cornmealYellow": "Mălai (galben)",
-    "pages.measurementConverter.ingredients.crackedWheat": "Grâu spart"
+    "pages.measurementConverter.ingredients.crackedWheat": "Grâu spart",
+    "emails.passwordReset.subject": "Resetarea parolei RecipeSage",
+    "emails.passwordReset.greeting": "Bună,",
+    "emails.passwordReset.intro": "Cineva a solicitat recent un link de resetare a parolei pentru contul RecipeSage asociat cu această adresă de e-mail.",
+    "emails.passwordReset.disregardNotice": "Dacă nu ai solicitat resetarea parolei, ignoră acest e-mail."
 }
