@@ -46,6 +46,7 @@ export interface RecipePDFStrings {
   servingSize: string;
   otherNutritionDetails: string;
   sourceUrl: string;
+  labels: string;
   imageUrl: string;
   nutritionLabels: {
     calories: string;
@@ -85,6 +86,7 @@ export const getRecipePDFStrings = async (
     servingSize: await t("pages.recipeDetails.nutritionServingSize"),
     otherNutritionDetails: await t("pages.recipeDetails.nutritionOtherDetails"),
     sourceUrl: await t("pages.editRecipe.input.sourceUrl"),
+    labels: await t("pages.recipeDetails.labels"),
     imageUrl: await t("webextension.inject.field.imageUrl"),
     nutritionLabels: {
       calories: await t("pages.recipeDetails.nutritionCalories"),
@@ -116,6 +118,7 @@ export interface RecipePDFMakeOptions {
   language: string;
   includePrimaryImage?: boolean;
   includeImageUrls?: boolean;
+  includeLabels?: boolean;
   renderInlineImages?: boolean;
   pageBreakBefore?: boolean;
   tocItem?: boolean;
@@ -621,6 +624,19 @@ export const recipeToPDFMakeSchema = async (
       text: [
         { text: strings.sourceUrl + ": ", bold: true },
         { text: recipe.url, link: recipe.url },
+      ],
+      margin: [0, 10, 0, 0] satisfies Margins,
+    });
+  }
+
+  if (options.includeLabels && recipe.recipeLabels.length > 0) {
+    const labelTitles = recipe.recipeLabels
+      .map((recipeLabel) => recipeLabel.label.title)
+      .sort((a, b) => a.localeCompare(b, options.language));
+    schema.push({
+      text: [
+        { text: strings.labels + ": ", bold: true },
+        { text: labelTitles.join(", ") },
       ],
       margin: [0, 10, 0, 0] satisfies Margins,
     });

@@ -299,6 +299,15 @@ export const appRoutes: Routes = [
     title: "pages.cookingTemperatures.tabTitle",
   },
   {
+    path: RouteMap.PanBakewareConverterPage.path,
+    loadComponent: () =>
+      import("./pages/tools/pan-bakeware-converter/pan-bakeware-converter.page").then(
+        (m) => m.PanBakewareConverterPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.panBakewareConverter.tabTitle",
+  },
+  {
     path: RouteMap.ImportPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import/import.page").then(

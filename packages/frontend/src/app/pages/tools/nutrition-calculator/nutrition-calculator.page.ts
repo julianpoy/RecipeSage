@@ -1,19 +1,16 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
-import {
-  add,
-  informationCircleOutline,
-  pricetag,
-  removeCircle,
-  remove,
-} from "ionicons/icons";
+import { add, fitness, pricetag, removeCircle, remove } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { EventName, EventService } from "../../../services/event.service";
+import { LoadingService } from "../../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
 import { SelectLabelModalComponent } from "../../../components/select-label-modal/select-label-modal.component";
 import {
@@ -158,16 +155,20 @@ type DisplayMode = "total" | "perServing";
     IonSegmentButton,
     IonNote,
     IonBadge,
+    InfoBlockComponent,
   ],
 })
-export class NutritionCalculatorPage implements OnInit {
+export class NutritionCalculatorPage implements OnInit, OnDestroy {
   private navCtrl = inject(NavController);
   private modalCtrl = inject(ModalController);
   private serverActionsService = inject(ServerActionsService);
   private utilService = inject(UtilService);
   private router = inject(Router);
+  private events = inject(EventService);
+  private loadingService = inject(LoadingService);
 
   private presetRecipeIds: string[] = [];
+  private reloadPending = false;
 
   defaultBackHref: string = RouteMap.ToolsPage.getPath();
 
@@ -188,7 +189,13 @@ export class NutritionCalculatorPage implements OnInit {
   recipesWithDataCount = 0;
 
   constructor() {
-    addIcons({ add, informationCircleOutline, pricetag, removeCircle, remove });
+    addIcons({
+      add,
+      fitness,
+      pricetag,
+      removeCircle,
+      remove,
+    });
 
     const state = this.router.getCurrentNavigation()?.extras.state;
     const rawRecipeIds = state?.["recipeIds"];
@@ -197,12 +204,58 @@ export class NutritionCalculatorPage implements OnInit {
         if (typeof id === "string") this.presetRecipeIds.push(id);
       }
     }
+
+    this.events.subscribe(
+      [EventName.RecipeUpdated, EventName.RecipeDeleted],
+      this.setReloadPending,
+    );
   }
 
   async ngOnInit() {
     if (this.presetRecipeIds.length) {
       await this.loadPresetRecipes(this.presetRecipeIds);
     }
+  }
+
+  ngOnDestroy() {
+    this.events.unsubscribe(
+      [EventName.RecipeUpdated, EventName.RecipeDeleted],
+      this.setReloadPending,
+    );
+  }
+
+  async ionViewWillEnter() {
+    if (this.reloadPending && this.recipes.length) {
+      const loading = this.loadingService.start();
+      try {
+        await this.reloadCachedRecipes();
+      } finally {
+        loading.dismiss();
+      }
+    }
+    this.reloadPending = false;
+  }
+
+  private setReloadPending = () => {
+    this.reloadPending = true;
+  };
+
+  private async reloadCachedRecipes() {
+    this.loadingRecipes = true;
+
+    const ids = this.recipes.map((recipe) => recipe.id);
+    for (const id of ids) {
+      this.nutritionById.delete(id);
+    }
+
+    await this.fetchNutritionForIds(ids);
+
+    this.recipes = this.recipes.filter((recipe) =>
+      this.nutritionById.has(recipe.id),
+    );
+
+    this.loadingRecipes = false;
+    this.recompute();
   }
 
   private async loadPresetRecipes(ids: string[]) {
@@ -385,6 +438,18 @@ export class NutritionCalculatorPage implements OnInit {
 
   clampBulkServings() {
     const value = this.clampServingsValue(Number(this.bulkServings) || 0, 0);
+    this.bulkServings = value;
+    for (const recipe of this.recipes) {
+      recipe.servings = value;
+    }
+    this.recompute();
+  }
+
+  stepBulkServings(delta: number) {
+    const value = this.clampServingsValue(
+      (Number(this.bulkServings) || 0) + delta,
+      0,
+    );
     this.bulkServings = value;
     for (const recipe of this.recipes) {
       recipe.servings = value;

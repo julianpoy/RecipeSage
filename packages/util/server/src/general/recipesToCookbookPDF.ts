@@ -11,6 +11,7 @@ export interface CookbookOptions {
   author?: string;
   includeToc: boolean;
   includeImages: boolean;
+  includeLabels: boolean;
   language: string;
   introductionLabel: string;
   contentsLabel: string;
@@ -81,6 +82,7 @@ export const generateCookbookPDFStream = async (
         language: options.language,
         includePrimaryImage: options.includeImages,
         renderInlineImages: options.includeImages,
+        includeLabels: options.includeLabels,
         pageBreakBefore: true,
         tocItem: options.includeToc,
       }),

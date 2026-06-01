@@ -228,6 +228,12 @@ export const RouteMap = {
     },
     path: "tools/cooking-temperatures",
   },
+  PanBakewareConverterPage: {
+    getPath() {
+      return `/tools/pan-bakeware-converter`;
+    },
+    path: "tools/pan-bakeware-converter",
+  },
   ImportPage: {
     getPath() {
       return `/settings/import`;

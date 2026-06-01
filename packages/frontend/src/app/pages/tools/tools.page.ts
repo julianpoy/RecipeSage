@@ -20,6 +20,8 @@ import {
   book,
   chatboxEllipses,
   fitness,
+  help,
+  resize,
   swapHorizontal,
   thermometer,
 } from "ionicons/icons";
@@ -51,6 +53,8 @@ export class ToolsPage {
       book,
       chatboxEllipses,
       fitness,
+      help,
+      resize,
       swapHorizontal,
       thermometer,
     });
@@ -72,7 +76,15 @@ export class ToolsPage {
     this.navCtrl.navigateForward(RouteMap.CookingTemperaturesPage.getPath());
   }
 
+  goToPanBakewareConverter() {
+    this.navCtrl.navigateForward(RouteMap.PanBakewareConverterPage.getPath());
+  }
+
   goToAssistant() {
     this.navCtrl.navigateForward(RouteMap.AssistantPage.getPath());
+  }
+
+  goToUserGuide() {
+    window.open("https://docs.recipesage.com");
   }
 }

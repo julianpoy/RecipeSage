@@ -40,11 +40,13 @@ import {
   chevronUp,
   chevronForward,
   options,
+  bulb,
 } from "ionicons/icons";
 
 import { RouteMap } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import {
   SearchableSelectModalComponent,
   type SearchableSelectOption,
@@ -73,11 +75,6 @@ import {
 
 type Mode = "ingredients" | "count" | "temperature";
 
-interface IngredientOption {
-  key: string;
-  name: string;
-}
-
 const FRACTION_VOLUME_UNITS: VolumeUnit[] = ["cup", "tablespoon", "teaspoon"];
 
 @Component({
@@ -105,6 +102,7 @@ const FRACTION_VOLUME_UNITS: VolumeUnit[] = ["cup", "tablespoon", "teaspoon"];
     IonSegmentButton,
     IonSelect,
     IonSelectOption,
+    InfoBlockComponent,
   ],
 })
 export class MeasurementConverterPage implements OnInit {
@@ -132,7 +130,6 @@ export class MeasurementConverterPage implements OnInit {
   weightExpanded = false;
 
   selectedIngredientKey = "water";
-  ingredientOptions: IngredientOption[] = [];
 
   private activeUnit: VolumeUnit | WeightUnit = "cup";
   volumeValues: Record<VolumeUnit, string> = {
@@ -182,6 +179,7 @@ export class MeasurementConverterPage implements OnInit {
       chevronUp,
       chevronForward,
       options,
+      bulb,
     });
   }
 
@@ -196,13 +194,6 @@ export class MeasurementConverterPage implements OnInit {
   }
 
   ngOnInit() {
-    this.ingredientOptions = INGREDIENT_DENSITIES.map((ingredient) => ({
-      key: ingredient.key,
-      name: this.translate.instant(
-        `pages.measurementConverter.ingredients.${ingredient.key}`,
-      ),
-    })).sort((a, b) => a.name.localeCompare(b.name));
-
     this.volumeValues.cup = "1";
     this.recompute();
     this.recomputeCount();
@@ -232,6 +223,17 @@ export class MeasurementConverterPage implements OnInit {
   }
 
   async openIngredientPicker() {
+    await this.translate
+      .get("pages.measurementConverter.selectIngredient")
+      .toPromise();
+
+    const options = INGREDIENT_DENSITIES.map((ingredient) => ({
+      value: ingredient.key,
+      label: this.translate.instant(
+        `pages.measurementConverter.ingredients.${ingredient.key}`,
+      ),
+    })).sort((a, b) => a.label.localeCompare(b.label));
+
     const modal = await this.modalCtrl.create({
       component: SearchableSelectModalComponent,
       componentProps: {
@@ -244,10 +246,7 @@ export class MeasurementConverterPage implements OnInit {
         noResultsText: this.translate.instant(
           "pages.measurementConverter.noResults",
         ),
-        options: this.ingredientOptions.map((option) => ({
-          value: option.key,
-          label: option.name,
-        })),
+        options,
         selectedValue: this.selectedIngredientKey,
       },
     });

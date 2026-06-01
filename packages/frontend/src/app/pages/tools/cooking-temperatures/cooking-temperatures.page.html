@@ -10,26 +10,20 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <aside
-      class="safety-callout"
-      role="note"
-      [attr.aria-label]="'pages.cookingTemperatures.safety.title' | translate"
+    <info-block
+      icon="shield"
+      [ariaLabel]="'pages.cookingTemperatures.safety.title' | translate"
     >
-      <div class="safety-icon">
-        <ion-icon name="shield" aria-hidden="true"></ion-icon>
-      </div>
-      <div class="safety-text">
-        <p class="safety-title">
-          {{ "pages.cookingTemperatures.safety.title" | translate }}
-        </p>
-        <p>{{ "pages.cookingTemperatures.safety.safeMin" | translate }}</p>
-        <p>{{ "pages.cookingTemperatures.safety.preference" | translate }}</p>
-        <p>{{ "pages.cookingTemperatures.safety.carryover" | translate }}</p>
-        <p class="safety-source">
-          {{ "pages.cookingTemperatures.safety.source" | translate }}
-        </p>
-      </div>
-    </aside>
+      <ng-container virtualSlot="title">
+        {{ "pages.cookingTemperatures.safety.title" | translate }}
+      </ng-container>
+      <p>{{ "pages.cookingTemperatures.safety.safeMin" | translate }}</p>
+      <p>{{ "pages.cookingTemperatures.safety.preference" | translate }}</p>
+      <p>{{ "pages.cookingTemperatures.safety.carryover" | translate }}</p>
+      <p virtualSlot="source">
+        {{ "pages.cookingTemperatures.safety.source" | translate }}
+      </p>
+    </info-block>
 
     <ion-searchbar
       class="temps-search"
@@ -71,6 +65,13 @@
                     <ion-icon name="water"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.oilTemp" | translate
+                    }}</ion-label>
+                  </ion-chip>
+                } @else if (display.entry.tempKind === "smokePoint") {
+                  <ion-chip color="warning" class="info-chip">
+                    <ion-icon name="flame"></ion-icon>
+                    <ion-label>{{
+                      "pages.cookingTemperatures.chip.smokePoint" | translate
                     }}</ion-label>
                   </ion-chip>
                 }
