@@ -15,7 +15,7 @@ export async function createContext({
       const token = req.headers.authorization.split(" ")[1];
       if (!token) return null;
 
-      const session = prisma.session.findFirst({
+      const session = prisma.session.findUnique({
         where: {
           token,
         },
