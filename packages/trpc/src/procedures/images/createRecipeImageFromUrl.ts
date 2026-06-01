@@ -1,18 +1,15 @@
 import { imageSummary, imageSummarySchema, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
-import {
-  FileTransformError,
-  validateTrpcSession,
-} from "@recipesage/util/server/general";
+import { FileTransformError } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
 import { ObjectTypes, writeImageURL } from "@recipesage/util/server/storage";
 
-export const createRecipeImageFromUrl = publicProcedure
+export const createRecipeImageFromUrl = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -29,11 +26,8 @@ export const createRecipeImageFromUrl = publicProcedure
   )
   .output(imageSummarySchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const encodeInHighRes = await userHasCapability(
-      session.userId,
+      ctx.session.userId,
       Capabilities.HighResImages,
     );
 
@@ -56,7 +50,7 @@ export const createRecipeImageFromUrl = publicProcedure
 
     const image = await prisma.image.create({
       data: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         location: storedFile.location,
         key: storedFile.key,
         json: storedFile as unknown as InputJsonValue,

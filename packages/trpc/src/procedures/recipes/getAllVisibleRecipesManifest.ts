@@ -1,13 +1,12 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   getFriendshipIds,
   getRecipeVisibilityQueryFilter,
 } from "@recipesage/util/server/db";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
 
-export const getAllVisibleRecipesManifest = publicProcedure
+export const getAllVisibleRecipesManifest = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -34,15 +33,12 @@ export const getAllVisibleRecipesManifest = publicProcedure
         updatedAt: Date;
       }[]
     > => {
-      const session = ctx.session;
-      validateTrpcSession(session);
-
-      const userIds = [session.userId];
-      const friendships = await getFriendshipIds(session.userId);
+      const userIds = [ctx.session.userId];
+      const friendships = await getFriendshipIds(ctx.session.userId);
       userIds.push(...friendships.friends);
 
       const queryFilters = await getRecipeVisibilityQueryFilter({
-        userId: session.userId,
+        userId: ctx.session.userId,
         userIds,
       });
 

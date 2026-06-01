@@ -3,12 +3,11 @@ import {
   labelGroupSummarySchema,
   prisma,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const updateLabelGroup = publicProcedure
+export const updateLabelGroup = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -28,15 +27,12 @@ export const updateLabelGroup = publicProcedure
   )
   .output(labelGroupSummarySchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const existingLabelGroup = await prisma.labelGroup.findFirst({
       where: {
         id: {
           not: input.id,
         },
-        userId: session.userId,
+        userId: ctx.session.userId,
         title: input.title,
       },
     });
@@ -50,7 +46,7 @@ export const updateLabelGroup = publicProcedure
 
     await prisma.labelGroup.update({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: input.id,
       },
       data: {
@@ -61,7 +57,7 @@ export const updateLabelGroup = publicProcedure
 
     await prisma.label.updateMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         labelGroupId: input.id,
       },
       data: {
@@ -71,7 +67,7 @@ export const updateLabelGroup = publicProcedure
 
     await prisma.label.updateMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: {
           in: input.labelIds,
         },
@@ -83,7 +79,7 @@ export const updateLabelGroup = publicProcedure
 
     const labelGroup = await prisma.labelGroup.findUniqueOrThrow({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: input.id,
       },
       ...labelGroupSummary,

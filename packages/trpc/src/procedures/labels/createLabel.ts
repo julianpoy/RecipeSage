@@ -1,11 +1,10 @@
 import { labelSummary, labelSummarySchema, prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { TRPCError } from "@trpc/server";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 
-export const createLabel = publicProcedure
+export const createLabel = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -23,9 +22,6 @@ export const createLabel = publicProcedure
   )
   .output(labelSummarySchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const title = cleanLabelTitle(input.title);
     if (!title.length) {
       throw new TRPCError({
@@ -36,7 +32,7 @@ export const createLabel = publicProcedure
 
     const existingLabel = await prisma.label.findFirst({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         title,
       },
     });
@@ -51,7 +47,7 @@ export const createLabel = publicProcedure
     if (input.labelGroupId) {
       const labelGroup = await prisma.labelGroup.findFirst({
         where: {
-          userId: session.userId,
+          userId: ctx.session.userId,
           id: input.labelGroupId,
         },
       });
@@ -68,12 +64,12 @@ export const createLabel = publicProcedure
       where: {
         userId_title: {
           title,
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
       },
       create: {
         title,
-        userId: session.userId,
+        userId: ctx.session.userId,
         labelGroupId: input.labelGroupId,
       },
       update: {},

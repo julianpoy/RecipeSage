@@ -1,10 +1,9 @@
 import { LabelSummary, labelSummarySchema } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { getVisibleLabels } from "@recipesage/util/server/db";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 
-export const getAllVisibleLabels = publicProcedure
+export const getAllVisibleLabels = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -16,10 +15,7 @@ export const getAllVisibleLabels = publicProcedure
   })
   .output(z.array(labelSummarySchema))
   .query(async ({ ctx }): Promise<LabelSummary[]> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const visibleLabels = await getVisibleLabels(session.userId, {
+    const visibleLabels = await getVisibleLabels(ctx.session.userId, {
       includeSelf: true,
       includeAllFriends: true,
     });

@@ -1,14 +1,13 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import {
   prisma,
   recipeSummaryLite,
   recipeSummaryLiteSchema,
 } from "@recipesage/prisma";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "@recipesage/util/server/db";
 
-export const getRecipesByUrl = publicProcedure
+export const getRecipesByUrl = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -25,12 +24,9 @@ export const getRecipesByUrl = publicProcedure
   )
   .output(z.array(recipeSummaryLiteSchema))
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const recipes = await prisma.recipe.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         url: input.url,
       },
       ...recipeSummaryLite,

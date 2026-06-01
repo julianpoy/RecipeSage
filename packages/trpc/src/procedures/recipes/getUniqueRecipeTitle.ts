@@ -1,7 +1,6 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { recipeSummaryLite } from "@recipesage/prisma";
 import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
 
@@ -11,7 +10,7 @@ import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
 const MAX_DUPE_RENAMES = 1001;
 const MAX_DUPES_RETRIEVED = 1000;
 
-export const getUniqueRecipeTitle = publicProcedure
+export const getUniqueRecipeTitle = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -30,14 +29,11 @@ export const getUniqueRecipeTitle = publicProcedure
   )
   .output(z.string().optional())
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const strippedRecipeTitle = stripNumberedRecipeTitle(input.title);
 
     const recipes = await prisma.recipe.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: {
           notIn: input.ignoreIds || [],
         },

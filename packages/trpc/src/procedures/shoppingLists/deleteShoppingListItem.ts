@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -13,7 +12,7 @@ import {
 } from "@recipesage/util/server/db";
 
 /** @deprecated Use deleteShoppingListItems instead */
-export const deleteShoppingListItem = publicProcedure
+export const deleteShoppingListItem = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -35,9 +34,6 @@ export const deleteShoppingListItem = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const shoppingListItem = await prisma.shoppingListItem.findUnique({
       where: {
         id: input.id,
@@ -54,7 +50,7 @@ export const deleteShoppingListItem = publicProcedure
     }
 
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       shoppingListItem.shoppingListId,
     );
 

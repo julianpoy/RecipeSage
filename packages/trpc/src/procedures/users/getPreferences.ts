@@ -1,5 +1,5 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   AppPreferenceTypes,
   AppTheme,
@@ -21,7 +21,6 @@ import {
   SupportedFontSize,
   SupportedLanguages,
 } from "@recipesage/util/shared";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 
 const appPreferencesSchema = z
@@ -78,7 +77,7 @@ const _checkTypeSatisfiesSchema =
     typeof appPreferencesSchema
   >;
 
-export const getPreferences = publicProcedure
+export const getPreferences = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -90,12 +89,9 @@ export const getPreferences = publicProcedure
   })
   .output(appPreferencesSchema)
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const user = await prisma.user.findUniqueOrThrow({
       where: {
-        id: session.userId,
+        id: ctx.session.userId,
       },
     });
 

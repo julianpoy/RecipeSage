@@ -1,6 +1,5 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import {
   AppPreferenceTypes,
@@ -24,7 +23,7 @@ import {
   SupportedLanguages,
 } from "@recipesage/util/shared";
 
-export const updatePreferences = publicProcedure
+export const updatePreferences = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -87,12 +86,9 @@ export const updatePreferences = publicProcedure
   )
   .output(z.string())
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     await prisma.user.update({
       where: {
-        id: session.userId,
+        id: ctx.session.userId,
       },
       data: {
         preferences: input,

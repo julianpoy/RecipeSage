@@ -1,11 +1,10 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import {
   getFriendshipIds,
   getRecipeVisibilityQueryFilter,
   convertPrismaRecipeSummariesToRecipeSummaries,
 } from "@recipesage/util/server/db";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   prisma,
   recipeSummary,
@@ -13,7 +12,7 @@ import {
   type RecipeSummary,
 } from "@recipesage/prisma";
 
-export const getRecipesByIds = publicProcedure
+export const getRecipesByIds = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -30,15 +29,12 @@ export const getRecipesByIds = publicProcedure
   )
   .output(z.array(recipeSummarySchema))
   .query(async ({ ctx, input }): Promise<RecipeSummary[]> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const userIds = [session.userId];
-    const friendships = await getFriendshipIds(session.userId);
+    const userIds = [ctx.session.userId];
+    const friendships = await getFriendshipIds(ctx.session.userId);
     userIds.push(...friendships.friends);
 
     const queryFilters = await getRecipeVisibilityQueryFilter({
-      userId: session.userId,
+      userId: ctx.session.userId,
       userIds,
     });
 

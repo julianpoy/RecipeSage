@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -12,7 +11,7 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 
-export const deleteMealPlan = publicProcedure
+export const deleteMealPlan = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -34,10 +33,7 @@ export const deleteMealPlan = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToMealPlan(session.userId, input.id);
+    const access = await getAccessToMealPlan(ctx.session.userId, input.id);
 
     if (access.level !== MealPlanAccessLevel.Owner) {
       throw new TRPCError({

@@ -1,10 +1,9 @@
 import { UserPublic, userPublicSchema } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { getFriendshipUserProfiles } from "@recipesage/util/server/db";
 import { z } from "zod";
 
-export const getMyFriends = publicProcedure
+export const getMyFriends = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -30,9 +29,6 @@ export const getMyFriends = publicProcedure
       incomingRequests: UserPublic[];
       outgoingRequests: UserPublic[];
     }> => {
-      const session = ctx.session;
-      validateTrpcSession(session);
-
-      return getFriendshipUserProfiles(session.userId);
+      return getFriendshipUserProfiles(ctx.session.userId);
     },
   );

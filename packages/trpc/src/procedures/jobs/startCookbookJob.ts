@@ -4,14 +4,11 @@ import {
   prisma,
   type CookbookJobMeta,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import {
-  enqueueJob,
-  validateTrpcSession,
-} from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
+import { enqueueJob } from "@recipesage/util/server/general";
 import { z } from "zod";
 
-export const startCookbookJob = publicProcedure
+export const startCookbookJob = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -38,12 +35,9 @@ export const startCookbookJob = publicProcedure
     }),
   )
   .mutation(async ({ input, ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const job = await prisma.job.create({
       data: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         type: JobType.COOKBOOK,
         status: JobStatus.CREATE,
         progress: 1,

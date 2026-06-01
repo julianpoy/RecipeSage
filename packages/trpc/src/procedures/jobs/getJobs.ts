@@ -4,11 +4,10 @@ import {
   prisma,
   prismaJobSummaryToJobSummary,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 
-export const getJobs = publicProcedure
+export const getJobs = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -20,12 +19,9 @@ export const getJobs = publicProcedure
   })
   .output(z.array(jobSummarySchema))
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const jobs = await prisma.job.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       take: 200,
       ...jobSummary,

@@ -1,5 +1,4 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import {
   mealPlanSummary,
   mealPlanSummarySchema,
@@ -12,7 +11,7 @@ import {
   getAccessToMealPlan,
 } from "@recipesage/util/server/db";
 
-export const getMealPlan = publicProcedure
+export const getMealPlan = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -29,10 +28,7 @@ export const getMealPlan = publicProcedure
   )
   .output(mealPlanSummarySchema)
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToMealPlan(session.userId, input.id);
+    const access = await getAccessToMealPlan(ctx.session.userId, input.id);
 
     if (access.level === MealPlanAccessLevel.None) {
       throw new TRPCError({

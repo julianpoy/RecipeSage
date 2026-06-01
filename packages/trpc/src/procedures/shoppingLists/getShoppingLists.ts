@@ -1,5 +1,4 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import {
   prisma,
   shoppingListSummary,
@@ -7,7 +6,7 @@ import {
 } from "@recipesage/prisma";
 import { z } from "zod";
 
-export const getShoppingLists = publicProcedure
+export const getShoppingLists = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -19,12 +18,9 @@ export const getShoppingLists = publicProcedure
   })
   .output(z.array(shoppingListSummarySchema))
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const collabRelationships = await prisma.shoppingListCollaborator.findMany({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       select: {
         shoppingListId: true,
@@ -35,7 +31,7 @@ export const getShoppingLists = publicProcedure
       where: {
         OR: [
           {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
           {
             id: {

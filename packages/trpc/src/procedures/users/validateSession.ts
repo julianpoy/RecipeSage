@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 
-export const validateSession = publicProcedure
+export const validateSession = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -13,9 +12,6 @@ export const validateSession = publicProcedure
     },
   })
   .output(z.string())
-  .query(async ({ ctx }): Promise<string> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
+  .query(async (): Promise<string> => {
     return "Valid";
   });

@@ -3,7 +3,7 @@ import { prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 
 const SESSION_VALIDITY_LENGTH = 30; // Initial session validity time
-const RENEW_WHEN_EXPIRES_WITHIN_DAYS = 29; // If session expires within this many days, we extend the session
+const RENEW_WHEN_EXPIRES_WITHIN_DAYS = 28; // If session expires within this many days, we extend the session
 
 export async function extendSession(session: Session) {
   // We will not extend sessions that are already expired

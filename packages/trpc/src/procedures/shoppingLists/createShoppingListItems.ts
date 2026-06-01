@@ -1,9 +1,8 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
   getShoppingListItemCategories,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
@@ -14,7 +13,7 @@ import {
 import { createShoppingListItemsInput } from "@recipesage/util/shared";
 import { z } from "zod";
 
-export const createShoppingListItems = publicProcedure
+export const createShoppingListItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -31,11 +30,8 @@ export const createShoppingListItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const access = await getAccessToShoppingList(
-      session.userId,
+      ctx.session.userId,
       input.shoppingListId,
     );
 
@@ -54,7 +50,7 @@ export const createShoppingListItems = publicProcedure
       ...item,
       completed: item.completed ?? false,
       categoryTitle: item.categoryTitle ?? `::${autoCategories[idx]}`,
-      userId: session.userId,
+      userId: ctx.session.userId,
       shoppingListId: input.shoppingListId,
     }));
 

@@ -3,12 +3,11 @@ import {
   labelGroupSummarySchema,
   prisma,
 } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const createLabelGroup = publicProcedure
+export const createLabelGroup = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -27,12 +26,9 @@ export const createLabelGroup = publicProcedure
   )
   .output(labelGroupSummarySchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const existingLabelGroup = await prisma.labelGroup.findFirst({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         title: input.title,
       },
     });
@@ -47,7 +43,7 @@ export const createLabelGroup = publicProcedure
     const _labelGroup = await prisma.labelGroup.create({
       data: {
         title: input.title,
-        userId: session.userId,
+        userId: ctx.session.userId,
         warnWhenNotPresent: input.warnWhenNotPresent,
       },
     });
@@ -61,7 +57,7 @@ export const createLabelGroup = publicProcedure
           id: {
             in: input.labelIds,
           },
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
       });
     }

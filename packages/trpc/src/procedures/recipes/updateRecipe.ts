@@ -1,8 +1,7 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
@@ -11,7 +10,7 @@ import { Capabilities } from "@recipesage/util/shared";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { getFriendshipIds } from "@recipesage/util/server/db";
 
-export const updateRecipe = publicProcedure
+export const updateRecipe = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -71,13 +70,10 @@ export const updateRecipe = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const initialRecipe = await prisma.recipe.findUnique({
       where: {
         id: input.id,
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
       include: {
         recipeImages: true,
@@ -109,7 +105,7 @@ export const updateRecipe = publicProcedure
           in: input.labelIds,
         },
         userId: {
-          not: session.userId,
+          not: ctx.session.userId,
         },
       },
     }));
@@ -127,8 +123,8 @@ export const updateRecipe = publicProcedure
       );
 
       if (newLinkedRecipeIds.length > 0) {
-        const friendshipIds = await getFriendshipIds(session.userId);
-        const allowedUserIds = [session.userId, ...friendshipIds.friends];
+        const friendshipIds = await getFriendshipIds(ctx.session.userId);
+        const allowedUserIds = [ctx.session.userId, ...friendshipIds.friends];
 
         const linkedRecipes = await prisma.recipe.findMany({
           where: {
@@ -177,7 +173,7 @@ export const updateRecipe = publicProcedure
     }));
 
     const multipleImagesEnabled = await userHasCapability(
-      session.userId,
+      ctx.session.userId,
       Capabilities.MultipleImages,
     );
     if (multipleImagesEnabled) {
@@ -257,7 +253,7 @@ export const updateRecipe = publicProcedure
         },
         data: {
           title: input.title,
-          userId: session.userId,
+          userId: ctx.session.userId,
           description: input.description,
           yield: input.yield,
           activeTime: input.activeTime,

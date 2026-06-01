@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -18,7 +17,7 @@ import {
   UPSERT_MEAL_PLAN_ITEMS_PAGINATION_LIMIT,
 } from "@recipesage/util/shared";
 
-export const upsertMealPlanItems = publicProcedure
+export const upsertMealPlanItems = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -57,10 +56,10 @@ export const upsertMealPlanItems = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToMealPlan(session.userId, input.mealPlanId);
+    const access = await getAccessToMealPlan(
+      ctx.session.userId,
+      input.mealPlanId,
+    );
 
     if (access.level === MealPlanAccessLevel.None) {
       throw new TRPCError({
@@ -118,7 +117,7 @@ export const upsertMealPlanItems = publicProcedure
             id: item.id,
             mealPlanId: input.mealPlanId,
             title: item.title,
-            userId: session.userId,
+            userId: ctx.session.userId,
             scheduled: null,
             scheduledDate: new Date(item.scheduledDate),
             meal: item.meal,

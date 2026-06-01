@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -13,7 +12,7 @@ import {
 } from "@recipesage/util/server/db";
 
 /** @deprecated Use deleteMealPlanItems instead */
-export const deleteMealPlanItem = publicProcedure
+export const deleteMealPlanItem = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -35,9 +34,6 @@ export const deleteMealPlanItem = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const mealPlanItem = await prisma.mealPlanItem.findUnique({
       where: {
         id: input.id,
@@ -54,7 +50,7 @@ export const deleteMealPlanItem = publicProcedure
     }
 
     const access = await getAccessToMealPlan(
-      session.userId,
+      ctx.session.userId,
       mealPlanItem.mealPlanId,
     );
 

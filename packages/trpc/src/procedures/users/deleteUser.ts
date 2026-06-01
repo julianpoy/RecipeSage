@@ -1,12 +1,11 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { prisma } from "@recipesage/prisma";
 import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
 import { deleteRecipes as deleteRecipesFromSearch } from "@recipesage/util/server/search";
 import * as Sentry from "@sentry/node";
 import { z } from "zod";
 
-export const deleteUser = publicProcedure
+export const deleteUser = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -18,14 +17,11 @@ export const deleteUser = publicProcedure
   })
   .output(z.string())
   .mutation(async ({ ctx }): Promise<string> => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     await prisma.$transaction(
       async (tx) => {
         const allRecipeIds = await tx.recipe.findMany({
           where: {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
           select: {
             id: true,
@@ -34,20 +30,20 @@ export const deleteUser = publicProcedure
 
         await tx.recipe.deleteMany({
           where: {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
         });
         await tx.userProfileImage.deleteMany({
           where: {
-            userId: session.userId,
+            userId: ctx.session.userId,
           },
         });
 
-        await deleteHangingImagesForUser(session.userId, tx);
+        await deleteHangingImagesForUser(ctx.session.userId, tx);
 
         await tx.user.delete({
           where: {
-            id: session.userId,
+            id: ctx.session.userId,
           },
         });
 

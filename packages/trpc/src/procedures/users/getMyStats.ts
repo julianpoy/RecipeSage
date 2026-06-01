@@ -1,9 +1,8 @@
 import { prisma } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 
-export const getMyStats = publicProcedure
+export const getMyStats = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -23,12 +22,9 @@ export const getMyStats = publicProcedure
     }),
   )
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const user = await prisma.user.findUniqueOrThrow({
       where: {
-        id: session.userId,
+        id: ctx.session.userId,
       },
       select: {
         createdAt: true,
@@ -38,14 +34,14 @@ export const getMyStats = publicProcedure
 
     const recipeCount = await prisma.recipe.count({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
       },
     });
 
     const recipeImageCount = await prisma.recipeImage.count({
       where: {
         recipe: {
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
       },
     });
@@ -54,10 +50,10 @@ export const getMyStats = publicProcedure
       where: {
         OR: [
           {
-            toUserId: session.userId,
+            toUserId: ctx.session.userId,
           },
           {
-            fromUserId: session.userId,
+            fromUserId: ctx.session.userId,
           },
         ],
       },

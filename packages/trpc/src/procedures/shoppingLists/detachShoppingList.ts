@@ -1,8 +1,7 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
@@ -12,7 +11,7 @@ import {
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 
-export const detachShoppingList = publicProcedure
+export const detachShoppingList = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -34,10 +33,7 @@ export const detachShoppingList = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToShoppingList(session.userId, input.id);
+    const access = await getAccessToShoppingList(ctx.session.userId, input.id);
 
     if (access.level !== ShoppingListAccessLevel.Collaborator) {
       throw new TRPCError({
@@ -51,7 +47,7 @@ export const detachShoppingList = publicProcedure
       where: {
         shoppingListId_userId: {
           shoppingListId: input.id,
-          userId: session.userId,
+          userId: ctx.session.userId,
         },
       },
     });

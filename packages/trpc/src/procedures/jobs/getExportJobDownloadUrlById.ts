@@ -1,7 +1,6 @@
 import { prisma, prismaJobSummaryToJobSummary } from "@recipesage/prisma";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { jobSummary } from "@recipesage/prisma";
-import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
@@ -10,7 +9,7 @@ import {
 } from "@recipesage/util/server/storage";
 
 /** @deprecated Use getJobDownloadUrlById instead */
-export const getExportJobDownloadUrlById = publicProcedure
+export const getExportJobDownloadUrlById = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -31,12 +30,9 @@ export const getExportJobDownloadUrlById = publicProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const _job = await prisma.job.findUniqueOrThrow({
       where: {
-        userId: session.userId,
+        userId: ctx.session.userId,
         id: input.id,
       },
       ...jobSummary,

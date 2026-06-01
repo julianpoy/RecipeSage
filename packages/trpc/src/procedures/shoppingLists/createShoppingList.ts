@@ -1,15 +1,14 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
-  validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { SHOPPING_LIST_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared";
 
-export const createShoppingList = publicProcedure
+export const createShoppingList = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -32,9 +31,6 @@ export const createShoppingList = publicProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
     const collaboratorUsers = await prisma.user.findMany({
       where: {
         id: {
@@ -56,7 +52,7 @@ export const createShoppingList = publicProcedure
     const createdShoppingList = await prisma.shoppingList.create({
       data: {
         title: input.title,
-        userId: session.userId,
+        userId: ctx.session.userId,
         collaboratorUsers: {
           createMany: {
             data: collaboratorUsers.map((collaboratorUser) => ({

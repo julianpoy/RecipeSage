@@ -1,12 +1,11 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { Assistant } from "@recipesage/util/server/ml";
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { assistantMessageSummarySchema } from "@recipesage/prisma";
 
 const assistant = new Assistant();
 
-export const getAssistantMessages = publicProcedure
+export const getAssistantMessages = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -18,15 +17,7 @@ export const getAssistantMessages = publicProcedure
   })
   .output(z.array(assistantMessageSummarySchema))
   .query(async ({ ctx }) => {
-    const session = ctx.session;
-    if (!session) {
-      throw new TRPCError({
-        message: "Must be logged in",
-        code: "UNAUTHORIZED",
-      });
-    }
-
-    const chatHistory = await assistant.getChatHistory(session.userId);
+    const chatHistory = await assistant.getChatHistory(ctx.session.userId);
 
     return chatHistory;
   });

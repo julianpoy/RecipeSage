@@ -1,4 +1,4 @@
-import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { inferAsyncReturnType, initTRPC, TRPCError } from "@trpc/server";
 import { OpenApiMeta } from "trpc-to-openapi";
 import { createContext } from "./context";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
@@ -51,3 +51,18 @@ export const createCallerFactory = t.createCallerFactory;
 export const publicProcedure = t.procedure
   .use(otelMiddleware)
   .use(sentryMiddleware);
+
+export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
+  if (!ctx.session) {
+    throw new TRPCError({
+      message: "Must be logged in",
+      code: "UNAUTHORIZED",
+    });
+  }
+  return next({
+    ctx: {
+      ...ctx,
+      session: ctx.session,
+    },
+  });
+});

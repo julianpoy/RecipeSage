@@ -1,4 +1,3 @@
-export * from "./auth/validateTrpcSession";
 export * from "./auth/validateSession";
 export * from "./auth/generateSession";
 export * from "./auth/extendSession";

@@ -3,7 +3,7 @@ import {
   isRecipeRecognitionSuccess,
   recordCreditsSpent,
 } from "@recipesage/util/server/general";
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { assertCreditsAvailableTrpc } from "../../util/assertCreditsAvailableTrpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -12,7 +12,7 @@ import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 /**
  * @deprecated Please use express routes which support file streaming rather than base64
  */
-export const getRecipeFromOCR = publicProcedure
+export const getRecipeFromOCR = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
@@ -30,15 +30,7 @@ export const getRecipeFromOCR = publicProcedure
   )
   .output(standardizedRecipeImportEntryForWebSchema)
   .mutation(async ({ ctx, input }) => {
-    const session = ctx.session;
-    if (!session) {
-      throw new TRPCError({
-        message: "Must be logged in",
-        code: "UNAUTHORIZED",
-      });
-    }
-
-    await assertCreditsAvailableTrpc(session.userId, "mlOcr");
+    await assertCreditsAvailableTrpc(ctx.session.userId, "mlOcr");
 
     const imageBuffer = Buffer.from(input.image, "base64");
 
@@ -51,7 +43,7 @@ export const getRecipeFromOCR = publicProcedure
     }
 
     if (isRecipeRecognitionSuccess(recognizedRecipe.recipe)) {
-      await recordCreditsSpent(session.userId, "mlOcr");
+      await recordCreditsSpent(ctx.session.userId, "mlOcr");
     }
 
     return {

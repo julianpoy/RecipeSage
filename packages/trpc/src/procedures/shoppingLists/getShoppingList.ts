@@ -1,5 +1,4 @@
-import { publicProcedure } from "../../trpc";
-import { validateTrpcSession } from "@recipesage/util/server/general";
+import { authenticatedProcedure } from "../../trpc";
 import {
   prisma,
   shoppingListSummary,
@@ -12,7 +11,7 @@ import {
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 
-export const getShoppingList = publicProcedure
+export const getShoppingList = authenticatedProcedure
   .meta({
     openapi: {
       method: "GET",
@@ -29,10 +28,7 @@ export const getShoppingList = publicProcedure
   )
   .output(shoppingListSummarySchema)
   .query(async ({ ctx, input }) => {
-    const session = ctx.session;
-    validateTrpcSession(session);
-
-    const access = await getAccessToShoppingList(session.userId, input.id);
+    const access = await getAccessToShoppingList(ctx.session.userId, input.id);
 
     if (access.level === ShoppingListAccessLevel.None) {
       throw new TRPCError({
