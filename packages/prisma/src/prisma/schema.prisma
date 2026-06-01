@@ -304,6 +304,7 @@ model Recipe {
   @@index([fromUserId], map: "recipes_from_user_id")
   @@index([userId, folder, createdAt(sort: Desc)], map: "recipes_user_folder_created_at")
   @@index([userId, folder, title], map: "recipes_user_folder_title")
+  @@index([tsv], type: Gin, map: "recipes_tsv_idx")
   @@map("Recipes")
 }
 
@@ -311,12 +312,13 @@ model Session {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   type      String   @db.VarChar(255)
-  token     String   @db.VarChar(255)
+  token     String   @unique @db.VarChar(255)
   expires   DateTime @db.Timestamptz(6)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("Sessions")
 }
 
