@@ -20,6 +20,7 @@ import {
   book,
   chatboxEllipses,
   fitness,
+  resize,
   swapHorizontal,
   thermometer,
 } from "ionicons/icons";
@@ -51,6 +52,7 @@ export class ToolsPage {
       book,
       chatboxEllipses,
       fitness,
+      resize,
       swapHorizontal,
       thermometer,
     });
@@ -70,6 +72,10 @@ export class ToolsPage {
 
   goToCookingTemperatures() {
     this.navCtrl.navigateForward(RouteMap.CookingTemperaturesPage.getPath());
+  }
+
+  goToPanBakewareConverter() {
+    this.navCtrl.navigateForward(RouteMap.PanBakewareConverterPage.getPath());
   }
 
   goToAssistant() {

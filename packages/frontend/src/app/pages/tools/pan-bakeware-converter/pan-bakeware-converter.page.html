@@ -1,0 +1,844 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.panBakewareConverter.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    <aside class="intro-callout" role="note">
+      <div class="intro-icon">
+        <ion-icon name="resize" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="intro-text">
+        <p class="intro-title">
+          {{ "pages.panBakewareConverter.intro.title" | translate }}
+        </p>
+        <p>{{ "pages.panBakewareConverter.intro.body" | translate }}</p>
+      </div>
+    </aside>
+
+    <ion-segment
+      class="unit-segment"
+      [value]="unit"
+      (ionChange)="onUnitToggle($event.detail.value)"
+    >
+      <ion-segment-button value="imperial">
+        <ion-label>{{
+          "pages.panBakewareConverter.units.imperial" | translate
+        }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="metric">
+        <ion-label>{{
+          "pages.panBakewareConverter.units.metric" | translate
+        }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <section class="pan-card" aria-labelledby="from-pan-heading">
+      <header class="pan-card-header">
+        <p class="pan-card-eyebrow">
+          {{ "pages.panBakewareConverter.from.eyebrow" | translate }}
+        </p>
+        <h2 id="from-pan-heading" class="pan-card-title">
+          {{ "pages.panBakewareConverter.from.title" | translate }}
+        </h2>
+      </header>
+
+      <div class="shape-chip-row" role="radiogroup">
+        @for (option of shapeOptions; track option.key) {
+          <ion-chip
+            class="shape-chip"
+            [color]="from.shape === option.key ? 'primary' : 'medium'"
+            [outline]="from.shape !== option.key"
+            (click)="onShapeChange('from', option.key)"
+            role="radio"
+            [attr.aria-checked]="from.shape === option.key"
+          >
+            <ion-icon [name]="option.iconName"></ion-icon>
+            <ion-label>{{ shapeLabel(option.key) }}</ion-label>
+          </ion-chip>
+        }
+      </div>
+
+      @if (presetsByShape[from.shape].length > 0) {
+        <div class="preset-chip-row">
+          @for (preset of presetsByShape[from.shape]; track preset.key) {
+            <ion-chip
+              class="preset-chip"
+              [color]="
+                from.selectedPresetKey === preset.key ? 'primary' : 'medium'
+              "
+              [outline]="from.selectedPresetKey !== preset.key"
+              (click)="selectPreset('from', preset.key)"
+            >
+              <ion-label>{{ presetLabel(preset) }}</ion-label>
+            </ion-chip>
+          }
+        </div>
+      }
+
+      <ion-list lines="full" class="dim-list">
+        @if (from.shape === "round" || from.shape === "springform") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.diameter" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.diameter"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (from.shape === "square") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.side" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.length"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (
+          from.shape === "rectangular" ||
+          from.shape === "loaf" ||
+          from.shape === "sheet"
+        ) {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.length" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.length"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.width" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.width"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (from.shape === "bundtTube") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.capacityCups" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.capacityOverride"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              "pages.panBakewareConverter.units.cups" | translate
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (from.shape === "muffin") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.cavities" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="numeric"
+              [(ngModel)]="from.cavities"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.cavityCapacity" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.cavityCapacity"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              "pages.panBakewareConverter.units.cups" | translate
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (from.shape !== "bundtTube" && from.shape !== "muffin") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.depth" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="from.depth"
+              (ionInput)="onDimensionInput('from')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+      </ion-list>
+
+      <div class="pan-stats">
+        <div class="pan-stat">
+          <span class="pan-stat-label">{{
+            "pages.panBakewareConverter.area.label" | translate
+          }}</span>
+          <span class="pan-stat-value">{{ panAreaLabel("from") }}</span>
+        </div>
+        <div class="pan-stat">
+          <span class="pan-stat-label">{{
+            "pages.panBakewareConverter.capacity.label" | translate
+          }}</span>
+          <span class="pan-stat-value">{{ panCapacityLabel("from") }}</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="swap-row">
+      <ion-button fill="clear" size="small" (click)="swapPans()">
+        <ion-icon slot="start" name="swap-horizontal"></ion-icon>
+        {{ "pages.panBakewareConverter.swap" | translate }}
+      </ion-button>
+    </div>
+
+    <section class="pan-card" aria-labelledby="to-pan-heading">
+      <header class="pan-card-header">
+        <p class="pan-card-eyebrow">
+          {{ "pages.panBakewareConverter.to.eyebrow" | translate }}
+        </p>
+        <h2 id="to-pan-heading" class="pan-card-title">
+          {{ "pages.panBakewareConverter.to.title" | translate }}
+        </h2>
+      </header>
+
+      <div class="shape-chip-row" role="radiogroup">
+        @for (option of shapeOptions; track option.key) {
+          <ion-chip
+            class="shape-chip"
+            [color]="to.shape === option.key ? 'primary' : 'medium'"
+            [outline]="to.shape !== option.key"
+            (click)="onShapeChange('to', option.key)"
+            role="radio"
+            [attr.aria-checked]="to.shape === option.key"
+          >
+            <ion-icon [name]="option.iconName"></ion-icon>
+            <ion-label>{{ shapeLabel(option.key) }}</ion-label>
+          </ion-chip>
+        }
+      </div>
+
+      @if (presetsByShape[to.shape].length > 0) {
+        <div class="preset-chip-row">
+          @for (preset of presetsByShape[to.shape]; track preset.key) {
+            <ion-chip
+              class="preset-chip"
+              [color]="
+                to.selectedPresetKey === preset.key ? 'primary' : 'medium'
+              "
+              [outline]="to.selectedPresetKey !== preset.key"
+              (click)="selectPreset('to', preset.key)"
+            >
+              <ion-label>{{ presetLabel(preset) }}</ion-label>
+            </ion-chip>
+          }
+        </div>
+      }
+
+      <ion-list lines="full" class="dim-list">
+        @if (to.shape === "round" || to.shape === "springform") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.diameter" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.diameter"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (to.shape === "square") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.side" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.length"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (
+          to.shape === "rectangular" ||
+          to.shape === "loaf" ||
+          to.shape === "sheet"
+        ) {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.length" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.length"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.width" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.width"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (to.shape === "bundtTube") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.capacityCups" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.capacityOverride"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              "pages.panBakewareConverter.units.cups" | translate
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (to.shape === "muffin") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.cavities" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="numeric"
+              [(ngModel)]="to.cavities"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.cavityCapacity" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.cavityCapacity"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              "pages.panBakewareConverter.units.cups" | translate
+            }}</ion-note>
+          </ion-item>
+        }
+        @if (to.shape !== "bundtTube" && to.shape !== "muffin") {
+          <ion-item>
+            <ion-label>{{
+              "pages.panBakewareConverter.field.depth" | translate
+            }}</ion-label>
+            <ion-input
+              slot="end"
+              class="dim-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="to.depth"
+              (ionInput)="onDimensionInput('to')"
+            ></ion-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              unitLabelShort()
+            }}</ion-note>
+          </ion-item>
+        }
+      </ion-list>
+
+      <div class="pan-stats">
+        <div class="pan-stat">
+          <span class="pan-stat-label">{{
+            "pages.panBakewareConverter.area.label" | translate
+          }}</span>
+          <span class="pan-stat-value">{{ panAreaLabel("to") }}</span>
+        </div>
+        <div class="pan-stat">
+          <span class="pan-stat-label">{{
+            "pages.panBakewareConverter.capacity.label" | translate
+          }}</span>
+          <span class="pan-stat-value">{{ panCapacityLabel("to") }}</span>
+        </div>
+      </div>
+    </section>
+
+    @if (fromVizPx() && toVizPx() && isFlatPan("from") && isFlatPan("to")) {
+      <section
+        class="viz-card"
+        [attr.aria-label]="'pages.panBakewareConverter.viz.title' | translate"
+      >
+        <p class="viz-title">
+          {{ "pages.panBakewareConverter.viz.title" | translate }}
+        </p>
+        <div class="viz-stage">
+          <figure class="viz-figure">
+            <div class="viz-shape-wrap">
+              @if (fromVizPx()?.isRound) {
+                <div
+                  class="viz-shape viz-shape-round viz-shape-from"
+                  [style.width.px]="fromVizPx()?.width"
+                  [style.height.px]="fromVizPx()?.height"
+                ></div>
+              } @else {
+                <div
+                  class="viz-shape viz-shape-rect viz-shape-from"
+                  [style.width.px]="fromVizPx()?.width"
+                  [style.height.px]="fromVizPx()?.height"
+                ></div>
+              }
+            </div>
+            <figcaption>
+              {{ "pages.panBakewareConverter.viz.fromCaption" | translate }}
+            </figcaption>
+          </figure>
+          <figure class="viz-figure">
+            <div class="viz-shape-wrap">
+              @if (toVizPx()?.isRound) {
+                <div
+                  class="viz-shape viz-shape-round viz-shape-to"
+                  [style.width.px]="toVizPx()?.width"
+                  [style.height.px]="toVizPx()?.height"
+                ></div>
+              } @else {
+                <div
+                  class="viz-shape viz-shape-rect viz-shape-to"
+                  [style.width.px]="toVizPx()?.width"
+                  [style.height.px]="toVizPx()?.height"
+                ></div>
+              }
+            </div>
+            <figcaption>
+              {{ "pages.panBakewareConverter.viz.toCaption" | translate }}
+            </figcaption>
+          </figure>
+        </div>
+        <p class="viz-footnote">
+          {{ "pages.panBakewareConverter.viz.footnote" | translate }}
+        </p>
+      </section>
+    }
+
+    @if (scaling) {
+      <section class="result-card" aria-labelledby="result-heading">
+        <header class="result-header">
+          <p class="result-eyebrow">
+            {{ "pages.panBakewareConverter.result.eyebrow" | translate }}
+          </p>
+          <h2 id="result-heading" class="result-multiplier">
+            × {{ multiplierLabel() }}
+          </h2>
+          <p class="result-basis">{{ multiplierBasisLabel() }}</p>
+          <p class="result-explain">{{ multiplierExplanation() }}</p>
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="copyMultiplier()"
+            class="copy-button"
+          >
+            <ion-icon slot="start" name="copy-outline"></ion-icon>
+            {{ "pages.panBakewareConverter.multiplier.copy" | translate }}
+          </ion-button>
+        </header>
+      </section>
+
+      <section class="tool-card" aria-labelledby="recipe-scaler-heading">
+        <header class="tool-card-header">
+          <h3 id="recipe-scaler-heading" class="tool-card-title">
+            {{ "pages.panBakewareConverter.recipeScaler.title" | translate }}
+          </h3>
+          <p class="tool-card-subtitle">
+            {{ "pages.panBakewareConverter.recipeScaler.subtitle" | translate }}
+          </p>
+        </header>
+        <ion-textarea
+          class="recipe-input"
+          [autoGrow]="true"
+          rows="4"
+          [(ngModel)]="recipeText"
+          (ionInput)="onRecipeTextInput()"
+          [placeholder]="
+            'pages.panBakewareConverter.recipeScaler.placeholder' | translate
+          "
+        ></ion-textarea>
+        @if (recipeScaledLines.length > 0) {
+          <div class="recipe-scaled" role="status" aria-live="polite">
+            <p class="recipe-scaled-label">
+              {{
+                "pages.panBakewareConverter.recipeScaler.outputLabel"
+                  | translate
+              }}
+            </p>
+            <ul class="recipe-scaled-list">
+              @for (line of recipeScaledLines; track $index) {
+                <li>{{ line }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </section>
+
+      @if (bakeTimeAdvice) {
+        <section class="tool-card bake-card" aria-labelledby="bake-heading">
+          <header class="tool-card-header">
+            <h3 id="bake-heading" class="tool-card-title">
+              {{ "pages.panBakewareConverter.bake.title" | translate }}
+            </h3>
+            <ion-chip
+              class="bake-direction-chip info-chip"
+              [color]="bakeDirectionColor()"
+            >
+              <ion-icon
+                [name]="
+                  bakeTimeAdvice.direction === 'similar'
+                    ? 'checkmark-circle'
+                    : 'flame'
+                "
+              ></ion-icon>
+              <ion-label>{{ bakeDirectionLabel() }}</ion-label>
+            </ion-chip>
+          </header>
+          <p class="bake-detail">{{ bakeDirectionDetail() }}</p>
+
+          <div class="bake-input-grid">
+            <ion-label class="bake-row-label">{{
+              "pages.panBakewareConverter.bake.originalTime" | translate
+            }}</ion-label>
+            <ion-input
+              class="bake-row-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="originalBakeTime"
+              (ionInput)="onBakeInput()"
+              [placeholder]="
+                'pages.panBakewareConverter.bake.originalTimePlaceholder'
+                  | translate
+              "
+            ></ion-input>
+            <ion-icon
+              class="bake-row-arrow"
+              name="arrow-forward"
+              aria-hidden="true"
+            ></ion-icon>
+            <span
+              class="bake-row-result"
+              [attr.aria-label]="
+                'pages.panBakewareConverter.bake.suggestedTime' | translate
+              "
+              >{{ suggestedBakeTime || "…" }}</span
+            >
+
+            <ion-label class="bake-row-label">{{
+              bakeTempInputLabel()
+            }}</ion-label>
+            <ion-input
+              class="bake-row-input"
+              type="text"
+              inputmode="decimal"
+              [(ngModel)]="originalBakeTemp"
+              (ionInput)="onBakeInput()"
+              [placeholder]="bakeTempInputPlaceholder()"
+            ></ion-input>
+            <ion-icon
+              class="bake-row-arrow"
+              name="arrow-forward"
+              aria-hidden="true"
+            ></ion-icon>
+            <span
+              class="bake-row-result"
+              [attr.aria-label]="
+                'pages.panBakewareConverter.bake.suggestedTemp' | translate
+              "
+              >{{ bakeTempResultLabel() }}</span
+            >
+          </div>
+          <p class="bake-footnote">
+            {{ "pages.panBakewareConverter.bake.footnote" | translate }}
+          </p>
+        </section>
+      }
+
+      @if (showDepthComparator() && depthAdvisory) {
+        <section class="tool-card" aria-labelledby="depth-heading">
+          <header class="tool-card-header">
+            <h3 id="depth-heading" class="tool-card-title">
+              {{ "pages.panBakewareConverter.depth.title" | translate }}
+            </h3>
+            <p class="tool-card-subtitle">
+              {{ "pages.panBakewareConverter.depth.subtitle" | translate }}
+            </p>
+          </header>
+          <div class="depth-rows">
+            <div class="depth-row">
+              <span class="depth-label">{{
+                "pages.panBakewareConverter.depth.fromLabel" | translate
+              }}</span>
+              <div
+                class="depth-track"
+                [attr.aria-label]="
+                  'pages.panBakewareConverter.depth.fromLabel' | translate
+                "
+              >
+                <div
+                  class="depth-fill depth-fill-from"
+                  [style.height.%]="
+                    depthBarPercent(
+                      depthAdvisoryFromBatter(),
+                      panDepthIn('from')
+                    )
+                  "
+                ></div>
+                <span class="depth-pan-marker"></span>
+              </div>
+              <span class="depth-value">{{ depthRowValue("from") }}</span>
+            </div>
+            <div class="depth-row">
+              <span class="depth-label">{{
+                "pages.panBakewareConverter.depth.toLabel" | translate
+              }}</span>
+              <div class="depth-track">
+                <div
+                  class="depth-fill depth-fill-to"
+                  [style.height.%]="
+                    depthBarPercent(depthAdvisoryToBatter(), panDepthIn('to'))
+                  "
+                ></div>
+                <span class="depth-pan-marker"></span>
+              </div>
+              <span class="depth-value">{{ depthRowValue("to") }}</span>
+            </div>
+          </div>
+        </section>
+      }
+
+      @if (capacityWarning && capacityWarning.overflowing) {
+        <aside class="warning-callout" role="alert">
+          <ion-icon name="warning" aria-hidden="true"></ion-icon>
+          <div>
+            <p class="warning-title">
+              {{
+                "pages.panBakewareConverter.warning.overflowTitle" | translate
+              }}
+            </p>
+            <p>
+              {{
+                "pages.panBakewareConverter.warning.overflowBody"
+                  | translate
+                    : {
+                        batter: capacityWarning.scaledBatterCups.toFixed(1),
+                        max: capacityWarning.maxRecommendedCups.toFixed(1),
+                      }
+              }}
+            </p>
+          </div>
+        </aside>
+      }
+
+      @if (substitutions.length > 0) {
+        <section class="tool-card" aria-labelledby="subs-heading">
+          <header class="tool-card-header">
+            <h3 id="subs-heading" class="tool-card-title">
+              {{ "pages.panBakewareConverter.substitutions.title" | translate }}
+            </h3>
+            <p class="tool-card-subtitle">
+              {{
+                "pages.panBakewareConverter.substitutions.subtitle" | translate
+              }}
+            </p>
+          </header>
+          <ul class="subs-list">
+            @for (sub of substitutions; track sub.preset.key) {
+              <li>
+                <button class="sub-button" (click)="applySubstitution(sub)">
+                  <span class="sub-name">{{ sub.label }}</span>
+                  <span class="sub-meta">
+                    {{ sub.capacityLabel }}
+                    <span class="sub-delta">
+                      ({{ sub.deltaPct >= 0 ? "+" : ""
+                      }}{{ sub.deltaPct.toFixed(0) }}%)
+                    </span>
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    } @else {
+      <aside class="warning-callout" role="status">
+        <ion-icon name="information-circle" aria-hidden="true"></ion-icon>
+        <div>
+          <p class="warning-title">
+            {{ "pages.panBakewareConverter.incomplete.title" | translate }}
+          </p>
+          <p>{{ "pages.panBakewareConverter.incomplete.body" | translate }}</p>
+        </div>
+      </aside>
+    }
+
+    <ion-item
+      button
+      lines="none"
+      class="expand-toggle"
+      (click)="methodologyExpanded = !methodologyExpanded"
+    >
+      <ion-icon
+        slot="start"
+        color="medium"
+        [name]="methodologyExpanded ? 'chevron-up' : 'chevron-down'"
+      ></ion-icon>
+      <ion-label color="medium">{{
+        "pages.panBakewareConverter.methodology.toggle" | translate
+      }}</ion-label>
+    </ion-item>
+
+    @if (methodologyExpanded) {
+      <div class="reference">
+        <p class="reference-title">
+          {{ "pages.panBakewareConverter.methodology.title" | translate }}
+        </p>
+        <p>{{ "pages.panBakewareConverter.methodology.body1" | translate }}</p>
+        <p>{{ "pages.panBakewareConverter.methodology.body2" | translate }}</p>
+        <p>{{ "pages.panBakewareConverter.methodology.body3" | translate }}</p>
+        <p>{{ "pages.panBakewareConverter.methodology.tip" | translate }}</p>
+        <p class="reference-footnote">
+          {{ "pages.panBakewareConverter.methodology.sources" | translate }}
+        </p>
+      </div>
+    }
+
+    <ion-item
+      button
+      lines="none"
+      class="expand-toggle"
+      (click)="referenceExpanded = !referenceExpanded"
+    >
+      <ion-icon
+        slot="start"
+        color="medium"
+        [name]="referenceExpanded ? 'chevron-up' : 'chevron-down'"
+      ></ion-icon>
+      <ion-label color="medium">{{
+        "pages.panBakewareConverter.reference.toggle" | translate
+      }}</ion-label>
+    </ion-item>
+
+    @if (referenceExpanded) {
+      <div class="reference">
+        <p class="reference-title">
+          {{ "pages.panBakewareConverter.reference.title" | translate }}
+        </p>
+        @for (shape of allShapes; track shape) {
+          @if (presetsByShape[shape].length > 0) {
+            <p class="reference-shape">{{ shapeLabel(shape) }}</p>
+            <div class="reference-table">
+              <div class="reference-row reference-head">
+                <span>{{
+                  "pages.panBakewareConverter.reference.colPan" | translate
+                }}</span>
+                <span>{{
+                  "pages.panBakewareConverter.reference.colCapacity" | translate
+                }}</span>
+              </div>
+              @for (preset of presetsByShape[shape]; track preset.key) {
+                <div class="reference-row">
+                  <span>{{ presetLabel(preset) }}</span>
+                  <span>{{ presetCapacityLabel(preset) }}</span>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</ion-content>
