@@ -799,7 +799,6 @@
     "components.ratingFilter.unrated": "לא מדורג",
     "components.ratingFilter.reset": "איתחול",
     "components.scaleRecipe.title": "התאמת כמויות והמרת מתכון",
-    "components.scaleRecipe.change": "שינוי דירוג המתכון",
     "components.scaleRecipe.click": "להכנסת דירוג באופן ידני, יש ללחוץ Enter",
     "components.scaleRecipe.manual": "או, יש להקליד מספר",
     "components.scaleRecipe.cancel": "ביטול",

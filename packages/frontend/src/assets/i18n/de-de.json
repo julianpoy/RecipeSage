@@ -799,7 +799,6 @@
     "components.ratingFilter.unrated": "Keine Bewertung",
     "components.ratingFilter.reset": "Zurücksetzen",
     "components.scaleRecipe.title": "Menge anpassen und konvertieren",
-    "components.scaleRecipe.change": "Hier kannst du die Rezeptmenge anpassen.",
     "components.scaleRecipe.click": "Klicke auf einen Button:",
     "components.scaleRecipe.manual": "Oder gib eine Zahl, Kommazahl oder einen Bruch ein:",
     "components.scaleRecipe.cancel": "Abbrechen",

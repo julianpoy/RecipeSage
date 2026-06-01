@@ -1178,7 +1178,6 @@
     "components.ratingFilter.unrated": "रेटिंग नहीं दी गई",
     "components.ratingFilter.reset": "रीसेट करें",
     "components.scaleRecipe.title": "रेसिपी का माप बदलें और परिवर्तित करें",
-    "components.scaleRecipe.change": "रेसिपी का माप समायोजित करें",
     "components.scaleRecipe.click": "कोई बटन क्लिक करें या माप मैन्युअल रूप से दर्ज करें",
     "components.scaleRecipe.manual": "या, कोई संख्या या भिन्न दर्ज करें",
     "components.scaleRecipe.systemLabel": "इकाइयाँ",

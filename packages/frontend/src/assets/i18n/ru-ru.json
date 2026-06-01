@@ -794,7 +794,6 @@
     "components.ratingFilter.unrated": "Без рейтинга",
     "components.ratingFilter.reset": "Сбросить",
     "components.scaleRecipe.title": "Масштабировать и конвертировать рецепт",
-    "components.scaleRecipe.change": "Отрегулируйте кратность рецепта",
     "components.scaleRecipe.click": "Нажмите кнопку или введите кратность вручную",
     "components.scaleRecipe.manual": "Или введите число или дробь",
     "components.scaleRecipe.cancel": "Отмена",

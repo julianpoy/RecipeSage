@@ -593,7 +593,6 @@
     "components.shoppingListItem.customCategory.title": "カスタムカテゴリに移動",
     "components.shoppingListItem.customCategory.message": "カスタムカテゴリ名を入力してください",
     "components.ratingFilter.title": "評価で絞り込む",
-    "components.scaleRecipe.change": "レシピの分量を調整する",
     "generic.confirm": "確認",
     "pages.contributeCancel.cta.3": "サーバー費用を賄いながら無料で提供し続けるために、皆様のご支援が必要です。",
     "pages.downloadAndInstall.thisDevice": "このデバイス",

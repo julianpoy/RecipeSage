@@ -377,7 +377,6 @@
     "components.tos.title": "Podmínky služby",
     "components.ratingFilter.title": "Filtrovat podle hodnocení",
     "components.scaleRecipe.title": "Změnit měřítko a převést recept",
-    "components.scaleRecipe.change": "Upravit měřítko receptu",
     "components.scaleRecipe.manual": "Nebo zadejte číslo či zlomek",
     "services.quickTutorial.multipleLabelSelection.header": "Výběr více štítků",
     "pages.app.nav.docs": "Dokumentace",

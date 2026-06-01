@@ -870,7 +870,6 @@
     "components.ratingFilter.unrated": "Niet beoordeeld",
     "components.ratingFilter.reset": "Opnieuw instellen",
     "components.scaleRecipe.title": "Recept schalen en converteren",
-    "components.scaleRecipe.change": "Pas de schaal van het recept aan",
     "components.scaleRecipe.click": "Klik op een knop of voer handmatig een schaal in",
     "components.scaleRecipe.manual": "Of voer een getal of breuk in",
     "components.scaleRecipe.cancel": "Annuleren",

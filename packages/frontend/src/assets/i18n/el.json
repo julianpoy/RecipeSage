@@ -952,7 +952,6 @@
     "components.selectRecipe.searching": "Αναζήτηση για \"{{searchText}}\"...",
     "components.selectRecipe.null": "Κανένα αποτέλεσμα για \"{{searchText}}\"",
     "components.scaleRecipe.title": "Προσαρμογή κλίμακας και μετατροπή συνταγής",
-    "components.scaleRecipe.change": "Ρυθμίστε την κλιμάκωση της συνταγής",
     "components.scaleRecipe.click": "Πατήστε σε ένα κουμπί ή εισαγάγετε χειροκίνητα μια κλίμακα",
     "components.selectUser.placeholder": "Αναζήτηση με email ή αναγνωριστικό",
     "components.selectUser.change": "Πατήστε για αλλαγή",

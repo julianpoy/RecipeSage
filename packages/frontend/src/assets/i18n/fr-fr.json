@@ -466,7 +466,6 @@
     "pages.shareProfileModal.shareBody": "Cliquez pour voir le profil public RecipeSage de {{name}} :",
     "components.multiImageUpload.imageError": "Une erreur s'est produite lors du traitement de l'une ou plusieurs des images que vous avez sélectionnées",
     "components.selectIngredients.toggleAll": "Sélectionner/Désélectionner tout",
-    "components.scaleRecipe.change": "Ajustez l'échelle de la recette",
     "services.quickTutorial.splitPaneView.message": "La vue en panneaux séparés n'est visible que sur les appareils dotés d'écrans larges (ordinateurs portables, grandes tablettes, etc.). Lorsque la vue en panneaux séparés est activée, le menu latéral est toujours visible. Cette fonction est utile pour optimiser l'expérience sur les grands appareils.",
     "components.selectUser.placeholder": "Recherche par e-mail ou handle",
     "components.selfhostWarning.1": "Remarque : Il s'agit d'une version auto-hébergée de RecipeSage et n'est donc pas associée à",

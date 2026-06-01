@@ -824,7 +824,6 @@
     "components.ratingFilter.unrated": "Neįvertinta",
     "components.scaleRecipe.title": "Keisti recepto mastelį ir konvertuoti",
     "components.ratingFilter.reset": "Nustatyti iš naujo",
-    "components.scaleRecipe.change": "Koreguoti recepto mastelį",
     "components.scaleRecipe.click": "Spustelėkite mygtuką arba rankiniu būdu įveskite mastelį",
     "components.scaleRecipe.manual": "Arba įveskite skaičių arba trupmeną",
     "components.scaleRecipe.cancel": "Atšaukti",

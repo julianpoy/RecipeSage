@@ -794,7 +794,6 @@
     "components.ratingFilter.unrated": "Sin valorar",
     "components.ratingFilter.reset": "Restablecer",
     "components.scaleRecipe.title": "Escalar y convertir receta",
-    "components.scaleRecipe.change": "Ajustar la escala de la receta",
     "components.scaleRecipe.click": "Pulse un botón o introduzca una escala manualmente",
     "components.scaleRecipe.manual": "O introduzca un número o una fracción",
     "components.scaleRecipe.cancel": "Cancelar",

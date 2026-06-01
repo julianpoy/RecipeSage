@@ -799,7 +799,6 @@
     "components.ratingFilter.unrated": "Senza valutazione",
     "components.ratingFilter.reset": "Deselezionare tutti",
     "components.scaleRecipe.title": "Ridimensiona e converti ricetta",
-    "components.scaleRecipe.change": "Regolare la scala della ricetta",
     "components.scaleRecipe.click": "Clicca su un pulsante o inserisci manualmente una scala",
     "components.scaleRecipe.manual": "Oppure, inserisci un numero o una frazione",
     "components.scaleRecipe.cancel": "Annulla",

@@ -645,7 +645,6 @@
     "components.ratingFilter.title": "Filtruj według oceny",
     "components.ratingFilter.unrated": "Bez oceny",
     "components.scaleRecipe.title": "Skaluj i konwertuj przepis",
-    "components.scaleRecipe.change": "Dostosuj skalę przepisu",
     "components.scaleRecipe.click": "Kliknij przycisk lub wprowadź skalę ręcznie",
     "components.scaleRecipe.manual": "Lub wprowadź liczbę albo ułamek",
     "components.scaleRecipe.systemLabel": "Jednostki",

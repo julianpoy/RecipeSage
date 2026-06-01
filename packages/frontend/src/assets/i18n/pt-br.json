@@ -910,7 +910,6 @@
     "components.ratingFilter.unrated": "Sem avaliação",
     "components.ratingFilter.reset": "Redefinir",
     "components.scaleRecipe.title": "Redimensionar e converter receita",
-    "components.scaleRecipe.change": "Ajuste a escala da receita",
     "components.scaleRecipe.click": "Clique em um botão ou insira uma escala manualmente",
     "components.scaleRecipe.manual": "Ou insira um número ou uma fração",
     "components.scaleRecipe.systemLabel": "Unidades",

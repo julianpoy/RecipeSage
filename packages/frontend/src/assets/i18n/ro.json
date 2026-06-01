@@ -1008,7 +1008,6 @@
     "components.ratingFilter.title": "Filtrare după notă",
     "components.ratingFilter.unrated": "Neevaluat",
     "components.ratingFilter.reset": "Resetare",
-    "components.scaleRecipe.change": "Ajustează cantitatea rețetei",
     "components.fontSize.option.PX16": "16px (normal)",
     "components.fontSize.option.PX24": "24px (mai mare)",
     "components.fontSize.reset": "Resetare",

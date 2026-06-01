@@ -252,7 +252,6 @@
     "components.ratingFilter.unrated": "Derecelendirilmemiş",
     "components.ratingFilter.reset": "Sıfırla",
     "components.scaleRecipe.title": "Tarifi Ölçeklendir ve Dönüştür",
-    "components.scaleRecipe.change": "Tarifin ölçeğini ayarlayın",
     "components.scaleRecipe.click": "Bir düğmeye tıklayın veya ölçeği manuel olarak girin",
     "components.scaleRecipe.manual": "Veya bir sayı ya da kesir girin",
     "components.scaleRecipe.systemLabel": "Birimler",

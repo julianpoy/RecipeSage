@@ -702,7 +702,6 @@
     "services.quickTutorial.multipleRecipeSelection.message": "Most a több recept kiválasztása módban van. Tetszőleges számú receptre kattinthat, majd a fejlécben megjelenő gombokkal tömeges műveleteket hajthat végre, például címkézést vagy törlést. A fejlécben lévő X-re kattintva kiléphet a ebből módból.",
     "services.quickTutorial.pinnedRecipes.message": "Ez a recept most ki lett tűzve! A receptek kitűzésének segítségével gyorsan ugorhat több recept között főzés közben. A rögzített receptek a képernyő alján lévő eszköztárban jelennek meg. Ekkor megjelenik egy buborék a recept képével és a recept címének első betűjével. A rögzített receptek mindaddig nyitva maradnak, amíg fel nem oldják őket, vagy amíg be nem zárja az alkalmazást.",
     "errors.offline": "Kapcsolódási hiba történt. Offline állapotban csak olvasási műveleteket végezhet, és tartalmakat tekinthet meg, ha azok az eszközén helyileg gyorsítótárazva lettek.",
-    "components.scaleRecipe.change": "Állítsa be a recept adagját",
     "components.scaleRecipe.click": "Kattintson egy gombra, vagy adja meg az adagot kézzel",
     "components.scaleRecipe.manual": "Vagy írjon be egy számot vagy törtet",
     "pages.editRecipe.autoclip": "Automatikus kitöltés URL-ből",

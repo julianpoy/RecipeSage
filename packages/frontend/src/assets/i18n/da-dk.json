@@ -812,7 +812,6 @@
     "components.ratingFilter.unrated": "Ikke bedømt",
     "components.ratingFilter.reset": "Nulstil",
     "components.scaleRecipe.title": "Skaler og konverter opskrift",
-    "components.scaleRecipe.change": "Juster skalering af opskriften",
     "components.scaleRecipe.manual": "Eller indtast et tal eller en brøk",
     "components.scaleRecipe.cancel": "Annuller",
     "components.scaleRecipe.apply": "Anvend",

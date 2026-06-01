@@ -373,7 +373,6 @@
     "components.ratingFilter.unrated": "Ej betygsatt",
     "components.ratingFilter.reset": "Återställ",
     "components.scaleRecipe.title": "Skala och konvertera recept",
-    "components.scaleRecipe.change": "Justera receptets skala",
     "components.scaleRecipe.click": "Klicka på en knapp eller ange en skala manuellt",
     "components.scaleRecipe.system.imperial": "Brittiskt-amerikanskt",
     "services.quickTutorial.multipleLabelSelection.header": "Val av flera etiketter",

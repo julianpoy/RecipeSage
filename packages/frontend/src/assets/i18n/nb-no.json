@@ -1178,7 +1178,6 @@
     "components.ratingFilter.unrated": "Ikke vurdert",
     "components.ratingFilter.reset": "Tilbakestill",
     "components.scaleRecipe.title": "Skaler og konverter oppskrift",
-    "components.scaleRecipe.change": "Juster oppskriftens skalering",
     "components.scaleRecipe.click": "Klikk på en knapp eller angi en skalering manuelt",
     "components.scaleRecipe.manual": "Eller angi et tall eller en brøk",
     "components.scaleRecipe.systemLabel": "Enheter",

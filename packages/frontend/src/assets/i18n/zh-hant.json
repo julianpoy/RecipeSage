@@ -1178,7 +1178,6 @@
     "components.ratingFilter.unrated": "未評分",
     "components.ratingFilter.reset": "重設",
     "components.scaleRecipe.title": "縮放並換算食譜",
-    "components.scaleRecipe.change": "調整食譜比例",
     "components.scaleRecipe.click": "按一下按鈕或手動輸入比例",
     "components.scaleRecipe.manual": "或者，輸入數字或分數",
     "components.scaleRecipe.systemLabel": "單位",

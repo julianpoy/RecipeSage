@@ -829,7 +829,6 @@
     "components.ratingFilter.title": "根据评分筛选",
     "components.ratingFilter.unrated": "未评分的",
     "components.ratingFilter.reset": "重置",
-    "components.scaleRecipe.change": "调整食谱的规模",
     "components.scaleRecipe.click": "点击按钮或者手动输入规模",
     "components.scaleRecipe.manual": "或者,输入数字或分数",
     "components.scaleRecipe.cancel": "取消",

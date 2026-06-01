@@ -9,7 +9,6 @@
     "pages.people.setup.header": "Profila ez dago konfiguratuta",
     "components.selectMultipleItems.noItems": "Ez dago elementurik",
     "components.selectUser.placeholder": "Bilatu posta elektronikoaren edo erabiltzaile-izenaren arabera",
-    "components.scaleRecipe.change": "Doitu errezetaren eskala",
     "pages.assistant.messageSize": "Zure mezua luzeegia da. Bidali mezu laburrago bat.",
     "pages.addRecipeToMealPlanModal.loading": "Otordu-planak kargatzen...",
     "components.fontSize.option.PX22": "22px (Handiagoa)",
