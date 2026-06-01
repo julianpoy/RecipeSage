@@ -1263,5 +1263,7 @@
     "pages.importCrouton.description": "Cette fonction importera un fichier d'export Crouton (une archive .zip contenant des fichiers de recettes .crumb) dans votre compte RecipeSage. Nous vous encourageons à devenir contributeur si votre fichier contient de nombreuses recettes ou images.",
     "components.recurrenceEditor.repeat": "Répéter",
     "components.recurrenceEditor.frequency": "Fréquence",
-    "components.recurrenceEditor.frequency.daily": "Quotidien"
+    "components.recurrenceEditor.frequency.daily": "Quotidien",
+    "pages.tools.cookingTemperatures.subtitle": "Températures minimales recommandées, degrés de cuisson, conseils pour la cuisson au four et à la friteuse",
+    "pages.measurementConverter.tabTitle": "Convertisseur d'unités - RecipeSage"
 }
