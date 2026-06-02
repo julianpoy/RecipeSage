@@ -209,7 +209,7 @@
     "astro": "^6.1.10",
     "astro-eslint-parser": "^1.4.0",
     "copy-webpack-plugin": "^13.0.1",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.28.0",
     "eslint": "9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
