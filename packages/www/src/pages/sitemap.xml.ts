@@ -21,8 +21,8 @@ const priorityFor = (path: string, loc: string) => {
 
 const urlForLocale = (site: URL, loc: string, path: string) => {
   const prefix = loc === DEFAULT_LOCALE ? "" : `/${loc}`;
-  const full = path === "/" ? `${prefix}/` : `${prefix}${path}`;
-  return new URL(full, site).toString();
+  const withSlash = path.endsWith("/") ? path : `${path}/`;
+  return new URL(`${prefix}${withSlash}`, site).toString();
 };
 
 const urlForEnOnly = (site: URL, path: string) =>

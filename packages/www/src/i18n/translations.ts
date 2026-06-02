@@ -84,8 +84,9 @@ export function makeTranslator(locale: string): Translator {
 }
 
 export function localePath(locale: string, path: string): string {
-  if (locale === DEFAULT_LOCALE) return path;
-  return `/${locale}${path}`;
+  const withSlash = path.endsWith("/") ? path : `${path}/`;
+  if (locale === DEFAULT_LOCALE) return withSlash;
+  return `/${locale}${withSlash}`;
 }
 
 export function toBcp47(locale: string): string {
