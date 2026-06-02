@@ -252,8 +252,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       pdfmake:
-        specifier: ^0.3.6
-        version: 0.3.7
+        specifier: ^0.3.9
+        version: 0.3.9
       pg:
         specifier: 8.17.2
         version: 8.17.2
@@ -10897,8 +10897,8 @@ packages:
   pdfkit@0.18.0:
     resolution: {integrity: sha512-NvUwSDZ0eYEzqAiWwVQkRkjYUkZ48kcsHuCO31ykqPPIVkwoSDjDGiwIgHHNtsiwls3z3P/zy4q00hl2chg2Ug==}
 
-  pdfmake@0.3.7:
-    resolution: {integrity: sha512-SwTFcaH3kCJBlPFWi/YB34zRg6lpCxq90tkZ9GxfSi9/v4Tk96cv4IvOstA+CC40rdW1OzQIuNhD2DLD1RDVgA==}
+  pdfmake@0.3.9:
+    resolution: {integrity: sha512-V8VIcjMG/yk7oJYhYjtvyLXvop3w3zcIB0bHdG3z1vuW8nVeemzRWu7YrOG7QA9KYaf858MZnCUG6hQ1Bei0vA==}
     engines: {node: '>=20'}
 
   pend@1.2.0:
@@ -26760,7 +26760,7 @@ snapshots:
       linebreak: 1.1.0
       png-js: 1.1.0
 
-  pdfmake@0.3.7:
+  pdfmake@0.3.9:
     dependencies:
       linebreak: 1.1.0
       pdfkit: 0.18.0
