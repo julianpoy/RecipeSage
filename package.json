@@ -75,7 +75,7 @@
     "body-parser": "~2.2.2",
     "bullmq": "^5.70.1",
     "cheerio": "^1.1.2",
-    "commander": "14.0.2",
+    "commander": "15.0.0",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.48.0",
     "cors": "^2.8.6",
