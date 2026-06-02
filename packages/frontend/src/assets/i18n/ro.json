@@ -1598,7 +1598,6 @@
     "pages.cookingTemperatures.title": "Temperaturi de gătire",
     "pages.cookingTemperatures.searchPlaceholder": "Caută un aliment, un grad de gătire sau o temperatură de prăjire",
     "pages.cookingTemperatures.noResults": "Nimic nu corespunde căutării tale.",
-    "pages.cookingTemperatures.tempValue": "",
     "pages.cookingTemperatures.chip.usdaMinimum": "minim de siguranță USDA",
     "pages.cookingTemperatures.chip.preference": "Preferință",
     "pages.cookingTemperatures.chip.rest": "Repaus {{minutes}} min",
