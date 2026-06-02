@@ -143,7 +143,7 @@
     "yauzl-promise": "^4.0.0",
     "zip-stream": "^7.0.2",
     "zod": "^4.3.4",
-    "zod-openapi": "5.1.1",
+    "zod-openapi": "5.4.6",
     "zone.js": "0.16.1"
   },
   "devDependencies": {
