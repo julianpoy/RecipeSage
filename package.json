@@ -112,7 +112,7 @@
     "p-limit": "^7.2.0",
     "p-throttle": "^8.1.0",
     "pdfmake": "^0.3.9",
-    "pg": "8.17.2",
+    "pg": "8.21.0",
     "pg-hstore": "^2.3.4",
     "prisma": "^7.8.0",
     "prisma-cursorstream": "^0.4.2",
