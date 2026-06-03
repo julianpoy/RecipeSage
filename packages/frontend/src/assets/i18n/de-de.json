@@ -1413,5 +1413,22 @@
     "pages.importMela.description": "Dadurch wird eine Mela-Exportdatei (mit der Endung .melarecipes oder .melarecipe) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende.",
     "pages.importCrouton.tabTitle": "Aus Crouton importieren – RecipeSage",
     "pages.importCrouton.title": "Rezepte aus Crouton-Datei importieren",
-    "pages.importCrouton.description": "Dadurch wird eine Crouton-Exportdatei (eine ZIP-Datei mit Dateien mit der Endung .crumb) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende."
+    "pages.importCrouton.description": "Dadurch wird eine Crouton-Exportdatei (eine ZIP-Datei mit Dateien mit der Endung .crumb) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende.",
+    "emails.passwordReset.subject": "RecipeSage – Passwortrücksetzung",
+    "emails.passwordReset.greeting": "Hallo,",
+    "emails.passwordReset.intro": "jemand hat kürzlich einen Link zur Passwortrücksetzung das RecipeSage-Konto angefragt, das mit dieser E‑Mail-Adresse verknüpft ist.",
+    "emails.passwordReset.disregardNotice": "Falls du dein Passwort nicht zurücksetzen wolltest, kannst du diese E‑Mail ignorieren.",
+    "emails.passwordReset.resetLinkText": "Hier klicken, um dein Passwort zurückzusetzen",
+    "emails.passwordReset.copyUrlFallback": "oder füge diese URL in deinem Browser ein: {{resetLink}}",
+    "emails.passwordReset.pasteUrlInstruction": "Füge diese URL in deinem Browser ein, um dein Passwort zurückzusetzen: {{resetLink}}",
+    "emails.signature.closing": "Viele Grüße",
+    "emails.signature.role": "der Entwickler von RecipeSage",
+    "emails.signature.socialHeader": "Social-Media:",
+    "pages.app.nav.tools": "Werkzeuge und Hilfsmittel",
+    "pages.recipeDetails.untitled": "Ohne Titel",
+    "pages.mealPlan.modal.noRecipesNutrition.header": "Keine Rezepte",
+    "pages.mealPlan.modal.noRecipesNutrition.message": "Die ausgewählten Tage enthalten keine Rezepte. Nur Einträge, die Rezepte sind, enthalten Nährwerte für eine Berechnung.",
+    "pages.mealPlan.modal.manualEntriesNutrition.header": "Manuelle Einträge werden übersprungen",
+    "pages.mealPlan.modal.manualEntriesNutrition.message": "Einige der ausgewählten Einträge sind manuelle Einträge und keine Rezepte. Sie haben keine Nährwerte und werden übersprungen.",
+    "pages.mealPlanPopover.actions.calculateNutrition": "Nährwerte für ausgewählte Tage berechnen"
 }
