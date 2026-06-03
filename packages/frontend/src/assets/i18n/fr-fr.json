@@ -1286,5 +1286,16 @@
     "pages.measurementConverter.bridgeScope": "Optionnel · Volume approximatif ↔ poids",
     "pages.measurementConverter.showFractions": "Afficher les fractions",
     "pages.measurementConverter.volume": "Volume",
-    "pages.measurementConverter.weight": "Poids"
+    "pages.measurementConverter.weight": "Poids",
+    "emails.passwordReset.subject": "Réinitialisation du mot de passe RecipeSage",
+    "emails.passwordReset.greeting": "Bonjour,",
+    "emails.passwordReset.intro": "Une demande de réinitialisation de mot de passe a récemment été faite pour le compte RecipeSage lié à cette adresse e-mail.",
+    "emails.passwordReset.disregardNotice": "Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer ce message.",
+    "emails.passwordReset.resetLinkText": "Cliquez ici pour réinitialiser votre mot de passe",
+    "emails.passwordReset.copyUrlFallback": "ou copiez-collez cette URL dans votre navigateur : {{resetLink}}",
+    "emails.passwordReset.pasteUrlInstruction": "Pour réinitialiser votre mot de passe, copiez-collez cette URL dans votre navigateur : {{resetLink}}",
+    "emails.signature.closing": "Cordialement,",
+    "emails.signature.role": "Développeur de RecipeSage",
+    "emails.signature.socialHeader": "Réseaux sociaux :",
+    "pages.app.nav.tools": "Outils et utilitaires"
 }
