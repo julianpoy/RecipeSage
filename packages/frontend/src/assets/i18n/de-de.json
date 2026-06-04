@@ -1430,5 +1430,9 @@
     "pages.mealPlan.modal.noRecipesNutrition.message": "Die ausgewählten Tage enthalten keine Rezepte. Nur Einträge, die Rezepte sind, enthalten Nährwerte für eine Berechnung.",
     "pages.mealPlan.modal.manualEntriesNutrition.header": "Manuelle Einträge werden übersprungen",
     "pages.mealPlan.modal.manualEntriesNutrition.message": "Einige der ausgewählten Einträge sind manuelle Einträge und keine Rezepte. Sie haben keine Nährwerte und werden übersprungen.",
-    "pages.mealPlanPopover.actions.calculateNutrition": "Nährwerte für ausgewählte Tage berechnen"
+    "pages.mealPlanPopover.actions.calculateNutrition": "Nährwerte für ausgewählte Tage berechnen",
+    "pages.tools.tabTitle": "Werkzeuge und Hilfsmittel – RecipeSage",
+    "pages.tools.title": "Werkzeuge und Hilfsmittel",
+    "pages.tools.cookbook.subtitle": "Speichere deine Rezepte als druckbares PDF-Kochbuch",
+    "pages.tools.nutritionCalculator.subtitle": "Summiere Nährwerte von mehreren Rezepten und passe sie nach Portion an"
 }
