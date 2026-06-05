@@ -87,7 +87,7 @@
     "firebase": "^12.14.0",
     "firebase-admin": "^13.7.0",
     "fraction.js": "^5.3.4",
-    "fs-extra": "^11.3.3",
+    "fs-extra": "^11.3.5",
     "google-auth-library": "^10.5.0",
     "he": "^1.2.0",
     "heic-decode": "^2.1.0",
