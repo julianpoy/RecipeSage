@@ -95,7 +95,7 @@
     "ical-generator": "^10.0.0",
     "idb": "^8.0.3",
     "ionicons": "8.0.13",
-    "joi": "^18.0.2",
+    "joi": "^18.2.1",
     "jsdom": "^26.0.0",
     "json-stream-stringify": "^3.1.6",
     "linkify-html": "^4.3.2",
