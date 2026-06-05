@@ -505,8 +505,8 @@ importers:
         specifier: ^0.17.4
         version: 0.17.6
       '@types/pdfmake':
-        specifier: ^0.2.12
-        version: 0.2.13
+        specifier: ^0.3.3
+        version: 0.3.3
       '@types/sanitize-html':
         specifier: ^2.16.0
         version: 2.16.1
@@ -5918,8 +5918,8 @@ packages:
   '@types/pdfkit@0.17.6':
     resolution: {integrity: sha512-tIwzxk2uWKp0Cq9JIluQXJid77lYhF52EsIOwhsMF4iWLA6YneoBR1xVKYYdAysHuepUB0OX4tdwMiUDdGKmig==}
 
-  '@types/pdfmake@0.2.13':
-    resolution: {integrity: sha512-QzOwk3dMTZOwVbDZNHGIQcpwBgprp1y1vzRBmR+p+vMtCZo00G1CN+YhNebkygtmaGjdzvyXJVOHMEuTbvhJ8A==}
+  '@types/pdfmake@0.3.3':
+    resolution: {integrity: sha512-ufbceB4Q3dKpmFUMKEbZvJcfLi8+C5b1+rTFVG6urtkS3FHwaTQH6NCh/iEEDINlApCxH/W3/rsq99pP5E9/JA==}
 
   '@types/pg-pool@2.0.7':
     resolution: {integrity: sha512-U4CwmGVQcbEuqpyju8/ptOKg6gEC+Tqsvj2xS9o1g71bUh8twxnC6ZL5rZKCsGN0iyH0CwgUyc9VR5owNQF9Ng==}
@@ -20759,7 +20759,7 @@ snapshots:
     dependencies:
       '@types/node': 24.9.1
 
-  '@types/pdfmake@0.2.13':
+  '@types/pdfmake@0.3.3':
     dependencies:
       '@types/node': 24.9.1
       '@types/pdfkit': 0.17.6

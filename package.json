@@ -197,7 +197,7 @@
     "@types/node": "24.9.1",
     "@types/node-fetch": "^2.6.13",
     "@types/pdfkit": "^0.17.4",
-    "@types/pdfmake": "^0.2.12",
+    "@types/pdfmake": "^0.3.3",
     "@types/sanitize-html": "^2.16.0",
     "@types/showdown": "^2.0.6",
     "@types/supertest": "^6.0.2",
