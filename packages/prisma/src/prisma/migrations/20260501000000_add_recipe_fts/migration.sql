@@ -1,4 +1,14 @@
-ALTER TABLE "Recipes" ADD COLUMN "tsv" tsvector;
+BEGIN;
+
+SET LOCAL lock_timeout = '5s';
+SET LOCAL statement_timeout = '60s';
+
+ALTER TABLE "Recipes" SET (
+  autovacuum_vacuum_scale_factor = 0.02,
+  autovacuum_vacuum_cost_limit = 2000
+);
+
+ALTER TABLE "Recipes" ADD COLUMN IF NOT EXISTS "tsv" tsvector;
 
 CREATE OR REPLACE FUNCTION recipes_tsv_trigger() RETURNS trigger AS $$
 BEGIN
@@ -13,10 +23,11 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS recipes_tsv_update ON "Recipes";
 CREATE TRIGGER recipes_tsv_update
   BEFORE INSERT OR UPDATE OF title, description, ingredients, source, notes, instructions
   ON "Recipes"
   FOR EACH ROW
   EXECUTE FUNCTION recipes_tsv_trigger();
 
-CREATE INDEX recipes_tsv_idx ON "Recipes" USING gin(tsv);
+COMMIT;

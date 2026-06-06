@@ -2,7 +2,6 @@ import { prisma } from "@recipesage/prisma";
 import { SearchProvider } from "./";
 
 const RESULT_LIMIT = 500;
-const FUZZY_WORD_SIMILARITY_THRESHOLD = 0.5;
 
 export const indexRecipes = async () => {
   return Promise.resolve();
@@ -39,7 +38,7 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
       SELECT id
       FROM "Recipes"
       WHERE "userId" = ANY(${userIds}::uuid[])
-        AND word_similarity(immutable_unaccent(lower(${fuzzyTerm})), immutable_unaccent(lower(title))) >= ${FUZZY_WORD_SIMILARITY_THRESHOLD}
+        AND immutable_unaccent(lower(title)) %> immutable_unaccent(lower(${fuzzyTerm}))
       ORDER BY immutable_unaccent(lower(title)) <-> immutable_unaccent(lower(${fuzzyTerm}))
       LIMIT ${RESULT_LIMIT}
     `,
