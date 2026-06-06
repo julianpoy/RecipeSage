@@ -30,8 +30,8 @@
     ]
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.71",
-    "@ai-sdk/google": "^3.0.64",
+    "@ai-sdk/anthropic": "^3.0.81",
+    "@ai-sdk/google": "^3.0.80",
     "@ai-sdk/openai": "^3.0.53",
     "@angular/common": "21.2.1",
     "@angular/core": "21.2.1",
@@ -56,7 +56,7 @@
     "@ngx-loading-bar/core": "^7.0.1",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
-    "@openrouter/ai-sdk-provider": "^2.8.0",
+    "@openrouter/ai-sdk-provider": "^2.9.0",
     "@opentelemetry/api": "^1.9.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
