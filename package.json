@@ -160,7 +160,7 @@
     "@angular/compiler": "21.2.4",
     "@angular/compiler-cli": "21.2.1",
     "@angular/language-service": "21.2.1",
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@babel/preset-env": "^7.29.7",
     "@capacitor/cli": "8.4.0",
     "@eslint/eslintrc": "^3.3.3",
