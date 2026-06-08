@@ -91,7 +91,7 @@
     "google-auth-library": "^10.5.0",
     "he": "^1.2.0",
     "heic-decode": "^2.1.0",
-    "https-proxy-agent": "^7.0.4",
+    "https-proxy-agent": "^9.0.0",
     "ical-generator": "^10.0.0",
     "idb": "^8.0.3",
     "ionicons": "8.0.13",
