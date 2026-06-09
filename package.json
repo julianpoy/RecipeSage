@@ -215,7 +215,7 @@
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^17.0.7",
     "nx": "22.3.3",
     "prettier": "^3.8.1",
     "supertest": "7.2.2",
