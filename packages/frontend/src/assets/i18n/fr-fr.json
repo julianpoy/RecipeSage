@@ -1297,5 +1297,19 @@
     "emails.signature.closing": "Cordialement,",
     "emails.signature.role": "Développeur de RecipeSage",
     "emails.signature.socialHeader": "Réseaux sociaux :",
-    "pages.app.nav.tools": "Outils et utilitaires"
+    "pages.app.nav.tools": "Outils et utilitaires",
+    "pages.mealPlan.modal.manualEntriesNutrition.header": "Les saisies manuelles seront ignorées",
+    "pages.mealPlan.modal.manualEntriesNutrition.message": "Certains éléments de repas choisis sont des entrées manuelles et non des recettes. Comme ils n'ont pas de données nutritionnelles, ils seront ignorés.",
+    "pages.mealPlanPopover.actions.calculateNutrition": "Calculer les apports nutritionnels pour le(s) jour(s) sélectionné(s)",
+    "pages.editRecipe.clipDocument.header": "Remplir automatiquement la recette à partir du document",
+    "pages.measurementConverter.units.cup": "Tasses",
+    "pages.measurementConverter.units.tablespoon": "Cuillères à soupe",
+    "pages.measurementConverter.units.teaspoon": "Cuillères à café",
+    "pages.measurementConverter.units.fluidOunce": "Millilitres",
+    "pages.measurementConverter.units.milliliter": "Millilitres",
+    "pages.measurementConverter.units.liter": "Litres",
+    "pages.measurementConverter.units.pint": "Millilitres",
+    "pages.measurementConverter.units.quart": "Litres",
+    "pages.measurementConverter.units.gallon": "Litres",
+    "pages.measurementConverter.units.deciliter": "Décilitres"
 }
