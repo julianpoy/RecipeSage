@@ -1546,5 +1546,13 @@
     "pages.measurementConverter.ingredients.wholeWheatPastryFlour": "Vollkorngebäckmehl | Whole Wheat Pastry Flour",
     "pages.measurementConverter.ingredients.whiteRyeFlour": "Weißes Roggenmehl",
     "pages.measurementConverter.ingredients.whiteWholeWheatFlour": "Weißes Vollkornmehl",
-    "pages.measurementConverter.ingredients.superfineSugar": "Feinkristallzucker"
+    "pages.measurementConverter.ingredients.superfineSugar": "Feinkristallzucker",
+    "pages.measurementConverter.ingredients.brownSugarPacked": "Brauner Zucker",
+    "pages.measurementConverter.ingredients.coconutSugar": "Kokoszucker",
+    "pages.measurementConverter.ingredients.confectionersSugar": "Puderzucker",
+    "pages.measurementConverter.ingredients.cinnamonSugar": "Zimt-Zucker-Mischung",
+    "pages.measurementConverter.ingredients.demeraraSugar": "Demerara-Zucker",
+    "pages.measurementConverter.ingredients.granulatedSugar": "Kristallzucker",
+    "pages.measurementConverter.ingredients.mapleSugar": "Ahornzucker",
+    "pages.measurementConverter.ingredients.pearlSugar": "Hagelzucker"
 }
