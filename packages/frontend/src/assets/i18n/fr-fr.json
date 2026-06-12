@@ -1311,5 +1311,7 @@
     "pages.measurementConverter.units.pint": "Millilitres",
     "pages.measurementConverter.units.quart": "Litres",
     "pages.measurementConverter.units.gallon": "Litres",
-    "pages.measurementConverter.units.deciliter": "Décilitres"
+    "pages.measurementConverter.units.deciliter": "Décilitres",
+    "pages.measurementConverter.countItem": "Ingrédient",
+    "pages.measurementConverter.quantity": "Quantité"
 }
