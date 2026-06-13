@@ -1313,5 +1313,11 @@
     "pages.measurementConverter.units.gallon": "Litres",
     "pages.measurementConverter.units.deciliter": "Décilitres",
     "pages.measurementConverter.countItem": "Ingrédient",
-    "pages.measurementConverter.quantity": "Quantité"
+    "pages.measurementConverter.quantity": "Quantité",
+    "pages.extensionAuth.officialBadge": "Extension officielle de RecipeSage",
+    "pages.extensionAuth.unofficialWarning.title": "Nous ne pouvons pas vérifier qu'il s'agit de l'extension officielle de RecipeSage.",
+    "pages.extensionAuth.unofficialWarning.body": "Ne continuez que si vous avez installé cette extension vous-même et que vous lui faites confiance. Cela pourrait être une tentative de prise de contrôle de votre compte.",
+    "pages.extensionAuth.invalidRequest.title": "Requête de connexion invalide",
+    "pages.extensionAuth.invalidRequest.message": "Cette page est destinée à la connexion via l'extension de navigateur RecipeSage. Ouvrez l'extension et réessayez.",
+    "pages.homeSearchFilterPopover.filterByNutrition": "Filtrer selon les apports nutritionnels"
 }
