@@ -1380,5 +1380,19 @@
     "pages.measurementConverter.ingredients.palmShortening": "Graisse de palme",
     "pages.measurementConverter.ingredients.vegetableOil": "Huile végétale",
     "pages.measurementConverter.ingredients.vegetableShortening": "Graisse végétale",
-    "pages.measurementConverter.ingredients.almondsSliced": "Amandes (effilées)"
+    "pages.measurementConverter.ingredients.almondsSliced": "Amandes (effilées)",
+    "pages.measurementConverter.ingredients.almondsSlivered": "Amandes (hachées)",
+    "pages.measurementConverter.ingredients.almondsWhole": "Amandes (entières)",
+    "pages.measurementConverter.ingredients.carawaySeeds": "Graines de carvi",
+    "pages.measurementConverter.ingredients.cashewsChopped": "Noix de cajou (hachées)",
+    "pages.measurementConverter.ingredients.cashewsWhole": "Noix de cajou (entières)",
+    "pages.measurementConverter.ingredients.chiaSeeds": "Graines de chia",
+    "pages.measurementConverter.ingredients.coconutSweetenedShredded": "Noix de coco (sucrée, râpée)",
+    "pages.measurementConverter.ingredients.coconutToasted": "Noix de coco (grillée)",
+    "pages.measurementConverter.ingredients.coconutDesiccated": "Noix de coco (non sucrée, râpée)",
+    "pages.measurementConverter.ingredients.coconutLargeFlakes": "Noix de coco (non sucrée, en gros flocons)",
+    "pages.measurementConverter.ingredients.coconutShredded": "Noix de coco (non sucrée, râpée)",
+    "pages.measurementConverter.ingredients.flaxMeal": "Farine de lin",
+    "pages.measurementConverter.ingredients.flaxseed": "Graines de lin",
+    "pages.measurementConverter.ingredients.hazelnutsWhole": "Noisettes (entières)"
 }
