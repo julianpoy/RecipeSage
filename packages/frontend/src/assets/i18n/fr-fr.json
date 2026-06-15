@@ -1394,5 +1394,14 @@
     "pages.measurementConverter.ingredients.coconutShredded": "Noix de coco (non sucrée, râpée)",
     "pages.measurementConverter.ingredients.flaxMeal": "Farine de lin",
     "pages.measurementConverter.ingredients.flaxseed": "Graines de lin",
-    "pages.measurementConverter.ingredients.hazelnutsWhole": "Noisettes (entières)"
+    "pages.measurementConverter.ingredients.hazelnutsWhole": "Noisettes (entières)",
+    "pages.measurementConverter.ingredients.cherriesCandied": "Cerises (confites)",
+    "pages.measurementConverter.ingredients.cherriesDried": "Cerises (séchées)",
+    "pages.measurementConverter.ingredients.cherriesFresh": "Cerises (fraîches, dénoyautées, coupées en morceaux)",
+    "pages.measurementConverter.ingredients.cherriesFrozen": "Cerises (surgelées)",
+    "pages.measurementConverter.ingredients.cranberriesDried": "Airelles (séchées)",
+    "pages.measurementConverter.ingredients.cranberriesFresh": "Airelles (fraîches ou surgelées)",
+    "pages.measurementConverter.ingredients.crystallizedGinger": "Gingembre confit",
+    "pages.measurementConverter.ingredients.currants": "Groseilles",
+    "pages.measurementConverter.ingredients.datesChopped": "Dattes (hachées)"
 }
