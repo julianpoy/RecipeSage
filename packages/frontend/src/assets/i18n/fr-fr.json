@@ -1495,5 +1495,11 @@
     "pages.cookingTemperatures.items.beefRare.state": "Très saignant, cœur rouge",
     "pages.cookingTemperatures.items.beefMediumRare.label": "Bœuf (rosé)",
     "pages.cookingTemperatures.items.beefMediumRare.state": "Rosé, cœur rouge",
-    "pages.cookingTemperatures.items.beefMediumWell.label": "Bœuf (à point)"
+    "pages.cookingTemperatures.items.beefMediumWell.label": "Bœuf (à point)",
+    "pages.cookingTemperatures.items.porkWellDone.state": "Porc bien cuit",
+    "pages.cookingTemperatures.items.salmonMediumRare.label": "Saumon (mi-cuit)",
+    "pages.cookingTemperatures.items.salmonMediumRare.state": "Rose pâle, centre presque transparent ; la cuisson que recherche le chef",
+    "pages.cookingTemperatures.items.salmonMedium.label": "Saumon (à point)",
+    "pages.cookingTemperatures.items.salmonMedium.state": "Rose tendre au centre, bien saisi à l'extérieur",
+    "pages.cookingTemperatures.items.tunaRare.label": "Thon cru au centre"
 }
