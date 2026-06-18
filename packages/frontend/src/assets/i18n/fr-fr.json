@@ -1510,5 +1510,14 @@
     "pages.cookingTemperatures.items.shellfish.label": "Palourdes, huîtres, moules",
     "pages.cookingTemperatures.items.shellfish.cue": "Cuire jusqu'à l'ouverture des coquilles.",
     "pages.cookingTemperatures.items.eggsFresh.label": "Œufs frais",
-    "pages.cookingTemperatures.items.eggsFresh.cue": "Cuire jusqu'à ce que le jaune et le blanc soient fermes."
+    "pages.cookingTemperatures.items.eggsFresh.cue": "Cuire jusqu'à ce que le jaune et le blanc soient fermes.",
+    "pages.cookingTemperatures.items.hotHolding.state": "Aliments cuits maintenus au chaud (buffets, chauffe-plats, maintien en four). À conserver à cette température ou à une température supérieure.",
+    "pages.cookingTemperatures.items.dangerZone.label": "Plage de température dangereuse pour les bactéries",
+    "pages.cookingTemperatures.items.dangerZone.state": "Les bactéries se multiplient rapidement dans cette plage de température. Ne pas laisser les aliments périssables dans cette zone plus de 2 heures (1 heure au-dessus de 32 °C).",
+    "pages.cookingTemperatures.items.sugarThread.label": "Stade du filet",
+    "pages.cookingTemperatures.items.sugarThread.state": "Le sirop s'écoule en fins filets qui se dissolvent rapidement. Utilisé pour les glaçages et les sirops légers.",
+    "pages.cookingTemperatures.items.sugarSoftBall.label": "Stade du petit boulé",
+    "pages.cookingTemperatures.items.sugarSoftBall.state": "Une goutte plongée dans l'eau froide forme une boule molle et souple. Fudge, fondant, crème au beurre italienne.",
+    "pages.cookingTemperatures.items.sugarFirmBall.label": "Stade du grand boulé",
+    "pages.cookingTemperatures.items.sugarFirmBall.state": "Stade du grand boulé — Forme une boule ferme qui conserve sa forme mais s'aplatit légèrement. Caramels, guimauves tendres."
 }
