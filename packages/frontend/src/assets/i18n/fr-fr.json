@@ -1501,5 +1501,14 @@
     "pages.cookingTemperatures.items.salmonMediumRare.state": "Rose pâle, centre presque transparent ; la cuisson que recherche le chef",
     "pages.cookingTemperatures.items.salmonMedium.label": "Saumon (à point)",
     "pages.cookingTemperatures.items.salmonMedium.state": "Rose tendre au centre, bien saisi à l'extérieur",
-    "pages.cookingTemperatures.items.tunaRare.label": "Thon cru au centre"
+    "pages.cookingTemperatures.items.tunaRare.label": "Thon cru au centre",
+    "pages.cookingTemperatures.items.finfish.state": "Saumon, thon, cabillaud, tilapia, truite, flétan, vivaneau, bar",
+    "pages.cookingTemperatures.items.shrimpLobsterCrab.label": "Crevettes, homard, crabe",
+    "pages.cookingTemperatures.items.shrimpLobsterCrab.cue": "Cuire jusqu'à ce que la chair devienne nacrée et opaque.",
+    "pages.cookingTemperatures.items.scallops.label": "Noix de Saint-Jacques",
+    "pages.cookingTemperatures.items.scallops.cue": "Cuire jusqu'à ce que la chair soit nacrée et opaque.",
+    "pages.cookingTemperatures.items.shellfish.label": "Palourdes, huîtres, moules",
+    "pages.cookingTemperatures.items.shellfish.cue": "Cuire jusqu'à l'ouverture des coquilles.",
+    "pages.cookingTemperatures.items.eggsFresh.label": "Œufs frais",
+    "pages.cookingTemperatures.items.eggsFresh.cue": "Cuire jusqu'à ce que le jaune et le blanc soient fermes."
 }
