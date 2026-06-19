@@ -69,10 +69,10 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
+      "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/queue-worker"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/queue-worker"
       }
     }
   }

@@ -17,7 +17,12 @@
       "cache": true
     },
     "@nx/eslint:lint": {
-      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
+      ],
       "cache": true
     },
     "@nx/vite:build": {
@@ -52,5 +57,6 @@
     "forcePathStyle": true,
     "localMode": "no-cache",
     "ciMode": "read-write"
-  }
+  },
+  "analytics": false
 }

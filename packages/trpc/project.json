@@ -6,9 +6,14 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
-      "dependsOn": ["util-shared:build", "util-server:build"],
+      "dependsOn": [
+        "util-shared:build",
+        "util-server:build"
+      ],
       "options": {
         "main": "packages/trpc/src/index.ts",
         "outputPath": "dist/packages/trpc",
@@ -23,7 +28,9 @@
           }
         ],
         "platform": "node",
-        "external": ["yauzl-promise"]
+        "external": [
+          "yauzl-promise"
+        ]
       },
       "configurations": {
         "development": {
@@ -53,9 +60,11 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/packages/trpc"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/trpc"
       }
     }
   }
