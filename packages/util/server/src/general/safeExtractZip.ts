@@ -16,6 +16,13 @@ export class ZipTooLargeError extends Error {
   }
 }
 
+export class ZipTooManyEntriesError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ZipTooManyEntriesError";
+  }
+}
+
 export class ZipUnsafePathError extends Error {
   constructor(message: string) {
     super(message);
@@ -81,7 +88,7 @@ export const safeExtractZip = async (
       const entry = next.value;
       entryCount++;
       if (entryCount > maxEntryCount) {
-        throw new ZipTooLargeError(
+        throw new ZipTooManyEntriesError(
           `Zip contains more than ${maxEntryCount} entries`,
         );
       }

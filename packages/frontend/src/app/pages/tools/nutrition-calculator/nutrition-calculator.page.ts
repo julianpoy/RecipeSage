@@ -13,6 +13,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
 import { SelectLabelModalComponent } from "../../../components/select-label-modal/select-label-modal.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -156,6 +157,7 @@ type DisplayMode = "total" | "perServing";
     IonNote,
     IonBadge,
     InfoBlockComponent,
+    TextInputComponent,
   ],
 })
 export class NutritionCalculatorPage implements OnInit, OnDestroy {

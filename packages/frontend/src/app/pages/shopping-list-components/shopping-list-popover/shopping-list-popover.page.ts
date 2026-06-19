@@ -22,6 +22,7 @@ import type {
 } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { ShoppingListCategoryOrderModalPage } from "../shopping-list-category-order-modal/shopping-list-category-order-modal.page";
+import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
 import {
   IonList,
   IonListHeader,
@@ -33,6 +34,7 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import {
+  ban,
   pencil,
   print,
   removeCircle,
@@ -60,7 +62,7 @@ import { addIcons } from "ionicons";
 })
 export class ShoppingListPopoverPage {
   constructor() {
-    addIcons({ pencil, print, removeCircle, reorderThree, trash });
+    addIcons({ ban, pencil, print, removeCircle, reorderThree, trash });
   }
 
   private navCtrl = inject(NavController);
@@ -96,7 +98,9 @@ export class ShoppingListPopoverPage {
   savePreferences() {
     this.preferencesService.save();
 
-    this.dismiss();
+    this.popoverCtrl.dismiss({
+      reprocessOnly: true,
+    });
   }
 
   dismiss() {
@@ -232,6 +236,16 @@ export class ShoppingListPopoverPage {
       },
     });
 
+    await modal.present();
+    await modal.onDidDismiss();
+
+    this.dismiss();
+  }
+
+  async showIgnoreModal() {
+    const modal = await this.modalCtrl.create({
+      component: ShoppingListIgnoreModalPage,
+    });
     await modal.present();
     await modal.onDidDismiss();
 

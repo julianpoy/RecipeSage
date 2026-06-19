@@ -1,0 +1,107 @@
+.cook-wrapper {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.ingredients-instructions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.ingredients {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.instructions {
+  flex-grow: 1;
+  min-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ingredients-instructions {
+    flex-wrap: nowrap;
+  }
+
+  .ingredients {
+    width: 320px;
+  }
+
+  .instructions {
+    min-width: auto;
+  }
+}
+
+.notes {
+  margin-top: 24px;
+
+  .header {
+    font-weight: bold;
+  }
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.ingredient {
+  margin: 0;
+  padding: 10px 0;
+  line-height: 1.4;
+
+  &.ingredientContent {
+    cursor: pointer;
+  }
+
+  &.complete {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+}
+
+.instruction {
+  margin: 0;
+  padding: 10px 0;
+  line-height: 1.5;
+
+  .sectionHeader {
+    display: block;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+
+  .instructionContent {
+    cursor: pointer;
+  }
+
+  span.complete .instructionContent {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+}
+
+:host ::ng-deep .inlineImage {
+  display: inline-block;
+  vertical-align: top;
+  margin-block: 4px;
+  margin-inline: 0 6px;
+
+  img {
+    display: block;
+    max-width: min(100%, 320px);
+    max-height: 240px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  figcaption {
+    font-size: 0.85em;
+    font-style: italic;
+    margin-top: 4px;
+    max-width: 320px;
+  }
+}

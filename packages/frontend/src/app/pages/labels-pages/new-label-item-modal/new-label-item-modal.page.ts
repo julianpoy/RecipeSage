@@ -13,6 +13,7 @@ import {
   SelectMultipleItemsComponent,
 } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -23,7 +24,6 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonInput,
   IonToggle,
   IonFooter,
 } from "@ionic/angular/standalone";
@@ -38,6 +38,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMultipleItemsComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -47,7 +48,6 @@ import { addIcons } from "ionicons";
     IonContent,
     IonItem,
     IonLabel,
-    IonInput,
     IonToggle,
     IonFooter,
   ],

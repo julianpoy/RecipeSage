@@ -1,0 +1,13 @@
+@use "../field" as field;
+
+@include field.base;
+
+.rs-field__control {
+  resize: vertical;
+  min-height: calc(1.5em * var(--rs-field-rows, 4) + 20px);
+}
+
+.rs-field__control--autogrow {
+  resize: none;
+  overflow: hidden;
+}

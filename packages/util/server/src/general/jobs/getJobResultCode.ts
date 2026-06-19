@@ -9,6 +9,7 @@ import { ImportStandardizedRecipesTooManyRecipesError } from "../../db/importSta
 import {
   ZipMalformedError,
   ZipTooLargeError,
+  ZipTooManyEntriesError,
   ZipUnsafePathError,
 } from "../safeExtractZip";
 
@@ -37,7 +38,8 @@ export const jobErrorToResultCode = (error: unknown) => {
 
   if (
     error instanceof ImportStandardizedRecipesTooManyRecipesError ||
-    error instanceof ImportTooManyRecipesError
+    error instanceof ImportTooManyRecipesError ||
+    error instanceof ZipTooManyEntriesError
   ) {
     return JOB_RESULT_CODES.tooManyRecipes;
   }

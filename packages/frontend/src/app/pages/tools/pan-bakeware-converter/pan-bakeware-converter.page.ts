@@ -1,6 +1,10 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import { Component, inject, ViewChild, type OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { NavController, ToastController } from "@ionic/angular/standalone";
+import {
+  ModalController,
+  NavController,
+  ToastController,
+} from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import {
   parseIngredients,
@@ -14,7 +18,6 @@ import {
   swapHorizontal,
   copyOutline,
   informationCircle,
-  warning,
   chevronDown,
   chevronUp,
   flame,
@@ -28,6 +31,7 @@ import {
   albumsOutline,
   radioButtonOffOutline,
   gridOutline,
+  search,
 } from "ionicons/icons";
 import {
   IonHeader,
@@ -39,49 +43,59 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonInput,
   IonButton,
   IonIcon,
   IonNote,
   IonSegment,
   IonSegmentButton,
   IonChip,
-  IonTextarea,
 } from "@ionic/angular/standalone";
 
-import { RouteMap } from "../../../services/util.service";
+import type { RecipeSummary } from "@recipesage/prisma";
+
+import { RouteMap, UtilService } from "../../../services/util.service";
+import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
+import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import {
-  PAN_PRESETS,
+  BATTER_TYPES,
+  PAN_PRESETS_IMPERIAL,
   PAN_SHAPES,
-  PRESETS_BY_SHAPE,
-  RECOMMENDED_FILL_FRACTION,
   computeBakeTimeAdvice,
-  computeCapacityWarning,
   computeScaling,
   cmToInches,
   cupsToMl,
   findSimilarPresets,
+  formatCm,
   formatCups,
   formatInches,
+  formatLiters,
   formatMl,
   formatMultiplier,
   inchesToCm,
   isFlatBottom,
+  isNegligibleScaling,
+  litersToMl,
+  mlToCups,
+  mlToLiters,
   panArea,
-  panCapacityCups,
-  sqInToSqCm,
+  panCapacityMl,
+  presetToDimensions,
+  presetsForUnit,
+  sqCmToSqIn,
   type BakeTimeAdvice,
   type BakeTimeDirection,
-  type CapacityWarning,
+  type BatterType,
   type PanDimensions,
   type PanPreset,
   type PanShape,
   type ScalingResult,
+  type UnitSystem,
 } from "./panBakewareData";
 
-type UnitSystem = "imperial" | "metric";
 type PanSlot = "from" | "to";
 
 interface PanState {
@@ -113,7 +127,7 @@ interface SubstitutionOption {
   deltaPct: number;
 }
 
-const DEFAULT_DEPTH_BY_SHAPE: Record<PanShape, number> = {
+const DEFAULT_DEPTH_IN: Record<PanShape, number> = {
   round: 2,
   square: 2,
   rectangular: 2,
@@ -122,6 +136,17 @@ const DEFAULT_DEPTH_BY_SHAPE: Record<PanShape, number> = {
   sheet: 1,
   bundtTube: 3.5,
   muffin: 1.25,
+};
+
+const DEFAULT_DEPTH_CM: Record<PanShape, number> = {
+  round: 5,
+  square: 5,
+  rectangular: 5,
+  loaf: 7,
+  springform: 7,
+  sheet: 2,
+  bundtTube: 9,
+  muffin: 3,
 };
 
 const SHAPE_LABEL_KEY: Record<PanShape, string> = {
@@ -160,6 +185,19 @@ const PRESET_FORMAT_KEY_OVERRIDE: Record<string, string> = {
   muffinStandard6: "pages.panBakewareConverter.presets.format.muffinStandard",
   muffinStandard12: "pages.panBakewareConverter.presets.format.muffinStandard",
   muffinJumbo6: "pages.panBakewareConverter.presets.format.muffinJumbo",
+  loafMmini: "pages.panBakewareConverter.presets.format.loafMini",
+  swissRollM30x20: "pages.panBakewareConverter.presets.format.swissRoll",
+  swissRollM33x23: "pages.panBakewareConverter.presets.format.swissRoll",
+  bakingTrayM40x30: "pages.panBakewareConverter.presets.format.bakingTray",
+  bundtM14: "pages.panBakewareConverter.presets.format.bundtMetric",
+  bundtM21: "pages.panBakewareConverter.presets.format.bundtMetric",
+  bundtM24: "pages.panBakewareConverter.presets.format.bundtMetric",
+  bundtM28: "pages.panBakewareConverter.presets.format.bundtMetric",
+  tubeM25: "pages.panBakewareConverter.presets.format.tube",
+  muffinMmini24: "pages.panBakewareConverter.presets.format.muffinMini",
+  muffinMstandard6: "pages.panBakewareConverter.presets.format.muffinStandard",
+  muffinMstandard12: "pages.panBakewareConverter.presets.format.muffinStandard",
+  muffinMjumbo6: "pages.panBakewareConverter.presets.format.muffinJumbo",
 };
 
 const BAKE_DIRECTION_LABEL_KEYS: Record<BakeTimeDirection, string> = {
@@ -168,22 +206,28 @@ const BAKE_DIRECTION_LABEL_KEYS: Record<BakeTimeDirection, string> = {
   deeper: "pages.panBakewareConverter.bake.direction.deeper",
 };
 
-const BAKE_DETAIL_KEYS: Record<
-  BakeTimeDirection,
-  Record<UnitSystem, string>
-> = {
-  similar: {
-    imperial: "pages.panBakewareConverter.bake.detail.similar",
-    metric: "pages.panBakewareConverter.bake.detail.similar",
-  },
-  shallower: {
-    imperial: "pages.panBakewareConverter.bake.detail.shallowerImperial",
-    metric: "pages.panBakewareConverter.bake.detail.shallowerMetric",
-  },
-  deeper: {
-    imperial: "pages.panBakewareConverter.bake.detail.deeperImperial",
-    metric: "pages.panBakewareConverter.bake.detail.deeperMetric",
-  },
+const BAKE_DETAIL_KEYS: Record<BakeTimeDirection, string> = {
+  similar: "pages.panBakewareConverter.bake.guidance.similar",
+  shallower: "pages.panBakewareConverter.bake.guidance.shallower",
+  deeper: "pages.panBakewareConverter.bake.guidance.deeper",
+};
+
+const BATTER_TYPE_LABEL_KEY: Record<BatterType, string> = {
+  cake: "pages.panBakewareConverter.batterType.cake",
+  spongeFoam: "pages.panBakewareConverter.batterType.spongeFoam",
+  quickBread: "pages.panBakewareConverter.batterType.quickBread",
+  yeastBread: "pages.panBakewareConverter.batterType.yeastBread",
+  cheesecake: "pages.panBakewareConverter.batterType.cheesecake",
+  brownieBar: "pages.panBakewareConverter.batterType.brownieBar",
+};
+
+const DONENESS_KEY: Record<BatterType, string> = {
+  cake: "pages.panBakewareConverter.doneness.cake",
+  spongeFoam: "pages.panBakewareConverter.doneness.spongeFoam",
+  quickBread: "pages.panBakewareConverter.doneness.quickBread",
+  yeastBread: "pages.panBakewareConverter.doneness.yeastBread",
+  cheesecake: "pages.panBakewareConverter.doneness.cheesecake",
+  brownieBar: "pages.panBakewareConverter.doneness.brownieBar",
 };
 
 const SHAPE_OPTIONS: ShapeOption[] = [
@@ -214,29 +258,37 @@ const SHAPE_OPTIONS: ShapeOption[] = [
     IonList,
     IonItem,
     IonLabel,
-    IonInput,
     IonButton,
     IonIcon,
     IonNote,
     IonSegment,
     IonSegmentButton,
     IonChip,
-    IonTextarea,
     InfoBlockComponent,
+    TextInputComponent,
+    TextAreaComponent,
   ],
 })
 export class PanBakewareConverterPage implements OnInit {
   private navCtrl = inject(NavController);
+  private modalCtrl = inject(ModalController);
   private translate = inject(TranslateService);
   private toastCtrl = inject(ToastController);
+  private utilService = inject(UtilService);
+  private recipeCompletionTrackerService = inject(
+    RecipeCompletionTrackerService,
+  );
+
+  @ViewChild(IonContent) content?: IonContent;
 
   defaultBackHref: string = RouteMap.ToolsPage.getPath();
 
   readonly shapeOptions = SHAPE_OPTIONS;
   readonly allShapes = PAN_SHAPES;
-  readonly presetsByShape = PRESETS_BY_SHAPE;
+  readonly batterTypes = BATTER_TYPES;
 
   unit: UnitSystem = "imperial";
+  batterType: BatterType = "cake";
 
   from: PanState = this.makeDefaultState("round", "round9x2");
   to: PanState = this.makeDefaultState("rectangular", "rect9x13");
@@ -246,7 +298,8 @@ export class PanBakewareConverterPage implements OnInit {
 
   originalBakeTime = "";
   originalBakeTemp = "";
-  suggestedBakeTime = "";
+  suggestedBakeTimeLow = "";
+  suggestedBakeTimeHigh = "";
   suggestedBakeTempF = "";
   suggestedBakeTempC = "";
 
@@ -259,7 +312,6 @@ export class PanBakewareConverterPage implements OnInit {
       swapHorizontal,
       copyOutline,
       informationCircle,
-      warning,
       chevronDown,
       chevronUp,
       flame,
@@ -273,6 +325,7 @@ export class PanBakewareConverterPage implements OnInit {
       albumsOutline,
       radioButtonOffOutline,
       gridOutline,
+      search,
     });
   }
 
@@ -284,33 +337,44 @@ export class PanBakewareConverterPage implements OnInit {
     this.navCtrl.navigateForward(RouteMap.ToolsPage.getPath());
   }
 
+  isLoggedIn(): boolean {
+    return this.utilService.isLoggedIn();
+  }
+
   private makeDefaultState(shape: PanShape, presetKey: string): PanState {
-    const preset = PAN_PRESETS.find((p) => p.key === presetKey);
+    const preset = PAN_PRESETS_IMPERIAL.find((p) => p.key === presetKey);
     return {
       shape,
       selectedPresetKey: preset?.key ?? null,
-      diameter: this.formatDimInput(preset?.diameterIn),
-      length: this.formatDimInput(preset?.lengthIn),
-      width: this.formatDimInput(preset?.widthIn),
-      depth: this.formatDimInput(
-        preset?.depthIn ?? DEFAULT_DEPTH_BY_SHAPE[shape],
-      ),
+      diameter: this.formatDim(preset?.diameter),
+      length: this.formatDim(preset?.length),
+      width: this.formatDim(preset?.width),
+      depth: this.formatDim(preset?.depth ?? this.defaultDepth(shape)),
       cavities: preset?.cavities !== undefined ? String(preset.cavities) : "",
       cavityCapacity:
-        preset?.cavityCapacityCups !== undefined
-          ? String(preset.cavityCapacityCups)
+        preset?.cavityCapacity !== undefined
+          ? String(preset.cavityCapacity)
           : "",
       capacityOverride:
-        preset?.capacityCupsOverride !== undefined
-          ? String(preset.capacityCupsOverride)
+        preset?.capacityOverride !== undefined
+          ? String(preset.capacityOverride)
           : "",
     };
   }
 
-  private formatDimInput(inches: number | undefined): string {
-    if (inches === undefined) return "";
-    if (this.unit === "metric") return inchesToCm(inches).toFixed(1);
-    return formatInches(inches);
+  private defaultDepth(shape: PanShape): number {
+    return this.unit === "metric"
+      ? DEFAULT_DEPTH_CM[shape]
+      : DEFAULT_DEPTH_IN[shape];
+  }
+
+  private formatDim(value: number | undefined): string {
+    if (value === undefined) return "";
+    return this.unit === "metric" ? formatCm(value) : formatInches(value);
+  }
+
+  presetsForShape(shape: PanShape): PanPreset[] {
+    return presetsForUnit(this.unit).filter((p) => p.shape === shape);
   }
 
   private slotState(slot: PanSlot): PanState {
@@ -324,11 +388,11 @@ export class PanBakewareConverterPage implements OnInit {
     state.diameter = "";
     state.length = "";
     state.width = "";
-    state.depth = this.formatDimInput(DEFAULT_DEPTH_BY_SHAPE[shape]);
+    state.depth = this.formatDim(this.defaultDepth(shape));
     state.cavities = "";
     state.cavityCapacity = "";
     state.capacityOverride = "";
-    const presets = PRESETS_BY_SHAPE[shape];
+    const presets = this.presetsForShape(shape);
     if (presets.length > 0) {
       this.selectPreset(slot, presets[0].key);
     }
@@ -336,24 +400,22 @@ export class PanBakewareConverterPage implements OnInit {
   }
 
   selectPreset(slot: PanSlot, presetKey: string) {
-    const preset = PAN_PRESETS.find((p) => p.key === presetKey);
+    const preset = presetsForUnit(this.unit).find((p) => p.key === presetKey);
     if (!preset) return;
     const state = this.slotState(slot);
     state.shape = preset.shape;
     state.selectedPresetKey = preset.key;
-    state.diameter = this.formatDimInput(preset.diameterIn);
-    state.length = this.formatDimInput(preset.lengthIn);
-    state.width = this.formatDimInput(preset.widthIn);
-    state.depth = this.formatDimInput(preset.depthIn);
+    state.diameter = this.formatDim(preset.diameter);
+    state.length = this.formatDim(preset.length);
+    state.width = this.formatDim(preset.width);
+    state.depth = this.formatDim(preset.depth);
     state.cavities =
       preset.cavities !== undefined ? String(preset.cavities) : "";
     state.cavityCapacity =
-      preset.cavityCapacityCups !== undefined
-        ? String(preset.cavityCapacityCups)
-        : "";
+      preset.cavityCapacity !== undefined ? String(preset.cavityCapacity) : "";
     state.capacityOverride =
-      preset.capacityCupsOverride !== undefined
-        ? String(preset.capacityCupsOverride)
+      preset.capacityOverride !== undefined
+        ? String(preset.capacityOverride)
         : "";
     this.recomputeAll();
   }
@@ -383,6 +445,8 @@ export class PanBakewareConverterPage implements OnInit {
     this.convertStateUnits(this.from, this.unit, newUnit);
     this.convertStateUnits(this.to, this.unit, newUnit);
     this.convertBakeTempUnits(this.unit, newUnit);
+    this.from.selectedPresetKey = null;
+    this.to.selectedPresetKey = null;
     this.unit = newUnit;
     this.recomputeRecipeScale();
     this.recomputeBakeAdvice();
@@ -406,18 +470,39 @@ export class PanBakewareConverterPage implements OnInit {
     toUnit: UnitSystem,
   ) {
     if (fromUnit === toUnit) return;
-    const convert = (raw: string): string => {
-      const v = parseQuantity(raw, this.translate.getCurrentLang());
+    const lang = this.translate.getCurrentLang();
+    const linear = (raw: string): string => {
+      const v = parseQuantity(raw, lang);
       if (v === null) return raw;
-      const inches = fromUnit === "metric" ? cmToInches(v) : v;
-      return toUnit === "metric"
-        ? inchesToCm(inches).toFixed(1)
-        : formatInches(inches);
+      const cm = fromUnit === "metric" ? v : inchesToCm(v);
+      return toUnit === "metric" ? formatCm(cm) : formatInches(cmToInches(cm));
     };
-    state.diameter = convert(state.diameter);
-    state.length = convert(state.length);
-    state.width = convert(state.width);
-    state.depth = convert(state.depth);
+    state.diameter = linear(state.diameter);
+    state.length = linear(state.length);
+    state.width = linear(state.width);
+    state.depth = linear(state.depth);
+
+    if (state.capacityOverride) {
+      const v = parseQuantity(state.capacityOverride, lang);
+      if (v !== null) {
+        const ml = fromUnit === "metric" ? litersToMl(v) : cupsToMl(v);
+        state.capacityOverride =
+          toUnit === "metric"
+            ? formatLiters(mlToLiters(ml))
+            : formatCups(mlToCups(ml));
+      }
+    }
+
+    if (state.cavityCapacity) {
+      const v = parseQuantity(state.cavityCapacity, lang);
+      if (v !== null) {
+        const ml = fromUnit === "metric" ? v : cupsToMl(v);
+        state.cavityCapacity =
+          toUnit === "metric"
+            ? String(Math.round(ml))
+            : formatCups(mlToCups(ml));
+      }
+    }
   }
 
   swapPans() {
@@ -429,61 +514,57 @@ export class PanBakewareConverterPage implements OnInit {
 
   private dimensionsFor(slot: PanSlot): PanDimensions | null {
     const state = this.slotState(slot);
-    const inchesFrom = (raw: string): number | null => {
-      const v = parseQuantity(raw, this.translate.getCurrentLang());
+    const lang = this.translate.getCurrentLang();
+    const cmFrom = (raw: string): number | null => {
+      const v = parseQuantity(raw, lang);
       if (v === null || v <= 0) return null;
-      return this.unit === "metric" ? cmToInches(v) : v;
+      return this.unit === "metric" ? v : inchesToCm(v);
     };
 
-    const depthIn = inchesFrom(state.depth);
-    if (depthIn === null) return null;
+    const depthCm = cmFrom(state.depth);
+    if (depthCm === null) return null;
 
-    const base: PanDimensions = { shape: state.shape, depthIn };
+    const base: PanDimensions = { shape: state.shape, depthCm };
 
     switch (state.shape) {
       case "round":
       case "springform": {
-        const d = inchesFrom(state.diameter);
+        const d = cmFrom(state.diameter);
         if (d === null) return null;
-        return { ...base, diameterIn: d };
+        return { ...base, diameterCm: d };
       }
       case "square": {
-        const s = inchesFrom(state.length);
+        const s = cmFrom(state.length);
         if (s === null) return null;
-        return { ...base, lengthIn: s, widthIn: s };
+        return { ...base, lengthCm: s, widthCm: s };
       }
       case "rectangular":
       case "loaf":
       case "sheet": {
-        const l = inchesFrom(state.length);
-        const w = inchesFrom(state.width);
+        const l = cmFrom(state.length);
+        const w = cmFrom(state.width);
         if (l === null || w === null) return null;
-        return { ...base, lengthIn: l, widthIn: w };
+        return { ...base, lengthCm: l, widthCm: w };
       }
       case "bundtTube": {
-        const cap = parseQuantity(
-          state.capacityOverride,
-          this.translate.getCurrentLang(),
-        );
+        const cap = parseQuantity(state.capacityOverride, lang);
         if (cap === null || cap <= 0) return null;
-        return { ...base, capacityCupsOverride: cap };
+        const capacityMl =
+          this.unit === "metric" ? litersToMl(cap) : cupsToMl(cap);
+        return { ...base, capacityMlOverride: capacityMl };
       }
       case "muffin": {
-        const cav = parseQuantity(
-          state.cavities,
-          this.translate.getCurrentLang(),
-        );
-        const cavCap = parseQuantity(
-          state.cavityCapacity,
-          this.translate.getCurrentLang(),
-        );
+        const cav = parseQuantity(state.cavities, lang);
+        const cavCap = parseQuantity(state.cavityCapacity, lang);
         if (cav === null || cavCap === null || cav <= 0 || cavCap <= 0) {
           return null;
         }
+        const cavityCapacityMl =
+          this.unit === "metric" ? cavCap : cupsToMl(cavCap);
         return {
           ...base,
           cavities: Math.round(cav),
-          cavityCapacityCups: cavCap,
+          cavityCapacityMl,
         };
       }
     }
@@ -504,42 +585,36 @@ export class PanBakewareConverterPage implements OnInit {
     return computeScaling(from, to);
   }
 
-  get capacityWarning(): CapacityWarning | null {
-    const to = this.toDimensions;
-    const from = this.fromDimensions;
-    const sc = this.scaling;
-    if (!from || !to || !sc) return null;
-    const fromCap = panCapacityCups(from);
-    if (fromCap === null) return null;
-    const fromUsable = fromCap * RECOMMENDED_FILL_FRACTION;
-    const scaledBatter = fromUsable * sc.multiplier;
-    return computeCapacityWarning(to, scaledBatter);
+  canEstimateBakeTime(): boolean {
+    return this.isFlatPan("from") && this.isFlatPan("to");
   }
 
   get bakeTimeAdvice(): BakeTimeAdvice | null {
     const from = this.fromDimensions;
     const to = this.toDimensions;
     const sc = this.scaling;
-    if (!from || !to || !sc) return null;
-    return computeBakeTimeAdvice(from, to, sc.multiplier);
+    if (!from || !to || !sc || !this.canEstimateBakeTime()) return null;
+    return computeBakeTimeAdvice(from, to);
   }
 
   get substitutions(): SubstitutionOption[] {
     const from = this.fromDimensions;
     if (!from) return [];
-    const targetCap = panCapacityCups(from);
+    const targetCap = panCapacityMl(from);
     if (targetCap === null) return [];
-    const matches = findSimilarPresets(from, this.from.selectedPresetKey, 0.1);
+    const matches = findSimilarPresets(
+      from,
+      [this.from.selectedPresetKey, this.to.selectedPresetKey],
+      this.unit,
+      0.1,
+    );
     return matches.map((preset) => {
-      const cap = panCapacityCups(preset) ?? 0;
+      const cap = panCapacityMl(presetToDimensions(preset)) ?? 0;
       const delta = ((cap - targetCap) / targetCap) * 100;
       return {
         preset,
         label: this.presetLabel(preset),
-        capacityLabel: this.translate.instant(
-          "pages.panBakewareConverter.capacity.value",
-          { cups: formatCups(cap) },
-        ),
+        capacityLabel: this.capacityCompactLabel(cap),
         deltaPct: delta,
       };
     });
@@ -553,20 +628,24 @@ export class PanBakewareConverterPage implements OnInit {
 
   private presetFormatParams(preset: PanPreset): Record<string, string> {
     const u = this.unitLabelShort();
-    const fmt = (inches: number | undefined): string => {
-      if (inches === undefined) return "";
-      return this.unit === "metric"
-        ? inchesToCm(inches).toFixed(1)
-        : formatInches(inches);
-    };
+    const fmt = (value: number | undefined): string =>
+      value === undefined ? "" : this.formatDim(value);
+    const isMetric = preset.unitSystem === "metric";
     return {
       u,
-      d: fmt(preset.diameterIn),
-      l: fmt(preset.lengthIn),
-      w: fmt(preset.widthIn),
-      s: fmt(preset.lengthIn),
-      h: fmt(preset.depthIn),
-      c: String(preset.capacityCupsOverride ?? ""),
+      d: fmt(preset.diameter),
+      l: fmt(preset.length),
+      w: fmt(preset.width),
+      s: fmt(preset.length),
+      h: fmt(preset.depth),
+      c:
+        !isMetric && preset.capacityOverride !== undefined
+          ? String(preset.capacityOverride)
+          : "",
+      v:
+        isMetric && preset.capacityOverride !== undefined
+          ? String(preset.capacityOverride)
+          : "",
       n: String(preset.cavities ?? ""),
     };
   }
@@ -602,7 +681,7 @@ export class PanBakewareConverterPage implements OnInit {
     }
     return this.translate.instant("pages.panBakewareConverter.area.value", {
       area:
-        this.unit === "metric" ? sqInToSqCm(area).toFixed(0) : area.toFixed(1),
+        this.unit === "metric" ? area.toFixed(0) : sqCmToSqIn(area).toFixed(1),
       unit: this.unitLabelSquare(),
     });
   }
@@ -614,19 +693,43 @@ export class PanBakewareConverterPage implements OnInit {
   }
 
   capacityLabelFor(dims: PanDimensions): string {
-    const cups = panCapacityCups(dims);
-    if (cups === null) return "…";
+    const ml = panCapacityMl(dims);
+    if (ml === null) return "…";
+    if (this.unit === "metric") return formatMl(ml);
     return this.translate.instant(
       "pages.panBakewareConverter.capacity.valueWithMl",
       {
-        cups: formatCups(cups),
-        ml: formatMl(cupsToMl(cups)),
+        cups: formatCups(mlToCups(ml)),
+        ml: formatMl(ml),
       },
     );
   }
 
+  private capacityCompactLabel(ml: number): string {
+    if (this.unit === "metric") return formatMl(ml);
+    return this.translate.instant("pages.panBakewareConverter.capacity.value", {
+      cups: formatCups(mlToCups(ml)),
+    });
+  }
+
+  capacityUnitLabel(): string {
+    return this.translate.instant(
+      this.unit === "metric"
+        ? "pages.panBakewareConverter.units.liters"
+        : "pages.panBakewareConverter.units.cups",
+    );
+  }
+
+  cavityUnitLabel(): string {
+    return this.translate.instant(
+      this.unit === "metric"
+        ? "pages.panBakewareConverter.units.ml"
+        : "pages.panBakewareConverter.units.cups",
+    );
+  }
+
   presetCapacityLabel(preset: PanPreset): string {
-    return this.capacityLabelFor(preset);
+    return this.capacityLabelFor(presetToDimensions(preset));
   }
 
   multiplierLabel(): string {
@@ -636,48 +739,65 @@ export class PanBakewareConverterPage implements OnInit {
   }
 
   multiplierBasisLabel(): string {
+    return this.translate.instant(
+      "pages.panBakewareConverter.multiplier.basis",
+    );
+  }
+
+  negligibleScaling(): boolean {
+    const sc = this.scaling;
+    return sc !== null && isNegligibleScaling(sc.multiplier);
+  }
+
+  noScaleExplanation(): string {
     const sc = this.scaling;
     if (!sc) return "";
     return this.translate.instant(
-      sc.basis === "area"
-        ? "pages.panBakewareConverter.multiplier.basisArea"
-        : "pages.panBakewareConverter.multiplier.basisCapacity",
+      "pages.panBakewareConverter.result.noScaleExplain",
+      {
+        multiplier: formatMultiplier(sc.multiplier),
+      },
     );
+  }
+
+  async applyToRecipe() {
+    const sc = this.scaling;
+    if (!sc) return;
+
+    const modal = await this.modalCtrl.create({
+      component: SelectRecipeModalComponent,
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss<RecipeSummary>();
+    if (!data) return;
+
+    this.recipeCompletionTrackerService.setRecipeScale(
+      data.id,
+      formatMultiplier(sc.multiplier),
+    );
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(data.id));
   }
 
   multiplierExplanation(): string {
     const sc = this.scaling;
     if (!sc) return "";
-    const fromArea = sc.fromArea;
-    const toArea = sc.toArea;
-    const fromCap = sc.fromCapacityCups;
-    const toCap = sc.toCapacityCups;
-    if (sc.basis === "area" && fromArea !== null && toArea !== null) {
+    if (this.unit === "metric") {
       return this.translate.instant(
-        "pages.panBakewareConverter.multiplier.explainArea",
+        "pages.panBakewareConverter.multiplier.explainCapacityMetric",
         {
-          toArea:
-            this.unit === "metric"
-              ? sqInToSqCm(toArea).toFixed(0)
-              : toArea.toFixed(1),
-          fromArea:
-            this.unit === "metric"
-              ? sqInToSqCm(fromArea).toFixed(0)
-              : fromArea.toFixed(1),
-          unit: this.unitLabelSquare(),
+          toVolume: formatMl(sc.toCapacityMl),
+          fromVolume: formatMl(sc.fromCapacityMl),
         },
       );
     }
-    if (fromCap !== null && toCap !== null) {
-      return this.translate.instant(
-        "pages.panBakewareConverter.multiplier.explainCapacity",
-        {
-          toCups: formatCups(toCap),
-          fromCups: formatCups(fromCap),
-        },
-      );
-    }
-    return "";
+    return this.translate.instant(
+      "pages.panBakewareConverter.multiplier.explainCapacity",
+      {
+        toCups: formatCups(mlToCups(sc.toCapacityMl)),
+        fromCups: formatCups(mlToCups(sc.fromCapacityMl)),
+      },
+    );
   }
 
   onRecipeTextInput() {
@@ -691,7 +811,7 @@ export class PanBakewareConverterPage implements OnInit {
       this.recipeScaledLines = [];
       return;
     }
-    const scaleStr = String(sc.multiplier);
+    const scaleStr = formatMultiplier(sc.multiplier);
     const parsed = parseIngredients(text, scaleStr);
     this.recipeScaledLines = parsed.map((line) => line.plaintextContent);
   }
@@ -703,7 +823,8 @@ export class PanBakewareConverterPage implements OnInit {
   private recomputeBakeAdvice() {
     const advice = this.bakeTimeAdvice;
     if (!advice) {
-      this.suggestedBakeTime = "";
+      this.suggestedBakeTimeLow = "";
+      this.suggestedBakeTimeHigh = "";
       this.suggestedBakeTempF = "";
       this.suggestedBakeTempC = "";
       return;
@@ -713,22 +834,28 @@ export class PanBakewareConverterPage implements OnInit {
       this.translate.getCurrentLang(),
     );
     if (time !== null && time > 0) {
-      this.suggestedBakeTime = String(
-        Math.round(time * advice.estimatedTimeMultiplier),
-      );
+      const low = Math.max(1, Math.round(time * advice.timeMultiplierLow));
+      const high = Math.max(low, Math.round(time * advice.timeMultiplierHigh));
+      this.suggestedBakeTimeLow = String(low);
+      this.suggestedBakeTimeHigh = String(high);
     } else {
-      this.suggestedBakeTime = "";
+      this.suggestedBakeTimeLow = "";
+      this.suggestedBakeTimeHigh = "";
     }
     const tempIn = parseQuantity(
       this.originalBakeTemp,
       this.translate.getCurrentLang(),
     );
     if (tempIn !== null && tempIn > 0) {
-      const inputF =
-        this.unit === "metric" ? celsiusToFahrenheit(tempIn) : tempIn;
-      const newF = inputF + advice.suggestedTempDeltaF;
-      this.suggestedBakeTempF = String(Math.round(newF));
-      this.suggestedBakeTempC = String(Math.round(fahrenheitToCelsius(newF)));
+      if (this.unit === "metric") {
+        const newC = tempIn + advice.suggestedTempDeltaC;
+        this.suggestedBakeTempC = String(Math.round(newC));
+        this.suggestedBakeTempF = String(Math.round(celsiusToFahrenheit(newC)));
+      } else {
+        const newF = tempIn + advice.suggestedTempDeltaF;
+        this.suggestedBakeTempF = String(Math.round(newF));
+        this.suggestedBakeTempC = String(Math.round(fahrenheitToCelsius(newF)));
+      }
     } else {
       this.suggestedBakeTempF = "";
       this.suggestedBakeTempC = "";
@@ -751,6 +878,11 @@ export class PanBakewareConverterPage implements OnInit {
     );
   }
 
+  bakeTempChanges(): boolean {
+    const advice = this.bakeTimeAdvice;
+    return advice !== null && advice.suggestedTempDeltaF !== 0;
+  }
+
   bakeDirectionLabel(): string {
     const advice = this.bakeTimeAdvice;
     if (!advice) return "";
@@ -760,9 +892,26 @@ export class PanBakewareConverterPage implements OnInit {
   bakeDirectionDetail(): string {
     const advice = this.bakeTimeAdvice;
     if (!advice) return "";
-    return this.translate.instant(
-      BAKE_DETAIL_KEYS[advice.direction][this.unit],
-    );
+    return this.translate.instant(BAKE_DETAIL_KEYS[advice.direction]);
+  }
+
+  donenessDetail(): string {
+    return this.translate.instant(DONENESS_KEY[this.batterType]);
+  }
+
+  batterTypeLabel(type: BatterType): string {
+    return this.translate.instant(BATTER_TYPE_LABEL_KEY[type]);
+  }
+
+  onBatterTypeChange(type: BatterType) {
+    this.batterType = type;
+  }
+
+  onBatterTypeKey(event: KeyboardEvent, type: BatterType) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.onBatterTypeChange(type);
+    }
   }
 
   bakeDirectionColor(): string {
@@ -775,6 +924,7 @@ export class PanBakewareConverterPage implements OnInit {
 
   applySubstitution(option: SubstitutionOption) {
     this.selectPreset("to", option.preset.key);
+    this.content?.scrollToTop(300);
   }
 
   async copyMultiplier() {
@@ -798,55 +948,6 @@ export class PanBakewareConverterPage implements OnInit {
   isFlatPan(slot: PanSlot): boolean {
     const dims = this.dimensionsFor(slot);
     return dims !== null && isFlatBottom(dims.shape);
-  }
-
-  fromVizPx(): { width: number; height: number; isRound: boolean } | null {
-    return this.vizPx("from");
-  }
-
-  toVizPx(): { width: number; height: number; isRound: boolean } | null {
-    return this.vizPx("to");
-  }
-
-  private vizPx(
-    slot: PanSlot,
-  ): { width: number; height: number; isRound: boolean } | null {
-    const dims = this.dimensionsFor(slot);
-    if (!dims) return null;
-    const fromDims = this.fromDimensions;
-    const toDims = this.toDimensions;
-    if (!fromDims || !toDims) return null;
-    const longestSide = (d: PanDimensions): number => {
-      if (d.shape === "round" || d.shape === "springform") {
-        return d.diameterIn ?? 0;
-      }
-      return Math.max(d.lengthIn ?? 0, d.widthIn ?? 0);
-    };
-    const maxSide = Math.max(longestSide(fromDims), longestSide(toDims), 1);
-    const MAX_PX = 120;
-    const scale = MAX_PX / maxSide;
-
-    const isRound = dims.shape === "round" || dims.shape === "springform";
-    if (isRound) {
-      const d = (dims.diameterIn ?? 0) * scale;
-      return { width: d, height: d, isRound: true };
-    }
-    if (dims.shape === "square") {
-      const s = (dims.lengthIn ?? 0) * scale;
-      return { width: s, height: s, isRound: false };
-    }
-    if (
-      dims.shape === "rectangular" ||
-      dims.shape === "loaf" ||
-      dims.shape === "sheet"
-    ) {
-      return {
-        width: (dims.lengthIn ?? 0) * scale,
-        height: (dims.widthIn ?? 0) * scale,
-        isRound: false,
-      };
-    }
-    return null;
   }
 
   private recomputeAll() {

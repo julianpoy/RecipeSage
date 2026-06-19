@@ -22,6 +22,12 @@ try {
 // Without support: Fallback splits on all newlines (breaks line continuations but works on older browsers)
 const lineSplitRegex = supportsNegativeLookahead ? /(?<!\\)\r?\n/ : /\r?\n/;
 
+export const stripBlankLines = (text: string): string =>
+  text
+    .split(lineSplitRegex)
+    .filter((line) => line.trim().length > 0)
+    .join("\n");
+
 const fractionMatchers = {
   // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, " 1/2"], // ½  \u00BD;

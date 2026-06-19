@@ -26,7 +26,7 @@
   }
 
   @if (profile) {
-    <div>
+    <div class="page-wrapper">
       <br />
       @if (isSelfHost) {
         <selfhost-warning-item></selfhost-warning-item>
@@ -139,61 +139,65 @@
   <ion-footer>
     @if (isLoggedIn()) {
       <ion-toolbar class="ion-padding-horizontal">
-        @if (myProfile?.enableProfile) {
-          <div class="action-button-container">
-            @if (!profile.incomingFriendship && !profile.outgoingFriendship) {
-              <ion-button expand="block" (click)="addFriend()">
-                {{ "pages.profile.send" | translate }}
+        <div class="page-wrapper">
+          @if (myProfile?.enableProfile) {
+            <div class="action-button-container">
+              @if (!profile.incomingFriendship && !profile.outgoingFriendship) {
+                <ion-button expand="block" (click)="addFriend()">
+                  {{ "pages.profile.send" | translate }}
+                </ion-button>
+              }
+              @if (!profile.incomingFriendship && profile.outgoingFriendship) {
+                <ion-button
+                  expand="block"
+                  (click)="deleteFriend()"
+                  color="danger"
+                >
+                  {{ "pages.profile.cancel" | translate }}
+                </ion-button>
+              }
+              @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+                <ion-button expand="block" (click)="addFriend()">
+                  {{ "pages.profile.accept" | translate }}
+                </ion-button>
+              }
+              @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+                <ion-button
+                  expand="block"
+                  (click)="deleteFriend()"
+                  color="danger"
+                >
+                  {{ "pages.profile.decline" | translate }}
+                </ion-button>
+              }
+              @if (profile.incomingFriendship && profile.outgoingFriendship) {
+                <ion-button
+                  expand="block"
+                  (click)="deleteFriend()"
+                  color="danger"
+                >
+                  {{ "pages.profile.unfriend" | translate }}
+                </ion-button>
+              }
+            </div>
+          }
+          @if (!myProfile?.enableProfile) {
+            <div class="action-button-container">
+              <ion-button expand="block" (click)="setupMyProfile()">
+                {{ "pages.profile.setup" | translate }}
               </ion-button>
-            }
-            @if (!profile.incomingFriendship && profile.outgoingFriendship) {
-              <ion-button
-                expand="block"
-                (click)="deleteFriend()"
-                color="danger"
-              >
-                {{ "pages.profile.cancel" | translate }}
-              </ion-button>
-            }
-            @if (profile.incomingFriendship && !profile.outgoingFriendship) {
-              <ion-button expand="block" (click)="addFriend()">
-                {{ "pages.profile.accept" | translate }}
-              </ion-button>
-            }
-            @if (profile.incomingFriendship && !profile.outgoingFriendship) {
-              <ion-button
-                expand="block"
-                (click)="deleteFriend()"
-                color="danger"
-              >
-                {{ "pages.profile.decline" | translate }}
-              </ion-button>
-            }
-            @if (profile.incomingFriendship && profile.outgoingFriendship) {
-              <ion-button
-                expand="block"
-                (click)="deleteFriend()"
-                color="danger"
-              >
-                {{ "pages.profile.unfriend" | translate }}
-              </ion-button>
-            }
-          </div>
-        }
-        @if (!myProfile?.enableProfile) {
-          <div class="action-button-container">
-            <ion-button expand="block" (click)="setupMyProfile()">
-              {{ "pages.profile.setup" | translate }}
-            </ion-button>
-          </div>
-        }
+            </div>
+          }
+        </div>
       </ion-toolbar>
     }
     @if (!isLoggedIn()) {
       <ion-toolbar class="ion-padding-horizontal">
-        <ion-button expand="block" (click)="authAndAddFriend()">
-          {{ "pages.profile.login" | translate }}
-        </ion-button>
+        <div class="page-wrapper">
+          <ion-button expand="block" (click)="authAndAddFriend()">
+            {{ "pages.profile.login" | translate }}
+          </ion-button>
+        </div>
       </ion-toolbar>
     }
   </ion-footer>

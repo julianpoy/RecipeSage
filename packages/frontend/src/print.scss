@@ -1,0 +1,77 @@
+@media print {
+  ngx-loading-bar,
+  ion-menu,
+  ion-header,
+  ion-footer,
+  cooking-toolbar,
+  ion-fab,
+  ion-modal,
+  ion-popover,
+  ion-toast,
+  ion-loading,
+  ion-alert,
+  ion-action-sheet,
+  ion-picker {
+    display: none !important;
+  }
+
+  :root {
+    --ion-background-color: #ffffff !important;
+    --ion-background-color-rgb: 255, 255, 255 !important;
+    --ion-text-color: #000000 !important;
+    --ion-text-color-rgb: 0, 0, 0 !important;
+    --ion-item-background: #ffffff !important;
+    --ion-card-background: #ffffff !important;
+    --ion-toolbar-background: #ffffff !important;
+    --ion-border-color: rgba(0, 0, 0, 0.13) !important;
+    --ion-color-step-50: #f4f4f4 !important;
+    --ion-color-step-100: #e9e9ea !important;
+    --ion-color-step-150: #dededf !important;
+    --ion-color-step-200: #d3d3d4 !important;
+    --ion-color-step-250: #c8c8c9 !important;
+    --ion-color-step-300: #bdbdbf !important;
+    --ion-color-step-350: #b2b2b4 !important;
+    --ion-color-step-400: #a7a7a9 !important;
+    --ion-color-step-450: #9c9c9e !important;
+    --ion-color-step-500: #919294 !important;
+    --ion-color-step-550: #858789 !important;
+    --ion-color-step-600: #7a7c7e !important;
+    --ion-color-step-650: #6f7173 !important;
+    --ion-color-step-700: #646669 !important;
+    --ion-color-step-750: #595b5e !important;
+    --ion-color-step-800: #4e5053 !important;
+    --ion-color-step-850: #434548 !important;
+    --ion-color-step-900: #383a3d !important;
+    --ion-color-step-950: #2d2f33 !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  html,
+  body,
+  ion-app,
+  ion-split-pane,
+  ion-router-outlet,
+  .ion-page,
+  ion-content {
+    contain: none !important;
+    overflow: visible !important;
+    position: static !important;
+    height: auto !important;
+  }
+
+  ion-content::part(scroll) {
+    contain: none !important;
+    overflow: visible !important;
+    position: static !important;
+    height: auto !important;
+  }
+
+  .ion-page-hidden {
+    display: none !important;
+  }
+}

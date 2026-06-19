@@ -14,6 +14,7 @@ export enum QuickTutorialOptions {
   MultipleLabelSelection = "multipleLabelSelection",
   SplitPaneView = "splitPaneView",
   PinnedRecipes = "pinnedRecipes",
+  NativePrintView = "nativePrintView",
 }
 
 type QuickTutorialBlurbs = {
@@ -36,6 +37,10 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
   [QuickTutorialOptions.PinnedRecipes]: {
     header: "services.quickTutorial.pinnedRecipes.header",
     message: "services.quickTutorial.pinnedRecipes.message",
+  },
+  [QuickTutorialOptions.NativePrintView]: {
+    header: "services.quickTutorial.nativePrintView.header",
+    message: "services.quickTutorial.nativePrintView.message",
   },
 };
 

@@ -197,6 +197,14 @@ export const appRoutes: Routes = [
     title: "pages.recipeDetails.tabTitle",
   },
   {
+    path: RouteMap.RecipePageCook.path,
+    loadComponent: () =>
+      import("./pages/recipe-components/cook/cook.page").then(
+        (m) => m.CookPage,
+      ),
+    title: "pages.cook.tabTitle",
+  },
+  {
     path: RouteMap.SettingsPage.path,
     loadComponent: () =>
       import("./pages/settings-components/settings/settings.page").then(

@@ -28,7 +28,10 @@ import { UnsavedChangesService } from "../../../services/unsaved-changes.service
 import { CapabilitiesService } from "../../../services/capabilities.service";
 import { ImageService } from "../../../services/image.service";
 import { PreferencesService } from "../../../services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
+import {
+  RecipeDetailsPreferenceKey,
+  decodeBasicHtmlEntities,
+} from "@recipesage/util/shared";
 import { getQueryParam } from "../../../utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
@@ -53,6 +56,9 @@ import { MultiImageUploadComponent } from "../../../components/multi-image-uploa
 import { MlService } from "../../../services/ml.service";
 import { Capacitor } from "@capacitor/core";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import { RecipeFormatToolbarComponent } from "../../../components/recipe-format-toolbar/recipe-format-toolbar.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import {
   IonHeader,
   IonToolbar,
@@ -66,8 +72,6 @@ import {
   IonList,
   IonItem,
   IonModal,
-  IonInput,
-  IonTextarea,
   IonAccordionGroup,
   IonAccordion,
   IonLabel,
@@ -96,6 +100,9 @@ import { addIcons } from "ionicons";
     RatingComponent,
     MultiImageUploadComponent,
     SelectRecipeComponent,
+    RecipeFormatToolbarComponent,
+    TextInputComponent,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -108,8 +115,6 @@ import { addIcons } from "ionicons";
     IonList,
     IonItem,
     IonModal,
-    IonInput,
-    IonTextarea,
     IonAccordionGroup,
     IonAccordion,
     IonLabel,
@@ -244,7 +249,12 @@ export class EditRecipePage {
 
       if (response) {
         this.fullRecipe = response;
-        this.recipe = response;
+        this.recipe = {
+          ...response,
+          ingredients: decodeBasicHtmlEntities(response.ingredients),
+          instructions: decodeBasicHtmlEntities(response.instructions),
+          notes: decodeBasicHtmlEntities(response.notes),
+        };
         this.images = response.recipeImages
           .sort((a, b) => a.order - b.order)
           .map((el) => el.image);
@@ -1466,43 +1476,18 @@ export class EditRecipePage {
     loading.dismiss();
   }
 
-  async addImageByUrlPrompt() {
-    const header = await this.translate
-      .get("pages.editRecipe.addImage.header")
-      .toPromise();
-    const message = await this.translate
-      .get("pages.editRecipe.addImage.message")
-      .toPromise();
-    const placeholder = await this.translate
-      .get("pages.editRecipe.addImage.placeholder")
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const confirm = await this.translate.get("generic.confirm").toPromise();
+  isAddImageByUrlModalOpen = false;
+  addImageByUrlInput = "";
 
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      inputs: [
-        {
-          name: "imageUrl",
-          placeholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          handler: () => {},
-        },
-        {
-          text: confirm,
-          handler: (data) => {
-            if (data.imageUrl) this._addImageByUrlPrompt(data.imageUrl);
-          },
-        },
-      ],
-    });
+  addImageByUrlPrompt() {
+    this.addImageByUrlInput = "";
+    this.isAddImageByUrlModalOpen = true;
+  }
 
-    await alert.present();
+  submitAddImageByUrl() {
+    const imageUrl = this.addImageByUrlInput;
+    this.isAddImageByUrlModalOpen = false;
+    if (imageUrl) this._addImageByUrlPrompt(imageUrl);
   }
 
   async _addImageByUrlPrompt(imageUrl: string) {

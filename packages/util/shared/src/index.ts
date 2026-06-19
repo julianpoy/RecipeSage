@@ -9,6 +9,7 @@ export * from "./units";
 export * from "./measurementConversion";
 export * from "./getShoppingListItemGroupings";
 export * from "./cleanLabelTitle";
+export * from "./decodeBasicHtmlEntities";
 export * from "./preferences";
 export * from "./JOB_RESULT_CODES";
 export * from "./ImmediateDebouncer";

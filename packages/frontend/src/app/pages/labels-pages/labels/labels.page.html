@@ -49,6 +49,33 @@
     }
 
     @if (!loading) {
+      <ion-searchbar
+        [(ngModel)]="searchText"
+        (ionInput)="onSearchInput()"
+        [placeholder]="'pages.labels.searchPlaceholder' | translate"
+        debounce="100"
+      ></ion-searchbar>
+    }
+
+    @if (
+      !loading &&
+      searchText &&
+      !filteredLabels.length &&
+      !filteredLabelGroups.length
+    ) {
+      <null-state>
+        <ion-icon
+          name="pricetag"
+          class="big-icon"
+          virtualSlot="header"
+        ></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.labels.noResults" | translate }}</p>
+        </ion-label>
+      </null-state>
+    }
+
+    @if (!loading && (!searchText || filteredLabels.length)) {
       <ion-list>
         <ion-item>
           <ion-label>
@@ -81,7 +108,7 @@
             </ion-label>
           </null-state>
         }
-        @for (label of labels; track labelTrackBy($index, label)) {
+        @for (label of filteredLabels; track labelTrackBy($index, label)) {
           <ion-item
             (click)="selectionMode ? selectLabel(label) : manageLabel(label)"
             button
@@ -137,7 +164,7 @@
         }
       </ion-list>
     }
-    @if (!loading) {
+    @if (!loading && (!searchText || filteredLabelGroups.length)) {
       <ion-list>
         <ion-item>
           <ion-label>
@@ -166,7 +193,7 @@
           </null-state>
         }
         @for (
-          labelGroup of labelGroups;
+          labelGroup of filteredLabelGroups;
           track labelGroupTrackBy($index, labelGroup)
         ) {
           <ion-item
@@ -208,11 +235,10 @@
     <br />
     <br />
     <br />
-
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="new()" color="primary">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
   </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="new()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

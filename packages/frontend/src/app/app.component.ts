@@ -38,6 +38,7 @@ import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
+import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DebugStoreService } from "./services/debugStore.service";
 import {
   IonApp,
@@ -128,10 +129,12 @@ export class AppComponent {
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
+  private nativePrintTutorialService = inject(NativePrintTutorialService);
   debugStoreService = inject(DebugStoreService);
 
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
+  inCookMode = false;
 
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
   enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
@@ -565,6 +568,8 @@ export class AppComponent {
 
       this.updateIsLoggedIn();
       this.updateNavList();
+
+      this.inCookMode = event.url.split("?")[0].endsWith("/cook");
 
       this.checkBrowserCompatibility();
 

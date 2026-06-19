@@ -6,7 +6,7 @@ export enum SessionType {
   User = "user",
 }
 
-const SESSION_VALIDITY_LENGTH_DAYS = 30;
+const SESSION_VALIDITY_LENGTH_DAYS = 60;
 
 /*
  * Creates a session in the DB

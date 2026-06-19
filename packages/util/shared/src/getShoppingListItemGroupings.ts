@@ -1,22 +1,43 @@
 import type { ShoppingListItemSummary } from "@recipesage/prisma";
 import { ShoppingListSortOptions } from "./preferences";
+import { getTitleForIngredient } from "./parsers";
 
 interface SortableItem {
   title: string;
   createdAt: string | Date;
 }
 
+const getSortTitle = (title: string): string => {
+  const parsed = getTitleForIngredient(title).trim();
+  return parsed.length > 0 ? parsed : title;
+};
+
+type SortTitleResolver = (title: string) => string;
+
+const createSortTitleResolver = (): SortTitleResolver => {
+  const cache = new Map<string, string>();
+  return (title) => {
+    let resolved = cache.get(title);
+    if (resolved === undefined) {
+      resolved = getSortTitle(title);
+      cache.set(title, resolved);
+    }
+    return resolved;
+  };
+};
+
 const itemSort = (
   a: SortableItem,
   b: SortableItem,
   sortBy: ShoppingListSortOptions,
+  getSortKey: SortTitleResolver,
 ): number => {
   switch (sortBy) {
     case "createdAt": {
       const dateComp =
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       if (dateComp === 0) {
-        return a.title.localeCompare(b.title);
+        return getSortKey(a.title).localeCompare(getSortKey(b.title));
       }
       return dateComp;
     }
@@ -24,13 +45,13 @@ const itemSort = (
       const reverseDateComp =
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       if (reverseDateComp === 0) {
-        return a.title.localeCompare(b.title);
+        return getSortKey(a.title).localeCompare(getSortKey(b.title));
       }
       return reverseDateComp;
     }
     case "-title":
     default: {
-      const localeComp = a.title.localeCompare(b.title);
+      const localeComp = getSortKey(a.title).localeCompare(getSortKey(b.title));
       if (localeComp === 0) {
         return (
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -49,6 +70,8 @@ const groupAndSort = <T extends SortableItem>(
   keyName: keyof T,
   sortBy: ShoppingListSortOptions,
 ): { [key: string]: T[] } => {
+  const getSortKey = createSortTitleResolver();
+
   const itemsGroupedByKey = items.reduce(
     (acc, item) => {
       const key = item[keyName] as string;
@@ -64,7 +87,7 @@ const groupAndSort = <T extends SortableItem>(
   const groupedAndSorted = entries.reduce(
     (acc, [key, items]) => {
       acc[key] = items.sort((a, b) => {
-        return itemSort(a, b, sortBy);
+        return itemSort(a, b, sortBy, getSortKey);
       });
       return acc;
     },
@@ -97,15 +120,17 @@ export const getShoppingListItemGroupings = (
   itemsByCategoryTitle: { [key: string]: ShoppingListItemSummary[] };
   groupsByCategoryTitle: ShoppingListItemSummariesByGroupAndCategory;
 } => {
+  const getSortKey = createSortTitleResolver();
+
   const sortedItems = items.sort((a, b) => {
-    return itemSort(a, b, sortBy);
+    return itemSort(a, b, sortBy, getSortKey);
   });
 
   const groupTitles = Array.from(
     new Set<string>(items.map((item) => item.groupTitle)),
   ).sort((a, b) => {
-    // Sort groups by title (always)
-    return a.localeCompare(b);
+    // Sort groups by title (always), ignoring measurement/unit where possible
+    return getSortKey(a).localeCompare(getSortKey(b));
   });
 
   const categoryOrderSet = new Set(categoryOrder?.toLowerCase().split("\n"));

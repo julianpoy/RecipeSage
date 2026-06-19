@@ -54,39 +54,31 @@
 @if (type === "label") {
   <ion-content class="ion-padding">
     <br />
-    <ion-item lines="none">
-      <ion-input
-        labelPlacement="stacked"
-        label="{{ 'pages.newLabelItemModal.labelTitleInput' | translate }}"
-        placeholder="{{
-          'pages.newLabelItemModal.labelTitleInputPlaceholder' | translate
-        }}"
-        helperText="{{
-          'pages.newLabelItemModal.labelTitleInputHint' | translate
-        }}"
-        (ionInput)="title = $event.detail.value || ''"
-        [value]="title"
-      ></ion-input>
-    </ion-item>
+    <text-input
+      label="{{ 'pages.newLabelItemModal.labelTitleInput' | translate }}"
+      placeholder="{{
+        'pages.newLabelItemModal.labelTitleInputPlaceholder' | translate
+      }}"
+      helperText="{{
+        'pages.newLabelItemModal.labelTitleInputHint' | translate
+      }}"
+      [(ngModel)]="title"
+    ></text-input>
   </ion-content>
 }
 @if (type === "group") {
   <ion-content class="ion-padding">
     <br />
-    <ion-item lines="none">
-      <ion-input
-        labelPlacement="stacked"
-        label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
-        placeholder="{{
-          'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate
-        }}"
-        helperText="{{
-          'pages.manageLabelGroupModal.groupTitleHint' | translate
-        }}"
-        (ionInput)="title = $event.detail.value || ''"
-        [value]="title"
-      ></ion-input>
-    </ion-item>
+    <text-input
+      label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
+      placeholder="{{
+        'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate
+      }}"
+      helperText="{{
+        'pages.manageLabelGroupModal.groupTitleHint' | translate
+      }}"
+      [(ngModel)]="title"
+    ></text-input>
     <br />
     <br />
     <ion-item lines="none">

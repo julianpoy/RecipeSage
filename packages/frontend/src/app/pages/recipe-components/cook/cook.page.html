@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-button (click)="exitCookMode()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title dir="auto">{{ recipe?.title }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="changeScale()">
+        {{ "pages.recipeDetails.scaleStatus" | translate: { scale: scale } }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (loading) {
+    <null-state>
+      <ion-spinner virtualSlot="header"></ion-spinner>
+      <ion-label virtualSlot="body">
+        <p>{{ "pages.cook.loading" | translate }}</p>
+      </ion-label>
+    </null-state>
+  }
+  @if (recipe) {
+    <div class="cook-wrapper">
+      <div class="ingredients-instructions">
+        <section class="ingredients">
+          <h2 class="section-title">
+            {{ "pages.recipeDetails.ingredients" | translate }}
+          </h2>
+          @for (
+            ingredient of ingredients;
+            track ingredient;
+            let ingredientIdx = $index
+          ) {
+            <p
+              [innerHTML]="ingredient.htmlContent"
+              dir="auto"
+              class="ingredient"
+              [ngClass]="{
+                ingredientContent: !ingredient.isHeader,
+                complete: getIngredientComplete(ingredientIdx),
+              }"
+              (click)="ingredientClicked($event, ingredient, ingredientIdx)"
+            ></p>
+          }
+          @if (!ingredients || ingredients.length === 0) {
+            <p>{{ "pages.recipeDetails.noIngredients" | translate }}</p>
+          }
+        </section>
+
+        <section class="instructions">
+          <h2 class="section-title">
+            {{ "pages.recipeDetails.instructions" | translate }}
+          </h2>
+          @for (
+            instruction of instructions;
+            track instruction;
+            let instructionIdx = $index
+          ) {
+            <p class="instruction" dir="auto">
+              @if (instruction.isHeader) {
+                <span
+                  class="sectionHeader"
+                  [innerHTML]="instruction.htmlContent"
+                  dir="auto"
+                ></span>
+              }
+              @if (!instruction.isHeader) {
+                <span
+                  (click)="
+                    instructionClicked($event, instruction, instructionIdx)
+                  "
+                  [ngClass]="{
+                    complete: getInstructionComplete(instructionIdx),
+                  }"
+                  dir="auto"
+                >
+                  <b>{{ instruction.count }} &nbsp;</b>
+                  <span
+                    class="instructionContent"
+                    [innerHTML]="instruction.htmlContent"
+                    dir="auto"
+                  ></span>
+                </span>
+              }
+            </p>
+          }
+          @if (!instructions || instructions.length === 0) {
+            <p>{{ "pages.recipeDetails.noInstructions" | translate }}</p>
+          }
+        </section>
+      </div>
+
+      @if (notes && notes.length > 0) {
+        <section class="notes">
+          <h2 class="section-title">
+            {{ "pages.recipeDetails.notes" | translate }}
+          </h2>
+          @for (note of notes; track note) {
+            @if (note.isTable) {
+              <div [innerHTML]="note.htmlContent" dir="auto"></div>
+            } @else {
+              <p
+                dir="auto"
+                [innerHTML]="note.htmlContent"
+                [ngClass]="{ header: note.isHeader }"
+              ></p>
+            }
+          }
+        </section>
+      }
+    </div>
+  }
+</ion-content>

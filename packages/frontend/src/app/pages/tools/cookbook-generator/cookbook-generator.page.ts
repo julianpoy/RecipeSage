@@ -26,8 +26,6 @@ import {
   IonListHeader,
   IonItem,
   IonLabel,
-  IonInput,
-  IonTextarea,
   IonToggle,
   IonReorderGroup,
   IonReorder,
@@ -36,6 +34,8 @@ import {
   IonSpinner,
   IonText,
 } from "@ionic/angular/standalone";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 
 const MAX_RECIPES = 1000;
 const RECIPE_PAGE_SIZE = 200;
@@ -52,6 +52,8 @@ interface CookbookRecipe {
   styleUrls: ["cookbook-generator.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextInputComponent,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -62,8 +64,6 @@ interface CookbookRecipe {
     IonListHeader,
     IonItem,
     IonLabel,
-    IonInput,
-    IonTextarea,
     IonToggle,
     IonReorderGroup,
     IonReorder,

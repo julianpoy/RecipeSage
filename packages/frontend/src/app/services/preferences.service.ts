@@ -2,6 +2,7 @@ import { Injectable, Injector, inject } from "@angular/core";
 import {
   AppPreferenceTypes,
   AppTheme,
+  CookModePreferenceKey,
   GlobalPreferenceKey,
   ManageLabelsPreferenceKey,
   MealPlanPreferenceKey,
@@ -18,6 +19,8 @@ import {
   ShoppingListSortOptions,
   StartPageOptions,
   SupportedFontSize,
+  VOLUME_UNITS_COMMON,
+  WEIGHT_UNITS_COMMON,
 } from "@recipesage/util/shared";
 import { ServerActionsService } from "./server-actions.service";
 import { UtilService } from "./util.service";
@@ -63,9 +66,14 @@ export class PreferencesService {
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: false,
 
+    [CookModePreferenceKey.FontSize]: SupportedFontSize.PX20,
+
     [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 
-    [MeasurementConverterPreferenceKey.ShowFractions]: true,
+    [MeasurementConverterPreferenceKey.EnabledUnits]: [
+      ...VOLUME_UNITS_COMMON,
+      ...WEIGHT_UNITS_COMMON,
+    ],
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,

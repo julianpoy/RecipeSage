@@ -993,13 +993,10 @@ export const COUNT_ITEMS: CountItem[] = [
   { key: "appleMedium", gramsPerUnit: 182, varies: true },
   { key: "avocadoMedium", gramsPerUnit: 150, varies: true },
   { key: "bananaMedium", gramsPerUnit: 118, varies: true },
-  { key: "bellPepperMedium", gramsPerUnit: 119, varies: true },
   { key: "breadSlice", gramsPerUnit: 33, varies: true },
   { key: "carrotMedium", gramsPerUnit: 61, varies: true },
   { key: "lemonMedium", gramsPerUnit: 58, varies: true },
   { key: "limeMedium", gramsPerUnit: 67, varies: true },
   { key: "onionMedium", gramsPerUnit: 110, varies: true },
-  { key: "potatoMedium", gramsPerUnit: 213, varies: true },
-  { key: "tomatoMedium", gramsPerUnit: 123, varies: true },
   { key: "zucchiniMedium", gramsPerUnit: 196, varies: true },
 ];

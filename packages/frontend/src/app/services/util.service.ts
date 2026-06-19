@@ -156,6 +156,12 @@ export const RouteMap = {
     },
     path: "recipe/:recipeId",
   },
+  RecipePageCook: {
+    getPath(recipeId: string) {
+      return `/recipe/${recipeId}/cook`;
+    },
+    path: "recipe/:recipeId/cook",
+  },
   SettingsPage: {
     getPath() {
       return `/settings`;

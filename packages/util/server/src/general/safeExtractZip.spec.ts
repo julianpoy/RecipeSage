@@ -9,6 +9,7 @@ import {
   safeExtractZip,
   ZipMalformedError,
   ZipTooLargeError,
+  ZipTooManyEntriesError,
 } from "./safeExtractZip";
 
 const buildZip = async (
@@ -121,7 +122,7 @@ describe("safeExtractZip", () => {
   });
 
   describe("size and count limits", () => {
-    it("throws ZipTooLargeError when entry count exceeds maxEntryCount", async () => {
+    it("throws ZipTooManyEntriesError when entry count exceeds maxEntryCount", async () => {
       const zipPath = join(workDir, "many.zip");
       await buildZip(zipPath, [
         { name: "a.txt", content: "a" },
@@ -131,7 +132,7 @@ describe("safeExtractZip", () => {
 
       await expect(
         safeExtractZip(zipPath, extractDir, { maxEntryCount: 2 }),
-      ).rejects.toBeInstanceOf(ZipTooLargeError);
+      ).rejects.toBeInstanceOf(ZipTooManyEntriesError);
     });
 
     it("throws ZipTooLargeError when a single entry exceeds maxEntryUncompressedSize", async () => {

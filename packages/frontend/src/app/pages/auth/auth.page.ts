@@ -24,6 +24,7 @@ import { SignInWithGoogleComponent } from "../../components/sign-in-with-google/
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
 import { WebsocketService } from "../../services/websocket.service";
+import { TextInputComponent } from "../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -34,8 +35,6 @@ import {
   IonTitle,
   IonContent,
   IonList,
-  IonItem,
-  IonInput,
 } from "@ionic/angular/standalone";
 import { close, eye, eyeOff } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -51,6 +50,7 @@ import { addIcons } from "ionicons";
     SignInWithGoogleComponent,
     LogoIconComponent,
     TosClickwrapAgreementComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -60,8 +60,6 @@ import { addIcons } from "ionicons";
     IonTitle,
     IonContent,
     IonList,
-    IonItem,
-    IonInput,
   ],
 })
 export class AuthPage {

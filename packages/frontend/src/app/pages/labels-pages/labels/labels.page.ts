@@ -29,6 +29,7 @@ import {
   IonIcon,
   IonTitle,
   IonContent,
+  IonSearchbar,
   IonList,
   IonItem,
   IonLabel,
@@ -65,6 +66,7 @@ import { addIcons } from "ionicons";
     IonIcon,
     IonTitle,
     IonContent,
+    IonSearchbar,
     IonList,
     IonItem,
     IonLabel,
@@ -104,6 +106,10 @@ export class LabelsPage {
   labels: LabelSummary[] = [];
   labelGroups: LabelGroupSummary[] = [];
 
+  searchText = "";
+  filteredLabels: LabelSummary[] = [];
+  filteredLabelGroups: LabelGroupSummary[] = [];
+
   loading = true;
   selectedLabelIds: string[] = [];
   selectionMode = false;
@@ -129,6 +135,29 @@ export class LabelsPage {
     this.labels = labelsResponse.sort((a, b) => a.title.localeCompare(b.title));
     this.labelGroups = labelGroupsResponse.sort((a, b) =>
       a.title.localeCompare(b.title),
+    );
+
+    this.applyFilter();
+  }
+
+  onSearchInput() {
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    const term = this.searchText.trim().toLowerCase();
+
+    if (!term) {
+      this.filteredLabels = this.labels;
+      this.filteredLabelGroups = this.labelGroups;
+      return;
+    }
+
+    this.filteredLabels = this.labels.filter((label) =>
+      label.title.toLowerCase().includes(term),
+    );
+    this.filteredLabelGroups = this.labelGroups.filter((labelGroup) =>
+      labelGroup.title.toLowerCase().includes(term),
     );
   }
 

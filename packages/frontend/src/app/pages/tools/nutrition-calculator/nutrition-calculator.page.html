@@ -288,21 +288,16 @@
             }
           </p>
           @if (displayMode === "perServing") {
-            <ion-input
+            <text-input
               class="divide-among"
-              type="number"
               inputmode="decimal"
-              step="any"
-              min="0"
-              fill="outline"
-              labelPlacement="stacked"
               [(ngModel)]="divideAmong"
-              (ionInput)="onDivideAmongInput()"
-              (ionBlur)="clampDivideAmong()"
+              (ngModelChange)="onDivideAmongInput()"
+              (focusout)="clampDivideAmong()"
               label="{{
                 'pages.nutritionCalculator.facts.divideAmong' | translate
               }}"
-            ></ion-input>
+            ></text-input>
             <p class="nutrition-facts-subtitle">
               {{
                 "pages.nutritionCalculator.facts.perServingBasis"

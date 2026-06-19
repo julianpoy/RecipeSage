@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.format-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.format-buttons {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow-x: auto;
+}
+
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  margin: 0;
+  color: var(--ion-text-color);
+}
+
+.icon {
+  width: 15.4px;
+  height: 15.4px;
+  font-size: 15.4px;
+}
+
+.format-help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-inline-start: auto;
+  flex-shrink: 0;
+  color: var(--ion-text-color);
+
+  ion-icon {
+    width: 17.6px;
+    height: 17.6px;
+    font-size: 17.6px;
+  }
+}

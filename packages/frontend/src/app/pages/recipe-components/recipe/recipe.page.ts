@@ -22,6 +22,7 @@ import { CookingToolbarService } from "../../../services/cooking-toolbar.service
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { WakeLockService } from "../../../services/wakelock.service";
+import { FullscreenService } from "../../../services/fullscreen.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
@@ -120,6 +121,7 @@ export class RecipePage {
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private wakeLockService = inject(WakeLockService);
+  private fullscreenService = inject(FullscreenService);
   private recipeCompletionTrackerService = inject(
     RecipeCompletionTrackerService,
   );
@@ -312,6 +314,23 @@ export class RecipePage {
       .sort((a, b) => a.label.title.localeCompare(b.label.title));
   }
 
+  get isOwner() {
+    return !!this.recipe && this.recipe.userId === this.me()?.id;
+  }
+
+  openLabel(labelTitle: string) {
+    if (!this.isOwner) return;
+
+    this.navCtrl.navigateForward(
+      RouteMap.HomePage.getPath("main", { selectedLabels: [labelTitle] }),
+      {
+        state: {
+          showBack: true,
+        },
+      },
+    );
+  }
+
   async _loadSimilarRecipes() {
     if (!this.isLoggedIn) return;
 
@@ -359,6 +378,8 @@ export class RecipePage {
             RecipeDetailsPreferenceKey.EnableWakeLock
           ];
         return wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
+      case "enterCookMode":
+        return this.enterCookMode();
       case "addToShoppingList":
         return this.addRecipeToShoppingList();
       case "addToMealPlan":
@@ -778,6 +799,13 @@ export class RecipePage {
 
   openRecipe(recipeId: string, event?: MouseEvent | KeyboardEvent) {
     this.utilService.openRecipe(this.navCtrl, recipeId, event);
+  }
+
+  async enterCookMode() {
+    await this.fullscreenService.request();
+    this.navCtrl.navigateForward(
+      RouteMap.RecipePageCook.getPath(this.recipeId),
+    );
   }
 
   setupWakeLock() {

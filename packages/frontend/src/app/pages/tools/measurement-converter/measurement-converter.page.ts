@@ -9,11 +9,7 @@ import {
   INGREDIENT_DENSITIES,
   COUNT_ITEMS,
   VOLUME_UNITS,
-  VOLUME_UNITS_COMMON,
-  VOLUME_UNITS_EXTRA,
   WEIGHT_UNITS,
-  WEIGHT_UNITS_COMMON,
-  WEIGHT_UNITS_EXTRA,
   OVEN_TEMPERATURES,
   buildPanel,
   getIngredientByKey,
@@ -34,14 +30,7 @@ import {
   type OvenTemperature,
 } from "@recipesage/util/shared";
 import { addIcons } from "ionicons";
-import {
-  swapVertical,
-  chevronDown,
-  chevronUp,
-  chevronForward,
-  options,
-  bulb,
-} from "ionicons/icons";
+import { swapVertical, chevronForward, options, bulb } from "ionicons/icons";
 
 import { RouteMap } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
@@ -52,6 +41,7 @@ import {
   type SearchableSelectOption,
 } from "../../../components/searchable-select-modal/searchable-select-modal.component";
 import { MeasurementConverterPopoverPage } from "../measurement-converter-popover/measurement-converter-popover.page";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -63,7 +53,6 @@ import {
   IonListHeader,
   IonItem,
   IonLabel,
-  IonInput,
   IonButton,
   IonIcon,
   IonNote,
@@ -76,6 +65,32 @@ import {
 type Mode = "ingredients" | "count" | "temperature";
 
 const FRACTION_VOLUME_UNITS: VolumeUnit[] = ["cup", "tablespoon", "teaspoon"];
+
+const SHORT_UNIT_KEYS: Record<string, string> = {
+  cup: "pages.measurementConverter.unitsShort.cup",
+  tablespoon: "pages.measurementConverter.unitsShort.tablespoon",
+  teaspoon: "pages.measurementConverter.unitsShort.teaspoon",
+  fluidOunce: "pages.measurementConverter.unitsShort.fluidOunce",
+  milliliter: "pages.measurementConverter.unitsShort.milliliter",
+  liter: "pages.measurementConverter.unitsShort.liter",
+  pint: "pages.measurementConverter.unitsShort.pint",
+  quart: "pages.measurementConverter.unitsShort.quart",
+  gallon: "pages.measurementConverter.unitsShort.gallon",
+  deciliter: "pages.measurementConverter.unitsShort.deciliter",
+  centiliter: "pages.measurementConverter.unitsShort.centiliter",
+  imperialCup: "pages.measurementConverter.unitsShort.imperialCup",
+  imperialPint: "pages.measurementConverter.unitsShort.imperialPint",
+  imperialFluidOunce:
+    "pages.measurementConverter.unitsShort.imperialFluidOunce",
+  gram: "pages.measurementConverter.unitsShort.gram",
+  kilogram: "pages.measurementConverter.unitsShort.kilogram",
+  ounce: "pages.measurementConverter.unitsShort.ounce",
+  pound: "pages.measurementConverter.unitsShort.pound",
+  milligram: "pages.measurementConverter.unitsShort.milligram",
+  stone: "pages.measurementConverter.unitsShort.stone",
+  fahrenheit: "pages.measurementConverter.unitsShort.fahrenheit",
+  celsius: "pages.measurementConverter.unitsShort.celsius",
+};
 
 @Component({
   standalone: true,
@@ -94,7 +109,6 @@ const FRACTION_VOLUME_UNITS: VolumeUnit[] = ["cup", "tablespoon", "teaspoon"];
     IonListHeader,
     IonItem,
     IonLabel,
-    IonInput,
     IonButton,
     IonIcon,
     IonNote,
@@ -103,6 +117,7 @@ const FRACTION_VOLUME_UNITS: VolumeUnit[] = ["cup", "tablespoon", "teaspoon"];
     IonSelect,
     IonSelectOption,
     InfoBlockComponent,
+    TextInputComponent,
   ],
 })
 export class MeasurementConverterPage implements OnInit {
@@ -115,19 +130,11 @@ export class MeasurementConverterPage implements OnInit {
   defaultBackHref: string = RouteMap.ToolsPage.getPath();
 
   preferences = this.preferencesService.preferences;
-  preferenceKeys = MeasurementConverterPreferenceKey;
 
   mode: Mode = "ingredients";
 
-  volumeUnitsCommon = VOLUME_UNITS_COMMON;
-  volumeUnitsExtra = VOLUME_UNITS_EXTRA;
-  weightUnitsCommon = WEIGHT_UNITS_COMMON;
-  weightUnitsExtra = WEIGHT_UNITS_EXTRA;
   ovenTemperatures: OvenTemperature[] = OVEN_TEMPERATURES;
   countItems = COUNT_ITEMS;
-
-  volumeExpanded = false;
-  weightExpanded = false;
 
   selectedIngredientKey = "water";
 
@@ -175,8 +182,6 @@ export class MeasurementConverterPage implements OnInit {
   constructor() {
     addIcons({
       swapVertical,
-      chevronDown,
-      chevronUp,
       chevronForward,
       options,
       bulb,
@@ -201,6 +206,23 @@ export class MeasurementConverterPage implements OnInit {
 
   goToTools() {
     this.navCtrl.navigateForward(RouteMap.ToolsPage.getPath());
+  }
+
+  private get enabledUnits(): string[] {
+    return this.preferences[MeasurementConverterPreferenceKey.EnabledUnits];
+  }
+
+  get visibleVolumeUnits(): VolumeUnit[] {
+    return VOLUME_UNITS.filter((unit) => this.enabledUnits.includes(unit));
+  }
+
+  get visibleWeightUnits(): WeightUnit[] {
+    return WEIGHT_UNITS.filter((unit) => this.enabledUnits.includes(unit));
+  }
+
+  shortUnitLabel(unit: string): string {
+    const key = SHORT_UNIT_KEYS[unit];
+    return key ? this.translate.instant(key) : "";
   }
 
   get selectedIngredientName(): string {
@@ -305,9 +327,7 @@ export class MeasurementConverterPage implements OnInit {
   }
 
   private formatVolume(unit: VolumeUnit, value: number): string {
-    const showFractions =
-      this.preferences[MeasurementConverterPreferenceKey.ShowFractions];
-    if (showFractions && FRACTION_VOLUME_UNITS.includes(unit)) {
+    if (FRACTION_VOLUME_UNITS.includes(unit)) {
       return formatFraction(value, this.translate.getCurrentLang());
     }
     return formatDecimal(value, this.translate.getCurrentLang());

@@ -3,6 +3,7 @@ import { authenticatedProcedure } from "../../trpc";
 import {
   AppPreferenceTypes,
   AppTheme,
+  CookModePreferenceKey,
   GlobalPreferenceKey,
   ManageLabelsPreferenceKey,
   MeasurementConverterPreferenceKey,
@@ -49,9 +50,11 @@ const appPreferencesSchema = z
     [RecipeDetailsPreferenceKey.EnableWakeLock]: z.boolean(),
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: z.boolean(),
 
+    [CookModePreferenceKey.FontSize]: z.enum(SupportedFontSize),
+
     [ManageLabelsPreferenceKey.ShowCreatedAt]: z.boolean(),
 
-    [MeasurementConverterPreferenceKey.ShowFractions]: z.boolean(),
+    [MeasurementConverterPreferenceKey.EnabledUnits]: z.array(z.string()),
 
     [MealPlanPreferenceKey.ShowAddedBy]: z.boolean(),
     [MealPlanPreferenceKey.ShowAddedOn]: z.boolean(),

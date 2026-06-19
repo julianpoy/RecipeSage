@@ -1,0 +1,28 @@
+<div class="format-toolbar">
+  <div class="format-buttons">
+    @for (button of buttons; track button.action) {
+      <ion-button
+        fill="clear"
+        size="small"
+        [disabled]="isDisabled(button.action)"
+        (mousedown)="$event.preventDefault()"
+        (click)="runAction(button.action)"
+        [attr.aria-label]="button.labelKey | translate"
+        [title]="button.labelKey | translate"
+      >
+        <ion-icon class="icon" [name]="button.icon"></ion-icon>
+      </ion-button>
+    }
+  </div>
+
+  <a
+    class="format-help"
+    [href]="docsHref"
+    target="_blank"
+    rel="noopener"
+    [attr.aria-label]="'components.recipeFormatToolbar.help' | translate"
+    [title]="'components.recipeFormatToolbar.help' | translate"
+  >
+    <ion-icon name="rs-format-help"></ion-icon>
+  </a>
+</div>

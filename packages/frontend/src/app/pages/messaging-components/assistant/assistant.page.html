@@ -19,7 +19,7 @@
 </ion-header>
 
 <ion-content #content class="ion-padding">
-  <div>
+  <div class="page-wrapper">
     <null-state>
       <logo-icon virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
@@ -157,40 +157,44 @@
 
 <ion-footer>
   <form ng-submit="sendMessage()">
-    <ion-item>
-      <ion-textarea
-        id="assistant-message-textarea"
-        class="textarea-autogrow-max400-40vh"
-        fill="solid"
-        [autoGrow]="true"
-        [counter]="true"
-        [maxlength]="maxMessageLength"
-        autocomplete="true"
-        spellcheck="true"
-        autocorrect="on"
-        autocapitalize="on"
-        name="body"
-        [(ngModel)]="pendingMessage"
-        (keydown)="onMessageKeyDown($event)"
-        type="text"
-        placeholder="{{ 'pages.messageThread.messagePlaceholder' | translate }}"
-        (ionFocus)="keyboardOpened()"
-        [disabled]="processing"
-      ></ion-textarea>
-      <ion-button
-        type="submit"
-        (click)="sendMessage()"
-        fill="clear"
-        slot="end"
-        class="submit"
-      >
-        @if (!processing) {
-          <ion-icon name="send" slot="icon-only"></ion-icon>
-        }
-        @if (processing) {
-          <ion-spinner name="crescent"></ion-spinner>
-        }
-      </ion-button>
-    </ion-item>
+    <div class="page-wrapper">
+      <ion-item>
+        <ion-textarea
+          id="assistant-message-textarea"
+          class="textarea-autogrow-max400-40vh"
+          fill="solid"
+          [autoGrow]="true"
+          [counter]="true"
+          [maxlength]="maxMessageLength"
+          autocomplete="true"
+          spellcheck="true"
+          autocorrect="on"
+          autocapitalize="on"
+          name="body"
+          [(ngModel)]="pendingMessage"
+          (keydown)="onMessageKeyDown($event)"
+          type="text"
+          placeholder="{{
+            'pages.messageThread.messagePlaceholder' | translate
+          }}"
+          (ionFocus)="keyboardOpened()"
+          [disabled]="processing"
+        ></ion-textarea>
+        <ion-button
+          type="submit"
+          (click)="sendMessage()"
+          fill="clear"
+          slot="end"
+          class="submit"
+        >
+          @if (!processing) {
+            <ion-icon name="send" slot="icon-only"></ion-icon>
+          }
+          @if (processing) {
+            <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </ion-item>
+    </div>
   </form>
 </ion-footer>

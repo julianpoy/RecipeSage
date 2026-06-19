@@ -11,6 +11,8 @@ import {
   StartPageOptions,
   SupportedFontSize,
   SupportedLanguages,
+  VOLUME_UNITS_COMMON,
+  WEIGHT_UNITS_COMMON,
 } from "@recipesage/util/shared";
 
 export function preferencesFactory(): AppPreferenceTypes {
@@ -33,8 +35,12 @@ export function preferencesFactory(): AppPreferenceTypes {
     "myRecipes.includeFriends": MyRecipesIncludeFriendsOptions.No,
     "recipeDetails.enableWakeLock": true,
     "recipeDetails.autoExpandNutrition": false,
+    "cookMode.fontSize": SupportedFontSize.PX20,
     "manageLabels.showCreatedAt": false,
-    "measurementConverter.showFractions": true,
+    "measurementConverter.enabledUnits": [
+      ...VOLUME_UNITS_COMMON,
+      ...WEIGHT_UNITS_COMMON,
+    ],
     "MealPlan.showAddedBy": true,
     "MealPlan.showAddedOn": true,
     "MealPlan.startOfWeek": MealPlanStartOfWeekOptions.Monday,

@@ -24,6 +24,7 @@ import {
   list,
   pin,
   print,
+  restaurant,
   share,
   trash,
 } from "ionicons/icons";
@@ -42,6 +43,7 @@ export type RecipeDetailsPopoverActionTypes =
   | "unpin"
   | "edit"
   | "updateWakeLock"
+  | "enterCookMode"
   | "setLastMadeToday";
 
 @Component({
@@ -94,6 +96,7 @@ export class RecipeDetailsPopoverPage {
       list,
       pin,
       print,
+      restaurant,
       share,
       trash,
     });

@@ -10,9 +10,10 @@ import {
 } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { createReadStream } from "fs";
-import { parse } from "csv-parse";
+import { parse, CsvError } from "csv-parse";
 import type { JobQueueItem } from "../../JobQueueItem";
 import { pipeline } from "stream/promises";
+import { ImportBadFormatError } from "../../../jobs/jobErrors";
 
 export async function csvImportJobHandler(
   job: ImportJobSummary,
@@ -261,7 +262,14 @@ export async function csvImportJobHandler(
     });
   });
 
-  await Promise.all([pipeline(fileReadStream, parser), done]);
+  try {
+    await Promise.all([pipeline(fileReadStream, parser), done]);
+  } catch (e) {
+    if (e instanceof CsvError) {
+      throw new ImportBadFormatError(e.message);
+    }
+    throw e;
+  }
 
   await importJobFinishCommon({
     job,

@@ -1,0 +1,25 @@
+@use "../field" as field;
+
+@include field.base;
+
+.rs-field__control-wrap {
+  position: relative;
+  display: block;
+}
+
+.rs-field__affix-end {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 4px;
+  display: flex;
+  align-items: center;
+  color: var(--rs-field-placeholder);
+}
+
+.rs-field__affix-end:empty {
+  display: none;
+}
+
+.rs-field__control-wrap:has(.rs-field__affix-end > *) .rs-field__control {
+  padding-inline-end: 40px;
+}

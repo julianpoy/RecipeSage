@@ -1,11 +1,19 @@
 .page-wrapper {
   max-width: var(--page-max-width);
   margin: 0 auto;
+  padding-bottom: 25vh;
 }
 
 info-block {
   display: block;
   margin: 16px;
+}
+
+.cookbook-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 16px;
 }
 
 .too-many-recipes {

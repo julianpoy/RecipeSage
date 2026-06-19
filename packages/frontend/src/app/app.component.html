@@ -3,11 +3,14 @@
 <ion-app>
   <ion-split-pane
     contentId="main-content"
-    [disabled]="!isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]"
+    [disabled]="
+      inCookMode || !isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]
+    "
     when="(min-width: 1200px)"
   >
     <ion-menu
       (ionWillOpen)="updateNavList()"
+      [disabled]="inCookMode"
       contentId="main-content"
       type="overlay"
       [class]="{

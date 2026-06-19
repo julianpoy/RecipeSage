@@ -135,12 +135,16 @@ export enum RecipeDetailsPreferenceKey {
   AutoExpandNutrition = "recipeDetails.autoExpandNutrition",
 }
 
+export enum CookModePreferenceKey {
+  FontSize = "cookMode.fontSize",
+}
+
 export enum ManageLabelsPreferenceKey {
   ShowCreatedAt = "manageLabels.showCreatedAt",
 }
 
 export enum MeasurementConverterPreferenceKey {
-  ShowFractions = "measurementConverter.showFractions",
+  EnabledUnits = "measurementConverter.enabledUnits",
 }
 
 export enum MealPlanPreferenceKey {
@@ -184,9 +188,11 @@ export interface AppPreferenceTypes {
   [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
   [RecipeDetailsPreferenceKey.AutoExpandNutrition]: boolean;
 
+  [CookModePreferenceKey.FontSize]: SupportedFontSize;
+
   [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 
-  [MeasurementConverterPreferenceKey.ShowFractions]: boolean;
+  [MeasurementConverterPreferenceKey.EnabledUnits]: string[];
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;
