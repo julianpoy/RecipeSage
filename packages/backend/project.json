@@ -6,13 +6,21 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
-      "dependsOn": ["util-shared:build", "util-server:build", "trpc:build"],
+      "dependsOn": [
+        "util-shared:build",
+        "util-server:build",
+        "trpc:build"
+      ],
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/backend",
-        "format": ["cjs"],
+        "format": [
+          "cjs"
+        ],
         "bundle": true,
         "minify": false,
         "external": [
@@ -82,9 +90,11 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/packages/backend"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/backend"
       }
     }
   }

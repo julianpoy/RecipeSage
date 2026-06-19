@@ -60,3 +60,7 @@ generated
 
 # Astro
 .astro
+
+.nx/migrate-runs
+.nx/polygraph
+.nx/self-healing

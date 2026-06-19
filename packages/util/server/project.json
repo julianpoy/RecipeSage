@@ -6,9 +6,13 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
-      "dependsOn": ["util-shared:build"],
+      "dependsOn": [
+        "util-shared:build"
+      ],
       "options": {
         "main": "packages/util/server/src/index.ts",
         "outputPath": "dist/libs/util/server",
@@ -16,7 +20,9 @@
         "declaration": true,
         "assets": [],
         "platform": "node",
-        "external": ["yauzl-promise"]
+        "external": [
+          "yauzl-promise"
+        ]
       },
       "configurations": {
         "development": {
@@ -46,9 +52,11 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../../coverage/packages/util/server"
+        "reportsDirectory": "{projectRoot}/../../../coverage/packages/util/server"
       }
     }
   }

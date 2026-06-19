@@ -24,7 +24,9 @@
     },
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": ["util-shared:build"],
+      "dependsOn": [
+        "util-shared:build"
+      ],
       "options": {
         "cwd": "packages/frontend",
         "commands": [
@@ -67,9 +69,11 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/packages/frontend"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/frontend"
       }
     }
   }

@@ -15,3 +15,4 @@ packages/frontend/src/assets/i18n/*.json
 /.nx/workspace-data
 
 pnpm-lock.yaml
+.nx/self-healing
