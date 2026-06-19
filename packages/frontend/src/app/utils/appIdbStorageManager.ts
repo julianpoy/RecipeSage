@@ -61,6 +61,22 @@ export class AppIdbStorageManager {
     await tx.done;
   }
 
+  async getPersistenceRequested(): Promise<boolean> {
+    const record = await getKvStoreEntry(KVStoreKeys.PersistenceRequested);
+    return record || false;
+  }
+
+  async setPersistenceRequested(requested: boolean): Promise<void> {
+    const localDb = await getLocalDb();
+    const tx = localDb.transaction(ObjectStoreName.KV, "readwrite");
+    const store = tx.objectStore(ObjectStoreName.KV);
+    await store.put({
+      key: KVStoreKeys.PersistenceRequested,
+      value: requested,
+    });
+    await tx.done;
+  }
+
   async deleteAllData(): Promise<void> {
     const localDb = await getLocalDb();
     await Promise.all(

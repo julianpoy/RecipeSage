@@ -40,6 +40,7 @@ export enum KVStoreKeys {
   MyUserProfile = "myUserProfile",
   MyFriends = "myFriends",
   MyStats = "myStats",
+  PersistenceRequested = "persistenceRequested",
 }
 
 export interface KVSession {
@@ -72,6 +73,10 @@ export interface KVMyStats {
   key: KVStoreKeys.MyStats;
   value: Awaited<ReturnType<typeof trpc.users.getMyStats.query>>;
 }
+export interface KVPersistenceRequested {
+  key: KVStoreKeys.PersistenceRequested;
+  value: boolean;
+}
 
 export type KVStoreValue = {
   [KVStoreKeys.Session]: KVSession;
@@ -81,6 +86,7 @@ export type KVStoreValue = {
   [KVStoreKeys.MyUserProfile]: KVMyUserProfile;
   [KVStoreKeys.MyFriends]: KVMyFriends;
   [KVStoreKeys.MyStats]: KVMyStats;
+  [KVStoreKeys.PersistenceRequested]: KVPersistenceRequested;
 };
 
 export interface RSLocalDB extends DBSchema {

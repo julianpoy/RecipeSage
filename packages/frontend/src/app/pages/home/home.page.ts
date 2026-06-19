@@ -30,6 +30,7 @@ import type {
   UserPublic,
 } from "@recipesage/prisma";
 import { countActiveNutritionRanges } from "../../utils/nutritionFilter";
+import { maybeRequestPersistentStorage } from "../../utils/persistentStorage";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { NullStateComponent } from "../../components/null-state/null-state.component";
@@ -439,6 +440,16 @@ export class HomePage implements OnDestroy {
 
     try {
       await this._resetAndLoadRecipes(scrollToLastPosition);
+
+      if (
+        this.recipeLoadGeneration === generation &&
+        this.utilService.isLoggedIn() &&
+        !this.userId &&
+        this.folder === "main" &&
+        this.totalRecipeCount
+      ) {
+        void maybeRequestPersistentStorage();
+      }
     } finally {
       if (this.recipeLoadGeneration === generation) {
         this.loading = false;

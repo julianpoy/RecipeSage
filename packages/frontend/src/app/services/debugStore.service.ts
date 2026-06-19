@@ -40,6 +40,16 @@ export class DebugStoreService {
       windowWidth: self.innerWidth,
       windowHeight: self.innerHeight,
       version: (window as any).version,
+      storage: {
+        persisted: navigator.storage?.persisted
+          ? await navigator.storage.persisted().catch(() => "failed")
+          : "unsupported",
+        estimate: navigator.storage?.estimate
+          ? await navigator.storage.estimate().catch(() => "failed")
+          : "unsupported",
+        displayModeStandalone: window.matchMedia("(display-mode: standalone)")
+          .matches,
+      },
       sw: {
         isPresent: !!navigator.serviceWorker.controller,
         state: navigator.serviceWorker.controller?.state,
