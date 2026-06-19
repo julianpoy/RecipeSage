@@ -49,12 +49,16 @@ export class TextAreaComponent implements ControlValueAccessor, AfterViewInit {
   private onTouched: () => void = () => {};
 
   ngAfterViewInit() {
-    this.resize();
+    this.scheduleResize();
+  }
+
+  getControlElement(): HTMLTextAreaElement | undefined {
+    return this.controlRef?.nativeElement;
   }
 
   writeValue(value: string | null) {
     this.value = value ?? "";
-    queueMicrotask(() => this.resize());
+    this.scheduleResize();
   }
 
   registerOnChange(fn: (value: string) => void) {
@@ -77,6 +81,10 @@ export class TextAreaComponent implements ControlValueAccessor, AfterViewInit {
 
   onBlur() {
     this.onTouched();
+  }
+
+  private scheduleResize() {
+    requestAnimationFrame(() => this.resize());
   }
 
   private resize() {

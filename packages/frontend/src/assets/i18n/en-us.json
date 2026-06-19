@@ -1989,6 +1989,23 @@
 
   "components.cookingToolbar.clear": "Clear All Pinned Recipes?",
 
+  "components.recipeFormatToolbar.bold": "Bold",
+  "components.recipeFormatToolbar.italic": "Italic",
+  "components.recipeFormatToolbar.underline": "Underline",
+  "components.recipeFormatToolbar.header": "Section header",
+  "components.recipeFormatToolbar.scale": "Scalable amount",
+  "components.recipeFormatToolbar.continuation": "Continue step on next line",
+  "components.recipeFormatToolbar.image": "Insert image reference",
+  "components.recipeFormatToolbar.table": "Insert table",
+  "components.recipeFormatToolbar.help": "Formatting help",
+  "components.recipeFormatToolbar.placeholder.bold": "bold text",
+  "components.recipeFormatToolbar.placeholder.italic": "italic text",
+  "components.recipeFormatToolbar.placeholder.underline": "underlined text",
+  "components.recipeFormatToolbar.placeholder.header": "Section name",
+  "components.recipeFormatToolbar.placeholder.scale": "amount",
+  "components.recipeFormatToolbar.table.header": "Header",
+  "components.recipeFormatToolbar.table.cell": "Cell",
+
   "components.copyWithWebshare.instructions": "To share, copy the link below",
   "components.copyWithWebshare.shareIcon": "or press the share icon",
 

@@ -56,6 +56,9 @@ import { MultiImageUploadComponent } from "../../../components/multi-image-uploa
 import { MlService } from "../../../services/ml.service";
 import { Capacitor } from "@capacitor/core";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import { RecipeFormatToolbarComponent } from "../../../components/recipe-format-toolbar/recipe-format-toolbar.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import {
   IonHeader,
   IonToolbar,
@@ -69,8 +72,6 @@ import {
   IonList,
   IonItem,
   IonModal,
-  IonInput,
-  IonTextarea,
   IonAccordionGroup,
   IonAccordion,
   IonLabel,
@@ -99,6 +100,9 @@ import { addIcons } from "ionicons";
     RatingComponent,
     MultiImageUploadComponent,
     SelectRecipeComponent,
+    RecipeFormatToolbarComponent,
+    TextInputComponent,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -111,8 +115,6 @@ import { addIcons } from "ionicons";
     IonList,
     IonItem,
     IonModal,
-    IonInput,
-    IonTextarea,
     IonAccordionGroup,
     IonAccordion,
     IonLabel,

@@ -167,106 +167,77 @@
     <br />
     <br />
     <br />
-    <ion-item class="recipe-input">
-      <ion-input
-        label="{{ 'pages.editRecipe.input.title' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="recipe.title"
-        (ngModelChange)="markAsDirty()"
-        type="text"
-        value=""
-        maxlength="254"
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-input>
-    </ion-item>
+    <text-input
+      class="recipe-input"
+      label="{{ 'pages.editRecipe.input.title' | translate }}"
+      [(ngModel)]="recipe.title"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      [maxlength]="254"
+      autocapitalize="on"
+      autocorrect="on"
+    ></text-input>
 
-    <ion-item class="recipe-input">
-      <ion-textarea
-        label="{{ 'pages.editRecipe.input.description' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="recipe.description"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-textarea>
-    </ion-item>
+    <text-area
+      class="recipe-input"
+      label="{{ 'pages.editRecipe.input.description' | translate }}"
+      [(ngModel)]="recipe.description"
+      (ngModelChange)="markAsDirty()"
+      [autoGrow]="true"
+      autocapitalize="on"
+      autocorrect="on"
+    ></text-area>
 
     <div class="miniflex">
-      <ion-item class="recipe-input">
-        <ion-input
-          label="{{ 'pages.editRecipe.input.yield' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="recipe.yield"
-          (ngModelChange)="markAsDirty()"
-          type="text"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+      <text-input
+        class="recipe-input"
+        label="{{ 'pages.editRecipe.input.yield' | translate }}"
+        [(ngModel)]="recipe.yield"
+        (ngModelChange)="markAsDirty()"
+        type="text"
+        autocapitalize="on"
+        autocorrect="on"
+      ></text-input>
 
-      <ion-item class="recipe-input">
-        <ion-input
-          label="{{ 'pages.editRecipe.input.activeTime' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="recipe.activeTime"
-          (ngModelChange)="markAsDirty()"
-          type="text"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+      <text-input
+        class="recipe-input"
+        label="{{ 'pages.editRecipe.input.activeTime' | translate }}"
+        [(ngModel)]="recipe.activeTime"
+        (ngModelChange)="markAsDirty()"
+        type="text"
+        autocapitalize="on"
+        autocorrect="on"
+      ></text-input>
 
-      <ion-item class="recipe-input">
-        <ion-input
-          label="{{ 'pages.editRecipe.input.totalTime' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="recipe.totalTime"
-          (ngModelChange)="markAsDirty()"
-          type="text"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+      <text-input
+        class="recipe-input"
+        label="{{ 'pages.editRecipe.input.totalTime' | translate }}"
+        [(ngModel)]="recipe.totalTime"
+        (ngModelChange)="markAsDirty()"
+        type="text"
+        autocapitalize="on"
+        autocorrect="on"
+      ></text-input>
 
-      <ion-item class="recipe-input">
-        <ion-input
-          label="{{ 'pages.editRecipe.input.source' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="recipe.source"
-          (ngModelChange)="markAsDirty()"
-          type="text"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+      <text-input
+        class="recipe-input"
+        label="{{ 'pages.editRecipe.input.source' | translate }}"
+        [(ngModel)]="recipe.source"
+        (ngModelChange)="markAsDirty()"
+        type="text"
+        autocapitalize="on"
+        autocorrect="on"
+      ></text-input>
 
-      <ion-item class="recipe-input">
-        <ion-input
-          label="{{ 'pages.editRecipe.input.sourceUrl' | translate }}"
-          labelPlacement="stacked"
-          [(ngModel)]="recipe.url"
-          (ngModelChange)="markAsDirty()"
-          type="url"
-          value=""
-          autocapitalize="on"
-          autocorrect="on"
-          spellcheck="true"
-        ></ion-input>
-      </ion-item>
+      <text-input
+        class="recipe-input"
+        label="{{ 'pages.editRecipe.input.sourceUrl' | translate }}"
+        [(ngModel)]="recipe.url"
+        (ngModelChange)="markAsDirty()"
+        type="url"
+        autocapitalize="on"
+        autocorrect="on"
+      ></text-input>
 
       <div class="rating-lastMadeAt recipe-input">
         <div class="rating">
@@ -281,16 +252,12 @@
         </div>
 
         @if (recipe.lastMadeAt) {
-          <ion-item>
-            <ion-input
-              label="{{ 'pages.editRecipe.input.lastMadeAt' | translate }}"
-              labelPlacement="stacked"
-              class="rs-date"
-              type="date"
-              [(ngModel)]="recipe.lastMadeAt"
-              (ngModelChange)="markAsDirty()"
-            />
-          </ion-item>
+          <text-input
+            label="{{ 'pages.editRecipe.input.lastMadeAt' | translate }}"
+            type="date"
+            [(ngModel)]="recipe.lastMadeAt"
+            (ngModelChange)="markAsDirty()"
+          ></text-input>
         }
         @if (!recipe.lastMadeAt) {
           <div class="lastMadeAt">
@@ -312,50 +279,55 @@
       </div>
     </div>
 
-    <ion-item class="recipe-input">
-      <ion-textarea
-        label="{{ 'pages.editRecipe.input.ingredients' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="recipe.ingredients"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-textarea>
-    </ion-item>
+    <text-area
+      #ingredientsInput
+      class="recipe-input"
+      label="{{ 'pages.editRecipe.input.ingredients' | translate }}"
+      [(ngModel)]="recipe.ingredients"
+      (ngModelChange)="markAsDirty()"
+      [autoGrow]="true"
+      autocapitalize="on"
+      autocorrect="on"
+    >
+      <recipe-format-toolbar
+        field="ingredients"
+        [target]="ingredientsInput"
+      ></recipe-format-toolbar>
+    </text-area>
 
-    <ion-item class="recipe-input">
-      <ion-textarea
-        label="{{ 'pages.editRecipe.input.instructions' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="recipe.instructions"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-textarea>
-    </ion-item>
+    <text-area
+      #instructionsInput
+      class="recipe-input"
+      label="{{ 'pages.editRecipe.input.instructions' | translate }}"
+      [(ngModel)]="recipe.instructions"
+      (ngModelChange)="markAsDirty()"
+      [autoGrow]="true"
+      autocapitalize="on"
+      autocorrect="on"
+    >
+      <recipe-format-toolbar
+        field="instructions"
+        [target]="instructionsInput"
+        [imageCount]="images.length"
+      ></recipe-format-toolbar>
+    </text-area>
 
-    <ion-item class="recipe-input">
-      <ion-textarea
-        label="{{ 'pages.editRecipe.input.notes' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="recipe.notes"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-textarea>
-    </ion-item>
+    <text-area
+      #notesInput
+      class="recipe-input"
+      label="{{ 'pages.editRecipe.input.notes' | translate }}"
+      [(ngModel)]="recipe.notes"
+      (ngModelChange)="markAsDirty()"
+      [autoGrow]="true"
+      autocapitalize="on"
+      autocorrect="on"
+    >
+      <recipe-format-toolbar
+        field="notes"
+        [target]="notesInput"
+        [imageCount]="images.length"
+      ></recipe-format-toolbar>
+    </text-area>
 
     <ion-accordion-group
       [value]="nutritionAccordionValue"
@@ -391,251 +363,209 @@
             </ion-button>
           </div>
           <div class="miniflex-nutrition">
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionServingSize' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionServingSize"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionServingSize' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionServingSize"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionCalories' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionCalories"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionCalories' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionCalories"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionTotalFat' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionTotalFat"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionTotalFat' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionTotalFat"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionSaturatedFat' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionSaturatedFat"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionSaturatedFat' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionSaturatedFat"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionTransFat' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionTransFat"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionTransFat' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionTransFat"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionPolyunsaturatedFat'
-                    | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionPolyunsaturatedFat"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionPolyunsaturatedFat' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionPolyunsaturatedFat"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionMonounsaturatedFat'
-                    | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionMonounsaturatedFat"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionMonounsaturatedFat' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionMonounsaturatedFat"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionCholesterol' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionCholesterol"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionCholesterol' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionCholesterol"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionSodium' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionSodium"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{ 'pages.editRecipe.input.nutritionSodium' | translate }}"
+              [(ngModel)]="recipe.nutritionSodium"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionTotalCarbs' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionTotalCarbs"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionTotalCarbs' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionTotalCarbs"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionDietaryFiber' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionDietaryFiber"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionDietaryFiber' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionDietaryFiber"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionTotalSugars' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionTotalSugars"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionTotalSugars' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionTotalSugars"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionAddedSugars' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionAddedSugars"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionAddedSugars' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionAddedSugars"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionProtein' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionProtein"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionProtein' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionProtein"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionVitaminD' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionVitaminD"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionVitaminD' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionVitaminD"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionCalcium' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionCalcium"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionCalcium' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionCalcium"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{ 'pages.editRecipe.input.nutritionIron' | translate }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionIron"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{ 'pages.editRecipe.input.nutritionIron' | translate }}"
+              [(ngModel)]="recipe.nutritionIron"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input">
-              <ion-input
-                label="{{
-                  'pages.editRecipe.input.nutritionPotassium' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionPotassium"
-                (ngModelChange)="markAsDirty()"
-                type="text"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              class="recipe-input"
+              label="{{
+                'pages.editRecipe.input.nutritionPotassium' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionPotassium"
+              (ngModelChange)="markAsDirty()"
+              type="text"
+              inputmode="decimal"
+            ></text-input>
 
-            <ion-item class="recipe-input full-width">
-              <ion-textarea
-                label="{{
-                  'pages.editRecipe.input.nutritionOtherDetails' | translate
-                }}"
-                labelPlacement="stacked"
-                [(ngModel)]="recipe.nutritionOtherDetails"
-                (ngModelChange)="markAsDirty()"
-                autoGrow="true"
-                [rows]="2"
-              ></ion-textarea>
-            </ion-item>
+            <text-area
+              class="recipe-input full-width"
+              label="{{
+                'pages.editRecipe.input.nutritionOtherDetails' | translate
+              }}"
+              [(ngModel)]="recipe.nutritionOtherDetails"
+              (ngModelChange)="markAsDirty()"
+              [autoGrow]="true"
+              [rows]="2"
+            ></text-area>
           </div>
         </div>
       </ion-accordion>
