@@ -28,7 +28,10 @@ import { UnsavedChangesService } from "../../../services/unsaved-changes.service
 import { CapabilitiesService } from "../../../services/capabilities.service";
 import { ImageService } from "../../../services/image.service";
 import { PreferencesService } from "../../../services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
+import {
+  RecipeDetailsPreferenceKey,
+  decodeBasicHtmlEntities,
+} from "@recipesage/util/shared";
 import { getQueryParam } from "../../../utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
@@ -244,7 +247,12 @@ export class EditRecipePage {
 
       if (response) {
         this.fullRecipe = response;
-        this.recipe = response;
+        this.recipe = {
+          ...response,
+          ingredients: decodeBasicHtmlEntities(response.ingredients),
+          instructions: decodeBasicHtmlEntities(response.instructions),
+          notes: decodeBasicHtmlEntities(response.notes),
+        };
         this.images = response.recipeImages
           .sort((a, b) => a.order - b.order)
           .map((el) => el.image);
