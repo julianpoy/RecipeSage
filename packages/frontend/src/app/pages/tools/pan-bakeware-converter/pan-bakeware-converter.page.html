@@ -14,7 +14,7 @@
       <ng-container virtualSlot="title">
         {{ "pages.panBakewareConverter.intro.title" | translate }}
       </ng-container>
-      <p>{{ "pages.panBakewareConverter.intro.body" | translate }}</p>
+      <p>{{ "pages.panBakewareConverter.intro.bodyVolume" | translate }}</p>
     </info-block>
 
     <ion-segment
@@ -62,9 +62,9 @@
         }
       </div>
 
-      @if (presetsByShape[from.shape].length > 0) {
+      @if (presetsForShape(from.shape).length > 0) {
         <div class="preset-chip-row">
-          @for (preset of presetsByShape[from.shape]; track preset.key) {
+          @for (preset of presetsForShape(from.shape); track preset.key) {
             <ion-chip
               class="preset-chip"
               [color]="
@@ -89,14 +89,18 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.diameter" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.diameter' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.diameter"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -107,14 +111,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.side" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.side' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.length"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -129,14 +135,18 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.length" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.length' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.length"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -145,14 +155,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.width" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.width' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.width"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -163,16 +175,20 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.capacityCups" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.capacityCups' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.capacityOverride"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
-              "pages.panBakewareConverter.units.cups" | translate
+              capacityUnitLabel()
             }}</ion-note>
           </ion-item>
         }
@@ -181,29 +197,37 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.cavities" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.cavities' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="numeric"
               [(ngModel)]="from.cavities"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
           </ion-item>
           <ion-item>
             <ion-label>{{
               "pages.panBakewareConverter.field.cavityCapacity" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.cavityCapacity' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.cavityCapacity"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
-              "pages.panBakewareConverter.units.cups" | translate
+              cavityUnitLabel()
             }}</ion-note>
           </ion-item>
         }
@@ -212,14 +236,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.depth" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.depth' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="from.depth"
-              (ionInput)="onDimensionInput('from')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('from')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -278,9 +304,9 @@
         }
       </div>
 
-      @if (presetsByShape[to.shape].length > 0) {
+      @if (presetsForShape(to.shape).length > 0) {
         <div class="preset-chip-row">
-          @for (preset of presetsByShape[to.shape]; track preset.key) {
+          @for (preset of presetsForShape(to.shape); track preset.key) {
             <ion-chip
               class="preset-chip"
               [color]="
@@ -305,14 +331,18 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.diameter" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.diameter' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.diameter"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -323,14 +353,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.side" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.side' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.length"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -345,14 +377,18 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.length" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.length' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.length"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -361,14 +397,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.width" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.width' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.width"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -379,16 +417,20 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.capacityCups" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.capacityCups' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.capacityOverride"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
-              "pages.panBakewareConverter.units.cups" | translate
+              capacityUnitLabel()
             }}</ion-note>
           </ion-item>
         }
@@ -397,29 +439,37 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.cavities" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.cavities' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="numeric"
               [(ngModel)]="to.cavities"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
           </ion-item>
           <ion-item>
             <ion-label>{{
               "pages.panBakewareConverter.field.cavityCapacity" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="
+                'pages.panBakewareConverter.field.cavityCapacity' | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.cavityCapacity"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
-              "pages.panBakewareConverter.units.cups" | translate
+              cavityUnitLabel()
             }}</ion-note>
           </ion-item>
         }
@@ -428,14 +478,16 @@
             <ion-label>{{
               "pages.panBakewareConverter.field.depth" | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="dim-input"
+              [ariaLabel]="'pages.panBakewareConverter.field.depth' | translate"
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="to.depth"
-              (ionInput)="onDimensionInput('to')"
-            ></ion-input>
+              (ngModelChange)="onDimensionInput('to')"
+            ></text-input>
             <ion-note slot="end" class="unit-suffix">{{
               unitLabelShort()
             }}</ion-note>
@@ -459,245 +511,48 @@
       </div>
     </section>
 
-    @if (fromVizPx() && toVizPx() && isFlatPan("from") && isFlatPan("to")) {
-      <section class="viz-card" aria-labelledby="viz-title">
-        <p id="viz-title" class="viz-title">
-          {{ "pages.panBakewareConverter.viz.title" | translate }}
-        </p>
-        <div class="viz-stage">
-          <figure class="viz-figure">
-            <div class="viz-shape-wrap">
-              @if (fromVizPx()?.isRound) {
-                <div
-                  class="viz-shape viz-shape-round viz-shape-from"
-                  [style.width.px]="fromVizPx()?.width"
-                  [style.height.px]="fromVizPx()?.height"
-                ></div>
-              } @else {
-                <div
-                  class="viz-shape viz-shape-rect viz-shape-from"
-                  [style.width.px]="fromVizPx()?.width"
-                  [style.height.px]="fromVizPx()?.height"
-                ></div>
-              }
-            </div>
-            <figcaption>
-              {{ "pages.panBakewareConverter.viz.fromCaption" | translate }}
-            </figcaption>
-          </figure>
-          <figure class="viz-figure">
-            <div class="viz-shape-wrap">
-              @if (toVizPx()?.isRound) {
-                <div
-                  class="viz-shape viz-shape-round viz-shape-to"
-                  [style.width.px]="toVizPx()?.width"
-                  [style.height.px]="toVizPx()?.height"
-                ></div>
-              } @else {
-                <div
-                  class="viz-shape viz-shape-rect viz-shape-to"
-                  [style.width.px]="toVizPx()?.width"
-                  [style.height.px]="toVizPx()?.height"
-                ></div>
-              }
-            </div>
-            <figcaption>
-              {{ "pages.panBakewareConverter.viz.toCaption" | translate }}
-            </figcaption>
-          </figure>
-        </div>
-        <p class="viz-footnote">
-          {{ "pages.panBakewareConverter.viz.footnote" | translate }}
-        </p>
-      </section>
-    }
-
     @if (scaling) {
       <section class="result-card" aria-labelledby="result-heading">
         <header class="result-header">
-          <p class="result-eyebrow">
-            {{ "pages.panBakewareConverter.result.eyebrow" | translate }}
-          </p>
-          <h2 id="result-heading" class="result-multiplier">
-            × {{ multiplierLabel() }}
-          </h2>
-          <p class="result-basis">{{ multiplierBasisLabel() }}</p>
-          <p class="result-explain">{{ multiplierExplanation() }}</p>
-          <ion-button
-            fill="clear"
-            size="small"
-            (click)="copyMultiplier()"
-            class="copy-button"
-          >
-            <ion-icon slot="start" name="copy-outline"></ion-icon>
-            {{ "pages.panBakewareConverter.multiplier.copy" | translate }}
-          </ion-button>
-        </header>
-      </section>
-
-      <section class="tool-card" aria-labelledby="recipe-scaler-heading">
-        <header class="tool-card-header">
-          <h3 id="recipe-scaler-heading" class="tool-card-title">
-            {{ "pages.panBakewareConverter.recipeScaler.title" | translate }}
-          </h3>
-          <p class="tool-card-subtitle">
-            {{ "pages.panBakewareConverter.recipeScaler.subtitle" | translate }}
-          </p>
-        </header>
-        <ion-textarea
-          class="recipe-input"
-          [autoGrow]="true"
-          rows="4"
-          [(ngModel)]="recipeText"
-          (ionInput)="onRecipeTextInput()"
-          [placeholder]="
-            'pages.panBakewareConverter.recipeScaler.placeholder' | translate
-          "
-        ></ion-textarea>
-        @if (recipeScaledLines.length > 0) {
-          <div class="recipe-scaled" role="status" aria-live="polite">
-            <p class="recipe-scaled-label">
+          @if (negligibleScaling()) {
+            <p class="result-eyebrow">
               {{
-                "pages.panBakewareConverter.recipeScaler.outputLabel"
-                  | translate
+                "pages.panBakewareConverter.result.eyebrowNoScale" | translate
               }}
             </p>
-            <ul class="recipe-scaled-list">
-              @for (line of recipeScaledLines; track $index) {
-                <li>{{ line }}</li>
-              }
-            </ul>
-          </div>
+            <h2
+              id="result-heading"
+              class="result-multiplier result-multiplier-text"
+            >
+              {{ "pages.panBakewareConverter.result.useAsIs" | translate }}
+            </h2>
+            <p class="result-explain">{{ noScaleExplanation() }}</p>
+          } @else {
+            <p class="result-eyebrow">
+              {{ "pages.panBakewareConverter.result.eyebrow" | translate }}
+            </p>
+            <h2 id="result-heading" class="result-multiplier">
+              × {{ multiplierLabel() }}
+            </h2>
+            <p class="result-basis">{{ multiplierBasisLabel() }}</p>
+            <p class="result-explain">{{ multiplierExplanation() }}</p>
+            <ion-button
+              fill="clear"
+              size="small"
+              (click)="copyMultiplier()"
+              class="copy-button"
+            >
+              <ion-icon slot="start" name="copy-outline"></ion-icon>
+              {{ "pages.panBakewareConverter.multiplier.copy" | translate }}
+            </ion-button>
+          }
+        </header>
+        @if (!negligibleScaling()) {
+          <p class="result-caveat">
+            {{ "pages.panBakewareConverter.recipeScaler.caveat" | translate }}
+          </p>
         }
       </section>
-
-      @if (bakeTimeAdvice) {
-        <section class="tool-card bake-card" aria-labelledby="bake-heading">
-          <header class="tool-card-header">
-            <h3 id="bake-heading" class="tool-card-title">
-              {{ "pages.panBakewareConverter.bake.title" | translate }}
-            </h3>
-            <ion-chip
-              class="bake-direction-chip info-chip"
-              [color]="bakeDirectionColor()"
-            >
-              <ion-icon
-                [name]="
-                  bakeTimeAdvice.direction === 'similar'
-                    ? 'checkmark-circle'
-                    : 'flame'
-                "
-              ></ion-icon>
-              <ion-label>{{ bakeDirectionLabel() }}</ion-label>
-            </ion-chip>
-          </header>
-          <p class="bake-detail">{{ bakeDirectionDetail() }}</p>
-
-          <div class="bake-input-grid">
-            <ion-label class="bake-row-label">{{
-              "pages.panBakewareConverter.bake.originalTime" | translate
-            }}</ion-label>
-            <ion-input
-              class="bake-row-input"
-              type="text"
-              inputmode="decimal"
-              [(ngModel)]="originalBakeTime"
-              (ionInput)="onBakeInput()"
-              [placeholder]="
-                'pages.panBakewareConverter.bake.originalTimePlaceholder'
-                  | translate
-              "
-            ></ion-input>
-            <ion-icon
-              class="bake-row-arrow"
-              name="arrow-forward"
-              aria-hidden="true"
-            ></ion-icon>
-            <span
-              class="bake-row-result"
-              [attr.aria-label]="
-                'pages.panBakewareConverter.bake.suggestedTime' | translate
-              "
-            >
-              @if (suggestedBakeTime) {
-                {{
-                  "pages.panBakewareConverter.bake.timeResult"
-                    | translate: { value: suggestedBakeTime }
-                }}
-              } @else {
-                …
-              }
-            </span>
-
-            <ion-label class="bake-row-label">{{
-              bakeTempInputLabel()
-            }}</ion-label>
-            <ion-input
-              class="bake-row-input"
-              type="text"
-              inputmode="decimal"
-              [(ngModel)]="originalBakeTemp"
-              (ionInput)="onBakeInput()"
-              [placeholder]="bakeTempInputPlaceholder()"
-            ></ion-input>
-            <ion-icon
-              class="bake-row-arrow"
-              name="arrow-forward"
-              aria-hidden="true"
-            ></ion-icon>
-            <span
-              class="bake-row-result"
-              [attr.aria-label]="
-                'pages.panBakewareConverter.bake.suggestedTemp' | translate
-              "
-            >
-              @if (suggestedBakeTempF) {
-                @if (unit === "metric") {
-                  {{
-                    "pages.panBakewareConverter.bake.tempResultMetric"
-                      | translate
-                        : { f: suggestedBakeTempF, c: suggestedBakeTempC }
-                  }}
-                } @else {
-                  {{
-                    "pages.panBakewareConverter.bake.tempResultImperial"
-                      | translate
-                        : { f: suggestedBakeTempF, c: suggestedBakeTempC }
-                  }}
-                }
-              } @else {
-                …
-              }
-            </span>
-          </div>
-          <p class="bake-footnote">
-            {{ "pages.panBakewareConverter.bake.footnote" | translate }}
-          </p>
-        </section>
-      }
-
-      @if (capacityWarning && capacityWarning.overflowing) {
-        <aside class="warning-callout" role="alert">
-          <ion-icon name="warning" aria-hidden="true"></ion-icon>
-          <div>
-            <p class="warning-title">
-              {{
-                "pages.panBakewareConverter.warning.overflowTitle" | translate
-              }}
-            </p>
-            <p>
-              {{
-                "pages.panBakewareConverter.warning.overflowBody"
-                  | translate
-                    : {
-                        batter: capacityWarning.scaledBatterCups.toFixed(1),
-                        max: capacityWarning.maxRecommendedCups.toFixed(1),
-                      }
-              }}
-            </p>
-          </div>
-        </aside>
-      }
 
       @if (substitutions.length > 0) {
         <section class="tool-card" aria-labelledby="subs-heading">
@@ -729,6 +584,213 @@
           </ul>
         </section>
       }
+
+      @if (!isLoggedIn()) {
+        <section class="tool-card" aria-labelledby="recipe-scaler-heading">
+          <header class="tool-card-header">
+            <h3 id="recipe-scaler-heading" class="tool-card-title">
+              {{ "pages.panBakewareConverter.recipeScaler.title" | translate }}
+            </h3>
+            <p class="tool-card-subtitle">
+              {{
+                "pages.panBakewareConverter.recipeScaler.subtitle" | translate
+              }}
+            </p>
+          </header>
+          <text-area
+            class="recipe-input"
+            [autoGrow]="true"
+            [rows]="4"
+            [ariaLabel]="
+              'pages.panBakewareConverter.recipeScaler.title' | translate
+            "
+            [(ngModel)]="recipeText"
+            (ngModelChange)="onRecipeTextInput()"
+            [placeholder]="
+              'pages.panBakewareConverter.recipeScaler.placeholder' | translate
+            "
+          ></text-area>
+          @if (recipeScaledLines.length > 0) {
+            <div class="recipe-scaled" role="status" aria-live="polite">
+              <p class="recipe-scaled-label">
+                {{
+                  "pages.panBakewareConverter.recipeScaler.outputLabel"
+                    | translate
+                }}
+              </p>
+              <ul class="recipe-scaled-list">
+                @for (line of recipeScaledLines; track $index) {
+                  <li>{{ line }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </section>
+      } @else {
+        <section class="tool-card" aria-labelledby="recipe-apply-heading">
+          <header class="tool-card-header">
+            <h3 id="recipe-apply-heading" class="tool-card-title">
+              {{ "pages.panBakewareConverter.recipeApply.title" | translate }}
+            </h3>
+            <p class="tool-card-subtitle">
+              {{
+                "pages.panBakewareConverter.recipeApply.subtitle" | translate
+              }}
+            </p>
+          </header>
+          <ion-button expand="block" fill="outline" (click)="applyToRecipe()">
+            <ion-icon slot="start" name="search"></ion-icon>
+            {{ "pages.panBakewareConverter.recipeApply.button" | translate }}
+          </ion-button>
+        </section>
+      }
+
+      <section class="tool-card" aria-labelledby="bake-heading">
+        <header class="tool-card-header">
+          <h3 id="bake-heading" class="tool-card-title">
+            {{ "pages.panBakewareConverter.bake.title" | translate }}
+          </h3>
+        </header>
+
+        <p class="batter-label">
+          {{ "pages.panBakewareConverter.batterType.label" | translate }}
+        </p>
+        <div class="batter-chip-row">
+          @for (type of batterTypes; track type) {
+            <ion-chip
+              class="batter-chip"
+              [color]="batterType === type ? 'primary' : 'medium'"
+              [outline]="batterType !== type"
+              (click)="onBatterTypeChange(type)"
+              (keydown)="onBatterTypeKey($event, type)"
+              role="button"
+              tabindex="0"
+              [attr.aria-pressed]="batterType === type"
+            >
+              <ion-label>{{ batterTypeLabel(type) }}</ion-label>
+            </ion-chip>
+          }
+        </div>
+
+        @if (bakeTimeAdvice) {
+          <ion-chip
+            class="bake-direction-chip info-chip"
+            [color]="bakeDirectionColor()"
+          >
+            <ion-icon
+              [name]="
+                bakeTimeAdvice.direction === 'similar'
+                  ? 'checkmark-circle'
+                  : 'flame'
+              "
+            ></ion-icon>
+            <ion-label>{{ bakeDirectionLabel() }}</ion-label>
+          </ion-chip>
+          <p class="bake-detail">{{ bakeDirectionDetail() }}</p>
+
+          <div class="bake-input-grid">
+            <ion-label class="bake-row-label">{{
+              "pages.panBakewareConverter.bake.originalTime" | translate
+            }}</ion-label>
+            <text-input
+              type="text"
+              inputmode="decimal"
+              [ariaLabel]="
+                'pages.panBakewareConverter.bake.originalTime' | translate
+              "
+              [(ngModel)]="originalBakeTime"
+              (ngModelChange)="onBakeInput()"
+              [placeholder]="
+                'pages.panBakewareConverter.bake.originalTimePlaceholder'
+                  | translate
+              "
+            ></text-input>
+            <ion-icon
+              class="bake-row-arrow"
+              name="arrow-forward"
+              aria-hidden="true"
+            ></ion-icon>
+            <span
+              class="bake-row-result"
+              [attr.aria-label]="
+                'pages.panBakewareConverter.bake.suggestedTime' | translate
+              "
+            >
+              @if (suggestedBakeTimeLow) {
+                {{
+                  "pages.panBakewareConverter.bake.timeRange"
+                    | translate
+                      : {
+                          low: suggestedBakeTimeLow,
+                          high: suggestedBakeTimeHigh,
+                        }
+                }}
+              } @else {
+                …
+              }
+            </span>
+
+            <ion-label class="bake-row-label">{{
+              bakeTempInputLabel()
+            }}</ion-label>
+            <text-input
+              type="text"
+              inputmode="decimal"
+              [ariaLabel]="bakeTempInputLabel()"
+              [(ngModel)]="originalBakeTemp"
+              (ngModelChange)="onBakeInput()"
+              [placeholder]="bakeTempInputPlaceholder()"
+            ></text-input>
+            <ion-icon
+              class="bake-row-arrow"
+              name="arrow-forward"
+              aria-hidden="true"
+            ></ion-icon>
+            <span
+              class="bake-row-result"
+              [attr.aria-label]="
+                'pages.panBakewareConverter.bake.suggestedTemp' | translate
+              "
+            >
+              @if (suggestedBakeTempF) {
+                @if (bakeTempChanges()) {
+                  @if (unit === "metric") {
+                    {{
+                      "pages.panBakewareConverter.bake.tempResultMetric"
+                        | translate
+                          : { f: suggestedBakeTempF, c: suggestedBakeTempC }
+                    }}
+                  } @else {
+                    {{
+                      "pages.panBakewareConverter.bake.tempResultImperial"
+                        | translate
+                          : { f: suggestedBakeTempF, c: suggestedBakeTempC }
+                    }}
+                  }
+                } @else {
+                  {{ "pages.panBakewareConverter.bake.tempSame" | translate }}
+                }
+              } @else {
+                …
+              }
+            </span>
+          </div>
+        } @else {
+          <p class="bake-detail">
+            {{ "pages.panBakewareConverter.bake.noEstimate" | translate }}
+          </p>
+        }
+
+        <div class="bake-doneness">
+          <p class="bake-doneness-label">
+            {{ "pages.panBakewareConverter.doneness.label" | translate }}
+          </p>
+          <p class="bake-doneness-body">{{ donenessDetail() }}</p>
+        </div>
+        <p class="bake-footnote">
+          {{ "pages.panBakewareConverter.bake.footnoteRange" | translate }}
+        </p>
+      </section>
     } @else {
       <aside class="warning-callout" role="status">
         <ion-icon name="information-circle" aria-hidden="true"></ion-icon>
@@ -762,9 +824,15 @@
         <p class="reference-title">
           {{ "pages.panBakewareConverter.methodology.title" | translate }}
         </p>
-        <p>{{ "pages.panBakewareConverter.methodology.body1" | translate }}</p>
+        <p>
+          {{ "pages.panBakewareConverter.methodology.body1Volume" | translate }}
+        </p>
         <p>{{ "pages.panBakewareConverter.methodology.body2" | translate }}</p>
-        <p>{{ "pages.panBakewareConverter.methodology.body3" | translate }}</p>
+        <p>
+          {{
+            "pages.panBakewareConverter.methodology.body3Doneness" | translate
+          }}
+        </p>
         <p>{{ "pages.panBakewareConverter.methodology.tip" | translate }}</p>
         <p class="reference-footnote">
           {{ "pages.panBakewareConverter.methodology.sources" | translate }}
@@ -794,7 +862,7 @@
           {{ "pages.panBakewareConverter.reference.title" | translate }}
         </p>
         @for (shape of allShapes; track shape) {
-          @if (presetsByShape[shape].length > 0) {
+          @if (presetsForShape(shape).length > 0) {
             <p class="reference-shape">{{ shapeLabel(shape) }}</p>
             <div class="reference-table">
               <div class="reference-row reference-head">
@@ -805,7 +873,7 @@
                   "pages.panBakewareConverter.reference.colCapacity" | translate
                 }}</span>
               </div>
-              @for (preset of presetsByShape[shape]; track preset.key) {
+              @for (preset of presetsForShape(shape); track preset.key) {
                 <div class="reference-row">
                   <span>{{ presetLabel(preset) }}</span>
                   <span>{{ presetCapacityLabel(preset) }}</span>

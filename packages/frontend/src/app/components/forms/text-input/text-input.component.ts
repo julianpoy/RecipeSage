@@ -18,6 +18,7 @@ let nextId = 0;
 })
 export class TextInputComponent implements ControlValueAccessor {
   @Input() label?: string;
+  @Input() ariaLabel?: string;
   @Input() placeholder?: string;
   @Input() helperText?: string;
   @Input() errorText?: string;
@@ -26,6 +27,7 @@ export class TextInputComponent implements ControlValueAccessor {
   @Input() name?: string;
   @Input() type = "text";
   @Input() inputmode?: string;
+  @Input() textAlign = "start";
   @Input() maxlength?: number;
   @Input() autocapitalize = "off";
   @Input() autocorrect = "off";

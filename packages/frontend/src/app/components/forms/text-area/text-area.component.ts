@@ -25,6 +25,7 @@ let nextId = 0;
 })
 export class TextAreaComponent implements ControlValueAccessor, AfterViewInit {
   @Input() label?: string;
+  @Input() ariaLabel?: string;
   @Input() placeholder?: string;
   @Input() helperText?: string;
   @Input() errorText?: string;
