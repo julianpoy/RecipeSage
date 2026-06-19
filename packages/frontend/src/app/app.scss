@@ -274,21 +274,25 @@ ion-modal.alert-modal {
   --min-width: 280px;
   --max-width: 280px;
   --height: auto;
-  --border-radius: 13px;
-  --background: var(
-    --ion-overlay-background-color,
-    var(--ion-background-color, #fff)
-  );
-  --box-shadow:
-    0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12);
+  --background: transparent;
 
   &::part(content) {
     overflow: visible;
+    background: transparent;
+    box-shadow: none;
   }
 
   .alert-modal-inner {
     padding: 24px;
+    background: var(
+      --ion-overlay-background-color,
+      var(--ion-background-color, #fff)
+    );
+    border-radius: 13px;
+    box-shadow:
+      0 11px 15px -7px rgba(0, 0, 0, 0.2),
+      0 24px 38px 3px rgba(0, 0, 0, 0.14),
+      0 9px 46px 8px rgba(0, 0, 0, 0.12);
 
     h2 {
       margin: 0 0 8px;
@@ -327,6 +331,8 @@ ion-modal.alert-modal {
       display: flex;
       justify-content: flex-end;
       margin-top: 16px;
+      margin-inline-end: -16px;
+      margin-bottom: -16px;
 
       button {
         background: transparent;

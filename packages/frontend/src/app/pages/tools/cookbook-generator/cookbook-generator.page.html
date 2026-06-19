@@ -22,40 +22,30 @@
       </p>
     </info-block>
 
+    <div class="cookbook-fields">
+      <text-input
+        [(ngModel)]="title"
+        label="{{ 'pages.cookbook.field.title' | translate }}"
+      ></text-input>
+
+      <text-input
+        [(ngModel)]="subtitle"
+        label="{{ 'pages.cookbook.field.subtitle' | translate }}"
+      ></text-input>
+
+      <text-input
+        [(ngModel)]="author"
+        label="{{ 'pages.cookbook.field.author' | translate }}"
+      ></text-input>
+
+      <text-area
+        [(ngModel)]="introduction"
+        [autoGrow]="true"
+        label="{{ 'pages.cookbook.field.introduction' | translate }}"
+      ></text-area>
+    </div>
+
     <ion-list>
-      <ion-item>
-        <ion-input
-          labelPlacement="stacked"
-          [(ngModel)]="title"
-          label="{{ 'pages.cookbook.field.title' | translate }}"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-input
-          labelPlacement="stacked"
-          [(ngModel)]="subtitle"
-          label="{{ 'pages.cookbook.field.subtitle' | translate }}"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-input
-          labelPlacement="stacked"
-          [(ngModel)]="author"
-          label="{{ 'pages.cookbook.field.author' | translate }}"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-textarea
-          labelPlacement="stacked"
-          [(ngModel)]="introduction"
-          autoGrow="true"
-          label="{{ 'pages.cookbook.field.introduction' | translate }}"
-        ></ion-textarea>
-      </ion-item>
-
       <ion-item>
         <ion-toggle [(ngModel)]="includeToc">
           {{ "pages.cookbook.field.toc" | translate }}

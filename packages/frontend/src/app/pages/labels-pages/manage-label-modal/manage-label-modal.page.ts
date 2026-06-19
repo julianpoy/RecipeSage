@@ -11,6 +11,7 @@ import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -22,6 +23,7 @@ import {
   IonItem,
   IonLabel,
   IonFooter,
+  IonModal,
 } from "@ionic/angular/standalone";
 import {
   close,
@@ -40,6 +42,7 @@ import { addIcons } from "ionicons";
   styleUrls: ["manage-label-modal.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -50,6 +53,7 @@ import { addIcons } from "ionicons";
     IonItem,
     IonLabel,
     IonFooter,
+    IonModal,
   ],
 })
 export class ManageLabelModalPage {
@@ -68,6 +72,11 @@ export class ManageLabelModalPage {
   label!: LabelSummary;
 
   createdAt?: string;
+
+  isRenameModalOpen = false;
+  renameInput = "";
+  isMergeModalOpen = false;
+  mergeInput = "";
 
   constructor() {
     addIcons({ close, create, folderOpen, gitNetwork, pricetag, trash });
@@ -132,43 +141,15 @@ export class ManageLabelModalPage {
     );
   }
 
-  async rename() {
-    const header = await this.translate
-      .get("pages.manageLabelModal.rename.header", { name: this.label.title })
-      .toPromise();
-    const placeholder = await this.translate
-      .get("pages.manageLabelModal.rename.placeholder")
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
+  rename() {
+    this.renameInput = this.label.title;
+    this.isRenameModalOpen = true;
+  }
 
-    const renamePrompt = await this.alertCtrl.create({
-      header,
-      inputs: [
-        {
-          name: "title",
-          type: "text",
-          id: "title",
-          value: this.label.title,
-          placeholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          role: "cancel",
-          cssClass: "secondary",
-        },
-        {
-          text: okay,
-          handler: (response) => {
-            this._rename(response.title);
-          },
-        },
-      ],
-    });
-
-    await renamePrompt.present();
+  submitRename() {
+    const title = this.renameInput;
+    this.isRenameModalOpen = false;
+    this._rename(title);
   }
 
   async _delete() {
@@ -373,53 +354,15 @@ export class ManageLabelModalPage {
     this.modalCtrl.dismiss();
   }
 
-  async merge() {
-    const header = await this.translate
-      .get("pages.manageLabelModal.merge.header", { title: this.label.title })
-      .toPromise();
-    const subHeader = await this.translate
-      .get("pages.manageLabelModal.merge.subHeader", {
-        title: this.label.title,
-      })
-      .toPromise();
-    const message = await this.translate
-      .get("pages.manageLabelModal.merge.message", { title: this.label.title })
-      .toPromise();
-    const placeholder = await this.translate
-      .get("pages.manageLabelModal.merge.placeholder")
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const confirm = await this.translate.get("generic.confirm").toPromise();
+  merge() {
+    this.mergeInput = "";
+    this.isMergeModalOpen = true;
+  }
 
-    const mergePrompt = await this.alertCtrl.create({
-      header,
-      subHeader,
-      message,
-      inputs: [
-        {
-          name: "title",
-          type: "text",
-          id: "title",
-          value: "",
-          placeholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          role: "cancel",
-          cssClass: "secondary",
-        },
-        {
-          text: confirm,
-          handler: async (response) => {
-            this._merge(response.title);
-          },
-        },
-      ],
-    });
-
-    await mergePrompt.present();
+  submitMerge() {
+    const title = this.mergeInput;
+    this.isMergeModalOpen = false;
+    this._merge(title);
   }
 
   cancel() {

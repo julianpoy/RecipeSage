@@ -503,6 +503,7 @@
   "pages.manageLabelModal.renameConflict.header": "Error",
   "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
   "pages.manageLabelModal.rename.header": "Rename label: {{name}}",
+  "pages.manageLabelModal.rename.placeholder": "New label name",
   "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
   "pages.manageLabelModal.deleteWithRecipes.header": "Delete label \"{{name}}\" including recipes",
   "pages.manageLabelModal.deleteWithRecipes.message": "This will delete the label {{name}}, along with any recipes that have this label attached to them.",
