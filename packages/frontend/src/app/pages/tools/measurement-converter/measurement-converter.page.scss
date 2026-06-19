@@ -1,6 +1,7 @@
 .page-wrapper {
   max-width: var(--page-max-width);
   margin: 0 auto;
+  padding-bottom: 25vh;
 }
 
 info-block {
@@ -37,19 +38,19 @@ info-block {
   color: var(--ion-color-medium-shade, #5b5b5b);
 }
 
-.expand-toggle {
-  font-size: 0.85rem;
-  --min-height: 36px;
-
-  ion-icon {
-    margin-inline-end: 8px;
-  }
+.value-input {
+  width: 140px;
 }
 
-.value-input {
-  max-width: 140px;
-  text-align: end;
-  --padding-end: 4px;
+.unit-suffix {
+  width: 30px;
+  margin-inline-start: 6px;
+  font-size: 0.8rem;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--ion-color-medium-shade);
+  align-self: center;
 }
 
 .varies-note {

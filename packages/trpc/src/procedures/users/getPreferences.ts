@@ -54,7 +54,7 @@ const appPreferencesSchema = z
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: z.boolean(),
 
-    [MeasurementConverterPreferenceKey.ShowFractions]: z.boolean(),
+    [MeasurementConverterPreferenceKey.EnabledUnits]: z.array(z.string()),
 
     [MealPlanPreferenceKey.ShowAddedBy]: z.boolean(),
     [MealPlanPreferenceKey.ShowAddedOn]: z.boolean(),

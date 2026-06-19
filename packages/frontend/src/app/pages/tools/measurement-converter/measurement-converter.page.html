@@ -26,6 +26,7 @@
         {{ "pages.measurementConverter.intro.title" | translate }}
       </ng-container>
       <p>{{ "pages.measurementConverter.intro.body" | translate }}</p>
+      <p>{{ "pages.measurementConverter.intro.bridgeHint" | translate }}</p>
     </info-block>
 
     <ion-segment class="mode-segment" [(ngModel)]="mode">
@@ -53,56 +54,28 @@
             "pages.measurementConverter.volume" | translate
           }}</ion-label>
         </ion-list-header>
-        @for (unit of volumeUnitsCommon; track unit) {
+        @for (unit of visibleVolumeUnits; track unit) {
           <ion-item>
             <ion-label>{{
               "pages.measurementConverter.units." + unit | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="value-input"
+              [ariaLabel]="
+                'pages.measurementConverter.units.' + unit | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="volumeValues[unit]"
-              (ionInput)="onVolumeInput(unit)"
-            ></ion-input>
+              (ngModelChange)="onVolumeInput(unit)"
+            ></text-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              shortUnitLabel(unit)
+            }}</ion-note>
           </ion-item>
         }
-        @if (volumeExpanded) {
-          @for (unit of volumeUnitsExtra; track unit) {
-            <ion-item>
-              <ion-label>{{
-                "pages.measurementConverter.units." + unit | translate
-              }}</ion-label>
-              <ion-input
-                slot="end"
-                class="value-input"
-                type="text"
-                inputmode="decimal"
-                [(ngModel)]="volumeValues[unit]"
-                (ionInput)="onVolumeInput(unit)"
-              ></ion-input>
-            </ion-item>
-          }
-        }
-        <ion-item
-          button
-          lines="none"
-          class="expand-toggle"
-          (click)="volumeExpanded = !volumeExpanded"
-        >
-          <ion-icon
-            slot="start"
-            color="medium"
-            [name]="volumeExpanded ? 'chevron-up' : 'chevron-down'"
-          ></ion-icon>
-          <ion-label color="medium">{{
-            (volumeExpanded
-              ? "pages.measurementConverter.showFewer"
-              : "pages.measurementConverter.showMore"
-            ) | translate
-          }}</ion-label>
-        </ion-item>
       </ion-list>
 
       <ion-item
@@ -137,56 +110,28 @@
             "pages.measurementConverter.weight" | translate
           }}</ion-label>
         </ion-list-header>
-        @for (unit of weightUnitsCommon; track unit) {
+        @for (unit of visibleWeightUnits; track unit) {
           <ion-item>
             <ion-label>{{
               "pages.measurementConverter.units." + unit | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="value-input"
+              [ariaLabel]="
+                'pages.measurementConverter.units.' + unit | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="weightValues[unit]"
-              (ionInput)="onWeightInput(unit)"
-            ></ion-input>
+              (ngModelChange)="onWeightInput(unit)"
+            ></text-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              shortUnitLabel(unit)
+            }}</ion-note>
           </ion-item>
         }
-        @if (weightExpanded) {
-          @for (unit of weightUnitsExtra; track unit) {
-            <ion-item>
-              <ion-label>{{
-                "pages.measurementConverter.units." + unit | translate
-              }}</ion-label>
-              <ion-input
-                slot="end"
-                class="value-input"
-                type="text"
-                inputmode="decimal"
-                [(ngModel)]="weightValues[unit]"
-                (ionInput)="onWeightInput(unit)"
-              ></ion-input>
-            </ion-item>
-          }
-        }
-        <ion-item
-          button
-          lines="none"
-          class="expand-toggle"
-          (click)="weightExpanded = !weightExpanded"
-        >
-          <ion-icon
-            slot="start"
-            color="medium"
-            [name]="weightExpanded ? 'chevron-up' : 'chevron-down'"
-          ></ion-icon>
-          <ion-label color="medium">{{
-            (weightExpanded
-              ? "pages.measurementConverter.showFewer"
-              : "pages.measurementConverter.showMore"
-            ) | translate
-          }}</ion-label>
-        </ion-item>
       </ion-list>
 
       @if (selectedIngredientVaries) {
@@ -217,14 +162,16 @@
           <ion-label>{{
             "pages.measurementConverter.quantity" | translate
           }}</ion-label>
-          <ion-input
+          <text-input
             slot="end"
             class="value-input"
+            [ariaLabel]="'pages.measurementConverter.quantity' | translate"
+            textAlign="end"
             type="text"
             inputmode="decimal"
             [(ngModel)]="countQuantity"
-            (ionInput)="onCountInput()"
-          ></ion-input>
+            (ngModelChange)="onCountInput()"
+          ></text-input>
         </ion-item>
       </ion-list>
 
@@ -234,56 +181,28 @@
             "pages.measurementConverter.weight" | translate
           }}</ion-label>
         </ion-list-header>
-        @for (unit of weightUnitsCommon; track unit) {
+        @for (unit of visibleWeightUnits; track unit) {
           <ion-item>
             <ion-label>{{
               "pages.measurementConverter.units." + unit | translate
             }}</ion-label>
-            <ion-input
+            <text-input
               slot="end"
               class="value-input"
+              [ariaLabel]="
+                'pages.measurementConverter.units.' + unit | translate
+              "
+              textAlign="end"
               type="text"
               inputmode="decimal"
               [(ngModel)]="countWeightValues[unit]"
-              (ionInput)="onCountWeightInput(unit)"
-            ></ion-input>
+              (ngModelChange)="onCountWeightInput(unit)"
+            ></text-input>
+            <ion-note slot="end" class="unit-suffix">{{
+              shortUnitLabel(unit)
+            }}</ion-note>
           </ion-item>
         }
-        @if (weightExpanded) {
-          @for (unit of weightUnitsExtra; track unit) {
-            <ion-item>
-              <ion-label>{{
-                "pages.measurementConverter.units." + unit | translate
-              }}</ion-label>
-              <ion-input
-                slot="end"
-                class="value-input"
-                type="text"
-                inputmode="decimal"
-                [(ngModel)]="countWeightValues[unit]"
-                (ionInput)="onCountWeightInput(unit)"
-              ></ion-input>
-            </ion-item>
-          }
-        }
-        <ion-item
-          button
-          lines="none"
-          class="expand-toggle"
-          (click)="weightExpanded = !weightExpanded"
-        >
-          <ion-icon
-            slot="start"
-            color="medium"
-            [name]="weightExpanded ? 'chevron-up' : 'chevron-down'"
-          ></ion-icon>
-          <ion-label color="medium">{{
-            (weightExpanded
-              ? "pages.measurementConverter.showFewer"
-              : "pages.measurementConverter.showMore"
-            ) | translate
-          }}</ion-label>
-        </ion-item>
       </ion-list>
 
       @if (countItemVaries) {
@@ -299,40 +218,61 @@
           <ion-label>{{
             "pages.measurementConverter.temperature.fahrenheit" | translate
           }}</ion-label>
-          <ion-input
+          <text-input
             slot="end"
             class="value-input"
+            [ariaLabel]="
+              'pages.measurementConverter.temperature.fahrenheit' | translate
+            "
+            textAlign="end"
             type="text"
             inputmode="decimal"
             [(ngModel)]="tempFahrenheit"
-            (ionInput)="onTemperatureInput('fahrenheit')"
-          ></ion-input>
+            (ngModelChange)="onTemperatureInput('fahrenheit')"
+          ></text-input>
+          <ion-note slot="end" class="unit-suffix">{{
+            shortUnitLabel("fahrenheit")
+          }}</ion-note>
         </ion-item>
         <ion-item>
           <ion-label>{{
             "pages.measurementConverter.temperature.celsius" | translate
           }}</ion-label>
-          <ion-input
+          <text-input
             slot="end"
             class="value-input"
+            [ariaLabel]="
+              'pages.measurementConverter.temperature.celsius' | translate
+            "
+            textAlign="end"
             type="text"
             inputmode="decimal"
             [(ngModel)]="tempCelsius"
-            (ionInput)="onTemperatureInput('celsius')"
-          ></ion-input>
+            (ngModelChange)="onTemperatureInput('celsius')"
+          ></text-input>
+          <ion-note slot="end" class="unit-suffix">{{
+            shortUnitLabel("celsius")
+          }}</ion-note>
         </ion-item>
         <ion-item>
           <ion-label>{{
             "pages.measurementConverter.temperature.gasMark" | translate
           }}</ion-label>
-          <ion-input
+          <text-input
             slot="end"
             class="value-input"
+            [ariaLabel]="
+              'pages.measurementConverter.temperature.gasMark' | translate
+            "
+            textAlign="end"
             type="text"
             inputmode="decimal"
             [(ngModel)]="tempGasMark"
-            (ionInput)="onTemperatureInput('gasMark')"
-          ></ion-input>
+            (ngModelChange)="onTemperatureInput('gasMark')"
+          ></text-input>
+          <ion-note slot="end" class="unit-suffix">{{
+            shortUnitLabel("gasMark")
+          }}</ion-note>
         </ion-item>
       </ion-list>
 

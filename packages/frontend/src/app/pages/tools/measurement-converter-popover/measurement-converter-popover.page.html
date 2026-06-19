@@ -3,14 +3,37 @@
     {{ "pages.measurementConverter.displayOptions" | translate }}
   </ion-list-header>
 
-  <ion-item lines="none">
-    <ion-toggle
-      [(ngModel)]="preferences[preferenceKeys.ShowFractions]"
-      (ngModelChange)="savePreferences()"
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.measurementConverter.volume' | translate }}"
+      [(ngModel)]="selectedVolumeUnits"
+      (ngModelChange)="saveUnits()"
+      multiple="true"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
-      <div class="ion-text-wrap">
-        {{ "pages.measurementConverter.showFractions" | translate }}
-      </div>
-    </ion-toggle>
+      @for (unit of volumeUnits; track unit) {
+        <ion-select-option [value]="unit">{{
+          "pages.measurementConverter.units." + unit | translate
+        }}</ion-select-option>
+      }
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-select
+      label="{{ 'pages.measurementConverter.weight' | translate }}"
+      [(ngModel)]="selectedWeightUnits"
+      (ngModelChange)="saveUnits()"
+      multiple="true"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
+    >
+      @for (unit of weightUnits; track unit) {
+        <ion-select-option [value]="unit">{{
+          "pages.measurementConverter.units." + unit | translate
+        }}</ion-select-option>
+      }
+    </ion-select>
   </ion-item>
 </ion-list>

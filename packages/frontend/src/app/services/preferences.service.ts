@@ -19,6 +19,8 @@ import {
   ShoppingListSortOptions,
   StartPageOptions,
   SupportedFontSize,
+  VOLUME_UNITS_COMMON,
+  WEIGHT_UNITS_COMMON,
 } from "@recipesage/util/shared";
 import { ServerActionsService } from "./server-actions.service";
 import { UtilService } from "./util.service";
@@ -68,7 +70,10 @@ export class PreferencesService {
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 
-    [MeasurementConverterPreferenceKey.ShowFractions]: true,
+    [MeasurementConverterPreferenceKey.EnabledUnits]: [
+      ...VOLUME_UNITS_COMMON,
+      ...WEIGHT_UNITS_COMMON,
+    ],
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,

@@ -144,7 +144,7 @@ export enum ManageLabelsPreferenceKey {
 }
 
 export enum MeasurementConverterPreferenceKey {
-  ShowFractions = "measurementConverter.showFractions",
+  EnabledUnits = "measurementConverter.enabledUnits",
 }
 
 export enum MealPlanPreferenceKey {
@@ -192,7 +192,7 @@ export interface AppPreferenceTypes {
 
   [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 
-  [MeasurementConverterPreferenceKey.ShowFractions]: boolean;
+  [MeasurementConverterPreferenceKey.EnabledUnits]: string[];
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;
