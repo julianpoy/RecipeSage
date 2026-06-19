@@ -2,26 +2,32 @@
   <label class="rs-field__label" [attr.for]="inputId">{{ label }}</label>
 }
 
-<input
-  #control
-  class="rs-field__control"
-  [class.rs-field__control--invalid]="invalid"
-  [id]="inputId"
-  [attr.aria-label]="ariaLabel"
-  [attr.name]="name"
-  [attr.type]="type"
-  [attr.inputmode]="inputmode"
-  [style.text-align]="textAlign"
-  [attr.placeholder]="placeholder"
-  [attr.maxlength]="maxlength"
-  [attr.autocapitalize]="autocapitalize"
-  [attr.autocorrect]="autocorrect"
-  [attr.spellcheck]="spellcheck"
-  [disabled]="disabled"
-  [value]="value"
-  (input)="onInput(control.value)"
-  (blur)="onBlur()"
-/>
+<div class="rs-field__control-wrap">
+  <input
+    #control
+    class="rs-field__control"
+    [class.rs-field__control--invalid]="invalid"
+    [id]="inputId"
+    [attr.aria-label]="ariaLabel"
+    [attr.name]="name"
+    [attr.type]="type"
+    [attr.inputmode]="inputmode"
+    [style.text-align]="textAlign"
+    [attr.placeholder]="placeholder"
+    [attr.maxlength]="maxlength"
+    [attr.autocapitalize]="autocapitalize"
+    [attr.autocorrect]="autocorrect"
+    [attr.spellcheck]="spellcheck"
+    [disabled]="disabled"
+    [value]="value"
+    (input)="onInput(control.value)"
+    (blur)="onBlur()"
+  />
+
+  <span class="rs-field__affix-end">
+    <ng-content select="[slot=end]"></ng-content>
+  </span>
+</div>
 
 @if (invalid && errorText) {
   <p class="rs-field__message rs-field__message--error">{{ errorText }}</p>

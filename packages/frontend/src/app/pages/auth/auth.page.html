@@ -52,79 +52,68 @@
 
         @if (!showLogin) {
           <div>
-            <ion-item>
-              <ion-input
-                label="{{ 'pages.auth.input.name' | translate }}"
-                labelPlacement="stacked"
-                [(ngModel)]="name"
-                type="text"
-              ></ion-input>
-            </ion-item>
+            <text-input
+              label="{{ 'pages.auth.input.name' | translate }}"
+              [(ngModel)]="name"
+              type="text"
+            ></text-input>
             <br />
           </div>
         }
 
-        <ion-item>
-          <ion-input
-            label="{{ 'pages.auth.input.email' | translate }}"
-            labelPlacement="stacked"
-            [(ngModel)]="email"
-            type="email"
-          ></ion-input>
-        </ion-item>
+        <text-input
+          label="{{ 'pages.auth.input.email' | translate }}"
+          [(ngModel)]="email"
+          type="email"
+        ></text-input>
         <br />
 
-        <ion-item>
-          <ion-input
-            label="{{ 'pages.auth.input.password' | translate }}"
-            labelPlacement="stacked"
-            [(ngModel)]="password"
-            [type]="revealPassword ? 'text' : 'password'"
-            (keyup.enter)="showLogin && auth()"
+        <text-input
+          label="{{ 'pages.auth.input.password' | translate }}"
+          [(ngModel)]="password"
+          [type]="revealPassword ? 'text' : 'password'"
+          (keyup.enter)="showLogin && auth()"
+        >
+          <ion-button
+            fill="clear"
+            size="small"
+            slot="end"
+            aria-label="Show/hide password"
+            (click)="revealPassword = !revealPassword"
           >
-            <ion-button
-              fill="clear"
-              slot="end"
-              aria-label="Show/hide password"
-              (click)="revealPassword = !revealPassword"
-            >
-              <ion-icon
-                slot="icon-only"
-                [name]="revealPassword ? 'eye-off' : 'eye'"
-                aria-hidden="true"
-                color="medium"
-              ></ion-icon>
-            </ion-button>
-          </ion-input>
-        </ion-item>
+            <ion-icon
+              slot="icon-only"
+              [name]="revealPassword ? 'eye-off' : 'eye'"
+              aria-hidden="true"
+              color="medium"
+            ></ion-icon>
+          </ion-button>
+        </text-input>
         <br />
 
         @if (!showLogin) {
           <div>
-            <ion-item>
-              <ion-input
-                label="{{ 'pages.auth.input.confirmPassword' | translate }}"
-                labelPlacement="stacked"
-                [(ngModel)]="confirmPassword"
-                [type]="revealPassword ? 'text' : 'password'"
-                (keyup.enter)="auth()"
+            <text-input
+              label="{{ 'pages.auth.input.confirmPassword' | translate }}"
+              [(ngModel)]="confirmPassword"
+              [type]="revealPassword ? 'text' : 'password'"
+              (keyup.enter)="auth()"
+            >
+              <ion-button
+                fill="clear"
+                size="small"
+                slot="end"
+                aria-label="Show/hide password"
+                (click)="revealPassword = !revealPassword"
               >
-                <ion-button
-                  fill="clear"
-                  slot="end"
-                  aria-label="Show/hide password"
-                  (click)="revealPassword = !revealPassword"
-                >
-                  <ion-icon
-                    slot="icon-only"
-                    [name]="revealPassword ? 'eye-off' : 'eye'"
-                    aria-hidden="true"
-                    color="medium"
-                    size="small"
-                  ></ion-icon>
-                </ion-button>
-              </ion-input>
-            </ion-item>
+                <ion-icon
+                  slot="icon-only"
+                  [name]="revealPassword ? 'eye-off' : 'eye'"
+                  aria-hidden="true"
+                  color="medium"
+                ></ion-icon>
+              </ion-button>
+            </text-input>
             <br /><br />
           </div>
         }
