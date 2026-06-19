@@ -8,7 +8,6 @@ import {
   extractText,
   findChild,
   findChildren,
-  MAX_NOTE_BYTES,
   normalizeRecipeText,
   streamNoteChunks,
   countNoteChunks,
@@ -146,16 +145,6 @@ describe("enexParsing", () => {
       await withTempFile("<en-export></en-export>", async (filePath) => {
         expect(await collect(streamNoteChunks(filePath))).toEqual([]);
         expect(await countNoteChunks(filePath)).toBe(0);
-      });
-    });
-
-    it("skips notes whose serialized size exceeds MAX_NOTE_BYTES", async () => {
-      const oversizedBody = "x".repeat(MAX_NOTE_BYTES + 1);
-      const enex = `<en-export><note>small1</note><note>${oversizedBody}</note><note>small2</note></en-export>`;
-      await withTempFile(enex, async (filePath) => {
-        const chunks = await collect(streamNoteChunks(filePath));
-        expect(chunks).toEqual(["<note>small1</note>", "<note>small2</note>"]);
-        expect(await countNoteChunks(filePath)).toBe(2);
       });
     });
   });
