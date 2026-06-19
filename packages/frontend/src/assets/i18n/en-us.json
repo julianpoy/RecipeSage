@@ -1826,6 +1826,7 @@
   "pages.shoppingListIgnoreModal.title": "Shopping List Item Ignore List",
   "pages.shoppingListIgnoreModal.description": "Items listed here will be automatically excluded when adding a recipe to a shopping list. This is particularly handy for ingredients such as salt, which you likely don't need added every time you add an item to a shopping list.",
   "pages.shoppingListIgnoreModal.instructions": "Each entry should be on it's own line. Entries will match an ingredient if the ingredient contains any part of the line. If you enter \"salt\", it will match \"1 tbsp sea salt finely ground\".",
+  "pages.shoppingListIgnoreModal.scopeNote": "This list applies to all of your shopping lists, and only to you. Other collaborators on a shopping list are not affected by your ignore list.",
   "pages.shoppingListIgnoreModal.label": "Ignore list",
   "pages.shoppingListIgnoreModal.placeholder": "Keywords to ignore, each on their own line",
 

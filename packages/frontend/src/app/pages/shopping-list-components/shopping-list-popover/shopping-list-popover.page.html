@@ -101,6 +101,16 @@
   </ion-button>
 
   <ion-button
+    (click)="showIgnoreModal()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="ban" slot="start"></ion-icon>
+    {{ "pages.shoppingLists.editIgnore" | translate }}
+  </ion-button>
+
+  <ion-button
     [disabled]="!isOwner"
     (click)="updateList()"
     expand="block"
