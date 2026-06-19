@@ -1476,43 +1476,18 @@ export class EditRecipePage {
     loading.dismiss();
   }
 
-  async addImageByUrlPrompt() {
-    const header = await this.translate
-      .get("pages.editRecipe.addImage.header")
-      .toPromise();
-    const message = await this.translate
-      .get("pages.editRecipe.addImage.message")
-      .toPromise();
-    const placeholder = await this.translate
-      .get("pages.editRecipe.addImage.placeholder")
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const confirm = await this.translate.get("generic.confirm").toPromise();
+  isAddImageByUrlModalOpen = false;
+  addImageByUrlInput = "";
 
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      inputs: [
-        {
-          name: "imageUrl",
-          placeholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          handler: () => {},
-        },
-        {
-          text: confirm,
-          handler: (data) => {
-            if (data.imageUrl) this._addImageByUrlPrompt(data.imageUrl);
-          },
-        },
-      ],
-    });
+  addImageByUrlPrompt() {
+    this.addImageByUrlInput = "";
+    this.isAddImageByUrlModalOpen = true;
+  }
 
-    await alert.present();
+  submitAddImageByUrl() {
+    const imageUrl = this.addImageByUrlInput;
+    this.isAddImageByUrlModalOpen = false;
+    if (imageUrl) this._addImageByUrlPrompt(imageUrl);
   }
 
   async _addImageByUrlPrompt(imageUrl: string) {

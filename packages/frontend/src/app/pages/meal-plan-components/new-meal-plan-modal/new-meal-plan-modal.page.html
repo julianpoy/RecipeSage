@@ -12,19 +12,13 @@
 
 <ion-content class="ion-padding">
   <h6>{{ "pages.updateMealPlanModal.detailsTitle" | translate }}</h6>
-  <ion-item>
-    <ion-input
-      label="{{ 'pages.newMealPlanModal.input.title' | translate }}"
-      labelPlacement="stacked"
-      [(ngModel)]="mealPlanTitle"
-      type="text"
-      value=""
-      autocapitalize="on"
-      autocomplete="on"
-      autocorrect="on"
-      spellcheck="true"
-    ></ion-input>
-  </ion-item>
+  <text-input
+    label="{{ 'pages.newMealPlanModal.input.title' | translate }}"
+    [(ngModel)]="mealPlanTitle"
+    type="text"
+    autocapitalize="on"
+    autocorrect="on"
+  ></text-input>
   <br />
   <ion-item button detail lines="none" (click)="openCustomMealOptions()">
     <ion-icon name="reorder-three" slot="start"></ion-icon>

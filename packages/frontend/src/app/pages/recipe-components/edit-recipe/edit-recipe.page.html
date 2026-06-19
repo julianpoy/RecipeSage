@@ -84,13 +84,13 @@
         <div class="alert-modal-inner">
           <h2>{{ "pages.editRecipe.clipText.header" | translate }}</h2>
           <p>{{ "pages.editRecipe.clipText.message" | translate }}</p>
-          <textarea
+          <text-area
             [(ngModel)]="clipTextInput"
             placeholder="{{
               'pages.editRecipe.clipText.placeholder' | translate
             }}"
-            rows="4"
-          ></textarea>
+            [rows]="4"
+          ></text-area>
           <label class="alert-modal-checkbox">
             <input type="checkbox" [(ngModel)]="clipTextIncludeNutrition" />
             {{ "pages.editRecipe.clip.includeNutrition" | translate }}
@@ -116,13 +116,13 @@
         <div class="alert-modal-inner">
           <h2>{{ "pages.editRecipe.clipURL.header" | translate }}</h2>
           <p>{{ "pages.editRecipe.clipURL.message" | translate }}</p>
-          <input
+          <text-input
             type="url"
             [(ngModel)]="clipUrlInput"
             placeholder="{{
               'pages.editRecipe.clipURL.placeholder' | translate
             }}"
-          />
+          ></text-input>
           <label class="alert-modal-checkbox">
             <input type="checkbox" [(ngModel)]="clipUrlIncludeNutrition" />
             {{ "pages.editRecipe.clip.includeNutrition" | translate }}
@@ -158,6 +158,34 @@
             </button>
             <button (click)="submitClipDocument()">
               {{ "pages.editRecipe.clipDocument.choose" | translate }}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+    <ion-modal
+      cssClass="alert-modal"
+      [isOpen]="isAddImageByUrlModalOpen"
+      (didDismiss)="isAddImageByUrlModalOpen = false"
+    >
+      <ng-template>
+        <div class="alert-modal-inner">
+          <h2>{{ "pages.editRecipe.addImage.header" | translate }}</h2>
+          <p>{{ "pages.editRecipe.addImage.message" | translate }}</p>
+          <text-input
+            type="url"
+            [(ngModel)]="addImageByUrlInput"
+            placeholder="{{
+              'pages.editRecipe.addImage.placeholder' | translate
+            }}"
+          ></text-input>
+          <div class="alert-modal-buttons">
+            <button (click)="isAddImageByUrlModalOpen = false">
+              {{ "generic.cancel" | translate }}
+            </button>
+            <button (click)="submitAddImageByUrl()">
+              {{ "generic.confirm" | translate }}
             </button>
           </div>
         </div>

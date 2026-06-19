@@ -303,21 +303,10 @@ ion-modal.alert-modal {
       opacity: 0.7;
     }
 
-    input[type="url"],
-    input[type="text"],
-    textarea {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid var(--ion-border-color, #dedede);
-      background: transparent;
-      color: var(--ion-text-color);
-      padding: 8px 0;
+    text-input,
+    text-area {
+      display: block;
       margin-bottom: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      resize: vertical;
-      box-sizing: border-box;
     }
 
     .alert-modal-checkbox {
