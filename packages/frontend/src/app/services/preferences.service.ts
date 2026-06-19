@@ -2,6 +2,7 @@ import { Injectable, Injector, inject } from "@angular/core";
 import {
   AppPreferenceTypes,
   AppTheme,
+  CookModePreferenceKey,
   GlobalPreferenceKey,
   ManageLabelsPreferenceKey,
   MealPlanPreferenceKey,
@@ -62,6 +63,8 @@ export class PreferencesService {
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: false,
+
+    [CookModePreferenceKey.FontSize]: SupportedFontSize.PX20,
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 

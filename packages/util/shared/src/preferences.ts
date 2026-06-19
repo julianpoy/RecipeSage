@@ -135,6 +135,10 @@ export enum RecipeDetailsPreferenceKey {
   AutoExpandNutrition = "recipeDetails.autoExpandNutrition",
 }
 
+export enum CookModePreferenceKey {
+  FontSize = "cookMode.fontSize",
+}
+
 export enum ManageLabelsPreferenceKey {
   ShowCreatedAt = "manageLabels.showCreatedAt",
 }
@@ -183,6 +187,8 @@ export interface AppPreferenceTypes {
 
   [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
   [RecipeDetailsPreferenceKey.AutoExpandNutrition]: boolean;
+
+  [CookModePreferenceKey.FontSize]: SupportedFontSize;
 
   [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 

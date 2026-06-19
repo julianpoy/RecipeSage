@@ -43,6 +43,16 @@
     }
   </ion-button>
 
+  <ion-button
+    (click)="closeWithAction('enterCookMode')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="restaurant" slot="start"></ion-icon>
+    {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
+  </ion-button>
+
   @if (recipe.userId === me?.id && recipe.folder === "inbox") {
     <div>
       <ion-item lines="none">

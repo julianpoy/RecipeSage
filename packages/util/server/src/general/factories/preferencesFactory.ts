@@ -33,6 +33,7 @@ export function preferencesFactory(): AppPreferenceTypes {
     "myRecipes.includeFriends": MyRecipesIncludeFriendsOptions.No,
     "recipeDetails.enableWakeLock": true,
     "recipeDetails.autoExpandNutrition": false,
+    "cookMode.fontSize": SupportedFontSize.PX20,
     "manageLabels.showCreatedAt": false,
     "measurementConverter.showFractions": true,
     "MealPlan.showAddedBy": true,

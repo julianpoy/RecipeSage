@@ -164,6 +164,24 @@
           class="custom-select-icon"
         ></ion-icon>
       </ion-item>
+      <ion-item
+        lines="inset"
+        class="cursor-pointer"
+        (click)="showCookModeFontSizePopover()"
+        button
+        detail="false"
+      >
+        <ion-icon name="restaurant" slot="start"></ion-icon>
+        <ion-label>
+          {{ "pages.settings.cookModeFontSize" | translate }}
+        </ion-label>
+        <ion-icon
+          name="caret-down-sharp"
+          size="small"
+          slot="end"
+          class="custom-select-icon"
+        ></ion-icon>
+      </ion-item>
       <ion-item lines="inset">
         <ion-icon name="fitness" slot="start"></ion-icon>
         <ion-toggle

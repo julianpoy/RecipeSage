@@ -134,6 +134,7 @@ export class AppComponent {
 
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
+  inCookMode = false;
 
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
   enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
@@ -567,6 +568,8 @@ export class AppComponent {
 
       this.updateIsLoggedIn();
       this.updateNavList();
+
+      this.inCookMode = event.url.split("?")[0].endsWith("/cook");
 
       this.checkBrowserCompatibility();
 

@@ -1,5 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { AlertController, NavController } from "@ionic/angular/standalone";
+import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap } from "../../services/util.service";
@@ -22,12 +23,17 @@ export class CookingToolbarComponent {
   }
 
   private navCtrl = inject(NavController);
+  private router = inject(Router);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
   cookingToolbarService = inject(CookingToolbarService);
 
   openRecipe(recipeId: string) {
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipeId));
+    const inCookMode = this.router.url.split("?")[0].endsWith("/cook");
+    const path = inCookMode
+      ? RouteMap.RecipePageCook.getPath(recipeId)
+      : RouteMap.RecipePage.getPath(recipeId);
+    this.navCtrl.navigateForward(path);
   }
 
   async clearPins() {

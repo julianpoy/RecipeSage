@@ -309,8 +309,12 @@
   "pages.recipeDetailsPopover.edit": "Edit",
   "pages.recipeDetailsPopover.makeACopy": "Make a Copy",
   "pages.recipeDetailsPopover.setLastMadeToday": "Mark as Made Today",
+  "pages.recipeDetailsPopover.enterCookMode": "Enter Cook Mode",
   "pages.recipeDetailsPopover.dangerZone": "Danger Zone",
   "pages.recipeDetailsPopover.delete": "Delete Recipe",
+
+  "pages.cook.tabTitle": "Cook Mode - RecipeSage",
+  "pages.cook.loading": "Loading recipe...",
 
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
@@ -1728,6 +1732,7 @@
   "pages.settings.language.contribute": "Language support is community powered. Click here to add a language or fix translations",
   "pages.settings.language.default": "Browser Default",
   "pages.settings.fontSize": "Font Size",
+  "pages.settings.cookModeFontSize": "Cook Mode Font Size",
   "pages.settings.autoExpandNutrition": "Auto-Expand Nutritional Information When Editing Recipes",
   "pages.settings.preferencesSync": "Sync Preferences Between Devices",
   "pages.settings.reset": "Reset All Preferences",

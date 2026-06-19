@@ -14,6 +14,7 @@ import {
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   AppTheme,
+  CookModePreferenceKey,
   encryptUtf8WithRSAKey,
   GlobalPreferenceKey,
   PreferencesSync,
@@ -69,6 +70,7 @@ import {
   list,
   logOut,
   person,
+  restaurant,
   sync,
   tabletLandscape,
   textOutline,
@@ -132,6 +134,7 @@ export class SettingsPage {
   languageSelectInterfaceOptions = {};
 
   fontSize = this.preferences[GlobalPreferenceKey.FontSize];
+  cookModeFontSize = this.preferences[CookModePreferenceKey.FontSize];
   startPageOptions = StartPageOptions;
   isLoggedIn: boolean = false;
 
@@ -149,6 +152,7 @@ export class SettingsPage {
       list,
       logOut,
       person,
+      restaurant,
       sync,
       tabletLandscape,
       textOutline,
@@ -421,6 +425,29 @@ export class SettingsPage {
     this.fontSize = data.fontSize;
 
     this.fontSizeChanged();
+  }
+
+  cookModeFontSizeChanged() {
+    this.preferences[CookModePreferenceKey.FontSize] = this.cookModeFontSize;
+    this.preferencesService.save();
+  }
+
+  async showCookModeFontSizePopover() {
+    const fontSizeModal = await this.modalCtrl.create({
+      component: FontSizeModalComponent,
+      componentProps: {
+        fontSize: this.cookModeFontSize,
+      },
+    });
+
+    await fontSizeModal.present();
+
+    const { data } = await fontSizeModal.onDidDismiss();
+    if (!data) return;
+
+    this.cookModeFontSize = data.fontSize;
+
+    this.cookModeFontSizeChanged();
   }
 
   themeChanged() {
