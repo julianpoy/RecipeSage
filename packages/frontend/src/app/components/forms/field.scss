@@ -1,0 +1,83 @@
+@mixin base {
+  :host {
+    display: block;
+
+    --rs-field-bg: var(--ion-color-step-50);
+    --rs-field-bg-focus: var(--ion-background-color);
+    --rs-field-border-focus: var(--ion-color-primary);
+    --rs-field-ring: rgba(var(--ion-color-primary-rgb), 0.2);
+    --rs-field-text: var(--ion-text-color);
+    --rs-field-placeholder: var(--ion-color-step-500);
+    --rs-field-label: var(--ion-color-step-650);
+    --rs-field-helper: var(--ion-color-step-500);
+    --rs-field-error: var(--ion-color-danger);
+    --rs-field-error-ring: rgba(var(--ion-color-danger-rgb, 235, 68, 90), 0.2);
+    --rs-field-radius: 8px;
+  }
+
+  .rs-field__label {
+    display: block;
+    margin-block-end: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--rs-field-label);
+  }
+
+  .rs-field__control {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--rs-field-text);
+    background: var(--rs-field-bg);
+    border: 1px solid transparent;
+    border-radius: var(--rs-field-radius);
+    outline: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .rs-field__control::placeholder {
+    color: var(--rs-field-placeholder);
+    opacity: 1;
+  }
+
+  .rs-field__control:focus {
+    background: var(--rs-field-bg-focus);
+    border-color: var(--rs-field-border-focus);
+    box-shadow: 0 0 0 3px var(--rs-field-ring);
+  }
+
+  .rs-field__control:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .rs-field__control--invalid {
+    border-color: var(--rs-field-error);
+  }
+
+  .rs-field__control--invalid:focus {
+    border-color: var(--rs-field-error);
+    box-shadow: 0 0 0 3px var(--rs-field-error-ring);
+  }
+
+  .rs-field__message {
+    margin: 0;
+    margin-block-start: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--rs-field-helper);
+  }
+
+  .rs-field__message--error {
+    color: var(--rs-field-error);
+  }
+}

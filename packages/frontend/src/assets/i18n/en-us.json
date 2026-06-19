@@ -1749,7 +1749,8 @@
   "pages.newShoppingListItem.title": "Add item(s)",
   "pages.newShoppingListItem.items": "Items",
   "pages.newShoppingListItem.recipe": "Recipe",
-  "pages.newShoppingListItem.itemTitle": "Item title",
+  "pages.newShoppingListItem.itemsLabel": "Items",
+  "pages.newShoppingListItem.itemsHelper": "Enter one item per line",
   "pages.newShoppingListItem.add": "Add to List",
 
   "pages.newShoppingList.title": "New shopping list",

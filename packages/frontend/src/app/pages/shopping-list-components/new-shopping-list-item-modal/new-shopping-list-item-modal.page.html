@@ -27,22 +27,18 @@
       @case ("items") {
         <div>
           <br />
-          @for (item of itemFields; track item) {
-            <ion-item>
-              <ion-input
-                label="{{ 'pages.newShoppingListItem.itemTitle' | translate }}"
-                labelPlacement="stacked"
-                [(ngModel)]="item.title"
-                (ngModelChange)="addOrRemoveTextFields()"
-                type="text"
-                value=""
-                autocapitalize="on"
-                autocorrect="on"
-                spellcheck="true"
-                [maxlength]="titleMaxLength"
-              ></ion-input>
-            </ion-item>
-          }
+          <text-area
+            label="{{ 'pages.newShoppingListItem.itemsLabel' | translate }}"
+            helperText="{{
+              'pages.newShoppingListItem.itemsHelper' | translate
+            }}"
+            [(ngModel)]="itemsText"
+            [rows]="5"
+            [autoGrow]="true"
+            autocapitalize="on"
+            autocorrect="on"
+            [spellcheck]="true"
+          ></text-area>
         </div>
       }
       @case ("recipe") {

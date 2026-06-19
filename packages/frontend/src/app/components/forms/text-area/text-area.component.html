@@ -1,0 +1,28 @@
+@if (label) {
+  <label class="rs-field__label" [attr.for]="inputId">{{ label }}</label>
+}
+
+<textarea
+  #control
+  class="rs-field__control"
+  [class.rs-field__control--invalid]="invalid"
+  [class.rs-field__control--autogrow]="autoGrow"
+  [id]="inputId"
+  [style.--rs-field-rows]="rows"
+  [attr.name]="name"
+  [attr.placeholder]="placeholder"
+  [attr.maxlength]="maxlength"
+  [attr.autocapitalize]="autocapitalize"
+  [attr.autocorrect]="autocorrect"
+  [attr.spellcheck]="spellcheck"
+  [disabled]="disabled"
+  [value]="value"
+  (input)="onInput(control.value)"
+  (blur)="onBlur()"
+></textarea>
+
+@if (invalid && errorText) {
+  <p class="rs-field__message rs-field__message--error">{{ errorText }}</p>
+} @else if (helperText) {
+  <p class="rs-field__message">{{ helperText }}</p>
+}
