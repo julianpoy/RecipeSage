@@ -237,12 +237,14 @@ export class MealPlanPage {
 
     const loading = this.loadingService.start();
 
-    const response =
-      await this.serverActionsService.mealPlans.createMealPlanItems({
-        mealPlanId: this.mealPlanId,
-        items,
-      });
-    if (response) this.reference = response.reference;
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
+    await this.serverActionsService.mealPlans.createMealPlanItems({
+      mealPlanId: this.mealPlanId,
+      items,
+      reference,
+    });
 
     this.loadMealPlan();
 
@@ -271,6 +273,9 @@ export class MealPlanPage {
         mealPlanId: this.mealPlanId,
         mealPlan: this.mealPlan(),
         isOwner: this.me()?.id === this.mealPlan()?.user.id,
+        setReference: (reference: string) => {
+          this.reference = reference;
+        },
         calendarCenter: this.mealPlanCalendar?.center,
         viewType: this.preferences[MealPlanPreferenceKey.ViewType],
       },
@@ -335,12 +340,13 @@ export class MealPlanPage {
     if (!item) return;
 
     const loading = this.loadingService.start();
-    const response =
-      await this.serverActionsService.mealPlans.updateMealPlanItems({
-        mealPlanId: this.mealPlanId,
-        items: [{ id: mealItem.id, ...item }],
-      });
-    if (response) this.reference = response.reference;
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+    await this.serverActionsService.mealPlans.updateMealPlanItems({
+      mealPlanId: this.mealPlanId,
+      items: [{ id: mealItem.id, ...item }],
+      reference,
+    });
     loading.dismiss();
     this.loadWithProgress();
   }
@@ -768,12 +774,13 @@ export class MealPlanPage {
       .flat();
 
     const loading = this.loadingService.start();
-    const response =
-      await this.serverActionsService.mealPlans.updateMealPlanItems({
-        mealPlanId: this.mealPlanId,
-        items: updatedItems,
-      });
-    if (response) this.reference = response.reference;
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+    await this.serverActionsService.mealPlans.updateMealPlanItems({
+      mealPlanId: this.mealPlanId,
+      items: updatedItems,
+      reference,
+    });
     loading.dismiss();
     this.loadWithProgress();
   }
@@ -802,12 +809,13 @@ export class MealPlanPage {
       .flat();
 
     const loading = this.loadingService.start();
-    const response =
-      await this.serverActionsService.mealPlans.createMealPlanItems({
-        mealPlanId: this.mealPlanId,
-        items: newItems,
-      });
-    if (response) this.reference = response.reference;
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+    await this.serverActionsService.mealPlans.createMealPlanItems({
+      mealPlanId: this.mealPlanId,
+      items: newItems,
+      reference,
+    });
     loading.dismiss();
     this.loadWithProgress();
   }
@@ -818,12 +826,13 @@ export class MealPlanPage {
       .flat();
 
     const loading = this.loadingService.start();
-    const response =
-      await this.serverActionsService.mealPlans.deleteMealPlanItems({
-        mealPlanId: this.mealPlanId,
-        ids: itemIds,
-      });
-    if (response) this.reference = response.reference;
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+    await this.serverActionsService.mealPlans.deleteMealPlanItems({
+      mealPlanId: this.mealPlanId,
+      ids: itemIds,
+      reference,
+    });
     loading.dismiss();
     this.loadWithProgress();
   }

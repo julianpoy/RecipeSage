@@ -7,4 +7,5 @@ export const deleteShoppingListItemsInput = z.object({
     .array(z.uuid())
     .min(1)
     .max(DELETE_SHOPPING_LIST_ITEMS_PAGINATION_LIMIT),
+  reference: z.uuid().optional(),
 });

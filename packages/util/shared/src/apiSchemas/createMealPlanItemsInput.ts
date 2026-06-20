@@ -20,4 +20,5 @@ export const createMealPlanItemsInput = z.object({
     )
     .min(1)
     .max(CREATE_MEAL_PLAN_ITEMS_PAGINATION_LIMIT),
+  reference: z.uuid().optional(),
 });

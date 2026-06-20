@@ -22,4 +22,5 @@ export const updateShoppingListItemsInput = z.object({
     )
     .min(1)
     .max(UPDATE_SHOPPING_LIST_ITEMS_PAGINATION_LIMIT),
+  reference: z.uuid().optional(),
 });

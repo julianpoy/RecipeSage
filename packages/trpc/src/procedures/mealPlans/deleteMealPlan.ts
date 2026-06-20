@@ -24,6 +24,7 @@ export const deleteMealPlan = authenticatedProcedure
   .input(
     z.object({
       id: z.uuid(),
+      reference: z.uuid().optional(),
     }),
   )
   .output(
@@ -48,7 +49,7 @@ export const deleteMealPlan = authenticatedProcedure
       },
     });
 
-    const reference = crypto.randomUUID();
+    const reference = input.reference ?? crypto.randomUUID();
     for (const subscriberId of access.subscriberIds) {
       broadcastWSEventIgnoringErrors(
         subscriberId,

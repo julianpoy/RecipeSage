@@ -89,6 +89,7 @@ export class MealPlanPopoverPage {
     required: true,
   })
   isOwner!: boolean;
+  @Input() setReference?: (reference: string) => void;
   @Input() calendarCenter?: Date;
   @Input() viewType?: string;
 
@@ -218,12 +219,17 @@ export class MealPlanPopoverPage {
   async _deleteMealPlan() {
     const loading = this.loadingService.start();
 
+    const reference = crypto.randomUUID();
+    this.setReference?.(reference);
+
     const result = this.isOwner
       ? await this.serverActionsService.mealPlans.deleteMealPlan({
           id: this.mealPlanId,
+          reference,
         })
       : await this.serverActionsService.mealPlans.detachMealPlan({
           id: this.mealPlanId,
+          reference,
         });
     loading.dismiss();
     if (!result) return;
