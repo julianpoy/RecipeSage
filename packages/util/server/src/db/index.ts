@@ -1,9 +1,11 @@
 export * from "./convertPrismaDateToDatestamp";
 export * from "./convertPrismaRecipeSummaries";
 export * from "./convertPrismaAssistantMessageSummaries";
+export * from "./convertPrismaMessages";
 export * from "./getFriendshipIds";
 export * from "./getFriendshipUserProfiles";
 export * from "./getRecipesWithConstraints";
+export * from "./getUniqueRecipeTitle";
 export * from "./getRecipeVisibilityQueryFilter";
 export * from "./getSimilarRecipes";
 export * from "./getVisibleProfileItems";
@@ -12,3 +14,4 @@ export * from "./getAccessToMealPlan";
 export * from "./getAccessToShoppingList";
 export * from "./importStandardizedRecipes";
 export * from "./invalidateStaleJobs";
+export * from "./shareRecipeToUser";

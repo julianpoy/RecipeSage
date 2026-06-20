@@ -6,7 +6,6 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { MessagingService } from "../../../services/messaging.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
@@ -56,7 +55,6 @@ export class NewMessageModalPage {
   toastCtrl = inject(ToastController);
   serverActionsService = inject(ServerActionsService);
   utilService = inject(UtilService);
-  messagingService = inject(MessagingService);
 
   @Input() initialRecipientId?: string;
   recipientId?: string;
@@ -96,11 +94,11 @@ export class NewMessageModalPage {
 
     this.message = this.message || defaultMessage;
 
-    const response = await this.messagingService.create({
+    const response = await this.serverActionsService.messages.createMessage({
       to: this.recipientId,
       body: this.message,
     });
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss();
     this.navCtrl.navigateForward(

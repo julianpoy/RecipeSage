@@ -12,59 +12,8 @@ import { Injectable, inject } from "@angular/core";
 import { AlertController } from "@ionic/angular/standalone";
 
 import { UserService } from "./user.service";
-import { HttpService } from "./http.service";
 import { EventName, EventService } from "./event.service";
-import { ErrorHandlers } from "./http-error-handler.service";
 import { TranslateService } from "@ngx-translate/core";
-
-export interface Message {
-  id: string;
-  body: string;
-  createdAt: string;
-  updatedAt: string;
-  fromUserId: string;
-  toUserId: string;
-  recipeId: string | null;
-  originalRecipeId: string | null;
-
-  recipe: null | {
-    id: string;
-    title: string;
-    images: any[];
-  };
-  originalRecipe: null | {
-    id: string;
-    title: string;
-    images: any[];
-  };
-
-  fromUser: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  toUser: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  otherUser: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
-export interface MessageThread {
-  otherUser: {
-    id: string;
-    name: string;
-    handle?: string;
-    email: string;
-  };
-  messageCount: number;
-  messages: Message[];
-}
 
 @Injectable({
   providedIn: "root",
@@ -72,7 +21,6 @@ export interface MessageThread {
 export class MessagingService {
   private events = inject(EventService);
   private translate = inject(TranslateService);
-  private httpService = inject(HttpService);
   private userService = inject(UserService);
   private alertCtrl = inject(AlertController);
 
@@ -135,53 +83,6 @@ export class MessagingService {
 
   isNotificationsCapable() {
     return this._isFCMSupported;
-  }
-
-  fetch(
-    params: {
-      user: string;
-    },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this.httpService.requestWithWrapper<Message[]>({
-      path: `messages`,
-      method: "GET",
-      payload: undefined,
-      query: params,
-      errorHandlers,
-    });
-  }
-
-  threads(
-    params?: {
-      limit?: number;
-    },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this.httpService.requestWithWrapper<MessageThread[]>({
-      path: `messages/threads`,
-      method: "GET",
-      payload: undefined,
-      query: params,
-      errorHandlers,
-    });
-  }
-
-  create(
-    payload: {
-      body: string;
-      to: string;
-      recipeId?: string;
-    },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this.httpService.requestWithWrapper<void>({
-      path: `messages`,
-      method: "POST",
-      payload: payload,
-      query: undefined,
-      errorHandlers,
-    });
   }
 
   async requestNotifications() {

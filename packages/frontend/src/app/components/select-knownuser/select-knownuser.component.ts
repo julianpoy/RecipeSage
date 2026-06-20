@@ -1,10 +1,8 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 
+import type { MessageThreadDTO } from "@recipesage/prisma";
 import { UserService } from "../../services/user.service";
-import {
-  MessageThread,
-  MessagingService,
-} from "../../services/messaging.service";
+import { ServerActionsService } from "../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonList,
@@ -32,7 +30,7 @@ import {
 })
 export class SelectKnownUserComponent {
   private userService = inject(UserService);
-  private messagingService = inject(MessagingService);
+  private serverActionsService = inject(ServerActionsService);
 
   _radioFriendship: any;
   _radioThread: any;
@@ -61,7 +59,7 @@ export class SelectKnownUserComponent {
   @Output() selectedUserChange = new EventEmitter();
 
   friendships: any[] = [];
-  threads: MessageThread[] = [];
+  threads: MessageThreadDTO[] = [];
 
   constructor() {
     this.fetchFriendships();
@@ -79,15 +77,13 @@ export class SelectKnownUserComponent {
   }
 
   async fetchThreads() {
-    const response = await this.messagingService.threads({
-      limit: 0,
-    });
-    if (!response.success) return;
+    const response = await this.serverActionsService.messages.getThreads();
+    if (!response) return;
 
     const friendIds = new Set(
       this.friendships.map((friendship) => friendship.otherUser.id),
     );
-    this.threads = response.data
+    this.threads = response
       .filter((thread) => !friendIds.has(thread.otherUser.id))
       .sort((a, b) => a.otherUser.name.localeCompare(b.otherUser.name));
   }
@@ -106,7 +102,7 @@ export class SelectKnownUserComponent {
     this.selectedUser = friendship.otherUser;
   }
 
-  selectThread(thread: MessageThread) {
+  selectThread(thread: MessageThreadDTO) {
     if (!thread) return;
     this._radioThread = thread;
     this.selectedUser = thread.otherUser;
