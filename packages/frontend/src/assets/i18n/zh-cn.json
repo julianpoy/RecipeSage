@@ -434,7 +434,6 @@
     "pages.messageThread.sent": "已发送!",
     "pages.messageThread.messagePlaceholder": "消息...",
     "pages.messages.title": "消息",
-    "pages.messages.history.you": "您",
     "pages.messages.history.sentRecipe": "发送食谱",
     "pages.messages.noMessages": "您还没有消息.",
     "pages.messages.instructions": "要联系好友,请点击下方的+号.",

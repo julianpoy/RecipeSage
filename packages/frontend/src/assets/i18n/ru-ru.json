@@ -414,7 +414,6 @@
     "pages.messageThread.sent": "Отправлено!",
     "pages.messageThread.messagePlaceholder": "Сообщение...",
     "pages.messages.title": "Сообщения",
-    "pages.messages.history.you": "Вы",
     "pages.messages.history.sentRecipe": "Отправил рецепт",
     "pages.messages.noMessages": "У вас нет цепочек сообщений.",
     "pages.messages.instructions": "Чтобы начать разговор с кем-то, нажмите кнопку + в нижнем углу.",

@@ -418,7 +418,6 @@
     "pages.messageThread.sent": "Gesendet!",
     "pages.messageThread.messagePlaceholder": "Nachricht …",
     "pages.messages.title": "Nachrichten",
-    "pages.messages.history.you": "Du",
     "pages.messages.history.sentRecipe": "Hat ein Rezept gesendet",
     "pages.messages.noMessages": "Du hast keine Unterhaltungen.",
     "pages.messages.instructions": "Klicke auf die Schaltfläche \"+\" in der unteren rechten Ecke, um eine Unterhaltung mit jemandem zu beginnen.",

@@ -413,7 +413,6 @@
     "pages.messageThread.sent": "¡Enviado!",
     "pages.messageThread.messagePlaceholder": "Mensaje...",
     "pages.messages.title": "Mensajes",
-    "pages.messages.history.you": "Tú",
     "pages.messages.history.sentRecipe": "Envió una receta",
     "pages.messages.noMessages": "No tienes hilos de mensajes.",
     "pages.messages.instructions": "Para iniciar una conversación con alguien, pulsa el botón más de la esquina inferior.",

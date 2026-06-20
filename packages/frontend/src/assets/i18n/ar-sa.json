@@ -167,7 +167,6 @@
     "pages.app.nav.register": "إنشاء حساب",
     "pages.import.tabTitle": "استيراد - RecipeSage",
     "pages.addFriendModal.profileDisabled.header": "الملف الشخصي غير مفعّل",
-    "pages.messages.history.you": "أنت",
     "pages.mealPlanPopover.deletePlan.message": "سيؤدي ذلك إلى إزالة خطة الوجبات هذه نهائيًا من حسابك. إذا كانت خطة الوجبات هذه مشتركة مع أي شخص آخر، فستتم إزالتها من حساباتهم أيضًا.",
     "pages.editRecipePopover.addImage": "إضافة صورة عبر عنوان URL",
     "pages.contributeCancel.cta.3": "للحفاظ على مجانية الخدمة مع دفع تكاليف الخوادم، نحتاج إلى مساعدتك.",

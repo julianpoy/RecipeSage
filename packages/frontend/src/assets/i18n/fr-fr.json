@@ -481,7 +481,6 @@
     "pages.messageThread.messagePlaceholder": "Message...",
     "pages.messages.title": "Messages",
     "pages.messageThread.sent": "Envoyé !",
-    "pages.messages.history.you": "Vous",
     "pages.messages.history.sentRecipe": "A envoyé une recette",
     "pages.messages.noMessages": "Vous n'avez pas de fils de messages.",
     "pages.messages.instructions": "Pour commencer une conversation avec quelqu'un, appuyez sur le bouton plus dans le coin inférieur.",

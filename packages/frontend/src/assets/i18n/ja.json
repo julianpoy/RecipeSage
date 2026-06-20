@@ -335,7 +335,6 @@
     "pages.editRecipe.clip.failedSelfhost": "セルフホスティングのReadmeに記載されているOpenAIの認証情報を確認してください",
     "pages.messages.tabTitle": "メッセージ - RecipeSage",
     "pages.messages.title": "メッセージ",
-    "pages.messages.history.you": "あなた",
     "pages.messages.instructions": "誰かとの会話を始めるには、画面下隅のプラスボタンを押してください。",
     "pages.messages.warning": "警告:",
     "pages.messages.notificationsRequired": "メッセージ機能を正しく動作させるには、通知を有効にする必要があります。",
