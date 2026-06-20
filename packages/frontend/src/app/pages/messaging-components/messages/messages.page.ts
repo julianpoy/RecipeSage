@@ -5,10 +5,9 @@ import {
   ModalController,
 } from "@ionic/angular/standalone";
 
-import {
-  MessageThread,
-  MessagingService,
-} from "../../../services/messaging.service";
+import type { MessageThreadDTO } from "@recipesage/prisma";
+import { MessagingService } from "../../../services/messaging.service";
+import { ServerActionsService } from "../../../services/server-actions.service";
 import { LoadingService } from "../../../services/loading.service";
 import { WebsocketService } from "../../../services/websocket.service";
 import { EventService } from "../../../services/event.service";
@@ -68,10 +67,11 @@ export class MessagesPage {
   loadingService = inject(LoadingService);
   websocketService = inject(WebsocketService);
   messagingService = inject(MessagingService);
+  serverActionsService = inject(ServerActionsService);
 
   loading = true;
 
-  threads: any = [];
+  threads: MessageThreadDTO[] = [];
 
   constructor() {
     addIcons({ add, chatbox });
@@ -97,20 +97,12 @@ export class MessagesPage {
   };
 
   loadThreads = async () => {
-    const response = await this.messagingService.threads({
-      limit: 1,
-    });
-    if (!response.success) return;
-
-    this.threads = response.data.sort((a, b) => {
-      const aCreatedAt = new Date(a.messages[0].updatedAt);
-      const bCreatedAt = new Date(b.messages[0].updatedAt);
-      // Ascending (newest first)
-      return bCreatedAt.valueOf() - aCreatedAt.valueOf();
-    });
+    const response = await this.serverActionsService.messages.getThreads();
+    if (!response) return;
+    this.threads = response;
   };
 
-  openThread(thread: MessageThread) {
+  openThread(thread: MessageThreadDTO) {
     this.navCtrl.navigateForward(
       RouteMap.MessageThreadPage.getPath(thread.otherUser.id),
     );

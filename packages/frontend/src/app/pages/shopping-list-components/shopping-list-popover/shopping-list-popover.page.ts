@@ -91,6 +91,7 @@ export class ShoppingListPopoverPage {
     required: true,
   })
   isOwner!: boolean;
+  @Input() setReference?: (reference: string) => void;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
@@ -214,10 +215,18 @@ export class ShoppingListPopoverPage {
   async _deleteList() {
     const loading = this.loadingService.start();
 
-    const response =
-      await this.serverActionsService.shoppingLists.deleteShoppingList({
-        id: this.shoppingListId,
-      });
+    const reference = crypto.randomUUID();
+    this.setReference?.(reference);
+
+    const response = this.isOwner
+      ? await this.serverActionsService.shoppingLists.deleteShoppingList({
+          id: this.shoppingListId,
+          reference,
+        })
+      : await this.serverActionsService.shoppingLists.detachShoppingList({
+          id: this.shoppingListId,
+          reference,
+        });
     loading.dismiss();
     if (!response) return;
 

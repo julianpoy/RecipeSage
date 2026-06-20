@@ -6,6 +6,8 @@ export * from "./labelSummary";
 export * from "./mealPlanSummary";
 export * from "./mealPlanSummaryWithItems";
 export * from "./mealPlanItemSummary";
+export * from "./messageSummary";
+export * from "./messageThreadDTO";
 export * from "./SessionDTO";
 export * from "./shoppingListSummary";
 export * from "./shoppingListSummaryWithItems";

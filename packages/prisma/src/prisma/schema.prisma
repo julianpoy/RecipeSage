@@ -150,6 +150,8 @@ model Message {
 
   @@index([originalRecipeId], map: "messages_original_recipe_id")
   @@index([recipeId], map: "messages_recipe_id")
+  @@index([fromUserId, createdAt], map: "messages_from_user_id_created_at")
+  @@index([toUserId, createdAt], map: "messages_to_user_id_created_at")
   @@map("Messages")
 }
 

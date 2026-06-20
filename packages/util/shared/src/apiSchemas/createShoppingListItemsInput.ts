@@ -17,4 +17,5 @@ export const createShoppingListItemsInput = z.object({
     )
     .min(1)
     .max(CREATE_SHOPPING_LIST_ITEMS_PAGINATION_LIMIT),
+  reference: z.uuid().optional(),
 });

@@ -3,7 +3,6 @@ module.exports = {
   globPatterns: [
     // "assets/fonts/roboto*.woff2",
     // "assets/**/*.{png,jpg}",
-    //"svg/*.svg",
     "*.css",
     "*.js",
     // "index.html" intentionally omitted so the shell stays NetworkFirst

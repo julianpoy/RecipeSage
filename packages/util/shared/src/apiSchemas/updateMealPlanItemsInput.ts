@@ -21,4 +21,5 @@ export const updateMealPlanItemsInput = z.object({
     )
     .min(1)
     .max(UPDATE_MEAL_PLAN_ITEMS_PAGINATION_LIMIT),
+  reference: z.uuid().optional(),
 });

@@ -27,29 +27,32 @@
 
     @if (threads.length && !loading) {
       <ion-list>
-        @for (thread of threads; track thread) {
+        @for (thread of threads; track thread.otherUser.id) {
           <ion-item class="thread" (click)="openThread(thread)" button>
             <ion-icon name="chatbox" slot="start"></ion-icon>
             <ion-label>
               <h2>{{ thread.otherUser.name }}</h2>
-              <p>
-                @if (thread.messages[0].fromUser.id === thread.otherUser.id) {
-                  <b> {{ "pages.messages.history.you" | translate }} </b>
-                }
-                @if (thread.messages[0].fromUser.id !== thread.otherUser.id) {
-                  <b> {{ thread.messages[0].fromUser.name }} </b>
-                }
-                :
-                @if (thread.messages[0].recipe) {
-                  <span>{{
-                    "pages.messages.history.sentRecipe" | translate
-                  }}</span>
-                }
-                @if (!thread.messages[0].recipe) {
-                  <span>{{ thread.messages[0].body }}</span>
-                }
-              </p>
-              <p>{{ prettyDate(thread.messages[0].updatedAt) }}</p>
+              @if (thread.latestMessage; as latestMessage) {
+                <p>
+                  @if (latestMessage.fromUserId !== thread.otherUser.id) {
+                    @if (latestMessage.recipe) {
+                      {{ "pages.messages.history.youSentRecipe" | translate }}
+                    } @else {
+                      {{
+                        "pages.messages.history.youSaid"
+                          | translate: { message: latestMessage.body }
+                      }}
+                    }
+                  } @else {
+                    @if (latestMessage.recipe) {
+                      {{ "pages.messages.history.sentRecipe" | translate }}
+                    } @else {
+                      {{ latestMessage.body }}
+                    }
+                  }
+                </p>
+                <p>{{ prettyDate(latestMessage.updatedAt) }}</p>
+              }
             </ion-label>
           </ion-item>
         }

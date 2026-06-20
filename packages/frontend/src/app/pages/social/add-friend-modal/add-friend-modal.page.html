@@ -13,6 +13,7 @@
 <ion-content class="ion-padding">
   <select-user
     (selectedUserChange)="onSelectedUserChange($event)"
+    [suggestKnownUsers]="false"
   ></select-user>
   <ion-item>
     <ion-label>

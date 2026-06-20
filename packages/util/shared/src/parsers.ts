@@ -267,11 +267,12 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
 };
 
 /**
- * Returns the single scalable measurement for an ingredient line, or null if
- * the line is empty, a header, multipart ("1 cup + 2 tbsp"), a range
- * ("1 to 2 cups"), or otherwise has no numerically-parseable leading quantity.
+ * Returns the measurement to anchor scaling on for an ingredient line, or null
+ * if the line is empty, a header, multipart ("1 cup + 2 tbsp"), or otherwise
+ * has no numerically-parseable leading quantity. For ranges ("1-2 cups",
+ * "1 to 2 cups", "1 bis 2 Tassen") the lower bound is used as the anchor.
  */
-export const getSingleScalableMeasurement = (
+export const getAnchorMeasurement = (
   ingredient: string,
 ): { qtyText: string; qtyValue: number; unit: string } | null => {
   const cleaned = stripNewlines(ingredient).trim();
@@ -283,12 +284,13 @@ export const getSingleScalableMeasurement = (
   if (parts.length !== 1) return null;
 
   const noNotes = stripNotes(parts[0]);
-  if (/\d\s+(?:to|à|bis)\s+\d/i.test(noNotes)) return null;
   const match = noNotes.match(new RegExp(measurementQuantityRegExp, "i"));
   if (!match || !match[1]) return null;
 
-  const qtyText = match[1].trim();
-  if (/-|\bto\b/i.test(qtyText)) return null;
+  const qtyText = match[1]
+    .trim()
+    .split(/-|–|—| to /i)[0]
+    .trim();
 
   let qtyValue: number;
   try {

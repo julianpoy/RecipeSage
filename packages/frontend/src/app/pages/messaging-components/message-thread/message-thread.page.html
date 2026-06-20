@@ -5,10 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{
-        "pages.messageThread.title"
-          | translate: { name: messages.at(0)?.otherUser?.name || "" }
-      }}
+      {{ "pages.messageThread.title" | translate: { name: otherUserName } }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -25,43 +22,44 @@
 
 <ion-content #content class="ion-padding">
   <div class="page-wrapper">
-    @for (message of messages; track trackByFn(i, message); let i = $index) {
+    @for (item of messages; track trackByFn(i, item); let i = $index) {
       <div
         class="message"
         [ngClass]="{
-          me: message.toUser.id === message.otherUser.id,
-          blue: message.fromUser.id === message.otherUser.id,
+          me: item.message.toUserId === otherUserId,
+          blue: item.message.fromUserId === otherUserId,
         }"
       >
-        @if (message.deservesDateDiff) {
-          <div class="time-divider">{{ message.dateDiff }}</div>
+        @if (item.parsedDetails.deservesDateDiff) {
+          <div class="time-divider">{{ item.parsedDetails.dateDiff }}</div>
         }
-        @if (!message.recipe) {
+        @if (!item.message.recipe) {
           <div class="chat" (click)="setSelectedChat(i)">
-            <span [innerHTML]="message.body"></span>
+            <span [innerHTML]="item.parsedDetails.body"></span>
           </div>
         }
-        @if (message.recipe && message.fromUser.id === message.otherUser.id) {
+        @if (item.message.recipe && item.message.fromUserId === otherUserId) {
           <div class="recipe">
             <!-- RECIPIENT -->
-            @if (message.recipe) {
-              <ion-item (click)="openRecipe(message.recipe)" lines="none">
+            @if (item.message.recipe) {
+              <ion-item (click)="openRecipe(item.message.recipe)" lines="none">
                 @if (
-                  message.recipe.images && message.recipe.images.length > 0
+                  item.message.recipe.recipeImages.at(0)?.image?.location;
+                  as recipeImage
                 ) {
                   <ion-avatar slot="start">
-                    <img src="{{ message.recipe.images[0].location }}" />
+                    <img src="{{ recipeImage }}" />
                   </ion-avatar>
                 }
                 <ion-label>
-                  <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
+                  <h2 class="ion-text-wrap">{{ item.message.recipe.title }}</h2>
                   <p class="description">
                     {{ "pages.messageThread.clickToOpen" | translate }}
                   </p>
                 </ion-label>
               </ion-item>
             }
-            @if (!message.recipe) {
+            @if (!item.message.recipe) {
               <ion-item (click)="setSelectedChat(i)" lines="none">
                 <ion-label>
                   <h2 class="ion-text-wrap">
@@ -76,28 +74,27 @@
           </div>
         }
         @if (
-          message.originalRecipe && message.fromUser.id !== message.otherUser.id
+          item.message.originalRecipe && item.message.fromUserId !== otherUserId
         ) {
           <div class="recipe">
             <!-- SENDER -->
-            @if (message.originalRecipe) {
+            @if (item.message.originalRecipe) {
               <ion-item
-                (click)="openRecipe(message.originalRecipe)"
+                (click)="openRecipe(item.message.originalRecipe)"
                 lines="none"
               >
                 @if (
-                  message.originalRecipe.images &&
-                  message.originalRecipe.images.length > 0
+                  item.message.originalRecipe.recipeImages.at(0)?.image
+                    ?.location;
+                  as recipeImage
                 ) {
                   <ion-avatar slot="start">
-                    <img
-                      src="{{ message.originalRecipe.images[0].location }}"
-                    />
+                    <img src="{{ recipeImage }}" />
                   </ion-avatar>
                 }
                 <ion-label>
                   <h2 class="ion-text-wrap">
-                    {{ message.originalRecipe.title }}
+                    {{ item.message.originalRecipe.title }}
                   </h2>
                   <p class="description">
                     {{ "pages.messageThread.recipeCopySent" | translate }}
@@ -105,7 +102,7 @@
                 </ion-label>
               </ion-item>
             }
-            @if (!message.originalRecipe) {
+            @if (!item.message.originalRecipe) {
               <ion-item (click)="setSelectedChat(i)" lines="none">
                 <ion-label>
                   <h2 class="ion-text-wrap">
@@ -120,38 +117,31 @@
           </div>
         }
         @if (selectedChatIdx === i) {
-          <div class="chatDetails">{{ message.formattedDate }}</div>
+          <div class="chatDetails">{{ item.parsedDetails.formattedDate }}</div>
         }
       </div>
     }
   </div>
 </ion-content>
 
-<ion-footer>
-  <form ng-submit="sendMessage()">
-    <div class="page-wrapper">
-      <ion-item>
-        <ion-textarea
-          autocomplete="“true”"
-          spellcheck="“true”"
-          autocorrect="“on”"
-          name="body"
-          fill="solid"
-          [(ngModel)]="pendingMessage"
-          (keydown)="onMessageKeyDown($event)"
-          type="text"
-          placeholder="{{ messagePlaceholder }}"
-          (ionFocus)="keyboardOpened()"
-        ></ion-textarea>
-        <ion-button
-          type="submit"
-          (click)="sendMessage()"
-          fill="clear"
-          slot="end"
-        >
-          <ion-icon name="send" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </div>
-  </form>
+<ion-footer class="ion-no-border">
+  <div class="page-wrapper">
+    <ion-item>
+      <ion-textarea
+        autocomplete="“true”"
+        spellcheck="“true”"
+        autocorrect="“on”"
+        name="body"
+        fill="solid"
+        [(ngModel)]="pendingMessage"
+        (keydown)="onMessageKeyDown($event)"
+        type="text"
+        placeholder="{{ messagePlaceholder }}"
+        (ionFocus)="keyboardOpened()"
+      ></ion-textarea>
+      <ion-button (click)="sendMessage()" fill="clear" slot="end">
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </div>
 </ion-footer>

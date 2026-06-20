@@ -66,6 +66,8 @@ export class SelectCollaboratorsComponent implements AfterViewInit {
   }
 
   async addCollaborator(userProfile: UserPublic) {
+    if (this.selectedCollaboratorIds.includes(userProfile.id)) return;
+
     this.userProfilesById.set(userProfile.id, userProfile);
     this.selectedCollaboratorIds.push(userProfile.id);
     this.selectedCollaboratorIdsChanged.emit(this.selectedCollaboratorIds);

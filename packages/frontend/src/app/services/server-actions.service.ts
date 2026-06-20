@@ -11,6 +11,7 @@ import { AssistantActionsService } from "./server-actions/assistant-actions.serv
 import { MlActionsService } from "./server-actions/ml-actions.service";
 import { ImagesActionsService } from "./server-actions/images-actions.service";
 import { PaymentsActionsService } from "./server-actions/payments-actions.service";
+import { MessagesActionsService } from "./server-actions/messages-actions.service";
 
 @Injectable({
   providedIn: "root",
@@ -27,4 +28,5 @@ export class ServerActionsService {
   ml = inject(MlActionsService);
   images = inject(ImagesActionsService);
   payments = inject(PaymentsActionsService);
+  messages = inject(MessagesActionsService);
 }

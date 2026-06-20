@@ -5,7 +5,7 @@ import {
   ToastController,
 } from "@ionic/angular/standalone";
 
-import { MessagingService } from "../../services/messaging.service";
+import { ServerActionsService } from "../../services/server-actions.service";
 import { User, UserService } from "../../services/user.service";
 import { RecipeService, Recipe } from "../../services/recipe.service";
 import { LoadingService } from "../../services/loading.service";
@@ -82,7 +82,7 @@ export class ShareModalPage {
   toastCtrl = inject(ToastController);
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
-  messagingService = inject(MessagingService);
+  serverActionsService = inject(ServerActionsService);
   recipeService = inject(RecipeService);
   userService = inject(UserService);
   modalCtrl = inject(ModalController);
@@ -94,8 +94,6 @@ export class ShareModalPage {
 
   selectedUser?: User;
   recipientId?: string;
-
-  threads: any = [];
 
   shareMethod = "account";
 
@@ -132,11 +130,6 @@ export class ShareModalPage {
       this.recipeURL =
         `${window.location.protocol}//${window.location.host}` +
         `/api/share/recipe/${this.recipe.id}`;
-
-      this.loadThreads().then(
-        () => {},
-        () => {},
-      );
 
       this.updateEmbed(true);
     });
@@ -179,13 +172,6 @@ export class ShareModalPage {
     this.recipeEmbedCode = embedCode;
   }
 
-  async loadThreads() {
-    const response = await this.messagingService.threads();
-    if (!response.success) return;
-
-    this.threads = response.data;
-  }
-
   selectUser(user: User) {
     if (!user) {
       this.selectedUser = undefined;
@@ -202,13 +188,13 @@ export class ShareModalPage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.messagingService.create({
+    const response = await this.serverActionsService.messages.createMessage({
       to: this.recipientId,
       body: "",
       recipeId: this.recipe.id,
     });
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.modalCtrl.dismiss();
     this.navCtrl.navigateForward(

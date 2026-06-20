@@ -126,13 +126,23 @@ export class ShoppingListPage {
     return id;
   })();
   private shoppingListQuery =
-    this.serverActionsService.shoppingLists.getShoppingList({
-      id: this.shoppingListId,
-    });
+    this.serverActionsService.shoppingLists.getShoppingList(
+      {
+        id: this.shoppingListId,
+      },
+      {
+        404: () => this.handleListNoLongerAvailable(),
+      },
+    );
   private shoppingListItemsQuery =
-    this.serverActionsService.shoppingLists.getShoppingListItems({
-      shoppingListId: this.shoppingListId,
-    });
+    this.serverActionsService.shoppingLists.getShoppingListItems(
+      {
+        shoppingListId: this.shoppingListId,
+      },
+      {
+        404: () => this.handleListNoLongerAvailable(),
+      },
+    );
   shoppingList = this.shoppingListQuery.value;
   shoppingListItems = this.shoppingListItemsQuery.value;
 
@@ -152,6 +162,8 @@ export class ShoppingListPage {
   preferenceKeys = ShoppingListPreferenceKey;
 
   reference = "0";
+
+  private handlingListNoLongerAvailable = false;
 
   constructor() {
     addIcons({ add, arrowUndo, caretDown, caretUp, cart, options, trash });
@@ -260,6 +272,23 @@ export class ShoppingListPage {
     this.shoppingListItemsQuery.refresh();
   }
 
+  async handleListNoLongerAvailable() {
+    if (this.handlingListNoLongerAvailable) return;
+    this.handlingListNoLongerAvailable = true;
+
+    const message = await this.translate
+      .get("pages.shoppingList.noLongerAvailable")
+      .toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    toast.present();
+
+    this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
+  }
+
   async completeItems(items: ShoppingListItemSummary[], completed: boolean) {
     if (!this.shoppingList()) return;
 
@@ -269,6 +298,9 @@ export class ShoppingListPage {
 
     const loading = this.loadingService.start();
 
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
     const response =
       await this.serverActionsService.shoppingLists.updateShoppingListItems({
         shoppingListId: this.shoppingListId,
@@ -276,13 +308,11 @@ export class ShoppingListPage {
           id: item.id,
           completed,
         })),
+        reference,
       });
     if (!response) return;
 
-    if (this.reference !== response.reference) {
-      this.reference = response.reference;
-      this.loadList();
-    }
+    this.loadList();
 
     loading.dismiss();
   }
@@ -295,6 +325,9 @@ export class ShoppingListPage {
 
     const loading = this.loadingService.start();
 
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
     const response =
       await this.serverActionsService.shoppingLists.updateShoppingListItems({
         shoppingListId: this.shoppingListId,
@@ -302,13 +335,11 @@ export class ShoppingListPage {
           id: item.id,
           categoryTitle,
         })),
+        reference,
       });
     if (!response) return;
 
-    if (this.reference !== response.reference) {
-      this.reference = response.reference;
-      this.loadList();
-    }
+    this.loadList();
 
     loading.dismiss();
   }
@@ -354,17 +385,18 @@ export class ShoppingListPage {
 
     const loading = this.loadingService.start();
 
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
     const response =
       await this.serverActionsService.shoppingLists.deleteShoppingListItems({
         shoppingListId: this.shoppingListId,
         ids: items.map((el) => el.id),
+        reference,
       });
     if (!response) return;
 
-    if (this.reference !== response.reference) {
-      this.reference = response.reference;
-      this.loadList();
-    }
+    this.loadList();
     loading.dismiss();
 
     const message = await this.translate
@@ -415,17 +447,18 @@ export class ShoppingListPage {
 
     const loading = this.loadingService.start();
 
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
     const response =
       await this.serverActionsService.shoppingLists.createShoppingListItems({
         shoppingListId: this.shoppingListId,
         items: sanitizedItems,
+        reference,
       });
     if (!response) return;
 
-    if (this.reference !== response.reference) {
-      this.reference = response.reference;
-      this.loadList();
-    }
+    this.loadList();
     loading.dismiss();
   }
 
@@ -455,6 +488,9 @@ export class ShoppingListPage {
         shoppingList,
         shoppingListItems: this.shoppingListItems(),
         isOwner: this.me()?.id === shoppingList.user.id,
+        setReference: (reference: string) => {
+          this.reference = reference;
+        },
       },
       event,
     });

@@ -30,6 +30,9 @@ export const shoppingListItemSummary = {
               },
             },
           },
+          orderBy: {
+            order: "asc",
+          },
         },
       },
     },

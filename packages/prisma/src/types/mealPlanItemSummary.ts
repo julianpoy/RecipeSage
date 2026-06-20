@@ -45,6 +45,9 @@ export const mealPlanItemSummary = {
               },
             },
           },
+          orderBy: {
+            order: "asc",
+          },
         },
       },
     },

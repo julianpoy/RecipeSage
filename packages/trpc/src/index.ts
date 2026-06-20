@@ -16,6 +16,7 @@ import { mlRouter } from "./procedures/ml/mlRouter";
 import { assistantRouter } from "./procedures/assistant/assistantRouter";
 import { paymentsRouter } from "./procedures/payments/paymentsRouter";
 import { imagesRouter } from "./procedures/images/imagesRouter";
+import { messagesRouter } from "./procedures/messages/messagesRouter";
 
 export const appRouter = router({
   labelGroups: labelGroupsRouter,
@@ -29,6 +30,7 @@ export const appRouter = router({
   ml: mlRouter,
   jobs: jobsRouter,
   images: imagesRouter,
+  messages: messagesRouter,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({

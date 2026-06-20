@@ -58,7 +58,7 @@ export const createShoppingListItems = authenticatedProcedure
       data: itemsWithCategoryTitles,
     });
 
-    const reference = crypto.randomUUID();
+    const reference = input.reference ?? crypto.randomUUID();
     for (const subscriberId of access.subscriberIds) {
       broadcastWSEventIgnoringErrors(
         subscriberId,

@@ -17,7 +17,7 @@ import { TranslateService } from "@ngx-translate/core";
 import fractionjs from "fraction.js";
 import { System } from "unitz-ts";
 import {
-  getSingleScalableMeasurement,
+  getAnchorMeasurement,
   parseIngredients,
   parseYieldCount,
   stripIngredient,
@@ -98,7 +98,7 @@ export class ScaleRecipeComponent implements OnInit {
                 targetSystem,
               )[0]?.plaintextContent ?? ingredient.originalContent)
             : ingredient.originalContent;
-        const measurement = getSingleScalableMeasurement(sourceText);
+        const measurement = getAnchorMeasurement(sourceText);
         if (!measurement) return null;
         const name = stripIngredient(ingredient.originalContent).trim();
         if (!name) return null;
@@ -159,9 +159,7 @@ export class ScaleRecipeComponent implements OnInit {
       scaleStr,
       this.targetSystem(),
     );
-    const measurement = getSingleScalableMeasurement(
-      parsed[0]?.plaintextContent ?? "",
-    );
+    const measurement = getAnchorMeasurement(parsed[0]?.plaintextContent ?? "");
     if (!measurement) return;
     this.anchorQtyInput = measurement.qtyText;
   }
