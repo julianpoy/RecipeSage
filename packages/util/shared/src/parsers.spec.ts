@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { System } from "unitz-ts";
 import {
   getMeasurementsForIngredient,
-  getSingleScalableMeasurement,
+  getAnchorMeasurement,
   getTitleForIngredient,
   stripIngredient,
   parseIngredients,
@@ -122,9 +122,9 @@ describe("parsers", () => {
     });
   });
 
-  describe("getSingleScalableMeasurement", () => {
+  describe("getAnchorMeasurement", () => {
     it("returns qty + unit for a clean line", () => {
-      expect(getSingleScalableMeasurement("2 cups flour")).toEqual({
+      expect(getAnchorMeasurement("2 cups flour")).toEqual({
         qtyText: "2",
         qtyValue: 2,
         unit: "cups",
@@ -132,7 +132,7 @@ describe("parsers", () => {
     });
 
     it("returns qty alone when no unit is present", () => {
-      expect(getSingleScalableMeasurement("3 eggs")).toEqual({
+      expect(getAnchorMeasurement("3 eggs")).toEqual({
         qtyText: "3",
         qtyValue: 3,
         unit: "",
@@ -140,45 +140,88 @@ describe("parsers", () => {
     });
 
     it("parses fractions and mixed numbers", () => {
-      expect(getSingleScalableMeasurement("1/2 cup butter")).toEqual({
+      expect(getAnchorMeasurement("1/2 cup butter")).toEqual({
         qtyText: "1/2",
         qtyValue: 0.5,
         unit: "cup",
       });
-      expect(getSingleScalableMeasurement("1 1/2 tsp salt")).toEqual({
+      expect(getAnchorMeasurement("1 1/2 tsp salt")).toEqual({
         qtyText: "1 1/2",
         qtyValue: 1.5,
         unit: "tsp",
       });
     });
 
+    it("recognizes German EL and TL units", () => {
+      expect(getAnchorMeasurement("2 EL Zucker")).toEqual({
+        qtyText: "2",
+        qtyValue: 2,
+        unit: "EL",
+      });
+      expect(getAnchorMeasurement("1 TL Salz")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "TL",
+      });
+    });
+
     it("returns null for headers", () => {
-      expect(getSingleScalableMeasurement("[Sauce]")).toBeNull();
+      expect(getAnchorMeasurement("[Sauce]")).toBeNull();
     });
 
     it("returns null for empty input", () => {
-      expect(getSingleScalableMeasurement("")).toBeNull();
-      expect(getSingleScalableMeasurement("   ")).toBeNull();
+      expect(getAnchorMeasurement("")).toBeNull();
+      expect(getAnchorMeasurement("   ")).toBeNull();
     });
 
     it("returns null for unquantified ingredients", () => {
-      expect(getSingleScalableMeasurement("salt to taste")).toBeNull();
+      expect(getAnchorMeasurement("salt to taste")).toBeNull();
     });
 
-    it("returns null for ranges", () => {
-      expect(getSingleScalableMeasurement("1-2 tsp salt")).toBeNull();
-      expect(getSingleScalableMeasurement("1 to 2 cups flour")).toBeNull();
-      expect(getSingleScalableMeasurement("1 à 2 tasses de farine")).toBeNull();
-      expect(getSingleScalableMeasurement("1 bis 2 Tassen Mehl")).toBeNull();
-      expect(getSingleScalableMeasurement("1–2 cups flour")).toBeNull();
-      expect(getSingleScalableMeasurement("1—2 cups flour")).toBeNull();
+    it("anchors ranges on their lower bound", () => {
+      expect(getAnchorMeasurement("1-2 tsp salt")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "tsp",
+      });
+      expect(getAnchorMeasurement("1 to 2 cups flour")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "cups",
+      });
+      expect(getAnchorMeasurement("1–2 cups flour")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "cups",
+      });
+      expect(getAnchorMeasurement("1—2 cups flour")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "cups",
+      });
+      expect(getAnchorMeasurement("2-3 EL Öl")).toEqual({
+        qtyText: "2",
+        qtyValue: 2,
+        unit: "EL",
+      });
+    });
+
+    it("anchors à and bis ranges on their lower bound", () => {
+      expect(getAnchorMeasurement("1 à 2 tasses de farine")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "",
+      });
+      expect(getAnchorMeasurement("1 bis 2 Tassen Mehl")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "",
+      });
     });
 
     it("returns null for multipart measurements", () => {
-      expect(
-        getSingleScalableMeasurement("1 cup + 2 tablespoons sugar"),
-      ).toBeNull();
-      expect(getSingleScalableMeasurement("1 cup or 250ml milk")).toBeNull();
+      expect(getAnchorMeasurement("1 cup + 2 tablespoons sugar")).toBeNull();
+      expect(getAnchorMeasurement("1 cup or 250ml milk")).toBeNull();
     });
   });
 

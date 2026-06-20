@@ -54,10 +54,12 @@ Core.addClass(
 Core.getGroup("tablespoon").addUnits({
   tbs: Plurality.SINGULAR,
   spsk: Plurality.EITHER,
+  el: Plurality.EITHER,
 });
 
 Core.getGroup("teaspoon").addUnits({
   tsk: Plurality.EITHER,
+  tl: Plurality.EITHER,
 });
 
 Core.setDenominators("cup", [2, 3, 4, 8]);
