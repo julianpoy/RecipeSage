@@ -11,7 +11,10 @@ import {
   MealPlanAccessLevel,
   convertPrismaDateToDatestamp,
   getAccessToMealPlan,
+  getMealPlanHistoryDateLimit,
 } from "@recipesage/util/server/db";
+
+const MEAL_PLAN_ITEMS_SAFETY_LIMIT = 100000;
 
 export const getMealPlanItems = authenticatedProcedure
   .meta({
@@ -26,7 +29,6 @@ export const getMealPlanItems = authenticatedProcedure
   .input(
     z.object({
       mealPlanId: z.uuid(),
-      limit: z.number().min(1).max(4000).default(1000),
     }),
   )
   .output(z.array(mealPlanItemSummarySchema))
@@ -46,12 +48,15 @@ export const getMealPlanItems = authenticatedProcedure
     const mealPlanItems = await prisma.mealPlanItem.findMany({
       where: {
         mealPlanId: input.mealPlanId,
+        scheduledDate: {
+          gte: getMealPlanHistoryDateLimit(),
+        },
       },
       ...mealPlanItemSummary,
       orderBy: {
-        scheduled: "desc",
+        scheduledDate: "desc",
       },
-      take: input.limit,
+      take: MEAL_PLAN_ITEMS_SAFETY_LIMIT,
     });
 
     const resultMealPlanItems = mealPlanItems.map((mealPlanItem) =>

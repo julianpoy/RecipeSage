@@ -6,10 +6,11 @@ import {
   mealPlanSummaryWithItemsSchema,
   prisma,
 } from "@recipesage/prisma";
-import { convertPrismaDateToDatestamp } from "@recipesage/util/server/db";
+import {
+  convertPrismaDateToDatestamp,
+  getMealPlanHistoryDateLimit,
+} from "@recipesage/util/server/db";
 import { z } from "zod";
-
-const HISTORICAL_DATE_LIMIT_DAYS = 30; // We return this number of past days of meal plan items
 
 export const getMealPlansWithItems = authenticatedProcedure
   .meta({
@@ -32,8 +33,7 @@ export const getMealPlansWithItems = authenticatedProcedure
       },
     });
 
-    const dateLimit = new Date();
-    dateLimit.setDate(dateLimit.getDate() - HISTORICAL_DATE_LIMIT_DAYS);
+    const dateLimit = getMealPlanHistoryDateLimit();
 
     const mealPlans = await prisma.mealPlan.findMany({
       where: {

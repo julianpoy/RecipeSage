@@ -12,6 +12,7 @@ export * from "./getVisibleProfileItems";
 export * from "./getVisibleLabels";
 export * from "./getAccessToMealPlan";
 export * from "./getAccessToShoppingList";
+export * from "./mealPlanHistoryWindow";
 export * from "./importStandardizedRecipes";
 export * from "./invalidateStaleJobs";
 export * from "./shareRecipeToUser";
