@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, Input, inject } from "@angular/core";
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  inject,
+  type OnInit,
+} from "@angular/core";
 
 import { LoadingService } from "../../services/loading.service";
 import { ServerActionsService } from "../../services/server-actions.service";
@@ -32,7 +39,7 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
     IonIcon,
   ],
 })
-export class SelectUserComponent {
+export class SelectUserComponent implements OnInit {
   constructor() {
     addIcons({ folderOpen });
   }
@@ -42,12 +49,28 @@ export class SelectUserComponent {
 
   @Input() selectedUser?: UserPublic;
   @Input() enableSelectedMode = true;
+  @Input() suggestKnownUsers = true;
+  @Input() excludeUserIds: string[] = [];
   @Output() selectedUserChange = new EventEmitter<UserPublic>();
   @Output() searchInputChange = new EventEmitter<string>();
 
   results: UserPublic[] = [];
+  knownUsers: UserPublic[] = [];
   searchTimeout?: NodeJS.Timeout;
   searching = false;
+
+  ngOnInit() {
+    if (this.suggestKnownUsers) {
+      this.loadKnownUsers();
+    }
+  }
+
+  async loadKnownUsers() {
+    const response = await this.serverActionsService.users.getMyFriends();
+    if (!response) return;
+
+    this.knownUsers = response.friends;
+  }
 
   _searchText: string = "";
   get searchText() {
@@ -108,7 +131,26 @@ export class SelectUserComponent {
 
     if (userResponse) results.push(userResponse);
 
-    this.results = results;
+    let merged = results;
+    if (this.suggestKnownUsers) {
+      const query = handle.toLowerCase();
+      const knownUserMatches = this.knownUsers.filter(
+        (knownUser) =>
+          knownUser.name.toLowerCase().includes(query) ||
+          knownUser.handle?.toLowerCase().includes(query),
+      );
+      const knownUserIds = new Set(
+        knownUserMatches.map((knownUser) => knownUser.id),
+      );
+      merged = [
+        ...knownUserMatches,
+        ...results.filter((result) => !knownUserIds.has(result.id)),
+      ];
+    }
+
+    this.results = merged.filter(
+      (user) => !this.excludeUserIds.includes(user.id),
+    );
 
     loading.dismiss();
   }
