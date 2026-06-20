@@ -214,10 +214,13 @@ export class ShoppingListPopoverPage {
   async _deleteList() {
     const loading = this.loadingService.start();
 
-    const response =
-      await this.serverActionsService.shoppingLists.deleteShoppingList({
-        id: this.shoppingListId,
-      });
+    const response = this.isOwner
+      ? await this.serverActionsService.shoppingLists.deleteShoppingList({
+          id: this.shoppingListId,
+        })
+      : await this.serverActionsService.shoppingLists.detachShoppingList({
+          id: this.shoppingListId,
+        });
     loading.dismiss();
     if (!response) return;
 

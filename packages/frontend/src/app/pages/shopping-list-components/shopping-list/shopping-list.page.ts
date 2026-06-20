@@ -126,13 +126,23 @@ export class ShoppingListPage {
     return id;
   })();
   private shoppingListQuery =
-    this.serverActionsService.shoppingLists.getShoppingList({
-      id: this.shoppingListId,
-    });
+    this.serverActionsService.shoppingLists.getShoppingList(
+      {
+        id: this.shoppingListId,
+      },
+      {
+        404: () => this.handleListNoLongerAvailable(),
+      },
+    );
   private shoppingListItemsQuery =
-    this.serverActionsService.shoppingLists.getShoppingListItems({
-      shoppingListId: this.shoppingListId,
-    });
+    this.serverActionsService.shoppingLists.getShoppingListItems(
+      {
+        shoppingListId: this.shoppingListId,
+      },
+      {
+        404: () => this.handleListNoLongerAvailable(),
+      },
+    );
   shoppingList = this.shoppingListQuery.value;
   shoppingListItems = this.shoppingListItemsQuery.value;
 
@@ -152,6 +162,8 @@ export class ShoppingListPage {
   preferenceKeys = ShoppingListPreferenceKey;
 
   reference = "0";
+
+  private handlingListNoLongerAvailable = false;
 
   constructor() {
     addIcons({ add, arrowUndo, caretDown, caretUp, cart, options, trash });
@@ -258,6 +270,23 @@ export class ShoppingListPage {
   loadList() {
     this.shoppingListQuery.refresh();
     this.shoppingListItemsQuery.refresh();
+  }
+
+  async handleListNoLongerAvailable() {
+    if (this.handlingListNoLongerAvailable) return;
+    this.handlingListNoLongerAvailable = true;
+
+    const message = await this.translate
+      .get("pages.shoppingList.noLongerAvailable")
+      .toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    toast.present();
+
+    this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
   }
 
   async completeItems(items: ShoppingListItemSummary[], completed: boolean) {

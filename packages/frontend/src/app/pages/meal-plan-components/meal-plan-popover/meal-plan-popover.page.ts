@@ -218,9 +218,13 @@ export class MealPlanPopoverPage {
   async _deleteMealPlan() {
     const loading = this.loadingService.start();
 
-    const result = await this.serverActionsService.mealPlans.deleteMealPlan({
-      id: this.mealPlanId,
-    });
+    const result = this.isOwner
+      ? await this.serverActionsService.mealPlans.deleteMealPlan({
+          id: this.mealPlanId,
+        })
+      : await this.serverActionsService.mealPlans.detachMealPlan({
+          id: this.mealPlanId,
+        });
     loading.dismiss();
     if (!result) return;
 

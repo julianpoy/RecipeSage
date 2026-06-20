@@ -5,6 +5,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
+  ToastController,
 } from "@ionic/angular/standalone";
 import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
@@ -92,6 +93,7 @@ export class MealPlanPage {
   private modalCtrl = inject(ModalController);
   private popoverCtrl = inject(PopoverController);
   private alertCtrl = inject(AlertController);
+  private toastCtrl = inject(ToastController);
   private titleService = inject(Title);
 
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
@@ -111,13 +113,23 @@ export class MealPlanPage {
     }
     return id;
   })();
-  private mealPlanQuery = this.serverActionsService.mealPlans.getMealPlan({
-    id: this.mealPlanId,
-  });
+  private mealPlanQuery = this.serverActionsService.mealPlans.getMealPlan(
+    {
+      id: this.mealPlanId,
+    },
+    {
+      404: () => this.handlePlanNoLongerAvailable(),
+    },
+  );
   private mealPlanItemsQuery =
-    this.serverActionsService.mealPlans.getMealPlanItems({
-      mealPlanId: this.mealPlanId,
-    });
+    this.serverActionsService.mealPlans.getMealPlanItems(
+      {
+        mealPlanId: this.mealPlanId,
+      },
+      {
+        404: () => this.handlePlanNoLongerAvailable(),
+      },
+    );
   mealPlan = this.mealPlanQuery.value;
   mealPlanItems = this.mealPlanItemsQuery.value;
 
@@ -148,6 +160,8 @@ export class MealPlanPage {
   listFormattedDates = new Map<string, string>();
 
   reference = "0";
+
+  private handlingPlanNoLongerAvailable = false;
 
   @ViewChild(MealCalendarComponent, { static: false })
   mealPlanCalendar?: MealCalendarComponent;
@@ -199,6 +213,23 @@ export class MealPlanPage {
   loadMealPlan() {
     this.mealPlanQuery.refresh();
     this.mealPlanItemsQuery.refresh();
+  }
+
+  async handlePlanNoLongerAvailable() {
+    if (this.handlingPlanNoLongerAvailable) return;
+    this.handlingPlanNoLongerAvailable = true;
+
+    const message = await this.translate
+      .get("pages.mealPlan.noLongerAvailable")
+      .toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    toast.present();
+
+    this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
   }
 
   async _addItems(items: MealPlanItemDraft[]) {
