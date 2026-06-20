@@ -169,20 +169,6 @@ registerRoute(
   }),
 );
 
-// Icons should be served cache first - they almost never change, and serving an old version is accepable
-const MAX_SVG_ICON_AGE = 60; // Days
-registerRoute(
-  /\/svg\/.*\.svg/,
-  new CacheFirst({
-    cacheName: "svg-icon-cache",
-    plugins: [
-      new ExpirationPlugin({
-        maxAgeSeconds: 60 * 60 * 24 * MAX_SVG_ICON_AGE,
-      }),
-    ],
-  }),
-);
-
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
 const MAX_OFFLINE_API_AGE = 60; // Days
