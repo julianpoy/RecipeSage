@@ -48,7 +48,6 @@ import {
 } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
 import { ErrorHandlers } from "../../../services/http-error-handler.service";
-import { EventName, EventService } from "../../../services/event.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
@@ -133,7 +132,6 @@ export class EditRecipePage {
   private loadingService = inject(LoadingService);
   private imageService = inject(ImageService);
   private capabilitiesService = inject(CapabilitiesService);
-  private events = inject(EventService);
   private preferencesService = inject(PreferencesService);
 
   saving = false;
@@ -663,8 +661,6 @@ export class EditRecipePage {
       nutritionOtherDetails: this.recipe.nutritionOtherDetails || null,
     });
 
-    this.events.publish(EventName.RecipeCreated);
-
     return response;
   }
 
@@ -725,8 +721,6 @@ export class EditRecipePage {
       ),
       nutritionOtherDetails: this.recipe.nutritionOtherDetails || null,
     });
-
-    this.events.publish(EventName.RecipeUpdated);
 
     return response;
   }

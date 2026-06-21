@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, NgZone } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
@@ -113,6 +113,7 @@ export class AppComponent {
   private syncService = inject(SyncService);
   private router = inject(Router);
   private platform = inject(Platform);
+  private ngZone = inject(NgZone);
   private menuCtrl = inject(MenuController);
   private events = inject(EventService);
   private toastCtrl = inject(ToastController);
@@ -558,6 +559,13 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.menuCtrl.close();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible") return;
+      this.ngZone.run(() => {
+        this.events.publish(EventName.ApplicationMultitaskingResumed);
+      });
     });
 
     let currentUrl: string | undefined;

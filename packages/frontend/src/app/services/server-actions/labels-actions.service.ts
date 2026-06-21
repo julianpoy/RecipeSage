@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { ErrorHandlers } from "../http-error-handler.service";
+import { EventName, EventService } from "../event.service";
 import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
 import {
   getLocalDb,
@@ -14,6 +15,8 @@ import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
   providedIn: "root",
 })
 export class LabelsActionsService extends ActionsBase {
+  private events = inject(EventService);
+
   getLabels(
     errorHandlers?: ErrorHandlers,
   ): Promise<RouterOutputs["labels"]["getLabels"] | undefined> {
@@ -102,6 +105,7 @@ export class LabelsActionsService extends ActionsBase {
       () => {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
+        this.events.publish(EventName.LabelCreated);
       },
       errorHandlers,
     );
@@ -117,6 +121,7 @@ export class LabelsActionsService extends ActionsBase {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.LabelUpdated);
       },
       errorHandlers,
     );
@@ -132,6 +137,7 @@ export class LabelsActionsService extends ActionsBase {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.LabelUpdated);
       },
       errorHandlers,
     );
@@ -147,6 +153,7 @@ export class LabelsActionsService extends ActionsBase {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.LabelDeleted);
       },
       errorHandlers,
     );
@@ -162,6 +169,7 @@ export class LabelsActionsService extends ActionsBase {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.LabelDeleted);
       },
       errorHandlers,
     );
@@ -177,6 +185,7 @@ export class LabelsActionsService extends ActionsBase {
         void this.syncService.syncLabels();
         void this.syncService.syncLabelGroups();
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.LabelDeleted);
       },
       errorHandlers,
     );

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import type {
   NutritionFilter,
   NutritionRange,
@@ -34,6 +34,7 @@ const passesNutritionFilter = (
 };
 
 import { ErrorHandlers } from "../http-error-handler.service";
+import { EventName, EventService } from "../event.service";
 import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
 import {
   getKvStoreEntry,
@@ -47,6 +48,8 @@ import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
   providedIn: "root",
 })
 export class RecipesActionsService extends ActionsBase {
+  private events = inject(EventService);
+
   getRecipe(
     input: RouterInputs["recipes"]["getRecipe"],
     errorHandlers?: ErrorHandlers,
@@ -429,6 +432,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.createRecipe.mutate(input),
       (result) => {
         void this.syncService.syncRecipe(result.id);
+        this.events.publish(EventName.RecipeCreated);
       },
       errorHandlers,
     );
@@ -442,6 +446,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.updateRecipe.mutate(input),
       (result) => {
         void this.syncService.syncRecipe(result.id);
+        this.events.publish(EventName.RecipeUpdated);
       },
       errorHandlers,
     );
@@ -455,6 +460,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipe.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -468,6 +474,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipesByIds.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -481,6 +488,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipesByLabelIds.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -493,6 +501,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteAllRecipes.mutate(),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
