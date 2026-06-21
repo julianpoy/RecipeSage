@@ -1,15 +1,15 @@
 import { Recipe } from "@recipesage/prisma";
-import { MeiliSearch, MeiliSearchApiError } from "meilisearch";
+import { Meilisearch, MeilisearchApiError } from "meilisearch";
 import { stripImageTokens } from "@recipesage/util/shared";
 import { SearchProvider } from "./";
 
-let client: MeiliSearch;
+let client: Meilisearch;
 
 if (process.env.SEARCH_PROVIDER === "meilisearch") {
   if (!process.env.MEILI_HOST || !process.env.MEILI_API_KEY)
     throw new Error("Missing MeiliSearch configuration");
 
-  client = new MeiliSearch({
+  client = new Meilisearch({
     host: process.env.MEILI_HOST,
     apiKey: process.env.MEILI_API_KEY,
   });
@@ -22,7 +22,7 @@ async function init() {
     await client.getIndex("recipes");
   } catch (e) {
     if (
-      e instanceof MeiliSearchApiError &&
+      e instanceof MeilisearchApiError &&
       e.cause?.code === "index_not_found"
     ) {
       console.log("Creating meilisearch index");
