@@ -102,6 +102,40 @@ describe("getVisibleUserProfileItems", () => {
       expect(items).toHaveLength(2);
     });
 
+    test("hides friends-only items when only the caller has friended the owner", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.user.update({
+        where: { id: user2.id },
+        data: { enableProfile: true },
+      });
+      await prisma.friendship.create({
+        data: { userId: user.id, friendId: user2.id },
+      });
+      await prisma.profileItem.createMany({
+        data: [
+          profileItemFactory({
+            userId: user2.id,
+            type: "all-recipes",
+            visibility: "public",
+          }),
+          profileItemFactory({
+            userId: user2.id,
+            type: "all-recipes",
+            visibility: "friends-only",
+          }),
+        ],
+      });
+
+      const items = await trpc.users.getVisibleUserProfileItems({
+        userId: user2.id,
+      });
+
+      expect(items).toHaveLength(1);
+    });
+
     test("returns all of the caller's own items", async ({ trpc, user }) => {
       await prisma.profileItem.createMany({
         data: [

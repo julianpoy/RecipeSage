@@ -27,7 +27,6 @@ export const updateMyProfile = authenticatedProcedure
       name: z.string().min(1).max(254).optional(),
       handle: z.string().min(1).max(255).optional(),
       enableProfile: z.boolean().optional(),
-      profileVisibility: z.string().max(255).optional(),
       profileItems: z
         .array(
           z.object({
@@ -135,9 +134,6 @@ export const updateMyProfile = authenticatedProcedure
           ...(handle !== undefined ? { handle } : {}),
           ...(input.enableProfile !== undefined
             ? { enableProfile: input.enableProfile }
-            : {}),
-          ...(input.profileVisibility !== undefined
-            ? { profileVisibility: input.profileVisibility }
             : {}),
         },
       });

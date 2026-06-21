@@ -15,13 +15,17 @@ describe("getMyCapabilities", () => {
         moreUsageCredits: false,
       });
     });
-  });
 
-  describe("error", () => {
-    test("throws when the caller is not logged in", async () => {
-      await expect(anonymousTrpc.users.getMyCapabilities()).rejects.toThrow(
-        "Must be logged in",
-      );
+    test("returns all capabilities disabled when not logged in", async () => {
+      const response = await anonymousTrpc.users.getMyCapabilities();
+
+      expect(response).toEqual({
+        highResImages: false,
+        multipleImages: false,
+        expandablePreviews: false,
+        assistantMoreMessages: false,
+        moreUsageCredits: false,
+      });
     });
   });
 });

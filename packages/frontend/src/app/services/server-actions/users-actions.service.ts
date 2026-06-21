@@ -242,8 +242,11 @@ export class UsersActionsService extends ActionsBase {
     input: RouterInputs["users"]["createFriendship"],
     errorHandlers?: ErrorHandlers,
   ): Promise<RouterOutputs["users"]["createFriendship"] | undefined> {
-    return this.passThrough(
+    return this.executeMutation(
       () => this.trpc.users.createFriendship.mutate(input),
+      () => {
+        void this.syncService.syncMyFriends();
+      },
       errorHandlers,
     );
   }
@@ -252,8 +255,11 @@ export class UsersActionsService extends ActionsBase {
     input: RouterInputs["users"]["deleteFriendship"],
     errorHandlers?: ErrorHandlers,
   ): Promise<RouterOutputs["users"]["deleteFriendship"] | undefined> {
-    return this.passThrough(
+    return this.executeMutation(
       () => this.trpc.users.deleteFriendship.mutate(input),
+      () => {
+        void this.syncService.syncMyFriends();
+      },
       errorHandlers,
     );
   }

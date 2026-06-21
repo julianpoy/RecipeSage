@@ -127,6 +127,71 @@ describe("updateMyProfile", () => {
         [image.id],
       );
     });
+
+    test("clears profile images when passed an empty array", async ({
+      trpc,
+      user,
+    }) => {
+      const image = await createOwnImage(user.id);
+      await trpc.users.updateMyProfile({ profileImageIds: [image.id] });
+
+      await trpc.users.updateMyProfile({ profileImageIds: [] });
+
+      const profileImages = await prisma.userProfileImage.findMany({
+        where: { userId: user.id },
+      });
+      expect(profileImages).toHaveLength(0);
+    });
+
+    test("keeps another user's image without the multiple images capability", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      const ownFresh = await createOwnImage(user.id);
+      const ownFreshExtra = await createOwnImage(user.id);
+      const othersImage = await createOwnImage(user2.id);
+
+      await trpc.users.updateMyProfile({
+        profileImageIds: [ownFresh.id, ownFreshExtra.id, othersImage.id],
+      });
+
+      const profileImages = await prisma.userProfileImage.findMany({
+        where: { userId: user.id },
+        orderBy: { order: "asc" },
+      });
+      expect(profileImages.map((profileImage) => profileImage.imageId)).toEqual(
+        [ownFresh.id, othersImage.id],
+      );
+    });
+
+    test("keeps own images older than a day without the multiple images capability", async ({
+      trpc,
+      user,
+    }) => {
+      const ownFresh = await createOwnImage(user.id);
+      const ownOld = await prisma.image.create({
+        data: {
+          userId: user.id,
+          location: "https://example.com/image.jpg",
+          key: "example-key-old",
+          json: {},
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      await trpc.users.updateMyProfile({
+        profileImageIds: [ownFresh.id, ownOld.id],
+      });
+
+      const profileImages = await prisma.userProfileImage.findMany({
+        where: { userId: user.id },
+        orderBy: { order: "asc" },
+      });
+      expect(profileImages.map((profileImage) => profileImage.imageId)).toEqual(
+        [ownFresh.id, ownOld.id],
+      );
+    });
   });
 
   describe("error", () => {
@@ -147,6 +212,20 @@ describe("updateMyProfile", () => {
 
       await expect(
         trpc.users.updateMyProfile({ handle: "taken" }),
+      ).rejects.toThrow("already in use");
+    });
+
+    test("rejects a handle already in use regardless of casing", async ({
+      trpc,
+      user2,
+    }) => {
+      await prisma.user.update({
+        where: { id: user2.id },
+        data: { handle: "taken" },
+      });
+
+      await expect(
+        trpc.users.updateMyProfile({ handle: "TAKEN" }),
       ).rejects.toThrow("already in use");
     });
 

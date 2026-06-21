@@ -137,6 +137,18 @@ export class SyncService {
     });
   }
 
+  async syncMyFriends(): Promise<void> {
+    if (!navigator.onLine) {
+      this.whenOnlineQueue.add(() => this.syncMyFriends());
+      return;
+    }
+
+    const manager = await this.managerP;
+    await manager.triggerSyncMyFriends().catch((e) => {
+      this.handleSyncManagerError(e);
+    });
+  }
+
   async syncShoppingLists(): Promise<void> {
     if (!navigator.onLine) {
       this.whenOnlineQueue.add(() => this.syncShoppingLists());
