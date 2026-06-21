@@ -21,9 +21,9 @@ import {
   parseIngredients,
   parseYieldCount,
   stripIngredient,
+  ParsedIngredient,
 } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { ParsedIngredient } from "../../services/recipe.service";
 
 export type UnitSystem = "original" | "metric" | "imperial";
 

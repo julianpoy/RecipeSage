@@ -61,6 +61,30 @@ export class RecipesActionsService extends ActionsBase {
     );
   }
 
+  getRecipeCount(
+    input: RouterInputs["recipes"]["getRecipeCount"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["recipes"]["getRecipeCount"] | undefined> {
+    return this.executeQuery(
+      () => this.trpc.recipes.getRecipeCount.query(input),
+      async () => {
+        const localDb = await getLocalDb();
+        const session = await appIdbStorageManager.getSession();
+        if (!session) return undefined;
+
+        const recipes = await localDb.getAll(ObjectStoreName.Recipes);
+        const count = recipes.filter(
+          (recipe) =>
+            recipe.userId === session.userId &&
+            (!input.folder || recipe.folder === input.folder),
+        ).length;
+
+        return { count };
+      },
+      errorHandlers,
+    );
+  }
+
   getRecipes(
     input: RouterInputs["recipes"]["getRecipes"],
     errorHandlers?: ErrorHandlers,

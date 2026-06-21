@@ -2,7 +2,6 @@ import { Component, inject } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
 
-import { ExportFormat } from "../../../services/recipe.service";
 import { RouteMap, UtilService } from "../../../services/util.service";
 import type { ExportJobSummary } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -24,6 +23,12 @@ import {
 } from "@ionic/angular/standalone";
 import { cloudDownload, document } from "ionicons/icons";
 import { addIcons } from "ionicons";
+
+export enum ExportFormat {
+  PDF = "pdf",
+  TXT = "txt",
+  JSONLD = "jsonld",
+}
 
 export const getJobFailureI18n = (exportJob: ExportJobSummary) => {
   switch (exportJob.resultCode) {

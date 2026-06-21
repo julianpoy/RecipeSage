@@ -22,7 +22,6 @@ import {
 } from "@capacitor/camera";
 
 import { RouteMap } from "../../../services/util.service";
-import { RecipeService } from "../../../services/recipe.service";
 import { LoadingService } from "../../../services/loading.service";
 import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { CapabilitiesService } from "../../../services/capabilities.service";
@@ -93,7 +92,6 @@ import { addIcons } from "ionicons";
   selector: "page-edit-recipe",
   templateUrl: "edit-recipe.page.html",
   styleUrls: ["edit-recipe.page.scss"],
-  providers: [RecipeService],
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMultipleItemsComponent,
@@ -133,7 +131,6 @@ export class EditRecipePage {
   private unsavedChangesService = inject(UnsavedChangesService);
   private loadingCtrl = inject(LoadingController);
   private loadingService = inject(LoadingService);
-  private recipeService = inject(RecipeService);
   private imageService = inject(ImageService);
   private capabilitiesService = inject(CapabilitiesService);
   private events = inject(EventService);
@@ -1395,7 +1392,7 @@ export class EditRecipePage {
       message: pleaseWait,
     });
     await loading.present();
-    const response = await this.recipeService.clipFromUrl(
+    const response = await this.serverActionsService.ml.clipFromUrl(
       {
         url,
       },
@@ -1415,24 +1412,24 @@ export class EditRecipePage {
         },
       },
     );
-    if (!response.success) {
+    if (!response) {
       loading.dismiss();
       return;
     }
 
-    this.recipe.title = response.data.title || "";
-    this.recipe.description = response.data.description || "";
-    this.recipe.source = response.data.source || "";
-    this.recipe.yield = response.data.yield || "";
-    this.recipe.activeTime = response.data.activeTime || "";
-    this.recipe.totalTime = response.data.totalTime || "";
-    this.recipe.ingredients = response.data.ingredients || "";
-    this.recipe.instructions = response.data.instructions || "";
-    this.recipe.notes = response.data.notes || "";
+    this.recipe.title = response.title || "";
+    this.recipe.description = response.description || "";
+    this.recipe.source = response.source || "";
+    this.recipe.yield = response.yield || "";
+    this.recipe.activeTime = response.activeTime || "";
+    this.recipe.totalTime = response.totalTime || "";
+    this.recipe.ingredients = response.ingredients || "";
+    this.recipe.instructions = response.instructions || "";
+    this.recipe.notes = response.notes || "";
     this.recipe.url = url;
 
-    if (includeNutrition && response.data.nutritionInfo) {
-      await this.parseAndApplyNutrition(response.data.nutritionInfo);
+    if (includeNutrition && response.nutritionInfo) {
+      await this.parseAndApplyNutrition(response.nutritionInfo);
     }
 
     if (!this.recipe.ingredients?.trim() && !this.recipe.instructions?.trim()) {
@@ -1452,7 +1449,7 @@ export class EditRecipePage {
       ).present();
     }
 
-    if (response.data.imageURL?.trim().length) {
+    if (response.imageURL?.trim().length) {
       const IMAGE_LOADING_TIMEOUT = 3000;
 
       // Handle very long image fetch. Dismiss loading overlay if image import takes too long.
@@ -1462,7 +1459,7 @@ export class EditRecipePage {
           const imageResponse =
             await this.serverActionsService.images.createRecipeImageFromUrl(
               {
-                url: response.data.imageURL,
+                url: response.imageURL,
               },
               {
                 "*": () => {},

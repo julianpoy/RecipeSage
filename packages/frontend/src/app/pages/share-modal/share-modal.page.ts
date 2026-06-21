@@ -6,8 +6,7 @@ import {
 } from "@ionic/angular/standalone";
 
 import { ServerActionsService } from "../../services/server-actions.service";
-import type { UserPublic } from "@recipesage/prisma";
-import { RecipeService, Recipe } from "../../services/recipe.service";
+import type { UserPublic, RecipeSummary } from "@recipesage/prisma";
 import { LoadingService } from "../../services/loading.service";
 import {
   UtilService,
@@ -84,13 +83,12 @@ export class ShareModalPage {
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
-  recipeService = inject(RecipeService);
   modalCtrl = inject(ModalController);
 
   @Input({
     required: true,
   })
-  recipe!: Recipe;
+  recipe!: RecipeSummary;
 
   selectedUser?: UserPublic;
   recipientId?: string;

@@ -188,7 +188,9 @@ describe("getVisibleUserProfileItems", () => {
       });
 
       expect(items[0].recipe?.id).toEqual(recipe.id);
-      expect(items[0].recipe?.images[0]?.location).toEqual(image.location);
+      expect(items[0].recipe?.recipeImages[0]?.image?.location).toEqual(
+        image.location,
+      );
       expect(items[0].label).toEqual(null);
     });
 

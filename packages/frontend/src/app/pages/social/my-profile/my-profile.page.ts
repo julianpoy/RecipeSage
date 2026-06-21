@@ -24,7 +24,6 @@ import {
   RouteMap,
   AuthType,
 } from "../../../services/util.service";
-import { RecipeService } from "../../../services/recipe.service";
 import { ImageService } from "../../../services/image.service";
 import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -63,13 +62,15 @@ import {
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
+type ProfileFormItem = Omit<ProfileItemSummary, "id" | "userId" | "order">;
+
 interface ProfileForm {
   id: string;
   name: string;
   handle: string | null;
   enableProfile: boolean;
   profileImages: ImageSummary[];
-  profileItems: ProfileItemSummary[];
+  profileItems: ProfileFormItem[];
 }
 
 @Component({
@@ -111,7 +112,6 @@ export class MyProfilePage {
   loadingService = inject(LoadingService);
   unsavedChangesService = inject(UnsavedChangesService);
   imageService = inject(ImageService);
-  recipeService = inject(RecipeService);
   serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
@@ -329,7 +329,9 @@ export class MyProfilePage {
       component: AddProfileItemModalPage,
     });
     modal.present();
-    const { data } = await modal.onDidDismiss();
+    const { data } = await modal.onDidDismiss<{
+      item: ProfileFormItem;
+    }>();
 
     if (data?.item) {
       this.myProfile.profileItems.push(data.item);
@@ -434,19 +436,22 @@ export class MyProfilePage {
     );
   }
 
-  open(item: any) {
+  open(item: ProfileFormItem) {
+    if (!this.myProfile) return;
+    const userId = this.myProfile.id;
+
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
-        RouteMap.HomePage.getPath("main", { userId: item.userId }),
+        RouteMap.HomePage.getPath("main", { userId }),
       );
-    } else if (item.type === "label") {
+    } else if (item.type === "label" && item.label) {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", {
-          userId: item.userId,
+          userId,
           selectedLabels: [item.label.title],
         }),
       );
-    } else if (item.type === "recipe") {
+    } else if (item.type === "recipe" && item.recipe) {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }

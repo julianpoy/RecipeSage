@@ -109,6 +109,24 @@ describe("updateMyProfile", () => {
         [image1.id],
       );
     });
+
+    test("ignores profile image ids that do not exist", async ({
+      trpc,
+      user,
+    }) => {
+      const image = await createOwnImage(user.id);
+
+      await trpc.users.updateMyProfile({
+        profileImageIds: [image.id, "00000000-0000-0000-0000-000000000000"],
+      });
+
+      const profileImages = await prisma.userProfileImage.findMany({
+        where: { userId: user.id },
+      });
+      expect(profileImages.map((profileImage) => profileImage.imageId)).toEqual(
+        [image.id],
+      );
+    });
   });
 
   describe("error", () => {
@@ -130,6 +148,56 @@ describe("updateMyProfile", () => {
       await expect(
         trpc.users.updateMyProfile({ handle: "taken" }),
       ).rejects.toThrow("already in use");
+    });
+
+    test("rejects pinning a recipe the caller does not own", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      const recipe = await prisma.recipe.create({
+        data: recipeFactory(user2.id),
+      });
+
+      await expect(
+        trpc.users.updateMyProfile({
+          profileItems: [
+            {
+              title: "Their recipe",
+              type: "recipe",
+              visibility: "public",
+              recipeId: recipe.id,
+            },
+          ],
+        }),
+      ).rejects.toThrow("your own recipes");
+
+      const profileItems = await prisma.profileItem.findMany({
+        where: { userId: user.id },
+      });
+      expect(profileItems).toHaveLength(0);
+    });
+
+    test("rejects pinning a label the caller does not own", async ({
+      trpc,
+      user2,
+    }) => {
+      const label = await prisma.label.create({
+        data: { userId: user2.id, title: "Their label" },
+      });
+
+      await expect(
+        trpc.users.updateMyProfile({
+          profileItems: [
+            {
+              title: "Their label",
+              type: "label",
+              visibility: "public",
+              labelId: label.id,
+            },
+          ],
+        }),
+      ).rejects.toThrow("your own labels");
     });
 
     test("throws when the caller is not logged in", async () => {

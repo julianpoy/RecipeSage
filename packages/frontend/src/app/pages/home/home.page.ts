@@ -8,7 +8,6 @@ import {
 } from "@ionic/angular/standalone";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
-import { Recipe, RecipeFolderName } from "../../services/recipe.service";
 import { LoadingService } from "../../services/loading.service";
 import { WebsocketService } from "../../services/websocket.service";
 import { EventName, EventService } from "../../services/event.service";
@@ -127,7 +126,7 @@ export class HomePage implements OnDestroy {
 
   searchText = "";
 
-  folder: RecipeFolderName = "main";
+  folder: "main" | "inbox" = "main";
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -257,7 +256,7 @@ export class HomePage implements OnDestroy {
     this.clearSelectedRecipes();
 
     const snapshotFolder =
-      (this.route.snapshot.paramMap.get("folder") as RecipeFolderName) ||
+      (this.route.snapshot.paramMap.get("folder") as "main" | "inbox") ||
       "main";
     const snapshotUserId =
       this.route.snapshot.queryParamMap.get("userId") || undefined;
@@ -331,7 +330,7 @@ export class HomePage implements OnDestroy {
 
   private applyRouteParams() {
     this.folder =
-      (this.route.snapshot.paramMap.get("folder") as RecipeFolderName) ||
+      (this.route.snapshot.paramMap.get("folder") as "main" | "inbox") ||
       "main";
     this.selectedLabels = (
       this.route.snapshot.queryParamMap.get("labels") || ""
@@ -604,7 +603,7 @@ export class HomePage implements OnDestroy {
     });
   }
 
-  openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
+  openRecipe(recipe: RecipeSummaryLite, event?: MouseEvent | KeyboardEvent) {
     this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
@@ -681,7 +680,7 @@ export class HomePage implements OnDestroy {
     await this.datasource.adapter.reset();
   }
 
-  selectRecipe(recipe: Recipe) {
+  selectRecipe(recipe: RecipeSummaryLite) {
     const index = this.selectedRecipeIds.indexOf(recipe.id);
     if (index > -1) {
       this.selectedRecipeIds.splice(index, 1);
@@ -875,7 +874,7 @@ export class HomePage implements OnDestroy {
     alert.present();
   }
 
-  getCardClass(recipe: Recipe) {
+  getCardClass(recipe: RecipeSummaryLite) {
     return {
       selected: this.selectedRecipeIds.includes(recipe.id),
 

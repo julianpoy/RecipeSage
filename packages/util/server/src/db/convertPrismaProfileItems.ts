@@ -15,20 +15,8 @@ export const convertPrismaProfileItemToProfileItemSummary = (
     type: profileItemTypeSchema.parse(profileItem.type),
     visibility: profileItemVisibilitySchema.parse(profileItem.visibility),
     order: profileItem.order,
-    recipe: profileItem.recipe
-      ? {
-          id: profileItem.recipe.id,
-          images: profileItem.recipe.recipeImages.map(
-            (recipeImage) => recipeImage.image,
-          ),
-        }
-      : null,
-    label: profileItem.label
-      ? {
-          id: profileItem.label.id,
-          title: profileItem.label.title,
-        }
-      : null,
+    recipe: profileItem.recipe,
+    label: profileItem.label,
   };
 };
 

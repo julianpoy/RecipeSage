@@ -56,39 +56,45 @@ export const updateMyProfile = authenticatedProcedure
     const handle = input.handle?.toLowerCase();
 
     let allowedProfileImageIds = input.profileImageIds;
-    if (input.profileImageIds && input.profileImageIds.length > 1) {
-      const canUploadMultipleImages = await userHasCapability(
-        userId,
-        Capabilities.MultipleImages,
+    if (input.profileImageIds && input.profileImageIds.length > 0) {
+      const images = await prisma.image.findMany({
+        where: {
+          id: {
+            in: input.profileImageIds,
+          },
+        },
+        select: {
+          id: true,
+          userId: true,
+          createdAt: true,
+        },
+      });
+      const imagesById = new Map(images.map((image) => [image.id, image]));
+
+      allowedProfileImageIds = input.profileImageIds.filter((imageId) =>
+        imagesById.has(imageId),
       );
 
-      if (!canUploadMultipleImages) {
-        const images = await prisma.image.findMany({
-          where: {
-            id: {
-              in: input.profileImageIds,
-            },
-          },
-          select: {
-            id: true,
-            userId: true,
-            createdAt: true,
-          },
-        });
-        const imagesById = new Map(images.map((image) => [image.id, image]));
-
-        const oneDayMs = 24 * 60 * 60 * 1000;
-        allowedProfileImageIds = input.profileImageIds.filter(
-          (imageId, idx) => {
-            const image = imagesById.get(imageId);
-            return (
-              idx === 0 ||
-              !image ||
-              image.userId !== userId ||
-              image.createdAt.getTime() + oneDayMs < Date.now()
-            );
-          },
+      if (allowedProfileImageIds.length > 1) {
+        const canUploadMultipleImages = await userHasCapability(
+          userId,
+          Capabilities.MultipleImages,
         );
+
+        if (!canUploadMultipleImages) {
+          const oneDayMs = 24 * 60 * 60 * 1000;
+          allowedProfileImageIds = allowedProfileImageIds.filter(
+            (imageId, idx) => {
+              const image = imagesById.get(imageId);
+              if (!image) return false;
+              return (
+                idx === 0 ||
+                image.userId !== userId ||
+                image.createdAt.getTime() + oneDayMs < Date.now()
+              );
+            },
+          );
+        }
       }
     }
 
@@ -137,6 +143,43 @@ export const updateMyProfile = authenticatedProcedure
       });
 
       if (input.profileItems) {
+        const recipeIds = input.profileItems.flatMap((profileItem) =>
+          profileItem.recipeId ? [profileItem.recipeId] : [],
+        );
+        const labelIds = input.profileItems.flatMap((profileItem) =>
+          profileItem.labelId ? [profileItem.labelId] : [],
+        );
+
+        if (recipeIds.length > 0) {
+          const ownedRecipeCount = await tx.recipe.count({
+            where: {
+              id: { in: recipeIds },
+              userId,
+            },
+          });
+          if (ownedRecipeCount !== new Set(recipeIds).size) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "You can only pin your own recipes to your profile",
+            });
+          }
+        }
+
+        if (labelIds.length > 0) {
+          const ownedLabelCount = await tx.label.count({
+            where: {
+              id: { in: labelIds },
+              userId,
+            },
+          });
+          if (ownedLabelCount !== new Set(labelIds).size) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "You can only pin your own labels to your profile",
+            });
+          }
+        }
+
         await tx.profileItem.deleteMany({
           where: {
             userId,

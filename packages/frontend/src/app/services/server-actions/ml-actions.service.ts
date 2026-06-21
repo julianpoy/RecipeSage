@@ -1,12 +1,44 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
+import type { StandardizedRecipeImportEntryForWeb } from "@recipesage/prisma";
 
 import { ErrorHandlers } from "../http-error-handler.service";
+import { HttpService } from "../http.service";
 import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
 
 @Injectable({
   providedIn: "root",
 })
 export class MlActionsService extends ActionsBase {
+  private httpService = inject(HttpService);
+
+  async clipFromUrl(
+    params: {
+      url: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ): Promise<
+    | (StandardizedRecipeImportEntryForWeb["recipe"] & { imageURL: string })
+    | undefined
+  > {
+    const response = await this.httpService.requestWithWrapper<
+      StandardizedRecipeImportEntryForWeb["recipe"] & { imageURL: string }
+    >({
+      path: `clip`,
+      method: "GET",
+      payload: undefined,
+      query: params,
+      errorHandlers,
+    });
+
+    if (!response.success) return undefined;
+
+    return response.data;
+  }
+
+  /**
+   * TODO: This should be replaced with a call to the express endpoint rather than to tRPC since it
+   * uploads a file
+   */
   getRecipeFromOCR(
     input: RouterInputs["ml"]["getRecipeFromOCR"],
     errorHandlers?: ErrorHandlers,
@@ -17,6 +49,10 @@ export class MlActionsService extends ActionsBase {
     );
   }
 
+  /**
+   * TODO: This should be replaced with a call to the express endpoint rather than to tRPC since it
+   * uploads a file
+   */
   getRecipeFromPDF(
     input: RouterInputs["ml"]["getRecipeFromPDF"],
     errorHandlers?: ErrorHandlers,

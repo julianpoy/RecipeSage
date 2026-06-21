@@ -8,7 +8,8 @@ describe("createFriendship", () => {
       user,
       user2,
     }) => {
-      await trpc.users.createFriendship({ friendId: user2.id });
+      const result = await trpc.users.createFriendship({ friendId: user2.id });
+      expect(result).toEqual("Created");
 
       const friendships = await prisma.friendship.findMany({
         where: { userId: user.id, friendId: user2.id },

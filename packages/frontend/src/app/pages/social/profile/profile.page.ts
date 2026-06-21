@@ -14,7 +14,6 @@ import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RouterOutputs } from "../../../services/server-actions/actions-base";
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
-import { RecipeService } from "../../../services/recipe.service";
 import { ImageViewerComponent } from "../../../modals/image-viewer/image-viewer.component";
 import { NewMessageModalPage } from "../../messaging-components/new-message-modal/new-message-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
@@ -86,7 +85,6 @@ export class ProfilePage {
   modalCtrl = inject(ModalController);
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
-  recipeService = inject(RecipeService);
   serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
@@ -222,19 +220,19 @@ export class ProfilePage {
     imageViewerModal.present();
   }
 
-  open(item: any) {
+  open(item: RouterOutputs["users"]["getVisibleUserProfileItems"][number]) {
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", { userId: item.userId }),
       );
-    } else if (item.type === "label") {
+    } else if (item.type === "label" && item.label) {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", {
           userId: item.userId,
           selectedLabels: [item.label.title],
         }),
       );
-    } else if (item.type === "recipe") {
+    } else if (item.type === "recipe" && item.recipe) {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }

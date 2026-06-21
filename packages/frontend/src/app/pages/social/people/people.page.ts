@@ -13,7 +13,6 @@ import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RouterOutputs } from "../../../services/server-actions/actions-base";
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
-import { RecipeService } from "../../../services/recipe.service";
 import { AddFriendModalPage } from "../add-friend-modal/add-friend-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
@@ -87,7 +86,6 @@ export class PeoplePage {
   modalCtrl = inject(ModalController);
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
-  recipeService = inject(RecipeService);
   serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
@@ -117,9 +115,11 @@ export class PeoplePage {
   }
 
   async loadInboxCount() {
-    const response = await this.recipeService.count({ folder: "inbox" });
-    if (!response.success) return;
-    this.inboxCount = response.data.count;
+    const response = await this.serverActionsService.recipes.getRecipeCount({
+      folder: "inbox",
+    });
+    if (!response) return;
+    this.inboxCount = response.count;
   }
 
   goToMessages() {

@@ -15,7 +15,6 @@ import {
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
 import { UtilService, RouteMap, AuthType } from "./services/util.service";
-import { RecipeService } from "./services/recipe.service";
 import { MessagingService } from "./services/messaging.service";
 import { WebsocketService } from "./services/websocket.service";
 import { PreferencesService } from "./services/preferences.service";
@@ -119,7 +118,6 @@ export class AppComponent {
   private toastCtrl = inject(ToastController);
   private alertCtrl = inject(AlertController);
   private utilService = inject(UtilService);
-  private recipeService = inject(RecipeService);
   private messagingService = inject(MessagingService);
   private websocketService = inject(WebsocketService);
   private preferencesService = inject(PreferencesService);
@@ -538,10 +536,12 @@ export class AppComponent {
   async loadInboxCount() {
     if (!localStorage.getItem("token")) return;
 
-    const response = await this.recipeService.count({ folder: "inbox" });
-    if (!response.success) return;
+    const response = await this.serverActionsService.recipes.getRecipeCount({
+      folder: "inbox",
+    });
+    if (!response) return;
 
-    this.inboxCount = response.data.count;
+    this.inboxCount = response.count;
   }
 
   async loadFriendRequestCount() {

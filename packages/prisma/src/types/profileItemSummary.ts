@@ -58,9 +58,11 @@ export interface ProfileItemSummary {
   order: number;
   recipe: {
     id: string;
-    images: {
-      id: string;
-      location: string;
+    recipeImages: {
+      image: {
+        id: string;
+        location: string;
+      };
     }[];
   } | null;
   label: {
@@ -79,10 +81,12 @@ export const profileItemSummarySchema = z.object({
   recipe: z
     .object({
       id: z.uuid(),
-      images: z.array(
+      recipeImages: z.array(
         z.object({
-          id: z.uuid(),
-          location: z.string(),
+          image: z.object({
+            id: z.uuid(),
+            location: z.string(),
+          }),
         }),
       ),
     })

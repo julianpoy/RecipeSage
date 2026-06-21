@@ -686,6 +686,26 @@ const restoreBracePlaceholders = (
   return out;
 };
 
+export interface ParsedIngredient {
+  content: string;
+  plaintextContent: string;
+  originalContent: string;
+  htmlContent: string;
+  isHeader: boolean;
+  complete: boolean;
+  isRtl: boolean;
+}
+
+export interface ParsedInstruction {
+  content: string;
+  plaintextContent: string;
+  htmlContent: string;
+  isHeader: boolean;
+  complete: boolean;
+  count: number;
+  isRtl: boolean;
+}
+
 export const parseIngredients = (
   ingredients: string,
   scale: string,
