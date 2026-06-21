@@ -8,7 +8,6 @@ import type { ShoppingListSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "../../../services/loading.service";
 import { MessagingService } from "../../../services/messaging.service";
-import { UserService } from "../../../services/user.service";
 import { UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -61,7 +60,6 @@ export class UpdateShoppingListModalPage {
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
   messagingService = inject(MessagingService);
-  userService = inject(UserService);
   toastCtrl = inject(ToastController);
 
   @Input({

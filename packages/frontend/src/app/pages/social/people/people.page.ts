@@ -9,13 +9,10 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { User, UserProfile, UserService } from "../../../services/user.service";
+import { ServerActionsService } from "../../../services/server-actions.service";
+import type { RouterOutputs } from "../../../services/server-actions/actions-base";
 import { LoadingService } from "../../../services/loading.service";
-import {
-  UtilService,
-  RouteMap,
-  AuthType,
-} from "../../../services/util.service";
+import { UtilService, RouteMap } from "../../../services/util.service";
 import { RecipeService } from "../../../services/recipe.service";
 import { AddFriendModalPage } from "../add-friend-modal/add-friend-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -91,14 +88,15 @@ export class PeoplePage {
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
   recipeService = inject(RecipeService);
-  userService = inject(UserService);
+  serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   isSelfHost = IS_SELFHOST;
 
-  friendships?: any;
-  accountInfo?: User;
-  myProfile?: UserProfile;
+  private meQuery = this.serverActionsService.users.getMe();
+  me = this.meQuery.value;
+
+  friendships?: RouterOutputs["users"]["getMyFriends"];
   inboxCount?: number;
 
   ionViewWillEnter() {
@@ -108,18 +106,11 @@ export class PeoplePage {
   load() {
     const loading = this.loadingService.start();
 
-    Promise.all([
-      this.userService.getMyFriends(),
-      this.userService.me(),
-      this.userService.getMyProfile(),
-    ]).then(([friendships, accountInfo, myProfile]) => {
-      loading.dismiss();
-      if (!friendships.success || !accountInfo.success || !myProfile.success)
-        return;
+    this.meQuery.refresh();
 
-      this.friendships = friendships.data;
-      this.accountInfo = accountInfo.data;
-      this.myProfile = myProfile.data;
+    this.serverActionsService.users.getMyFriends().then((friendships) => {
+      loading.dismiss();
+      this.friendships = friendships;
     });
 
     this.loadInboxCount();
@@ -140,7 +131,7 @@ export class PeoplePage {
   }
 
   async findProfile() {
-    if (!this.accountInfo?.enableProfile) {
+    if (!this.me()?.enableProfile) {
       const header = await this.translate
         .get("pages.people.setup.header")
         .toPromise();
@@ -183,16 +174,17 @@ export class PeoplePage {
   }
 
   async addFriend(friendId: string) {
-    await this.userService.addFriend(friendId);
+    await this.serverActionsService.users.createFriendship({ friendId });
     this.load();
   }
 
   async deleteFriend(friendId: string) {
-    await this.userService.deleteFriend(friendId);
+    await this.serverActionsService.users.deleteFriendship({ friendId });
     this.load();
   }
 
-  async openProfile(handle: string) {
+  async openProfile(handle: string | null) {
+    if (!handle) return;
     this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${handle}`));
   }
 

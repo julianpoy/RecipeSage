@@ -13,6 +13,7 @@ export * from "./shoppingListSummary";
 export * from "./shoppingListSummaryWithItems";
 export * from "./shoppingListItemSummary";
 export * from "./nutritionFilter";
+export * from "./profileItemSummary";
 export * from "./recipeSummary";
 export * from "./recipeSummaryLite";
 export * from "./userPublic";

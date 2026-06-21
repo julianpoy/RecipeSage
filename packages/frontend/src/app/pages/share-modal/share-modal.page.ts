@@ -6,7 +6,7 @@ import {
 } from "@ionic/angular/standalone";
 
 import { ServerActionsService } from "../../services/server-actions.service";
-import { User, UserService } from "../../services/user.service";
+import type { UserPublic } from "@recipesage/prisma";
 import { RecipeService, Recipe } from "../../services/recipe.service";
 import { LoadingService } from "../../services/loading.service";
 import {
@@ -35,6 +35,7 @@ import {
   IonToggle,
   IonInput,
   IonFooter,
+  type SegmentCustomEvent,
 } from "@ionic/angular/standalone";
 import {
   close,
@@ -84,7 +85,6 @@ export class ShareModalPage {
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
   recipeService = inject(RecipeService);
-  userService = inject(UserService);
   modalCtrl = inject(ModalController);
 
   @Input({
@@ -92,7 +92,7 @@ export class ShareModalPage {
   })
   recipe!: Recipe;
 
-  selectedUser?: User;
+  selectedUser?: UserPublic;
   recipientId?: string;
 
   shareMethod = "account";
@@ -172,7 +172,7 @@ export class ShareModalPage {
     this.recipeEmbedCode = embedCode;
   }
 
-  selectUser(user: User) {
+  selectUser(user: UserPublic | undefined) {
     if (!user) {
       this.selectedUser = undefined;
       this.recipientId = undefined;
@@ -202,7 +202,7 @@ export class ShareModalPage {
     );
   }
 
-  shareMethodChanged(event: any) {
-    this.shareMethod = event.detail.value;
+  shareMethodChanged(event: SegmentCustomEvent) {
+    this.shareMethod = String(event.detail.value);
   }
 }

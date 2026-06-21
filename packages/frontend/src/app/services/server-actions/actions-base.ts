@@ -14,7 +14,7 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type RefreshableSignal<T> = {
   value: Signal<T | undefined>;
-  refresh: () => void;
+  refresh: () => Promise<void>;
 };
 
 export abstract class ActionsBase {
@@ -149,7 +149,7 @@ export abstract class ActionsBase {
     const result = signal<T | undefined>(undefined);
     let generation = 0;
 
-    const run = () => {
+    const run = (): Promise<void> => {
       const myGeneration = ++generation;
       const isCurrent = () => myGeneration === generation;
 
@@ -166,7 +166,7 @@ export abstract class ActionsBase {
         }
       });
 
-      void networkPromise.then(
+      return networkPromise.then(
         (fresh) => {
           if (!isCurrent()) return;
           result.set(fresh);
@@ -184,7 +184,7 @@ export abstract class ActionsBase {
       );
     };
 
-    run();
+    void run();
 
     return { value: result.asReadonly(), refresh: run };
   }

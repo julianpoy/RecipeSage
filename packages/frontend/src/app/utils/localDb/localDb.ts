@@ -40,6 +40,7 @@ export enum KVStoreKeys {
   MyUserProfile = "myUserProfile",
   MyFriends = "myFriends",
   MyStats = "myStats",
+  MyCapabilities = "myCapabilities",
   PersistenceRequested = "persistenceRequested",
 }
 
@@ -73,6 +74,10 @@ export interface KVMyStats {
   key: KVStoreKeys.MyStats;
   value: Awaited<ReturnType<typeof trpc.users.getMyStats.query>>;
 }
+export interface KVMyCapabilities {
+  key: KVStoreKeys.MyCapabilities;
+  value: Awaited<ReturnType<typeof trpc.users.getMyCapabilities.query>>;
+}
 export interface KVPersistenceRequested {
   key: KVStoreKeys.PersistenceRequested;
   value: boolean;
@@ -86,6 +91,7 @@ export type KVStoreValue = {
   [KVStoreKeys.MyUserProfile]: KVMyUserProfile;
   [KVStoreKeys.MyFriends]: KVMyFriends;
   [KVStoreKeys.MyStats]: KVMyStats;
+  [KVStoreKeys.MyCapabilities]: KVMyCapabilities;
   [KVStoreKeys.PersistenceRequested]: KVPersistenceRequested;
 };
 

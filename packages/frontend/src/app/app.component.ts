@@ -18,7 +18,6 @@ import { UtilService, RouteMap, AuthType } from "./services/util.service";
 import { RecipeService } from "./services/recipe.service";
 import { MessagingService } from "./services/messaging.service";
 import { WebsocketService } from "./services/websocket.service";
-import { UserService } from "./services/user.service";
 import { PreferencesService } from "./services/preferences.service";
 import {
   GlobalPreferenceKey,
@@ -123,7 +122,6 @@ export class AppComponent {
   private recipeService = inject(RecipeService);
   private messagingService = inject(MessagingService);
   private websocketService = inject(WebsocketService);
-  private userService = inject(UserService);
   private preferencesService = inject(PreferencesService);
   private featureFlagService = inject(FeatureFlagService);
   private titleService = inject(Title);
@@ -549,12 +547,12 @@ export class AppComponent {
   async loadFriendRequestCount() {
     if (!localStorage.getItem("token")) return;
 
-    const response = await this.userService.getMyFriends({
+    const response = await this.serverActionsService.users.getMyFriends({
       401: () => {},
     });
-    if (!response.success) return;
+    if (!response) return;
 
-    this.friendRequestCount = response.data.incomingRequests?.length || null;
+    this.friendRequestCount = response.incomingRequests?.length || undefined;
   }
 
   initializeApp() {

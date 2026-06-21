@@ -1,5 +1,6 @@
 import { Injectable, inject } from "@angular/core";
-import { UserService } from "./user.service";
+import { ServerActionsService } from "./server-actions.service";
+import type { RouterOutputs } from "./server-actions/actions-base";
 import { UtilService } from "./util.service";
 
 const CAPABILITY_RETRY_RATE = 5000;
@@ -8,12 +9,12 @@ const CAPABILITY_RETRY_RATE = 5000;
   providedIn: "root",
 })
 export class CapabilitiesService {
-  private userService = inject(UserService);
+  private serverActionsService = inject(ServerActionsService);
   private utilService = inject(UtilService);
 
-  retryTimeout: any;
+  retryTimeout?: ReturnType<typeof setTimeout>;
 
-  capabilities = {
+  capabilities: RouterOutputs["users"]["getMyCapabilities"] = {
     highResImages: false,
     multipleImages: false,
     expandablePreviews: false,
@@ -38,10 +39,11 @@ export class CapabilitiesService {
   async updateCapabilities() {
     if (!this.utilService.isLoggedIn()) return this.retry();
 
-    const response = await this.userService.capabilities();
-    if (!response.success && response.status === 401) return;
-    if (!response.success) return this.retry();
+    const response = await this.serverActionsService.users.getMyCapabilities({
+      401: () => {},
+    });
+    if (!response) return this.retry();
 
-    this.capabilities = response.data;
+    this.capabilities = response;
   }
 }
