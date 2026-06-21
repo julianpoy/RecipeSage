@@ -1545,6 +1545,14 @@
     "pages.cookingTemperatures.items.chocolateWhiteWork.label": "Chocolat blanc (température de travail)",
     "pages.cookingTemperatures.items.porkRibs.label": "Travers de porc",
     "pages.cookingTemperatures.items.porkRibs.state": "Test au toucher ou test à la fourchette entre les os",
-    "pages.cookingTemperatures.items.fryGeneral.label": "Huile de friture (usuelle)",
-    "pages.cookingTemperatures.items.fryGeneral.state": "La plupart des aliments frits se retrouvent dans cette catégorie"
+    "pages.cookingTemperatures.items.fryGeneral.label": "Huile de friture (plage de température standard)",
+    "pages.cookingTemperatures.items.fryGeneral.state": "La plupart des aliments frits se retrouvent dans cette plage",
+    "pages.cookingTemperatures.items.fryFrenchBlanch.label": "Frites - première cuisson (température de l'huile)",
+    "pages.cookingTemperatures.items.fryFrenchBlanch.state": "Première cuisson pour cuire à cœur",
+    "pages.cookingTemperatures.items.fryFrenchFinish.label": "Frites, deuxième cuisson (température de l'huile)",
+    "pages.cookingTemperatures.items.fryFrenchFinish.state": "Deuxième cuisson pour croustiller et dorer",
+    "pages.cookingTemperatures.items.fryChicken.label": "Poulet frit, avec os (température de l'huile)",
+    "pages.cookingTemperatures.items.fryChickenWings.label": "Ailes de poulet, frites (température de l'huile)",
+    "pages.cookingTemperatures.items.fryChickenTenders.label": "Filets / nuggets de poulet frits (température de l'huile)",
+    "pages.cookingTemperatures.items.fryFish.label": "Poisson pané, frit (température de l'huile)"
 }
