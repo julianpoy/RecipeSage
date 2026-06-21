@@ -222,8 +222,8 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       meilisearch:
-        specifier: ^0.55.0
-        version: 0.55.0
+        specifier: ^0.58.0
+        version: 0.58.0
       minisearch:
         specifier: ^7.2.0
         version: 7.2.0
@@ -10412,8 +10412,9 @@ packages:
     resolution: {integrity: sha512-aisnrDP4GNe06UcKFnV5bfMNPBUw4jsLGaWwWfnH3v02GnBuXX2MCVn5RbrWo0j3pczUilYblq7fQ7Nw2t5XKw==}
     engines: {node: '>= 0.8'}
 
-  meilisearch@0.55.0:
-    resolution: {integrity: sha512-qSMeiezfDgIqciIeYzh5E4pXDZZD7CtHeWDCs43kN3trLgl5FtfmBAIkljL3huFaOx08feYtC8FfIFUpVwq6rg==}
+  meilisearch@0.58.0:
+    resolution: {integrity: sha512-MXFlU+JVG2I3tDI4brS3UHxEv2fjOROP24TPP16c8dGHTulb1kxMgXvKP0x4ImvUcsVVJFi4QXP0JNDS/TaWaw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
 
   mem@1.1.0:
     resolution: {integrity: sha512-nOBDrc/wgpkd3X/JOhMqYR+/eLqlfLP4oQfoBA6QExIxEl+GU01oyEkwWyueyO8110pUKijtiHGhEmYoOn88oQ==}
@@ -26019,7 +26020,7 @@ snapshots:
 
   media-typer@1.1.0: {}
 
-  meilisearch@0.55.0: {}
+  meilisearch@0.58.0: {}
 
   mem@1.1.0:
     dependencies:
