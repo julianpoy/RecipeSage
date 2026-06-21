@@ -569,7 +569,6 @@
     "pages.messages.tabTitle": "메시지 - RecipeSage",
     "pages.messages.title": "메시지",
     "pages.messages.loading": "메시지를 불러오는 중...",
-    "pages.messages.history.you": "나",
     "pages.messages.history.sentRecipe": "레시피를 보냈습니다",
     "pages.messages.noMessages": "메시지 스레드가 없습니다.",
     "pages.messages.instructions": "다른 사람과 대화를 시작하려면 하단 모서리에 있는 더하기 버튼을 누르십시오.",

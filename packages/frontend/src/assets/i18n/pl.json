@@ -782,7 +782,6 @@
     "pages.assistant.welcome.3": "Każda wysłana wiadomość zużywa jeden kredyt na gotowanie z dziennego limitu, który jest współdzielony z funkcjami takimi jak wycinanie przepisów i import. Osoby wspierające otrzymują nieograniczoną liczbę wiadomości.",
     "pages.messageThread.tabTitle": "Rozmowa - RecipeSage",
     "pages.messages.title": "Wiadomości",
-    "pages.messages.history.you": "Ty",
     "pages.newMessageModal.title": "Nowy wątek wiadomości",
     "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Doskonale! Teraz wybierz właśnie utworzony plan posiłków.",
     "pages.addRecipeToShoppingListModal.loading": "Ładowanie list zakupów...",

@@ -1130,7 +1130,6 @@
     "pages.labels.group.sectionDescription": "Bendras jūsų etikečių kategorijų skaičius: {{count}}. Spustelėkite kategoriją, kad ją redaguotumėte.",
     "pages.labels.group.labelCount": "Šiai kategorijai priklausančių etikečių skaičius: {{count}}.",
     "pages.assistant.welcome.2": "Maisto gaminimo asistentas gali atsakyti į Jūsų maisto gaminimo klausimus ir padėti kurti receptus.",
-    "pages.messages.history.you": "Jūs",
     "pages.messages.history.sentRecipe": "Išsiuntė receptą",
     "pages.editRecipe.clipImage.selectMore.header": "Pasirinkti papildomą nuotrauką?",
     "pages.editRecipe.clipImage.selectMore.message": "Jei nepavyko sutalpinti viso recepto vienoje nuotraukoje, galite nuskaityti iki {{maxCount}} vaizdų. Stenkitės kiek įmanoma labiau apriboti persidengiantį tekstą, nes persidengiantis tekstas galutiniame recepto nuskaityme gali pasirodyti daugiau nei vieną kartą.",
