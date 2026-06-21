@@ -73,7 +73,7 @@
     "ai": "^6.0.197",
     "axios": "^1.18.0",
     "body-parser": "~2.2.2",
-    "bullmq": "^5.70.1",
+    "bullmq": "^5.78.1",
     "cheerio": "^1.1.2",
     "commander": "15.0.0",
     "cookie-parser": "^1.4.7",
