@@ -11,7 +11,7 @@ import { Injectable, inject } from "@angular/core";
 
 import { AlertController } from "@ionic/angular/standalone";
 
-import { UserService } from "./user.service";
+import { ServerActionsService } from "./server-actions.service";
 import { EventName, EventService } from "./event.service";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -21,11 +21,11 @@ import { TranslateService } from "@ngx-translate/core";
 export class MessagingService {
   private events = inject(EventService);
   private translate = inject(TranslateService);
-  private userService = inject(UserService);
+  private serverActionsService = inject(ServerActionsService);
   private alertCtrl = inject(AlertController);
 
   private messaging: Messaging | null = null;
-  private fcmToken: any;
+  private fcmToken?: string;
 
   private _isFCMSupported: boolean = false;
   private isFCMSupportedPromise: Promise<boolean> | undefined;
@@ -147,8 +147,9 @@ export class MessagingService {
     if (!this.messaging || !isFCMSupported) return;
 
     const token = this.fcmToken;
+    if (!token) return;
 
-    await this.userService.removeFCMToken(token);
+    await this.serverActionsService.users.removeFCMToken({ fcmToken: token });
   }
 
   private async updateToken() {
@@ -163,7 +164,7 @@ export class MessagingService {
 
       this.fcmToken = currentToken;
 
-      await this.userService.saveFCMToken({
+      await this.serverActionsService.users.saveFCMToken({
         fcmToken: currentToken,
       });
     } catch (err) {

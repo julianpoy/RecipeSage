@@ -44,7 +44,7 @@
             slot="start"
             (click)="openImageViewer()"
           >
-            <img src="{{ profile.profileImages.at(0)?.location }}" />
+            <img src="{{ profile.profileImages.at(0)?.image?.location }}" />
           </ion-thumbnail>
         }
         <div class="profile-details">
@@ -58,7 +58,7 @@
             <ion-item lines="none" (click)="shareProfile()" button>
               <ion-icon name="share-social"></ion-icon>
             </ion-item>
-            @if (isLoggedIn() && !profile.isMe) {
+            @if (isLoggedIn() && !isMyProfile()) {
               <ion-item lines="none" (click)="sendMessage()" button>
                 <ion-icon name="mail"></ion-icon>
               </ion-item>
@@ -73,9 +73,9 @@
           {{ "pages.profile.pinned" | translate }}
         </ion-label>
       </ion-item>
-      @if (profile.profileItems.length) {
+      @if (profileItems.length) {
         <ion-list>
-          @for (item of profile.profileItems; track item) {
+          @for (item of profileItems; track item) {
             <div>
               @if (item.type === "all-recipes") {
                 <ion-item button (click)="open(item)">
@@ -90,9 +90,13 @@
               }
               @if (item.type === "recipe") {
                 <ion-item button (click)="open(item)">
-                  @if (item?.recipe?.images?.length) {
+                  @if (item?.recipe?.recipeImages?.length) {
                     <ion-avatar slot="start">
-                      <img [src]="item.recipe.images?.at(0)?.location" />
+                      <img
+                        [src]="
+                          item.recipe?.recipeImages?.at(0)?.image?.location
+                        "
+                      />
                     </ion-avatar>
                   }
                   <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
@@ -114,7 +118,7 @@
           }
         </ion-list>
       }
-      @if (!profile.profileItems.length) {
+      @if (!profileItems.length) {
         <null-state>
           <ion-icon
             name="bookmarks"
@@ -135,19 +139,19 @@
   }
 </ion-content>
 
-@if (profile && !profile.isMe) {
+@if (profile && !isMyProfile()) {
   <ion-footer>
     @if (isLoggedIn()) {
       <ion-toolbar class="ion-padding-horizontal">
         <div class="page-wrapper">
-          @if (myProfile?.enableProfile) {
+          @if (me()?.enableProfile) {
             <div class="action-button-container">
-              @if (!profile.incomingFriendship && !profile.outgoingFriendship) {
+              @if (!incomingFriendship && !outgoingFriendship) {
                 <ion-button expand="block" (click)="addFriend()">
                   {{ "pages.profile.send" | translate }}
                 </ion-button>
               }
-              @if (!profile.incomingFriendship && profile.outgoingFriendship) {
+              @if (!incomingFriendship && outgoingFriendship) {
                 <ion-button
                   expand="block"
                   (click)="deleteFriend()"
@@ -156,12 +160,12 @@
                   {{ "pages.profile.cancel" | translate }}
                 </ion-button>
               }
-              @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+              @if (incomingFriendship && !outgoingFriendship) {
                 <ion-button expand="block" (click)="addFriend()">
                   {{ "pages.profile.accept" | translate }}
                 </ion-button>
               }
-              @if (profile.incomingFriendship && !profile.outgoingFriendship) {
+              @if (incomingFriendship && !outgoingFriendship) {
                 <ion-button
                   expand="block"
                   (click)="deleteFriend()"
@@ -170,7 +174,7 @@
                   {{ "pages.profile.decline" | translate }}
                 </ion-button>
               }
-              @if (profile.incomingFriendship && profile.outgoingFriendship) {
+              @if (incomingFriendship && outgoingFriendship) {
                 <ion-button
                   expand="block"
                   (click)="deleteFriend()"
@@ -181,7 +185,7 @@
               }
             </div>
           }
-          @if (!myProfile?.enableProfile) {
+          @if (!me()?.enableProfile) {
             <div class="action-button-container">
               <ion-button expand="block" (click)="setupMyProfile()">
                 {{ "pages.profile.setup" | translate }}

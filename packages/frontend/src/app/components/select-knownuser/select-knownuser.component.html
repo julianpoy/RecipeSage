@@ -11,11 +11,11 @@
         @for (friendship of friendships; track friendship) {
           <ion-item>
             <ion-avatar slot="start">
-              @if (!friendship.otherUser.profileImages?.length) {
+              @if (!friendship.profileImages?.length) {
                 <img src="assets/avatar.svg" />
               }
-              @if (friendship.otherUser.profileImages?.length) {
-                <img [src]="friendship.otherUser.profileImages[0].location" />
+              @if (friendship.profileImages?.length) {
+                <img [src]="friendship.profileImages[0].image.location" />
               }
             </ion-avatar>
             <ion-radio
@@ -24,8 +24,8 @@
               [value]="friendship"
             >
               <div class="ion-radio-label">
-                {{ friendship.otherUser.name }}
-                <p>&commat;{{ friendship.otherUser.handle }}</p>
+                {{ friendship.name }}
+                <p>&commat;{{ friendship.handle }}</p>
               </div>
             </ion-radio>
           </ion-item>

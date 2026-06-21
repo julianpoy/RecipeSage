@@ -12,7 +12,6 @@ import { LoadingService } from "../../services/loading.service";
 import { MessagingService } from "../../services/messaging.service";
 import { ToastController, ModalController } from "@ionic/angular/standalone";
 import { UtilService } from "../../services/util.service";
-import { UserService } from "../../services/user.service";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -35,7 +34,6 @@ export class SelectCollaboratorsComponent implements AfterViewInit {
 
   toastCtrl = inject(ToastController);
   modalCtrl = inject(ModalController);
-  userService = inject(UserService);
   serverActionsService = inject(ServerActionsService);
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
@@ -65,7 +63,8 @@ export class SelectCollaboratorsComponent implements AfterViewInit {
     }
   }
 
-  async addCollaborator(userProfile: UserPublic) {
+  async addCollaborator(userProfile: UserPublic | undefined) {
+    if (!userProfile) return;
     if (this.selectedCollaboratorIds.includes(userProfile.id)) return;
 
     this.userProfilesById.set(userProfile.id, userProfile);

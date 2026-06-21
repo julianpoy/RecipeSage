@@ -63,6 +63,35 @@ export class UsersActionsService extends ActionsBase {
     );
   }
 
+  logout(
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["logout"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.logout.mutate(),
+      errorHandlers,
+    );
+  }
+
+  saveFCMToken(
+    input: RouterInputs["users"]["saveFCMToken"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["saveFCMToken"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.saveFCMToken.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  removeFCMToken(
+    input: RouterInputs["users"]["removeFCMToken"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["removeFCMToken"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.removeFCMToken.mutate(input),
+      errorHandlers,
+    );
+  }
+
   forgotPassword(
     input: RouterInputs["users"]["forgotPassword"],
     errorHandlers?: ErrorHandlers,
@@ -139,6 +168,16 @@ export class UsersActionsService extends ActionsBase {
     );
   }
 
+  getMyCapabilities(
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["getMyCapabilities"] | undefined> {
+    return this.executeQuery(
+      () => this.trpc.users.getMyCapabilities.query(),
+      async () => getKvStoreEntry(KVStoreKeys.MyCapabilities),
+      errorHandlers,
+    );
+  }
+
   getUserProfilesById(
     input: RouterInputs["users"]["getUserProfilesById"],
     errorHandlers?: ErrorHandlers,
@@ -165,6 +204,62 @@ export class UsersActionsService extends ActionsBase {
   ): Promise<RouterOutputs["users"]["getUserProfileByEmail"] | undefined> {
     return this.passThrough(
       () => this.trpc.users.getUserProfileByEmail.query(input),
+      errorHandlers,
+    );
+  }
+
+  getVisibleUserProfileItems(
+    input: RouterInputs["users"]["getVisibleUserProfileItems"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["getVisibleUserProfileItems"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.getVisibleUserProfileItems.query(input),
+      errorHandlers,
+    );
+  }
+
+  getIsHandleAvailable(
+    input: RouterInputs["users"]["getIsHandleAvailable"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["getIsHandleAvailable"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.getIsHandleAvailable.query(input),
+      errorHandlers,
+    );
+  }
+
+  updateMyProfile(
+    input: RouterInputs["users"]["updateMyProfile"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["updateMyProfile"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.updateMyProfile.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  createFriendship(
+    input: RouterInputs["users"]["createFriendship"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["createFriendship"] | undefined> {
+    return this.executeMutation(
+      () => this.trpc.users.createFriendship.mutate(input),
+      () => {
+        void this.syncService.syncMyFriends();
+      },
+      errorHandlers,
+    );
+  }
+
+  deleteFriendship(
+    input: RouterInputs["users"]["deleteFriendship"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["deleteFriendship"] | undefined> {
+    return this.executeMutation(
+      () => this.trpc.users.deleteFriendship.mutate(input),
+      () => {
+        void this.syncService.syncMyFriends();
+      },
       errorHandlers,
     );
   }

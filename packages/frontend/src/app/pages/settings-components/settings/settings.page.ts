@@ -33,7 +33,7 @@ import {
 import { SwCommunicationService } from "../../../services/sw-communication.service";
 import { FontSizeModalComponent } from "../../../components/font-size-modal/font-size-modal.component";
 import { MessagingService } from "../../../services/messaging.service";
-import { UserService } from "../../../services/user.service";
+import { ServerActionsService } from "../../../services/server-actions.service";
 import { EventName, EventService } from "../../../services/event.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
@@ -113,7 +113,7 @@ export class SettingsPage {
   private featureFlagService = inject(FeatureFlagService);
   private quickTutorialService = inject(QuickTutorialService);
   private messagingService = inject(MessagingService);
-  private userService = inject(UserService);
+  private serverActionsService = inject(ServerActionsService);
   private recipeCompletionTrackerService = inject(
     RecipeCompletionTrackerService,
   );
@@ -211,7 +211,7 @@ export class SettingsPage {
   logout() {
     this.messagingService.disableNotifications();
 
-    this.userService.logout({
+    this.serverActionsService.users.logout({
       "*": () => {},
     });
 

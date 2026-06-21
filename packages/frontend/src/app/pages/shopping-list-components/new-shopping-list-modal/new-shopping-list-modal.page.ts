@@ -7,7 +7,6 @@ import {
 
 import { LoadingService } from "../../../services/loading.service";
 import { MessagingService } from "../../../services/messaging.service";
-import { UserService } from "../../../services/user.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
@@ -58,7 +57,6 @@ export class NewShoppingListModalPage {
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
   messagingService = inject(MessagingService);
-  userService = inject(UserService);
   toastCtrl = inject(ToastController);
 
   @Input() openAfterCreate = true;

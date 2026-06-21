@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import type {
   NutritionFilter,
   NutritionRange,
@@ -34,6 +34,7 @@ const passesNutritionFilter = (
 };
 
 import { ErrorHandlers } from "../http-error-handler.service";
+import { EventName, EventService } from "../event.service";
 import { ActionsBase, RouterInputs, RouterOutputs } from "./actions-base";
 import {
   getKvStoreEntry,
@@ -47,6 +48,8 @@ import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
   providedIn: "root",
 })
 export class RecipesActionsService extends ActionsBase {
+  private events = inject(EventService);
+
   getRecipe(
     input: RouterInputs["recipes"]["getRecipe"],
     errorHandlers?: ErrorHandlers,
@@ -56,6 +59,30 @@ export class RecipesActionsService extends ActionsBase {
       async () => {
         const localDb = await getLocalDb();
         return localDb.get(ObjectStoreName.Recipes, input.id);
+      },
+      errorHandlers,
+    );
+  }
+
+  getRecipeCount(
+    input: RouterInputs["recipes"]["getRecipeCount"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["recipes"]["getRecipeCount"] | undefined> {
+    return this.executeQuery(
+      () => this.trpc.recipes.getRecipeCount.query(input),
+      async () => {
+        const localDb = await getLocalDb();
+        const session = await appIdbStorageManager.getSession();
+        if (!session) return undefined;
+
+        const recipes = await localDb.getAll(ObjectStoreName.Recipes);
+        const count = recipes.filter(
+          (recipe) =>
+            recipe.userId === session.userId &&
+            (!input.folder || recipe.folder === input.folder),
+        ).length;
+
+        return { count };
       },
       errorHandlers,
     );
@@ -405,6 +432,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.createRecipe.mutate(input),
       (result) => {
         void this.syncService.syncRecipe(result.id);
+        this.events.publish(EventName.RecipeCreated);
       },
       errorHandlers,
     );
@@ -418,6 +446,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.updateRecipe.mutate(input),
       (result) => {
         void this.syncService.syncRecipe(result.id);
+        this.events.publish(EventName.RecipeUpdated);
       },
       errorHandlers,
     );
@@ -431,6 +460,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipe.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -444,6 +474,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipesByIds.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -457,6 +488,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteRecipesByLabelIds.mutate(input),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );
@@ -469,6 +501,7 @@ export class RecipesActionsService extends ActionsBase {
       () => this.trpc.recipes.deleteAllRecipes.mutate(),
       () => {
         void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeDeleted);
       },
       errorHandlers,
     );

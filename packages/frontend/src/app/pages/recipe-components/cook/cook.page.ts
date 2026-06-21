@@ -3,12 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import {
-  RecipeService,
-  ParsedInstruction,
-  ParsedIngredient,
-  ParsedNote,
-} from "../../../services/recipe.service";
 import { linkifyHtml } from "../../../utils/linkify";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { WakeLockService } from "../../../services/wakelock.service";
@@ -17,6 +11,12 @@ import { PreferencesService } from "../../../services/preferences.service";
 import {
   CookModePreferenceKey,
   GlobalPreferenceKey,
+  ParsedInstruction,
+  ParsedIngredient,
+  ParsedNote,
+  parseIngredients,
+  parseInstructions,
+  parseNotes,
 } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import {
@@ -48,7 +48,6 @@ import { addIcons } from "ionicons";
   selector: "page-cook",
   templateUrl: "cook.page.html",
   styleUrls: ["cook.page.scss"],
-  providers: [RecipeService],
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,
@@ -67,7 +66,6 @@ export class CookPage {
   private navCtrl = inject(NavController);
   private modalCtrl = inject(ModalController);
   private route = inject(ActivatedRoute);
-  private recipeService = inject(RecipeService);
   private wakeLockService = inject(WakeLockService);
   private fullscreenService = inject(FullscreenService);
   private preferencesService = inject(PreferencesService);
@@ -158,29 +156,27 @@ export class CookPage {
           ? System.US
           : undefined;
 
-    this.ingredients = this.recipeService.parseIngredients(
+    this.ingredients = parseIngredients(
       this.recipe.ingredients,
       this.scale,
       targetSystem,
     );
-    this.instructions = this.recipeService.parseInstructions(
+    this.instructions = parseInstructions(
       this.recipe.instructions,
       this.scale,
       targetSystem,
       this.getInlineImageRefs(),
     );
     if (this.recipe.notes && this.recipe.notes.length > 0) {
-      this.notes = this.recipeService
-        .parseNotes(
-          this.recipe.notes,
-          this.scale,
-          targetSystem,
-          this.getInlineImageRefs(),
-        )
-        .map((note) => ({
-          ...note,
-          htmlContent: linkifyHtml(note.htmlContent),
-        }));
+      this.notes = parseNotes(
+        this.recipe.notes,
+        this.scale,
+        targetSystem,
+        this.getInlineImageRefs(),
+      ).map((note) => ({
+        ...note,
+        htmlContent: linkifyHtml(note.htmlContent),
+      }));
     }
   }
 

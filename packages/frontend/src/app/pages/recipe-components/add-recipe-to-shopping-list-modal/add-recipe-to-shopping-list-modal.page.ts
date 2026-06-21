@@ -15,17 +15,16 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
-import {
-  RecipeService,
-  ParsedIngredient,
-} from "../../../services/recipe.service";
 import { UtilService } from "../../../services/util.service";
 import { NewShoppingListModalPage } from "../../shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RecipeSummary, ShoppingListSummary } from "@recipesage/prisma";
-import { SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared";
+import {
+  SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
+  ParsedIngredient,
+} from "@recipesage/util/shared";
 import {
   IonHeader,
   IonToolbar,
@@ -68,7 +67,6 @@ import { addIcons } from "ionicons";
 export class AddRecipeToShoppingListModalPage {
   navCtrl = inject(NavController);
   translate = inject(TranslateService);
-  recipeService = inject(RecipeService);
   loadingService = inject(LoadingService);
   utilService = inject(UtilService);
   toastCtrl = inject(ToastController);

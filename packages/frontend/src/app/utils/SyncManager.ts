@@ -73,6 +73,7 @@ export class SyncManager {
       await this.syncMyUserProfile(abortSignal);
       await this.syncMyFriends(abortSignal);
       await this.syncMyStats(abortSignal);
+      await this.syncMyCapabilities(abortSignal);
 
       const lastSync = await appIdbStorageManager.getLastSync();
       if (!lastSync || lastSync.datetime < syncStart) {
@@ -113,6 +114,9 @@ export class SyncManager {
   }
   public async triggerSyncMyStats() {
     await this.trigger(this.syncMyStats.bind(this));
+  }
+  public async triggerSyncMyCapabilities() {
+    await this.trigger(this.syncMyCapabilities.bind(this));
   }
 
   public abort() {
@@ -563,6 +567,18 @@ export class SyncManager {
     await this.localDb.put(ObjectStoreName.KV, {
       key: KVStoreKeys.MyStats,
       value: myStats,
+    });
+  }
+
+  private async syncMyCapabilities(abortSignal: AbortSignal) {
+    this.syncCheckAbort(abortSignal);
+    const myCapabilities = await throttle(() =>
+      trpc.users.getMyCapabilities.query(),
+    )();
+    this.syncCheckAbort(abortSignal);
+    await this.localDb.put(ObjectStoreName.KV, {
+      key: KVStoreKeys.MyCapabilities,
+      value: myCapabilities,
     });
   }
 }

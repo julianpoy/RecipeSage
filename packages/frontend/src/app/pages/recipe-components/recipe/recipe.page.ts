@@ -11,20 +11,21 @@ import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
 import { linkifyHtml } from "../../../utils/linkify";
-import {
-  RecipeService,
-  ParsedInstruction,
-  ParsedIngredient,
-  ParsedNote,
-  RecipeFolderName,
-} from "../../../services/recipe.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { WakeLockService } from "../../../services/wakelock.service";
 import { FullscreenService } from "../../../services/fullscreen.service";
 import { PreferencesService } from "../../../services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
+import {
+  RecipeDetailsPreferenceKey,
+  ParsedInstruction,
+  ParsedIngredient,
+  ParsedNote,
+  parseIngredients,
+  parseInstructions,
+  parseNotes,
+} from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
@@ -90,7 +91,6 @@ import { addIcons } from "ionicons";
   selector: "page-recipe",
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],
-  providers: [RecipeService],
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,
@@ -127,7 +127,6 @@ export class RecipePage {
   );
   private route = inject(ActivatedRoute);
   utilService = inject(UtilService);
-  private recipeService = inject(RecipeService);
   cookingToolbarService = inject(CookingToolbarService);
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
@@ -482,29 +481,27 @@ export class RecipePage {
           ? System.US
           : undefined;
 
-    this.ingredients = this.recipeService.parseIngredients(
+    this.ingredients = parseIngredients(
       this.recipe.ingredients,
       this.scale,
       targetSystem,
     );
-    this.instructions = this.recipeService.parseInstructions(
+    this.instructions = parseInstructions(
       this.recipe.instructions,
       this.scale,
       targetSystem,
       this.getInlineImageRefs(),
     );
     if (this.recipe.notes && this.recipe.notes.length > 0) {
-      this.notes = this.recipeService
-        .parseNotes(
-          this.recipe.notes,
-          this.scale,
-          targetSystem,
-          this.getInlineImageRefs(),
-        )
-        .map((note) => ({
-          ...note,
-          htmlContent: linkifyHtml(note.htmlContent),
-        }));
+      this.notes = parseNotes(
+        this.recipe.notes,
+        this.scale,
+        targetSystem,
+        this.getInlineImageRefs(),
+      ).map((note) => ({
+        ...note,
+        htmlContent: linkifyHtml(note.htmlContent),
+      }));
     }
   }
 
@@ -557,10 +554,12 @@ export class RecipePage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.recipeService.delete(this.recipe.id);
+    const response = await this.serverActionsService.recipes.deleteRecipe({
+      id: this.recipe.id,
+    });
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
   }
@@ -651,7 +650,7 @@ export class RecipePage {
     shareModal.present();
   }
 
-  async moveToFolder(folderName: RecipeFolderName) {
+  async moveToFolder(folderName: "main" | "inbox") {
     if (!this.recipe) return;
 
     const loading = this.loadingService.start();

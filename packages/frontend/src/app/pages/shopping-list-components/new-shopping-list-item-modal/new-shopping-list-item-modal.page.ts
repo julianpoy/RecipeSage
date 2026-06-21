@@ -1,12 +1,14 @@
 import { Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
-import { ParsedIngredient } from "../../../services/recipe.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import type { RecipeSummary } from "@recipesage/prisma";
-import { SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT } from "@recipesage/util/shared";
+import {
+  SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
+  ParsedIngredient,
+} from "@recipesage/util/shared";
 import {
   IonHeader,
   IonToolbar,

@@ -18,6 +18,7 @@ import {
   IonSearchbar,
   IonSpinner,
   IonIcon,
+  type SearchbarCustomEvent,
 } from "@ionic/angular/standalone";
 import { folderOpen } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -51,7 +52,7 @@ export class SelectUserComponent implements OnInit {
   @Input() enableSelectedMode = true;
   @Input() suggestKnownUsers = true;
   @Input() excludeUserIds: string[] = [];
-  @Output() selectedUserChange = new EventEmitter<UserPublic>();
+  @Output() selectedUserChange = new EventEmitter<UserPublic | undefined>();
   @Output() searchInputChange = new EventEmitter<string>();
 
   results: UserPublic[] = [];
@@ -81,7 +82,7 @@ export class SelectUserComponent implements OnInit {
     this.searchInputChange.emit(val);
   }
 
-  onSearchInputChange(event: any) {
+  onSearchInputChange(event: SearchbarCustomEvent) {
     this.searchText = event.detail.value || "";
     if (!this.searchText) return;
 

@@ -190,6 +190,9 @@ jobs:
           name: set-frontend-version
           command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
       - run:
+          name: strip-sourcemaps
+          command: find www/ -name '*.map' -delete
+      - run:
           name: upload frontend to s3
           command: |
             TAG=${CIRCLE_TAG:-stg}

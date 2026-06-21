@@ -1,10 +1,13 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
-import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
 import { ScaleRecipeComponent } from "../../modals/scale-recipe/scale-recipe.component";
 import { PreferencesService } from "../../services/preferences.service";
-import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import {
+  ShoppingListPreferenceKey,
+  ParsedIngredient,
+  parseIngredients,
+} from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
 
@@ -17,7 +20,6 @@ import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
 })
 export class SelectIngredientsComponent {
   private modalCtrl = inject(ModalController);
-  private recipeService = inject(RecipeService);
   private preferencesService = inject(PreferencesService);
 
   allSelected = true;
@@ -89,9 +91,10 @@ export class SelectIngredientsComponent {
   }
 
   applyScale(init?: boolean) {
-    this.scaledIngredients = this.recipeService
-      .parseIngredients(this._ingredients, this.scale)
-      .filter((e) => !e.isHeader);
+    this.scaledIngredients = parseIngredients(
+      this._ingredients,
+      this.scale,
+    ).filter((e) => !e.isHeader);
 
     this.selectedIngredients = [];
     for (let i = 0; i < (this.scaledIngredients || []).length; i++) {

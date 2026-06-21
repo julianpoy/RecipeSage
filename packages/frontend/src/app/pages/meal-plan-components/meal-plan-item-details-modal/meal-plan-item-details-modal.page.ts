@@ -6,7 +6,6 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RecipeService } from "../../../services/recipe.service";
 import { LoadingService } from "../../../services/loading.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import { RouteMap } from "../../../services/util.service";
@@ -87,7 +86,6 @@ export class MealPlanItemDetailsModalPage {
   private alertCtrl = inject(AlertController);
   private serverActionsService = inject(ServerActionsService);
   cookingToolbarService = inject(CookingToolbarService);
-  private recipeService = inject(RecipeService);
   private loadingService = inject(LoadingService);
 
   @Input({
@@ -244,16 +242,16 @@ export class MealPlanItemDetailsModalPage {
 
     const loading = this.loadingService.start();
     // Fetch complete recipe (this page is provided with only topical recipe details)
-    const response = await this.recipeService.getRecipeById(
-      this.mealItem.recipe.id,
-    );
+    const response = await this.serverActionsService.recipes.getRecipe({
+      id: this.mealItem.recipe.id,
+    });
     loading.dismiss();
 
-    if (response.success) {
+    if (response) {
       const addRecipeToShoppingListModal = await this.modalCtrl.create({
         component: AddRecipeToShoppingListModalPage,
         componentProps: {
-          recipes: [response.data],
+          recipes: [response],
         },
       });
       addRecipeToShoppingListModal.present();

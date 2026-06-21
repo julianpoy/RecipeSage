@@ -10,7 +10,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { IS_SELFHOST } from "../../../environments/environment";
 
 import { EventName, EventService } from "../../services/event.service";
-import { UserService } from "../../services/user.service";
 import { LoadingService } from "../../services/loading.service";
 import { MessagingService } from "../../services/messaging.service";
 import { RouteMap, AuthType } from "../../services/util.service";
@@ -44,7 +43,6 @@ import { addIcons } from "ionicons";
   selector: "page-auth",
   templateUrl: "auth.page.html",
   styleUrls: ["auth.page.scss"],
-  providers: [UserService],
   imports: [
     ...SHARED_UI_IMPORTS,
     SignInWithGoogleComponent,

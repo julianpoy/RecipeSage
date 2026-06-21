@@ -13,9 +13,9 @@
 <ion-content>
   <ion-list>
     <ion-item lines="none">
-      @if (recipe.images && recipe.images.length > 0) {
+      @if (recipe.recipeImages && recipe.recipeImages.length > 0) {
         <ion-avatar slot="start">
-          <img src="{{ recipe.images[0].location }}" />
+          <img src="{{ recipe.recipeImages[0].image.location }}" />
         </ion-avatar>
       }
       <ion-label>

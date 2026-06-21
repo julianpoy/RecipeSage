@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, effect } from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -12,19 +12,18 @@ import { isHandleValid } from "@recipesage/util/shared";
 import { AddProfileItemModalPage } from "../add-profile-item-modal/add-profile-item-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 
-import {
-  UserService,
-  UserProfile,
-  User,
-  ProfileItem,
-} from "../../../services/user.service";
+import { ServerActionsService } from "../../../services/server-actions.service";
+import type {
+  RouterInputs,
+  RouterOutputs,
+} from "../../../services/server-actions/actions-base";
+import type { ImageSummary, ProfileItemSummary } from "@recipesage/prisma";
 import { LoadingService } from "../../../services/loading.service";
 import {
   UtilService,
   RouteMap,
   AuthType,
 } from "../../../services/util.service";
-import { RecipeService } from "../../../services/recipe.service";
 import { ImageService } from "../../../services/image.service";
 import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -62,6 +61,17 @@ import {
   trash,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
+
+type ProfileFormItem = Omit<ProfileItemSummary, "id" | "userId" | "order">;
+
+interface ProfileForm {
+  id: string;
+  name: string;
+  handle: string | null;
+  enableProfile: boolean;
+  profileImages: ImageSummary[];
+  profileItems: ProfileFormItem[];
+}
 
 @Component({
   standalone: true,
@@ -102,23 +112,28 @@ export class MyProfilePage {
   loadingService = inject(LoadingService);
   unsavedChangesService = inject(UnsavedChangesService);
   imageService = inject(ImageService);
-  recipeService = inject(RecipeService);
-  userService = inject(UserService);
+  serverActionsService = inject(ServerActionsService);
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
   revealNameInput: boolean = false;
   revealHandleInput: boolean = false;
 
-  accountInfo?: User;
-  myProfile?: UserProfile;
+  private meQuery = this.serverActionsService.users.getMe({
+    401: () =>
+      this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login)),
+  });
+  me = this.meQuery.value;
+
+  myProfile?: ProfileForm;
   requiresSetup = false;
+  private hasCheckedProfileEnabled = false;
 
   checkingHandleAvailable = false;
   isHandleAvailable = true;
   handleInputTimeout?: NodeJS.Timeout;
 
-  updatedProfileFields: Partial<UserProfile> = {};
+  updatedProfileFields: Partial<ProfileForm> = {};
 
   constructor() {
     addIcons({
@@ -132,35 +147,41 @@ export class MyProfilePage {
       shareSocial,
       trash,
     });
-    this.load().then(() => {
-      this.checkProfileEnabled();
+    effect(() => {
+      const me = this.me();
+      if (!me) return;
+      if (this.isUpdatePending()) return;
+      this.seedForm(me);
     });
   }
 
-  async load() {
-    const loading = this.loadingService.start();
-
-    const [accountInfo, myProfile] = await Promise.all([
-      this.userService.me({
-        401: () =>
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login)),
-      }),
-      this.userService.getMyProfile({
-        401: () =>
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login)),
-      }),
-    ]);
-    loading.dismiss();
-
-    if (!accountInfo.success || !myProfile.success) return;
-
-    this.accountInfo = accountInfo.data;
-    this.myProfile = myProfile.data;
+  private async seedForm(me: RouterOutputs["users"]["getMe"]) {
+    this.myProfile = {
+      id: me.id,
+      name: me.name,
+      handle: me.handle,
+      enableProfile: me.enableProfile,
+      profileImages: me.profileImages.map((profileImage) => profileImage.image),
+      profileItems: this.myProfile?.profileItems ?? [],
+    };
 
     this.requiresSetup = !this.myProfile.name || !this.myProfile.handle;
 
     if (this.requiresSetup) {
       this.updatedProfileFields.enableProfile = true;
+    }
+
+    const profileItems =
+      await this.serverActionsService.users.getVisibleUserProfileItems({
+        userId: me.id,
+      });
+    if (this.myProfile) {
+      this.myProfile.profileItems = profileItems ?? [];
+    }
+
+    if (!this.hasCheckedProfileEnabled) {
+      this.hasCheckedProfileEnabled = true;
+      this.checkProfileEnabled();
     }
   }
 
@@ -197,9 +218,8 @@ export class MyProfilePage {
             text: enable,
             handler: () => {
               this.updatedProfileFields.enableProfile = true;
-              if (this.myProfile && this.accountInfo) {
+              if (this.myProfile) {
                 this.myProfile.enableProfile = true;
-                this.accountInfo.enableProfile = true;
               }
 
               this.markAsDirty();
@@ -216,9 +236,13 @@ export class MyProfilePage {
       this.isHandleAvailable = false;
       return;
     }
-    const response = await this.userService.getHandleInfo(handle);
-    if (!response.success) return;
-    this.isHandleAvailable = response.data.available;
+    const response = await this.serverActionsService.users.getIsHandleAvailable(
+      {
+        handle,
+      },
+    );
+    if (!response) return;
+    this.isHandleAvailable = response.available;
   }
 
   handleInput() {
@@ -264,11 +288,11 @@ export class MyProfilePage {
 
   async save() {
     const loading = this.loadingService.start();
-    const update = {
+    const update: RouterInputs["users"]["updateMyProfile"] = {
       name: this.updatedProfileFields.name,
-      handle: this.updatedProfileFields.handle,
+      handle: this.updatedProfileFields.handle ?? undefined,
       enableProfile: this.updatedProfileFields.enableProfile,
-    } as any;
+    };
 
     if (this.updatedProfileFields.profileImages) {
       update.profileImageIds = this.updatedProfileFields.profileImages.map(
@@ -288,12 +312,13 @@ export class MyProfilePage {
       );
     }
 
-    const updated = await this.userService.updateMyProfile(update);
+    const updated =
+      await this.serverActionsService.users.updateMyProfile(update);
     loading.dismiss();
     if (updated) {
       this.updatedProfileFields = {};
       this.markAsClean();
-      await this.load();
+      this.meQuery.refresh();
     }
   }
 
@@ -304,7 +329,9 @@ export class MyProfilePage {
       component: AddProfileItemModalPage,
     });
     modal.present();
-    const { data } = await modal.onDidDismiss();
+    const { data } = await modal.onDidDismiss<{
+      item: ProfileFormItem;
+    }>();
 
     if (data?.item) {
       this.myProfile.profileItems.push(data.item);
@@ -362,7 +389,7 @@ export class MyProfilePage {
     const modal = await this.modalCtrl.create({
       component: ShareProfileModalPage,
       componentProps: {
-        profile: this.myProfile,
+        profile: this.me(),
       },
     });
     modal.present();
@@ -409,19 +436,22 @@ export class MyProfilePage {
     );
   }
 
-  open(item: any) {
+  open(item: ProfileFormItem) {
+    if (!this.myProfile) return;
+    const userId = this.myProfile.id;
+
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
-        RouteMap.HomePage.getPath("main", { userId: item.userId }),
+        RouteMap.HomePage.getPath("main", { userId }),
       );
-    } else if (item.type === "label") {
+    } else if (item.type === "label" && item.label) {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", {
-          userId: item.userId,
+          userId,
           selectedLabels: [item.label.title],
         }),
       );
-    } else if (item.type === "recipe") {
+    } else if (item.type === "recipe" && item.recipe) {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }

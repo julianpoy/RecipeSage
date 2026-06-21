@@ -2,7 +2,7 @@ import { Component, Input, type OnInit, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from "../../../services/user.service";
+import { ServerActionsService } from "../../../services/server-actions.service";
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
@@ -49,7 +49,7 @@ import { addIcons } from "ionicons";
 })
 export class ShareProfileModalPage implements OnInit {
   private translate = inject(TranslateService);
-  private userService = inject(UserService);
+  private serverActionsService = inject(ServerActionsService);
   private modalCtrl = inject(ModalController);
 
   @Input() handle!: string;
@@ -74,12 +74,17 @@ export class ShareProfileModalPage implements OnInit {
   }
 
   async loadFromHandle(handle: string) {
-    this.profile = await this.userService.getProfileByHandle(handle);
+    this.profile = await this.serverActionsService.users.getUserProfileByHandle(
+      { handle },
+    );
     this.profileUrl = this.getProfileUrl();
   }
 
   async loadFromUserId(userId: string) {
-    this.profile = await this.userService.getProfileByUserId(userId);
+    const profiles = await this.serverActionsService.users.getUserProfilesById({
+      ids: [userId],
+    });
+    this.profile = profiles?.[0];
     this.profileUrl = this.getProfileUrl();
   }
 
@@ -123,7 +128,7 @@ export class ShareProfileModalPage implements OnInit {
       .toPromise();
 
     const imageUrl = encodeURIComponent(
-      this.profile.profileImages?.[0]?.location || "",
+      this.profile.profileImages?.[0]?.image?.location || "",
     );
     const url = encodeURIComponent(this.getProfileUrl());
     const win = window.open() as any;

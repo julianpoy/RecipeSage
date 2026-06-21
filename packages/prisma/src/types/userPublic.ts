@@ -18,6 +18,9 @@ export const userPublic = {
           },
         },
       },
+      orderBy: {
+        order: "asc",
+      },
     },
   },
 } satisfies Prisma.UserFindFirstArgs;

@@ -1,12 +1,18 @@
 import { Component, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 
-import { Recipe } from "../../../services/recipe.service";
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectLabelComponent } from "../../../components/select-label/select-label.component";
-import { SelectRecipeLegacyComponent } from "../../../components/select-recipe-legacy/select-recipe-legacy.component";
-import type { LabelSummary } from "@recipesage/prisma";
+import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import type {
+  LabelSummary,
+  ProfileItemSummary,
+  ProfileItemType,
+  ProfileItemVisibility,
+  RecipeSummary,
+} from "@recipesage/prisma";
+import { type RadioGroupCustomEvent } from "@ionic/angular/standalone";
 import {
   IonHeader,
   IonToolbar,
@@ -40,7 +46,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectLabelComponent,
-    SelectRecipeLegacyComponent,
+    SelectRecipeComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -65,24 +71,20 @@ export class AddProfileItemModalPage {
 
   legalHref: string = RouteMap.LegalPage.getPath();
 
-  itemType = null;
+  itemType: ProfileItemType | null = null;
 
-  itemVisibility = null;
-  visibilityTypePrettyNameMap = {
-    public: "public",
-    "friends-only": "friends only",
-  };
+  itemVisibility: ProfileItemVisibility | null = null;
 
   itemTitle = "";
 
-  selectedRecipe?: Recipe;
+  selectedRecipe?: RecipeSummary;
   selectedLabel?: LabelSummary;
 
-  onItemTypeChange(event: any) {
+  onItemTypeChange(event: RadioGroupCustomEvent) {
     this.itemType = event.detail.value;
   }
 
-  onItemVisibilityChange(event: any) {
+  onItemVisibilityChange(event: RadioGroupCustomEvent) {
     this.itemVisibility = event.detail.value;
   }
 
@@ -99,14 +101,21 @@ export class AddProfileItemModalPage {
       selectedLabel,
     } = this;
 
+    if (!itemType || !itemVisibility) return;
+
     this.modalCtrl.dismiss({
       item: {
         title: itemTitle,
         type: itemType,
         visibility: itemVisibility,
         label: selectedLabel || null,
-        recipe: selectedRecipe || null,
-      },
+        recipe: selectedRecipe
+          ? {
+              id: selectedRecipe.id,
+              recipeImages: selectedRecipe.recipeImages,
+            }
+          : null,
+      } satisfies Omit<ProfileItemSummary, "id" | "userId" | "order">,
     });
   }
 

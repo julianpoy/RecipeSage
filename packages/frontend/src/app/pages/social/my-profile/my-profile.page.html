@@ -137,13 +137,13 @@
                 </ion-label>
               </ion-item>
             }
-            @if (accountInfo) {
+            @if (myProfile) {
               <ion-item class="enable-profile" lines="none">
                 <ion-toggle
-                  [(ngModel)]="accountInfo.enableProfile"
+                  [(ngModel)]="myProfile.enableProfile"
                   (ngModelChange)="
                     updatedProfileFields.enableProfile =
-                      accountInfo.enableProfile;
+                      myProfile.enableProfile;
                     markAsDirty()
                   "
                 >
@@ -216,9 +216,13 @@
                 }
                 @if (item.type === "recipe") {
                   <ion-item button (click)="open(item)">
-                    @if (item?.recipe?.images?.length) {
+                    @if (item?.recipe?.recipeImages?.length) {
                       <ion-avatar slot="start">
-                        <img [src]="item.recipe.images?.at(0)?.location" />
+                        <img
+                          [src]="
+                            item.recipe?.recipeImages?.at(0)?.image?.location
+                          "
+                        />
                       </ion-avatar>
                     }
                     <ion-label class="ion-text-wrap">{{

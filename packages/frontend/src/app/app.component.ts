@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, NgZone } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
@@ -15,10 +15,8 @@ import {
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
 import { UtilService, RouteMap, AuthType } from "./services/util.service";
-import { RecipeService } from "./services/recipe.service";
 import { MessagingService } from "./services/messaging.service";
 import { WebsocketService } from "./services/websocket.service";
-import { UserService } from "./services/user.service";
 import { PreferencesService } from "./services/preferences.service";
 import {
   GlobalPreferenceKey,
@@ -115,15 +113,14 @@ export class AppComponent {
   private syncService = inject(SyncService);
   private router = inject(Router);
   private platform = inject(Platform);
+  private ngZone = inject(NgZone);
   private menuCtrl = inject(MenuController);
   private events = inject(EventService);
   private toastCtrl = inject(ToastController);
   private alertCtrl = inject(AlertController);
   private utilService = inject(UtilService);
-  private recipeService = inject(RecipeService);
   private messagingService = inject(MessagingService);
   private websocketService = inject(WebsocketService);
-  private userService = inject(UserService);
   private preferencesService = inject(PreferencesService);
   private featureFlagService = inject(FeatureFlagService);
   private titleService = inject(Title);
@@ -540,26 +537,35 @@ export class AppComponent {
   async loadInboxCount() {
     if (!localStorage.getItem("token")) return;
 
-    const response = await this.recipeService.count({ folder: "inbox" });
-    if (!response.success) return;
+    const response = await this.serverActionsService.recipes.getRecipeCount({
+      folder: "inbox",
+    });
+    if (!response) return;
 
-    this.inboxCount = response.data.count;
+    this.inboxCount = response.count;
   }
 
   async loadFriendRequestCount() {
     if (!localStorage.getItem("token")) return;
 
-    const response = await this.userService.getMyFriends({
+    const response = await this.serverActionsService.users.getMyFriends({
       401: () => {},
     });
-    if (!response.success) return;
+    if (!response) return;
 
-    this.friendRequestCount = response.data.incomingRequests?.length || null;
+    this.friendRequestCount = response.incomingRequests?.length || undefined;
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.menuCtrl.close();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible") return;
+      this.ngZone.run(() => {
+        this.events.publish(EventName.ApplicationMultitaskingResumed);
+      });
     });
 
     let currentUrl: string | undefined;
