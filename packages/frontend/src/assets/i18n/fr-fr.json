@@ -1648,5 +1648,18 @@
     "pages.panBakewareConverter.recipeScaler.caveat": "Prudence : n'ajustez pas mécaniquement la levure chimique, le bicarbonate de soude, le sel, les œufs ou le beurre du moule, surtout au-delà de 25 %. Ces ingrédients ne se mettent pas à l'échelle proportionnellement, alors dosez-les à votre convenance.",
     "pages.panBakewareConverter.recipeApply.title": "Ajouter à l'une de vos recettes",
     "pages.panBakewareConverter.recipeApply.subtitle": "Choisissez une recette et nous l'ajusterons aux dimensions de votre nouveau plat.",
-    "pages.panBakewareConverter.recipeApply.button": "Choisissez une recette"
+    "pages.panBakewareConverter.recipeApply.button": "Choisissez une recette",
+    "pages.panBakewareConverter.bake.title": "Temps et température de cuisson",
+    "pages.panBakewareConverter.bake.direction.similar": "Les temps devraient être proches",
+    "pages.panBakewareConverter.bake.direction.shallower": "La pâte est moins épaisse → la cuisson est plus rapide",
+    "pages.panBakewareConverter.bake.direction.deeper": "La pâte est plus épaisse → la cuisson est plus lente",
+    "pages.panBakewareConverter.bake.guidance.similar": "La pâte a à peu près la même épaisseur dans les deux moules ; le temps de cuisson devrait donc être proche de celui indiqué initialement. Commencez à vérifier la cuisson dès le début de la fourchette indiquée.",
+    "pages.panBakewareConverter.bake.guidance.shallower": "La pâte est moins épaisse dans le nouveau moule, ce qui accélère la cuisson. Prévoyez un temps de cuisson plus court ; si la différence est importante, augmentez légèrement la température pour que les bords dorent bien.",
+    "pages.panBakewareConverter.bake.guidance.deeper": "La pâte est plus épaisse dans le nouveau moule, ce qui fait que le centre met plus de temps à prendre. Prévoyez un temps de cuisson plus long et si la différence est trop importante, baissez la température pour éviter que l'extérieur ne brûle avant que l'intérieur ne soit cuit.",
+    "pages.panBakewareConverter.bake.originalTime": "Durée initiale (min)",
+    "pages.panBakewareConverter.bake.originalTimePlaceholder": "par ex. 30",
+    "pages.panBakewareConverter.bake.suggestedTime": "Durée recommandée (min)",
+    "pages.panBakewareConverter.bake.timeRange": "{{low}} à {{high}} min",
+    "pages.panBakewareConverter.bake.originalTempF": "Température d'origine (°F)",
+    "pages.panBakewareConverter.bake.originalTempC": "Température d'origine (°C)"
 }
