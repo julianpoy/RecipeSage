@@ -342,8 +342,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       zip-stream:
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^7.0.5
+        version: 7.0.5
       zod:
         specifier: ^4.3.4
         version: 4.3.6
@@ -7356,8 +7356,8 @@ packages:
   component-emitter@1.3.1:
     resolution: {integrity: sha512-T0+barUSQRTUQASh8bx02dl+DhF54GtIDY13Y3m9oWTklKbb3Wv974meRpeZ3lp1JpLVECWWNHC4vaG2XHXouQ==}
 
-  compress-commons@7.0.0:
-    resolution: {integrity: sha512-8WWFRMWaa37dwjWCxDcmdx6sxfjQTAEQ6s96BWqX9WYC6Mgg95EvwPYS/7QGX3txkst7TD1jIL2HCY9AixLGfA==}
+  compress-commons@7.0.1:
+    resolution: {integrity: sha512-g0S8KAD8qf4+V//pr3BfB1aBnARLXNz2Gx+jmHU0LEriUuoQUOPOulVquHKTJ8+EAIIO7fhseNDr9wK5Q9FKBQ==}
     engines: {node: '>=18'}
 
   compressible@2.0.18:
@@ -14339,8 +14339,8 @@ packages:
   zeptomatch@2.1.0:
     resolution: {integrity: sha512-KiGErG2J0G82LSpniV0CtIzjlJ10E04j02VOudJsPyPwNZgGnRKQy7I1R7GMyg/QswnE4l7ohSGrQbQbjXPPDA==}
 
-  zip-stream@7.0.2:
-    resolution: {integrity: sha512-g1TjcvzTXLWwDDyZSdC+w7tNdeNCq/qA8Amm8kxGBldyW2yxtSHHlYinxTRvlcaE4Tt3l1ZPsWSA+P9sn20MRw==}
+  zip-stream@7.0.5:
+    resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
 
   zod-openapi@5.4.6:
@@ -22299,7 +22299,7 @@ snapshots:
 
   component-emitter@1.3.1: {}
 
-  compress-commons@7.0.0:
+  compress-commons@7.0.1:
     dependencies:
       crc-32: 1.2.2
       crc32-stream: 7.0.1
@@ -30688,9 +30688,9 @@ snapshots:
       grammex: 3.1.12
       graphmatch: 1.1.1
 
-  zip-stream@7.0.2:
+  zip-stream@7.0.5:
     dependencies:
-      compress-commons: 7.0.0
+      compress-commons: 7.0.1
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
