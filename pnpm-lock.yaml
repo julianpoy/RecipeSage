@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^3.0.84
-        version: 3.0.84(zod@4.3.6)
+        specifier: ^3.0.85
+        version: 3.0.85(zod@4.3.6)
       '@ai-sdk/google':
-        specifier: ^3.0.82
-        version: 3.0.82(zod@4.3.6)
+        specifier: ^3.0.83
+        version: 3.0.83(zod@4.3.6)
       '@ai-sdk/openai':
-        specifier: ^3.0.71
-        version: 3.0.71(zod@4.3.6)
+        specifier: ^3.0.72
+        version: 3.0.72(zod@4.3.6)
       '@angular/common':
         specifier: 21.2.17
         version: 21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2)
@@ -88,7 +88,7 @@ importers:
         version: 17.0.0(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))
       '@openrouter/ai-sdk-provider':
         specifier: ^2.9.1
-        version: 2.9.1(ai@6.0.206(zod@4.3.6))(zod@4.3.6)
+        version: 2.9.1(ai@6.0.207(zod@4.3.6))(zod@4.3.6)
       '@opentelemetry/api':
         specifier: ^1.9.1
         version: 1.9.1
@@ -129,8 +129,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       ai:
-        specifier: ^6.0.206
-        version: 6.0.206(zod@4.3.6)
+        specifier: ^6.0.207
+        version: 6.0.207(zod@4.3.6)
       axios:
         specifier: ^1.18.0
         version: 1.18.0(debug@4.4.3)
@@ -606,32 +606,32 @@ importers:
 
 packages:
 
-  '@ai-sdk/anthropic@3.0.84':
-    resolution: {integrity: sha512-BIDaHmCHs6Sr5VUsEkTbbVlAN4GWjg97X9x/IfXyviLtzsXvffui9XIcZugkAi1Ri6FnvI5T5qDGh5YLnSuzRg==}
+  '@ai-sdk/anthropic@3.0.85':
+    resolution: {integrity: sha512-fNeDB644l5wbRNQU0FnI+F7UTtOenMnPtACfMPUJaS2zJfuBlseEa1TMg+otHkETZgaJB+6Na51NQEv0+m7czw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/gateway@3.0.132':
-    resolution: {integrity: sha512-sFZFGk6aVSNKmgDrb14efaAbvM71AB3UUvaTsU+bvhWP9jrkRrwix/jFX8IoOAJk0/X7Xf7p3m0J2O2G6ljZbA==}
+  '@ai-sdk/gateway@3.0.133':
+    resolution: {integrity: sha512-Ebs+7iS9zUgJu5B0RlxM2JmDWzq79Cpd6YdiqcCzB5qFdpfQJPUDiXutqlQP89F2XGjOdDeidulBTXUdXWzOxw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/google@3.0.82':
-    resolution: {integrity: sha512-md+M92ZJuPIMU2p4v1rGLpJJWTmTh/vpJPkMnQbEdcLaPTZxRaroIKSnmL/9UGJV0BORJlHNDJegkcnhVpTmDA==}
+  '@ai-sdk/google@3.0.83':
+    resolution: {integrity: sha512-Pz7aCX0dy+5x+r4K/37HbLZNaPtPL4q2NduzJW64VffLv5sI9Nb478wAd7PlH2r2asiypJsz/Jerf9draTciUA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/openai@3.0.71':
-    resolution: {integrity: sha512-j6eBAa5oHFZ4U5CxpIV3T4zXNM/BviodNCZCL1qHkA4aqkwK9iQ18TWYz2DZcXpw4BO5pikKzqpXORxb1EnZGA==}
+  '@ai-sdk/openai@3.0.72':
+    resolution: {integrity: sha512-ZF545m6pCXLUTERFfRCyfM7WsG4Nu/A+jlXQjSv7w22dGov02ssB0e1kviI3NLIERfRF/U+n2rKbFuUjzYY7CQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider-utils@4.0.29':
-    resolution: {integrity: sha512-uhukHaCBvqkwBHkT8C2PrnqKTCoLn3pdHXqtcR9I8ErH+flbzgW4o7VHSNIup9LRu+WBvZIZDQLsx6rwl2tiOA==}
+  '@ai-sdk/provider-utils@4.0.30':
+    resolution: {integrity: sha512-VO7I+vPffqI5sMnPoUq5DCSqKIgQIk/naJWRdQVpz2ma2zoprC/lqiJiUEl2s6DfvTD76TbhD3q39ROjlA6rGw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -6421,8 +6421,8 @@ packages:
   ahocorasick@1.0.2:
     resolution: {integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==}
 
-  ai@6.0.206:
-    resolution: {integrity: sha512-hVdB5PozMMxmkPBfbCxkFOn0eVeCMi/imkfPvk65cxL4O8oIrvjUxDUX8dGkdkWG1No+R7e7D9ti2DHO61Z4YQ==}
+  ai@6.0.207:
+    resolution: {integrity: sha512-9rAHnqU+AvxyqO6WgiWj7hQENX6AprHXZWZEdBWwgnA854D2Mje/PiTmbcFqO+2Cck1lII0NLRQJY9lmdSorMw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -14408,32 +14408,32 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/anthropic@3.0.84(zod@4.3.6)':
+  '@ai-sdk/anthropic@3.0.85(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/gateway@3.0.132(zod@4.3.6)':
+  '@ai-sdk/gateway@3.0.133(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       '@vercel/oidc': 3.2.0
       zod: 4.3.6
 
-  '@ai-sdk/google@3.0.82(zod@4.3.6)':
+  '@ai-sdk/google@3.0.83(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/openai@3.0.71(zod@4.3.6)':
+  '@ai-sdk/openai@3.0.72(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/provider-utils@4.0.29(zod@4.3.6)':
+  '@ai-sdk/provider-utils@4.0.30(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
       '@standard-schema/spec': 1.1.0
@@ -18664,9 +18664,9 @@ snapshots:
       - debug
       - supports-color
 
-  '@openrouter/ai-sdk-provider@2.9.1(ai@6.0.206(zod@4.3.6))(zod@4.3.6)':
+  '@openrouter/ai-sdk-provider@2.9.1(ai@6.0.207(zod@4.3.6))(zod@4.3.6)':
     dependencies:
-      ai: 6.0.206(zod@4.3.6)
+      ai: 6.0.207(zod@4.3.6)
       zod: 4.3.6
 
   '@opentelemetry/api-logs@0.207.0':
@@ -21139,11 +21139,11 @@ snapshots:
 
   ahocorasick@1.0.2: {}
 
-  ai@6.0.206(zod@4.3.6):
+  ai@6.0.207(zod@4.3.6):
     dependencies:
-      '@ai-sdk/gateway': 3.0.132(zod@4.3.6)
+      '@ai-sdk/gateway': 3.0.133(zod@4.3.6)
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       '@opentelemetry/api': 1.9.1
       zod: 4.3.6
 
