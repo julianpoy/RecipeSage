@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^3.0.84
-        version: 3.0.84(zod@4.3.6)
+        specifier: ^3.0.85
+        version: 3.0.85(zod@4.3.6)
       '@ai-sdk/google':
-        specifier: ^3.0.82
-        version: 3.0.82(zod@4.3.6)
+        specifier: ^3.0.83
+        version: 3.0.83(zod@4.3.6)
       '@ai-sdk/openai':
-        specifier: ^3.0.71
-        version: 3.0.71(zod@4.3.6)
+        specifier: ^3.0.72
+        version: 3.0.72(zod@4.3.6)
       '@angular/common':
         specifier: 21.2.17
         version: 21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2)
@@ -36,14 +36,14 @@ importers:
         specifier: 21.2.1
         version: 21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
       '@aws-sdk/client-s3':
-        specifier: ^3.1069.0
-        version: 3.1069.0
+        specifier: ^3.1070.0
+        version: 3.1070.0
       '@aws-sdk/client-ses':
-        specifier: ^3.1069.0
-        version: 3.1069.0
+        specifier: ^3.1070.0
+        version: 3.1070.0
       '@aws-sdk/lib-storage':
         specifier: ^3.1070.0
-        version: 3.1070.0(@aws-sdk/client-s3@3.1069.0)
+        version: 3.1070.0(@aws-sdk/client-s3@3.1070.0)
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.1070.0
         version: 3.1070.0
@@ -72,8 +72,8 @@ importers:
         specifier: ^5.3.7
         version: 5.3.7
       '@ionic/angular':
-        specifier: ^8.8.4
-        version: 8.8.4(6c659c91579f877543e8545d2faf545e)
+        specifier: ^8.8.10
+        version: 8.8.10(6c659c91579f877543e8545d2faf545e)
       '@julianpoy/recipe-clipper':
         specifier: ^3.3.0
         version: 3.3.0
@@ -88,7 +88,7 @@ importers:
         version: 17.0.0(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))
       '@openrouter/ai-sdk-provider':
         specifier: ^2.9.1
-        version: 2.9.1(ai@6.0.206(zod@4.3.6))(zod@4.3.6)
+        version: 2.9.1(ai@6.0.207(zod@4.3.6))(zod@4.3.6)
       '@opentelemetry/api':
         specifier: ^1.9.1
         version: 1.9.1
@@ -129,8 +129,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       ai:
-        specifier: ^6.0.206
-        version: 6.0.206(zod@4.3.6)
+        specifier: ^6.0.207
+        version: 6.0.207(zod@4.3.6)
       axios:
         specifier: ^1.18.0
         version: 1.18.0(debug@4.4.3)
@@ -159,8 +159,8 @@ importers:
         specifier: ^6.1.0
         version: 6.2.1
       dayjs:
-        specifier: ^1.11.19
-        version: 1.11.20
+        specifier: ^1.11.21
+        version: 1.11.21
       debug:
         specifier: ~4.4.3
         version: 4.4.3
@@ -196,7 +196,7 @@ importers:
         version: 9.1.0
       ical-generator:
         specifier: ^11.0.0
-        version: 11.0.0(@types/node@24.9.1)(dayjs@1.11.20)(luxon@3.7.2)(moment-timezone@0.5.48)(moment@2.30.1)
+        version: 11.0.0(@types/node@24.9.1)(dayjs@1.11.21)(luxon@3.7.2)(moment-timezone@0.5.48)(moment@2.30.1)
       idb:
         specifier: ^8.0.3
         version: 8.0.3
@@ -342,8 +342,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       zip-stream:
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^7.0.5
+        version: 7.0.5
       zod:
         specifier: ^4.3.4
         version: 4.3.6
@@ -642,32 +642,32 @@ importers:
 
 packages:
 
-  '@ai-sdk/anthropic@3.0.84':
-    resolution: {integrity: sha512-BIDaHmCHs6Sr5VUsEkTbbVlAN4GWjg97X9x/IfXyviLtzsXvffui9XIcZugkAi1Ri6FnvI5T5qDGh5YLnSuzRg==}
+  '@ai-sdk/anthropic@3.0.85':
+    resolution: {integrity: sha512-fNeDB644l5wbRNQU0FnI+F7UTtOenMnPtACfMPUJaS2zJfuBlseEa1TMg+otHkETZgaJB+6Na51NQEv0+m7czw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/gateway@3.0.132':
-    resolution: {integrity: sha512-sFZFGk6aVSNKmgDrb14efaAbvM71AB3UUvaTsU+bvhWP9jrkRrwix/jFX8IoOAJk0/X7Xf7p3m0J2O2G6ljZbA==}
+  '@ai-sdk/gateway@3.0.133':
+    resolution: {integrity: sha512-Ebs+7iS9zUgJu5B0RlxM2JmDWzq79Cpd6YdiqcCzB5qFdpfQJPUDiXutqlQP89F2XGjOdDeidulBTXUdXWzOxw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/google@3.0.82':
-    resolution: {integrity: sha512-md+M92ZJuPIMU2p4v1rGLpJJWTmTh/vpJPkMnQbEdcLaPTZxRaroIKSnmL/9UGJV0BORJlHNDJegkcnhVpTmDA==}
+  '@ai-sdk/google@3.0.83':
+    resolution: {integrity: sha512-Pz7aCX0dy+5x+r4K/37HbLZNaPtPL4q2NduzJW64VffLv5sI9Nb478wAd7PlH2r2asiypJsz/Jerf9draTciUA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/openai@3.0.71':
-    resolution: {integrity: sha512-j6eBAa5oHFZ4U5CxpIV3T4zXNM/BviodNCZCL1qHkA4aqkwK9iQ18TWYz2DZcXpw4BO5pikKzqpXORxb1EnZGA==}
+  '@ai-sdk/openai@3.0.72':
+    resolution: {integrity: sha512-ZF545m6pCXLUTERFfRCyfM7WsG4Nu/A+jlXQjSv7w22dGov02ssB0e1kviI3NLIERfRF/U+n2rKbFuUjzYY7CQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider-utils@4.0.29':
-    resolution: {integrity: sha512-uhukHaCBvqkwBHkT8C2PrnqKTCoLn3pdHXqtcR9I8ErH+flbzgW4o7VHSNIup9LRu+WBvZIZDQLsx6rwl2tiOA==}
+  '@ai-sdk/provider-utils@4.0.30':
+    resolution: {integrity: sha512-VO7I+vPffqI5sMnPoUq5DCSqKIgQIk/naJWRdQVpz2ma2zoprC/lqiJiUEl2s6DfvTD76TbhD3q39ROjlA6rGw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -1085,12 +1085,12 @@ packages:
     resolution: {integrity: sha512-7kPy33qNGq3NfwHC0412T6LDK1bp4+eiPzetX0sVd9cpTSXuQDKpoOFnB0Njj6uZjJDcLS3n2OeyarwwgkQ0Ow==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-s3@3.1069.0':
-    resolution: {integrity: sha512-zkwCW4D88foQ0YHyjVyFhDOIWG+IWiTGXYg8+kUgH6M19son3OsZLvioZGyZdNtlRgLNYfQGBjfArSJOYYt2QQ==}
+  '@aws-sdk/client-s3@3.1070.0':
+    resolution: {integrity: sha512-B/OUiCqGQ4Zr7v9gFFyiuitKN2c0PIgvOlQb5bYg1SM2y0F8a5JQ7FNsjRcl+d2PqYWLHwHx12CvZDyLn4KxIw==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-ses@3.1069.0':
-    resolution: {integrity: sha512-FO6VicT6XHFcjV9gTOtLJpyu7mSGfmMd60LbghvEvfR7Bonpx7Z+6KoelxShprOP/H4QLiro0h/wtfmRVMvd+Q==}
+  '@aws-sdk/client-ses@3.1070.0':
+    resolution: {integrity: sha512-bPfie6sd2pcs4inpRTBnZzNN8ud5aup9ljI72DjOnI1xUzJKbWjS+i1RVcRjgB5zWdWawOhMYauGlrmKNGCUSg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/core@3.974.22':
@@ -3385,8 +3385,8 @@ packages:
   '@ionic/angular-toolkit@12.3.0':
     resolution: {integrity: sha512-9cPTMmwggviB2W7wf4sv4vFeQnYq5HbO6V89UqQHopShokdhSvUFpaQ2w1/Mdf/ot8PghGjR3t5IdnXV7i1LvA==}
 
-  '@ionic/angular@8.8.4':
-    resolution: {integrity: sha512-PpM5xjreDAW02QVXJPzKoe1hmA0+EOYdMvQSkNiEAAF96pnfeIa1zh6xiB74cT6V7dB+s5B8eXPxN1Ug1d+wfQ==}
+  '@ionic/angular@8.8.10':
+    resolution: {integrity: sha512-ViOexy5QbdCFtSIWGZVQwykww192lfKFp1HEoEX4CH3Hs95YXWTYN7PnwnhSJcecohjx9PkEmSZS5CNNrn4bpQ==}
     peerDependencies:
       '@angular/core': '>=16.0.0'
       '@angular/forms': '>=16.0.0'
@@ -3398,8 +3398,8 @@ packages:
     resolution: {integrity: sha512-TshtaFQsovB4NWRBydbNFawql6yul7d5bMiW1WYYf17hd99V6xdDdk3vtF51bw6sLkxON3bDQpWsnUc9/hVo3g==}
     engines: {node: '>=16.0.0'}
 
-  '@ionic/core@8.8.4':
-    resolution: {integrity: sha512-RWts/72xtNNJDZQtntMRxB68KDctq76INV5OmLWWc0rlgcxOlNQDNH+lTBH7kV9vQ78JDVGSgi10ax3oQ3dIIQ==}
+  '@ionic/core@8.8.10':
+    resolution: {integrity: sha512-pNujZuU/vydXKtE3yOqmeOIySbXodspxuK4QcbRitWoikNZhGalqW2JvtEJqeRRvE4KJ4dJ3gXF8i6+rtVSG3Q==}
     engines: {node: '>= 16'}
 
   '@ionic/utils-array@2.1.6':
@@ -4989,11 +4989,6 @@ packages:
     cpu: [arm64]
     os: [android]
 
-  '@rollup/rollup-darwin-arm64@4.34.9':
-    resolution: {integrity: sha512-0CY3/K54slrzLDjOA7TOjN1NuLKERBgk9nY5V34mhmuu673YNb+7ghaDUs6N0ujXR7fz5XaS5Aa6d2TNxZd0OQ==}
-    cpu: [arm64]
-    os: [darwin]
-
   '@rollup/rollup-darwin-arm64@4.44.0':
     resolution: {integrity: sha512-VGF3wy0Eq1gcEIkSCr8Ke03CWT+Pm2yveKLaDvq51pPpZza3JX/ClxXOCmTYYq3us5MvEuNRTaeyFThCKRQhOA==}
     cpu: [arm64]
@@ -5007,11 +5002,6 @@ packages:
   '@rollup/rollup-darwin-arm64@4.62.0':
     resolution: {integrity: sha512-BqCoMoIbn0keKys+dEAdBa70EtOwV1bEsQCUgU9FdiZmmMge/Zk7LlkYGqbrdHR+Frnt0E1FOanly+rlwvvQzw==}
     cpu: [arm64]
-    os: [darwin]
-
-  '@rollup/rollup-darwin-x64@4.34.9':
-    resolution: {integrity: sha512-eOojSEAi/acnsJVYRxnMkPFqcxSMFfrw7r2iD9Q32SGkb/Q9FpUY1UlAu1DH9T7j++gZ0lHjnm4OyH2vCI7l7Q==}
-    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-darwin-x64@4.44.0':
@@ -5073,12 +5063,6 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@rollup/rollup-linux-arm64-gnu@4.34.9':
-    resolution: {integrity: sha512-6TZjPHjKZUQKmVKMUowF3ewHxctrRR09eYyvT5eFv8w/fXarEra83A2mHTVJLA5xU91aCNOUnM+DWFMSbQ0Nxw==}
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
-
   '@rollup/rollup-linux-arm64-gnu@4.44.0':
     resolution: {integrity: sha512-ZTR2mxBHb4tK4wGf9b8SYg0Y6KQPjGpR4UWwTFdnmjB4qRtoATZ5dWn3KsDwGa5Z2ZBOE7K52L36J9LueKBdOQ==}
     cpu: [arm64]
@@ -5096,12 +5080,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-
-  '@rollup/rollup-linux-arm64-musl@4.34.9':
-    resolution: {integrity: sha512-LD2fytxZJZ6xzOKnMbIpgzFOuIKlxVOpiMAXawsAZ2mHBPEYOnLRK5TTEsID6z4eM23DuO88X0Tq1mErHMVq0A==}
-    cpu: [arm64]
-    os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-musl@4.44.0':
     resolution: {integrity: sha512-GFWfAhVhWGd4r6UxmnKRTBwP1qmModHtd5gkraeW2G490BpFOZkFtem8yuX2NyafIP/mGpRJgTJ2PwohQkUY/Q==}
@@ -5205,12 +5183,6 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@rollup/rollup-linux-x64-gnu@4.34.9':
-    resolution: {integrity: sha512-FwBHNSOjUTQLP4MG7y6rR6qbGw4MFeQnIBrMe161QGaQoBQLqSUEKlHIiVgF3g/mb3lxlxzJOpIBhaP+C+KP2A==}
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
   '@rollup/rollup-linux-x64-gnu@4.44.0':
     resolution: {integrity: sha512-iUVJc3c0o8l9Sa/qlDL2Z9UP92UZZW1+EmQ4xfjTc1akr0iUFZNfxrXJ/R1T90h/ILm9iXEY6+iPrmYB3pXKjw==}
     cpu: [x64]
@@ -5234,12 +5206,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-
-  '@rollup/rollup-linux-x64-musl@4.34.9':
-    resolution: {integrity: sha512-cYRpV4650z2I3/s6+5/LONkjIz8MBeqrk+vPXV10ORBnshpn8S32bPqQ2Utv39jCiDcO2eJTuSlPXpnvmaIgRA==}
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-x64-musl@4.44.0':
     resolution: {integrity: sha512-PQUobbhLTQT5yz/SPg116VJBgz+XOtXt8D1ck+sfJJhuEsMj2jSej5yTdp8CvWBSceu+WW+ibVL6dm0ptG5fcA==}
@@ -5279,11 +5245,6 @@ packages:
     cpu: [arm64]
     os: [openharmony]
 
-  '@rollup/rollup-win32-arm64-msvc@4.34.9':
-    resolution: {integrity: sha512-z4mQK9dAN6byRA/vsSgQiPeuO63wdiDxZ9yg9iyX2QTzKuQM7T4xlBoeUP/J8uiFkqxkcWndWi+W7bXdPbt27Q==}
-    cpu: [arm64]
-    os: [win32]
-
   '@rollup/rollup-win32-arm64-msvc@4.44.0':
     resolution: {integrity: sha512-M0CpcHf8TWn+4oTxJfh7LQuTuaYeXGbk0eageVjQCKzYLsajWS/lFC94qlRqOlyC2KvRT90ZrfXULYmukeIy7w==}
     cpu: [arm64]
@@ -5316,11 +5277,6 @@ packages:
 
   '@rollup/rollup-win32-x64-gnu@4.62.0':
     resolution: {integrity: sha512-SoTb6lPg25xZlA2ibwQ++ahCCnH+FP0qmEuafMJ4gznZKOlXioKEAeJLgCrqjM98ACziXM9V1amFjICVL4IFoA==}
-    cpu: [x64]
-    os: [win32]
-
-  '@rollup/rollup-win32-x64-msvc@4.34.9':
-    resolution: {integrity: sha512-AyleYRPU7+rgkMWbEh71fQlrzRfeP6SyMnRf9XX4fCdDPAJumdSBqYEcWPMzVQ4ScAl7E4oFfK0GUVn77xSwbw==}
     cpu: [x64]
     os: [win32]
 
@@ -5860,13 +5816,13 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@stencil/core@4.43.0':
-    resolution: {integrity: sha512-6Uj2Z3lzLuufYAE7asZ6NLKgSwsB9uxl84Eh34PASnUjfj32GkrP4DtKK7fNeh1WFGGyffsTDka3gwtl+4reUg==}
+  '@stencil/core@4.43.4':
+    resolution: {integrity: sha512-QWawMM1XIpSz4k+k+VyHZMr2YSxlCNAPWO/jTdJ+2kdgdN7ZQVEFZpc4WBm3E3mrDPTZ79lLcnIPa399bg4XOg==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
 
-  '@stencil/core@4.43.4':
-    resolution: {integrity: sha512-QWawMM1XIpSz4k+k+VyHZMr2YSxlCNAPWO/jTdJ+2kdgdN7ZQVEFZpc4WBm3E3mrDPTZ79lLcnIPa399bg4XOg==}
+  '@stencil/core@4.43.5':
+    resolution: {integrity: sha512-cgWD+GeuvJpTe1WQn40p02+BJ2j0j1YJ17GdkF2qKIQ23s2e3Zivq5yISXS3dcuV6oUJFN93jprdk+nk/sq99Q==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
 
@@ -6730,8 +6686,8 @@ packages:
   ahocorasick@1.0.2:
     resolution: {integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==}
 
-  ai@6.0.206:
-    resolution: {integrity: sha512-hVdB5PozMMxmkPBfbCxkFOn0eVeCMi/imkfPvk65cxL4O8oIrvjUxDUX8dGkdkWG1No+R7e7D9ti2DHO61Z4YQ==}
+  ai@6.0.207:
+    resolution: {integrity: sha512-9rAHnqU+AvxyqO6WgiWj7hQENX6AprHXZWZEdBWwgnA854D2Mje/PiTmbcFqO+2Cck1lII0NLRQJY9lmdSorMw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -7784,8 +7740,8 @@ packages:
   component-emitter@1.3.1:
     resolution: {integrity: sha512-T0+barUSQRTUQASh8bx02dl+DhF54GtIDY13Y3m9oWTklKbb3Wv974meRpeZ3lp1JpLVECWWNHC4vaG2XHXouQ==}
 
-  compress-commons@7.0.0:
-    resolution: {integrity: sha512-8WWFRMWaa37dwjWCxDcmdx6sxfjQTAEQ6s96BWqX9WYC6Mgg95EvwPYS/7QGX3txkst7TD1jIL2HCY9AixLGfA==}
+  compress-commons@7.0.1:
+    resolution: {integrity: sha512-g0S8KAD8qf4+V//pr3BfB1aBnARLXNz2Gx+jmHU0LEriUuoQUOPOulVquHKTJ8+EAIIO7fhseNDr9wK5Q9FKBQ==}
     engines: {node: '>=18'}
 
   compressible@2.0.18:
@@ -8053,8 +8009,8 @@ packages:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
 
-  dayjs@1.11.20:
-    resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -11964,6 +11920,10 @@ packages:
     resolution: {integrity: sha512-cbrerZV+6rvdQrrD+iGMcZFEiiSrbv9Tfdkvnusy6y0x0GKBXREFg/Y65GhIfm0tnLntThhzCnfKwp1WRjeCyQ==}
     engines: {node: '>=14.0.0'}
 
+  path-expression-matcher@1.6.0:
+    resolution: {integrity: sha512-e5y7RCLHKjemsgQ4eqGJtPyr10ILz25HO7flzxhTV8bgvd5yHx98DGtCAtbVW9f2TqnYI/gEVZd+vz7snrdPTw==}
+    engines: {node: '>=14.0.0'}
+
   path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
@@ -15254,8 +15214,8 @@ packages:
   zeptomatch@2.1.0:
     resolution: {integrity: sha512-KiGErG2J0G82LSpniV0CtIzjlJ10E04j02VOudJsPyPwNZgGnRKQy7I1R7GMyg/QswnE4l7ohSGrQbQbjXPPDA==}
 
-  zip-stream@7.0.2:
-    resolution: {integrity: sha512-g1TjcvzTXLWwDDyZSdC+w7tNdeNCq/qA8Amm8kxGBldyW2yxtSHHlYinxTRvlcaE4Tt3l1ZPsWSA+P9sn20MRw==}
+  zip-stream@7.0.5:
+    resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
 
   zod-openapi@5.4.6:
@@ -15283,32 +15243,32 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/anthropic@3.0.84(zod@4.3.6)':
+  '@ai-sdk/anthropic@3.0.85(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/gateway@3.0.132(zod@4.3.6)':
+  '@ai-sdk/gateway@3.0.133(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       '@vercel/oidc': 3.2.0
       zod: 4.3.6
 
-  '@ai-sdk/google@3.0.82(zod@4.3.6)':
+  '@ai-sdk/google@3.0.83(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/openai@3.0.71(zod@4.3.6)':
+  '@ai-sdk/openai@3.0.72(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       zod: 4.3.6
 
-  '@ai-sdk/provider-utils@4.0.29(zod@4.3.6)':
+  '@ai-sdk/provider-utils@4.0.30(zod@4.3.6)':
     dependencies:
       '@ai-sdk/provider': 3.0.10
       '@standard-schema/spec': 1.1.0
@@ -16036,7 +15996,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-s3@3.1069.0':
+  '@aws-sdk/client-s3@3.1070.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -16053,7 +16013,7 @@ snapshots:
       '@smithy/types': 4.15.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-ses@3.1069.0':
+  '@aws-sdk/client-ses@3.1070.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -16294,9 +16254,9 @@ snapshots:
       stream-browserify: 3.0.0
       tslib: 2.8.1
 
-  '@aws-sdk/lib-storage@3.1070.0(@aws-sdk/client-s3@3.1069.0)':
+  '@aws-sdk/lib-storage@3.1070.0(@aws-sdk/client-s3@3.1070.0)':
     dependencies:
-      '@aws-sdk/client-s3': 3.1069.0
+      '@aws-sdk/client-s3': 3.1070.0
       '@smithy/core': 3.25.1
       '@smithy/types': 4.15.0
       buffer: 5.6.0
@@ -19105,12 +19065,12 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@ionic/angular@8.8.4(6c659c91579f877543e8545d2faf545e)':
+  '@ionic/angular@8.8.10(6c659c91579f877543e8545d2faf545e)':
     dependencies:
       '@angular/core': 21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1)
       '@angular/forms': 21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
       '@angular/router': 21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.17(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.17(@angular/compiler@21.2.17)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
-      '@ionic/core': 8.8.4
+      '@ionic/core': 8.8.10
       ionicons: 8.0.13
       jsonc-parser: 3.3.1
       rxjs: 7.8.2
@@ -19125,9 +19085,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ionic/core@8.8.4':
+  '@ionic/core@8.8.10':
     dependencies:
-      '@stencil/core': 4.43.0
+      '@stencil/core': 4.43.5
       ionicons: 8.0.13
       tslib: 2.8.1
 
@@ -20078,9 +20038,9 @@ snapshots:
       - debug
       - supports-color
 
-  '@openrouter/ai-sdk-provider@2.9.1(ai@6.0.206(zod@4.3.6))(zod@4.3.6)':
+  '@openrouter/ai-sdk-provider@2.9.1(ai@6.0.207(zod@4.3.6))(zod@4.3.6)':
     dependencies:
-      ai: 6.0.206(zod@4.3.6)
+      ai: 6.0.207(zod@4.3.6)
       zod: 4.3.6
 
   '@opentelemetry/api-logs@0.207.0':
@@ -20743,9 +20703,6 @@ snapshots:
   '@rollup/rollup-android-arm64@4.62.0':
     optional: true
 
-  '@rollup/rollup-darwin-arm64@4.34.9':
-    optional: true
-
   '@rollup/rollup-darwin-arm64@4.44.0':
     optional: true
 
@@ -20753,9 +20710,6 @@ snapshots:
     optional: true
 
   '@rollup/rollup-darwin-arm64@4.62.0':
-    optional: true
-
-  '@rollup/rollup-darwin-x64@4.34.9':
     optional: true
 
   '@rollup/rollup-darwin-x64@4.44.0':
@@ -20791,9 +20745,6 @@ snapshots:
   '@rollup/rollup-linux-arm-musleabihf@4.62.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-gnu@4.34.9':
-    optional: true
-
   '@rollup/rollup-linux-arm64-gnu@4.44.0':
     optional: true
 
@@ -20801,9 +20752,6 @@ snapshots:
     optional: true
 
   '@rollup/rollup-linux-arm64-gnu@4.62.0':
-    optional: true
-
-  '@rollup/rollup-linux-arm64-musl@4.34.9':
     optional: true
 
   '@rollup/rollup-linux-arm64-musl@4.44.0':
@@ -20857,9 +20805,6 @@ snapshots:
   '@rollup/rollup-linux-s390x-gnu@4.62.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.34.9':
-    optional: true
-
   '@rollup/rollup-linux-x64-gnu@4.44.0':
     optional: true
 
@@ -20870,9 +20815,6 @@ snapshots:
     optional: true
 
   '@rollup/rollup-linux-x64-gnu@4.62.0':
-    optional: true
-
-  '@rollup/rollup-linux-x64-musl@4.34.9':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.44.0':
@@ -20896,9 +20838,6 @@ snapshots:
   '@rollup/rollup-openharmony-arm64@4.62.0':
     optional: true
 
-  '@rollup/rollup-win32-arm64-msvc@4.34.9':
-    optional: true
-
   '@rollup/rollup-win32-arm64-msvc@4.44.0':
     optional: true
 
@@ -20918,9 +20857,6 @@ snapshots:
     optional: true
 
   '@rollup/rollup-win32-x64-gnu@4.62.0':
-    optional: true
-
-  '@rollup/rollup-win32-x64-msvc@4.34.9':
     optional: true
 
   '@rollup/rollup-win32-x64-msvc@4.44.0':
@@ -21594,18 +21530,18 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@stencil/core@4.43.0':
-    optionalDependencies:
-      '@rollup/rollup-darwin-arm64': 4.34.9
-      '@rollup/rollup-darwin-x64': 4.34.9
-      '@rollup/rollup-linux-arm64-gnu': 4.34.9
-      '@rollup/rollup-linux-arm64-musl': 4.34.9
-      '@rollup/rollup-linux-x64-gnu': 4.34.9
-      '@rollup/rollup-linux-x64-musl': 4.34.9
-      '@rollup/rollup-win32-arm64-msvc': 4.34.9
-      '@rollup/rollup-win32-x64-msvc': 4.34.9
-
   '@stencil/core@4.43.4':
+    optionalDependencies:
+      '@rollup/rollup-darwin-arm64': 4.44.0
+      '@rollup/rollup-darwin-x64': 4.44.0
+      '@rollup/rollup-linux-arm64-gnu': 4.44.0
+      '@rollup/rollup-linux-arm64-musl': 4.44.0
+      '@rollup/rollup-linux-x64-gnu': 4.44.0
+      '@rollup/rollup-linux-x64-musl': 4.44.0
+      '@rollup/rollup-win32-arm64-msvc': 4.44.0
+      '@rollup/rollup-win32-x64-msvc': 4.44.0
+
+  '@stencil/core@4.43.5':
     optionalDependencies:
       '@rollup/rollup-darwin-arm64': 4.44.0
       '@rollup/rollup-darwin-x64': 4.44.0
@@ -22622,11 +22558,11 @@ snapshots:
 
   ahocorasick@1.0.2: {}
 
-  ai@6.0.206(zod@4.3.6):
+  ai@6.0.207(zod@4.3.6):
     dependencies:
-      '@ai-sdk/gateway': 3.0.132(zod@4.3.6)
+      '@ai-sdk/gateway': 3.0.133(zod@4.3.6)
       '@ai-sdk/provider': 3.0.10
-      '@ai-sdk/provider-utils': 4.0.29(zod@4.3.6)
+      '@ai-sdk/provider-utils': 4.0.30(zod@4.3.6)
       '@opentelemetry/api': 1.9.1
       zod: 4.3.6
 
@@ -23951,7 +23887,7 @@ snapshots:
 
   component-emitter@1.3.1: {}
 
-  compress-commons@7.0.0:
+  compress-commons@7.0.1:
     dependencies:
       crc-32: 1.2.2
       crc32-stream: 7.0.1
@@ -24244,7 +24180,7 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
-  dayjs@1.11.20: {}
+  dayjs@1.11.21: {}
 
   debug@2.6.9:
     dependencies:
@@ -25236,7 +25172,7 @@ snapshots:
     dependencies:
       '@nodable/entities': 2.2.0
       fast-xml-builder: 1.2.0
-      path-expression-matcher: 1.5.0
+      path-expression-matcher: 1.6.0
       strnum: 2.4.1
 
   fast-xml-parser@5.8.0:
@@ -26367,10 +26303,10 @@ snapshots:
 
   hyperdyperid@1.2.0: {}
 
-  ical-generator@11.0.0(@types/node@24.9.1)(dayjs@1.11.20)(luxon@3.7.2)(moment-timezone@0.5.48)(moment@2.30.1):
+  ical-generator@11.0.0(@types/node@24.9.1)(dayjs@1.11.21)(luxon@3.7.2)(moment-timezone@0.5.48)(moment@2.30.1):
     optionalDependencies:
       '@types/node': 24.9.1
-      dayjs: 1.11.20
+      dayjs: 1.11.21
       luxon: 3.7.2
       moment: 2.30.1
       moment-timezone: 0.5.48
@@ -27446,7 +27382,7 @@ snapshots:
 
   launder@1.7.1:
     dependencies:
-      dayjs: 1.11.20
+      dayjs: 1.11.21
 
   lcid@1.0.0:
     dependencies:
@@ -29227,6 +29163,8 @@ snapshots:
   path-exists@4.0.0: {}
 
   path-expression-matcher@1.5.0: {}
+
+  path-expression-matcher@1.6.0: {}
 
   path-is-absolute@1.0.1: {}
 
@@ -32965,9 +32903,9 @@ snapshots:
       grammex: 3.1.12
       graphmatch: 1.1.1
 
-  zip-stream@7.0.2:
+  zip-stream@7.0.5:
     dependencies:
-      compress-commons: 7.0.0
+      compress-commons: 7.0.1
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
