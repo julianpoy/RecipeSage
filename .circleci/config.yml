@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
+  node: circleci/node@7.1.0
 commands:
   install-dependencies:
     steps:
@@ -44,6 +45,7 @@ jobs:
           JOB_QUEUE_REDIS_HOST: localhost
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
+          API_PUBLIC_BASE_URL: http://localhost:3000
           FONTS_PATH: fonts
           EXPRESS_VIEWS_PATH: packages/backend/src/views
           FRONTEND_I18N_PATH: packages/frontend/src/assets/i18n
@@ -325,6 +327,192 @@ jobs:
             docker buildx imagetools create -t julianpoy/recipesage-selfhost:static-${CIRCLE_TAG:=stg} \
               julianpoy/recipesage-selfhost:static-${CIRCLE_TAG:=stg}-amd64 \
               julianpoy/recipesage-selfhost:static-${CIRCLE_TAG:=stg}-arm64
+  build_desktop_frontend:
+    resource_class: large
+    docker:
+      - image: cimg/node:24.13
+    steps:
+      - checkout
+      - install-dependencies
+      - run:
+          name: build-frontend-for-desktop
+          command: ./scripts/prepare-for-electron-build.sh
+          environment:
+            ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=8192
+      - persist_to_workspace:
+          root: .
+          paths:
+            - packages/desktop/renderer
+            - packages/desktop/package.json
+  desktop_macos:
+    macos:
+      xcode: "15.4.0"
+    resource_class: macos.m1.medium.gen1
+    steps:
+      - checkout
+      - node/install:
+          node-version: "24.13"
+      - run:
+          name: enable-corepack
+          command: sudo corepack enable
+      - run:
+          name: install-packages
+          command: pnpm install --frozen-lockfile
+      - attach_workspace:
+          at: .
+      - run:
+          name: setup-keychain
+          command: |
+            echo "$APPLE_CERT_BASE64" | base64 -d > /tmp/cert.p12
+            security create-keychain -p "" build.keychain
+            security default-keychain -s build.keychain
+            security set-keychain-settings -lut 7200 build.keychain
+            security unlock-keychain -p "" build.keychain
+            security list-keychains -d user -s build.keychain $(security list-keychains -d user | tr -d '"')
+            curl -sfo /tmp/DeveloperIDG2CA.cer https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer
+            security import /tmp/DeveloperIDG2CA.cer -k build.keychain -T /usr/bin/codesign
+            rm /tmp/DeveloperIDG2CA.cer
+            security import /tmp/cert.p12 -k build.keychain -P "$APPLE_CERT_PASSWORD" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+            rm /tmp/cert.p12
+      - run:
+          name: setup-notarization
+          command: |
+            mkdir -p ~/private_keys
+            echo "$APPLE_API_KEY_BASE64" | base64 -d > ~/private_keys/AuthKey.p8
+            echo 'export APPLE_API_KEY_PATH=~/private_keys/AuthKey.p8' >> "$BASH_ENV"
+      - run:
+          name: verify-signing-setup
+          command: |
+            IDENTITY_COUNT=$(security find-identity -v build.keychain | grep -c "Developer ID Application" || true)
+            if [ "$IDENTITY_COUNT" -gt 0 ]; then
+              echo "OK: Found $IDENTITY_COUNT Developer ID Application identity(s) in build.keychain"
+            else
+              echo "FATAL: No Developer ID Application identity found in build.keychain"
+              security find-identity -v build.keychain | grep -c "valid identities found" || true
+              exit 1
+            fi
+      - run:
+          name: arm64
+          command: |
+            cd packages/desktop
+            ../../node_modules/.bin/electron-forge make --arch=arm64
+      - run:
+          name: collect-arm64-artifacts
+          command: |
+            mkdir -p desktop-artifacts/darwin/arm64
+            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-arm64.dmg
+            cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/RecipeSage-darwin-arm64.zip
+            cp packages/desktop/out/make/zip/darwin/arm64/RELEASES.json desktop-artifacts/darwin/arm64/
+            cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/darwin/
+      - run:
+          name: clean-out
+          command: rm -rf packages/desktop/out
+      - run:
+          name: x64
+          command: |
+            cd packages/desktop
+            ../../node_modules/.bin/electron-forge make --arch=x64
+      - run:
+          name: collect-x64-artifacts
+          command: |
+            mkdir -p desktop-artifacts/darwin/x64
+            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-x64.dmg
+            cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/RecipeSage-darwin-x64.zip
+            cp packages/desktop/out/make/zip/darwin/x64/RELEASES.json desktop-artifacts/darwin/x64/
+            cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/darwin/
+      - aws-cli/setup
+      - run:
+          name: push-to-s3
+          command: |
+            aws s3 sync desktop-artifacts/ s3://chefbook-static/desktop/$CIRCLE_TAG/ \
+              --acl public-read \
+              --cache-control "public, max-age=3600"
+      - store_artifacts:
+          path: desktop-artifacts
+          destination: desktop-macos
+  desktop_linux:
+    resource_class: medium+
+    docker:
+      - image: cimg/node:24.13
+    steps:
+      - checkout
+      - install-dependencies
+      - attach_workspace:
+          at: .
+      - run:
+          name: install-rpm
+          command: sudo apt-get update && sudo apt-get install -y dpkg fakeroot rpm squashfs-tools
+      - run:
+          name: make
+          command: |
+            cd packages/desktop
+            ../../node_modules/.bin/electron-forge make
+      - run:
+          name: collect-artifacts
+          command: |
+            mkdir -p desktop-artifacts
+            cp packages/desktop/out/make/deb/x64/*.deb desktop-artifacts/RecipeSage-linux-amd64.deb
+            cp packages/desktop/out/make/rpm/x64/*.rpm desktop-artifacts/RecipeSage-linux-x86_64.rpm
+            cp packages/desktop/out/make/zip/linux/x64/*.zip desktop-artifacts/RecipeSage-linux-x64.zip
+            cp packages/desktop/out/make/AppImage/x64/*.AppImage desktop-artifacts/RecipeSage-linux-x86_64.AppImage
+      - aws-cli/setup
+      - run:
+          name: push-to-s3
+          command: |
+            aws s3 sync desktop-artifacts/ s3://chefbook-static/desktop/$CIRCLE_TAG/ \
+              --acl public-read \
+              --cache-control "public, max-age=3600"
+      - store_artifacts:
+          path: desktop-artifacts
+          destination: desktop-linux
+  desktop_windows:
+    machine:
+      image: windows-server-2022-gui:current
+    resource_class: windows.medium
+    shell: bash.exe
+    steps:
+      - checkout
+      - run:
+          name: install-node
+          command: |
+            nvm install 24.13
+            nvm use 24.13
+      - run:
+          name: enable-corepack
+          command: corepack enable
+      - run:
+          name: install-packages
+          command: pnpm install --frozen-lockfile
+      - attach_workspace:
+          at: .
+      - run:
+          name: make
+          no_output_timeout: 30m
+          command: |
+            cd packages/desktop
+            ../../node_modules/.bin/electron-forge make
+      - run:
+          name: collect-artifacts
+          command: |
+            mkdir -p desktop-artifacts/win32/x64
+            cp packages/desktop/out/make/squirrel.windows/x64/*.exe desktop-artifacts/RecipeSage-Setup.exe
+            cp packages/desktop/out/make/squirrel.windows/x64/RELEASES desktop-artifacts/win32/x64/
+            cp packages/desktop/out/make/squirrel.windows/x64/*.nupkg desktop-artifacts/win32/x64/
+            cp packages/desktop/out/make/squirrel.windows/x64/*.exe desktop-artifacts/win32/x64/
+      - run:
+          name: install-awscli
+          command: choco install awscli -y
+      - run:
+          name: push-to-s3
+          command: |
+            aws s3 sync desktop-artifacts/ s3://chefbook-static/desktop/$CIRCLE_TAG/ \
+              --acl public-read \
+              --cache-control "public, max-age=3600"
+      - store_artifacts:
+          path: desktop-artifacts
+          destination: desktop-windows
 
 workflows:
   version: 2
@@ -423,5 +611,39 @@ workflows:
             tags:
               # We do not publish -beta versions for selfhost
               only: /^v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - build_desktop_frontend:
+          requires:
+            - build_and_test
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - desktop_macos:
+          context:
+            - apple-desktop-signing
+          requires:
+            - build_desktop_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - desktop_linux:
+          requires:
+            - build_desktop_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - desktop_windows:
+          requires:
+            - build_desktop_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
               ignore: /.*/

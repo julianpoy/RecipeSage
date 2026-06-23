@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title> {{ "pages.serverSettings.title" | translate }} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    <ion-item lines="none">
+      <ion-icon name="warning" color="danger" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap" color="danger">
+        <strong>{{ "pages.serverSettings.warning.title" | translate }}</strong>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap" color="danger">
+        <p>{{ "pages.serverSettings.warning.body" | translate }}</p>
+      </ion-label>
+    </ion-item>
+
+    @if (!unlocked) {
+      <ion-button color="danger" (click)="unlock()" class="ion-margin">
+        {{ "pages.serverSettings.confirm" | translate }}
+      </ion-button>
+    } @else {
+      <p>{{ "pages.serverSettings.description" | translate }}</p>
+
+      <text-input
+        [label]="'pages.serverSettings.baseUrl.label' | translate"
+        [placeholder]="'pages.serverSettings.baseUrl.placeholder' | translate"
+        [helperText]="'pages.serverSettings.baseUrl.helper' | translate"
+        [errorText]="'pages.serverSettings.baseUrl.invalid' | translate"
+        [invalid]="invalid"
+        type="url"
+        inputmode="url"
+        [(ngModel)]="baseUrl"
+      ></text-input>
+
+      <div class="form-actions">
+        <ion-button (click)="save()">
+          {{ "generic.save" | translate }}
+        </ion-button>
+        <ion-button fill="outline" (click)="reset()">
+          {{ "pages.serverSettings.reset" | translate }}
+        </ion-button>
+      </div>
+    }
+  </div>
+</ion-content>

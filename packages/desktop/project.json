@@ -1,0 +1,51 @@
+{
+  "name": "desktop",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/desktop/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/desktop",
+        "command": "NODE_ENV=development WEBUI_URL=${WEBUI_URL:-http://localhost:8100/app/} ../../node_modules/.bin/electron-forge start"
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "dependsOn": [{ "projects": ["frontend"], "target": "build:desktop" }],
+      "options": {
+        "commands": [
+          "rm -rf packages/desktop/renderer && cp -r packages/frontend/www packages/desktop/renderer",
+          "cd packages/desktop && ../../node_modules/.bin/electron-forge package"
+        ],
+        "parallel": false
+      }
+    },
+    "make": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["package"],
+      "options": {
+        "command": "cd packages/desktop && ../../node_modules/.bin/electron-forge make"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/desktop",
+        "command": "tsc --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "maxWarnings": 0,
+        "lintFilePatterns": [
+          "packages/desktop/src",
+          "packages/desktop/forge.config.ts",
+          "packages/desktop/vite.config.ts"
+        ]
+      }
+    }
+  }
+}

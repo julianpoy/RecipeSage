@@ -48,6 +48,19 @@
         "parallel": false
       }
     },
+    "build:desktop": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["util-shared:build"],
+      "options": {
+        "cwd": "packages/frontend",
+        "commands": [
+          "ng build --configuration=desktop",
+          "tsx build-service-worker.ts",
+          "workbox injectManifest"
+        ],
+        "parallel": false
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

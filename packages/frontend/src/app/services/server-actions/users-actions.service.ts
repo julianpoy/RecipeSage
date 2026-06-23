@@ -112,6 +112,16 @@ export class UsersActionsService extends ActionsBase {
     );
   }
 
+  signInWithDesktopGoogle(
+    input: RouterInputs["users"]["signInWithDesktopGoogle"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["signInWithDesktopGoogle"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.signInWithDesktopGoogle.mutate(input),
+      errorHandlers,
+    );
+  }
+
   updateUser(
     input: RouterInputs["users"]["updateUser"],
     errorHandlers?: ErrorHandlers,

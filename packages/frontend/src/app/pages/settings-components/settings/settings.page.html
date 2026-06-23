@@ -210,6 +210,14 @@
         <ion-icon name="close" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.reset" | translate }} </ion-label>
       </ion-item>
+      @if (showServerSettings) {
+        <ion-item lines="inset" (click)="goToServerSettings()" button>
+          <ion-icon name="server" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.settings.serverSettings" | translate }}
+          </ion-label>
+        </ion-item>
+      }
     </ion-list>
   </div>
 </ion-content>

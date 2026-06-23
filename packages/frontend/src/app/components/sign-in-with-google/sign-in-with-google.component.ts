@@ -6,6 +6,7 @@ import {
   ElementRef,
   ViewChild,
   type AfterViewInit,
+  type OnDestroy,
   inject,
 } from "@angular/core";
 import { ServerActionsService } from "../../services/server-actions.service";
@@ -15,6 +16,9 @@ import {
 } from "@recipesage/frontend/src/environments/environment";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { IonButton } from "@ionic/angular/standalone";
+import { getElectronAPI, getIsElectron } from "../../utils/electron";
+import { getBase } from "../../utils/getBase";
 
 const getGoogleRef = () => {
   return (window as any).google;
@@ -25,9 +29,9 @@ const getGoogleRef = () => {
   selector: "sign-in-with-google",
   templateUrl: "sign-in-with-google.component.html",
   styleUrls: ["./sign-in-with-google.component.scss"],
-  imports: [...SHARED_UI_IMPORTS],
+  imports: [...SHARED_UI_IMPORTS, IonButton],
 })
-export class SignInWithGoogleComponent implements AfterViewInit {
+export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   private serverActionsService = inject(ServerActionsService);
 
   // Can be use to hide the button and only use for prompting
@@ -41,8 +45,19 @@ export class SignInWithGoogleComponent implements AfterViewInit {
   @ViewChild("googleButtonContainer", { static: true })
   googleButtonContainer!: ElementRef<HTMLDivElement>;
 
+  isElectron = getIsElectron();
+
+  private removeAuthCodeListener?: () => void;
+
   ngAfterViewInit() {
     if (IS_SELFHOST) return;
+
+    if (this.isElectron) {
+      this.removeAuthCodeListener = getElectronAPI()?.onAuthCode((code) =>
+        this.afterDesktopSignInComplete(code),
+      );
+      return;
+    }
 
     const googleScriptNodeId = "google-auth-script";
     const existingNode = document.getElementById(googleScriptNodeId);
@@ -60,6 +75,32 @@ export class SignInWithGoogleComponent implements AfterViewInit {
     } else {
       if (this.showButton) this.renderGoogleButton();
       if (this.autoPrompt) this.showGoogleAuthPrompt();
+    }
+  }
+
+  ngOnDestroy() {
+    this.removeAuthCodeListener?.();
+  }
+
+  startDesktopGoogleSignIn() {
+    window.open(
+      `${getBase()}auth/desktop-google?allowRegistration=${this.allowRegistration}`,
+    );
+  }
+
+  async afterDesktopSignInComplete(code: string) {
+    const session =
+      await this.serverActionsService.users.signInWithDesktopGoogle(
+        {
+          code,
+        },
+        {
+          404: () => this.accountNotFound.emit(),
+        },
+      );
+
+    if (session) {
+      this.signInComplete.emit(session);
     }
   }
 

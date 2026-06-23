@@ -32,6 +32,9 @@ const getEnvString = <
 };
 
 export const config = {
+  api: {
+    publicUrl: getEnvString("API_PUBLIC_BASE_URL", Environment.All),
+  },
   google: {
     gsi: {
       clientId: getEnvString("GOOGLE_GSI_CLIENT_ID", [Environment.Prod]),

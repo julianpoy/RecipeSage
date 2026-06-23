@@ -20,6 +20,7 @@ import { register } from "./register";
 import { removeFCMToken } from "./removeFCMToken";
 import { saveFCMToken } from "./saveFCMToken";
 import { signInWithGoogle } from "./signInWithGoogle";
+import { signInWithDesktopGoogle } from "./signInWithDesktopGoogle";
 import { updateMyProfile } from "./updateMyProfile";
 import { updatePreferences } from "./updatePreferences";
 import { updateUser } from "./updateUser";
@@ -42,6 +43,7 @@ export const usersRouter = router({
   updatePreferences,
   getPreferences,
   signInWithGoogle,
+  signInWithDesktopGoogle,
   login,
   logout,
   register,

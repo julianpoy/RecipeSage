@@ -264,6 +264,15 @@ export const appRoutes: Routes = [
     title: "pages.jobs.tabTitle",
   },
   {
+    path: RouteMap.ServerSettingsPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/server-settings/server-settings.page").then(
+        (m) => m.ServerSettingsPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.serverSettings.tabTitle",
+  },
+  {
     path: RouteMap.ToolsPage.path,
     loadComponent: () =>
       import("./pages/tools/tools.page").then((m) => m.ToolsPage),

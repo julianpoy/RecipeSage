@@ -38,6 +38,7 @@ import { EventName, EventService } from "../../../services/event.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { isServerOverrideAvailable } from "../../../utils/apiHostOverride";
 import { DebugStoreService } from "../../../services/debugStore.service";
 import { DEBUG_DUMP_PUBLIC_KEY } from "../../../utils/localDb/DEBUG_DUMP_PUBLIC_KEY";
 import { downloadBlobpartsAsFile } from "../../../utils/downloadBlobpartsAsFile";
@@ -71,6 +72,7 @@ import {
   logOut,
   person,
   restaurant,
+  server,
   sync,
   tabletLandscape,
   textOutline,
@@ -127,6 +129,7 @@ export class SettingsPage {
   featureFlagKeys = FeatureFlagKeys;
 
   showSplitPaneOption = false;
+  showServerSettings = isServerOverrideAvailable();
 
   language: SupportedLanguages | "navigator" =
     this.preferences[GlobalPreferenceKey.Language] || "navigator";
@@ -153,6 +156,7 @@ export class SettingsPage {
       logOut,
       person,
       restaurant,
+      server,
       sync,
       tabletLandscape,
       textOutline,
@@ -511,5 +515,9 @@ export class SettingsPage {
 
   goToAccount() {
     this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
+  }
+
+  goToServerSettings() {
+    this.navCtrl.navigateForward(RouteMap.ServerSettingsPage.getPath());
   }
 }
