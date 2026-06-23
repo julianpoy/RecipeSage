@@ -1591,7 +1591,7 @@
     "pages.panBakewareConverter.intro.bodyVolume": "Choisissez votre casserole de départ et celle que vous préférez utiliser. Nous adaptons les ingrédients selon la capacité pour que la nouvelle casserole se remplisse au même niveau que l'originale, puis nous vous suggérons une plage de temps de cuisson et une température pour que l'intérieur finisse de cuire en même temps que l'extérieur.",
     "pages.panBakewareConverter.batterType.label": "Qu'est-ce que vous cuisinez ?",
     "pages.panBakewareConverter.batterType.cake": "Gâteau au beurre ou à l'huile",
-    "pages.panBakewareConverter.batterType.spongeFoam": "Génoise ou gâteau éponge",
+    "pages.panBakewareConverter.batterType.spongeFoam": "Génoise ou gâteau mousseux",
     "pages.panBakewareConverter.batterType.quickBread": "Muffins ou pain rapide",
     "pages.panBakewareConverter.batterType.yeastBread": "Pain à la levure",
     "pages.panBakewareConverter.batterType.cheesecake": "Gâteau au fromage ou crème anglaise",
@@ -1672,5 +1672,16 @@
     "pages.recipeDetails.untitled": "Sans titre",
     "pages.panBakewareConverter.bake.noEstimate": "Les moules à Kouglof, à savarin et à muffins présentent des caractéristiques de cuisson trop différentes pour permettre d'estimer de manière fiable le temps et la température de cuisson. Utilisez les paramètres d'origine de votre recette comme point de départ et fiez-vous aux conseils ci-dessous pour vérifier la cuisson.",
     "pages.panBakewareConverter.doneness.label": "Vérifier la cuisson",
-    "pages.panBakewareConverter.doneness.cake": "La cuisson est terminée lorsque la température au cœur atteint environ 93 à 99 °C (200 à 210 °F), ou lorsque la lame d\"'un couteau en ressort propre et que la surface reprend sa forme initiale."
+    "pages.panBakewareConverter.doneness.cake": "La cuisson est terminée lorsque la température au cœur atteint environ 93 à 99 °C ou lorsque la lame d'un couteau en ressort propre et que la surface reprend sa forme initiale.",
+    "pages.panBakewareConverter.doneness.spongeFoam": "C'est cuit lorsque le dessus reprend sa forme initiale et que la lame d'un couteau ressort propre, à environ 93 °C. Laissez refroidir les gâteaux mousseux à l'envers et ne graissez pas le moule.",
+    "pages.panBakewareConverter.doneness.quickBread": "La cuisson est terminée lorsque la température au centre atteint environ 93 °C ou lorsque la lame d'un couteau ressort propre.",
+    "pages.panBakewareConverter.doneness.yeastBread": "Cuit à environ 88 à 99 °C au centre ; les pains allégés demandent une température plus élevée que les pâtes riches et enrichies.",
+    "pages.panBakewareConverter.doneness.cheesecake": "Cuit quand les bords sont figés mais le centre frémit encore, environ 66 °C. La texture se raffermit lors du refroidissement.",
+    "pages.panBakewareConverter.doneness.brownieBar": "La cuisson est terminée lorsque, en retirant la pointe d'un couteau, on constate la présence de quelques miettes humides, et non de pâte humide. Mieux vaut ne pas trop cuire pour obtenir des carrés fondants.",
+    "pages.panBakewareConverter.incomplete.title": "Versez dans les deux moules",
+    "pages.panBakewareConverter.incomplete.body": "Entrez les dimensions des moules de départ et de remplacement pour voir le multiplicateur d'ajustement et les conseils de cuisson.",
+    "pages.panBakewareConverter.substitutions.title": "Autres moules de capacité équivalente",
+    "pages.panBakewareConverter.substitutions.subtitle": "Ces moules ont une capacité comprise entre ±10 % de celle du moule de départ, suffisamment proches pour être interchangeables avec peu ou pas d'ajustement. Cliquez sur l'un d'eux pour le charger comme moule de remplacement.",
+    "pages.panBakewareConverter.methodology.toggle": "Comment fonctionnent les calculs",
+    "pages.panBakewareConverter.methodology.title": "Méthodologie"
 }
