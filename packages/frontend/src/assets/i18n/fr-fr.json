@@ -1683,5 +1683,22 @@
     "pages.panBakewareConverter.substitutions.title": "Autres moules de capacité équivalente",
     "pages.panBakewareConverter.substitutions.subtitle": "Ces moules ont une capacité comprise entre ±10 % de celle du moule de départ, suffisamment proches pour être interchangeables avec peu ou pas d'ajustement. Cliquez sur l'un d'eux pour le charger comme moule de remplacement.",
     "pages.panBakewareConverter.methodology.toggle": "Comment fonctionnent les calculs",
-    "pages.panBakewareConverter.methodology.title": "Méthodologie"
+    "pages.panBakewareConverter.methodology.title": "Méthodologie",
+    "pages.panBakewareConverter.methodology.body1Volume": "Le multiplicateur est le rapport entre les capacités des deux moules : divisez la capacité du moule de remplacement par celle du moule de départ. La capacité est la surface de la base multipliée par la profondeur, convertie en millilitres, de sorte que l'ajustement remplit les deux moules au même niveau et maintient la pâte à à peu près la même épaisseur, ce qui détermine le temps de cuisson.",
+    "pages.panBakewareConverter.methodology.body2": "Pour les moules de forme irrégulière (Kouglof, savarin, muffin), on se fie au rapport de capacité puisque la surface de base n'est pas bien définie. Traitez les conseils de temps de cuisson comme un point de départ approximatif, car ces formes cuisent aussi différemment en raison du trou central ou des empreintes individuelles.",
+    "pages.panBakewareConverter.methodology.body3Doneness": "Nous dire ce que vous faites cuire affine les conseils de cuisson pour cette pâte : la température interne et les indices visuels qui signalent que c'est cuit. Parce que changer de moule rend le temps de cuisson peu fiable, la vérification de cuisson est l'élément auquel faire le plus confiance.",
+    "pages.panBakewareConverter.methodology.tip": "Alternative sans calcul : versez de l'eau dans le moule en utilisant un verre doseur jusqu'à le remplir. La quantité obtenue en additionnant les verres doseurs est la véritable capacité du moule, en tenant compte de toutes les particularités de sa forme.",
+    "pages.panBakewareConverter.methodology.sources": "Les références de capacité des moules proviennent de Sally's Baking Addiction, Joy of Baking et King Arthur Baking. Les conseils de temps de cuisson sont synthétisés à partir de Food Network et Cook's Illustrated.",
+    "pages.panBakewareConverter.reference.toggle": "Moule de référence",
+    "pages.panBakewareConverter.reference.title": "Moules courants",
+    "pages.panBakewareConverter.reference.colPan": "Moule",
+    "pages.panBakewareConverter.reference.colCapacity": "Capacité",
+    "pages.panBakewareConverter.presets.format.round": "{{d}} {{u}} de diamètre × {{h}} {{u}} de hauteur",
+    "pages.panBakewareConverter.presets.format.pie": "{{d}} {{u}} moule à tarte",
+    "pages.panBakewareConverter.presets.format.pieDeepDish": "{{d}} {{u}} moule à tarte haut",
+    "pages.panBakewareConverter.presets.format.square": "{{s}} × {{s}} {{u}} × {{h}} {{u}} hauteur",
+    "pages.panBakewareConverter.presets.format.rectangular": "{{w}} × {{l}} {{u}} × {{h}} {{u}} de hauteur",
+    "pages.panBakewareConverter.presets.format.loaf": "{{l}} × {{w}} {{u}} moule à pain",
+    "pages.panBakewareConverter.presets.format.loafMini": "Petit moule à pain ({{l}} × {{w}} {{u}})",
+    "pages.panBakewareConverter.presets.format.springform": "{{d}} {{u}} moule à charnière"
 }
