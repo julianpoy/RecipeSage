@@ -42,6 +42,7 @@ const defaultCorsAllowlist = [
   "https://windows.recipesage.com",
   "https://android.recipesage.com",
   "https://ios.recipesage.com",
+  "https://desktop-vhost.recipesage.com",
   "https://localhost",
   "capacitor://localhost",
   "moz-extension://*",

@@ -34,6 +34,7 @@ x-common-env: &common-env
   FIREBASE_CREDENTIALS_PATH: /app/.credentials/firebase.json
   RECIPECLIPPER_MINISERVER_URL: http://recipeclipper-miniserver:3000/
   NX_DAEMON: "true"
+  API_PUBLIC_BASE_URL: https://example.com
 
 services:
   proxy:

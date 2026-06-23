@@ -1,0 +1,31 @@
+{
+  "name": "@recipesage/desktop",
+  "version": "1.0.0",
+  "license": "SEE README",
+  "description": "RecipeSage Desktop Application",
+  "main": ".vite/build/main.js",
+  "private": true,
+  "author": {
+    "name": "RecipeSage"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "config": {
+    "forge": "./forge.config.ts"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-deb": "^7.11.2",
+    "@electron-forge/maker-dmg": "^7.11.2",
+    "@electron-forge/maker-rpm": "^7.11.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
+    "@electron-forge/plugin-vite": "^7.11.2",
+    "@reforged/maker-appimage": "^5.2.0",
+    "electron": "^40.2.1"
+  }
+}

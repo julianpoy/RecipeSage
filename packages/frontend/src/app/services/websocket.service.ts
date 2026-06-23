@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { UtilService } from "./util.service";
 import { ServerActionsService } from "./server-actions.service";
 import { GRIP_WS_URL } from "../../environments/environment";
+import { getApiHostOverride } from "../utils/apiHostOverride";
 
 @Injectable({
   providedIn: "root",
@@ -80,8 +81,15 @@ export class WebsocketService {
     let prot = "ws";
     if ((window.location.href as any).indexOf("https") > -1) prot = "wss";
 
-    const connBaseUrl =
-      GRIP_WS_URL || prot + "://" + window.location.hostname + "/grip/ws";
+    const override = getApiHostOverride();
+    let connBaseUrl: string;
+    if (override) {
+      const trimmed = override.replace(/\/$/, "");
+      connBaseUrl = `${trimmed.replace(/^http/, "ws")}/grip/ws`;
+    } else {
+      connBaseUrl =
+        GRIP_WS_URL || prot + "://" + window.location.hostname + "/grip/ws";
+    }
 
     this.connection = new WebSocket(
       connBaseUrl + this.utilService.getTokenQuery(),

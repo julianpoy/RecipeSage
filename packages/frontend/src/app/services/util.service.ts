@@ -204,6 +204,12 @@ export const RouteMap = {
     },
     path: "settings/jobs",
   },
+  ServerSettingsPage: {
+    getPath() {
+      return `/settings/server`;
+    },
+    path: "settings/server",
+  },
   ToolsPage: {
     getPath() {
       return `/tools`;

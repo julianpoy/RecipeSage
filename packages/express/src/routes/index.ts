@@ -1,4 +1,5 @@
 import express from "express";
+import { authRouter } from "./auth";
 import { clipRouter } from "./clip";
 import { imageRouter } from "./image";
 import { importRouter } from "./import";
@@ -12,6 +13,7 @@ import { mlRouter } from "./ml";
 
 const router = express.Router();
 
+router.use("/auth", authRouter);
 router.use("/clip", clipRouter);
 router.use("/images", imageRouter);
 router.use("/import", importRouter);
