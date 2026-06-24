@@ -2180,5 +2180,8 @@
     "components.scaleRecipe.anchorQty": "Menge in {{unit}} (Originalrezept erfordert {{originalQty}})",
     "components.scaleRecipe.anchorQtyNoUnit": "Verfügbare Menge (Originalrezept erfordert {{originalQty}})",
     "services.quickTutorial.nativePrintView.header": "Druckgeeignete Ansicht verfügbar",
-    "services.quickTutorial.nativePrintView.message": "Für eine optimale Druckerfahrung wird die native Druckoption dieser Seite im Optionsmenü oben rechts empfohlen."
+    "services.quickTutorial.nativePrintView.message": "Für eine optimale Druckerfahrung wird die native Druckoption dieser Seite im Optionsmenü oben rechts empfohlen.",
+    "pages.settings.serverSettings": "Servereinstellungen",
+    "pages.serverSettings.tabTitle": "Servereinstellungen – RecipeSage",
+    "pages.serverSettings.title": "Servereinstellungen"
 }
