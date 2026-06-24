@@ -1729,5 +1729,7 @@
     "pages.cookbook.field.includeLabels": "Ajoutez des étiquettes de recettes",
     "pages.cookbook.recipes.title": "Recettes",
     "pages.cookbook.recipes.loading": "Chargement des recettes...",
-    "pages.cookbook.recipes.empty": "Aucune recette n'a encore été ajoutée. Utilisez les boutons « Ajoutez une recette » ou « Ajoutez une étiquette » pour créer votre livre de recettes."
+    "pages.cookbook.recipes.empty": "Aucune recette n'a encore été ajoutée. Utilisez les boutons « Ajoutez une recette » ou « Ajoutez une étiquette » pour créer votre livre de recettes.",
+    "pages.cookbook.recipes.tooMany": "Les livres de recettes peuvent contenir au maximum {{max}} recettes. Veuillez en supprimer certaines pour continuer.",
+    "pages.cookbook.addRecipe.title": "Ajoutez une recette"
 }
