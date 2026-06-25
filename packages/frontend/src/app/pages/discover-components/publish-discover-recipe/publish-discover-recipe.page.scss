@@ -1,0 +1,61 @@
+.edit-contents-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 25vh;
+}
+
+.miniflex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: top;
+
+  margin-left: -10px;
+  margin-right: -10px;
+
+  > * {
+    flex: 1 1 30%;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 260px;
+  }
+}
+
+.miniflex-nutrition {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  column-gap: 20px;
+
+  > .full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+ion-accordion [slot="content"] {
+  overflow: hidden;
+}
+
+.nutrition-badge {
+  margin-right: 8px;
+}
+
+.nutrition-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  padding: 0 16px;
+}
+
+.recipe-input {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.tos {
+  margin-top: 32px;
+}
+
+.tos-link-item {
+  --min-height: 0;
+  font-size: 0.9em;
+}

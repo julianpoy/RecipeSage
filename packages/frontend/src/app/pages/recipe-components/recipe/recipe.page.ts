@@ -70,6 +70,7 @@ import {
   book,
   calendar,
   cloudDownload,
+  compass,
   copy,
   create,
   documentText,
@@ -193,6 +194,7 @@ export class RecipePage {
       book,
       calendar,
       cloudDownload,
+      compass,
       copy,
       create,
       documentText,
@@ -403,6 +405,8 @@ export class RecipePage {
         return this.deleteRecipe();
       case "setLastMadeToday":
         return this.setLastMadeToday();
+      case "publishToDiscover":
+        return this.publishToDiscover();
       default:
         const exhaustiveCheck: never = action;
         throw new Error(`Unhandled action case: ${exhaustiveCheck}`);
@@ -515,6 +519,37 @@ export class RecipePage {
   editRecipe() {
     this.navCtrl.navigateForward(
       RouteMap.EditRecipePage.getPath(this.recipeId),
+    );
+  }
+
+  async publishToDiscover() {
+    if (!this.recipe) return;
+
+    if (this.recipe.source?.trim() || this.recipe.url?.trim()) {
+      const header = await this.translate
+        .get("pages.publishDiscoverRecipe.ineligible.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.publishDiscoverRecipe.ineligible.message")
+        .toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
+
+      const alert = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: okay,
+            role: "cancel",
+          },
+        ],
+      });
+      alert.present();
+      return;
+    }
+
+    this.navCtrl.navigateForward(
+      RouteMap.PublishDiscoverRecipePage.getPath(this.recipe.id),
     );
   }
 

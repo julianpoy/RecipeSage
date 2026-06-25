@@ -46,6 +46,7 @@ model Image {
   user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
   recipeImages  RecipeImage[]
   profileImages UserProfileImage[]
+  discoverRecipeImages DiscoverRecipeImage[]
 
   @@index([userId], map: "images_user_id")
   @@map("Images")
@@ -300,6 +301,7 @@ model Recipe {
   fromUser          User?              @relation("Recipes_fromUserIdToUsers", fields: [fromUserId], references: [id])
   user              User               @relation("Recipes_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
   shoppingListItems ShoppingListItem[]
+  discoverRecipes   DiscoverRecipe[]
   tsv               Unsupported("tsvector")?
 
   @@index([userId], map: "recipes_user_id")
@@ -308,6 +310,125 @@ model Recipe {
   @@index([userId, folder, title], map: "recipes_user_folder_title")
   @@index([tsv], type: Gin, map: "recipes_tsv_idx")
   @@map("Recipes")
+}
+
+model DiscoverRecipe {
+  id             String                @id @default(uuid()) @db.Uuid
+  authorId       String                @db.Uuid
+  sourceRecipeId String?               @db.Uuid
+  title          String                @db.VarChar(255)
+  description    String                @default("")
+  yield          String                @default("")
+  activeTime     String                @default("")
+  totalTime      String                @default("")
+  notes          String                @default("")
+  ingredients    String                @default("")
+  instructions   String                @default("")
+  language       String                @db.VarChar(255)
+  categories     String[]              @default([])
+  approvalState  DiscoverApprovalState @default(PENDING)
+  ratingAverage  Float                 @default(0)
+  ratingCount    Int                   @default(0)
+  saveCount      Int                   @default(0)
+  rankScore      Float                 @default(0)
+  tosAgreedAt    DateTime              @db.Timestamptz(6)
+  tosVersion     String                @db.VarChar(255)
+  nutritionServingSize         String?
+  nutritionCalories            Float?
+  nutritionTotalFat            Float?
+  nutritionSaturatedFat        Float?
+  nutritionTransFat            Float?
+  nutritionPolyunsaturatedFat  Float?
+  nutritionMonounsaturatedFat  Float?
+  nutritionCholesterol         Float?
+  nutritionSodium              Float?
+  nutritionTotalCarbs          Float?
+  nutritionDietaryFiber        Float?
+  nutritionTotalSugars         Float?
+  nutritionAddedSugars         Float?
+  nutritionProtein             Float?
+  nutritionVitaminD            Float?
+  nutritionCalcium             Float?
+  nutritionIron                Float?
+  nutritionPotassium           Float?
+  nutritionOtherDetails        String?
+  modifiedAt     DateTime?             @db.Timestamptz(6)
+  createdAt      DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime              @updatedAt @db.Timestamptz(6)
+  author         User                  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  sourceRecipe   Recipe?               @relation(fields: [sourceRecipeId], references: [id], onDelete: SetNull)
+  discoverRecipeImages DiscoverRecipeImage[]
+  ratings        DiscoverRecipeRating[]
+  saves          DiscoverRecipeSave[]
+  discoverRecipeLinks     DiscoverRecipeLink[] @relation("DiscoverRecipeLinks_discoverRecipeId")
+  linkedByDiscoverRecipes DiscoverRecipeLink[] @relation("DiscoverRecipeLinks_linkedDiscoverRecipeId")
+  tsv            Unsupported("tsvector")?
+
+  @@index([authorId], map: "discover_recipes_author_id")
+  @@index([approvalState, rankScore(sort: Desc)], map: "discover_recipes_approval_state_rank_score")
+  @@index([language], map: "discover_recipes_language")
+  @@index([categories], type: Gin, map: "discover_recipes_categories_idx")
+  @@index([tsv], type: Gin, map: "discover_recipes_tsv_idx")
+  @@map("Discover_Recipes")
+}
+
+model DiscoverRecipeLink {
+  id                     String         @id @default(uuid()) @db.Uuid
+  discoverRecipeId       String         @db.Uuid
+  linkedDiscoverRecipeId String         @db.Uuid
+  createdAt              DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime       @updatedAt @db.Timestamptz(6)
+  discoverRecipe         DiscoverRecipe @relation("DiscoverRecipeLinks_discoverRecipeId", fields: [discoverRecipeId], references: [id], onDelete: Cascade)
+  linkedDiscoverRecipe   DiscoverRecipe @relation("DiscoverRecipeLinks_linkedDiscoverRecipeId", fields: [linkedDiscoverRecipeId], references: [id], onDelete: Cascade)
+
+  @@unique([discoverRecipeId, linkedDiscoverRecipeId], map: "discover_recipe_links_pair_uk")
+  @@index([discoverRecipeId], map: "discover_recipe_links_discover_recipe_id")
+  @@index([linkedDiscoverRecipeId], map: "discover_recipe_links_linked_discover_recipe_id")
+  @@map("Discover_Recipe_Links")
+}
+
+model DiscoverRecipeImage {
+  id               String         @id @default(uuid()) @db.Uuid
+  discoverRecipeId String         @db.Uuid
+  imageId          String         @db.Uuid
+  order            Int
+  createdAt        DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime       @updatedAt @db.Timestamptz(6)
+  discoverRecipe   DiscoverRecipe @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
+  image            Image          @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@index([discoverRecipeId], map: "discover_recipe__images_discover_recipe_id")
+  @@index([imageId], map: "discover_recipe__images_image_id")
+  @@map("Discover_Recipe_Images")
+}
+
+model DiscoverRecipeRating {
+  id               String         @id @default(uuid()) @db.Uuid
+  discoverRecipeId String         @db.Uuid
+  userId           String         @db.Uuid
+  rating           Int
+  createdAt        DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime       @updatedAt @db.Timestamptz(6)
+  discoverRecipe   DiscoverRecipe @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([discoverRecipeId, userId], map: "Discover_Recipe_Ratings_discoverRecipeId_userId_uk")
+  @@index([userId], map: "discover_recipe__ratings_user_id")
+  @@map("Discover_Recipe_Ratings")
+}
+
+model DiscoverRecipeSave {
+  id               String         @id @default(uuid()) @db.Uuid
+  discoverRecipeId String         @db.Uuid
+  userId           String         @db.Uuid
+  createdAt        DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime       @updatedAt @db.Timestamptz(6)
+  discoverRecipe   DiscoverRecipe @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([discoverRecipeId, userId], map: "Discover_Recipe_Saves_discoverRecipeId_userId_uk")
+  @@index([userId, discoverRecipeId], map: "discover_recipe__saves_user_id_discover_recipe_id")
+  @@map("Discover_Recipe_Saves")
 }
 
 model Session {
@@ -466,6 +587,9 @@ model User {
   jobs                      Job[]
   stripeEvents              StripeEvent[]
   creditLogs                UserCreditLog[]
+  discoverRecipes           DiscoverRecipe[]
+  discoverRecipeRatings     DiscoverRecipeRating[]
+  discoverRecipeSaves       DiscoverRecipeSave[]
 
   @@map("Users")
 }
@@ -510,4 +634,10 @@ enum JobStatus {
   RUN
   FAIL
   SUCCESS
+}
+
+enum DiscoverApprovalState {
+  PENDING
+  ACTIVE
+  SHADOWBANNED
 }

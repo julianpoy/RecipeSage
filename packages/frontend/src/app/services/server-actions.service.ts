@@ -12,11 +12,13 @@ import { MlActionsService } from "./server-actions/ml-actions.service";
 import { ImagesActionsService } from "./server-actions/images-actions.service";
 import { PaymentsActionsService } from "./server-actions/payments-actions.service";
 import { MessagesActionsService } from "./server-actions/messages-actions.service";
+import { DiscoverActionsService } from "./server-actions/discover-actions.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ServerActionsService {
+  discover = inject(DiscoverActionsService);
   recipes = inject(RecipesActionsService);
   shoppingLists = inject(ShoppingListsActionsService);
   mealPlans = inject(MealPlansActionsService);

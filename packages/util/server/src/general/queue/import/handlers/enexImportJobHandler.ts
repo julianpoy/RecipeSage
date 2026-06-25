@@ -28,7 +28,7 @@ import { mkdtempDisposable, writeFile } from "fs/promises";
 import { createReadStream } from "fs";
 import { randomUUID } from "crypto";
 import path from "path";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 import { ImportTooManyRecipesError } from "../../../jobs/jobErrors";
@@ -128,7 +128,7 @@ const processNote = async (
 
 export async function enexImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];

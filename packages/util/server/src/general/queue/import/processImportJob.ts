@@ -1,5 +1,5 @@
 import type { JobSummary } from "@recipesage/prisma";
-import type { JobQueueItem } from "../JobQueueItem";
+import type { StandardJobQueueItem } from "../JobQueueItem";
 import { JobType } from "@recipesage/prisma";
 import { urlsImportJobHandler } from "./handlers/urlsImportJobHandler";
 import { pepperplateImportJobHandler } from "./handlers/pepperplateImportJobHandler";
@@ -22,7 +22,7 @@ export const IMPORT_JOB_STEP_COUNT = 3;
 
 export const processImportJob = async (
   job: JobSummary,
-  jobQueueItem: JobQueueItem,
+  jobQueueItem: StandardJobQueueItem,
 ) => {
   if (job.type !== JobType.IMPORT) {
     throw new Error("Import processor received a non-import job");

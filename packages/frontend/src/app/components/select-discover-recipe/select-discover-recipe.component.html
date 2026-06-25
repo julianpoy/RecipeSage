@@ -1,0 +1,73 @@
+<div>
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    (ionInput)="onSearchInputChange()"
+    placeholder="{{ 'components.selectDiscoverRecipe.search' | translate }}"
+    autocomplete="off"
+  ></ion-searchbar>
+  <div class="ion-padding-start ion-padding-end">
+    @if (searchText.length) {
+      <div class="results-list-container">
+        <div class="results-list">
+          @for (recipe of recipes; track recipeTrackBy($index, recipe)) {
+            <ion-item (click)="select(recipe)" button>
+              @if (recipe.images.length) {
+                <ion-avatar slot="start">
+                  <img src="{{ recipe.images[0].location }}" />
+                </ion-avatar>
+              } @else {
+                <ion-avatar slot="start">
+                  <img src="assets/imgs/logo_green_padded.png" />
+                </ion-avatar>
+              }
+              <ion-label>
+                <h2 dir="auto">{{ recipe.title }}</h2>
+                <p class="author">
+                  {{
+                    "pages.discover.recipe.by"
+                      | translate: { handle: authorDisplay(recipe.author) }
+                  }}
+                </p>
+                @if (recipe.description) {
+                  <p dir="auto">{{ recipe.description }}</p>
+                }
+              </ion-label>
+            </ion-item>
+          }
+          @if (searching) {
+            <ion-item>
+              <ion-spinner slot="start"></ion-spinner>
+              <ion-label>
+                <h2>
+                  {{
+                    "components.selectDiscoverRecipe.searching"
+                      | translate: { searchText: searchText }
+                  }}
+                </h2>
+              </ion-label>
+            </ion-item>
+          }
+          @if (recipes.length === 0 && searchText.length > 0 && !searching) {
+            <ion-item>
+              <ion-icon name="folder-open" slot="start"></ion-icon>
+              <ion-label>
+                <h2>
+                  @if (lastQueryWasId) {
+                    {{
+                      "components.selectDiscoverRecipe.idNotFound" | translate
+                    }}
+                  } @else {
+                    {{
+                      "components.selectDiscoverRecipe.null"
+                        | translate: { searchText: searchText }
+                    }}
+                  }
+                </h2>
+              </ion-label>
+            </ion-item>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

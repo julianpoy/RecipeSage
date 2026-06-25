@@ -15,13 +15,35 @@ import {
   jobErrorToResultCode,
 } from "../jobs/getJobResultCode";
 import { onJobUpdate } from "../jobs/updateJobProgress";
+import { moderateDiscoverRecipe } from "../../ml/moderateDiscoverRecipe";
 
 export const processWorkerJob = async (
   args: SandboxedJob<JobQueueItem, unknown>,
 ) => {
+  if ("discoverModeration" in args.data) {
+    const { discoverRecipeId } = args.data.discoverModeration;
+    try {
+      await moderateDiscoverRecipe(discoverRecipeId);
+    } catch (e) {
+      Sentry.captureException(e, {
+        extra: {
+          discoverRecipeId,
+        },
+      });
+      console.error(e);
+      throw e;
+    }
+    return;
+  }
+
+  if (!args.data.jobId) {
+    throw new Error("Job queue item is missing a jobId");
+  }
+  const jobId = args.data.jobId;
+
   const verify = await prisma.job.findUniqueOrThrow({
     where: {
-      id: args.data.jobId,
+      id: jobId,
     },
     ...jobSummary,
   });
@@ -36,7 +58,7 @@ export const processWorkerJob = async (
 
   const _job = await prisma.job.update({
     where: {
-      id: args.data.jobId,
+      id: jobId,
       status: JobStatus.CREATE,
     },
     data: {

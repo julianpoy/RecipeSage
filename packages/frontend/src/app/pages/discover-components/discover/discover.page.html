@@ -1,0 +1,141 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ "pages.discover.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="discover-page">
+    <div class="search-container">
+      <ion-searchbar
+        class="searchbar"
+        [value]="searchTerm"
+        placeholder="{{ 'pages.discover.search.placeholder' | translate }}"
+        enterkeyhint="search"
+        inputmode="search"
+        type="search"
+        (ionClear)="onSearchChange('')"
+        (keydown.enter)="searchFieldEnter($event)"
+      ></ion-searchbar>
+      <ion-button fill="clear" size="small" (click)="openFilters($event)">
+        <ion-icon name="options" slot="start"></ion-icon>
+        {{ "pages.discover.filters.title" | translate }}
+      </ion-button>
+    </div>
+
+    @if (preferences[preferenceKeys.ViewType] === "tiles") {
+      <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
+        <div class="recipe-group" [class.single-col]="tileColCount === 1">
+          @for (recipe of recipeGroup; track recipe.id) {
+            <div class="recipe-card" (click)="openRecipe(recipe)" button>
+              @if (recipe.images.length) {
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  [alt]="recipe.title"
+                  [src]="recipe.images[0].location"
+                />
+              } @else {
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  alt=""
+                  class="no-image"
+                  src="assets/imgs/logo_green.png"
+                />
+              }
+              <div class="recipe-card-content">
+                <h2 dir="auto" [title]="recipe.title">{{ recipe.title }}</h2>
+                <p class="description" dir="auto" [title]="recipe.description">
+                  {{ recipe.description }}
+                </p>
+                <p class="author">
+                  {{
+                    "pages.discover.recipe.by"
+                      | translate: { handle: authorDisplay(recipe.author) }
+                  }}
+                </p>
+                <div class="rating-line">
+                  @if (recipe.ratingCount) {
+                    <rating
+                      [rating]="recipe.ratingAverage"
+                      [enableEdit]="false"
+                    ></rating>
+                    <span>{{
+                      "pages.discoverRecipe.ratingCount"
+                        | translate: { count: recipe.ratingCount }
+                    }}</span>
+                  }
+                  <span>{{
+                    "pages.discover.recipe.saves"
+                      | translate: { count: recipe.saveCount }
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div *uiScroll="let recipe of datasource" class="recipe-item" button>
+        <div class="recipe-item-clickable" (click)="openRecipe(recipe)">
+          @if (recipe.images.length) {
+            <img
+              loading="lazy"
+              decoding="async"
+              [alt]="recipe.title"
+              [src]="recipe.images[0].location"
+            />
+          } @else {
+            <img
+              loading="lazy"
+              decoding="async"
+              alt=""
+              class="no-image"
+              src="assets/imgs/logo_green.png"
+            />
+          }
+          <div class="recipe-item-content">
+            <h2 dir="auto" [title]="recipe.title">{{ recipe.title }}</h2>
+            <p class="description" dir="auto" [title]="recipe.description">
+              {{ recipe.description }}
+            </p>
+            <p class="author">
+              {{
+                "pages.discover.recipe.by"
+                  | translate: { handle: authorDisplay(recipe.author) }
+              }}
+            </p>
+            <div class="rating-line">
+              @if (recipe.ratingCount) {
+                <rating
+                  [rating]="recipe.ratingAverage"
+                  [enableEdit]="false"
+                ></rating>
+                <span>{{
+                  "pages.discoverRecipe.ratingCount"
+                    | translate: { count: recipe.ratingCount }
+                }}</span>
+              }
+              <span>{{
+                "pages.discover.recipe.saves"
+                  | translate: { count: recipe.saveCount }
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (loadedAny && recipes.length === 0) {
+      <div class="discover-empty">
+        <ion-icon name="search" class="big-icon"></ion-icon>
+        <h2>{{ "pages.discover.empty.title" | translate }}</h2>
+        <p>{{ "pages.discover.empty.message" | translate }}</p>
+      </div>
+    }
+  </div>
+</ion-content>

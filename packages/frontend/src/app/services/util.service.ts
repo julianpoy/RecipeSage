@@ -162,6 +162,42 @@ export const RouteMap = {
     },
     path: "recipe/:recipeId/cook",
   },
+  DiscoverPage: {
+    getPath(filters?: { categories?: string[] }) {
+      let url = `/discover`;
+      if (filters?.categories?.length) {
+        url += `?categories=${filters.categories
+          .map((category) => encodeURIComponent(category))
+          .join(",")}`;
+      }
+      return url;
+    },
+    path: "discover",
+  },
+  DiscoverRecipePage: {
+    getPath(discoverRecipeId: string) {
+      return `/discover/${discoverRecipeId}`;
+    },
+    path: "discover/:discoverRecipeId",
+  },
+  PublishDiscoverRecipePage: {
+    getPath(recipeId: string) {
+      return `/recipe/${recipeId}/publish`;
+    },
+    path: "recipe/:recipeId/publish",
+  },
+  EditDiscoverRecipePage: {
+    getPath(discoverRecipeId: string) {
+      return `/discover/${discoverRecipeId}/edit`;
+    },
+    path: "discover/:discoverRecipeId/edit",
+  },
+  DiscoverRecipePageCook: {
+    getPath(discoverRecipeId: string) {
+      return `/discover/${discoverRecipeId}/cook`;
+    },
+    path: "discover/:discoverRecipeId/cook",
+  },
   SettingsPage: {
     getPath() {
       return `/settings`;

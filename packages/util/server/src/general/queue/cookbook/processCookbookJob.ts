@@ -1,4 +1,4 @@
-import type { JobQueueItem } from "../JobQueueItem";
+import type { StandardJobQueueItem } from "../JobQueueItem";
 import * as Sentry from "@sentry/node";
 import {
   JobStatus,
@@ -25,7 +25,7 @@ const COOKBOOK_JOB_STEP_COUNT = 1;
 
 export const processCookbookJob = async (
   job: JobSummary,
-  _jobQueueItem: JobQueueItem,
+  _jobQueueItem: StandardJobQueueItem,
 ) => {
   if (job.type !== JobType.COOKBOOK) {
     throw new Error("Cookbook processor received a non-cookbook job");

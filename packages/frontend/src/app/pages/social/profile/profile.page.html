@@ -135,6 +135,29 @@
           </ion-label>
         </null-state>
       }
+      @if (!isSelfHost && publishedRecipes.length) {
+        <br />
+        <ion-item lines="none">
+          <ion-icon name="compass" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.profile.publishedRecipes" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-list>
+          @for (publishedRecipe of publishedRecipes; track publishedRecipe.id) {
+            <ion-item button (click)="openDiscoverRecipe(publishedRecipe)">
+              @if (publishedRecipe.images.length) {
+                <ion-avatar slot="start">
+                  <img [src]="publishedRecipe.images[0].location" />
+                </ion-avatar>
+              }
+              <ion-label class="ion-text-wrap">
+                {{ publishedRecipe.title }}
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      }
     </div>
   }
 </ion-content>

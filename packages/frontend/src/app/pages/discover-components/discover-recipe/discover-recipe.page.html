@@ -1,0 +1,601 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ "pages.discoverRecipe.pageTitle" | translate }}</ion-title>
+
+    @if (recipe) {
+      <ion-buttons slot="end">
+        <ion-button (click)="presentPopover($event)">
+          <ion-icon name="options" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (notFound) {
+    <div class="not-found">
+      <p>{{ "pages.discoverRecipe.notFound" | translate }}</p>
+    </div>
+  }
+
+  @if (recipe) {
+    <div class="page-wrapper">
+      <ion-item lines="none">
+        @if (recipe.images.length) {
+          <ion-thumbnail
+            class="ion-margin-top"
+            slot="start"
+            (click)="openImageViewer()"
+          >
+            <img src="{{ recipe.images[0].location }}" />
+          </ion-thumbnail>
+        }
+        <ion-label dir="auto">
+          <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
+          <ion-grid class="meta">
+            <ion-row class="ion-justify-content-start">
+              <ion-col class="ion-no-padding" size="auto">
+                <p class="ion-text-wrap">
+                  <b>{{ "pages.discoverRecipe.author" | translate }}: </b>
+                  @if (recipe.author.handle) {
+                    <a
+                      dir="auto"
+                      (click)="openAuthorProfile(recipe.author.handle)"
+                      >{{ atHandle(recipe.author.handle) }}</a
+                    >
+                  } @else {
+                    <span dir="auto">{{ recipe.author.name }}</span>
+                  }
+                </p>
+              </ion-col>
+              <ion-col class="ion-no-padding" size="auto">
+                <p class="rating-meta">
+                  @if (recipe.ratingCount) {
+                    <rating [rating]="recipe.ratingAverage"></rating>
+                    <span>{{
+                      "pages.discoverRecipe.ratingCount"
+                        | translate: { count: recipe.ratingCount }
+                    }}</span>
+                  }
+                  <span>{{
+                    "pages.discover.recipe.saves"
+                      | translate: { count: recipe.saveCount }
+                  }}</span>
+                </p>
+              </ion-col>
+              @if (recipe.activeTime) {
+                <ion-col class="ion-no-padding" size="auto">
+                  <p class="ion-text-wrap">
+                    <b>{{ "pages.recipeDetails.activeTime" | translate }}: </b
+                    >{{ recipe.activeTime }}
+                  </p>
+                </ion-col>
+              }
+              @if (recipe.totalTime) {
+                <ion-col class="ion-no-padding" size="auto">
+                  <p class="ion-text-wrap">
+                    <b>{{ "pages.recipeDetails.totalTime" | translate }}: </b
+                    >{{ recipe.totalTime }}
+                  </p>
+                </ion-col>
+              }
+              @if (recipe.yield) {
+                <ion-col class="ion-no-padding" size="auto">
+                  <p class="ion-text-wrap">
+                    <b>{{ "pages.recipeDetails.yield" | translate }}: </b
+                    >{{ recipe.yield }}
+                  </p>
+                </ion-col>
+              }
+            </ion-row>
+          </ion-grid>
+          <p dir="auto" class="ion-text-wrap">{{ recipe.description }}</p>
+        </ion-label>
+      </ion-item>
+
+      <br />
+
+      @if (isLoggedIn()) {
+        <div class="discover-action-row rate-block">
+          <span class="rate-label"
+            >{{ "pages.discoverRecipe.rateThis" | translate }}:</span
+          >
+          <rating
+            [rating]="recipe.myRating"
+            [enableEdit]="true"
+            (ratingChanged)="rate($event)"
+          ></rating>
+        </div>
+      }
+
+      <div class="discover-action-row actions">
+        @if (isLoggedIn()) {
+          <ion-button (click)="save()">
+            <ion-icon name="bookmark" slot="start"></ion-icon>
+            {{ "pages.discoverRecipe.save" | translate }}
+          </ion-button>
+        } @else {
+          <ion-button (click)="authAndSave()">
+            <ion-icon name="bookmark" slot="start"></ion-icon>
+            {{ "pages.discoverRecipe.save" | translate }}
+          </ion-button>
+        }
+      </div>
+
+      <br />
+      <div class="ingredientsInstructionsGrid">
+        <div class="ingredientsCol">
+          <ion-item lines="none">
+            <ion-icon name="book" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.recipeDetails.ingredients" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item class="ingredients ion-text-wrap" lines="none">
+            <ion-label dir="auto">
+              @for (
+                ingredient of ingredients;
+                track ingredient;
+                let ingredientIdx = $index
+              ) {
+                <p
+                  [innerHTML]="ingredient.htmlContent"
+                  dir="auto"
+                  class="ingredient ion-text-wrap"
+                  [ngClass]="{
+                    header: ingredient.isHeader,
+                    ingredientContent: !ingredient.isHeader,
+                    complete: getIngredientComplete(ingredientIdx),
+                  }"
+                  (click)="ingredientClicked(ingredient, ingredientIdx)"
+                ></p>
+              }
+              <p>
+                <a class="scale" (click)="changeScale()"
+                  >{{
+                    "pages.recipeDetails.scaleStatus"
+                      | translate: { scale: scale }
+                  }}
+                  ·
+                  {{ unitSystemLabelKey | translate }}</a
+                >
+              </p>
+            </ion-label>
+          </ion-item>
+        </div>
+        <div class="instructionsCol">
+          <ion-item lines="none">
+            <ion-icon name="list" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.recipeDetails.instructions" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item class="instructions ion-text-wrap" lines="none">
+            <ion-label dir="auto">
+              @for (
+                instruction of instructions;
+                track instruction;
+                let instructionIdx = $index
+              ) {
+                <p class="instruction ion-text-wrap" dir="auto">
+                  @if (instruction.isHeader) {
+                    <span
+                      class="sectionHeader"
+                      [innerHTML]="instruction.htmlContent"
+                    ></span>
+                  } @else {
+                    <span
+                      (click)="instructionClicked(instruction, instructionIdx)"
+                      [ngClass]="{
+                        complete: getInstructionComplete(instructionIdx),
+                      }"
+                    >
+                      <b>{{ instruction.count }} &nbsp;</b>
+                      <span
+                        class="instructionContent"
+                        [innerHTML]="instruction.htmlContent"
+                      ></span>
+                    </span>
+                  }
+                </p>
+              }
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+
+      @if (notes) {
+        <div class="notes ion-margin-top">
+          <ion-item lines="none">
+            <ion-icon name="document-text" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.recipeDetails.notes" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none" class="ion-text-wrap">
+            <ion-label dir="auto">
+              @for (note of notes; track note) {
+                <p
+                  dir="auto"
+                  [innerHTML]="note.htmlContent"
+                  [ngClass]="{ header: note.isHeader }"
+                  class="ion-text-wrap"
+                ></p>
+              }
+            </ion-label>
+          </ion-item>
+        </div>
+      }
+
+      @if (hasNutrition()) {
+        <div class="nutrition ion-margin-top">
+          <ion-item lines="none">
+            <ion-icon name="fitness" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.recipeDetails.nutrition" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          @if (recipe.nutritionServingSize) {
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionServingSize" | translate
+                    }}:
+                  </b>
+                  {{ recipe.nutritionServingSize }}
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap nutrition-fields">
+              @if (
+                recipe.nutritionCalories !== null &&
+                recipe.nutritionCalories !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionCalories" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.kcal"
+                      | translate: { value: recipe.nutritionCalories }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionTotalFat !== null &&
+                recipe.nutritionTotalFat !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionTotalFat" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionTotalFat }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionSaturatedFat !== null &&
+                recipe.nutritionSaturatedFat !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionSaturatedFat" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionSaturatedFat }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionTransFat !== null &&
+                recipe.nutritionTransFat !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionTransFat" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionTransFat }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionPolyunsaturatedFat !== null &&
+                recipe.nutritionPolyunsaturatedFat !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionPolyunsaturatedFat"
+                        | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionPolyunsaturatedFat }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionMonounsaturatedFat !== null &&
+                recipe.nutritionMonounsaturatedFat !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionMonounsaturatedFat"
+                        | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionMonounsaturatedFat }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionCholesterol !== null &&
+                recipe.nutritionCholesterol !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionCholesterol" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.mg"
+                      | translate: { value: recipe.nutritionCholesterol }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionSodium !== null &&
+                recipe.nutritionSodium !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionSodium" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.mg"
+                      | translate: { value: recipe.nutritionSodium }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionTotalCarbs !== null &&
+                recipe.nutritionTotalCarbs !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionTotalCarbs" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionTotalCarbs }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionDietaryFiber !== null &&
+                recipe.nutritionDietaryFiber !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionDietaryFiber" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionDietaryFiber }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionTotalSugars !== null &&
+                recipe.nutritionTotalSugars !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionTotalSugars" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionTotalSugars }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionAddedSugars !== null &&
+                recipe.nutritionAddedSugars !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionAddedSugars" | translate
+                    }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionAddedSugars }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionProtein !== null &&
+                recipe.nutritionProtein !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionProtein" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.g"
+                      | translate: { value: recipe.nutritionProtein }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionVitaminD !== null &&
+                recipe.nutritionVitaminD !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionVitaminD" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.mcg"
+                      | translate: { value: recipe.nutritionVitaminD }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionCalcium !== null &&
+                recipe.nutritionCalcium !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionCalcium" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.mg"
+                      | translate: { value: recipe.nutritionCalcium }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionIron !== null &&
+                recipe.nutritionIron !== undefined
+              ) {
+                <p>
+                  <b>{{ "pages.recipeDetails.nutritionIron" | translate }}: </b>
+                  {{
+                    "pages.recipeDetails.units.mg"
+                      | translate: { value: recipe.nutritionIron }
+                  }}
+                </p>
+              }
+              @if (
+                recipe.nutritionPotassium !== null &&
+                recipe.nutritionPotassium !== undefined
+              ) {
+                <p>
+                  <b
+                    >{{ "pages.recipeDetails.nutritionPotassium" | translate }}:
+                  </b>
+                  {{
+                    "pages.recipeDetails.units.mg"
+                      | translate: { value: recipe.nutritionPotassium }
+                  }}
+                </p>
+              }
+            </ion-label>
+          </ion-item>
+          @if (recipe.nutritionOtherDetails) {
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">
+                <p>
+                  <b
+                    >{{
+                      "pages.recipeDetails.nutritionOtherDetails" | translate
+                    }}:
+                  </b>
+                </p>
+                <p class="ion-text-wrap pre">
+                  {{ recipe.nutritionOtherDetails }}
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+        </div>
+      }
+
+      @if (recipe.categories.length) {
+        <br />
+        <div>
+          <ion-item class="labels ion-text-wrap" lines="none">
+            <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.discoverRecipe.categories" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <div class="label-group-container ion-padding-start ion-margin-start">
+            <div class="label-group">
+              <div>
+                @for (category of recipe.categories; track category) {
+                  <ion-chip
+                    class="clickable"
+                    (click)="openCategory(category)"
+                    >{{ categoryLabelKeys[category] | translate }}</ion-chip
+                  >
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (recipe.linkedRecipes.length) {
+        <br />
+        <div class="linked-recipes">
+          <ion-item lines="none">
+            <ion-icon name="link" slot="start" size="large"></ion-icon>
+            <ion-label class="section-title">
+              <p>{{ "pages.discoverRecipe.linkedRecipes" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          @for (linkedRecipe of recipe.linkedRecipes; track linkedRecipe.id) {
+            <ion-item
+              (click)="openLinkedRecipe(linkedRecipe.id)"
+              lines="none"
+              button
+            >
+              @if (linkedRecipe.images.length) {
+                <ion-avatar slot="start">
+                  <img src="{{ linkedRecipe.images[0].location }}" />
+                </ion-avatar>
+              } @else {
+                <ion-avatar slot="start">
+                  <img src="assets/imgs/logo_green_padded.png" />
+                </ion-avatar>
+              }
+              <ion-label dir="auto">
+                <h2>{{ linkedRecipe.title }}</h2>
+              </ion-label>
+            </ion-item>
+          }
+        </div>
+      }
+
+      @if (recipe.modifiedAt) {
+        <p class="discover-action-row modified">
+          {{
+            "pages.discoverRecipe.modified"
+              | translate: { date: formatDate(recipe.modifiedAt) }
+          }}
+        </p>
+      }
+    </div>
+  }
+</ion-content>

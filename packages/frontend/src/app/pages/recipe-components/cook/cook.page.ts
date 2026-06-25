@@ -24,7 +24,6 @@ import {
   type UnitSystem,
 } from "../../../modals/scale-recipe/scale-recipe.component";
 import { System } from "unitz-ts";
-import type { RecipeSummary } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -42,6 +41,15 @@ import {
 } from "@ionic/angular/standalone";
 import { close } from "ionicons/icons";
 import { addIcons } from "ionicons";
+
+interface CookableRecipe {
+  title: string;
+  yield: string;
+  ingredients: string;
+  instructions: string;
+  notes: string;
+  images: { location: string; order: number }[];
+}
 
 @Component({
   standalone: true,
@@ -82,7 +90,8 @@ export class CookPage {
   } = null;
 
   loading = true;
-  recipe: RecipeSummary | null = null;
+  recipe: CookableRecipe | null = null;
+  isDiscover = false;
   recipeId = "";
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
@@ -95,8 +104,15 @@ export class CookPage {
     this.applyRouteParams();
   }
 
+  private get routeParamName() {
+    return this.route.snapshot.data["isDiscover"]
+      ? "discoverRecipeId"
+      : "recipeId";
+  }
+
   private applyRouteParams() {
-    const recipeId = this.route.snapshot.paramMap.get("recipeId");
+    this.isDiscover = !!this.route.snapshot.data["isDiscover"];
+    const recipeId = this.route.snapshot.paramMap.get(this.routeParamName);
     if (!recipeId) {
       this.navCtrl.navigateBack(RouteMap.HomePage.getPath("main"));
       throw new Error("No recipeId was provided");
@@ -108,7 +124,9 @@ export class CookPage {
   }
 
   ionViewWillEnter() {
-    const snapshotRecipeId = this.route.snapshot.paramMap.get("recipeId");
+    const snapshotRecipeId = this.route.snapshot.paramMap.get(
+      this.routeParamName,
+    );
     if (snapshotRecipeId && snapshotRecipeId !== this.recipeId) {
       this.applyRouteParams();
     }
@@ -128,13 +146,11 @@ export class CookPage {
 
   async load() {
     this.loading = true;
-    const response = await this.serverActionsService.recipes.getRecipe({
-      id: this.recipeId,
-    });
+    this.recipe = this.isDiscover
+      ? await this.loadDiscoverRecipe()
+      : await this.loadRecipe();
     this.loading = false;
-    if (!response) return;
-
-    this.recipe = response;
+    if (!this.recipe) return;
 
     const title = await this.translate
       .get("generic.labeledPageTitle", {
@@ -144,6 +160,46 @@ export class CookPage {
     this.titleService.setTitle(title);
 
     this.applyScale();
+  }
+
+  private async loadRecipe(): Promise<CookableRecipe | null> {
+    const response = await this.serverActionsService.recipes.getRecipe({
+      id: this.recipeId,
+    });
+    if (!response) return null;
+
+    return {
+      title: response.title,
+      yield: response.yield,
+      ingredients: response.ingredients,
+      instructions: response.instructions,
+      notes: response.notes,
+      images: response.recipeImages.map((recipeImage) => ({
+        location: recipeImage.image.location,
+        order: recipeImage.order,
+      })),
+    };
+  }
+
+  private async loadDiscoverRecipe(): Promise<CookableRecipe | null> {
+    const response = await this.serverActionsService.discover.getDiscoverRecipe(
+      {
+        id: this.recipeId,
+      },
+    );
+    if (!response) return null;
+
+    return {
+      title: response.title,
+      yield: response.yield,
+      ingredients: response.ingredients,
+      instructions: response.instructions,
+      notes: response.notes,
+      images: response.images.map((image) => ({
+        location: image.location,
+        order: image.order,
+      })),
+    };
   }
 
   applyScale() {
@@ -182,9 +238,9 @@ export class CookPage {
 
   private getInlineImageRefs(): { url: string }[] {
     if (!this.recipe) return [];
-    return [...this.recipe.recipeImages]
+    return [...this.recipe.images]
       .sort((a, b) => a.order - b.order)
-      .map((ri) => ({ url: ri.image.location }));
+      .map((image) => ({ url: image.location }));
   }
 
   async changeScale() {
@@ -250,7 +306,11 @@ export class CookPage {
   }
 
   exitCookMode() {
-    this.navCtrl.navigateBack(RouteMap.RecipePage.getPath(this.recipeId));
+    this.navCtrl.navigateBack(
+      this.isDiscover
+        ? RouteMap.DiscoverRecipePage.getPath(this.recipeId)
+        : RouteMap.RecipePage.getPath(this.recipeId),
+    );
   }
 
   setupWakeLock() {
