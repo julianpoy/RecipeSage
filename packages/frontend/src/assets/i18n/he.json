@@ -2078,5 +2078,6 @@
     "components.scaleRecipe.anchorQtyNoUnit": "הכמות שיש לי (המתכון המקורי דורש {{originalQty}})",
     "generic.moreInfo": "מידע נוסף",
     "webextension.action.welcomeHeading": "ברוכים הבאים!",
-    "webextension.action.welcomeSubtitle": "התנתקת מהמערכת."
+    "webextension.action.welcomeSubtitle": "התנתקת מהמערכת.",
+    "pages.cook.loading": "טוען מתכון..."
 }
