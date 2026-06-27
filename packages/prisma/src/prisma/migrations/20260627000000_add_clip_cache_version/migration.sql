@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "ClipCache" ADD COLUMN "clipVersion" INTEGER NOT NULL DEFAULT 0;

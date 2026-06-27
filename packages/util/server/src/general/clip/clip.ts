@@ -1,21 +1,27 @@
 import { createHash } from "crypto";
 import { AbortError } from "node-fetch";
 import * as Sentry from "@sentry/node";
-import he from "he";
 import { Prisma, prisma } from "@recipesage/prisma";
-import { fetchURL } from "./fetch";
-import { StandardizedRecipeImportEntry } from "../db";
-import { metrics } from "./metrics";
+import { fetchURL } from "../fetch";
+import { StandardizedRecipeImportEntry } from "../../db";
+import { metrics } from "../metrics";
 import {
   ocrImagesToRecipe,
   pdfToRecipe,
   textToRecipe,
   TextToRecipeInputType,
-} from "../ml";
+} from "../../ml";
 import {
-  htmlToBodyInnerText,
-  htmlToRecipeViaRecipeClipper,
-} from "./clipHelpers";
+  extractStructuredData,
+  extractPageText,
+  PageText,
+} from "./htmlExtract";
+import { htmlmetaparserToRecipe } from "./htmlmetaparserToRecipe";
+import { isRecipeGrounded } from "./isRecipeGrounded";
+import { normalizeClipUrl } from "./normalizeClipUrl";
+import type { Result } from "htmlmetaparser";
+
+const CLIP_CACHE_VERSION = 1;
 
 const hashUrl = (url: string) => createHash("sha256").update(url).digest();
 
@@ -28,41 +34,34 @@ const isBotChallengePage = (html: string): boolean => {
   );
 };
 
-const clipRecipeHtmlWithJSDOM = async (document: string) => {
-  if (isBotChallengePage(document)) return undefined;
+const isCompleteRecipe = (entry: StandardizedRecipeImportEntry): boolean =>
+  !!(
+    entry.recipe.title &&
+    entry.recipe.ingredients &&
+    entry.recipe.instructions
+  );
 
+const hasUsableContent = (entry: StandardizedRecipeImportEntry): boolean =>
+  !!(entry.recipe.ingredients || entry.recipe.instructions);
+
+const clipRecipeViaStructuredData = (
+  structured: Result,
+  source: "jsonld" | "microdata",
+  pageText: string,
+) => {
   metrics.clipStartedProcessing.inc({
-    method: "jsdom",
+    method: source,
   });
 
-  const result = await htmlToRecipeViaRecipeClipper(document);
-
-  return {
-    recipe: {
-      title: he.decode(result?.title || ""),
-      description: he.decode(result?.description || ""),
-      source: he.decode(result?.source || ""),
-      yield: he.decode(result?.yield || ""),
-      activeTime: he.decode(result?.activeTime || ""),
-      totalTime: he.decode(result?.totalTime || ""),
-      ingredients: he.decode(result?.ingredients || ""),
-      instructions: he.decode(result?.instructions || ""),
-      notes: he.decode(result?.notes || ""),
-      nutritionInfo: he.decode(result?.nutritionInfo || ""),
-    },
-    images: result?.imageURL ? [result.imageURL] : [],
-    labels: [],
-  } satisfies StandardizedRecipeImportEntry;
+  return htmlmetaparserToRecipe(structured, source, pageText);
 };
 
-const clipRecipeHtmlWithGPT = async (document: string) => {
+const clipRecipeHtmlWithLLM = async (document: string, text: string) => {
   if (isBotChallengePage(document)) return undefined;
 
   metrics.clipStartedProcessing.inc({
-    method: "gpt",
+    method: "llm",
   });
-
-  const text = await htmlToBodyInnerText(document);
 
   return textToRecipe(text, TextToRecipeInputType.Webpage);
 };
@@ -101,37 +100,35 @@ export const clipUrl = async (
     });
   };
 
-  const skipCache = url.includes("?") || url.includes("#");
+  const normalizedUrl = normalizeClipUrl(url);
 
-  const urlHash = hashUrl(url);
+  const urlHash = hashUrl(normalizedUrl);
 
-  if (!skipCache) {
-    const cached = await prisma.clipCache.findUnique({
-      where: { urlHash },
-    });
+  const cached = await prisma.clipCache.findUnique({
+    where: { urlHash },
+  });
 
-    if (cached && cached.url === url) {
-      const cachedRecipe =
-        cached.recipe as unknown as StandardizedRecipeImportEntry;
-      if (
-        cachedRecipe.recipe.title &&
-        cachedRecipe.recipe.ingredients &&
-        cachedRecipe.recipe.instructions
-      ) {
-        metrics.clipCacheLookup.inc({
-          result: "hit",
-        });
-        metrics.clipSuccess.inc({
-          form: "url",
-          method: "cached",
-        });
-        return cachedRecipe;
-      }
+  if (
+    cached &&
+    cached.url === normalizedUrl &&
+    cached.clipVersion === CLIP_CACHE_VERSION
+  ) {
+    const cachedRecipe =
+      cached.recipe as unknown as StandardizedRecipeImportEntry;
+    if (isCompleteRecipe(cachedRecipe)) {
+      metrics.clipCacheLookup.inc({
+        result: "hit",
+      });
+      metrics.clipSuccess.inc({
+        form: "url",
+        method: "cached",
+      });
+      return cachedRecipe;
     }
   }
 
   metrics.clipCacheLookup.inc({
-    result: skipCache ? "skipped" : "miss",
+    result: "miss",
   });
 
   const response = await (async () => {
@@ -139,12 +136,12 @@ export const clipUrl = async (
       process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "30000",
     );
 
-    let _url = url;
+    let _url = normalizedUrl;
     if (process.env.SCRAPFLY_API_KEY) {
       const params = new URLSearchParams({
         asp: "true",
         key: process.env.SCRAPFLY_API_KEY,
-        url,
+        url: normalizedUrl,
         proxified_response: "true",
       });
 
@@ -170,25 +167,42 @@ export const clipUrl = async (
     throw new ClipFetchError();
   });
 
+  if (!response.ok) {
+    metrics.clipError.inc({
+      form: "url",
+      method: "fetch",
+    });
+    throw new ClipFetchError();
+  }
+
   const cacheResult = async (result: StandardizedRecipeImportEntry) => {
-    if (skipCache) return;
     await prisma.clipCache.upsert({
       where: { urlHash },
       create: {
-        url,
+        url: normalizedUrl,
         urlHash,
         recipe: result as unknown as Prisma.InputJsonValue,
+        clipVersion: CLIP_CACHE_VERSION,
       },
       update: {
-        url,
+        url: normalizedUrl,
         recipe: result as unknown as Prisma.InputJsonValue,
+        clipVersion: CLIP_CACHE_VERSION,
       },
     });
   };
 
   if (response.headers.get("content-type") === "application/pdf") {
     const pdfContent = await response.buffer();
-    const result = await pdfToRecipe(pdfContent);
+    const result = await pdfToRecipe(pdfContent).catch((e) => {
+      Sentry.captureException(e, {
+        extra: {
+          url,
+        },
+      });
+      console.error(e);
+      return undefined;
+    });
 
     if (!result) {
       metrics.clipError.inc({
@@ -199,7 +213,7 @@ export const clipUrl = async (
       return {
         recipe: {
           title: "Error",
-          url,
+          url: normalizedUrl,
         },
         labels: [],
         images: [],
@@ -211,9 +225,9 @@ export const clipUrl = async (
       method: "pdf",
     });
 
-    result.recipe.url = url;
+    result.recipe.url = normalizedUrl;
 
-    await cacheResult(result);
+    if (isCompleteRecipe(result)) await cacheResult(result);
 
     return result;
   }
@@ -239,7 +253,7 @@ export const clipUrl = async (
       return {
         recipe: {
           title: "Error",
-          url,
+          url: normalizedUrl,
         },
         labels: [],
         images: [],
@@ -251,19 +265,19 @@ export const clipUrl = async (
       method: "image",
     });
 
-    result.recipe.url = url;
-    result.images.push(url);
+    result.recipe.url = normalizedUrl;
+    result.images.push(normalizedUrl);
 
-    await cacheResult(result);
+    if (isCompleteRecipe(result)) await cacheResult(result);
 
     return result;
   }
 
   const htmlDocument = await response.text();
 
-  const result = await clipHtml(htmlDocument, url, captureError);
+  const result = await clipHtml(htmlDocument, normalizedUrl, captureError);
 
-  if (!isBotChallengePage(htmlDocument)) {
+  if (isCompleteRecipe(result) && !isBotChallengePage(htmlDocument)) {
     await cacheResult(result);
   }
 
@@ -343,8 +357,26 @@ export const clipHtml = async (
 
         if (!result) continue;
 
-        if (result.recipe.ingredients && result.recipe.instructions) {
+        const usable = !!(
+          result.recipe.ingredients && result.recipe.instructions
+        );
+        const grounded = isRecipeGrounded(result.recipe, getPageText().text);
+
+        if (usable && grounded) {
           return [name, result];
+        }
+
+        if (name === "llm" && !grounded) {
+          metrics.clipError.inc({
+            form,
+            method: "ungrounded",
+          });
+          Sentry.captureMessage("Clip LLM result rejected as ungrounded", {
+            extra: {
+              url,
+            },
+          });
+          continue;
         }
 
         collectedResults.push(result);
@@ -353,25 +385,79 @@ export const clipHtml = async (
       }
     }
 
-    Sentry.captureMessage("Clip resulted in partial content", {
-      extra: {
-        url,
-        collectedResults: JSON.stringify(collectedResults),
-      },
-    });
+    const merged = merge(collectedResults);
 
-    return ["merged", merge(collectedResults)];
+    const mergedComplete = !!(
+      merged.recipe.ingredients && merged.recipe.instructions
+    );
+
+    if (collectedResults.length > 0 && !mergedComplete) {
+      Sentry.captureMessage("Clip resulted in partial content", {
+        extra: {
+          url,
+          collectedResults: JSON.stringify(collectedResults),
+        },
+      });
+    }
+
+    return ["merged", merged];
   };
 
+  let pageText: PageText | undefined;
+  const getPageText = (): PageText => {
+    if (!pageText) pageText = extractPageText(htmlDocument);
+    return pageText;
+  };
+
+  const structured = await extractStructuredData(htmlDocument, url).catch(
+    (e) => {
+      onError("structured-parse", e);
+      return undefined;
+    },
+  );
+
   const [method, result] = await attemptEach([
-    ["jsdom", () => clipRecipeHtmlWithJSDOM(htmlDocument)],
-    ["gpt", () => clipRecipeHtmlWithGPT(htmlDocument)],
+    [
+      "jsonld",
+      async () =>
+        structured
+          ? clipRecipeViaStructuredData(
+              structured,
+              "jsonld",
+              getPageText().text,
+            )
+          : undefined,
+    ],
+    [
+      "microdata",
+      async () =>
+        structured
+          ? clipRecipeViaStructuredData(
+              structured,
+              "microdata",
+              getPageText().text,
+            )
+          : undefined,
+    ],
+    ["llm", () => clipRecipeHtmlWithLLM(htmlDocument, getPageText().text)],
   ]);
 
-  metrics.clipSuccess.inc({
-    form,
-    method,
-  });
+  if (result.images.length === 0) {
+    const { ogImage } = getPageText();
+    if (ogImage) result.images.push(ogImage);
+  }
+
+  if (hasUsableContent(result)) {
+    metrics.clipSuccess.inc({
+      form,
+      method,
+    });
+  } else {
+    metrics.clipError.inc({
+      form,
+      method: "empty",
+    });
+  }
 
   if (url) result.recipe.url = url;
   return result;

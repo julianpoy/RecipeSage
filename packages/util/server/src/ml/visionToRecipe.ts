@@ -1,7 +1,8 @@
 import { ocrFormatRecipeSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { generateText, Output } from "ai";
-import { AI_MODEL_HIGH, aiProvider } from "./vercel";
+import { aiProvider } from "./vercel";
+import { config } from "../general/config";
 import { metrics } from "../general/metrics";
 import { withNoObjectRetry } from "./withNoObjectRetry";
 
@@ -28,7 +29,7 @@ export const visionToRecipe = async (
     generateText({
       system:
         "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank. A header can be denoted in the ingredients, instructions, or notes by prefixing the line with a # sign.",
-      model: aiProvider(AI_MODEL_HIGH),
+      model: aiProvider(config.ai.model.vision),
       temperature: 0,
       messages: [
         {

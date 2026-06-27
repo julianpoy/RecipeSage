@@ -12,7 +12,8 @@ import { userHasCapability } from "../capabilities";
 import { Capabilities } from "@recipesage/util/shared";
 import { Converter } from "showdown";
 import { generateText, ModelMessage } from "ai";
-import { AI_MODEL_HIGH, AI_MODEL_LOW, aiProvider } from "./vercel";
+import { aiProvider } from "./vercel";
+import { config } from "../general/config";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
 import { convertPrismaAssistantMessageSummariesToAssistantMessageSummaries } from "../db/convertPrismaAssistantMessageSummaries";
 import { metrics } from "../general/metrics";
@@ -126,7 +127,11 @@ export class Assistant {
 
     const response = await generateText({
       system: this.systemPrompt,
-      model: aiProvider(useLowQualityModel ? AI_MODEL_LOW : AI_MODEL_HIGH),
+      model: aiProvider(
+        useLowQualityModel
+          ? config.ai.model.assistantLow
+          : config.ai.model.assistant,
+      ),
       messages: context,
       tools: {
         createRecipe: initCreateAssistantRecipeTool(),
