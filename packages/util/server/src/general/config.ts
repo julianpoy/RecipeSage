@@ -47,4 +47,16 @@ export const config = {
     url: getEnvString("GRIP_URL", Environment.All),
     key: getEnvString("GRIP_KEY", Environment.All),
   },
+  ai: {
+    model: {
+      webpage: getEnvString("AI_MODEL_WEBPAGE", Environment.All),
+      text: getEnvString("AI_MODEL_TEXT", Environment.All),
+      ocr: getEnvString("AI_MODEL_OCR", Environment.All),
+      document: getEnvString("AI_MODEL_DOCUMENT", Environment.All),
+      vision: getEnvString("AI_MODEL_VISION", Environment.All),
+      nutrition: getEnvString("AI_MODEL_NUTRITION", Environment.All),
+      assistant: getEnvString("AI_MODEL_ASSISTANT", Environment.All),
+      assistantLow: getEnvString("AI_MODEL_ASSISTANT_LOW", Environment.All),
+    },
+  },
 };

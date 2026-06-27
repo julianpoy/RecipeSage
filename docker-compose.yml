@@ -32,7 +32,6 @@ x-common-env: &common-env
   GROCERY_CATEGORIZER_URL: http://grocery-categorizer:8000/
   OTEL_LOG_LEVEL: info
   FIREBASE_CREDENTIALS_PATH: /app/.credentials/firebase.json
-  RECIPECLIPPER_MINISERVER_URL: http://recipeclipper-miniserver:3000/
   NX_DAEMON: "true"
   API_PUBLIC_BASE_URL: https://example.com
 
@@ -154,9 +153,6 @@ services:
     stop_grace_period: 1s
   grocery-categorizer:
     image: julianpoy/ingredient-categorizer:latest
-    stop_grace_period: 1s
-  recipeclipper-miniserver:
-    image: julianpoy/recipeclipper-miniserver:1.2.0
     stop_grace_period: 1s
 
 volumes:

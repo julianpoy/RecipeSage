@@ -59,7 +59,3 @@ export const aiProviderNativeTools = (() => {
     }
   }
 })();
-
-export const AI_MODEL_HIGH = process.env.AI_MODEL_HIGH || "gpt-5";
-export const AI_MODEL_LOW = process.env.AI_MODEL_LOW || "gpt-5-mini";
-export const AI_MODEL_OCR = process.env.AI_MODEL_OCR || "gpt-5-mini";
