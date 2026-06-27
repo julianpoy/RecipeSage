@@ -74,14 +74,14 @@ export const metrics = {
     name: "clip_cache_lookup",
     help: "A lookup against the clip cache during a url clip",
     labelNames: [
-      "result", // One of: 'hit' | 'miss' | 'skipped'
+      "result", // One of: 'hit' | 'miss'
     ],
   }),
   clipStartedProcessing: new client.Counter({
     name: "clip_started_processing",
     help: "A clip started with a given processor. This can happen multiple times for a single clip",
     labelNames: [
-      "method", // One of: 'jsdom' | 'gpt'
+      "method", // One of: 'jsonld' | 'microdata' | 'llm'
     ],
   }),
   clipSuccess: new client.Counter({
@@ -89,7 +89,7 @@ export const metrics = {
     help: "A clip request succeeded",
     labelNames: [
       "form", // Either 'html' or 'url'
-      "method", // One of: 'jsdom' | 'gpt' | 'merged' | 'pdf' | 'image' | 'cached'
+      "method", // One of: 'jsonld' | 'microdata' | 'llm' | 'merged' | 'pdf' | 'image' | 'cached'
     ],
   }),
   clipError: new client.Counter({
@@ -97,7 +97,7 @@ export const metrics = {
     help: "A clip request failed",
     labelNames: [
       "form", // Either 'html' or 'url'
-      "method", // One of: 'jsdom' | 'gpt' | 'pdf' | 'image' | 'timeout' | 'fetch'
+      "method", // One of: 'structured-parse' | 'jsonld' | 'microdata' | 'llm' | 'ungrounded' | 'pdf' | 'image' | 'timeout' | 'fetch' | 'empty'
     ],
   }),
 

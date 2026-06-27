@@ -595,12 +595,13 @@ model User {
 }
 
 model ClipCache {
-  id        String   @id @default(uuid()) @db.Uuid
-  url       String
-  urlHash   Bytes    @unique
-  recipe    Json
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  id          String   @id @default(uuid()) @db.Uuid
+  url         String
+  urlHash     Bytes    @unique
+  recipe      Json
+  clipVersion Int      @default(0)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
 
   @@map("ClipCache")
 }

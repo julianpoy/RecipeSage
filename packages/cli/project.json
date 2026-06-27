@@ -15,12 +15,7 @@
         "format": ["cjs"],
         "bundle": true,
         "minify": false,
-        "external": [
-          "@sentry/profiling-node",
-          "jsdom",
-          "pdfmake",
-          "yauzl-promise"
-        ],
+        "external": ["@sentry/profiling-node", "pdfmake", "yauzl-promise"],
         "main": "packages/cli/src/main.ts",
         "tsConfig": "packages/cli/tsconfig.json",
         "generatePackageJson": true,

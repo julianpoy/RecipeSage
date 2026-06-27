@@ -20,7 +20,6 @@
         "minify": false,
         "external": [
           "@sentry/profiling-node",
-          "jsdom",
           "pdfmake",
           "bullmq",
           "yauzl-promise"

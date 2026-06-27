@@ -287,11 +287,11 @@ const wireUp = async () => {
     },
   });
 
-  for (const logo of document.querySelectorAll(".logo")) {
+  document.querySelectorAll(".logo").forEach((logo) => {
     if (logo instanceof HTMLImageElement) {
       logo.src = chrome.runtime.getURL("./images/recipesage-black-trimmed.png");
     }
-  }
+  });
 
   const submitLogin = document.getElementById("login-submit");
   if (submitLogin) submitLogin.onclick = () => void login();

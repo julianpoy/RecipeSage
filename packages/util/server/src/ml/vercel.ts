@@ -2,14 +2,14 @@ import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { config } from "../general/config";
 
 export const aiProvider = (() => {
   const commonConfig = {
     apiKey: process.env.AI_API_KEY || "selfhost-invalid-placeholder",
     baseURL: process.env.AI_API_BASE_URL || undefined,
   };
-  const provider = process.env.AI_PROVIDER;
-  switch (process.env.AI_PROVIDER || "openai") {
+  switch (config.ai.provider) {
     case "openrouter": {
       return createOpenRouter(commonConfig);
     }
@@ -23,13 +23,13 @@ export const aiProvider = (() => {
       return createAnthropic(commonConfig);
     }
     default: {
-      throw new Error(`Unsupported AI provider: ${provider}`);
+      throw new Error(`Unsupported AI provider: ${config.ai.provider}`);
     }
   }
 })();
 
 export const aiProviderNativeTools = (() => {
-  switch (process.env.AI_PROVIDER || "openai") {
+  switch (config.ai.provider) {
     case "openrouter": {
       return {
         web_search: undefined,
@@ -59,7 +59,3 @@ export const aiProviderNativeTools = (() => {
     }
   }
 })();
-
-export const AI_MODEL_HIGH = process.env.AI_MODEL_HIGH || "gpt-5";
-export const AI_MODEL_LOW = process.env.AI_MODEL_LOW || "gpt-5-mini";
-export const AI_MODEL_OCR = process.env.AI_MODEL_OCR || "gpt-5-mini";

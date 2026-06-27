@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { metrics } from "../general";
 import { generateText, Output } from "ai";
-import { AI_MODEL_LOW, aiProvider } from "./vercel";
+import { aiProvider } from "./vercel";
+import { config } from "../general/config";
 import { withNoObjectRetry } from "./withNoObjectRetry";
 
 export const nutritionSchema = z.object({
@@ -72,7 +73,7 @@ export const textToNutrition = async (
     generateText({
       system:
         "You are a nutrition data extraction utility. Extract nutrition information from the provided text. Only extract values that are explicitly stated in the text. If a value is not present, return null for that field. Do not estimate or calculate values that are not provided. All values should be per serving.",
-      model: aiProvider(AI_MODEL_LOW),
+      model: aiProvider(config.ai.model.nutrition),
       temperature: 0,
       prompt:
         "Extract the nutrition information from this text. Only include values that are explicitly mentioned. Return null for any values not found in the text.\n\n" +
