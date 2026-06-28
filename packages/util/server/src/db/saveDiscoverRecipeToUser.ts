@@ -14,6 +14,7 @@ const getDiscoverRecipeUrl = (discoverRecipeId: string) => {
 export const saveDiscoverRecipeToUser = async (
   discoverRecipeId: string,
   recipientId: string,
+  title?: string,
 ) => {
   const discoverRecipe = await prisma.discoverRecipe.findUnique({
     where: {
@@ -69,19 +70,18 @@ export const saveDiscoverRecipeToUser = async (
   ).filter((copiedImage) => copiedImage !== null);
 
   return async (tx: PrismaTransactionClient) => {
-    const adjustedTitle = await getUniqueRecipeTitle(
-      recipientId,
-      discoverRecipe.title,
-      {
-        tx,
-      },
-    );
+    const finalTitle =
+      title !== undefined
+        ? title
+        : await getUniqueRecipeTitle(recipientId, discoverRecipe.title, {
+            tx,
+          });
 
     const savedRecipe = await tx.recipe.create({
       data: {
         userId: recipientId,
         fromUserId: discoverRecipe.authorId,
-        title: adjustedTitle,
+        title: finalTitle,
         description: discoverRecipe.description,
         yield: discoverRecipe.yield,
         activeTime: discoverRecipe.activeTime,

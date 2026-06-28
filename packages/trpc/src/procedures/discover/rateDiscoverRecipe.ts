@@ -2,10 +2,8 @@ import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
-import {
-  assertDiscoverRecipeVisible,
-  discoverRecipeVisibilitySelect,
-} from "@recipesage/util/server/trpc";
+import { assertDiscoverRecipeVisible } from "@recipesage/util/server/trpc";
+import { discoverRecipeVisibilitySelect } from "@recipesage/util/server/db";
 
 export const rateDiscoverRecipe = authenticatedProcedure
   .meta({

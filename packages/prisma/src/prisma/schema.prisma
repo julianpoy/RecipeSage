@@ -427,14 +427,13 @@ model DiscoverRecipeSave {
   id               String         @id @default(uuid()) @db.Uuid
   discoverRecipeId String         @db.Uuid
   userId           String         @db.Uuid
-  recipeId         String         @unique(map: "Discover_Recipe_Saves_recipeId_uk") @db.Uuid
+  recipeId         String?        @unique(map: "Discover_Recipe_Saves_recipeId_uk") @db.Uuid
   createdAt        DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime       @updatedAt @db.Timestamptz(6)
   discoverRecipe   DiscoverRecipe @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  recipe           Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe           Recipe?        @relation(fields: [recipeId], references: [id], onDelete: SetNull)
 
-  @@unique([discoverRecipeId, userId], map: "Discover_Recipe_Saves_discoverRecipeId_userId_uk")
   @@index([userId, discoverRecipeId], map: "discover_recipe__saves_user_id_discover_recipe_id")
   @@map("Discover_Recipe_Saves")
 }

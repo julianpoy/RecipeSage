@@ -52,5 +52,22 @@ describe("getDiscoverRecipesByAuthor", () => {
       });
       expect(response.recipes).toHaveLength(3);
     });
+
+    test("excludes soft-deleted recipes even from the author", async ({
+      trpc,
+      user,
+    }) => {
+      const active = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await prisma.discoverRecipe.create({
+        data: { ...discoverRecipeFactory(user.id), deletedAt: new Date() },
+      });
+
+      const response = await trpc.discover.getDiscoverRecipesByAuthor({
+        authorId: user.id,
+      });
+      expect(response.recipes.map((recipe) => recipe.id)).toEqual([active.id]);
+    });
   });
 });

@@ -1,6 +1,6 @@
 import { Prisma } from "@recipesage/prisma";
 import { z } from "zod";
-import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/trpc";
+import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/db";
 
 export const DISCOVER_APPROVAL_STATES = [
   "PENDING",
@@ -149,7 +149,7 @@ export const discoverRecipeDetailSelect = {
   nutritionOtherDetails: true,
   discoverRecipeLinks: {
     where: {
-      linkedDiscoverRecipe: discoverPubliclyVisibleWhere(),
+      linkedDiscoverRecipe: discoverPubliclyVisibleWhere,
     },
     select: {
       linkedDiscoverRecipe: {

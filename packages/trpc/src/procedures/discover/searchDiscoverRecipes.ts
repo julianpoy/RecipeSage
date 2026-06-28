@@ -6,7 +6,7 @@ import {
   discoverRecipeSummarySelect,
   prismaDiscoverRecipeToSummary,
 } from "./discoverRecipeSchemas";
-import { discoverPubliclyVisibleSql } from "@recipesage/util/server/trpc";
+import { discoverPubliclyVisibleSql } from "@recipesage/util/server/db";
 
 const buildTsQuery = (searchTerm: string): string | undefined => {
   const tokens = searchTerm

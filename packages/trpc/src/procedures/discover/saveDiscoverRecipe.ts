@@ -2,12 +2,12 @@ import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
-import { saveDiscoverRecipeToUser } from "@recipesage/util/server/db";
-import { indexRecipes } from "@recipesage/util/server/search";
 import {
-  assertDiscoverRecipeVisible,
+  saveDiscoverRecipeToUser,
   discoverRecipeVisibilitySelect,
-} from "@recipesage/util/server/trpc";
+} from "@recipesage/util/server/db";
+import { indexRecipes } from "@recipesage/util/server/search";
+import { assertDiscoverRecipeVisible } from "@recipesage/util/server/trpc";
 
 export const saveDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -22,6 +22,7 @@ export const saveDiscoverRecipe = authenticatedProcedure
   .input(
     z.object({
       id: z.uuid(),
+      title: z.string().min(1).max(255).optional(),
     }),
   )
   .output(
@@ -49,26 +50,10 @@ export const saveDiscoverRecipe = authenticatedProcedure
 
     assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
 
-    const existingSave = await prisma.discoverRecipeSave.findUnique({
-      where: {
-        discoverRecipeId_userId: {
-          discoverRecipeId: discoverRecipe.id,
-          userId: ctx.session.userId,
-        },
-      },
-      select: {
-        recipeId: true,
-      },
-    });
-    if (existingSave) {
-      return {
-        recipeId: existingSave.recipeId,
-      };
-    }
-
     const persistSavedRecipe = await saveDiscoverRecipeToUser(
       discoverRecipe.id,
       ctx.session.userId,
+      input.title,
     );
     if (!persistSavedRecipe) {
       throw new TRPCError({

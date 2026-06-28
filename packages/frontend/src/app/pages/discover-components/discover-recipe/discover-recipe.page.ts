@@ -619,11 +619,75 @@ export class DiscoverRecipePage {
   async save() {
     if (!this.recipe) return;
 
+    const title = this.recipe.title;
+
+    const loading = this.loadingService.start();
+    const conflictingRecipes =
+      await this.serverActionsService.recipes.getRecipesByTitle({
+        title,
+      });
+    const uniqueTitle =
+      await this.serverActionsService.recipes.getUniqueRecipeTitle({
+        title,
+      });
+    loading.dismiss();
+
+    if (!conflictingRecipes || !uniqueTitle) return;
+
+    if (!conflictingRecipes.length) {
+      await this._save(title);
+      return;
+    }
+
+    const header = await this.translate
+      .get("pages.editRecipe.conflict.title")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.editRecipe.conflict.message", { title, uniqueTitle })
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const rename = await this.translate
+      .get("pages.editRecipe.conflict.rename")
+      .toPromise();
+    const ignore = await this.translate
+      .get("pages.editRecipe.conflict.ignore")
+      .toPromise();
+
+    const confirmPrompt = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+          role: "cancel",
+        },
+        {
+          text: rename,
+          handler: () => {
+            this._save(uniqueTitle);
+          },
+        },
+        {
+          text: ignore,
+          handler: () => {
+            this._save(title);
+          },
+        },
+      ],
+    });
+
+    await confirmPrompt.present();
+  }
+
+  private async _save(title: string) {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     const response =
       await this.serverActionsService.discover.saveDiscoverRecipe({
         id: this.recipe.id,
+        title,
       });
 
     loading.dismiss();

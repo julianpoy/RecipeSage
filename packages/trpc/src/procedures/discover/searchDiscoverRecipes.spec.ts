@@ -61,6 +61,17 @@ describe("searchDiscoverRecipes", () => {
       expect(response.recipes.map((recipe) => recipe.id)).toEqual([visible.id]);
     });
 
+    test("excludes soft-deleted recipes", async ({ user }) => {
+      const language = uniqueLanguage();
+      const visible = await createActive(user.id, { language });
+      await createActive(user.id, { language, deletedAt: new Date() });
+
+      const response = await anonymousTrpc.discover.searchDiscoverRecipes({
+        languages: [language],
+      });
+      expect(response.recipes.map((recipe) => recipe.id)).toEqual([visible.id]);
+    });
+
     test("matches on the search term", async ({ user }) => {
       const language = uniqueLanguage();
       const token = faker.string.alpha(12).toLowerCase();

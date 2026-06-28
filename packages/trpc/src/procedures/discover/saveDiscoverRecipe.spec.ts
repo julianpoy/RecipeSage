@@ -1,25 +1,37 @@
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
 
+const shadowbanUser = (userId: string) =>
+  prisma.user.update({
+    where: { id: userId },
+    data: { discoverStanding: UserDiscoverStanding.SHADOWBANNED },
+  });
+
 describe("saveDiscoverRecipe", () => {
   describe("success", () => {
-    test("copies the recipe into the caller's collection", async ({
-      trpc,
+    test("copies another author's recipe into the saver's collection", async ({
+      trpc2,
       user,
+      user2,
     }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      const response = await trpc.discover.saveDiscoverRecipe({
+      const response = await trpc2.discover.saveDiscoverRecipe({
         id: recipe.id,
       });
 
       const saved = await prisma.recipe.findUnique({
         where: { id: response.recipeId },
       });
-      expect(saved?.userId).toEqual(user.id);
+      expect(saved?.userId).toEqual(user2.id);
+      expect(saved?.fromUserId).toEqual(user.id);
       expect(saved?.source).toEqual("RecipeSage Discover");
 
       const updated = await prisma.discoverRecipe.findUnique({
@@ -28,37 +40,58 @@ describe("saveDiscoverRecipe", () => {
       expect(updated?.saveCount).toEqual(1);
 
       const saves = await prisma.discoverRecipeSave.findMany({
-        where: { discoverRecipeId: recipe.id, userId: user.id },
+        where: { discoverRecipeId: recipe.id, userId: user2.id },
       });
       expect(saves).toHaveLength(1);
+      expect(saves[0].recipeId).toEqual(response.recipeId);
     });
 
-    test("is idempotent and does not duplicate the copy on a repeat save", async ({
-      trpc,
+    test("creates a new copy and increments saveCount on every save", async ({
+      trpc2,
+      user,
+      user2,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+
+      const first = await trpc2.discover.saveDiscoverRecipe({ id: recipe.id });
+      const second = await trpc2.discover.saveDiscoverRecipe({ id: recipe.id });
+      expect(first.recipeId).not.toEqual(second.recipeId);
+
+      const updated = await prisma.discoverRecipe.findUnique({
+        where: { id: recipe.id },
+      });
+      expect(updated?.saveCount).toEqual(2);
+
+      const saves = await prisma.discoverRecipeSave.findMany({
+        where: { discoverRecipeId: recipe.id, userId: user2.id },
+      });
+      expect(saves).toHaveLength(2);
+
+      const copies = await prisma.recipe.findMany({
+        where: { userId: user2.id, source: "RecipeSage Discover" },
+      });
+      expect(copies).toHaveLength(2);
+    });
+
+    test("copies the recipe using the provided title verbatim", async ({
+      trpc2,
       user,
     }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      const first = await trpc.discover.saveDiscoverRecipe({ id: recipe.id });
-      const second = await trpc.discover.saveDiscoverRecipe({ id: recipe.id });
-      expect(first.recipeId).toEqual(second.recipeId);
-
-      const updated = await prisma.discoverRecipe.findUnique({
-        where: { id: recipe.id },
+      const response = await trpc2.discover.saveDiscoverRecipe({
+        id: recipe.id,
+        title: "My Chosen Title",
       });
-      expect(updated?.saveCount).toEqual(1);
 
-      const saves = await prisma.discoverRecipeSave.findMany({
-        where: { discoverRecipeId: recipe.id, userId: user.id },
+      const saved = await prisma.recipe.findUnique({
+        where: { id: response.recipeId },
       });
-      expect(saves).toHaveLength(1);
-
-      const copies = await prisma.recipe.findMany({
-        where: { userId: user.id, source: "RecipeSage Discover" },
-      });
-      expect(copies).toHaveLength(1);
+      expect(saved?.title).toEqual("My Chosen Title");
     });
   });
 
@@ -92,6 +125,33 @@ describe("saveDiscoverRecipe", () => {
 
       await expect(
         trpc2.discover.saveDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a recipe by a shadowbanned author from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await shadowbanUser(user.id);
+
+      await expect(
+        trpc2.discover.saveDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a soft-deleted recipe even from its author", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: { ...discoverRecipeFactory(user.id), deletedAt: new Date() },
+      });
+
+      await expect(
+        trpc.discover.saveDiscoverRecipe({ id: recipe.id }),
       ).rejects.toThrow("Could not find that discover recipe");
     });
 

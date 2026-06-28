@@ -6,7 +6,7 @@ import {
   discoverRecipeSummarySelect,
   prismaDiscoverRecipeToSummary,
 } from "./discoverRecipeSchemas";
-import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/trpc";
+import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/db";
 
 export const getDiscoverRecipesByAuthor = publicProcedure
   .meta({
@@ -39,7 +39,7 @@ export const getDiscoverRecipesByAuthor = publicProcedure
         }
       : {
           authorId: input.authorId,
-          ...discoverPubliclyVisibleWhere(),
+          ...discoverPubliclyVisibleWhere,
         };
 
     const discoverRecipes = await prisma.discoverRecipe.findMany({

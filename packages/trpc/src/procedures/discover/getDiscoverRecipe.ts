@@ -56,12 +56,10 @@ export const getDiscoverRecipe = publicProcedure
             rating: true,
           },
         }),
-        prisma.discoverRecipeSave.findUnique({
+        prisma.discoverRecipeSave.findFirst({
           where: {
-            discoverRecipeId_userId: {
-              discoverRecipeId: discoverRecipe.id,
-              userId: ctx.session.userId,
-            },
+            discoverRecipeId: discoverRecipe.id,
+            userId: ctx.session.userId,
           },
           select: {
             id: true,

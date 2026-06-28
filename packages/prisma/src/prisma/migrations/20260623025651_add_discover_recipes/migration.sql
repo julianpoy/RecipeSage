@@ -80,7 +80,7 @@ CREATE TABLE "Discover_Recipe_Saves" (
     "id" UUID NOT NULL,
     "discoverRecipeId" UUID NOT NULL,
     "userId" UUID NOT NULL,
-    "recipeId" UUID NOT NULL,
+    "recipeId" UUID,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
@@ -127,9 +127,6 @@ CREATE UNIQUE INDEX "Discover_Recipe_Ratings_discoverRecipeId_userId_uk" ON "Dis
 CREATE INDEX "discover_recipe__saves_user_id_discover_recipe_id" ON "Discover_Recipe_Saves"("userId", "discoverRecipeId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Discover_Recipe_Saves_discoverRecipeId_userId_uk" ON "Discover_Recipe_Saves"("discoverRecipeId", "userId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Discover_Recipe_Saves_recipeId_uk" ON "Discover_Recipe_Saves"("recipeId");
 
 -- AddForeignKey
@@ -157,7 +154,7 @@ ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_discov
 ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 CREATE OR REPLACE FUNCTION discover_recipes_tsv_trigger() RETURNS trigger AS $$
 BEGIN

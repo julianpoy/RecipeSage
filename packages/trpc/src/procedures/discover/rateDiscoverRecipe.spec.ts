@@ -1,6 +1,16 @@
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
+
+const shadowbanUser = (userId: string) =>
+  prisma.user.update({
+    where: { id: userId },
+    data: { discoverStanding: UserDiscoverStanding.SHADOWBANNED },
+  });
 
 describe("rateDiscoverRecipe", () => {
   describe("success", () => {
@@ -105,6 +115,33 @@ describe("rateDiscoverRecipe", () => {
 
       await expect(
         trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a recipe by a shadowbanned author from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await shadowbanUser(user.id);
+
+      await expect(
+        trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a soft-deleted recipe even from its author", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: { ...discoverRecipeFactory(user.id), deletedAt: new Date() },
+      });
+
+      await expect(
+        trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
       ).rejects.toThrow("Could not find that discover recipe");
     });
 
