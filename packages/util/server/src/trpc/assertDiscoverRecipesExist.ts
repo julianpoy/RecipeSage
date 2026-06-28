@@ -1,5 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
+import { discoverPubliclyVisibleWhere } from "./discoverPubliclyVisibleWhere";
 
 export const assertDiscoverRecipesExist = async (ids: string[]) => {
   if (!ids.length) return;
@@ -8,6 +9,7 @@ export const assertDiscoverRecipesExist = async (ids: string[]) => {
       id: {
         in: ids,
       },
+      ...discoverPubliclyVisibleWhere(),
     },
   });
   if (found !== ids.length) {

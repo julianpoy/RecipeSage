@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
-import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
+import { userHasCapability } from "../capabilities";
 
 export const assertCanPublishDiscover = async (userId: string) => {
   const canPublish = await userHasCapability(

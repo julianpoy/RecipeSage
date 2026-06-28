@@ -1,7 +1,7 @@
 import { nutritionSchema, textToNutrition } from "@recipesage/util/server/ml";
 import { recordCreditsSpent } from "@recipesage/util/server/general";
 import { authenticatedProcedure } from "../../trpc";
-import { assertCreditsAvailableTrpc } from "../../util/assertCreditsAvailableTrpc";
+import { assertCreditsAvailableTrpc } from "@recipesage/util/server/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 

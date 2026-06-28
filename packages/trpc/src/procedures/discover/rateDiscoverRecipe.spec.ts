@@ -92,6 +92,22 @@ describe("rateDiscoverRecipe", () => {
       ).rejects.toThrow("Could not find that discover recipe");
     });
 
+    test("hides a pending recipe from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          approvalState: DiscoverApprovalState.PENDING,
+        },
+      });
+
+      await expect(
+        trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
     test("requires authentication", async ({ user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),

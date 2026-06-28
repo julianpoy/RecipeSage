@@ -1,7 +1,11 @@
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
+import {
+  assertDiscoverRecipeVisible,
+  discoverRecipeVisibilitySelect,
+} from "@recipesage/util/server/trpc";
 
 export const rateDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -33,22 +37,18 @@ export const rateDiscoverRecipe = authenticatedProcedure
       },
       select: {
         id: true,
-        authorId: true,
-        approvalState: true,
+        ...discoverRecipeVisibilitySelect,
       },
     });
 
-    const isAuthor = discoverRecipe?.authorId === ctx.session.userId;
-    if (
-      !discoverRecipe ||
-      (discoverRecipe.approvalState === DiscoverApprovalState.SHADOWBANNED &&
-        !isAuthor)
-    ) {
+    if (!discoverRecipe) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Could not find that discover recipe",
       });
     }
+
+    assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
 
     return prisma.$transaction(async (tx) => {
       if (input.rating === 0) {

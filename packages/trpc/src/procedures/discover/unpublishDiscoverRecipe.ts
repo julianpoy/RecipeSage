@@ -28,6 +28,7 @@ export const unpublishDiscoverRecipe = authenticatedProcedure
       where: {
         id: input.id,
         authorId: ctx.session.userId,
+        deletedAt: null,
       },
       select: {
         id: true,
@@ -41,9 +42,12 @@ export const unpublishDiscoverRecipe = authenticatedProcedure
       });
     }
 
-    await prisma.discoverRecipe.delete({
+    await prisma.discoverRecipe.update({
       where: {
         id: existing.id,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 

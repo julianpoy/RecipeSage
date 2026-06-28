@@ -3,7 +3,10 @@ import {
   DiscoverApprovalState,
   UserDiscoverStanding,
 } from "@recipesage/prisma";
-import { discoverRecipeFactory } from "@recipesage/util/server/general";
+import {
+  discoverRecipeFactory,
+  recipeFactory,
+} from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
 
 const shadowbanUser = (userId: string) =>
@@ -89,10 +92,14 @@ describe("getDiscoverRecipe", () => {
           rating: 4,
         },
       });
+      const savedCopy = await prisma.recipe.create({
+        data: recipeFactory(user.id),
+      });
       await prisma.discoverRecipeSave.create({
         data: {
           discoverRecipeId: recipe.id,
           userId: user.id,
+          recipeId: savedCopy.id,
         },
       });
 

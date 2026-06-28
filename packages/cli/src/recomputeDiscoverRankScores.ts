@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node";
 
-import { prisma } from "@recipesage/prisma";
+import { Prisma, prisma } from "@recipesage/prisma";
 import { computeDiscoverRankScore } from "@recipesage/util/server/db";
 
 export const recomputeDiscoverRankScores = async (options: {
@@ -36,24 +36,23 @@ export const recomputeDiscoverRankScores = async (options: {
 
       if (!discoverRecipes.length) break;
 
-      await prisma.$transaction(
-        discoverRecipes.map((discoverRecipe) =>
-          prisma.discoverRecipe.update({
-            where: {
-              id: discoverRecipe.id,
-            },
-            data: {
-              rankScore: computeDiscoverRankScore({
-                createdAt: discoverRecipe.createdAt,
-                saveCount: discoverRecipe.saveCount,
-                ratingAverage: discoverRecipe.ratingAverage,
-                ratingCount: discoverRecipe.ratingCount,
-                now,
-              }),
-            },
-          }),
-        ),
-      );
+      const valueTuples = discoverRecipes.map((discoverRecipe) => {
+        const rankScore = computeDiscoverRankScore({
+          createdAt: discoverRecipe.createdAt,
+          saveCount: discoverRecipe.saveCount,
+          ratingAverage: discoverRecipe.ratingAverage,
+          ratingCount: discoverRecipe.ratingCount,
+          now,
+        });
+        return Prisma.sql`(${discoverRecipe.id}::uuid, ${rankScore}::double precision)`;
+      });
+
+      await prisma.$executeRaw(Prisma.sql`
+        UPDATE "Discover_Recipes" AS d
+        SET "rankScore" = v.rankScore
+        FROM (VALUES ${Prisma.join(valueTuples)}) AS v(id, rankScore)
+        WHERE d.id = v.id
+      `);
 
       processed += discoverRecipes.length;
       cursor = discoverRecipes[discoverRecipes.length - 1].id;

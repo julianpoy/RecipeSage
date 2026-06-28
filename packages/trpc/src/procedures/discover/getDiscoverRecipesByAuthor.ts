@@ -1,16 +1,12 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import {
-  Prisma,
-  prisma,
-  DiscoverApprovalState,
-  UserDiscoverStanding,
-} from "@recipesage/prisma";
+import { Prisma, prisma } from "@recipesage/prisma";
 import {
   discoverRecipeSummarySchema,
   discoverRecipeSummarySelect,
   prismaDiscoverRecipeToSummary,
 } from "./discoverRecipeSchemas";
+import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/trpc";
 
 export const getDiscoverRecipesByAuthor = publicProcedure
   .meta({
@@ -24,7 +20,7 @@ export const getDiscoverRecipesByAuthor = publicProcedure
   .input(
     z.object({
       authorId: z.uuid(),
-      offset: z.number().int().min(0).default(0),
+      offset: z.number().int().min(0).max(10000).default(0),
       limit: z.number().int().min(1).max(100).default(40),
     }),
   )
@@ -36,17 +32,15 @@ export const getDiscoverRecipesByAuthor = publicProcedure
   .query(async ({ ctx, input }) => {
     const isAuthor = ctx.session?.userId === input.authorId;
 
-    const where: Prisma.DiscoverRecipeWhereInput = {
-      authorId: input.authorId,
-    };
-    if (!isAuthor) {
-      where.approvalState = DiscoverApprovalState.ACTIVE;
-      where.author = {
-        discoverStanding: {
-          not: UserDiscoverStanding.SHADOWBANNED,
-        },
-      };
-    }
+    const where: Prisma.DiscoverRecipeWhereInput = isAuthor
+      ? {
+          authorId: input.authorId,
+          deletedAt: null,
+        }
+      : {
+          authorId: input.authorId,
+          ...discoverPubliclyVisibleWhere(),
+        };
 
     const discoverRecipes = await prisma.discoverRecipe.findMany({
       where,

@@ -6,6 +6,7 @@ import {
   discoverRecipeSummarySelect,
   prismaDiscoverRecipeToSummary,
 } from "./discoverRecipeSchemas";
+import { discoverPubliclyVisibleSql } from "@recipesage/util/server/trpc";
 
 const buildTsQuery = (searchTerm: string): string | undefined => {
   const tokens = searchTerm
@@ -31,8 +32,8 @@ export const searchDiscoverRecipes = publicProcedure
   .input(
     z.object({
       searchTerm: z.string().max(255).optional(),
-      languages: z.array(z.string().max(35)).optional(),
-      categories: z.array(z.string()).optional(),
+      languages: z.array(z.string().max(35)).max(20).optional(),
+      categories: z.array(z.string().max(255)).max(20).optional(),
       matchAllCategories: z.boolean().optional(),
       minRating: z.number().min(0).max(5).optional(),
       minRatingCount: z.number().int().min(0).optional(),
@@ -40,7 +41,7 @@ export const searchDiscoverRecipes = publicProcedure
       sortBy: z
         .enum(["trending", "newest", "topRated", "mostSaved"])
         .default("trending"),
-      offset: z.number().int().min(0).default(0),
+      offset: z.number().int().min(0).max(10000).default(0),
       limit: z.number().int().min(1).max(100).default(40),
     }),
   )
@@ -50,10 +51,7 @@ export const searchDiscoverRecipes = publicProcedure
     }),
   )
   .query(async ({ input }) => {
-    const conditions: Prisma.Sql[] = [
-      Prisma.sql`"approvalState" = 'ACTIVE'`,
-      Prisma.sql`NOT EXISTS (SELECT 1 FROM "Users" WHERE "Users".id = "Discover_Recipes"."authorId" AND "Users"."discoverStanding" = 'SHADOWBANNED')`,
-    ];
+    const conditions: Prisma.Sql[] = [discoverPubliclyVisibleSql];
 
     if (input.languages?.length) {
       conditions.push(Prisma.sql`"language" = ANY(${input.languages}::text[])`);

@@ -1,16 +1,13 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import {
-  prisma,
-  DiscoverApprovalState,
-  UserDiscoverStanding,
-} from "@recipesage/prisma";
+import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import {
   discoverRecipeDetailSchema,
   discoverRecipeDetailSelect,
   prismaDiscoverRecipeToDetail,
 } from "./discoverRecipeSchemas";
+import { assertDiscoverRecipeVisible } from "@recipesage/util/server/trpc";
 
 export const getDiscoverRecipe = publicProcedure
   .meta({
@@ -42,20 +39,7 @@ export const getDiscoverRecipe = publicProcedure
       });
     }
 
-    const isAuthor = ctx.session?.userId === discoverRecipe.author.id;
-
-    const isHidden =
-      discoverRecipe.approvalState === DiscoverApprovalState.SHADOWBANNED ||
-      discoverRecipe.approvalState === DiscoverApprovalState.PENDING ||
-      discoverRecipe.author.discoverStanding ===
-        UserDiscoverStanding.SHADOWBANNED;
-
-    if (isHidden && !isAuthor) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Could not find that discover recipe",
-      });
-    }
+    assertDiscoverRecipeVisible(discoverRecipe, ctx.session?.userId);
 
     let myRating: number | null = null;
     let isSaved = false;

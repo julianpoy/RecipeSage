@@ -1,5 +1,6 @@
-import { Prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import { Prisma } from "@recipesage/prisma";
 import { z } from "zod";
+import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/trpc";
 
 export const DISCOVER_APPROVAL_STATES = [
   "PENDING",
@@ -94,6 +95,7 @@ export const discoverRecipeSummarySelect = {
   saveCount: true,
   createdAt: true,
   modifiedAt: true,
+  deletedAt: true,
   author: {
     select: {
       id: true,
@@ -146,12 +148,14 @@ export const discoverRecipeDetailSelect = {
   nutritionPotassium: true,
   nutritionOtherDetails: true,
   discoverRecipeLinks: {
+    where: {
+      linkedDiscoverRecipe: discoverPubliclyVisibleWhere(),
+    },
     select: {
       linkedDiscoverRecipe: {
         select: {
           id: true,
           title: true,
-          approvalState: true,
           discoverRecipeImages: {
             select: {
               order: true,
@@ -248,26 +252,19 @@ export const prismaDiscoverRecipeToDetail = (
     nutritionOtherDetails: discoverRecipe.nutritionOtherDetails,
     myRating: viewer.myRating,
     isSaved: viewer.isSaved,
-    linkedRecipes: discoverRecipe.discoverRecipeLinks
-      .filter(
-        (link) =>
-          link.linkedDiscoverRecipe.approvalState ===
-          DiscoverApprovalState.ACTIVE,
-      )
-      .map((link) => ({
-        id: link.linkedDiscoverRecipe.id,
-        title: link.linkedDiscoverRecipe.title,
-        discoverRecipeImages:
-          link.linkedDiscoverRecipe.discoverRecipeImages.map(
-            (discoverRecipeImage) => ({
-              order: discoverRecipeImage.order,
-              image: {
-                id: discoverRecipeImage.image.id,
-                location: discoverRecipeImage.image.location,
-              },
-            }),
-          ),
-      })),
+    linkedRecipes: discoverRecipe.discoverRecipeLinks.map((link) => ({
+      id: link.linkedDiscoverRecipe.id,
+      title: link.linkedDiscoverRecipe.title,
+      discoverRecipeImages: link.linkedDiscoverRecipe.discoverRecipeImages.map(
+        (discoverRecipeImage) => ({
+          order: discoverRecipeImage.order,
+          image: {
+            id: discoverRecipeImage.image.id,
+            location: discoverRecipeImage.image.location,
+          },
+        }),
+      ),
+    })),
   };
 };
 

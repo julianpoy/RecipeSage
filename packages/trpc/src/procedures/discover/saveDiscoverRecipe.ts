@@ -1,9 +1,13 @@
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { saveDiscoverRecipeToUser } from "@recipesage/util/server/db";
 import { indexRecipes } from "@recipesage/util/server/search";
+import {
+  assertDiscoverRecipeVisible,
+  discoverRecipeVisibilitySelect,
+} from "@recipesage/util/server/trpc";
 
 export const saveDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -32,21 +36,34 @@ export const saveDiscoverRecipe = authenticatedProcedure
       },
       select: {
         id: true,
-        authorId: true,
-        approvalState: true,
+        ...discoverRecipeVisibilitySelect,
       },
     });
 
-    const isAuthor = discoverRecipe?.authorId === ctx.session.userId;
-    if (
-      !discoverRecipe ||
-      (discoverRecipe.approvalState === DiscoverApprovalState.SHADOWBANNED &&
-        !isAuthor)
-    ) {
+    if (!discoverRecipe) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Could not find that discover recipe",
       });
+    }
+
+    assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
+
+    const existingSave = await prisma.discoverRecipeSave.findUnique({
+      where: {
+        discoverRecipeId_userId: {
+          discoverRecipeId: discoverRecipe.id,
+          userId: ctx.session.userId,
+        },
+      },
+      select: {
+        recipeId: true,
+      },
+    });
+    if (existingSave) {
+      return {
+        recipeId: existingSave.recipeId,
+      };
     }
 
     const persistSavedRecipe = await saveDiscoverRecipeToUser(
@@ -63,28 +80,24 @@ export const saveDiscoverRecipe = authenticatedProcedure
     const savedRecipe = await prisma.$transaction(async (tx) => {
       const savedRecipe = await persistSavedRecipe(tx);
 
-      const created = await tx.discoverRecipeSave.createMany({
-        data: [
-          {
-            discoverRecipeId: discoverRecipe.id,
-            userId: ctx.session.userId,
-          },
-        ],
-        skipDuplicates: true,
+      await tx.discoverRecipeSave.create({
+        data: {
+          discoverRecipeId: discoverRecipe.id,
+          userId: ctx.session.userId,
+          recipeId: savedRecipe.id,
+        },
       });
 
-      if (created.count > 0) {
-        await tx.discoverRecipe.update({
-          where: {
-            id: discoverRecipe.id,
+      await tx.discoverRecipe.update({
+        where: {
+          id: discoverRecipe.id,
+        },
+        data: {
+          saveCount: {
+            increment: 1,
           },
-          data: {
-            saveCount: {
-              increment: 1,
-            },
-          },
-        });
-      }
+        },
+      });
 
       return savedRecipe;
     });

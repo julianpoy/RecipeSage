@@ -1,12 +1,31 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, DiscoverReportSource } from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
 
 describe("unpublishDiscoverRecipe", () => {
   describe("success", () => {
-    test("deletes the author's own discover recipe", async ({ trpc, user }) => {
+    test("soft-deletes the recipe and retains its reports", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
+      });
+      await prisma.discoverRecipeReport.create({
+        data: {
+          discoverRecipeId: recipe.id,
+          source: DiscoverReportSource.SYSTEM,
+          reason: "system flag",
+        },
+      });
+      await prisma.discoverRecipeReport.create({
+        data: {
+          discoverRecipeId: recipe.id,
+          source: DiscoverReportSource.USER,
+          reporterId: user2.id,
+          reason: "user report",
+        },
       });
 
       await trpc.discover.unpublishDiscoverRecipe({ id: recipe.id });
@@ -14,7 +33,17 @@ describe("unpublishDiscoverRecipe", () => {
       const found = await prisma.discoverRecipe.findUnique({
         where: { id: recipe.id },
       });
-      expect(found).toBeNull();
+      expect(found).not.toBeNull();
+      expect(found?.deletedAt).not.toBeNull();
+
+      const reports = await prisma.discoverRecipeReport.findMany({
+        where: { discoverRecipeId: recipe.id },
+      });
+      expect(reports).toHaveLength(2);
+
+      await expect(
+        trpc.discover.getDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
     });
   });
 

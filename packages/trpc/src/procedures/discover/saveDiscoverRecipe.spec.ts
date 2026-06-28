@@ -33,19 +33,32 @@ describe("saveDiscoverRecipe", () => {
       expect(saves).toHaveLength(1);
     });
 
-    test("counts a given user's save only once", async ({ trpc, user }) => {
+    test("is idempotent and does not duplicate the copy on a repeat save", async ({
+      trpc,
+      user,
+    }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
       const first = await trpc.discover.saveDiscoverRecipe({ id: recipe.id });
       const second = await trpc.discover.saveDiscoverRecipe({ id: recipe.id });
-      expect(first.recipeId).not.toEqual(second.recipeId);
+      expect(first.recipeId).toEqual(second.recipeId);
 
       const updated = await prisma.discoverRecipe.findUnique({
         where: { id: recipe.id },
       });
       expect(updated?.saveCount).toEqual(1);
+
+      const saves = await prisma.discoverRecipeSave.findMany({
+        where: { discoverRecipeId: recipe.id, userId: user.id },
+      });
+      expect(saves).toHaveLength(1);
+
+      const copies = await prisma.recipe.findMany({
+        where: { userId: user.id, source: "RecipeSage Discover" },
+      });
+      expect(copies).toHaveLength(1);
     });
   });
 
@@ -58,6 +71,22 @@ describe("saveDiscoverRecipe", () => {
         data: {
           ...discoverRecipeFactory(user.id),
           approvalState: DiscoverApprovalState.SHADOWBANNED,
+        },
+      });
+
+      await expect(
+        trpc2.discover.saveDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a pending recipe from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          approvalState: DiscoverApprovalState.PENDING,
         },
       });
 

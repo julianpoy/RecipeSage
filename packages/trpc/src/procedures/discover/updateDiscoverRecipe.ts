@@ -3,9 +3,11 @@ import { z } from "zod";
 import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { enqueueJob } from "@recipesage/util/server/general";
-import { assertCanPublishDiscover } from "../../util/assertCanPublishDiscover";
-import { assertImagesOwned } from "../../util/assertImagesOwned";
-import { assertDiscoverRecipesExist } from "../../util/assertDiscoverRecipesExist";
+import {
+  assertCanPublishDiscover,
+  assertImagesOwned,
+  assertDiscoverRecipesExist,
+} from "@recipesage/util/server/trpc";
 import { discoverRecipeContentInputSchema } from "./discoverRecipeSchemas";
 
 export const updateDiscoverRecipe = authenticatedProcedure
@@ -39,6 +41,7 @@ export const updateDiscoverRecipe = authenticatedProcedure
       where: {
         id: input.id,
         authorId: ctx.session.userId,
+        deletedAt: null,
       },
       select: {
         id: true,

@@ -302,6 +302,7 @@ model Recipe {
   user              User               @relation("Recipes_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
   shoppingListItems ShoppingListItem[]
   discoverRecipes   DiscoverRecipe[]
+  discoverRecipeSave DiscoverRecipeSave?
   tsv               Unsupported("tsvector")?
 
   @@index([userId], map: "recipes_user_id")
@@ -324,7 +325,7 @@ model DiscoverRecipe {
   notes          String                @default("")
   ingredients    String                @default("")
   instructions   String                @default("")
-  language       String                @db.VarChar(255)
+  language       String                @db.VarChar(35)
   categories     String[]              @default([])
   approvalState  DiscoverApprovalState @default(PENDING)
   ratingAverage  Float                 @default(0)
@@ -353,6 +354,7 @@ model DiscoverRecipe {
   nutritionPotassium           Float?
   nutritionOtherDetails        String?
   modifiedAt     DateTime?             @db.Timestamptz(6)
+  deletedAt      DateTime?             @db.Timestamptz(6)
   createdAt      DateTime              @default(now()) @db.Timestamptz(6)
   updatedAt      DateTime              @updatedAt @db.Timestamptz(6)
   author         User                  @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -365,8 +367,11 @@ model DiscoverRecipe {
   linkedByDiscoverRecipes DiscoverRecipeLink[] @relation("DiscoverRecipeLinks_linkedDiscoverRecipeId")
   tsv            Unsupported("tsvector")?
 
-  @@index([authorId], map: "discover_recipes_author_id")
+  @@index([authorId, createdAt(sort: Desc)], map: "discover_recipes_author_id_created_at")
   @@index([approvalState, rankScore(sort: Desc)], map: "discover_recipes_approval_state_rank_score")
+  @@index([approvalState, createdAt(sort: Desc)], map: "discover_recipes_approval_state_created_at")
+  @@index([approvalState, saveCount(sort: Desc), createdAt(sort: Desc)], map: "discover_recipes_approval_state_save_count")
+  @@index([approvalState, ratingAverage(sort: Desc), ratingCount(sort: Desc)], map: "discover_recipes_approval_state_rating")
   @@index([language], map: "discover_recipes_language")
   @@index([categories], type: Gin, map: "discover_recipes_categories_idx")
   @@index([tsv], type: Gin, map: "discover_recipes_tsv_idx")
@@ -422,10 +427,12 @@ model DiscoverRecipeSave {
   id               String         @id @default(uuid()) @db.Uuid
   discoverRecipeId String         @db.Uuid
   userId           String         @db.Uuid
+  recipeId         String         @unique(map: "Discover_Recipe_Saves_recipeId_uk") @db.Uuid
   createdAt        DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime       @updatedAt @db.Timestamptz(6)
   discoverRecipe   DiscoverRecipe @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe           Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([discoverRecipeId, userId], map: "Discover_Recipe_Saves_discoverRecipeId_userId_uk")
   @@index([userId, discoverRecipeId], map: "discover_recipe__saves_user_id_discover_recipe_id")

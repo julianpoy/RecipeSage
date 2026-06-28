@@ -4,9 +4,11 @@ import { prisma, UserDiscoverStanding } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { createDiscoverRecipeFromRecipe } from "@recipesage/util/server/db";
 import { enqueueJob } from "@recipesage/util/server/general";
-import { assertCanPublishDiscover } from "../../util/assertCanPublishDiscover";
-import { assertImagesOwned } from "../../util/assertImagesOwned";
-import { assertDiscoverRecipesExist } from "../../util/assertDiscoverRecipesExist";
+import {
+  assertCanPublishDiscover,
+  assertImagesOwned,
+  assertDiscoverRecipesExist,
+} from "@recipesage/util/server/trpc";
 import { discoverRecipeContentInputSchema } from "./discoverRecipeSchemas";
 
 export const DISCOVER_TOS_VERSION = "1";

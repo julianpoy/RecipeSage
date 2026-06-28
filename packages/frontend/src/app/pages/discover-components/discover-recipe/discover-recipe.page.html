@@ -41,7 +41,7 @@
             <ion-row class="ion-justify-content-start">
               <ion-col class="ion-no-padding" size="auto">
                 <p class="ion-text-wrap">
-                  <b>{{ "pages.discoverRecipe.author" | translate }}: </b>
+                  <b>{{ "pages.discoverRecipe.author" | translate }} </b>
                   @if (recipe.author.handle) {
                     <a
                       dir="auto"
@@ -102,9 +102,9 @@
 
       @if (isLoggedIn()) {
         <div class="discover-action-row rate-block">
-          <span class="rate-label"
-            >{{ "pages.discoverRecipe.rateThis" | translate }}:</span
-          >
+          <span class="rate-label">{{
+            "pages.discoverRecipe.rateThis" | translate
+          }}</span>
           <rating
             [rating]="recipe.myRating"
             [enableEdit]="true"

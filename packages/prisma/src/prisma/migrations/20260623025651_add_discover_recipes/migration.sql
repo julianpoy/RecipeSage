@@ -14,7 +14,7 @@ CREATE TABLE "Discover_Recipes" (
     "notes" TEXT NOT NULL DEFAULT '',
     "ingredients" TEXT NOT NULL DEFAULT '',
     "instructions" TEXT NOT NULL DEFAULT '',
-    "language" VARCHAR(255) NOT NULL,
+    "language" VARCHAR(35) NOT NULL,
     "categories" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "approvalState" "DiscoverApprovalState" NOT NULL DEFAULT 'PENDING',
     "ratingAverage" DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -43,6 +43,7 @@ CREATE TABLE "Discover_Recipes" (
     "nutritionPotassium" DOUBLE PRECISION,
     "nutritionOtherDetails" TEXT,
     "modifiedAt" TIMESTAMPTZ(6),
+    "deletedAt" TIMESTAMPTZ(6),
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
     "tsv" tsvector,
@@ -79,6 +80,7 @@ CREATE TABLE "Discover_Recipe_Saves" (
     "id" UUID NOT NULL,
     "discoverRecipeId" UUID NOT NULL,
     "userId" UUID NOT NULL,
+    "recipeId" UUID NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
@@ -86,10 +88,19 @@ CREATE TABLE "Discover_Recipe_Saves" (
 );
 
 -- CreateIndex
-CREATE INDEX "discover_recipes_author_id" ON "Discover_Recipes"("authorId");
+CREATE INDEX "discover_recipes_author_id_created_at" ON "Discover_Recipes"("authorId", "createdAt" DESC);
 
 -- CreateIndex
 CREATE INDEX "discover_recipes_approval_state_rank_score" ON "Discover_Recipes"("approvalState", "rankScore" DESC);
+
+-- CreateIndex
+CREATE INDEX "discover_recipes_approval_state_created_at" ON "Discover_Recipes"("approvalState", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "discover_recipes_approval_state_save_count" ON "Discover_Recipes"("approvalState", "saveCount" DESC, "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "discover_recipes_approval_state_rating" ON "Discover_Recipes"("approvalState", "ratingAverage" DESC, "ratingCount" DESC);
 
 -- CreateIndex
 CREATE INDEX "discover_recipes_language" ON "Discover_Recipes"("language");
@@ -118,6 +129,9 @@ CREATE INDEX "discover_recipe__saves_user_id_discover_recipe_id" ON "Discover_Re
 -- CreateIndex
 CREATE UNIQUE INDEX "Discover_Recipe_Saves_discoverRecipeId_userId_uk" ON "Discover_Recipe_Saves"("discoverRecipeId", "userId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Discover_Recipe_Saves_recipeId_uk" ON "Discover_Recipe_Saves"("recipeId");
+
 -- AddForeignKey
 ALTER TABLE "Discover_Recipes" ADD CONSTRAINT "Discover_Recipes_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -142,6 +156,9 @@ ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_discov
 -- AddForeignKey
 ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_recipeId_fkey" FOREIGN KEY ("recipeId") REFERENCES "Recipes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 CREATE OR REPLACE FUNCTION discover_recipes_tsv_trigger() RETURNS trigger AS $$
 BEGIN
   NEW.tsv :=
@@ -160,8 +177,6 @@ CREATE TRIGGER discover_recipes_tsv_update
   ON "Discover_Recipes"
   FOR EACH ROW
   EXECUTE FUNCTION discover_recipes_tsv_trigger();
-
-CREATE INDEX "discover_recipes_active_rank" ON "Discover_Recipes" ("rankScore" DESC) WHERE "approvalState" = 'ACTIVE';
 
 -- CreateTable
 CREATE TABLE "Discover_Recipe_Links" (
