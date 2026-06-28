@@ -1836,5 +1836,18 @@
     "pages.measurementConverter.ingredients.coconutSugar": "Sucre de coco",
     "pages.measurementConverter.ingredients.confectionersSugar": "Sucre glace",
     "pages.measurementConverter.ingredients.cinnamonSugar": "Sucre à la cannelle",
-    "pages.measurementConverter.ingredients.demeraraSugar": "Sucre demerara"
+    "pages.measurementConverter.ingredients.demeraraSugar": "Sucre demerara",
+    "pages.measurementConverter.ingredients.candiedOrangePeel": "Écorces d'orange confites",
+    "pages.measurementConverter.ingredients.figsDried": "Figues (sèches, hachées)",
+    "pages.measurementConverter.ingredients.passionFruitPuree": "Purée de fruit de la passion",
+    "pages.measurementConverter.ingredients.peaches": "Pêches (pelées et coupées en dés)",
+    "pages.measurementConverter.ingredients.pears": "Poires (pelées et coupées en dés)",
+    "pages.measurementConverter.ingredients.pineappleCrushed": "Ananas (en morceaux, égoutté)",
+    "pages.measurementConverter.ingredients.pineappleDried": "Tranches d'ananas (séchées)",
+    "pages.measurementConverter.ingredients.pineappleDiced": "Ananas (frais ou en conserve, coupé en dés)",
+    "pages.measurementConverter.ingredients.raisinsLoose": "Raisins secs (en vrac)",
+    "pages.measurementConverter.ingredients.raisinsPacked": "Raisins secs (en sachet)",
+    "pages.measurementConverter.ingredients.cocoaUnsweetened": "Cacao (non sucré)",
+    "pages.measurementConverter.ingredients.miniChocolateChips": "Pépites de chocolat petit calibre",
+    "pages.measurementConverter.ingredients.whiteChocolateChips": "Pépites de chocolat blanc"
 }
