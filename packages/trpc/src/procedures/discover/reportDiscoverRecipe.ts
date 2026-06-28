@@ -1,16 +1,20 @@
-import { publicProcedure } from "../../trpc";
+import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { prisma } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverReportSource,
+  DiscoverReportStatus,
+} from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
-import * as Sentry from "@sentry/node";
 
-export const reportDiscoverRecipe = publicProcedure
+export const reportDiscoverRecipe = authenticatedProcedure
   .meta({
     openapi: {
       method: "POST",
       path: "/discover/reportDiscoverRecipe",
       tags: ["discover"],
       summary: "Report a discover recipe for moderator review",
+      protect: true,
     },
   })
   .input(
@@ -31,9 +35,6 @@ export const reportDiscoverRecipe = publicProcedure
       },
       select: {
         id: true,
-        title: true,
-        authorId: true,
-        approvalState: true,
       },
     });
 
@@ -44,18 +45,24 @@ export const reportDiscoverRecipe = publicProcedure
       });
     }
 
-    Sentry.captureMessage("Discover recipe reported", {
-      level: "warning",
-      tags: {
-        discoverRecipeId: discoverRecipe.id,
+    const reason = input.reason.trim();
+
+    await prisma.discoverRecipeReport.upsert({
+      where: {
+        discoverRecipeId_reporterId: {
+          discoverRecipeId: discoverRecipe.id,
+          reporterId: ctx.session.userId,
+        },
       },
-      extra: {
+      create: {
         discoverRecipeId: discoverRecipe.id,
-        title: discoverRecipe.title,
-        authorId: discoverRecipe.authorId,
-        approvalState: discoverRecipe.approvalState,
-        reportedByUserId: ctx.session?.userId ?? null,
-        reason: input.reason,
+        source: DiscoverReportSource.USER,
+        reporterId: ctx.session.userId,
+        reason,
+      },
+      update: {
+        reason,
+        status: DiscoverReportStatus.OPEN,
       },
     });
 

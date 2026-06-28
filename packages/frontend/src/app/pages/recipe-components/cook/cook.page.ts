@@ -195,9 +195,9 @@ export class CookPage {
       ingredients: response.ingredients,
       instructions: response.instructions,
       notes: response.notes,
-      images: response.images.map((image) => ({
-        location: image.location,
-        order: image.order,
+      images: response.discoverRecipeImages.map((discoverRecipeImage) => ({
+        location: discoverRecipeImage.image.location,
+        order: discoverRecipeImage.order,
       })),
     };
   }

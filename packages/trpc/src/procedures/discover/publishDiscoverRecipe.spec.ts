@@ -1,10 +1,14 @@
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import {
   recipeFactory,
   discoverRecipeFactory,
   discoverRecipeContentFactory,
 } from "@recipesage/util/server/general";
-import { test } from "../../testutils";
+import { test, createActiveSubscription } from "../../testutils";
 
 const { enqueueJobMock } = vi.hoisted(() => ({
   enqueueJobMock: vi.fn().mockResolvedValue(undefined),
@@ -38,6 +42,7 @@ describe("publishDiscoverRecipe", () => {
       trpc,
       user,
     }) => {
+      await createActiveSubscription(user.id);
       const recipe = await eligibleRecipe(user.id);
 
       const response = await trpc.discover.publishDiscoverRecipe({
@@ -63,6 +68,7 @@ describe("publishDiscoverRecipe", () => {
     });
 
     test("persists linked recipes", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await eligibleRecipe(user.id);
       const linkTarget = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
@@ -88,6 +94,7 @@ describe("publishDiscoverRecipe", () => {
 
   describe("error", () => {
     test("rejects recipes with an external source", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
@@ -110,8 +117,10 @@ describe("publishDiscoverRecipe", () => {
 
     test("rejects a recipe the caller does not own", async ({
       trpc,
+      user,
       user2,
     }) => {
+      await createActiveSubscription(user.id);
       const recipe = await eligibleRecipe(user2.id);
 
       await expect(
@@ -127,6 +136,7 @@ describe("publishDiscoverRecipe", () => {
     });
 
     test("rejects a nonexistent linked recipe", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await eligibleRecipe(user.id);
 
       await expect(
@@ -139,6 +149,78 @@ describe("publishDiscoverRecipe", () => {
           agreedToTos: true,
         }),
       ).rejects.toThrow("linked recipes could not be found");
+    });
+
+    test("rejects publishing without the discover publish capability", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await eligibleRecipe(user.id);
+
+      await expect(
+        trpc.discover.publishDiscoverRecipe({
+          recipeId: recipe.id,
+          content: discoverRecipeContentFactory(),
+          language: "en",
+          imageIds: [],
+          linkedDiscoverRecipeIds: [],
+          agreedToTos: true,
+        }),
+      ).rejects.toThrow("contributor subscription");
+    });
+  });
+
+  describe("publish limit", () => {
+    const seedPublishes = async (userId: string, count: number) => {
+      for (let i = 0; i < count; i++) {
+        await prisma.discoverRecipe.create({
+          data: discoverRecipeFactory(userId),
+        });
+      }
+    };
+
+    test("rejects publishing beyond the daily limit", async ({
+      trpc,
+      user,
+    }) => {
+      await createActiveSubscription(user.id);
+      await seedPublishes(user.id, 5);
+      const recipe = await eligibleRecipe(user.id);
+
+      await expect(
+        trpc.discover.publishDiscoverRecipe({
+          recipeId: recipe.id,
+          content: discoverRecipeContentFactory(),
+          language: "en",
+          imageIds: [],
+          linkedDiscoverRecipeIds: [],
+          agreedToTos: true,
+        }),
+      ).rejects.toThrow("at most");
+    });
+
+    test("lets trusted users bypass the daily limit", async ({
+      trpc,
+      user,
+    }) => {
+      await createActiveSubscription(user.id);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { discoverStanding: UserDiscoverStanding.TRUSTED },
+      });
+      await seedPublishes(user.id, 5);
+      const recipe = await eligibleRecipe(user.id);
+
+      const response = await trpc.discover.publishDiscoverRecipe({
+        recipeId: recipe.id,
+        content: discoverRecipeContentFactory(),
+        language: "en",
+        imageIds: [],
+        linkedDiscoverRecipeIds: [],
+        agreedToTos: true,
+      });
+
+      expect(response.id).toBeDefined();
     });
   });
 });

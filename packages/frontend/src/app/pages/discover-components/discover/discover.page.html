@@ -31,12 +31,12 @@
         <div class="recipe-group" [class.single-col]="tileColCount === 1">
           @for (recipe of recipeGroup; track recipe.id) {
             <div class="recipe-card" (click)="openRecipe(recipe)" button>
-              @if (recipe.images.length) {
+              @if (recipe.discoverRecipeImages.length) {
                 <img
                   loading="lazy"
                   decoding="async"
                   [alt]="recipe.title"
-                  [src]="recipe.images[0].location"
+                  [src]="recipe.discoverRecipeImages[0].image.location"
                 />
               } @else {
                 <img
@@ -82,12 +82,12 @@
     } @else {
       <div *uiScroll="let recipe of datasource" class="recipe-item" button>
         <div class="recipe-item-clickable" (click)="openRecipe(recipe)">
-          @if (recipe.images.length) {
+          @if (recipe.discoverRecipeImages.length) {
             <img
               loading="lazy"
               decoding="async"
               [alt]="recipe.title"
-              [src]="recipe.images[0].location"
+              [src]="recipe.discoverRecipeImages[0].image.location"
             />
           } @else {
             <img

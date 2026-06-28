@@ -1,4 +1,9 @@
-import { prisma, DiscoverApprovalState, Prisma } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+  Prisma,
+} from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
@@ -36,6 +41,24 @@ describe("searchDiscoverRecipes", () => {
         languages: [language],
       });
       expect(response.recipes.map((recipe) => recipe.id)).toEqual([active.id]);
+    });
+
+    test("excludes recipes from shadowbanned authors", async ({
+      user,
+      user2,
+    }) => {
+      const language = uniqueLanguage();
+      const visible = await createActive(user.id, { language });
+      await createActive(user2.id, { language });
+      await prisma.user.update({
+        where: { id: user2.id },
+        data: { discoverStanding: UserDiscoverStanding.SHADOWBANNED },
+      });
+
+      const response = await anonymousTrpc.discover.searchDiscoverRecipes({
+        languages: [language],
+      });
+      expect(response.recipes.map((recipe) => recipe.id)).toEqual([visible.id]);
     });
 
     test("matches on the search term", async ({ user }) => {

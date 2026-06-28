@@ -1,6 +1,16 @@
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
+
+const shadowbanUser = (userId: string) =>
+  prisma.user.update({
+    where: { id: userId },
+    data: { discoverStanding: UserDiscoverStanding.SHADOWBANNED },
+  });
 
 describe("getDiscoverRecipe", () => {
   describe("success", () => {
@@ -19,9 +29,7 @@ describe("getDiscoverRecipe", () => {
       expect(response.isSaved).toEqual(false);
     });
 
-    test("returns a pending recipe by direct id to anyone", async ({
-      user,
-    }) => {
+    test("returns a pending recipe to its author", async ({ trpc, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: {
           ...discoverRecipeFactory(user.id),
@@ -29,7 +37,7 @@ describe("getDiscoverRecipe", () => {
         },
       });
 
-      const response = await anonymousTrpc.discover.getDiscoverRecipe({
+      const response = await trpc.discover.getDiscoverRecipe({
         id: recipe.id,
       });
       expect(response.id).toEqual(recipe.id);
@@ -45,6 +53,21 @@ describe("getDiscoverRecipe", () => {
           approvalState: DiscoverApprovalState.SHADOWBANNED,
         },
       });
+
+      const response = await trpc.discover.getDiscoverRecipe({
+        id: recipe.id,
+      });
+      expect(response.id).toEqual(recipe.id);
+    });
+
+    test("returns an own recipe to a shadowbanned author", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await shadowbanUser(user.id);
 
       const response = await trpc.discover.getDiscoverRecipe({
         id: recipe.id,
@@ -144,6 +167,36 @@ describe("getDiscoverRecipe", () => {
 
       await expect(
         anonymousTrpc.discover.getDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides a pending recipe from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          approvalState: DiscoverApprovalState.PENDING,
+        },
+      });
+
+      await expect(
+        trpc2.discover.getDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("hides recipes of a shadowbanned author from a non-author", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await shadowbanUser(user.id);
+
+      await expect(
+        trpc2.discover.getDiscoverRecipe({ id: recipe.id }),
       ).rejects.toThrow("Could not find that discover recipe");
     });
 

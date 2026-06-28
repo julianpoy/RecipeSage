@@ -241,7 +241,9 @@ export class PublishDiscoverRecipePage {
     this.selectedLinkedRecipes.push({
       id: recipe.id,
       title: recipe.title,
-      images: recipe.images.map((image) => ({ location: image.location })),
+      images: recipe.discoverRecipeImages.map((discoverRecipeImage) => ({
+        location: discoverRecipeImage.image.location,
+      })),
     });
     this.markAsDirty();
   }
@@ -350,16 +352,16 @@ export class PublishDiscoverRecipePage {
     if (!response) return;
 
     this.applySource(response);
-    this.images = response.images.map((image) => ({
-      id: image.id,
-      location: image.location,
+    this.images = response.discoverRecipeImages.map((discoverRecipeImage) => ({
+      id: discoverRecipeImage.image.id,
+      location: discoverRecipeImage.image.location,
     }));
     this.language = response.language;
     this.selectedLinkedRecipes = response.linkedRecipes.map((linkedRecipe) => ({
       id: linkedRecipe.id,
       title: linkedRecipe.title,
-      images: linkedRecipe.images.map((image) => ({
-        location: image.location,
+      images: linkedRecipe.discoverRecipeImages.map((discoverRecipeImage) => ({
+        location: discoverRecipeImage.image.location,
       })),
     }));
   }

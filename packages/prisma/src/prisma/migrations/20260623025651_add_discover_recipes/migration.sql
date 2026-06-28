@@ -142,7 +142,6 @@ ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_discov
 -- AddForeignKey
 ALTER TABLE "Discover_Recipe_Saves" ADD CONSTRAINT "Discover_Recipe_Saves_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- Full-text search vector maintenance (mirrors Recipes; no source field on discover)
 CREATE OR REPLACE FUNCTION discover_recipes_tsv_trigger() RETURNS trigger AS $$
 BEGIN
   NEW.tsv :=
@@ -162,7 +161,6 @@ CREATE TRIGGER discover_recipes_tsv_update
   FOR EACH ROW
   EXECUTE FUNCTION discover_recipes_tsv_trigger();
 
--- Partial index for the public listing query (active recipes ordered by rank)
 CREATE INDEX "discover_recipes_active_rank" ON "Discover_Recipes" ("rankScore" DESC) WHERE "approvalState" = 'ACTIVE';
 
 -- CreateTable
@@ -190,3 +188,32 @@ ALTER TABLE "Discover_Recipe_Links" ADD CONSTRAINT "Discover_Recipe_Links_discov
 
 -- AddForeignKey
 ALTER TABLE "Discover_Recipe_Links" ADD CONSTRAINT "Discover_Recipe_Links_linkedDiscoverRecipeId_fkey" FOREIGN KEY ("linkedDiscoverRecipeId") REFERENCES "Discover_Recipes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TYPE "UserDiscoverStanding" AS ENUM ('NORMAL', 'TRUSTED', 'SHADOWBANNED');
+ALTER TABLE "Users" ADD COLUMN "discoverStanding" "UserDiscoverStanding" NOT NULL DEFAULT 'NORMAL';
+
+CREATE TYPE "DiscoverReportSource" AS ENUM ('USER', 'SYSTEM');
+CREATE TYPE "DiscoverReportStatus" AS ENUM ('OPEN', 'ACTIONED', 'DISMISSED');
+
+CREATE TABLE "Discover_Recipe_Reports" (
+    "id" UUID NOT NULL,
+    "discoverRecipeId" UUID NOT NULL,
+    "source" "DiscoverReportSource" NOT NULL,
+    "reporterId" UUID,
+    "reason" TEXT NOT NULL,
+    "status" "DiscoverReportStatus" NOT NULL DEFAULT 'OPEN',
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
+
+    CONSTRAINT "Discover_Recipe_Reports_pkey" PRIMARY KEY ("id")
+);
+
+CREATE UNIQUE INDEX "Discover_Recipe_Reports_discoverRecipeId_reporterId_uk" ON "Discover_Recipe_Reports"("discoverRecipeId", "reporterId");
+
+CREATE INDEX "discover_recipe__reports_status_created_at" ON "Discover_Recipe_Reports"("status", "createdAt");
+
+CREATE INDEX "discover_recipe__reports_discover_recipe_id" ON "Discover_Recipe_Reports"("discoverRecipeId");
+
+ALTER TABLE "Discover_Recipe_Reports" ADD CONSTRAINT "Discover_Recipe_Reports_discoverRecipeId_fkey" FOREIGN KEY ("discoverRecipeId") REFERENCES "Discover_Recipes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Discover_Recipe_Reports" ADD CONSTRAINT "Discover_Recipe_Reports_reporterId_fkey" FOREIGN KEY ("reporterId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

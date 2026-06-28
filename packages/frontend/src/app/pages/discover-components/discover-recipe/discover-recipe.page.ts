@@ -207,7 +207,8 @@ export class DiscoverRecipePage {
     this.cookingToolbarService.pinRecipe({
       id: this.recipe.id,
       title: this.recipe.title,
-      imageUrl: this.recipe.images[0]?.location || undefined,
+      imageUrl:
+        this.recipe.discoverRecipeImages[0]?.image.location || undefined,
       path: RouteMap.DiscoverRecipePage.getPath(this.recipe.id),
     });
   }
@@ -314,8 +315,11 @@ export class DiscoverRecipePage {
           ? System.US
           : undefined;
 
-    const imageRefs = this.recipe.images
-      .map((image) => ({ url: image.location, order: image.order }))
+    const imageRefs = this.recipe.discoverRecipeImages
+      .map((discoverRecipeImage) => ({
+        url: discoverRecipeImage.image.location,
+        order: discoverRecipeImage.order,
+      }))
       .sort((a, b) => a.order - b.order)
       .map((image) => ({ url: image.url }));
 
@@ -414,6 +418,16 @@ export class DiscoverRecipePage {
 
   async report() {
     if (!this.recipe) return;
+
+    if (!this.isLoggedIn()) {
+      const authModal = await this.modalCtrl.create({
+        component: AuthPage,
+      });
+      await authModal.present();
+      await authModal.onDidDismiss();
+      await this.meQuery.refresh();
+      if (!this.isLoggedIn()) return;
+    }
 
     const header = await this.translate
       .get("pages.discoverRecipe.report.confirm.header")
@@ -570,12 +584,14 @@ export class DiscoverRecipePage {
   }
 
   async openImageViewer() {
-    if (!this.recipe || !this.recipe.images.length) return;
+    if (!this.recipe || !this.recipe.discoverRecipeImages.length) return;
 
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
-        imageUrls: this.recipe.images.map((image) => image.location),
+        imageUrls: this.recipe.discoverRecipeImages.map(
+          (discoverRecipeImage) => discoverRecipeImage.image.location,
+        ),
       },
     });
     imageViewerModal.present();

@@ -1,6 +1,10 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import {
   discoverRecipeDetailSchema,
@@ -40,10 +44,13 @@ export const getDiscoverRecipe = publicProcedure
 
     const isAuthor = ctx.session?.userId === discoverRecipe.author.id;
 
-    if (
-      discoverRecipe.approvalState === DiscoverApprovalState.SHADOWBANNED &&
-      !isAuthor
-    ) {
+    const isHidden =
+      discoverRecipe.approvalState === DiscoverApprovalState.SHADOWBANNED ||
+      discoverRecipe.approvalState === DiscoverApprovalState.PENDING ||
+      discoverRecipe.author.discoverStanding ===
+        UserDiscoverStanding.SHADOWBANNED;
+
+    if (isHidden && !isAuthor) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Could not find that discover recipe",

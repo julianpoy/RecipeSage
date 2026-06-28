@@ -360,6 +360,7 @@ model DiscoverRecipe {
   discoverRecipeImages DiscoverRecipeImage[]
   ratings        DiscoverRecipeRating[]
   saves          DiscoverRecipeSave[]
+  reports        DiscoverRecipeReport[]
   discoverRecipeLinks     DiscoverRecipeLink[] @relation("DiscoverRecipeLinks_discoverRecipeId")
   linkedByDiscoverRecipes DiscoverRecipeLink[] @relation("DiscoverRecipeLinks_linkedDiscoverRecipeId")
   tsv            Unsupported("tsvector")?
@@ -429,6 +430,24 @@ model DiscoverRecipeSave {
   @@unique([discoverRecipeId, userId], map: "Discover_Recipe_Saves_discoverRecipeId_userId_uk")
   @@index([userId, discoverRecipeId], map: "discover_recipe__saves_user_id_discover_recipe_id")
   @@map("Discover_Recipe_Saves")
+}
+
+model DiscoverRecipeReport {
+  id               String                 @id @default(uuid()) @db.Uuid
+  discoverRecipeId String                 @db.Uuid
+  source           DiscoverReportSource
+  reporterId       String?                @db.Uuid
+  reason           String
+  status           DiscoverReportStatus   @default(OPEN)
+  createdAt        DateTime               @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime               @updatedAt @db.Timestamptz(6)
+  discoverRecipe   DiscoverRecipe         @relation(fields: [discoverRecipeId], references: [id], onDelete: Cascade)
+  reporter         User?                  @relation(fields: [reporterId], references: [id], onDelete: SetNull)
+
+  @@unique([discoverRecipeId, reporterId], map: "Discover_Recipe_Reports_discoverRecipeId_reporterId_uk")
+  @@index([status, createdAt], map: "discover_recipe__reports_status_created_at")
+  @@index([discoverRecipeId], map: "discover_recipe__reports_discover_recipe_id")
+  @@map("Discover_Recipe_Reports")
 }
 
 model Session {
@@ -561,6 +580,7 @@ model User {
   handle                    String?                    @unique(map: "Users_handle_uk") @db.VarChar(255)
   enableProfile             Boolean                    @default(false)
   profileVisibility         String?                    @db.VarChar(255)
+  discoverStanding          UserDiscoverStanding       @default(NORMAL)
   preferences               Json?
   fcmTokens                 FCMToken[]
   incomingFriendships       Friendship[]               @relation("Friendships_friendIdToUsers")
@@ -590,6 +610,7 @@ model User {
   discoverRecipes           DiscoverRecipe[]
   discoverRecipeRatings     DiscoverRecipeRating[]
   discoverRecipeSaves       DiscoverRecipeSave[]
+  discoverRecipeReports     DiscoverRecipeReport[]
 
   @@map("Users")
 }
@@ -641,4 +662,21 @@ enum DiscoverApprovalState {
   PENDING
   ACTIVE
   SHADOWBANNED
+}
+
+enum UserDiscoverStanding {
+  NORMAL
+  TRUSTED
+  SHADOWBANNED
+}
+
+enum DiscoverReportSource {
+  USER
+  SYSTEM
+}
+
+enum DiscoverReportStatus {
+  OPEN
+  ACTIONED
+  DISMISSED
 }

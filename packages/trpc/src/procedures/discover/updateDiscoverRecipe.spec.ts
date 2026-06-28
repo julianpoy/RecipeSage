@@ -3,7 +3,7 @@ import {
   discoverRecipeFactory,
   discoverRecipeContentFactory,
 } from "@recipesage/util/server/general";
-import { test } from "../../testutils";
+import { test, createActiveSubscription } from "../../testutils";
 
 const { enqueueJobMock } = vi.hoisted(() => ({
   enqueueJobMock: vi.fn().mockResolvedValue(undefined),
@@ -28,6 +28,7 @@ describe("updateDiscoverRecipe", () => {
       trpc,
       user,
     }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
@@ -54,6 +55,7 @@ describe("updateDiscoverRecipe", () => {
     });
 
     test("adds and removes links across edits", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
@@ -94,6 +96,7 @@ describe("updateDiscoverRecipe", () => {
     });
 
     test("ignores a self link", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
@@ -116,8 +119,10 @@ describe("updateDiscoverRecipe", () => {
   describe("error", () => {
     test("rejects a recipe the caller does not own", async ({
       trpc,
+      user,
       user2,
     }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user2.id),
       });
@@ -134,6 +139,7 @@ describe("updateDiscoverRecipe", () => {
     });
 
     test("rejects a nonexistent linked recipe", async ({ trpc, user }) => {
+      await createActiveSubscription(user.id);
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
@@ -147,6 +153,25 @@ describe("updateDiscoverRecipe", () => {
           linkedDiscoverRecipeIds: ["00000000-0c70-4718-aacc-05add19096b5"],
         }),
       ).rejects.toThrow("linked recipes could not be found");
+    });
+
+    test("rejects editing without the discover publish capability", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+
+      await expect(
+        trpc.discover.updateDiscoverRecipe({
+          id: recipe.id,
+          content: discoverRecipeContentFactory(),
+          language: "en",
+          imageIds: [],
+          linkedDiscoverRecipeIds: [],
+        }),
+      ).rejects.toThrow("contributor subscription");
     });
   });
 });

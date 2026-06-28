@@ -1,47 +1,18 @@
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
-import { prisma } from "@recipesage/prisma";
+import { prisma, UserDiscoverStanding } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { createDiscoverRecipeFromRecipe } from "@recipesage/util/server/db";
 import { enqueueJob } from "@recipesage/util/server/general";
+import { assertCanPublishDiscover } from "../../util/assertCanPublishDiscover";
+import { assertImagesOwned } from "../../util/assertImagesOwned";
+import { assertDiscoverRecipesExist } from "../../util/assertDiscoverRecipesExist";
 import { discoverRecipeContentInputSchema } from "./discoverRecipeSchemas";
 
 export const DISCOVER_TOS_VERSION = "1";
 
-const assertImagesOwned = async (imageIds: string[], userId: string) => {
-  if (!imageIds.length) return;
-  const owned = await prisma.image.count({
-    where: {
-      id: {
-        in: imageIds,
-      },
-      userId,
-    },
-  });
-  if (owned !== new Set(imageIds).size) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "One or more images could not be found",
-    });
-  }
-};
-
-const assertDiscoverRecipesExist = async (ids: string[]) => {
-  if (!ids.length) return;
-  const found = await prisma.discoverRecipe.count({
-    where: {
-      id: {
-        in: ids,
-      },
-    },
-  });
-  if (found !== ids.length) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "One or more linked recipes could not be found",
-    });
-  }
-};
+const MAX_DISCOVER_PUBLISHES_PER_DAY = 5;
+const PUBLISH_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export const publishDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -69,6 +40,33 @@ export const publishDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
+    await assertCanPublishDiscover(ctx.session.userId);
+
+    const author = await prisma.user.findUnique({
+      where: {
+        id: ctx.session.userId,
+      },
+      select: {
+        discoverStanding: true,
+      },
+    });
+    if (author?.discoverStanding !== UserDiscoverStanding.TRUSTED) {
+      const recentPublishCount = await prisma.discoverRecipe.count({
+        where: {
+          authorId: ctx.session.userId,
+          createdAt: {
+            gte: new Date(Date.now() - PUBLISH_WINDOW_MS),
+          },
+        },
+      });
+      if (recentPublishCount >= MAX_DISCOVER_PUBLISHES_PER_DAY) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: `You can publish at most ${MAX_DISCOVER_PUBLISHES_PER_DAY} recipes to Discover per day. Please try again later.`,
+        });
+      }
+    }
+
     const sourceRecipe = await prisma.recipe.findFirst({
       where: {
         id: input.recipeId,

@@ -1,6 +1,11 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { Prisma, prisma, DiscoverApprovalState } from "@recipesage/prisma";
+import {
+  Prisma,
+  prisma,
+  DiscoverApprovalState,
+  UserDiscoverStanding,
+} from "@recipesage/prisma";
 import {
   discoverRecipeSummarySchema,
   discoverRecipeSummarySelect,
@@ -36,6 +41,11 @@ export const getDiscoverRecipesByAuthor = publicProcedure
     };
     if (!isAuthor) {
       where.approvalState = DiscoverApprovalState.ACTIVE;
+      where.author = {
+        discoverStanding: {
+          not: UserDiscoverStanding.SHADOWBANNED,
+        },
+      };
     }
 
     const discoverRecipes = await prisma.discoverRecipe.findMany({

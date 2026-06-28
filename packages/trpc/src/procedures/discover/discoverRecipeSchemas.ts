@@ -8,9 +8,11 @@ export const DISCOVER_APPROVAL_STATES = [
 ] as const;
 
 export const discoverRecipeImageSchema = z.object({
-  id: z.uuid(),
-  location: z.string(),
   order: z.number().int(),
+  image: z.object({
+    id: z.uuid(),
+    location: z.string(),
+  }),
 });
 
 export const discoverRecipeAuthorSchema = z.object({
@@ -22,7 +24,7 @@ export const discoverRecipeAuthorSchema = z.object({
 export const discoverRecipeLinkedSummarySchema = z.object({
   id: z.uuid(),
   title: z.string(),
-  images: z.array(discoverRecipeImageSchema),
+  discoverRecipeImages: z.array(discoverRecipeImageSchema),
 });
 
 export const discoverNutritionSchema = z.object({
@@ -60,7 +62,7 @@ export const discoverRecipeSummarySchema = z.object({
   createdAt: z.date(),
   modifiedAt: z.date().nullable(),
   author: discoverRecipeAuthorSchema,
-  images: z.array(discoverRecipeImageSchema),
+  discoverRecipeImages: z.array(discoverRecipeImageSchema),
 });
 
 export const discoverRecipeDetailSchema = discoverRecipeSummarySchema
@@ -97,6 +99,7 @@ export const discoverRecipeSummarySelect = {
       id: true,
       handle: true,
       name: true,
+      discoverStanding: true,
     },
   },
   discoverRecipeImages: {
@@ -192,12 +195,20 @@ export const prismaDiscoverRecipeToSummary = (
     saveCount: discoverRecipe.saveCount,
     createdAt: discoverRecipe.createdAt,
     modifiedAt: discoverRecipe.modifiedAt,
-    author: discoverRecipe.author,
-    images: discoverRecipe.discoverRecipeImages.map((discoverRecipeImage) => ({
-      id: discoverRecipeImage.image.id,
-      location: discoverRecipeImage.image.location,
-      order: discoverRecipeImage.order,
-    })),
+    author: {
+      id: discoverRecipe.author.id,
+      handle: discoverRecipe.author.handle,
+      name: discoverRecipe.author.name,
+    },
+    discoverRecipeImages: discoverRecipe.discoverRecipeImages.map(
+      (discoverRecipeImage) => ({
+        order: discoverRecipeImage.order,
+        image: {
+          id: discoverRecipeImage.image.id,
+          location: discoverRecipeImage.image.location,
+        },
+      }),
+    ),
   };
 };
 
@@ -246,13 +257,16 @@ export const prismaDiscoverRecipeToDetail = (
       .map((link) => ({
         id: link.linkedDiscoverRecipe.id,
         title: link.linkedDiscoverRecipe.title,
-        images: link.linkedDiscoverRecipe.discoverRecipeImages.map(
-          (discoverRecipeImage) => ({
-            id: discoverRecipeImage.image.id,
-            location: discoverRecipeImage.image.location,
-            order: discoverRecipeImage.order,
-          }),
-        ),
+        discoverRecipeImages:
+          link.linkedDiscoverRecipe.discoverRecipeImages.map(
+            (discoverRecipeImage) => ({
+              order: discoverRecipeImage.order,
+              image: {
+                id: discoverRecipeImage.image.id,
+                location: discoverRecipeImage.image.location,
+              },
+            }),
+          ),
       })),
   };
 };

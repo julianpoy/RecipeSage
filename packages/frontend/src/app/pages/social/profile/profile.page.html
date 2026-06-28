@@ -146,9 +146,13 @@
         <ion-list>
           @for (publishedRecipe of publishedRecipes; track publishedRecipe.id) {
             <ion-item button (click)="openDiscoverRecipe(publishedRecipe)">
-              @if (publishedRecipe.images.length) {
+              @if (publishedRecipe.discoverRecipeImages.length) {
                 <ion-avatar slot="start">
-                  <img [src]="publishedRecipe.images[0].location" />
+                  <img
+                    [src]="
+                      publishedRecipe.discoverRecipeImages[0].image.location
+                    "
+                  />
                 </ion-avatar>
               }
               <ion-label class="ion-text-wrap">

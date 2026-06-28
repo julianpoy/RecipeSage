@@ -26,13 +26,13 @@
   @if (recipe) {
     <div class="page-wrapper">
       <ion-item lines="none">
-        @if (recipe.images.length) {
+        @if (recipe.discoverRecipeImages.length) {
           <ion-thumbnail
             class="ion-margin-top"
             slot="start"
             (click)="openImageViewer()"
           >
-            <img src="{{ recipe.images[0].location }}" />
+            <img src="{{ recipe.discoverRecipeImages[0].image.location }}" />
           </ion-thumbnail>
         }
         <ion-label dir="auto">
@@ -571,9 +571,13 @@
               lines="none"
               button
             >
-              @if (linkedRecipe.images.length) {
+              @if (linkedRecipe.discoverRecipeImages.length) {
                 <ion-avatar slot="start">
-                  <img src="{{ linkedRecipe.images[0].location }}" />
+                  <img
+                    src="{{
+                      linkedRecipe.discoverRecipeImages[0].image.location
+                    }}"
+                  />
                 </ion-avatar>
               } @else {
                 <ion-avatar slot="start">

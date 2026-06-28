@@ -3,42 +3,10 @@ import { z } from "zod";
 import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { enqueueJob } from "@recipesage/util/server/general";
+import { assertCanPublishDiscover } from "../../util/assertCanPublishDiscover";
+import { assertImagesOwned } from "../../util/assertImagesOwned";
+import { assertDiscoverRecipesExist } from "../../util/assertDiscoverRecipesExist";
 import { discoverRecipeContentInputSchema } from "./discoverRecipeSchemas";
-
-const assertImagesOwned = async (imageIds: string[], userId: string) => {
-  if (!imageIds.length) return;
-  const owned = await prisma.image.count({
-    where: {
-      id: {
-        in: imageIds,
-      },
-      userId,
-    },
-  });
-  if (owned !== new Set(imageIds).size) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "One or more images could not be found",
-    });
-  }
-};
-
-const assertDiscoverRecipesExist = async (ids: string[]) => {
-  if (!ids.length) return;
-  const found = await prisma.discoverRecipe.count({
-    where: {
-      id: {
-        in: ids,
-      },
-    },
-  });
-  if (found !== ids.length) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "One or more linked recipes could not be found",
-    });
-  }
-};
 
 export const updateDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -65,6 +33,8 @@ export const updateDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
+    await assertCanPublishDiscover(ctx.session.userId);
+
     const existing = await prisma.discoverRecipe.findFirst({
       where: {
         id: input.id,

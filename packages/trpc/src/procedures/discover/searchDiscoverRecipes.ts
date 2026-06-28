@@ -50,7 +50,10 @@ export const searchDiscoverRecipes = publicProcedure
     }),
   )
   .query(async ({ input }) => {
-    const conditions: Prisma.Sql[] = [Prisma.sql`"approvalState" = 'ACTIVE'`];
+    const conditions: Prisma.Sql[] = [
+      Prisma.sql`"approvalState" = 'ACTIVE'`,
+      Prisma.sql`NOT EXISTS (SELECT 1 FROM "Users" WHERE "Users".id = "Discover_Recipes"."authorId" AND "Users"."discoverStanding" = 'SHADOWBANNED')`,
+    ];
 
     if (input.languages?.length) {
       conditions.push(Prisma.sql`"language" = ANY(${input.languages}::text[])`);
