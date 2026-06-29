@@ -34,11 +34,6 @@ describe("saveDiscoverRecipe", () => {
       expect(saved?.fromUserId).toEqual(user.id);
       expect(saved?.source).toEqual("RecipeSage Discover");
 
-      const updated = await prisma.discoverRecipe.findUnique({
-        where: { id: recipe.id },
-      });
-      expect(updated?.saveCount).toEqual(1);
-
       const saves = await prisma.discoverRecipeSave.findMany({
         where: { discoverRecipeId: recipe.id, userId: user2.id },
       });
@@ -46,7 +41,7 @@ describe("saveDiscoverRecipe", () => {
       expect(saves[0].recipeId).toEqual(response.recipeId);
     });
 
-    test("creates a new copy and increments saveCount on every save", async ({
+    test("creates a new copy and logs each save", async ({
       trpc2,
       user,
       user2,
@@ -58,11 +53,6 @@ describe("saveDiscoverRecipe", () => {
       const first = await trpc2.discover.saveDiscoverRecipe({ id: recipe.id });
       const second = await trpc2.discover.saveDiscoverRecipe({ id: recipe.id });
       expect(first.recipeId).not.toEqual(second.recipeId);
-
-      const updated = await prisma.discoverRecipe.findUnique({
-        where: { id: recipe.id },
-      });
-      expect(updated?.saveCount).toEqual(2);
 
       const saves = await prisma.discoverRecipeSave.findMany({
         where: { discoverRecipeId: recipe.id, userId: user2.id },
@@ -153,6 +143,16 @@ describe("saveDiscoverRecipe", () => {
       await expect(
         trpc.discover.saveDiscoverRecipe({ id: recipe.id }),
       ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("rejects saving your own discover recipe", async ({ trpc, user }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+
+      await expect(
+        trpc.discover.saveDiscoverRecipe({ id: recipe.id }),
+      ).rejects.toThrow("You cannot save your own discover recipe");
     });
 
     test("requires authentication", async ({ user }) => {

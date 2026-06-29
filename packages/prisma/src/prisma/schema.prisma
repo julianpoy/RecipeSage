@@ -368,7 +368,7 @@ model DiscoverRecipe {
   tsv            Unsupported("tsvector")?
 
   @@index([authorId, createdAt(sort: Desc)], map: "discover_recipes_author_id_created_at")
-  @@index([approvalState, rankScore(sort: Desc)], map: "discover_recipes_approval_state_rank_score")
+  @@index([approvalState, rankScore(sort: Desc), createdAt(sort: Desc)], map: "discover_recipes_approval_state_rank_score")
   @@index([approvalState, createdAt(sort: Desc)], map: "discover_recipes_approval_state_created_at")
   @@index([approvalState, saveCount(sort: Desc), createdAt(sort: Desc)], map: "discover_recipes_approval_state_save_count")
   @@index([approvalState, ratingAverage(sort: Desc), ratingCount(sort: Desc)], map: "discover_recipes_approval_state_rating")

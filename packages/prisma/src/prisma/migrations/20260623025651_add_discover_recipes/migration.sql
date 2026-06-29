@@ -91,7 +91,7 @@ CREATE TABLE "Discover_Recipe_Saves" (
 CREATE INDEX "discover_recipes_author_id_created_at" ON "Discover_Recipes"("authorId", "createdAt" DESC);
 
 -- CreateIndex
-CREATE INDEX "discover_recipes_approval_state_rank_score" ON "Discover_Recipes"("approvalState", "rankScore" DESC);
+CREATE INDEX "discover_recipes_approval_state_rank_score" ON "Discover_Recipes"("approvalState", "rankScore" DESC, "createdAt" DESC);
 
 -- CreateIndex
 CREATE INDEX "discover_recipes_approval_state_created_at" ON "Discover_Recipes"("approvalState", "createdAt" DESC);

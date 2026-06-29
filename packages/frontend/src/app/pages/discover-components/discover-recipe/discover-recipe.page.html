@@ -32,7 +32,10 @@
             slot="start"
             (click)="openImageViewer()"
           >
-            <img src="{{ recipe.discoverRecipeImages[0].image.location }}" />
+            <img
+              src="{{ recipe.discoverRecipeImages[0].image.location }}"
+              alt=""
+            />
           </ion-thumbnail>
         }
         <ion-label dir="auto">
@@ -100,7 +103,7 @@
 
       <br />
 
-      @if (isLoggedIn()) {
+      @if (isLoggedIn() && !isAuthor()) {
         <div class="discover-action-row rate-block">
           <span class="rate-label">{{
             "pages.discoverRecipe.rateThis" | translate
@@ -113,19 +116,21 @@
         </div>
       }
 
-      <div class="discover-action-row actions">
-        @if (isLoggedIn()) {
-          <ion-button (click)="save()">
-            <ion-icon name="bookmark" slot="start"></ion-icon>
-            {{ "pages.discoverRecipe.save" | translate }}
-          </ion-button>
-        } @else {
-          <ion-button (click)="authAndSave()">
-            <ion-icon name="bookmark" slot="start"></ion-icon>
-            {{ "pages.discoverRecipe.save" | translate }}
-          </ion-button>
-        }
-      </div>
+      @if (!isAuthor()) {
+        <div class="discover-action-row actions">
+          @if (isLoggedIn()) {
+            <ion-button (click)="save()">
+              <ion-icon name="bookmark" slot="start"></ion-icon>
+              {{ "pages.discoverRecipe.save" | translate }}
+            </ion-button>
+          } @else {
+            <ion-button (click)="authAndSave()">
+              <ion-icon name="bookmark" slot="start"></ion-icon>
+              {{ "pages.discoverRecipe.save" | translate }}
+            </ion-button>
+          }
+        </div>
+      }
 
       <br />
       <div class="ingredientsInstructionsGrid">
@@ -577,11 +582,12 @@
                     src="{{
                       linkedRecipe.discoverRecipeImages[0].image.location
                     }}"
+                    alt=""
                   />
                 </ion-avatar>
               } @else {
                 <ion-avatar slot="start">
-                  <img src="assets/imgs/logo_green_padded.png" />
+                  <img src="assets/imgs/logo_green_padded.png" alt="" />
                 </ion-avatar>
               }
               <ion-label dir="auto">

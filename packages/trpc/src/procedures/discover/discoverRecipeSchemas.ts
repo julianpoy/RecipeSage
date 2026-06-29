@@ -95,13 +95,11 @@ export const discoverRecipeSummarySelect = {
   saveCount: true,
   createdAt: true,
   modifiedAt: true,
-  deletedAt: true,
   author: {
     select: {
       id: true,
       handle: true,
       name: true,
-      discoverStanding: true,
     },
   },
   discoverRecipeImages: {
@@ -122,6 +120,15 @@ export const discoverRecipeSummarySelect = {
 
 export const discoverRecipeDetailSelect = {
   ...discoverRecipeSummarySelect,
+  deletedAt: true,
+  author: {
+    select: {
+      id: true,
+      handle: true,
+      name: true,
+      discoverStanding: true,
+    },
+  },
   yield: true,
   activeTime: true,
   totalTime: true,
@@ -277,7 +284,7 @@ export const discoverRecipeContentInputSchema = z.object({
   notes: z.string().max(10000),
   ingredients: z.string().max(20000),
   instructions: z.string().max(20000),
-  nutritionServingSize: z.string().nullable(),
+  nutritionServingSize: z.string().max(255).nullable(),
   nutritionCalories: z.number().nullable(),
   nutritionTotalFat: z.number().nullable(),
   nutritionSaturatedFat: z.number().nullable(),
@@ -295,5 +302,5 @@ export const discoverRecipeContentInputSchema = z.object({
   nutritionCalcium: z.number().nullable(),
   nutritionIron: z.number().nullable(),
   nutritionPotassium: z.number().nullable(),
-  nutritionOtherDetails: z.string().nullable(),
+  nutritionOtherDetails: z.string().max(10000).nullable(),
 });

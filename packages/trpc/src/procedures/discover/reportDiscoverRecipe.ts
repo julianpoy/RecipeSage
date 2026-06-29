@@ -29,9 +29,10 @@ export const reportDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const discoverRecipe = await prisma.discoverRecipe.findUnique({
+    const discoverRecipe = await prisma.discoverRecipe.findFirst({
       where: {
         id: input.id,
+        deletedAt: null,
       },
       select: {
         id: true,

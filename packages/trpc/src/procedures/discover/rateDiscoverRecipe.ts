@@ -48,7 +48,16 @@ export const rateDiscoverRecipe = authenticatedProcedure
 
     assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
 
+    if (discoverRecipe.author.id === ctx.session.userId) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You cannot rate your own discover recipe",
+      });
+    }
+
     return prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT 1 FROM "Discover_Recipes" WHERE id = ${discoverRecipe.id}::uuid FOR UPDATE`;
+
       if (input.rating === 0) {
         await tx.discoverRecipeRating.deleteMany({
           where: {

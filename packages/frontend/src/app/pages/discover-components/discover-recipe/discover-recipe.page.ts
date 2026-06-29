@@ -693,11 +693,6 @@ export class DiscoverRecipePage {
     loading.dismiss();
     if (!response) return;
 
-    this.recipe = {
-      ...this.recipe,
-      isSaved: true,
-    };
-
     const message = await this.translate
       .get("pages.discoverRecipe.saveSuccess")
       .toPromise();

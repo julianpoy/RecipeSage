@@ -4,7 +4,13 @@ import {
   UserDiscoverStanding,
 } from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
-import { test, anonymousTrpc } from "../../testutils";
+import {
+  test,
+  anonymousTrpc,
+  createCaller,
+  createUser,
+  createSession,
+} from "../../testutils";
 
 const shadowbanUser = (userId: string) =>
   prisma.user.update({
@@ -15,14 +21,14 @@ const shadowbanUser = (userId: string) =>
 describe("rateDiscoverRecipe", () => {
   describe("success", () => {
     test("records a rating and updates the aggregate", async ({
-      trpc,
+      trpc2,
       user,
     }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      const response = await trpc.discover.rateDiscoverRecipe({
+      const response = await trpc2.discover.rateDiscoverRecipe({
         id: recipe.id,
         rating: 4,
       });
@@ -37,13 +43,13 @@ describe("rateDiscoverRecipe", () => {
       expect(updated?.ratingCount).toEqual(1);
     });
 
-    test("overwrites the caller's previous rating", async ({ trpc, user }) => {
+    test("overwrites the caller's previous rating", async ({ trpc2, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      await trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 });
-      const response = await trpc.discover.rateDiscoverRecipe({
+      await trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 });
+      const response = await trpc2.discover.rateDiscoverRecipe({
         id: recipe.id,
         rating: 2,
       });
@@ -51,31 +57,33 @@ describe("rateDiscoverRecipe", () => {
       expect(response.ratingCount).toEqual(1);
     });
 
-    test("averages ratings from multiple users", async ({
-      trpc,
-      trpc2,
-      user,
-    }) => {
+    test("averages ratings from multiple users", async ({ trpc2, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      await trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 });
-      const response = await trpc2.discover.rateDiscoverRecipe({
+      const user3 = await createUser();
+      const session3 = await createSession(user3.id);
+      const trpc3 = createCaller({ session: session3, language: "" });
+
+      await trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 });
+      const response = await trpc3.discover.rateDiscoverRecipe({
         id: recipe.id,
         rating: 2,
       });
       expect(response.ratingAverage).toEqual(3);
       expect(response.ratingCount).toEqual(2);
+
+      await prisma.user.deleteMany({ where: { id: user3.id } });
     });
 
-    test("clears the rating when rating is 0", async ({ trpc, user }) => {
+    test("clears the rating when rating is 0", async ({ trpc2, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),
       });
 
-      await trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 5 });
-      const response = await trpc.discover.rateDiscoverRecipe({
+      await trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 5 });
+      const response = await trpc2.discover.rateDiscoverRecipe({
         id: recipe.id,
         rating: 0,
       });
@@ -143,6 +151,16 @@ describe("rateDiscoverRecipe", () => {
       await expect(
         trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
       ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("rejects rating your own discover recipe", async ({ trpc, user }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+
+      await expect(
+        trpc.discover.rateDiscoverRecipe({ id: recipe.id, rating: 4 }),
+      ).rejects.toThrow("You cannot rate your own discover recipe");
     });
 
     test("requires authentication", async ({ user }) => {

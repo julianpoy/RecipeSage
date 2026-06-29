@@ -15,16 +15,17 @@
                 <ion-avatar slot="start">
                   <img
                     src="{{ recipe.discoverRecipeImages[0].image.location }}"
+                    alt=""
                   />
                 </ion-avatar>
               } @else {
                 <ion-avatar slot="start">
-                  <img src="assets/imgs/logo_green_padded.png" />
+                  <img src="assets/imgs/logo_green_padded.png" alt="" />
                 </ion-avatar>
               }
               <ion-label>
                 <h2 dir="auto">{{ recipe.title }}</h2>
-                <p class="author">
+                <p class="author" dir="auto">
                   {{
                     "pages.discover.recipe.by"
                       | translate: { handle: authorDisplay(recipe.author) }

@@ -50,6 +50,13 @@ export const saveDiscoverRecipe = authenticatedProcedure
 
     assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
 
+    if (discoverRecipe.author.id === ctx.session.userId) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You cannot save your own discover recipe",
+      });
+    }
+
     const persistSavedRecipe = await saveDiscoverRecipeToUser(
       discoverRecipe.id,
       ctx.session.userId,
@@ -70,17 +77,6 @@ export const saveDiscoverRecipe = authenticatedProcedure
           discoverRecipeId: discoverRecipe.id,
           userId: ctx.session.userId,
           recipeId: savedRecipe.id,
-        },
-      });
-
-      await tx.discoverRecipe.update({
-        where: {
-          id: discoverRecipe.id,
-        },
-        data: {
-          saveCount: {
-            increment: 1,
-          },
         },
       });
 

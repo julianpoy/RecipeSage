@@ -1,7 +1,10 @@
 import * as Sentry from "@sentry/node";
 
 import { Prisma, prisma } from "@recipesage/prisma";
-import { computeDiscoverRankScore } from "@recipesage/util/server/db";
+import {
+  computeDiscoverRankScore,
+  getDiscoverDistinctSaverCounts,
+} from "@recipesage/util/server/db";
 
 export const recomputeDiscoverRankScores = async (options: {
   batchSize: number;
@@ -16,7 +19,6 @@ export const recomputeDiscoverRankScores = async (options: {
         select: {
           id: true,
           createdAt: true,
-          saveCount: true,
           ratingAverage: true,
           ratingCount: true,
         },
@@ -36,21 +38,26 @@ export const recomputeDiscoverRankScores = async (options: {
 
       if (!discoverRecipes.length) break;
 
+      const saverCounts = await getDiscoverDistinctSaverCounts(
+        discoverRecipes.map((discoverRecipe) => discoverRecipe.id),
+      );
+
       const valueTuples = discoverRecipes.map((discoverRecipe) => {
+        const saveCount = saverCounts.get(discoverRecipe.id) ?? 0;
         const rankScore = computeDiscoverRankScore({
           createdAt: discoverRecipe.createdAt,
-          saveCount: discoverRecipe.saveCount,
+          saveCount,
           ratingAverage: discoverRecipe.ratingAverage,
           ratingCount: discoverRecipe.ratingCount,
           now,
         });
-        return Prisma.sql`(${discoverRecipe.id}::uuid, ${rankScore}::double precision)`;
+        return Prisma.sql`(${discoverRecipe.id}::uuid, ${saveCount}::integer, ${rankScore}::double precision)`;
       });
 
       await prisma.$executeRaw(Prisma.sql`
         UPDATE "Discover_Recipes" AS d
-        SET "rankScore" = v.rankScore
-        FROM (VALUES ${Prisma.join(valueTuples)}) AS v(id, rankScore)
+        SET "saveCount" = v.saveCount, "rankScore" = v.rankScore
+        FROM (VALUES ${Prisma.join(valueTuples)}) AS v(id, saveCount, rankScore)
         WHERE d.id = v.id
       `);
 
