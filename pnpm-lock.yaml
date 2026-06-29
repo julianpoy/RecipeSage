@@ -126,8 +126,8 @@ importers:
         specifier: ^6.0.209
         version: 6.0.209(zod@4.3.6)
       axios:
-        specifier: ^1.18.0
-        version: 1.18.0(debug@4.4.3)
+        specifier: ^1.18.1
+        version: 1.18.1(debug@4.4.3)
       body-parser:
         specifier: ~2.2.2
         version: 2.2.2
@@ -7011,8 +7011,8 @@ packages:
   axios@1.13.6:
     resolution: {integrity: sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==}
 
-  axios@1.18.0:
-    resolution: {integrity: sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==}
+  axios@1.18.1:
+    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -19732,7 +19732,7 @@ snapshots:
 
   '@npmcli/fs@5.0.0':
     dependencies:
-      semver: 7.7.4
+      semver: 7.7.3
 
   '@npmcli/git@7.0.2':
     dependencies:
@@ -23037,7 +23037,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.18.0(debug@4.4.3):
+  axios@1.18.1(debug@4.4.3):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
@@ -28665,7 +28665,7 @@ snapshots:
       graceful-fs: 4.2.11
       nopt: 9.0.0
       proc-log: 6.1.0
-      semver: 7.7.4
+      semver: 7.7.3
       tar: 7.5.16
       tinyglobby: 0.2.17
       undici: 6.27.0
@@ -28716,7 +28716,7 @@ snapshots:
 
   npm-install-checks@8.0.0:
     dependencies:
-      semver: 7.7.4
+      semver: 7.7.3
 
   npm-normalize-package-bin@5.0.0: {}
 
@@ -28777,7 +28777,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.18.0(debug@4.4.3)
+      axios: 1.18.1(debug@4.4.3)
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -31784,7 +31784,7 @@ snapshots:
   typesense@3.0.6(@babel/runtime@7.29.2)(debug@4.4.3):
     dependencies:
       '@babel/runtime': 7.29.2
-      axios: 1.18.0(debug@4.4.3)
+      axios: 1.18.1(debug@4.4.3)
       loglevel: 1.9.2
       tslib: 2.8.1
     transitivePeerDependencies:

@@ -73,7 +73,7 @@
     "accept-language": "^3.0.20",
     "ahocorasick": "^1.0.2",
     "ai": "^6.0.209",
-    "axios": "^1.18.0",
+    "axios": "^1.18.1",
     "body-parser": "~2.2.2",
     "bullmq": "^5.78.1",
     "cheerio": "^1.1.2",
