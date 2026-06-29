@@ -33,6 +33,9 @@ pdfmake.addFonts({
   },
 });
 
+pdfmake.setUrlAccessPolicy(() => false);
+pdfmake.setLocalAccessPolicy(() => false);
+
 export interface RecipePDFStrings {
   untitled: string;
   source: string;
