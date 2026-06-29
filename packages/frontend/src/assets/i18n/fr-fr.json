@@ -1849,5 +1849,17 @@
     "pages.measurementConverter.ingredients.raisinsPacked": "Raisins secs (en sachet)",
     "pages.measurementConverter.ingredients.cocoaUnsweetened": "Cacao (non sucré)",
     "pages.measurementConverter.ingredients.miniChocolateChips": "Pépites de chocolat petit calibre",
-    "pages.measurementConverter.ingredients.whiteChocolateChips": "Pépites de chocolat blanc"
+    "pages.measurementConverter.ingredients.whiteChocolateChips": "Pépites de chocolat blanc",
+    "pages.measurementConverter.ingredients.millet": "Millet (complet)",
+    "pages.measurementConverter.ingredients.oatBran": "Son d'avoine",
+    "pages.measurementConverter.ingredients.rolledOats": "Flocons d'avoine (gros ou fins)",
+    "pages.measurementConverter.ingredients.oatsPrepared": "Flocons d'avoine (prêts à l'emploi)",
+    "pages.measurementConverter.ingredients.polenta": "Polenta (semoule de maïs)",
+    "pages.measurementConverter.ingredients.quinoaCooked": "Quinoa (cuit)",
+    "pages.measurementConverter.ingredients.wheatBerries": "Grains de blé (rouge)",
+    "pages.measurementConverter.ingredients.instantYeast": "Levure instantanée",
+    "pages.measurementConverter.ingredients.kosherSaltDiamond": "Sel casher (Diamond Crystal) ou Fleur de sel en France",
+    "pages.measurementConverter.ingredients.kosherSaltMorton": "Sel casher (Morton's) ou Fleur de sel en France",
+    "pages.measurementConverter.ingredients.tableSalt": "Sel de table",
+    "pages.measurementConverter.ingredients.almondButter": "Beurre d'amande"
 }
