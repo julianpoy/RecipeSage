@@ -18,7 +18,7 @@
   .rs-field__label {
     display: block;
     margin-block-end: 6px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.4;
     color: var(--rs-field-label);
@@ -31,7 +31,7 @@
     margin: 0;
     padding: 8px 10px;
     font-family: inherit;
-    font-size: 15px;
+    font-size: 1rem;
     line-height: 1.5;
     color: var(--rs-field-text);
     background: var(--rs-field-bg);
@@ -72,7 +72,7 @@
   .rs-field__message {
     margin: 0;
     margin-block-start: 6px;
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 1.4;
     color: var(--rs-field-helper);
   }
