@@ -6,7 +6,7 @@ import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import fetch from "node-fetch";
 import xmljs from "xml-js";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadCredentialsError } from "../../../jobs/jobErrors";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
@@ -22,7 +22,7 @@ function escapeXml(str: string): string {
 
 export async function pepperplateImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];

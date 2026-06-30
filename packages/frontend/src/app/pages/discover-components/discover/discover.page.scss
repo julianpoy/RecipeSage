@@ -1,0 +1,207 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  .searchbar {
+    flex: 1 1 auto;
+  }
+}
+
+.rating-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.7);
+
+  rating {
+    font-size: 16px;
+    line-height: 14px;
+  }
+}
+
+.recipe-group-row {
+  display: block;
+}
+
+.recipe-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px;
+
+  &.single-col .recipe-card {
+    width: 100%;
+  }
+}
+
+.recipe-card {
+  width: 200px;
+  --paragraph-line-height: 1.188rem;
+  --content-padding-leeway: 1.5rem;
+  --image-height: 190px;
+  --title-height: var(--paragraph-line-height);
+  --description-height: calc(var(--paragraph-line-height) * 2);
+  --author-height: var(--paragraph-line-height);
+  --rating-height: 1.5rem;
+
+  --content-height: calc(
+    var(--content-padding-leeway) + var(--title-height) +
+      var(--description-height) + var(--author-height) + var(--rating-height)
+  );
+
+  min-width: 0;
+  height: calc(var(--image-height) + var(--content-height));
+  cursor: pointer;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--ion-item-background);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+
+  img {
+    width: 100%;
+    height: var(--image-height);
+    object-fit: cover;
+    display: block;
+  }
+
+  .recipe-card-content {
+    padding: 8px 10px 10px;
+
+    h2 {
+      margin: 0 0 4px;
+      height: var(--title-height);
+      font-size: 1rem;
+      line-height: var(--paragraph-line-height);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      margin: 0 0 4px;
+      font-size: 0.875rem;
+      line-height: var(--paragraph-line-height);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &.description {
+        height: var(--description-height);
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      &.author {
+        height: var(--author-height);
+        font-style: italic;
+        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.75);
+      }
+    }
+  }
+
+  .rating-line {
+    height: var(--rating-height);
+    overflow: hidden;
+  }
+}
+
+.recipe-item {
+  --paragraph-line-height: 1.188rem;
+  --content-padding-leeway: 1rem;
+  --title-height: var(--paragraph-line-height);
+  --description-height: calc(var(--paragraph-line-height) * 2);
+  --author-height: var(--paragraph-line-height);
+  --rating-height: 1.5rem;
+
+  --item-height: calc(
+    var(--content-padding-leeway) + var(--title-height) +
+      var(--description-height) + var(--author-height) + var(--rating-height)
+  );
+
+  display: block;
+  border-bottom: 1px solid var(--ion-border-color);
+
+  .recipe-item-clickable {
+    display: grid;
+    grid-template-columns: 80px auto;
+    gap: 12px;
+    align-items: start;
+    height: var(--item-height);
+    overflow: hidden;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: var(--ion-background-tint-color);
+  }
+
+  img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+  }
+
+  .recipe-item-content {
+    min-width: 0;
+
+    h2 {
+      margin: 0 0 2px;
+      height: var(--title-height);
+      font-size: 1rem;
+      line-height: var(--paragraph-line-height);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      margin: 0 0 2px;
+      font-size: 0.875rem;
+      line-height: var(--paragraph-line-height);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &.description {
+        height: var(--description-height);
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      &.author {
+        height: var(--author-height);
+        font-style: italic;
+        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.75);
+      }
+    }
+  }
+
+  .rating-line {
+    height: var(--rating-height);
+    overflow: hidden;
+  }
+}
+
+.discover-empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.6);
+
+  .big-icon {
+    font-size: 64px;
+  }
+}

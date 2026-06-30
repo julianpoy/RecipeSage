@@ -7,13 +7,13 @@ import {
 } from "../../../index";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile } from "fs/promises";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 
 export async function jsonldImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];

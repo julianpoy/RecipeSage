@@ -78,7 +78,7 @@ export const getJobQueueWorker = () => {
   jobQueueWorker.on("failed", (job) => {
     console.log(`Job ${job?.id} has triggered the failed event`);
 
-    if (job) {
+    if (job && "jobId" in job.data && job.data.jobId) {
       prisma.job
         .update({
           where: {

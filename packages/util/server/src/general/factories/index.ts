@@ -1,3 +1,4 @@
+export * from "./discoverRecipeFactory";
 export * from "./friendshipFactory";
 export * from "./labelFactory";
 export * from "./preferencesFactory";

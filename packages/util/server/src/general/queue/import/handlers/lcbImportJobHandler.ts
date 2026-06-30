@@ -11,7 +11,7 @@ import { readdir, mkdtempDisposable, stat } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
 import { spawn } from "child_process";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
@@ -97,7 +97,7 @@ async function findFilesByRegex(
 
 export async function lcbImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];

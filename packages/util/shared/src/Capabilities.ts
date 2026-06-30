@@ -4,4 +4,5 @@ export enum Capabilities {
   ExpandablePreviews = "expandablePreviews",
   AssistantMoreMessages = "assistantMoreMessages",
   MoreUsageCredits = "moreUsageCredits",
+  DiscoverPublish = "discoverPublish",
 }

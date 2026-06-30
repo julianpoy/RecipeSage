@@ -20,6 +20,7 @@ export class CapabilitiesService {
     expandablePreviews: false,
     assistantMoreMessages: false,
     moreUsageCredits: false,
+    discoverPublish: false,
   };
 
   constructor() {

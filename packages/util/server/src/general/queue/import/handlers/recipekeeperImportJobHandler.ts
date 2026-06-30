@@ -7,14 +7,14 @@ import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile, stat, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
 import * as cheerio from "cheerio";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 
 export async function recipekeeperImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];

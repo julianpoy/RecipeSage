@@ -3,7 +3,7 @@ import {
   assertCreditsAvailable,
   CreditLimitExceededError,
   CreditOperation,
-} from "@recipesage/util/server/general";
+} from "../general";
 
 export const assertCreditsAvailableTrpc = async (
   userId: string,

@@ -13,6 +13,7 @@ export interface PinnedRecipe {
   imageUrl?: string;
   title: string;
   id: string;
+  path?: string;
 }
 
 @Injectable({

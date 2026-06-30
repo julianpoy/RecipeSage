@@ -61,6 +61,19 @@ export async function createUser() {
   });
 }
 
+export async function createActiveSubscription(userId: string) {
+  const nextYear = new Date();
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+
+  return prisma.userSubscription.create({
+    data: {
+      userId,
+      name: "pyo-monthly",
+      expires: nextYear,
+    },
+  });
+}
+
 export async function createSession(userId: string) {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
