@@ -222,7 +222,7 @@
     "astro": "^6.4.8",
     "astro-eslint-parser": "^1.4.0",
     "copy-webpack-plugin": "^14.0.0",
-    "electron": "^40.2.1",
+    "electron": "^42.4.1",
     "electron-squirrel-startup": "^1.0.1",
     "esbuild": "^0.28.1",
     "eslint": "9.39.2",
