@@ -7,6 +7,7 @@ import {
 } from "@recipesage/express";
 
 import express from "express";
+import compression from "compression";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -33,6 +34,8 @@ import proxy from "./routes/proxy.js";
 import { ErrorRequestHandler } from "express";
 
 const app = express();
+
+app.use(compression());
 
 const defaultCorsAllowlist = [
   "https://www.recipesage.com",
