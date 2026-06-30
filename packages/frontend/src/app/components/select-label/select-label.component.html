@@ -1,7 +1,7 @@
 <div>
   @if (selectedLabel) {
     <ion-item (click)="selectedLabel = undefined" button>
-      <ion-icon name="pricetag" slot="start"></ion-icon>
+      <ion-icon name="pricetag-outline" slot="start"></ion-icon>
       <ion-label>
         <h2>
           {{ selectedLabel.title }}
@@ -26,7 +26,7 @@
             <div class="results-list">
               @for (label of results; track labelTrackBy($index, label)) {
                 <ion-item (click)="selectLabel(label)" button>
-                  <ion-icon name="pricetag" slot="start"></ion-icon>
+                  <ion-icon name="pricetag-outline" slot="start"></ion-icon>
                   <ion-label>
                     <h2>
                       {{ label.title }}
@@ -38,7 +38,7 @@
               <!-- Searching for label which does not exist -->
               @if (results.length === 0 && searchText.length > 0) {
                 <ion-item>
-                  <ion-icon name="folder-open" slot="start"></ion-icon>
+                  <ion-icon name="folder-open-outline" slot="start"></ion-icon>
                   <ion-label>
                     {{
                       "components.selectLabel.null"

@@ -39,7 +39,7 @@ import {
   IonLabel,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { close, list } from "ionicons/icons";
+import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -92,7 +92,7 @@ export class AddRecipeToShoppingListModalPage {
   saving = false;
 
   constructor() {
-    addIcons({ close, list });
+    addIcons({ closeOutline, listOutline });
     effect(() => {
       const lists = this.shoppingListsQuery.value();
       if (!lists) return;

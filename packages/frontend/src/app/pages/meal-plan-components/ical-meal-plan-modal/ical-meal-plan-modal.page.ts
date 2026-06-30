@@ -13,7 +13,7 @@ import {
   IonIcon,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { close } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -36,7 +36,7 @@ import { addIcons } from "ionicons";
 })
 export class ICalMealPlanModalPage {
   constructor() {
-    addIcons({ close });
+    addIcons({ closeOutline });
   }
 
   private modalCtrl = inject(ModalController);

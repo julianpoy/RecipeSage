@@ -4,7 +4,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,7 +14,7 @@
   @if (!itemType) {
     <div>
       <ion-item lines="none">
-        <ion-icon name="folder-open" slot="start"></ion-icon>
+        <ion-icon name="folder-open-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.addProfileItem.prompt" | translate }} </ion-label>
       </ion-item>
       <div class="ion-padding-start ion-padding-end">
@@ -40,7 +40,7 @@
   }
   @if (itemType) {
     <ion-item (click)="itemType = null" button>
-      <ion-icon name="folder-open" slot="start"></ion-icon>
+      <ion-icon name="folder-open-outline" slot="start"></ion-icon>
       <ion-label>
         <h2>
           {{ "pages.addProfileItem.type" | translate }}
@@ -63,10 +63,10 @@
   @if ((itemType === "recipe" || itemType === "label") && !isItemSelected()) {
     <ion-item class="ion-margin-top" lines="none">
       @if (itemType === "recipe") {
-        <ion-icon name="document-text" slot="start"></ion-icon>
+        <ion-icon name="document-text-outline" slot="start"></ion-icon>
       }
       @if (itemType === "label") {
-        <ion-icon name="pricetag" slot="start"></ion-icon>
+        <ion-icon name="pricetag-outline" slot="start"></ion-icon>
       }
       <ion-label>
         @if (itemType === "recipe") {
@@ -97,7 +97,7 @@
   @if (isItemSelected() && !itemVisibility) {
     <div>
       <ion-item>
-        <ion-icon name="eye" slot="start"></ion-icon>
+        <ion-icon name="eye-outline" slot="start"></ion-icon>
         <ion-label>
           {{ "pages.addProfileItem.selectVisibility" | translate }}
         </ion-label>
@@ -127,7 +127,7 @@
   }
   @if (itemVisibility) {
     <ion-item (click)="itemVisibility = null" button>
-      <ion-icon name="eye" slot="start"></ion-icon>
+      <ion-icon name="eye-outline" slot="start"></ion-icon>
       <ion-label>
         <h2>
           @if (itemVisibility === "public") {
@@ -147,7 +147,7 @@
   }
   @if (itemVisibility) {
     <ion-item>
-      <ion-icon name="pricetag" slot="start"></ion-icon>
+      <ion-icon name="pricetag-outline" slot="start"></ion-icon>
       <ion-input
         label="{{ 'pages.addProfileItem.itemTitle' | translate }}"
         labelPlacement="stacked"
@@ -172,7 +172,7 @@
     </ion-label>
   </ion-item>
   <ion-button expand="block" (click)="done()" [disabled]="!isValid()">
-    <ion-icon name="checkmark" slot="start"></ion-icon>
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
     <ion-label> {{ "pages.addProfileItem.done" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

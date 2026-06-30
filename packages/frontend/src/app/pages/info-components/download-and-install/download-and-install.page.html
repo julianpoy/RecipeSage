@@ -15,14 +15,14 @@
     <ion-list>
       @if (pwaPromptCapable()) {
         <ion-item button (click)="showPWAPrompt()">
-          <ion-icon name="cloud-download" slot="start"></ion-icon>
+          <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
           <ion-label>{{
             "pages.downloadAndInstall.thisDevice" | translate
           }}</ion-label>
         </ion-item>
       }
       <ion-item button (click)="toggleAndroid()" detail="true">
-        <ion-icon name="phone-portrait" slot="start"></ion-icon>
+        <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
         <ion-label>{{
           "pages.downloadAndInstall.android.title" | translate
         }}</ion-label>
@@ -36,7 +36,7 @@
             }}<br />
             <b>2.</b>
             {{ "pages.downloadAndInstall.android.step.2" | translate }}
-            <ion-icon name="ellipsis-vertical"></ion-icon><br />
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon><br />
             <b>3.</b> {{ "pages.downloadAndInstall.android.step.3" | translate
             }}<br />
             {{ "pages.downloadAndInstall.done" | translate }}
@@ -44,7 +44,7 @@
         </ion-item>
       }
       <ion-item button (click)="toggleIOS()" detail="true">
-        <ion-icon name="phone-portrait" slot="start"></ion-icon>
+        <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
         <ion-label>{{
           "pages.downloadAndInstall.ios.title" | translate
         }}</ion-label>
@@ -65,7 +65,7 @@
         </ion-item>
       }
       <ion-item button (click)="toggleDesktop()" detail="true">
-        <ion-icon name="laptop" slot="start"></ion-icon>
+        <ion-icon name="laptop-outline" slot="start"></ion-icon>
         <ion-label>{{
           "pages.downloadAndInstall.desktop.title" | translate
         }}</ion-label>
@@ -79,7 +79,7 @@
             }}<br />
             <b>2.</b>
             {{ "pages.downloadAndInstall.desktop.step.2" | translate }}
-            <ion-icon name="ellipsis-vertical"></ion-icon><br />
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon><br />
             <b>3.</b> {{ "pages.downloadAndInstall.desktop.step.3" | translate
             }}<br />
             {{ "pages.downloadAndInstall.done" | translate }}

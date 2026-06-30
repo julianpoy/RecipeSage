@@ -34,12 +34,12 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import {
-  ban,
-  pencil,
-  print,
-  removeCircle,
-  reorderThree,
-  trash,
+  banOutline,
+  pencilOutline,
+  printOutline,
+  removeCircleOutline,
+  reorderThreeOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -62,7 +62,14 @@ import { addIcons } from "ionicons";
 })
 export class ShoppingListPopoverPage {
   constructor() {
-    addIcons({ ban, pencil, print, removeCircle, reorderThree, trash });
+    addIcons({
+      banOutline,
+      pencilOutline,
+      printOutline,
+      removeCircleOutline,
+      reorderThreeOutline,
+      trashOutline,
+    });
   }
 
   private navCtrl = inject(NavController);

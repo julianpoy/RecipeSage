@@ -31,7 +31,12 @@ import {
   IonInput,
   IonButton,
 } from "@ionic/angular/standalone";
-import { heart, key, statsChart, warning } from "ionicons/icons";
+import {
+  heartOutline,
+  keyOutline,
+  statsChartOutline,
+  warningOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -91,7 +96,7 @@ export class AccountPage {
   > = {};
 
   constructor() {
-    addIcons({ heart, key, statsChart, warning });
+    addIcons({ heartOutline, keyOutline, statsChartOutline, warningOutline });
     const resetToken = getQueryParam("token");
     if (resetToken) localStorage.setItem("token", resetToken);
 

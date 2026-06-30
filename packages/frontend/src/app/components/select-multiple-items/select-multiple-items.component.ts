@@ -8,7 +8,13 @@ import {
   IonSearchbar,
   IonItem,
 } from "@ionic/angular/standalone";
-import { add, ban, folderOpen, pricetag, trash } from "ionicons/icons";
+import {
+  addOutline,
+  banOutline,
+  folderOpenOutline,
+  pricetagOutline,
+  trashOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export interface SelectableItem {
@@ -35,7 +41,13 @@ export interface SelectableItem {
 })
 export class SelectMultipleItemsComponent<T extends SelectableItem> {
   constructor() {
-    addIcons({ add, ban, folderOpen, pricetag, trash });
+    addIcons({
+      addOutline,
+      banOutline,
+      folderOpenOutline,
+      pricetagOutline,
+      trashOutline,
+    });
   }
 
   searchText = "";

@@ -46,13 +46,13 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  arrowUndo,
+  addOutline,
+  arrowUndoOutline,
   caretDown,
   caretUp,
-  cart,
-  options,
-  trash,
+  cartOutline,
+  optionsOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -166,7 +166,15 @@ export class ShoppingListPage {
   private handlingListNoLongerAvailable = false;
 
   constructor() {
-    addIcons({ add, arrowUndo, caretDown, caretUp, cart, options, trash });
+    addIcons({
+      addOutline,
+      arrowUndoOutline,
+      caretDown,
+      caretUp,
+      cartOutline,
+      optionsOutline,
+      trashOutline,
+    });
     effect(() => {
       const shoppingList = this.shoppingList();
       const shoppingListItems = this.shoppingListItems();

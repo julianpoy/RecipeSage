@@ -23,7 +23,7 @@ import {
   IonFooter,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { close, list } from "ionicons/icons";
+import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -48,7 +48,7 @@ import { addIcons } from "ionicons";
 })
 export class NewShoppingListModalPage {
   constructor() {
-    addIcons({ close, list });
+    addIcons({ closeOutline, listOutline });
   }
 
   modalCtrl = inject(ModalController);

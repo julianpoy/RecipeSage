@@ -32,7 +32,7 @@ import {
   IonTextarea,
   IonSpinner,
 } from "@ionic/angular/standalone";
-import { refresh, send } from "ionicons/icons";
+import { refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -62,7 +62,7 @@ import { addIcons } from "ionicons";
 })
 export class AssistantPage {
   constructor() {
-    addIcons({ refresh, send });
+    addIcons({ refreshOutline, sendOutline });
   }
 
   private navCtrl = inject(NavController);

@@ -10,7 +10,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
-        <ion-icon name="options" slot="icon-only"></ion-icon>
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -31,7 +31,7 @@
       @if (upcomingDates.length === 0 && pastDates.length === 0) {
         <null-state>
           <ion-icon
-            name="calendar"
+            name="calendar-outline"
             class="big-icon"
             virtualSlot="header"
           ></ion-icon>
@@ -44,7 +44,7 @@
         @if (upcomingDates.length === 0 && pastDates.length > 0) {
           <null-state>
             <ion-icon
-              name="calendar"
+              name="calendar-outline"
               class="big-icon"
               virtualSlot="header"
             ></ion-icon>
@@ -85,7 +85,11 @@
                 {{ "pages.mealPlan.list.pastMeals" | translate }}
               </ion-label>
               <ion-icon
-                [name]="pastMealsExpanded ? 'chevron-up' : 'chevron-down'"
+                [name]="
+                  pastMealsExpanded
+                    ? 'chevron-up-outline'
+                    : 'chevron-down-outline'
+                "
                 slot="end"
               ></ion-icon>
             </ion-item-divider>
@@ -138,7 +142,7 @@
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newMealPlanItem()" color="primary">
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

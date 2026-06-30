@@ -56,11 +56,11 @@
           </ion-item>
           <div class="profile-icon-buttons">
             <ion-item lines="none" (click)="shareProfile()" button>
-              <ion-icon name="share-social"></ion-icon>
+              <ion-icon name="share-social-outline"></ion-icon>
             </ion-item>
             @if (isLoggedIn() && !isMyProfile()) {
               <ion-item lines="none" (click)="sendMessage()" button>
-                <ion-icon name="mail"></ion-icon>
+                <ion-icon name="mail-outline"></ion-icon>
               </ion-item>
             }
           </div>
@@ -68,7 +68,7 @@
       </div>
       <br />
       <ion-item lines="none">
-        <ion-icon name="key" slot="start"></ion-icon>
+        <ion-icon name="key-outline" slot="start"></ion-icon>
         <ion-label class="ion-text-wrap">
           {{ "pages.profile.pinned" | translate }}
         </ion-label>
@@ -81,7 +81,7 @@
                 <ion-item button (click)="open(item)">
                   <ion-icon
                     class="item-icon"
-                    name="folder"
+                    name="folder-outline"
                     slot="start"
                   ></ion-icon>
                   <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
@@ -107,7 +107,7 @@
                 <ion-item button (click)="open(item)">
                   <ion-icon
                     class="item-icon"
-                    name="pricetag"
+                    name="pricetag-outline"
                     slot="start"
                   ></ion-icon>
                   <ion-label class="ion-text-wrap">{{ item.title }}</ion-label>
@@ -121,7 +121,7 @@
       @if (!profileItems.length) {
         <null-state>
           <ion-icon
-            name="bookmarks"
+            name="bookmarks-outline"
             class="big-icon"
             virtualSlot="header"
           ></ion-icon>
@@ -138,7 +138,7 @@
       @if (!isSelfHost && publishedRecipes.length) {
         <br />
         <ion-item lines="none">
-          <ion-icon name="compass" slot="start"></ion-icon>
+          <ion-icon name="compass-outline" slot="start"></ion-icon>
           <ion-label class="ion-text-wrap">
             {{ "pages.profile.publishedRecipes" | translate }}
           </ion-label>

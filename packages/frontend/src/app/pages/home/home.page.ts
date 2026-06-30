@@ -51,15 +51,15 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  close,
-  download,
-  funnel,
-  mailOpen,
-  options,
-  pricetag,
-  search,
-  trash,
+  addOutline,
+  closeOutline,
+  downloadOutline,
+  funnelOutline,
+  mailOpenOutline,
+  optionsOutline,
+  pricetagOutline,
+  searchOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -192,15 +192,15 @@ export class HomePage implements OnDestroy {
 
   constructor() {
     addIcons({
-      add,
-      close,
-      download,
-      funnel,
-      mailOpen,
-      options,
-      pricetag,
-      search,
-      trash,
+      addOutline,
+      closeOutline,
+      downloadOutline,
+      funnelOutline,
+      mailOpenOutline,
+      optionsOutline,
+      pricetagOutline,
+      searchOutline,
+      trashOutline,
     });
 
     this.applyRouteParams();

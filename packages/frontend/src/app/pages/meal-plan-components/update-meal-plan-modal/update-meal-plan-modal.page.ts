@@ -20,7 +20,7 @@ import {
   IonLabel,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { close, list, reorderThree } from "ionicons/icons";
+import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -46,7 +46,7 @@ import { addIcons } from "ionicons";
 })
 export class UpdateMealPlanModalPage {
   constructor() {
-    addIcons({ close, list, reorderThree });
+    addIcons({ closeOutline, listOutline, reorderThreeOutline });
   }
 
   private modalCtrl = inject(ModalController);

@@ -4,7 +4,7 @@
       {{ "pages.recipeDetailsPopover.options" | translate }}
     </ion-list-header>
     <ion-item lines="full">
-      <ion-icon name="eye" slot="start"></ion-icon>
+      <ion-icon name="eye-outline" slot="start"></ion-icon>
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]"
         (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')"
@@ -30,7 +30,7 @@
     size="small"
     class="ion-margin"
   >
-    <ion-icon name="pin" slot="start"></ion-icon>
+    <ion-icon name="pin-outline" slot="start"></ion-icon>
     @if (cookingToolbarService.isPinned(recipeId)) {
       {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }}
     } @else {
@@ -44,7 +44,7 @@
     size="small"
     class="ion-margin"
   >
-    <ion-icon name="restaurant" slot="start"></ion-icon>
+    <ion-icon name="restaurant-outline" slot="start"></ion-icon>
     {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
   </ion-button>
 
@@ -54,7 +54,7 @@
     size="small"
     class="ion-margin"
   >
-    <ion-icon name="share" slot="start"></ion-icon>
+    <ion-icon name="share-outline" slot="start"></ion-icon>
     {{ "pages.recipeDetailsPopover.share" | translate }}
   </ion-button>
 
@@ -65,7 +65,7 @@
       size="small"
       class="ion-margin"
     >
-      <ion-icon name="create" slot="start"></ion-icon>
+      <ion-icon name="create-outline" slot="start"></ion-icon>
       {{ "pages.discoverRecipe.edit" | translate }}
     </ion-button>
 
@@ -76,7 +76,7 @@
       color="danger"
       class="ion-margin"
     >
-      <ion-icon name="trash" slot="start"></ion-icon>
+      <ion-icon name="trash-outline" slot="start"></ion-icon>
       {{ "pages.discoverRecipe.unpublish" | translate }}
     </ion-button>
   } @else {
@@ -87,7 +87,7 @@
       color="danger"
       class="ion-margin"
     >
-      <ion-icon name="flag" slot="start"></ion-icon>
+      <ion-icon name="flag-outline" slot="start"></ion-icon>
       {{ "pages.discoverRecipe.report" | translate }}
     </ion-button>
   }

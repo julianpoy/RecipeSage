@@ -31,7 +31,7 @@ import {
   IonFooter,
   IonSpinner,
 } from "@ionic/angular/standalone";
-import { add, chatbox } from "ionicons/icons";
+import { addOutline, chatboxOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -74,7 +74,7 @@ export class MessagesPage {
   threads: MessageThreadDTO[] = [];
 
   constructor() {
-    addIcons({ add, chatbox });
+    addIcons({ addOutline, chatboxOutline });
     this.messagingService.requestNotifications();
   }
 

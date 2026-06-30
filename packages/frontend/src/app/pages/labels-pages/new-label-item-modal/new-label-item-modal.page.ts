@@ -27,7 +27,12 @@ import {
   IonToggle,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { arrowBack, close, pricetag, pricetags } from "ionicons/icons";
+import {
+  arrowBackOutline,
+  closeOutline,
+  pricetagOutline,
+  pricetagsOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -54,7 +59,12 @@ import { addIcons } from "ionicons";
 })
 export class NewLabelItemModalPage {
   constructor() {
-    addIcons({ arrowBack, close, pricetag, pricetags });
+    addIcons({
+      arrowBackOutline,
+      closeOutline,
+      pricetagOutline,
+      pricetagsOutline,
+    });
   }
 
   private translate = inject(TranslateService);
@@ -112,7 +122,7 @@ export class NewLabelItemModalPage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag",
+      icon: "pricetag-outline",
     }));
 
     return mapped;

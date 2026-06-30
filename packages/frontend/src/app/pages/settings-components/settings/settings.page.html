@@ -15,39 +15,39 @@
         {{ "pages.settings.section1.title" | translate }}
       </ion-list-header>
       <ion-item lines="inset" (click)="goToImport()" button>
-        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.import" | translate }} </ion-label>
       </ion-item>
       <ion-item lines="inset" (click)="goToExport()" button>
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.export" | translate }} </ion-label>
       </ion-item>
       <ion-item lines="inset" (click)="goToJobs()" button>
-        <ion-icon name="list" slot="start"></ion-icon>
+        <ion-icon name="list-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.jobs" | translate }} </ion-label>
       </ion-item>
       <ion-item lines="inset" (click)="exportDebugStore()" button>
-        <ion-icon name="bug" slot="start"></ion-icon>
+        <ion-icon name="bug-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.debugDump" | translate }} </ion-label>
       </ion-item>
       <ion-item lines="inset" (click)="goToAccount()" button>
-        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.account" | translate }} </ion-label>
       </ion-item>
       <ion-item [disabled]="!isLoggedIn" (click)="logout()" button>
-        <ion-icon slot="start" name="log-out"></ion-icon>
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
         <ion-label> {{ "pages.settings.logout" | translate }} </ion-label>
       </ion-item>
       <ion-list-header>
         {{ "pages.settings.section2.title" | translate }}
       </ion-list-header>
       <ion-item lines="inset" (click)="triggerSync()" button>
-        <ion-icon name="sync" slot="start"></ion-icon>
+        <ion-icon name="sync-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.sync" | translate }} </ion-label>
       </ion-item>
 
       <ion-item lines="inset" (click)="resetCompletion()" button>
-        <ion-icon name="trash-bin" slot="start"></ion-icon>
+        <ion-icon name="trash-bin-outline" slot="start"></ion-icon>
         <ion-label>
           {{ "pages.settings.resetCompletion" | translate }}
         </ion-label>
@@ -55,7 +55,7 @@
 
       @if (showSplitPaneOption) {
         <ion-item lines="inset">
-          <ion-icon name="tablet-landscape" slot="start"></ion-icon>
+          <ion-icon name="tablet-landscape-outline" slot="start"></ion-icon>
           <ion-toggle
             [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
             (ngModelChange)="toggleSplitPane(); savePreferences()"
@@ -90,7 +90,7 @@
         </ion-select>
       </ion-item>
       <ion-item lines="inset">
-        <ion-icon name="brush" slot="start"></ion-icon>
+        <ion-icon name="brush-outline" slot="start"></ion-icon>
         <ion-select
           [(ngModel)]="preferences[preferenceKeys.Theme]"
           (ngModelChange)="appThemeChanged()"
@@ -171,7 +171,7 @@
         button
         detail="false"
       >
-        <ion-icon name="restaurant" slot="start"></ion-icon>
+        <ion-icon name="restaurant-outline" slot="start"></ion-icon>
         <ion-label>
           {{ "pages.settings.cookModeFontSize" | translate }}
         </ion-label>
@@ -183,7 +183,7 @@
         ></ion-icon>
       </ion-item>
       <ion-item lines="inset">
-        <ion-icon name="fitness" slot="start"></ion-icon>
+        <ion-icon name="fitness-outline" slot="start"></ion-icon>
         <ion-toggle
           [(ngModel)]="
             preferences[recipeDetailsPreferenceKeys.AutoExpandNutrition]
@@ -196,7 +196,7 @@
         </ion-toggle>
       </ion-item>
       <ion-item lines="inset">
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
         <ion-toggle
           [checked]="preferences[preferenceKeys.PreferencesSync] === 'enabled'"
           (ionChange)="togglePreferencesSync($event)"
@@ -207,12 +207,12 @@
         </ion-toggle>
       </ion-item>
       <ion-item lines="inset" (click)="resetPreferences()" button>
-        <ion-icon name="close" slot="start"></ion-icon>
+        <ion-icon name="close-outline" slot="start"></ion-icon>
         <ion-label> {{ "pages.settings.reset" | translate }} </ion-label>
       </ion-item>
       @if (showServerSettings) {
         <ion-item lines="inset" (click)="goToServerSettings()" button>
-          <ion-icon name="server" slot="start"></ion-icon>
+          <ion-icon name="server-outline" slot="start"></ion-icon>
           <ion-label>
             {{ "pages.settings.serverSettings" | translate }}
           </ion-label>

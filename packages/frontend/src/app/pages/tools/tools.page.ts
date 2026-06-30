@@ -17,13 +17,13 @@ import {
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import {
-  book,
-  chatboxEllipses,
-  fitness,
-  help,
-  resize,
-  swapHorizontal,
-  thermometer,
+  bookOutline,
+  chatboxEllipsesOutline,
+  fitnessOutline,
+  helpOutline,
+  resizeOutline,
+  swapHorizontalOutline,
+  thermometerOutline,
 } from "ionicons/icons";
 
 @Component({
@@ -50,13 +50,13 @@ export class ToolsPage {
 
   constructor() {
     addIcons({
-      book,
-      chatboxEllipses,
-      fitness,
-      help,
-      resize,
-      swapHorizontal,
-      thermometer,
+      bookOutline,
+      chatboxEllipsesOutline,
+      fitnessOutline,
+      helpOutline,
+      resizeOutline,
+      swapHorizontalOutline,
+      thermometerOutline,
     });
   }
 

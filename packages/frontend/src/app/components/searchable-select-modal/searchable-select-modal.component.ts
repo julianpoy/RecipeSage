@@ -13,7 +13,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { close, checkmark } from "ionicons/icons";
+import { closeOutline, checkmarkOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -56,7 +56,7 @@ export class SearchableSelectModalComponent {
   searchText = "";
 
   constructor() {
-    addIcons({ close, checkmark });
+    addIcons({ closeOutline, checkmarkOutline });
   }
 
   get filteredOptions(): SearchableSelectOption[] {

@@ -39,14 +39,14 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  close,
-  folderOpen,
-  options,
-  pencil,
-  pricetag,
-  pricetags,
-  trash,
+  addOutline,
+  closeOutline,
+  folderOpenOutline,
+  optionsOutline,
+  pencilOutline,
+  pricetagOutline,
+  pricetagsOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -79,14 +79,14 @@ import { addIcons } from "ionicons";
 export class LabelsPage {
   constructor() {
     addIcons({
-      add,
-      close,
-      folderOpen,
-      options,
-      pencil,
-      pricetag,
-      pricetags,
-      trash,
+      addOutline,
+      closeOutline,
+      folderOpenOutline,
+      optionsOutline,
+      pencilOutline,
+      pricetagOutline,
+      pricetagsOutline,
+      trashOutline,
     });
   }
 

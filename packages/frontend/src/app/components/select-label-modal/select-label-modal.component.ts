@@ -10,7 +10,7 @@ import {
   IonContent,
 } from "@ionic/angular/standalone";
 import type { LabelSummary } from "@recipesage/prisma";
-import { close } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -36,7 +36,7 @@ export class SelectLabelModalComponent {
   private modalCtrl = inject(ModalController);
 
   constructor() {
-    addIcons({ close });
+    addIcons({ closeOutline });
   }
 
   onSelect(label: LabelSummary) {

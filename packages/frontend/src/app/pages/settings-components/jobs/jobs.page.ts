@@ -23,11 +23,11 @@ import {
   IonText,
 } from "@ionic/angular/standalone";
 import {
-  book,
-  cloudDownload,
-  cloudUpload,
-  document,
-  list,
+  bookOutline,
+  cloudDownloadOutline,
+  cloudUploadOutline,
+  documentOutline,
+  listOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -61,7 +61,13 @@ const JOB_POLL_INTERVAL_MS = 60_000;
 })
 export class JobsPage {
   constructor() {
-    addIcons({ book, cloudDownload, cloudUpload, document, list });
+    addIcons({
+      bookOutline,
+      cloudDownloadOutline,
+      cloudUploadOutline,
+      documentOutline,
+      listOutline,
+    });
   }
 
   private utilService = inject(UtilService);
@@ -145,11 +151,11 @@ export class JobsPage {
   getJobIcon(job: JobSummary): string {
     switch (job.type) {
       case "COOKBOOK":
-        return "book";
+        return "book-outline";
       case "IMPORT":
-        return "cloud-upload";
+        return "cloud-upload-outline";
       default:
-        return "document";
+        return "document-outline";
     }
   }
 

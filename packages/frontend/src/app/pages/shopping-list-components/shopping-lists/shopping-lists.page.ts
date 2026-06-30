@@ -32,7 +32,13 @@ import {
   IonFabButton,
   IonSpinner,
 } from "@ionic/angular/standalone";
-import { add, ban, cart, list, options } from "ionicons/icons";
+import {
+  addOutline,
+  banOutline,
+  cartOutline,
+  listOutline,
+  optionsOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -82,7 +88,13 @@ export class ShoppingListsPage {
   });
 
   constructor() {
-    addIcons({ add, ban, cart, list, options });
+    addIcons({
+      addOutline,
+      banOutline,
+      cartOutline,
+      listOutline,
+      optionsOutline,
+    });
   }
 
   ionViewWillEnter() {

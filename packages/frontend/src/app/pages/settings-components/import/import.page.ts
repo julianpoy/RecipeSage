@@ -21,7 +21,7 @@ import {
   IonButton,
   IonList,
 } from "@ionic/angular/standalone";
-import { cloudUpload, fileTrayFull } from "ionicons/icons";
+import { cloudUploadOutline, fileTrayFullOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export const getJobFailureI18n = (importJob: ImportJobSummary) => {
@@ -86,7 +86,7 @@ type ImportFormat =
 })
 export class ImportPage {
   constructor() {
-    addIcons({ cloudUpload, fileTrayFull });
+    addIcons({ cloudUploadOutline, fileTrayFullOutline });
   }
 
   private navCtrl = inject(NavController);

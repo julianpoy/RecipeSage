@@ -63,16 +63,14 @@ import {
   IonAvatar,
 } from "@ionic/angular/standalone";
 import {
-  book,
-  bookmark,
-  create,
-  documentText,
-  fitness,
-  link,
-  list,
-  options,
-  pricetag,
-  trash,
+  bookOutline,
+  bookmarkOutline,
+  documentTextOutline,
+  fitnessOutline,
+  linkOutline,
+  listOutline,
+  optionsOutline,
+  pricetagOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -146,16 +144,14 @@ export class DiscoverRecipePage {
 
   constructor() {
     addIcons({
-      book,
-      bookmark,
-      create,
-      documentText,
-      fitness,
-      link,
-      list,
-      options,
-      pricetag,
-      trash,
+      bookOutline,
+      bookmarkOutline,
+      documentTextOutline,
+      fitnessOutline,
+      linkOutline,
+      listOutline,
+      optionsOutline,
+      pricetagOutline,
     });
     this.applyRouteParams();
   }

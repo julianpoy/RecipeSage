@@ -6,7 +6,12 @@ import {
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
-import { add, book, pricetag, removeCircle } from "ionicons/icons";
+import {
+  addOutline,
+  bookOutline,
+  pricetagOutline,
+  removeCircleOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { RouteMap } from "../../../services/util.service";
@@ -98,7 +103,7 @@ export class CookbookGeneratorPage {
   maxRecipes = MAX_RECIPES;
 
   constructor() {
-    addIcons({ add, book, pricetag, removeCircle });
+    addIcons({ addOutline, bookOutline, pricetagOutline, removeCircleOutline });
   }
 
   async addRecipe() {

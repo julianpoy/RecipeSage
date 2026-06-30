@@ -7,7 +7,7 @@
         </ion-list-header>
       }
       <ion-item lines="full">
-        <ion-icon name="eye" slot="start"></ion-icon>
+        <ion-icon name="eye-outline" slot="start"></ion-icon>
         <ion-toggle
           [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]"
           (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')"
@@ -34,7 +34,7 @@
     size="small"
     class="ion-margin"
   >
-    <ion-icon name="pin" slot="start"></ion-icon>
+    <ion-icon name="pin-outline" slot="start"></ion-icon>
     @if (cookingToolbarService.isPinned(recipe.id)) {
       <span> {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }} </span>
     }
@@ -49,7 +49,7 @@
     size="small"
     class="ion-margin"
   >
-    <ion-icon name="restaurant" slot="start"></ion-icon>
+    <ion-icon name="restaurant-outline" slot="start"></ion-icon>
     {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
   </ion-button>
 
@@ -68,7 +68,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
       </ion-button>
       <ion-list-header>
@@ -81,7 +81,7 @@
         class="ion-margin"
         color="danger"
       >
-        <ion-icon name="trash" slot="start"></ion-icon>
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.delete" | translate }}
       </ion-button>
     </div>
@@ -101,7 +101,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
       </ion-button>
     </div>
@@ -121,7 +121,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetails.registerOrLoginToSave" | translate }}
       </ion-button>
     </div>
@@ -134,7 +134,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="list" slot="start"></ion-icon>
+        <ion-icon name="list-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.addToShoppingList" | translate }}
       </ion-button>
       <ion-button
@@ -143,7 +143,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.addToMealPlan" | translate }}
       </ion-button>
       <ion-button
@@ -152,7 +152,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="share" slot="start"></ion-icon>
+        <ion-icon name="share-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.share" | translate }}
       </ion-button>
       @if (!isSelfHost && capabilitiesService.capabilities.discoverPublish) {
@@ -162,7 +162,7 @@
           size="small"
           class="ion-margin"
         >
-          <ion-icon name="compass" slot="start"></ion-icon>
+          <ion-icon name="compass-outline" slot="start"></ion-icon>
           {{ "pages.recipeDetails.publishToDiscover" | translate }}
         </ion-button>
       }
@@ -172,7 +172,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="print" slot="start"></ion-icon>
+        <ion-icon name="print-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.print" | translate }}
       </ion-button>
       <ion-button
@@ -181,7 +181,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="create" slot="start"></ion-icon>
+        <ion-icon name="create-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.edit" | translate }}
       </ion-button>
       <ion-button
@@ -190,7 +190,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="copy" slot="start"></ion-icon>
+        <ion-icon name="copy-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.makeACopy" | translate }}
       </ion-button>
       <ion-button
@@ -199,7 +199,7 @@
         size="small"
         class="ion-margin"
       >
-        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.setLastMadeToday" | translate }}
       </ion-button>
       <ion-list-header>
@@ -212,7 +212,7 @@
         color="danger"
         class="ion-margin"
       >
-        <ion-icon name="trash" slot="start"></ion-icon>
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.delete" | translate }}
       </ion-button>
     </div>

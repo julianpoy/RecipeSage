@@ -30,7 +30,12 @@ import {
   type OvenTemperature,
 } from "@recipesage/util/shared";
 import { addIcons } from "ionicons";
-import { swapVertical, chevronForward, options, bulb } from "ionicons/icons";
+import {
+  swapVerticalOutline,
+  chevronForwardOutline,
+  optionsOutline,
+  bulbOutline,
+} from "ionicons/icons";
 
 import { RouteMap } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
@@ -181,10 +186,10 @@ export class MeasurementConverterPage implements OnInit {
 
   constructor() {
     addIcons({
-      swapVertical,
-      chevronForward,
-      options,
-      bulb,
+      swapVerticalOutline,
+      chevronForwardOutline,
+      optionsOutline,
+      bulbOutline,
     });
   }
 

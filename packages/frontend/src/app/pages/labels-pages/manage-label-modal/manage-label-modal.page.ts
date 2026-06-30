@@ -26,12 +26,12 @@ import {
   IonModal,
 } from "@ionic/angular/standalone";
 import {
-  close,
-  create,
-  folderOpen,
-  gitNetwork,
-  pricetag,
-  trash,
+  closeOutline,
+  createOutline,
+  folderOpenOutline,
+  gitNetworkOutline,
+  pricetagOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -79,7 +79,14 @@ export class ManageLabelModalPage {
   mergeInput = "";
 
   constructor() {
-    addIcons({ close, create, folderOpen, gitNetwork, pricetag, trash });
+    addIcons({
+      closeOutline,
+      createOutline,
+      folderOpenOutline,
+      gitNetworkOutline,
+      pricetagOutline,
+      trashOutline,
+    });
     const utilService = this.utilService;
 
     setTimeout(() => {

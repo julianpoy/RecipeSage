@@ -12,7 +12,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
-        <ion-icon name="options" slot="icon-only"></ion-icon>
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -46,7 +46,7 @@
               button
               (click)="isAutoclipPopoverOpen = false; clipFromUrl()"
             >
-              <ion-icon name="link" slot="start"></ion-icon>
+              <ion-icon name="link-outline" slot="start"></ion-icon>
               {{ "pages.editRecipe.autoclip" | translate }}
             </ion-item>
             <ion-item
@@ -60,7 +60,7 @@
               button
               (click)="isAutoclipPopoverOpen = false; scanImage()"
             >
-              <ion-icon name="camera" slot="start"></ion-icon>
+              <ion-icon name="camera-outline" slot="start"></ion-icon>
               {{ "pages.editRecipe.scanImage" | translate }}
             </ion-item>
             <ion-item
@@ -646,7 +646,7 @@
                   fill="clear"
                   (click)="removeLinkedRecipe(linkedRecipe.id)"
                 >
-                  <ion-icon name="close" slot="icon-only"></ion-icon>
+                  <ion-icon name="close-outline" slot="icon-only"></ion-icon>
                 </ion-button>
               </ion-item>
             }

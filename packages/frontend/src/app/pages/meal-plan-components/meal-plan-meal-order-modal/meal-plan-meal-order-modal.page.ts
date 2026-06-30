@@ -35,7 +35,11 @@ import {
   IonFooter,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { checkmark, close, closeCircle } from "ionicons/icons";
+import {
+  checkmarkOutline,
+  closeOutline,
+  closeCircleOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 interface MealOptionEntry {
@@ -69,7 +73,7 @@ interface MealOptionEntry {
 })
 export class MealPlanMealOrderModalPage implements OnInit {
   constructor() {
-    addIcons({ checkmark, close, closeCircle });
+    addIcons({ checkmarkOutline, closeOutline, closeCircleOutline });
   }
 
   private modalCtrl = inject(ModalController);

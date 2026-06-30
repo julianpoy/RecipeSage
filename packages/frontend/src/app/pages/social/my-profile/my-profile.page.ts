@@ -50,15 +50,15 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  arrowForward,
-  bookmarks,
-  folder,
-  key,
-  pencil,
-  pricetag,
-  shareSocial,
-  trash,
+  addOutline,
+  arrowForwardOutline,
+  bookmarksOutline,
+  folderOutline,
+  keyOutline,
+  pencilOutline,
+  pricetagOutline,
+  shareSocialOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -137,15 +137,15 @@ export class MyProfilePage {
 
   constructor() {
     addIcons({
-      add,
-      arrowForward,
-      bookmarks,
-      folder,
-      key,
-      pencil,
-      pricetag,
-      shareSocial,
-      trash,
+      addOutline,
+      arrowForwardOutline,
+      bookmarksOutline,
+      folderOutline,
+      keyOutline,
+      pencilOutline,
+      pricetagOutline,
+      shareSocialOutline,
+      trashOutline,
     });
     effect(() => {
       const me = this.me();

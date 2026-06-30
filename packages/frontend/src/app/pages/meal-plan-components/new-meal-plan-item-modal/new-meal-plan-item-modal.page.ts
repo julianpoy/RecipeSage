@@ -28,7 +28,7 @@ import {
   IonTextarea,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { calendar, close } from "ionicons/icons";
+import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export interface MealPlanItemDraft {
@@ -67,7 +67,7 @@ export interface MealPlanItemDraft {
 })
 export class NewMealPlanItemModalPage {
   constructor() {
-    addIcons({ calendar, close });
+    addIcons({ calendarOutline, closeOutline });
   }
 
   private modalCtrl = inject(ModalController);

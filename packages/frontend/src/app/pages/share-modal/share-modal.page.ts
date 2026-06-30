@@ -37,15 +37,15 @@ import {
   type SegmentCustomEvent,
 } from "@ionic/angular/standalone";
 import {
-  close,
-  codeWorking,
-  documentText,
-  image,
-  link,
-  print,
-  resize,
-  send,
-  swapHorizontal,
+  closeOutline,
+  codeWorkingOutline,
+  documentTextOutline,
+  imageOutline,
+  linkOutline,
+  printOutline,
+  resizeOutline,
+  sendOutline,
+  swapHorizontalOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -114,15 +114,15 @@ export class ShareModalPage {
 
   constructor() {
     addIcons({
-      close,
-      codeWorking,
-      documentText,
-      image,
-      link,
-      print,
-      resize,
-      send,
-      swapHorizontal,
+      closeOutline,
+      codeWorkingOutline,
+      documentTextOutline,
+      imageOutline,
+      linkOutline,
+      printOutline,
+      resizeOutline,
+      sendOutline,
+      swapHorizontalOutline,
     });
     setTimeout(() => {
       this.recipeURL =

@@ -11,8 +11,8 @@ import { IonIcon } from "@ionic/angular/standalone";
 import {
   caretBack,
   caretForward,
-  informationCircle,
-  removeCircle,
+  informationCircleOutline,
+  removeCircleOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -25,7 +25,12 @@ import { addIcons } from "ionicons";
 })
 export class MultiImageUploadComponent {
   constructor() {
-    addIcons({ caretBack, caretForward, informationCircle, removeCircle });
+    addIcons({
+      caretBack,
+      caretForward,
+      informationCircleOutline,
+      removeCircleOutline,
+    });
   }
 
   private toastCtrl = inject(ToastController);

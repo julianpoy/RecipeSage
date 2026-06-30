@@ -10,7 +10,7 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <info-block icon="book">
+    <info-block icon="book-outline">
       <ng-container virtualSlot="title">
         {{ "pages.cookbook.intro.title" | translate }}
       </ng-container>
@@ -69,11 +69,11 @@
       <ion-list-header>
         <ion-label>{{ "pages.cookbook.recipes.title" | translate }}</ion-label>
         <ion-button size="small" (click)="addRecipe()">
-          <ion-icon name="add" slot="start"></ion-icon>
+          <ion-icon name="add-outline" slot="start"></ion-icon>
           {{ "pages.cookbook.addRecipe.title" | translate }}
         </ion-button>
         <ion-button size="small" (click)="addLabel()">
-          <ion-icon name="pricetag" slot="start"></ion-icon>
+          <ion-icon name="pricetag-outline" slot="start"></ion-icon>
           {{ "pages.cookbook.addLabel.title" | translate }}
         </ion-button>
       </ion-list-header>
@@ -100,7 +100,10 @@
                 color="danger"
                 (click)="removeRecipe(recipe)"
               >
-                <ion-icon name="remove-circle" slot="icon-only"></ion-icon>
+                <ion-icon
+                  name="remove-circle-outline"
+                  slot="icon-only"
+                ></ion-icon>
               </ion-button>
               <ion-label class="ion-text-wrap">{{ recipe.title }}</ion-label>
               <ion-reorder slot="end"></ion-reorder>

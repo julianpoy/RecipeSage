@@ -6,7 +6,7 @@
       }
       @if (selectionMode) {
         <ion-button (click)="clearSelectedLabels()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
         </ion-button>
       }
     </ion-buttons>
@@ -26,12 +26,12 @@
     <ion-buttons slot="end">
       @if (selectionMode && selectedLabelIds.length > 0) {
         <ion-button (click)="deleteSelectedLabels()">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       }
 
       <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="options"></ion-icon>
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -65,7 +65,7 @@
     ) {
       <null-state>
         <ion-icon
-          name="pricetag"
+          name="pricetag-outline"
           class="big-icon"
           virtualSlot="header"
         ></ion-icon>
@@ -96,7 +96,7 @@
         @if (!labels.length) {
           <null-state>
             <ion-icon
-              name="pricetag"
+              name="pricetag-outline"
               class="big-icon"
               virtualSlot="header"
             ></ion-icon>
@@ -114,7 +114,7 @@
             button
             class="ion-margin-start"
           >
-            <ion-icon name="pricetag" slot="start"></ion-icon>
+            <ion-icon name="pricetag-outline" slot="start"></ion-icon>
             <ion-label>
               {{ label.title }}
               <p>
@@ -147,13 +147,13 @@
               slot="end"
               (click)="$event.stopPropagation(); manageLabel(label)"
             >
-              <ion-icon name="pencil" slot="icon-only"></ion-icon>
+              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button
               slot="end"
               (click)="$event.stopPropagation(); browseLabelRecipes(label)"
             >
-              <ion-icon name="folder-open" slot="icon-only"></ion-icon>
+              <ion-icon name="folder-open-outline" slot="icon-only"></ion-icon>
             </ion-button>
             @if (selectedLabelIds.indexOf(label.id) > -1) {
               <ion-badge slot="end">
@@ -180,7 +180,7 @@
         @if (!labelGroups.length) {
           <null-state>
             <ion-icon
-              name="pricetags"
+              name="pricetags-outline"
               class="big-icon"
               virtualSlot="header"
             ></ion-icon>
@@ -201,7 +201,7 @@
             button
             class="ion-margin-start"
           >
-            <ion-icon name="pricetags" slot="start"></ion-icon>
+            <ion-icon name="pricetags-outline" slot="start"></ion-icon>
             <ion-label>
               {{ labelGroup.title }}
               <p>
@@ -224,7 +224,7 @@
               slot="end"
               (click)="$event.stopPropagation(); manageLabelGroup(labelGroup)"
             >
-              <ion-icon name="pencil" slot="icon-only"></ion-icon>
+              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
             </ion-button>
           </ion-item>
         }
@@ -238,7 +238,7 @@
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="new()" color="primary">
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

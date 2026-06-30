@@ -6,7 +6,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="close()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -45,7 +45,7 @@
             (click)="removeEntry($index)"
             [disabled]="entry.isDefault"
           >
-            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+            <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
           </ion-button>
           <ion-reorder></ion-reorder>
         }
@@ -66,7 +66,7 @@
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()">
-    <ion-icon name="checkmark" slot="start"></ion-icon>
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
     <ion-label> {{ "generic.done" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

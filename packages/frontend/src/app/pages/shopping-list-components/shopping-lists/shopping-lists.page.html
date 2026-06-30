@@ -8,7 +8,7 @@
 
     <ion-buttons slot="end">
       <ion-button id="popover-trigger">
-        <ion-icon name="options" slot="icon-only"></ion-icon>
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,7 +29,7 @@
             size="small"
             class="ion-margin"
           >
-            <ion-icon name="ban" slot="start"></ion-icon>
+            <ion-icon name="ban-outline" slot="start"></ion-icon>
             {{ "pages.shoppingLists.editIgnore" | translate }}
           </ion-button>
         </ion-content>
@@ -43,7 +43,7 @@
           class="ion-text-wrap"
           (click)="openShoppingList(shoppingList.id)"
         >
-          <ion-icon name="list" slot="start"></ion-icon>
+          <ion-icon name="list-outline" slot="start"></ion-icon>
           <ion-label>
             <h2>{{ shoppingList.title }}</h2>
             <p>
@@ -105,7 +105,7 @@
       @if (shoppingLists()?.length === 0) {
         <null-state>
           <ion-icon
-            name="cart"
+            name="cart-outline"
             class="big-icon"
             virtualSlot="header"
           ></ion-icon>
@@ -121,7 +121,7 @@
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newShoppingList()" color="primary">
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

@@ -18,7 +18,11 @@ import {
   IonIcon,
   IonContent,
 } from "@ionic/angular/standalone";
-import { arrowBack, arrowForward, close } from "ionicons/icons";
+import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  closeOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -39,7 +43,7 @@ import { addIcons } from "ionicons";
 })
 export class ImageViewerComponent {
   constructor() {
-    addIcons({ arrowBack, arrowForward, close });
+    addIcons({ arrowBackOutline, arrowForwardOutline, closeOutline });
   }
 
   private modalCtrl = inject(ModalController);

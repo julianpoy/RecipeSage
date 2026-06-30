@@ -30,15 +30,15 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import {
-  cart,
-  copy,
-  cut,
-  nutrition,
-  pencil,
-  pin,
-  print,
-  share,
-  trash,
+  cartOutline,
+  copyOutline,
+  cutOutline,
+  nutritionOutline,
+  pencilOutline,
+  pinOutline,
+  printOutline,
+  shareOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -60,7 +60,17 @@ import { addIcons } from "ionicons";
 })
 export class MealPlanPopoverPage {
   constructor() {
-    addIcons({ cart, copy, cut, nutrition, pencil, pin, print, share, trash });
+    addIcons({
+      cartOutline,
+      copyOutline,
+      cutOutline,
+      nutritionOutline,
+      pencilOutline,
+      pinOutline,
+      printOutline,
+      shareOutline,
+      trashOutline,
+    });
   }
 
   private popoverCtrl = inject(PopoverController);

@@ -19,13 +19,13 @@
     <ion-list>
       <ion-item button (click)="goToMessages()">
         <ion-avatar slot="start" class="icon-avatar">
-          <ion-icon name="chatbubbles"></ion-icon>
+          <ion-icon name="chatbubbles-outline"></ion-icon>
         </ion-avatar>
         <ion-label>{{ "pages.app.nav.messages" | translate }}</ion-label>
       </ion-item>
       <ion-item button (click)="goToInbox()">
         <ion-avatar slot="start" class="icon-avatar">
-          <ion-icon name="mail"></ion-icon>
+          <ion-icon name="mail-outline"></ion-icon>
         </ion-avatar>
         <ion-label>{{ "pages.app.nav.inbox" | translate }}</ion-label>
         @if (inboxCount) {
@@ -61,7 +61,7 @@
     @if (me() && !me()?.enableProfile) {
       <null-state>
         <ion-icon
-          name="person-circle"
+          name="person-circle-outline"
           class="big-icon"
           virtualSlot="header"
         ></ion-icon>
@@ -72,7 +72,7 @@
             <br />
             <br />
             <ion-button (click)="editProfile()">
-              <ion-icon slot="start" name="add"></ion-icon>
+              <ion-icon slot="start" name="add-outline"></ion-icon>
               {{ "pages.people.create" | translate }}
             </ion-button>
           </p>
@@ -176,7 +176,7 @@
         ) {
           <null-state>
             <ion-icon
-              name="people"
+              name="people-outline"
               class="big-icon"
               virtualSlot="header"
             ></ion-icon>
@@ -194,7 +194,7 @@
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="findProfile()" color="primary">
-      <ion-icon name="search"></ion-icon>
+      <ion-icon name="search-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

@@ -37,12 +37,12 @@ import {
   IonBadge,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  chatbubbles,
-  mail,
-  people,
-  personCircle,
-  search,
+  addOutline,
+  chatbubblesOutline,
+  mailOutline,
+  peopleOutline,
+  personCircleOutline,
+  searchOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -76,7 +76,14 @@ import { addIcons } from "ionicons";
 })
 export class PeoplePage {
   constructor() {
-    addIcons({ add, chatbubbles, mail, people, personCircle, search });
+    addIcons({
+      addOutline,
+      chatbubblesOutline,
+      mailOutline,
+      peopleOutline,
+      personCircleOutline,
+      searchOutline,
+    });
   }
 
   navCtrl = inject(NavController);

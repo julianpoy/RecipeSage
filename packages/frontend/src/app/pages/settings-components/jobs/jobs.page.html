@@ -23,7 +23,7 @@
             (click)="downloadJob(job)"
             target="_blank"
             [detail]="isDownloadable(job)"
-            detailIcon="cloud-download"
+            detailIcon="cloud-download-outline"
             [button]="isDownloadable(job)"
           >
             <ion-icon [name]="getJobIcon(job)" slot="start" />
@@ -79,7 +79,11 @@
       }
     } @else {
       <null-state>
-        <ion-icon name="list" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-icon
+          name="list-outline"
+          class="big-icon"
+          virtualSlot="header"
+        ></ion-icon>
         <ion-label virtualSlot="body">
           <p>{{ "pages.jobs.empty" | translate }}</p>
         </ion-label>

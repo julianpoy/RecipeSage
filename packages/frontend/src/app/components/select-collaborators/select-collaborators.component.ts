@@ -17,7 +17,7 @@ import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../select-user/select-user.component";
 import { IonIcon } from "@ionic/angular/standalone";
-import { trash } from "ionicons/icons";
+import { trashOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -29,7 +29,7 @@ import { addIcons } from "ionicons";
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {
   constructor() {
-    addIcons({ trash });
+    addIcons({ trashOutline });
   }
 
   toastCtrl = inject(ToastController);
