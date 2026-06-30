@@ -219,7 +219,7 @@
     "@vitest/coverage-v8": "4.1.9",
     "@vitest/eslint-plugin": "^1.6.20",
     "@vitest/ui": "4.1.9",
-    "astro": "^6.4.6",
+    "astro": "^6.4.8",
     "astro-eslint-parser": "^1.4.0",
     "copy-webpack-plugin": "^14.0.0",
     "electron": "^40.2.1",
