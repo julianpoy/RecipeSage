@@ -22,7 +22,7 @@ import {
   IonListHeader,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { ellipsisVertical, trash } from "ionicons/icons";
+import { ellipsisVerticalOutline, trashOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -106,7 +106,7 @@ export class ShoppingListItemComponent {
   userKnownCategories = this.getUserKnownCategories();
 
   constructor() {
-    addIcons({ ellipsisVertical, trash });
+    addIcons({ ellipsisVerticalOutline, trashOutline });
     this.generateBuiltinCategories();
   }
 

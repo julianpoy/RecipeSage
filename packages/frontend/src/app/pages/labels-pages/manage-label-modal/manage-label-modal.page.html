@@ -6,7 +6,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,7 +14,7 @@
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
-    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-icon name="pricetag-outline" slot="start"></ion-icon>
     <ion-label>
       <h2 class="ion-text-capitalize">{{ label.title }}</h2>
       <p>
@@ -51,27 +51,27 @@
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="view()">
-    <ion-icon name="folder-open" slot="start"></ion-icon>
+    <ion-icon name="folder-open-outline" slot="start"></ion-icon>
     <ion-label>{{ "pages.manageLabelModal.view" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" (click)="rename()">
-    <ion-icon name="create" slot="start"></ion-icon>
+    <ion-icon name="create-outline" slot="start"></ion-icon>
     <ion-label>{{ "pages.manageLabelModal.rename" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" (click)="merge()">
-    <ion-icon name="git-network" slot="start"></ion-icon>
+    <ion-icon name="git-network-outline" slot="start"></ion-icon>
     <ion-label>{{ "pages.manageLabelModal.merge" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" color="danger" (click)="delete()">
-    <ion-icon name="trash" slot="start"></ion-icon>
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
     <ion-label>{{ "pages.manageLabelModal.delete" | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="block" color="danger" (click)="deleteWithRecipes()">
-    <ion-icon name="trash" slot="start"></ion-icon>
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
     <ion-label>{{
       "pages.manageLabelModal.deleteWithRecipes" | translate
     }}</ion-label>

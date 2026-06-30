@@ -7,7 +7,7 @@ import { RouteMap } from "../../services/util.service";
 import { CookingToolbarService } from "../../services/cooking-toolbar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon, IonRippleEffect } from "@ionic/angular/standalone";
-import { close, pin } from "ionicons/icons";
+import { closeOutline, pinOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -19,7 +19,7 @@ import { addIcons } from "ionicons";
 })
 export class CookingToolbarComponent {
   constructor() {
-    addIcons({ close, pin });
+    addIcons({ closeOutline, pinOutline });
   }
 
   private navCtrl = inject(NavController);

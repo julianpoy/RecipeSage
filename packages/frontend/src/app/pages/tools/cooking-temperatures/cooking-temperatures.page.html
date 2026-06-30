@@ -11,7 +11,7 @@
 <ion-content>
   <div class="page-wrapper">
     <info-block
-      icon="shield"
+      icon="shield-outline"
       [ariaLabel]="'pages.cookingTemperatures.safety.title' | translate"
     >
       <ng-container virtualSlot="title">
@@ -35,7 +35,10 @@
 
     @if (visibleGroups.length === 0) {
       <div class="empty-state" role="status" aria-live="polite">
-        <ion-icon name="information-circle" aria-hidden="true"></ion-icon>
+        <ion-icon
+          name="information-circle-outline"
+          aria-hidden="true"
+        ></ion-icon>
         <p>{{ "pages.cookingTemperatures.noResults" | translate }}</p>
       </div>
     }
@@ -62,14 +65,14 @@
               <div class="temp-chips">
                 @if (display.entry.tempKind === "oil") {
                   <ion-chip color="tertiary" class="info-chip">
-                    <ion-icon name="water"></ion-icon>
+                    <ion-icon name="water-outline"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.oilTemp" | translate
                     }}</ion-label>
                   </ion-chip>
                 } @else if (display.entry.tempKind === "smokePoint") {
                   <ion-chip color="warning" class="info-chip">
-                    <ion-icon name="flame"></ion-icon>
+                    <ion-icon name="flame-outline"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.smokePoint" | translate
                     }}</ion-label>
@@ -77,14 +80,14 @@
                 }
                 @if (display.entry.isDangerZone) {
                   <ion-chip color="danger" class="info-chip">
-                    <ion-icon name="warning"></ion-icon>
+                    <ion-icon name="warning-outline"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.bacteriaZone" | translate
                     }}</ion-label>
                   </ion-chip>
                 } @else if (display.entry.isSafetyMinimum) {
                   <ion-chip color="success" class="info-chip">
-                    <ion-icon name="shield"></ion-icon>
+                    <ion-icon name="shield-outline"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.usdaMinimum" | translate
                     }}</ion-label>
@@ -100,7 +103,7 @@
                 }
                 @if (display.entry.restMinutes) {
                   <ion-chip color="warning" class="info-chip">
-                    <ion-icon name="timer"></ion-icon>
+                    <ion-icon name="timer-outline"></ion-icon>
                     <ion-label>{{
                       "pages.cookingTemperatures.chip.rest"
                         | translate: { minutes: display.entry.restMinutes }

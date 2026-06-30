@@ -14,15 +14,15 @@ import {
 } from "@recipesage/util/shared";
 import { addIcons } from "ionicons";
 import {
-  resize,
-  swapHorizontal,
+  resizeOutline,
+  swapHorizontalOutline,
   copyOutline,
-  informationCircle,
-  chevronDown,
-  chevronUp,
-  flame,
-  checkmarkCircle,
-  arrowForward,
+  informationCircleOutline,
+  chevronDownOutline,
+  chevronUpOutline,
+  flameOutline,
+  checkmarkCircleOutline,
+  arrowForwardOutline,
   ellipseOutline,
   squareOutline,
   tabletLandscapeOutline,
@@ -31,7 +31,7 @@ import {
   albumsOutline,
   radioButtonOffOutline,
   gridOutline,
-  search,
+  searchOutline,
 } from "ionicons/icons";
 import {
   IonHeader,
@@ -308,15 +308,15 @@ export class PanBakewareConverterPage implements OnInit {
 
   constructor() {
     addIcons({
-      resize,
-      swapHorizontal,
+      resizeOutline,
+      swapHorizontalOutline,
       copyOutline,
-      informationCircle,
-      chevronDown,
-      chevronUp,
-      flame,
-      checkmarkCircle,
-      arrowForward,
+      informationCircleOutline,
+      chevronDownOutline,
+      chevronUpOutline,
+      flameOutline,
+      checkmarkCircleOutline,
+      arrowForwardOutline,
       ellipseOutline,
       squareOutline,
       tabletLandscapeOutline,
@@ -325,7 +325,7 @@ export class PanBakewareConverterPage implements OnInit {
       albumsOutline,
       radioButtonOffOutline,
       gridOutline,
-      search,
+      searchOutline,
     });
   }
 

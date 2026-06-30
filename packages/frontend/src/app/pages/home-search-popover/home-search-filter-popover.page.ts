@@ -24,7 +24,7 @@ import {
   IonToggle,
   IonSelectOption,
 } from "@ionic/angular/standalone";
-import { caretDownSharp, funnel } from "ionicons/icons";
+import { caretDownSharp, funnelOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -47,7 +47,7 @@ import { addIcons } from "ionicons";
 })
 export class HomeSearchFilterPopoverPage {
   constructor() {
-    addIcons({ caretDownSharp, funnel });
+    addIcons({ caretDownSharp, funnelOutline });
   }
 
   private translate = inject(TranslateService);

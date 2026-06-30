@@ -10,7 +10,7 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <info-block icon="resize">
+    <info-block icon="resize-outline">
       <ng-container virtualSlot="title">
         {{ "pages.panBakewareConverter.intro.title" | translate }}
       </ng-container>
@@ -271,7 +271,7 @@
 
     <div class="swap-row">
       <ion-button fill="clear" size="small" (click)="swapPans()">
-        <ion-icon slot="start" name="swap-horizontal"></ion-icon>
+        <ion-icon slot="start" name="swap-horizontal-outline"></ion-icon>
         {{ "pages.panBakewareConverter.swap" | translate }}
       </ion-button>
     </div>
@@ -639,7 +639,7 @@
             </p>
           </header>
           <ion-button expand="block" fill="outline" (click)="applyToRecipe()">
-            <ion-icon slot="start" name="search"></ion-icon>
+            <ion-icon slot="start" name="search-outline"></ion-icon>
             {{ "pages.panBakewareConverter.recipeApply.button" | translate }}
           </ion-button>
         </section>
@@ -680,8 +680,8 @@
             <ion-icon
               [name]="
                 bakeTimeAdvice.direction === 'similar'
-                  ? 'checkmark-circle'
-                  : 'flame'
+                  ? 'checkmark-circle-outline'
+                  : 'flame-outline'
               "
             ></ion-icon>
             <ion-label>{{ bakeDirectionLabel() }}</ion-label>
@@ -707,7 +707,7 @@
             ></text-input>
             <ion-icon
               class="bake-row-arrow"
-              name="arrow-forward"
+              name="arrow-forward-outline"
               aria-hidden="true"
             ></ion-icon>
             <span
@@ -743,7 +743,7 @@
             ></text-input>
             <ion-icon
               class="bake-row-arrow"
-              name="arrow-forward"
+              name="arrow-forward-outline"
               aria-hidden="true"
             ></ion-icon>
             <span
@@ -793,7 +793,10 @@
       </section>
     } @else {
       <aside class="warning-callout" role="status">
-        <ion-icon name="information-circle" aria-hidden="true"></ion-icon>
+        <ion-icon
+          name="information-circle-outline"
+          aria-hidden="true"
+        ></ion-icon>
         <div>
           <p class="warning-title">
             {{ "pages.panBakewareConverter.incomplete.title" | translate }}
@@ -812,7 +815,9 @@
       <ion-icon
         slot="start"
         color="medium"
-        [name]="methodologyExpanded ? 'chevron-up' : 'chevron-down'"
+        [name]="
+          methodologyExpanded ? 'chevron-up-outline' : 'chevron-down-outline'
+        "
       ></ion-icon>
       <ion-label color="medium">{{
         "pages.panBakewareConverter.methodology.toggle" | translate
@@ -849,7 +854,9 @@
       <ion-icon
         slot="start"
         color="medium"
-        [name]="referenceExpanded ? 'chevron-up' : 'chevron-down'"
+        [name]="
+          referenceExpanded ? 'chevron-up-outline' : 'chevron-down-outline'
+        "
       ></ion-icon>
       <ion-label color="medium">{{
         "pages.panBakewareConverter.reference.toggle" | translate

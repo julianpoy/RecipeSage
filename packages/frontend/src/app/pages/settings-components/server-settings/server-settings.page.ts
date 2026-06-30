@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { warning } from "ionicons/icons";
+import { warningOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { RouteMap } from "../../../services/util.service";
@@ -53,7 +53,7 @@ export class ServerSettingsPage {
   unlocked = false;
 
   constructor() {
-    addIcons({ warning });
+    addIcons({ warningOutline });
   }
 
   unlock() {

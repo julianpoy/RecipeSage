@@ -77,12 +77,12 @@ import {
   IonAvatar,
 } from "@ionic/angular/standalone";
 import {
-  camera,
-  close,
+  cameraOutline,
+  closeOutline,
   cutOutline,
   documentTextOutline,
-  link,
-  options,
+  linkOutline,
+  optionsOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -175,7 +175,14 @@ export class EditRecipePage {
   isAutoclipPopoverOpen = false;
 
   constructor() {
-    addIcons({ camera, close, cutOutline, documentTextOutline, link, options });
+    addIcons({
+      cameraOutline,
+      closeOutline,
+      cutOutline,
+      documentTextOutline,
+      linkOutline,
+      optionsOutline,
+    });
     this.applyRouteParams();
     this.load();
   }
@@ -1544,7 +1551,7 @@ export class EditRecipePage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag",
+      icon: "pricetag-outline",
     }));
 
     return mapped;

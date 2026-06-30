@@ -17,7 +17,7 @@
           class="ion-text-wrap"
           (click)="openMealPlan(mealPlan.id)"
         >
-          <ion-icon name="calendar" slot="start"></ion-icon>
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
           <ion-label>
             <h2>{{ mealPlan.title }}</h2>
             <p>
@@ -81,7 +81,7 @@
       @if (mealPlans()?.length === 0) {
         <null-state>
           <ion-icon
-            name="calendar"
+            name="calendar-outline"
             class="big-icon"
             virtualSlot="header"
           ></ion-icon>
@@ -97,7 +97,7 @@
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newMealPlan()" color="primary">
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

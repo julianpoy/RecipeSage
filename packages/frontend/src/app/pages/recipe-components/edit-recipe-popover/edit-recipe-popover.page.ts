@@ -9,7 +9,7 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { image } from "ionicons/icons";
+import { imageOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -21,7 +21,7 @@ import { addIcons } from "ionicons";
 })
 export class EditRecipePopoverPage {
   constructor() {
-    addIcons({ image });
+    addIcons({ imageOutline });
   }
 
   private preferencesService = inject(PreferencesService);

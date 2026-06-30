@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon, IonLabel, IonItem } from "@ionic/angular/standalone";
 import {
-  chatboxEllipses,
+  chatboxEllipsesOutline,
   logoFacebook,
   logoGithub,
   logoInstagram,
@@ -18,6 +18,11 @@ import { addIcons } from "ionicons";
 })
 export class SocialLinksComponent {
   constructor() {
-    addIcons({ chatboxEllipses, logoFacebook, logoGithub, logoInstagram });
+    addIcons({
+      chatboxEllipsesOutline,
+      logoFacebook,
+      logoGithub,
+      logoInstagram,
+    });
   }
 }

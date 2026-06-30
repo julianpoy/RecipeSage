@@ -16,7 +16,10 @@
     @if (ratingFilter.length) {
       <ion-badge slot="end">
         {{ ratingFilter.length }}
-        <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+        <ion-icon
+          name="funnel-outline"
+          style="vertical-align: bottom"
+        ></ion-icon>
       </ion-badge>
     }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
@@ -62,7 +65,10 @@
     @if (nutritionFilterActiveCount > 0) {
       <ion-badge slot="end">
         {{ nutritionFilterActiveCount }}
-        <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+        <ion-icon
+          name="funnel-outline"
+          style="vertical-align: bottom"
+        ></ion-icon>
       </ion-badge>
     }
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>

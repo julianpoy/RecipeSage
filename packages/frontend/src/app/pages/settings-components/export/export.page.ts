@@ -21,7 +21,7 @@ import {
   IonButton,
   IonList,
 } from "@ionic/angular/standalone";
-import { cloudDownload, document } from "ionicons/icons";
+import { cloudDownloadOutline, documentOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export enum ExportFormat {
@@ -66,7 +66,7 @@ const JOB_POLL_INTERVAL_MS = 60_000;
 })
 export class ExportPage {
   constructor() {
-    addIcons({ cloudDownload, document });
+    addIcons({ cloudDownloadOutline, documentOutline });
   }
 
   private utilService = inject(UtilService);

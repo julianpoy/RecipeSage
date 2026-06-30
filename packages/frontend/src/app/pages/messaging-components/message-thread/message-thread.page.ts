@@ -32,7 +32,7 @@ import {
   IonFooter,
   IonTextarea,
 } from "@ionic/angular/standalone";
-import { refresh, send } from "ionicons/icons";
+import { refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 interface MessageParsedDetails {
@@ -98,7 +98,7 @@ export class MessageThreadPage {
   selectedChatIdx = -1;
 
   constructor() {
-    addIcons({ refresh, send });
+    addIcons({ refreshOutline, sendOutline });
     this.applyRouteParams();
   }
 

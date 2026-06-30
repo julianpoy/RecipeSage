@@ -27,7 +27,7 @@ import {
   IonLabel,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { close } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -54,7 +54,7 @@ import { addIcons } from "ionicons";
 })
 export class ManageLabelGroupModalPage {
   constructor() {
-    addIcons({ close });
+    addIcons({ closeOutline });
   }
 
   private translate = inject(TranslateService);
@@ -106,7 +106,7 @@ export class ManageLabelGroupModalPage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag",
+      icon: "pricetag-outline",
     }));
 
     return mapped;

@@ -16,17 +16,17 @@ import {
   IonLabel,
 } from "@ionic/angular/standalone";
 import {
-  calendar,
-  cloudDownload,
-  copy,
-  create,
-  eye,
-  list,
-  pin,
-  print,
-  restaurant,
-  share,
-  trash,
+  calendarOutline,
+  cloudDownloadOutline,
+  copyOutline,
+  createOutline,
+  eyeOutline,
+  listOutline,
+  pinOutline,
+  printOutline,
+  restaurantOutline,
+  shareOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -88,17 +88,17 @@ export class RecipeDetailsPopoverPage {
 
   constructor() {
     addIcons({
-      calendar,
-      cloudDownload,
-      copy,
-      create,
-      eye,
-      list,
-      pin,
-      print,
-      restaurant,
-      share,
-      trash,
+      calendarOutline,
+      cloudDownloadOutline,
+      copyOutline,
+      createOutline,
+      eyeOutline,
+      listOutline,
+      pinOutline,
+      printOutline,
+      restaurantOutline,
+      shareOutline,
+      trashOutline,
     });
     this.wakeLockCapable = this.wakeLockService.isCapable;
   }

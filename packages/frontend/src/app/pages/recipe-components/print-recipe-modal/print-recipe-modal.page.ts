@@ -20,7 +20,7 @@ import {
   IonFooter,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { close, print } from "ionicons/icons";
+import { closeOutline, printOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export interface PrintOption {
@@ -51,7 +51,7 @@ export interface PrintOption {
 })
 export class PrintRecipeModalPage {
   constructor() {
-    addIcons({ close, print });
+    addIcons({ closeOutline, printOutline });
   }
 
   private translate = inject(TranslateService);

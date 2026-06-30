@@ -14,7 +14,7 @@ import {
   IonIcon,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { compass } from "ionicons/icons";
+import { compassOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -37,7 +37,7 @@ import { addIcons } from "ionicons";
 })
 export class NotFoundPage {
   constructor() {
-    addIcons({ compass });
+    addIcons({ compassOutline });
   }
 
   private navCtrl = inject(NavController);

@@ -29,7 +29,7 @@
       <ion-list>
         @for (thread of threads; track thread.otherUser.id) {
           <ion-item class="thread" (click)="openThread(thread)" button>
-            <ion-icon name="chatbox" slot="start"></ion-icon>
+            <ion-icon name="chatbox-outline" slot="start"></ion-icon>
             <ion-label>
               <h2>{{ thread.otherUser.name }}</h2>
               @if (thread.latestMessage; as latestMessage) {
@@ -61,7 +61,7 @@
     @if (threads.length === 0 && !loading) {
       <null-state>
         <ion-icon
-          name="chatbox"
+          name="chatbox-outline"
           class="big-icon"
           virtualSlot="header"
         ></ion-icon>
@@ -84,7 +84,7 @@
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newThread()" color="primary">
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

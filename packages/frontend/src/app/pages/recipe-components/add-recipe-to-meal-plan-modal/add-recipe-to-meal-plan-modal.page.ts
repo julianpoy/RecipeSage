@@ -35,7 +35,7 @@ import {
   IonTextarea,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { calendar, close } from "ionicons/icons";
+import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -90,7 +90,7 @@ export class AddRecipeToMealPlanModalPage {
   selectedDays: string[] = [];
 
   constructor() {
-    addIcons({ calendar, close });
+    addIcons({ calendarOutline, closeOutline });
     effect(() => {
       const mealPlans = this.mealPlansQuery.value();
       if (!mealPlans) return;

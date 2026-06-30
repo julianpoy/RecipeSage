@@ -8,7 +8,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
-        <ion-icon name="options" slot="icon-only"></ion-icon>
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -179,7 +179,7 @@
       <div class="ingredientsInstructionsGrid">
         <div class="ingredientsCol">
           <ion-item lines="none">
-            <ion-icon name="book" slot="start" size="large"></ion-icon>
+            <ion-icon name="book-outline" slot="start" size="large"></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.ingredients" | translate }}</p>
             </ion-label>
@@ -223,7 +223,7 @@
         </div>
         <div class="instructionsCol">
           <ion-item lines="none">
-            <ion-icon name="list" slot="start" size="large"></ion-icon>
+            <ion-icon name="list-outline" slot="start" size="large"></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.instructions" | translate }}</p>
             </ion-label>
@@ -273,7 +273,11 @@
       @if (notes) {
         <div class="notes ion-margin-top">
           <ion-item lines="none">
-            <ion-icon name="document-text" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="document-text-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.notes" | translate }}</p>
             </ion-label>
@@ -305,7 +309,11 @@
       @if (hasNutrition()) {
         <div class="nutrition ion-margin-top">
           <ion-item lines="none">
-            <ion-icon name="fitness" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="fitness-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.nutrition" | translate }}</p>
             </ion-label>
@@ -604,7 +612,7 @@
         <br />
         <div>
           <ion-item lines="none">
-            <ion-icon name="link" slot="start" size="large"></ion-icon>
+            <ion-icon name="link-outline" slot="start" size="large"></ion-icon>
             <ion-label>
               <p class="ion-text-wrap">
                 {{ "pages.recipeDetails.linkedRecipes" | translate }}
@@ -641,7 +649,11 @@
         <br />
         <div>
           <ion-item class="labels ion-text-wrap" lines="none">
-            <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="pricetag-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.labels" | translate }}</p>
             </ion-label>
@@ -699,7 +711,11 @@
         <br />
         <div>
           <ion-item lines="none">
-            <ion-icon name="flashlight" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="flashlight-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label>
               <p class="ion-text-wrap">
                 {{ "pages.recipeDetails.similar" | translate }}
@@ -747,7 +763,10 @@
             <ion-row>
               <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
                 <ion-button expand="block" (click)="moveToFolder('main')">
-                  <ion-icon name="cloud-download" slot="start"></ion-icon>
+                  <ion-icon
+                    name="cloud-download-outline"
+                    slot="start"
+                  ></ion-icon>
                   {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
                 </ion-button>
               </ion-col>
@@ -757,7 +776,7 @@
                   expand="block"
                   (click)="deleteRecipe()"
                 >
-                  <ion-icon name="trash" slot="start"></ion-icon>
+                  <ion-icon name="trash-outline" slot="start"></ion-icon>
                   {{ "pages.recipeDetails.delete" | translate }}
                 </ion-button>
               </ion-col>
@@ -775,7 +794,7 @@
             </ion-label>
           </ion-item>
           <ion-button expand="block" (click)="cloneRecipe()">
-            <ion-icon name="cloud-download" slot="start"></ion-icon>
+            <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
             {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
           </ion-button>
         </div>
@@ -790,7 +809,7 @@
             </ion-label>
           </ion-item>
           <ion-button expand="block" (click)="authAndClone()">
-            <ion-icon name="cloud-download" slot="start"></ion-icon>
+            <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
             {{ "pages.recipeDetails.registerOrLoginToSave" | translate }}
           </ion-button>
         </div>
@@ -817,13 +836,13 @@
         <ion-row class="action-buttons ion-justify-content-around">
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="editRecipe()" fill="clear" size="small">
-              <ion-icon name="create" slot="start"></ion-icon>
+              <ion-icon name="create-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.edit" | translate }}
             </ion-button>
           </ion-col>
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="deleteRecipe()" fill="clear" size="small">
-              <ion-icon name="trash" slot="start"></ion-icon>
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.delete" | translate }}
             </ion-button>
           </ion-col>
@@ -833,7 +852,7 @@
               fill="clear"
               size="small"
             >
-              <ion-icon name="list" slot="start"></ion-icon>
+              <ion-icon name="list-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.addToShoppingList" | translate }}
             </ion-button>
           </ion-col>
@@ -843,25 +862,25 @@
               fill="clear"
               size="small"
             >
-              <ion-icon name="calendar" slot="start"></ion-icon>
+              <ion-icon name="calendar-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.addToMealPlan" | translate }}
             </ion-button>
           </ion-col>
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="shareRecipe()" fill="clear" size="small">
-              <ion-icon name="share" slot="start"></ion-icon>
+              <ion-icon name="share-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.share" | translate }}
             </ion-button>
           </ion-col>
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="printRecipe()" fill="clear" size="small">
-              <ion-icon name="print" slot="start"></ion-icon>
+              <ion-icon name="print-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.print" | translate }}
             </ion-button>
           </ion-col>
           <ion-col class="ion-text-center" size="auto">
             <ion-button (click)="cloneRecipe()" fill="clear" size="small">
-              <ion-icon name="copy" slot="start"></ion-icon>
+              <ion-icon name="copy-outline" slot="start"></ion-icon>
               {{ "pages.recipeDetails.makeACopy" | translate }}
             </ion-button>
           </ion-col>
@@ -875,7 +894,7 @@
               fill="clear"
               size="small"
             >
-              <ion-icon name="pin" slot="start"></ion-icon>
+              <ion-icon name="pin-outline" slot="start"></ion-icon>
               @if (!cookingToolbarService.isPinned(recipeId)) {
                 <span> {{ "pages.recipeDetails.pinRecipe" | translate }} </span>
               }

@@ -2,7 +2,7 @@
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <!-- <ion-title>Title</ion-title> -->
@@ -13,7 +13,7 @@
   @if (slideNum > 0) {
     <ion-icon
       (click)="swiperContainer.swiper.slidePrev()"
-      name="arrow-back"
+      name="arrow-back-outline"
       class="back"
     ></ion-icon>
   }
@@ -32,7 +32,7 @@
   @if (slideNum < imageUrls.length - 1) {
     <ion-icon
       (click)="swiperContainer.swiper.slideNext()"
-      name="arrow-forward"
+      name="arrow-forward-outline"
       class="forward"
     ></ion-icon>
   }

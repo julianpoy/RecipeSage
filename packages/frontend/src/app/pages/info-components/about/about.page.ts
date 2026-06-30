@@ -15,7 +15,14 @@ import {
   IonItem,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { archive, heart, help, list, person, send } from "ionicons/icons";
+import {
+  archiveOutline,
+  heartOutline,
+  helpOutline,
+  listOutline,
+  personOutline,
+  sendOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -39,7 +46,14 @@ import { addIcons } from "ionicons";
 })
 export class AboutPage {
   constructor() {
-    addIcons({ archive, heart, help, list, person, send });
+    addIcons({
+      archiveOutline,
+      heartOutline,
+      helpOutline,
+      listOutline,
+      personOutline,
+      sendOutline,
+    });
   }
 
   navCtrl = inject(NavController);

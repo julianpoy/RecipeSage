@@ -40,12 +40,12 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  bookmarks,
-  folder,
-  key,
-  mail,
-  pricetag,
-  shareSocial,
+  bookmarksOutline,
+  folderOutline,
+  keyOutline,
+  mailOutline,
+  pricetagOutline,
+  shareSocialOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -100,7 +100,14 @@ export class ProfilePage {
   me = this.meQuery.value;
 
   constructor() {
-    addIcons({ bookmarks, folder, key, mail, pricetag, shareSocial });
+    addIcons({
+      bookmarksOutline,
+      folderOutline,
+      keyOutline,
+      mailOutline,
+      pricetagOutline,
+      shareSocialOutline,
+    });
     this.applyRouteParams();
   }
 

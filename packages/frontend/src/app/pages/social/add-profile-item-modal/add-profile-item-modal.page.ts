@@ -29,12 +29,12 @@ import {
   IonFooter,
 } from "@ionic/angular/standalone";
 import {
-  checkmark,
-  close,
-  documentText,
-  eye,
-  folderOpen,
-  pricetag,
+  checkmarkOutline,
+  closeOutline,
+  documentTextOutline,
+  eyeOutline,
+  folderOpenOutline,
+  pricetagOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -64,7 +64,14 @@ import { addIcons } from "ionicons";
 })
 export class AddProfileItemModalPage {
   constructor() {
-    addIcons({ checkmark, close, documentText, eye, folderOpen, pricetag });
+    addIcons({
+      checkmarkOutline,
+      closeOutline,
+      documentTextOutline,
+      eyeOutline,
+      folderOpenOutline,
+      pricetagOutline,
+    });
   }
 
   private modalCtrl = inject(ModalController);

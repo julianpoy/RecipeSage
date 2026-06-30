@@ -2,7 +2,13 @@ import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
-import { add, fitness, pricetag, removeCircle, remove } from "ionicons/icons";
+import {
+  addOutline,
+  fitnessOutline,
+  pricetagOutline,
+  removeCircleOutline,
+  removeOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
@@ -192,11 +198,11 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
 
   constructor() {
     addIcons({
-      add,
-      fitness,
-      pricetag,
-      removeCircle,
-      remove,
+      addOutline,
+      fitnessOutline,
+      pricetagOutline,
+      removeCircleOutline,
+      removeOutline,
     });
 
     const state = this.router.getCurrentNavigation()?.extras.state;

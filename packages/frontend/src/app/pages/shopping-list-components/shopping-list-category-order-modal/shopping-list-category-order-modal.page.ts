@@ -16,7 +16,7 @@ import {
   IonTextarea,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { close, save } from "ionicons/icons";
+import { closeOutline, saveOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -41,7 +41,7 @@ import { addIcons } from "ionicons";
 })
 export class ShoppingListCategoryOrderModalPage {
   constructor() {
-    addIcons({ close, save });
+    addIcons({ closeOutline, saveOutline });
   }
 
   private modalCtrl = inject(ModalController);

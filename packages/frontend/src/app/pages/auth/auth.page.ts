@@ -35,7 +35,7 @@ import {
   IonContent,
   IonList,
 } from "@ionic/angular/standalone";
-import { close, eye, eyeOff } from "ionicons/icons";
+import { closeOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -92,7 +92,7 @@ export class AuthPage {
   loading = false;
 
   constructor() {
-    addIcons({ close, eye, eyeOff });
+    addIcons({ closeOutline, eyeOutline, eyeOffOutline });
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
     } else {

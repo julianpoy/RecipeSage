@@ -16,7 +16,7 @@ import {
   IonSpinner,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { folderOpen } from "ionicons/icons";
+import { folderOpenOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -71,7 +71,7 @@ export class SelectRecipeComponent {
   recipes: RecipeSummaryLite[] = [];
 
   constructor() {
-    addIcons({ folderOpen });
+    addIcons({ folderOpenOutline });
     this.fetchFriends();
   }
 

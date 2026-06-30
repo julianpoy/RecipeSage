@@ -40,7 +40,7 @@ import {
   IonSpinner,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { close } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -91,7 +91,7 @@ export class CookPage {
   unitSystem: UnitSystem = "original";
 
   constructor() {
-    addIcons({ close });
+    addIcons({ closeOutline });
     this.applyRouteParams();
   }
 

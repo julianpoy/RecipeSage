@@ -4,7 +4,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,7 +29,7 @@
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
-    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-icon name="list-outline" slot="start"></ion-icon>
     <ion-label>
       @if (selectedCollaboratorIds.length === 0) {
         <span> {{ "pages.newShoppingList.create" | translate }} </span>

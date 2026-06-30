@@ -4,12 +4,12 @@ import { TranslateService } from "@ngx-translate/core";
 import { fahrenheitToCelsius } from "@recipesage/util/shared";
 import { addIcons } from "ionicons";
 import {
-  shield,
-  timer,
-  informationCircle,
-  water,
-  warning,
-  flame,
+  shieldOutline,
+  timerOutline,
+  informationCircleOutline,
+  waterOutline,
+  warningOutline,
+  flameOutline,
 } from "ionicons/icons";
 import {
   IonHeader,
@@ -90,12 +90,12 @@ export class CookingTemperaturesPage implements OnInit {
 
   constructor() {
     addIcons({
-      shield,
-      timer,
-      informationCircle,
-      water,
-      warning,
-      flame,
+      shieldOutline,
+      timerOutline,
+      informationCircleOutline,
+      waterOutline,
+      warningOutline,
+      flameOutline,
     });
   }
 

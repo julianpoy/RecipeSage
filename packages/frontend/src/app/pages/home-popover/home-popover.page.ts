@@ -20,7 +20,7 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { checkmark, close } from "ionicons/icons";
+import { checkmarkOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -42,7 +42,7 @@ import { addIcons } from "ionicons";
 })
 export class HomePopoverPage {
   constructor() {
-    addIcons({ checkmark, close });
+    addIcons({ checkmarkOutline, closeOutline });
   }
 
   translate = inject(TranslateService);

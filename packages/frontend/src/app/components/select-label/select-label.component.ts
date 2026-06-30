@@ -9,7 +9,7 @@ import {
   IonLabel,
   IonSearchbar,
 } from "@ionic/angular/standalone";
-import { folderOpen, pricetag } from "ionicons/icons";
+import { folderOpenOutline, pricetagOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -42,7 +42,7 @@ export class SelectLabelComponent {
   results: LabelSummary[] = [];
 
   constructor() {
-    addIcons({ folderOpen, pricetag });
+    addIcons({ folderOpenOutline, pricetagOutline });
     this.load();
   }
 

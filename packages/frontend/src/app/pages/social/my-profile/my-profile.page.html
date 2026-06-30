@@ -83,7 +83,8 @@
             @if (!revealNameInput) {
               <ion-item lines="none">
                 <h3 class="username-preview" (click)="revealNameInput = true">
-                  {{ myProfile.name }} <ion-icon name="pencil"></ion-icon>
+                  {{ myProfile.name }}
+                  <ion-icon name="pencil-outline"></ion-icon>
                 </h3>
               </ion-item>
             }
@@ -101,7 +102,7 @@
               <ion-item lines="none">
                 <h5 class="handle-preview" (click)="revealHandleInput = true">
                   &commat;{{ myProfile.handle }}
-                  <ion-icon name="pencil"></ion-icon>
+                  <ion-icon name="pencil-outline"></ion-icon>
                 </h5>
               </ion-item>
             }
@@ -157,13 +158,13 @@
               <ion-item lines="none">
                 <ion-button (click)="shareProfile()">
                   {{ "pages.myProfile.share" | translate }}
-                  <ion-icon name="share-social" slot="end"></ion-icon>
+                  <ion-icon name="share-social-outline" slot="end"></ion-icon>
                 </ion-button>
               </ion-item>
               <ion-item lines="none">
                 <ion-button (click)="viewProfile()">
                   {{ "pages.myProfile.view" | translate }}
-                  <ion-icon name="arrow-forward" slot="end"></ion-icon>
+                  <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
                 </ion-button>
               </ion-item>
             </div>
@@ -171,13 +172,13 @@
         </div>
         <br />
         <ion-item lines="full">
-          <ion-icon name="key" slot="start"></ion-icon>
+          <ion-icon name="key-outline" slot="start"></ion-icon>
           <ion-label class="ion-text-wrap">
             {{ "pages.myProfile.pinned" | translate }}
           </ion-label>
           <ion-button slot="end" (click)="startNewProfileItem()">
             {{ "pages.myProfile.add" | translate }}
-            <ion-icon name="add" slot="start"></ion-icon>
+            <ion-icon name="add-outline" slot="start"></ion-icon>
           </ion-button>
         </ion-item>
         @if (myProfile.profileItems.length) {
@@ -195,21 +196,24 @@
                   <ion-item button (click)="open(item)">
                     <ion-icon
                       class="item-icon"
-                      name="folder"
+                      name="folder-outline"
                       slot="start"
                     ></ion-icon>
                     <ion-label class="ion-text-wrap">{{
                       item.title
                     }}</ion-label>
                     <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-                    <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                    <!--<ion-icon name="pencil-outline" slot="icon-only"></ion-icon>-->
                     <!--</ion-button>-->
                     <ion-button
                       color="danger"
                       slot="end"
                       (click)="$event.stopPropagation(); removeProfileItem(idx)"
                     >
-                      <ion-icon name="trash" slot="icon-only"></ion-icon>
+                      <ion-icon
+                        name="trash-outline"
+                        slot="icon-only"
+                      ></ion-icon>
                     </ion-button>
                     <ion-reorder slot="end"></ion-reorder>
                   </ion-item>
@@ -229,14 +233,17 @@
                       item.title
                     }}</ion-label>
                     <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-                    <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                    <!--<ion-icon name="pencil-outline" slot="icon-only"></ion-icon>-->
                     <!--</ion-button>-->
                     <ion-button
                       color="danger"
                       slot="end"
                       (click)="$event.stopPropagation(); removeProfileItem(idx)"
                     >
-                      <ion-icon name="trash" slot="icon-only"></ion-icon>
+                      <ion-icon
+                        name="trash-outline"
+                        slot="icon-only"
+                      ></ion-icon>
                     </ion-button>
                     <ion-reorder slot="end"></ion-reorder>
                   </ion-item>
@@ -245,21 +252,24 @@
                   <ion-item button (click)="open(item)">
                     <ion-icon
                       class="item-icon"
-                      name="pricetag"
+                      name="pricetag-outline"
                       slot="start"
                     ></ion-icon>
                     <ion-label class="ion-text-wrap">{{
                       item.title
                     }}</ion-label>
                     <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
-                    <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+                    <!--<ion-icon name="pencil-outline" slot="icon-only"></ion-icon>-->
                     <!--</ion-button>-->
                     <ion-button
                       color="danger"
                       slot="end"
                       (click)="$event.stopPropagation(); removeProfileItem(idx)"
                     >
-                      <ion-icon name="trash" slot="icon-only"></ion-icon>
+                      <ion-icon
+                        name="trash-outline"
+                        slot="icon-only"
+                      ></ion-icon>
                     </ion-button>
                     <ion-reorder slot="end"></ion-reorder>
                   </ion-item>
@@ -271,7 +281,7 @@
         @if (!myProfile.profileItems.length) {
           <null-state>
             <ion-icon
-              name="bookmarks"
+              name="bookmarks-outline"
               class="big-icon"
               virtualSlot="header"
             ></ion-icon>

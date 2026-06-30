@@ -6,7 +6,7 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { copy, share } from "ionicons/icons";
+import { copyOutline, shareOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -31,7 +31,7 @@ export class CopyWithWebshareComponent implements AfterViewInit {
   hasWebShareAPI: boolean = !!(navigator as any).share;
 
   constructor() {
-    addIcons({ copy, share });
+    addIcons({ copyOutline, shareOutline });
   }
 
   ngAfterViewInit(): void {

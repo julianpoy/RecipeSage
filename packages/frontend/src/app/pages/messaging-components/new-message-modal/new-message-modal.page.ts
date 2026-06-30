@@ -24,7 +24,7 @@ import {
   IonTextarea,
   IonFooter,
 } from "@ionic/angular/standalone";
-import { close, send } from "ionicons/icons";
+import { closeOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -63,7 +63,7 @@ export class NewMessageModalPage {
   message = "";
 
   constructor() {
-    addIcons({ close, send });
+    addIcons({ closeOutline, sendOutline });
     setTimeout(() => {
       if (this.initialRecipientId) {
         this.setSelectedUser(this.initialRecipientId);

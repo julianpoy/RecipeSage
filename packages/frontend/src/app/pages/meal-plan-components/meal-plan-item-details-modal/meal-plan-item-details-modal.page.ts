@@ -33,15 +33,15 @@ import {
   IonFooter,
 } from "@ionic/angular/standalone";
 import {
-  calendar,
-  cart,
-  close,
-  copy,
-  create,
-  documentText,
-  person,
-  pin,
-  trash,
+  calendarOutline,
+  cartOutline,
+  closeOutline,
+  copyOutline,
+  createOutline,
+  documentTextOutline,
+  personOutline,
+  pinOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -68,15 +68,15 @@ import { addIcons } from "ionicons";
 export class MealPlanItemDetailsModalPage {
   constructor() {
     addIcons({
-      calendar,
-      cart,
-      close,
-      copy,
-      create,
-      documentText,
-      person,
-      pin,
-      trash,
+      calendarOutline,
+      cartOutline,
+      closeOutline,
+      copyOutline,
+      createOutline,
+      documentTextOutline,
+      personOutline,
+      pinOutline,
+      trashOutline,
     });
   }
 

@@ -52,7 +52,13 @@ import {
   IonFabButton,
   IonSpinner,
 } from "@ionic/angular/standalone";
-import { add, calendar, chevronDown, chevronUp, options } from "ionicons/icons";
+import {
+  addOutline,
+  calendarOutline,
+  chevronDownOutline,
+  chevronUpOutline,
+  optionsOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -167,7 +173,13 @@ export class MealPlanPage {
   mealPlanCalendar?: MealCalendarComponent;
 
   constructor() {
-    addIcons({ add, calendar, chevronDown, chevronUp, options });
+    addIcons({
+      addOutline,
+      calendarOutline,
+      chevronDownOutline,
+      chevronUpOutline,
+      optionsOutline,
+    });
     effect(() => {
       const mealPlan = this.mealPlan();
       const mealPlanItems = this.mealPlanItems();

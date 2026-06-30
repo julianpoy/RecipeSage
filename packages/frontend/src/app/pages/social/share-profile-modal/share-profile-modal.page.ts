@@ -19,11 +19,11 @@ import {
   IonLabel,
 } from "@ionic/angular/standalone";
 import {
-  close,
+  closeOutline,
   logoFacebook,
   logoPinterest,
   logoTwitter,
-  mail,
+  mailOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -59,7 +59,13 @@ export class ShareProfileModalPage implements OnInit {
   profileUrl?: string;
 
   constructor() {
-    addIcons({ close, logoFacebook, logoPinterest, logoTwitter, mail });
+    addIcons({
+      closeOutline,
+      logoFacebook,
+      logoPinterest,
+      logoTwitter,
+      mailOutline,
+    });
     setTimeout(() => {
       if (this.handle) this.loadFromHandle(this.handle);
       if (this.userId) this.loadFromUserId(this.userId);

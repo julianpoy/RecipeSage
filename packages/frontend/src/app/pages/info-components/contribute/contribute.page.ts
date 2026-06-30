@@ -22,7 +22,7 @@ import {
   IonIcon,
   IonBadge,
 } from "@ionic/angular/standalone";
-import { arrowForward } from "ionicons/icons";
+import { arrowForwardOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 const BILLING_PORTAL_URL =
@@ -65,7 +65,7 @@ export class ContributePage {
   customAmount?: string;
 
   constructor() {
-    addIcons({ arrowForward });
+    addIcons({ arrowForwardOutline });
     if (IS_SELFHOST) {
       window.alert(
         "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",

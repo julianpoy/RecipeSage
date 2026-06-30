@@ -3,7 +3,7 @@
     @if (isInModal) {
       <ion-buttons slot="start">
         <ion-button (click)="logout()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     }
@@ -83,7 +83,7 @@
           >
             <ion-icon
               slot="icon-only"
-              [name]="revealPassword ? 'eye-off' : 'eye'"
+              [name]="revealPassword ? 'eye-off-outline' : 'eye-outline'"
               aria-hidden="true"
               color="medium"
             ></ion-icon>
@@ -108,7 +108,7 @@
               >
                 <ion-icon
                   slot="icon-only"
-                  [name]="revealPassword ? 'eye-off' : 'eye'"
+                  [name]="revealPassword ? 'eye-off-outline' : 'eye-outline'"
                   aria-hidden="true"
                   color="medium"
                 ></ion-icon>

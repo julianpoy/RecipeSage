@@ -4,7 +4,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,11 +24,11 @@
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
-    <ion-icon name="send" slot="start"></ion-icon>
+    <ion-icon name="send-outline" slot="start"></ion-icon>
     <ion-label> {{ "pages.addFriendModal.send" | translate }} </ion-label>
   </ion-button>
   <ion-button expand="block" (click)="open()" [disabled]="!recipientId">
-    <ion-icon name="open" slot="start"></ion-icon>
+    <ion-icon name="open-outline" slot="start"></ion-icon>
     <ion-label> {{ "pages.addFriendModal.open" | translate }} </ion-label>
   </ion-button>
 </ion-footer>

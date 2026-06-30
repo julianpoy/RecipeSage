@@ -13,7 +13,7 @@
           'pages.measurementConverter.displayOptions' | translate
         }}"
       >
-        <ion-icon slot="icon-only" name="options"></ion-icon>
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,7 +21,7 @@
 
 <ion-content>
   <div class="page-wrapper">
-    <info-block icon="bulb">
+    <info-block icon="bulb-outline">
       <ng-container virtualSlot="title">
         {{ "pages.measurementConverter.intro.title" | translate }}
       </ng-container>
@@ -88,7 +88,11 @@
         "
         aria-haspopup="dialog"
       >
-        <ion-icon name="swap-vertical" slot="start" color="medium"></ion-icon>
+        <ion-icon
+          name="swap-vertical-outline"
+          slot="start"
+          color="medium"
+        ></ion-icon>
         <ion-label>
           <p class="ingredient-bridge-scope">
             {{ "pages.measurementConverter.bridgeScope" | translate }}
@@ -101,7 +105,11 @@
             }}
           </p>
         </ion-label>
-        <ion-icon name="chevron-forward" slot="end" color="medium"></ion-icon>
+        <ion-icon
+          name="chevron-forward-outline"
+          slot="end"
+          color="medium"
+        ></ion-icon>
       </ion-item>
 
       <ion-list>

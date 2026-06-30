@@ -13,10 +13,10 @@ import {
   IonLabel,
 } from "@ionic/angular/standalone";
 import {
-  cloudDownload,
-  ellipsisVertical,
-  laptop,
-  phonePortrait,
+  cloudDownloadOutline,
+  ellipsisVerticalOutline,
+  laptopOutline,
+  phonePortraitOutline,
   shareOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -47,10 +47,10 @@ export class DownloadAndInstallPage {
 
   constructor() {
     addIcons({
-      cloudDownload,
-      ellipsisVertical,
-      laptop,
-      phonePortrait,
+      cloudDownloadOutline,
+      ellipsisVerticalOutline,
+      laptopOutline,
+      phonePortraitOutline,
       shareOutline,
     });
     const wind = window as any;

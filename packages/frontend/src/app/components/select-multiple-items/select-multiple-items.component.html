@@ -28,7 +28,7 @@
         <ion-label>
           {{ selectedItem.title }}
         </ion-label>
-        <ion-icon name="trash" color="danger"></ion-icon>
+        <ion-icon name="trash-outline" color="danger"></ion-icon>
       </ion-chip>
     }
   </div>
@@ -127,7 +127,7 @@
               <ion-item>
                 <ion-icon
                   aria-hidden="true"
-                  name="folder-open"
+                  name="folder-open-outline"
                   slot="start"
                 ></ion-icon>
                 <ion-label>
@@ -151,7 +151,11 @@
                 (click)="create()"
                 button
               >
-                <ion-icon aria-hidden="true" name="add" slot="start"></ion-icon>
+                <ion-icon
+                  aria-hidden="true"
+                  name="add-outline"
+                  slot="start"
+                ></ion-icon>
                 <ion-label>
                   <h2>{{ searchText }}</h2>
                   <p>
@@ -167,7 +171,11 @@
               disallowedTitles[searchText]
             ) {
               <ion-item>
-                <ion-icon aria-hidden="true" name="ban" slot="start"></ion-icon>
+                <ion-icon
+                  aria-hidden="true"
+                  name="ban-outline"
+                  slot="start"
+                ></ion-icon>
                 <ion-label>
                   <h2>{{ searchText }}</h2>
                   <p>

@@ -9,7 +9,7 @@
       }
       @if (selectionMode) {
         <ion-button (click)="clearSelectedRecipes()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
         </ion-button>
       }
     </ion-buttons>
@@ -60,22 +60,22 @@
     <ion-buttons slot="end">
       @if (selectionMode && selectedRecipeIds.length > 0 && folder === "main") {
         <ion-button (click)="addLabelToSelectedRecipes()">
-          <ion-icon slot="icon-only" name="pricetag"></ion-icon>
+          <ion-icon slot="icon-only" name="pricetag-outline"></ion-icon>
         </ion-button>
       }
       @if (selectionMode && selectedRecipeIds.length > 0) {
         <ion-button (click)="exportSelectedRecipes()">
-          <ion-icon slot="icon-only" name="download"></ion-icon>
+          <ion-icon slot="icon-only" name="download-outline"></ion-icon>
         </ion-button>
       }
       @if (selectionMode && selectedRecipeIds.length > 0) {
         <ion-button (click)="deleteSelectedRecipes()">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       }
 
       <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="options"></ion-icon>
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -376,7 +376,7 @@
           @if (searchText.length) {
             <null-state>
               <ion-icon
-                name="search"
+                name="search-outline"
                 class="big-icon"
                 virtualSlot="header"
               ></ion-icon>
@@ -394,7 +394,7 @@
           @if (!searchText.length && folder === "inbox") {
             <null-state>
               <ion-icon
-                name="mail-open"
+                name="mail-open-outline"
                 class="big-icon"
                 virtualSlot="header"
               ></ion-icon>
@@ -490,7 +490,7 @@
             ) {
               <null-state>
                 <ion-icon
-                  name="funnel"
+                  name="funnel-outline"
                   class="big-icon"
                   virtualSlot="header"
                 ></ion-icon>
@@ -508,7 +508,7 @@
   @if (!userId && folder !== "inbox") {
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="newRecipe()" color="primary">
-        <ion-icon name="add"></ion-icon>
+        <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   }

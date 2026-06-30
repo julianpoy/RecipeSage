@@ -6,7 +6,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="close()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -73,13 +73,13 @@
 <ion-footer class="ion-padding">
   <div class="split-footer">
     <ion-button expand="block" (click)="close()">
-      <ion-icon name="close" slot="start"></ion-icon>
+      <ion-icon name="close-outline" slot="start"></ion-icon>
       <ion-label>
         {{ "pages.mealPlanBulkPinModal.cancel" | translate }}
       </ion-label>
     </ion-button>
     <ion-button expand="block" (click)="pinRecipes(); close()">
-      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-icon name="pin-outline" slot="start"></ion-icon>
       <ion-label>
         {{ "pages.mealPlanBulkPinModal.pin" | translate }}
       </ion-label>

@@ -56,19 +56,19 @@ import {
   IonRouterOutlet,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  book,
-  calendar,
-  cart,
-  cloudDownload,
-  construct,
-  heart,
-  helpBuoy,
-  leaf,
-  logIn,
-  people,
-  pricetag,
-  settings,
+  addOutline,
+  bookOutline,
+  calendarOutline,
+  cartOutline,
+  cloudDownloadOutline,
+  constructOutline,
+  heartOutline,
+  helpBuoyOutline,
+  leafOutline,
+  logInOutline,
+  peopleOutline,
+  pricetagOutline,
+  settingsOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -160,19 +160,19 @@ export class AppComponent {
 
   constructor() {
     addIcons({
-      add,
-      book,
-      calendar,
-      cart,
-      cloudDownload,
-      construct,
-      heart,
-      helpBuoy,
-      leaf,
-      logIn,
-      people,
-      pricetag,
-      settings,
+      addOutline,
+      bookOutline,
+      calendarOutline,
+      cartOutline,
+      cloudDownloadOutline,
+      constructOutline,
+      heartOutline,
+      helpBuoyOutline,
+      leafOutline,
+      logInOutline,
+      peopleOutline,
+      pricetagOutline,
+      settingsOutline,
     });
 
     this.translate.onLangChange.subscribe((params) => {
@@ -374,7 +374,7 @@ export class AppComponent {
         {
           id: "login",
           title: login,
-          icon: "log-in",
+          icon: "log-in-outline",
           url: RouteMap.AuthPage.getPath(AuthType.Login),
         },
       ],
@@ -383,7 +383,7 @@ export class AppComponent {
         {
           id: "register",
           title: register,
-          icon: "leaf",
+          icon: "leaf-outline",
           url: RouteMap.AuthPage.getPath(AuthType.Register),
         },
       ],
@@ -392,7 +392,7 @@ export class AppComponent {
         {
           id: "download",
           title: download,
-          icon: "cloud-download",
+          icon: "cloud-download-outline",
           url: RouteMap.DownloadAndInstallPage.getPath(),
         },
       ],
@@ -401,7 +401,7 @@ export class AppComponent {
         {
           id: "contribute",
           title: contribute,
-          icon: "heart",
+          icon: "heart-outline",
           url: RouteMap.ContributePage.getPath(),
         },
       ],
@@ -410,7 +410,7 @@ export class AppComponent {
         {
           id: "settings",
           title: settings,
-          icon: "settings",
+          icon: "settings-outline",
           url: RouteMap.SettingsPage.getPath(),
         },
       ],
@@ -419,7 +419,7 @@ export class AppComponent {
         {
           id: "about",
           title: about,
-          icon: "help-buoy",
+          icon: "help-buoy-outline",
           url: RouteMap.AboutPage.getPath(),
         },
       ],
@@ -431,7 +431,7 @@ export class AppComponent {
         {
           id: "home",
           title: home,
-          icon: "book",
+          icon: "book-outline",
           url: RouteMap.HomePage.getPath("main"),
         },
       ],
@@ -440,7 +440,7 @@ export class AppComponent {
         {
           id: "newrecipe",
           title: newrecipe,
-          icon: "add",
+          icon: "add-outline",
           url: RouteMap.EditRecipePage.getPath("new"),
         },
       ],
@@ -449,7 +449,7 @@ export class AppComponent {
         {
           id: "shopping",
           title: shopping,
-          icon: "cart",
+          icon: "cart-outline",
           url: RouteMap.ShoppingListsPage.getPath(),
         },
       ],
@@ -458,7 +458,7 @@ export class AppComponent {
         {
           id: "meals",
           title: meals,
-          icon: "calendar",
+          icon: "calendar-outline",
           url: RouteMap.MealPlansPage.getPath(),
         },
       ],
@@ -467,7 +467,7 @@ export class AppComponent {
         {
           id: "people",
           title: people,
-          icon: "people",
+          icon: "people-outline",
           url: RouteMap.PeoplePage.getPath(),
         },
       ],
@@ -476,7 +476,7 @@ export class AppComponent {
         {
           id: "tools",
           title: tools,
-          icon: "construct",
+          icon: "construct-outline",
           url: RouteMap.ToolsPage.getPath(),
         },
       ],
@@ -485,7 +485,7 @@ export class AppComponent {
         {
           id: "labels",
           title: labels,
-          icon: "pricetag",
+          icon: "pricetag-outline",
           url: RouteMap.LabelsPage.getPath(),
         },
       ],
@@ -494,7 +494,7 @@ export class AppComponent {
         {
           id: "download",
           title: download,
-          icon: "cloud-download",
+          icon: "cloud-download-outline",
           url: RouteMap.DownloadAndInstallPage.getPath(),
         },
       ],
@@ -503,7 +503,7 @@ export class AppComponent {
         {
           id: "contribute",
           title: contribute,
-          icon: "heart",
+          icon: "heart-outline",
           url: RouteMap.ContributePage.getPath(),
         },
       ],
@@ -512,7 +512,7 @@ export class AppComponent {
         {
           id: "settings",
           title: settings,
-          icon: "settings",
+          icon: "settings-outline",
           url: RouteMap.SettingsPage.getPath(),
         },
       ],
@@ -521,7 +521,7 @@ export class AppComponent {
         {
           id: "about",
           title: about,
-          icon: "help-buoy",
+          icon: "help-buoy-outline",
           url: RouteMap.AboutPage.getPath(),
         },
       ],
