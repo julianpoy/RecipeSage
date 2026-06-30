@@ -568,8 +568,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(webpack@5.107.2)
       electron:
-        specifier: ^40.2.1
-        version: 40.10.4
+        specifier: ^42.4.1
+        version: 42.4.1
       electron-squirrel-startup:
         specifier: ^1.0.1
         version: 1.0.1
@@ -2113,8 +2113,8 @@ packages:
     resolution: {integrity: sha512-U8j5Hyj2Zt7I5PciJvPJfmEv69Gb/Da9v+k655z3Jj1cuY0UnToEJ61IhXrzlTYqo+jUKC+fgAjDJ6vltJTS0A==}
     engines: {node: '>= 14.17.5'}
 
-  '@electron-internal/extract-zip@1.0.3':
-    resolution: {integrity: sha512-OjKpjB7gohtEjZiq6nDx1egqjZJhGPN1iFOIED+NFhB/MMkXw/XRcHjh1DGXKT5z2W9eW7Jy2UKU3gpjvusFTQ==}
+  '@electron-internal/extract-zip@1.0.4':
+    resolution: {integrity: sha512-Zr1Vs7E9tpCNhZHDAbFVXc2gEVCG9RqPDjrno5+bdgB6LRAuvgyMHJut4NCVyYwtAieapMzc3fiQ3CSTi75ARg==}
     engines: {node: '>=22.12.0'}
 
   '@electron/asar@3.4.1':
@@ -6182,8 +6182,8 @@ packages:
   '@types/node-fetch@2.6.13':
     resolution: {integrity: sha512-QGpRVpzSaUs30JBSGPjOg4Uveu384erbHBoT1zeONvyCfwQxIkUshLAOqN/k9EjGviPRmWTTe6aH2qySWKTVSw==}
 
-  '@types/node@22.19.21':
-    resolution: {integrity: sha512-VMeFBSCKQKmm2swI2kW51SFusDqekC6q9trBCvJ/JliDchFSuoYYKN7yVNjPthP1HKZcx3U1gI/wTcEBjEFKTA==}
+  '@types/node@22.20.0':
+    resolution: {integrity: sha512-QWlFW2wf3nTjC13/DqRnBpR4ZO36VJH/JVBkA/vcnmbTBNQIlnObqyqZE1tUR7+Ni23Lda8R1BxMfbXRpCUx5g==}
 
   '@types/node@24.9.1':
     resolution: {integrity: sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg==}
@@ -8355,8 +8355,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@40.10.4:
-    resolution: {integrity: sha512-ouNZrXXmdPL/wiTQ+xzXpb7B/BHg+j7XARig0SE7azFO3bjbYUd6lFjIAAiDQ02Pl/Oj7MUk+4C0hdf9yFtA1A==}
+  electron@42.4.1:
+    resolution: {integrity: sha512-8CYHJP5O4wFO+ycoJR98yy907MmPeo+vWXrzjxmGGgRNKqv8pOjjm+wphO0CCgQJnBU7+QUPSJS4QXhbKrO50w==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -17906,7 +17906,7 @@ snapshots:
     dependencies:
       chrome-trace-event: 1.0.4
 
-  '@electron-internal/extract-zip@1.0.3': {}
+  '@electron-internal/extract-zip@1.0.4': {}
 
   '@electron/asar@3.4.1':
     dependencies:
@@ -18994,7 +18994,7 @@ snapshots:
       '@inquirer/figures': 1.0.15
       '@inquirer/type': 2.0.0
       '@types/mute-stream': 0.0.4
-      '@types/node': 22.19.21
+      '@types/node': 22.20.0
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
@@ -22024,7 +22024,7 @@ snapshots:
       '@types/node': 24.9.1
       form-data: 4.0.5
 
-  '@types/node@22.19.21':
+  '@types/node@22.20.0':
     dependencies:
       undici-types: 6.21.0
 
@@ -24641,9 +24641,9 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@40.10.4:
+  electron@42.4.1:
     dependencies:
-      '@electron-internal/extract-zip': 1.0.3
+      '@electron-internal/extract-zip': 1.0.4
       '@electron/get': 5.0.0
       '@types/node': 24.9.1
     transitivePeerDependencies:
