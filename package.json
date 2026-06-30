@@ -225,7 +225,7 @@
     "electron": "^40.2.1",
     "electron-squirrel-startup": "^1.0.1",
     "esbuild": "^0.28.1",
-    "eslint": "9.39.2",
+    "eslint": "10.5.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.6.0",
