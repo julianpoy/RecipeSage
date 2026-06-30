@@ -1,0 +1,94 @@
+<ion-list no-border>
+  @if (wakeLockCapable) {
+    <ion-list-header>
+      {{ "pages.recipeDetailsPopover.options" | translate }}
+    </ion-list-header>
+    <ion-item lines="full">
+      <ion-icon name="eye" slot="start"></ion-icon>
+      <ion-toggle
+        [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]"
+        (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')"
+      >
+        <div class="ion-text-wrap">
+          {{ "pages.recipeDetailsPopover.keepScreenOn" | translate }}
+        </div>
+      </ion-toggle>
+    </ion-item>
+  }
+
+  <ion-list-header>{{
+    "pages.recipeDetailsPopover.actions" | translate
+  }}</ion-list-header>
+
+  <ion-button
+    (click)="
+      cookingToolbarService.isPinned(recipeId)
+        ? closeWithAction('unpin')
+        : closeWithAction('pin')
+    "
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="pin" slot="start"></ion-icon>
+    @if (cookingToolbarService.isPinned(recipeId)) {
+      {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }}
+    } @else {
+      {{ "pages.recipeDetailsPopover.pinRecipe" | translate }}
+    }
+  </ion-button>
+
+  <ion-button
+    (click)="closeWithAction('enterCookMode')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="restaurant" slot="start"></ion-icon>
+    {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
+  </ion-button>
+
+  <ion-button
+    (click)="closeWithAction('share')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="share" slot="start"></ion-icon>
+    {{ "pages.recipeDetailsPopover.share" | translate }}
+  </ion-button>
+
+  @if (isAuthor) {
+    <ion-button
+      (click)="closeWithAction('edit')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      {{ "pages.discoverRecipe.edit" | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('unpublish')"
+      expand="block"
+      size="small"
+      color="danger"
+      class="ion-margin"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      {{ "pages.discoverRecipe.unpublish" | translate }}
+    </ion-button>
+  } @else {
+    <ion-button
+      (click)="closeWithAction('report')"
+      expand="block"
+      size="small"
+      color="danger"
+      class="ion-margin"
+    >
+      <ion-icon name="flag" slot="start"></ion-icon>
+      {{ "pages.discoverRecipe.report" | translate }}
+    </ion-button>
+  }
+</ion-list>

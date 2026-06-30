@@ -7,6 +7,14 @@
 
     &.pointer {
       cursor: pointer;
+      transition:
+        transform 0.1s ease,
+        opacity 0.1s ease;
+
+      &:hover {
+        transform: scale(1.15);
+        opacity: 0.85;
+      }
     }
   }
 }

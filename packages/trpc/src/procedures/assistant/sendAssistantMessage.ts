@@ -4,7 +4,7 @@ import { Assistant } from "@recipesage/util/server/ml";
 import { recordCreditsSpent } from "@recipesage/util/server/general";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
-import { assertCreditsAvailableTrpc } from "../../util/assertCreditsAvailableTrpc";
+import { assertCreditsAvailableTrpc } from "@recipesage/util/server/trpc";
 import { TRPCError } from "@trpc/server";
 
 const assistant = new Assistant();

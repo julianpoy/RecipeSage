@@ -205,6 +205,49 @@ export const appRoutes: Routes = [
     title: "pages.cook.tabTitle",
   },
   {
+    path: RouteMap.DiscoverPage.path,
+    loadComponent: () =>
+      import("./pages/discover-components/discover/discover.page").then(
+        (m) => m.DiscoverPage,
+      ),
+    title: "pages.discover.tabTitle",
+  },
+  {
+    path: RouteMap.PublishDiscoverRecipePage.path,
+    loadComponent: () =>
+      import("./pages/discover-components/publish-discover-recipe/publish-discover-recipe.page").then(
+        (m) => m.PublishDiscoverRecipePage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.publishDiscoverRecipe.tabTitle",
+  },
+  {
+    path: RouteMap.EditDiscoverRecipePage.path,
+    loadComponent: () =>
+      import("./pages/discover-components/publish-discover-recipe/publish-discover-recipe.page").then(
+        (m) => m.PublishDiscoverRecipePage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.publishDiscoverRecipe.tabTitle",
+  },
+  {
+    path: RouteMap.DiscoverRecipePageCook.path,
+    loadComponent: () =>
+      import("./pages/recipe-components/cook/cook.page").then(
+        (m) => m.CookPage,
+      ),
+    data: { isDiscover: true },
+    title: "pages.cook.tabTitle",
+  },
+  {
+    path: RouteMap.DiscoverRecipePage.path,
+    loadComponent: () =>
+      import("./pages/discover-components/discover-recipe/discover-recipe.page").then(
+        (m) => m.DiscoverRecipePage,
+      ),
+    title: "pages.discoverRecipe.tabTitle",
+  },
+  {
     path: RouteMap.SettingsPage.path,
     loadComponent: () =>
       import("./pages/settings-components/settings/settings.page").then(

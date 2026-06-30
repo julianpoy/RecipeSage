@@ -61,6 +61,7 @@ import {
   calendar,
   cart,
   cloudDownload,
+  compass,
   construct,
   heart,
   helpBuoy,
@@ -165,6 +166,7 @@ export class AppComponent {
       calendar,
       cart,
       cloudDownload,
+      compass,
       construct,
       heart,
       helpBuoy,
@@ -352,6 +354,9 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
+    const discover = await this.translate
+      .get("pages.app.nav.discover")
+      .toPromise();
     const newrecipe = await this.translate
       .get("pages.app.nav.newrecipe")
       .toPromise();
@@ -385,6 +390,15 @@ export class AppComponent {
           title: register,
           icon: "leaf",
           url: RouteMap.AuthPage.getPath(AuthType.Register),
+        },
+      ],
+      [
+        !this.isSelfHost,
+        {
+          id: "discover",
+          title: discover,
+          icon: "compass",
+          url: RouteMap.DiscoverPage.getPath(),
         },
       ],
       [
@@ -469,6 +483,15 @@ export class AppComponent {
           title: people,
           icon: "people",
           url: RouteMap.PeoplePage.getPath(),
+        },
+      ],
+      [
+        !this.isSelfHost,
+        {
+          id: "discover",
+          title: discover,
+          icon: "compass",
+          url: RouteMap.DiscoverPage.getPath(),
         },
       ],
       [

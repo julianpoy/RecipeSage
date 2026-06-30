@@ -1,0 +1,120 @@
+<ion-list no-border>
+  <ion-list-header>{{
+    "pages.discover.filters.title" | translate
+  }}</ion-list-header>
+
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.discover.filters.sort' | translate }}"
+      [(ngModel)]="sortBy"
+      (ngModelChange)="onFilterChange()"
+      interface="popover"
+    >
+      <ion-select-option value="trending">{{
+        "pages.discover.filters.sort.trending" | translate
+      }}</ion-select-option>
+      <ion-select-option value="newest">{{
+        "pages.discover.filters.sort.newest" | translate
+      }}</ion-select-option>
+      <ion-select-option value="topRated">{{
+        "pages.discover.filters.sort.topRated" | translate
+      }}</ion-select-option>
+      <ion-select-option value="mostSaved">{{
+        "pages.discover.filters.sort.mostSaved" | translate
+      }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item
+    lines="full"
+    class="cursor-pointer"
+    (click)="openLanguageFilter()"
+    button
+    detail="false"
+  >
+    <ion-label>{{ "pages.discover.filters.language" | translate }}</ion-label>
+    @if (selectedLanguages.length) {
+      <ion-badge slot="end">{{ selectedLanguages.length }}</ion-badge>
+    }
+    <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+  </ion-item>
+
+  <ion-item
+    lines="full"
+    class="cursor-pointer"
+    (click)="openCategoryFilter()"
+    button
+    detail="false"
+  >
+    <ion-label>{{ "pages.discover.filters.categories" | translate }}</ion-label>
+    @if (selectedCategories.length) {
+      <ion-badge slot="end">{{ selectedCategories.length }}</ion-badge>
+    }
+    <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-toggle
+      [(ngModel)]="matchAllCategories"
+      (ngModelChange)="onFilterChange()"
+    >
+      <div class="ion-text-wrap">
+        {{ "pages.discover.filters.matchAllCategories" | translate }}
+      </div>
+    </ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.discover.filters.minRating' | translate }}"
+      [(ngModel)]="minRating"
+      (ngModelChange)="onFilterChange()"
+      interface="popover"
+    >
+      <ion-select-option [value]="0">{{
+        "pages.discover.filters.minRating.any" | translate
+      }}</ion-select-option>
+      <ion-select-option [value]="1">1+</ion-select-option>
+      <ion-select-option [value]="2">2+</ion-select-option>
+      <ion-select-option [value]="3">3+</ion-select-option>
+      <ion-select-option [value]="4">4+</ion-select-option>
+      <ion-select-option [value]="5">5</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.discover.filters.minRatingCount' | translate }}"
+      [(ngModel)]="minRatingCount"
+      (ngModelChange)="onFilterChange()"
+      interface="popover"
+    >
+      <ion-select-option [value]="0">{{
+        "pages.discover.filters.minRatingCount.any" | translate
+      }}</ion-select-option>
+      <ion-select-option [value]="1">1+</ion-select-option>
+      <ion-select-option [value]="5">5+</ion-select-option>
+      <ion-select-option [value]="10">10+</ion-select-option>
+      <ion-select-option [value]="25">25+</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.discover.filters.photo' | translate }}"
+      [(ngModel)]="photo"
+      (ngModelChange)="onFilterChange()"
+      interface="popover"
+    >
+      <ion-select-option value="optional">{{
+        "pages.discover.filters.photo.optional" | translate
+      }}</ion-select-option>
+      <ion-select-option value="required">{{
+        "pages.discover.filters.photo.required" | translate
+      }}</ion-select-option>
+      <ion-select-option value="none">{{
+        "pages.discover.filters.photo.none" | translate
+      }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list>
