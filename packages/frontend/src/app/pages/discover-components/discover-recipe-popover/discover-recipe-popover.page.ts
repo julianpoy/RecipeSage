@@ -16,13 +16,13 @@ import {
   IonIcon,
 } from "@ionic/angular/standalone";
 import {
-  create,
-  eye,
-  flag,
-  pin,
-  restaurant,
-  share,
-  trash,
+  createOutline,
+  eyeOutline,
+  flagOutline,
+  pinOutline,
+  restaurantOutline,
+  shareOutline,
+  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -67,7 +67,15 @@ export class DiscoverRecipePopoverPage {
   wakeLockCapable: boolean;
 
   constructor() {
-    addIcons({ create, eye, flag, pin, restaurant, share, trash });
+    addIcons({
+      createOutline,
+      eyeOutline,
+      flagOutline,
+      pinOutline,
+      restaurantOutline,
+      shareOutline,
+      trashOutline,
+    });
     this.wakeLockCapable = this.wakeLockService.isCapable;
   }
 

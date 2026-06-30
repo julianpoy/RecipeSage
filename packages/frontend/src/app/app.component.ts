@@ -56,20 +56,20 @@ import {
   IonRouterOutlet,
 } from "@ionic/angular/standalone";
 import {
-  add,
-  book,
-  calendar,
-  cart,
-  cloudDownload,
-  compass,
-  construct,
-  heart,
-  helpBuoy,
-  leaf,
-  logIn,
-  people,
-  pricetag,
-  settings,
+  addOutline,
+  bookOutline,
+  calendarOutline,
+  cartOutline,
+  cloudDownloadOutline,
+  compassOutline,
+  constructOutline,
+  heartOutline,
+  helpBuoyOutline,
+  leafOutline,
+  logInOutline,
+  peopleOutline,
+  pricetagOutline,
+  settingsOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -161,20 +161,20 @@ export class AppComponent {
 
   constructor() {
     addIcons({
-      add,
-      book,
-      calendar,
-      cart,
-      cloudDownload,
-      compass,
-      construct,
-      heart,
-      helpBuoy,
-      leaf,
-      logIn,
-      people,
-      pricetag,
-      settings,
+      addOutline,
+      bookOutline,
+      calendarOutline,
+      cartOutline,
+      cloudDownloadOutline,
+      compassOutline,
+      constructOutline,
+      heartOutline,
+      helpBuoyOutline,
+      leafOutline,
+      logInOutline,
+      peopleOutline,
+      pricetagOutline,
+      settingsOutline,
     });
 
     this.translate.onLangChange.subscribe((params) => {
@@ -397,7 +397,7 @@ export class AppComponent {
         {
           id: "discover",
           title: discover,
-          icon: "compass",
+          icon: "compass-outline",
           url: RouteMap.DiscoverPage.getPath(),
         },
       ],
@@ -490,7 +490,7 @@ export class AppComponent {
         {
           id: "discover",
           title: discover,
-          icon: "compass",
+          icon: "compass-outline",
           url: RouteMap.DiscoverPage.getPath(),
         },
       ],

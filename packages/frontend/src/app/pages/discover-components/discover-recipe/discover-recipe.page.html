@@ -9,7 +9,7 @@
     @if (recipe) {
       <ion-buttons slot="end">
         <ion-button (click)="presentPopover($event)">
-          <ion-icon name="options" slot="icon-only"></ion-icon>
+          <ion-icon name="options-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
     }
@@ -120,12 +120,12 @@
         <div class="discover-action-row actions">
           @if (isLoggedIn()) {
             <ion-button (click)="save()">
-              <ion-icon name="bookmark" slot="start"></ion-icon>
+              <ion-icon name="bookmark-outline" slot="start"></ion-icon>
               {{ "pages.discoverRecipe.save" | translate }}
             </ion-button>
           } @else {
             <ion-button (click)="authAndSave()">
-              <ion-icon name="bookmark" slot="start"></ion-icon>
+              <ion-icon name="bookmark-outline" slot="start"></ion-icon>
               {{ "pages.discoverRecipe.save" | translate }}
             </ion-button>
           }
@@ -136,7 +136,7 @@
       <div class="ingredientsInstructionsGrid">
         <div class="ingredientsCol">
           <ion-item lines="none">
-            <ion-icon name="book" slot="start" size="large"></ion-icon>
+            <ion-icon name="book-outline" slot="start" size="large"></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.ingredients" | translate }}</p>
             </ion-label>
@@ -175,7 +175,7 @@
         </div>
         <div class="instructionsCol">
           <ion-item lines="none">
-            <ion-icon name="list" slot="start" size="large"></ion-icon>
+            <ion-icon name="list-outline" slot="start" size="large"></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.instructions" | translate }}</p>
             </ion-label>
@@ -217,7 +217,11 @@
       @if (notes) {
         <div class="notes ion-margin-top">
           <ion-item lines="none">
-            <ion-icon name="document-text" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="document-text-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.notes" | translate }}</p>
             </ion-label>
@@ -240,7 +244,11 @@
       @if (hasNutrition()) {
         <div class="nutrition ion-margin-top">
           <ion-item lines="none">
-            <ion-icon name="fitness" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="fitness-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.nutrition" | translate }}</p>
             </ion-label>
@@ -540,7 +548,11 @@
         <br />
         <div>
           <ion-item class="labels ion-text-wrap" lines="none">
-            <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="pricetag-outline"
+              slot="start"
+              size="large"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.discoverRecipe.categories" | translate }}</p>
             </ion-label>
@@ -565,7 +577,7 @@
         <br />
         <div class="linked-recipes">
           <ion-item lines="none">
-            <ion-icon name="link" slot="start" size="large"></ion-icon>
+            <ion-icon name="link-outline" slot="start" size="large"></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.discoverRecipe.linkedRecipes" | translate }}</p>
             </ion-label>

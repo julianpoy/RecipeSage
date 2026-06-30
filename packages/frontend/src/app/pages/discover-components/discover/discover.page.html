@@ -21,7 +21,7 @@
         (keydown.enter)="searchFieldEnter($event)"
       ></ion-searchbar>
       <ion-button fill="clear" size="small" (click)="openFilters($event)">
-        <ion-icon name="options" slot="start"></ion-icon>
+        <ion-icon name="options-outline" slot="start"></ion-icon>
         {{ "pages.discover.filters.title" | translate }}
       </ion-button>
     </div>
@@ -132,7 +132,7 @@
 
     @if (loadedAny && recipes.length === 0) {
       <div class="discover-empty">
-        <ion-icon name="search" class="big-icon"></ion-icon>
+        <ion-icon name="search-outline" class="big-icon"></ion-icon>
         <h2>{{ "pages.discover.empty.title" | translate }}</h2>
         <p>{{ "pages.discover.empty.message" | translate }}</p>
       </div>

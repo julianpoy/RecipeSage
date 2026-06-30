@@ -47,7 +47,7 @@ import {
   IonAvatar,
   IonIcon,
 } from "@ionic/angular/standalone";
-import { closeCircle } from "ionicons/icons";
+import { closeCircleOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 type DiscoverContent =
@@ -216,7 +216,7 @@ export class PublishDiscoverRecipePage {
   selectedLinkedRecipes: LinkedDiscoverRecipe[] = [];
 
   constructor() {
-    addIcons({ closeCircle });
+    addIcons({ closeCircleOutline });
     this.languageOptions = getDiscoverLanguageOptions(
       this.translate.currentLang,
     );
