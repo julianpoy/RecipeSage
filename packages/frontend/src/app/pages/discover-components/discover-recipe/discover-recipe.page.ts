@@ -65,14 +65,12 @@ import {
 import {
   bookOutline,
   bookmarkOutline,
-  createOutline,
   documentTextOutline,
   fitnessOutline,
   linkOutline,
   listOutline,
   optionsOutline,
   pricetagOutline,
-  trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -148,14 +146,12 @@ export class DiscoverRecipePage {
     addIcons({
       bookOutline,
       bookmarkOutline,
-      createOutline,
       documentTextOutline,
       fitnessOutline,
       linkOutline,
       listOutline,
       optionsOutline,
       pricetagOutline,
-      trashOutline,
     });
     this.applyRouteParams();
   }
