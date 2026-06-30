@@ -56,19 +56,20 @@ import {
   IonRouterOutlet,
 } from "@ionic/angular/standalone";
 import {
-  addOutline,
-  bookOutline,
-  calendarOutline,
-  cartOutline,
-  cloudDownloadOutline,
-  constructOutline,
-  heartOutline,
-  helpBuoyOutline,
-  leafOutline,
-  logInOutline,
-  peopleOutline,
-  pricetagOutline,
-  settingsOutline,
+  add,
+  book,
+  calendar,
+  cart,
+  cloudDownload,
+  compass,
+  construct,
+  heart,
+  helpBuoy,
+  leaf,
+  logIn,
+  people,
+  pricetag,
+  settings,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -160,19 +161,20 @@ export class AppComponent {
 
   constructor() {
     addIcons({
-      addOutline,
-      bookOutline,
-      calendarOutline,
-      cartOutline,
-      cloudDownloadOutline,
-      constructOutline,
-      heartOutline,
-      helpBuoyOutline,
-      leafOutline,
-      logInOutline,
-      peopleOutline,
-      pricetagOutline,
-      settingsOutline,
+      add,
+      book,
+      calendar,
+      cart,
+      cloudDownload,
+      compass,
+      construct,
+      heart,
+      helpBuoy,
+      leaf,
+      logIn,
+      people,
+      pricetag,
+      settings,
     });
 
     this.translate.onLangChange.subscribe((params) => {
@@ -352,6 +354,9 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
+    const discover = await this.translate
+      .get("pages.app.nav.discover")
+      .toPromise();
     const newrecipe = await this.translate
       .get("pages.app.nav.newrecipe")
       .toPromise();
@@ -385,6 +390,15 @@ export class AppComponent {
           title: register,
           icon: "leaf-outline",
           url: RouteMap.AuthPage.getPath(AuthType.Register),
+        },
+      ],
+      [
+        !this.isSelfHost,
+        {
+          id: "discover",
+          title: discover,
+          icon: "compass",
+          url: RouteMap.DiscoverPage.getPath(),
         },
       ],
       [
@@ -469,6 +483,15 @@ export class AppComponent {
           title: people,
           icon: "people-outline",
           url: RouteMap.PeoplePage.getPath(),
+        },
+      ],
+      [
+        !this.isSelfHost,
+        {
+          id: "discover",
+          title: discover,
+          icon: "compass",
+          url: RouteMap.DiscoverPage.getPath(),
         },
       ],
       [

@@ -4,7 +4,10 @@ import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap } from "../../services/util.service";
-import { CookingToolbarService } from "../../services/cooking-toolbar.service";
+import {
+  CookingToolbarService,
+  PinnedRecipe,
+} from "../../services/cooking-toolbar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon, IonRippleEffect } from "@ionic/angular/standalone";
 import { closeOutline, pinOutline } from "ionicons/icons";
@@ -28,11 +31,15 @@ export class CookingToolbarComponent {
   private translate = inject(TranslateService);
   cookingToolbarService = inject(CookingToolbarService);
 
-  openRecipe(recipeId: string) {
+  openRecipe(pinnedRecipe: PinnedRecipe) {
+    if (pinnedRecipe.path) {
+      this.navCtrl.navigateForward(pinnedRecipe.path);
+      return;
+    }
     const inCookMode = this.router.url.split("?")[0].endsWith("/cook");
     const path = inCookMode
-      ? RouteMap.RecipePageCook.getPath(recipeId)
-      : RouteMap.RecipePage.getPath(recipeId);
+      ? RouteMap.RecipePageCook.getPath(pinnedRecipe.id)
+      : RouteMap.RecipePage.getPath(pinnedRecipe.id);
     this.navCtrl.navigateForward(path);
   }
 

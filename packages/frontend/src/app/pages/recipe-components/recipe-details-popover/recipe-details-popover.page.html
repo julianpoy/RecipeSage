@@ -155,6 +155,17 @@
         <ion-icon name="share-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.share" | translate }}
       </ion-button>
+      @if (!isSelfHost && capabilitiesService.capabilities.discoverPublish) {
+        <ion-button
+          (click)="closeWithAction('publishToDiscover')"
+          expand="block"
+          size="small"
+          class="ion-margin"
+        >
+          <ion-icon name="compass" slot="start"></ion-icon>
+          {{ "pages.recipeDetails.publishToDiscover" | translate }}
+        </ion-button>
+      }
       <ion-button
         (click)="closeWithAction('print')"
         expand="block"

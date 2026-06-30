@@ -72,6 +72,9 @@ export const config = {
       vision:
         getEnvString("AI_MODEL_VISION", Environment.AllRuntime) ||
         "anthropic/claude-sonnet-4.6",
+      moderation:
+        getEnvString("AI_MODEL_MODERATION", Environment.AllRuntime) ||
+        "google/gemini-2.5-flash",
       nutrition:
         getEnvString("AI_MODEL_NUTRITION", Environment.AllRuntime) ||
         "google/gemini-2.5-flash-lite",

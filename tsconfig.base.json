@@ -36,6 +36,9 @@
       "@recipesage/util/server/storage": [
         "packages/util/server/src/storage/index.ts"
       ],
+      "@recipesage/util/server/trpc": [
+        "packages/util/server/src/trpc/index.ts"
+      ],
       "@recipesage/util/shared": ["packages/util/shared/src/index.ts"],
       "@recipesage/queue-worker": ["packages/queue-worker/src/index.ts"]
     }

@@ -4,7 +4,7 @@ import type {
   Prisma,
   RecipeSummary,
 } from "@recipesage/prisma";
-import type { JobQueueItem } from "../JobQueueItem";
+import type { StandardJobQueueItem } from "../JobQueueItem";
 import * as Sentry from "@sentry/node";
 import {
   JobStatus,
@@ -32,7 +32,7 @@ const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
 
 export const processExportJob = async (
   job: JobSummary,
-  _jobQueueItem: JobQueueItem,
+  _jobQueueItem: StandardJobQueueItem,
 ) => {
   if (job.type !== JobType.EXPORT) {
     throw new Error("Export processor received a non-export job");

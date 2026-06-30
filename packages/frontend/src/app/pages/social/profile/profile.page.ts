@@ -40,12 +40,13 @@ import {
   IonSpinner,
 } from "@ionic/angular/standalone";
 import {
-  bookmarksOutline,
-  folderOutline,
-  keyOutline,
-  mailOutline,
-  pricetagOutline,
-  shareSocialOutline,
+  bookmarks,
+  compass,
+  folder,
+  key,
+  mail,
+  pricetag,
+  shareSocial,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -93,6 +94,8 @@ export class ProfilePage {
   handle: string = "";
   profile?: RouterOutputs["users"]["getUserProfileByHandle"];
   profileItems: RouterOutputs["users"]["getVisibleUserProfileItems"] = [];
+  publishedRecipes: RouterOutputs["discover"]["getDiscoverRecipesByAuthor"]["recipes"] =
+    [];
   incomingFriendship = false;
   outgoingFriendship = false;
 
@@ -100,14 +103,7 @@ export class ProfilePage {
   me = this.meQuery.value;
 
   constructor() {
-    addIcons({
-      bookmarksOutline,
-      folderOutline,
-      keyOutline,
-      mailOutline,
-      pricetagOutline,
-      shareSocialOutline,
-    });
+    addIcons({ bookmarks, compass, folder, key, mail, pricetag, shareSocial });
     this.applyRouteParams();
   }
 
@@ -153,6 +149,7 @@ export class ProfilePage {
     if (snapshotHandle && snapshotHandle !== this.handle) {
       this.applyRouteParams();
       this.profile = undefined;
+      this.publishedRecipes = [];
     }
 
     this.meQuery.refresh();
@@ -176,19 +173,25 @@ export class ProfilePage {
     }
 
     const loggedIn = this.isLoggedIn();
-    const [items, friends] = await Promise.all([
+    const [items, friends, publishedRecipes] = await Promise.all([
       this.serverActionsService.users.getVisibleUserProfileItems({
         userId: profileResponse.id,
       }),
       loggedIn
         ? this.serverActionsService.users.getMyFriends()
         : Promise.resolve(undefined),
+      this.isSelfHost
+        ? Promise.resolve(undefined)
+        : this.serverActionsService.discover.getDiscoverRecipesByAuthor({
+            authorId: profileResponse.id,
+          }),
     ]);
 
     loading.dismiss();
 
     this.profile = profileResponse;
     this.profileItems = items ?? [];
+    this.publishedRecipes = publishedRecipes?.recipes ?? [];
 
     this.incomingFriendship = false;
     this.outgoingFriendship = false;
@@ -242,6 +245,14 @@ export class ProfilePage {
     } else if (item.type === "recipe" && item.recipe) {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
+  }
+
+  openDiscoverRecipe(
+    discoverRecipe: RouterOutputs["discover"]["getDiscoverRecipesByAuthor"]["recipes"][number],
+  ) {
+    this.navCtrl.navigateForward(
+      RouteMap.DiscoverRecipePage.getPath(discoverRecipe.id),
+    );
   }
 
   async addFriend() {

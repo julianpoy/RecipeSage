@@ -5,6 +5,7 @@ import { activateBonusFeatures } from "./activateBonusFeatures";
 import { categorizeShoppingListItems } from "./categorizeShoppingListItems";
 import { decryptDebugStore } from "./decryptDebugStore";
 import { indexRecipes } from "./indexRecipes";
+import { recomputeDiscoverRankScores } from "./recomputeDiscoverRankScores";
 
 const runAction =
   <O>(fn: (options: O) => Promise<void>) =>
@@ -42,6 +43,20 @@ program
   .action(
     runAction(async () => {
       await categorizeShoppingListItems();
+    }),
+  );
+
+program
+  .command("recomputeDiscoverRankScores")
+  .description(
+    "Recompute the smart-ranking score for every discover recipe. Intended to be scheduled (for example, as a Kubernetes CronJob).",
+  )
+  .option("-b, --batch-size <size>", "Batch size", "1000")
+  .action(
+    runAction<{ batchSize: string }>(async (options) => {
+      await recomputeDiscoverRankScores({
+        batchSize: parseInt(options.batchSize, 10),
+      });
     }),
   );
 

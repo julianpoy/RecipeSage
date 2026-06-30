@@ -5,7 +5,7 @@
       pinnedRecipe of cookingToolbarService.pinnedRecipes;
       track pinnedRecipe
     ) {
-      <div class="item ion-activatable" (click)="openRecipe(pinnedRecipe.id)">
+      <div class="item ion-activatable" (click)="openRecipe(pinnedRecipe)">
         @if (pinnedRecipe.imageUrl) {
           <img [src]="pinnedRecipe.imageUrl" />
         }

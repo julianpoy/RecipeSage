@@ -11,13 +11,13 @@ import {
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { createReadStream } from "fs";
 import { parse, CsvError } from "csv-parse";
-import type { JobQueueItem } from "../../JobQueueItem";
+import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { pipeline } from "stream/promises";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
 
 export async function csvImportJobHandler(
   job: ImportJobSummary,
-  queueItem: JobQueueItem,
+  queueItem: StandardJobQueueItem,
 ): Promise<void> {
   const jobMeta = job.meta;
   const importLabels = jobMeta.importLabels || [];
