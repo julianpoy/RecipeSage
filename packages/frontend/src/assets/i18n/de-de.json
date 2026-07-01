@@ -2183,5 +2183,14 @@
     "services.quickTutorial.nativePrintView.message": "Für eine optimale Druckerfahrung wird die native Druckoption dieser Seite im Optionsmenü oben rechts empfohlen.",
     "pages.settings.serverSettings": "Servereinstellungen",
     "pages.serverSettings.tabTitle": "Servereinstellungen – RecipeSage",
-    "pages.serverSettings.title": "Servereinstellungen"
+    "pages.serverSettings.title": "Servereinstellungen",
+    "pages.serverSettings.warning.title": "Fortgeschrittene Einstellung, bitte nicht ändern",
+    "pages.serverSettings.warning.body": "Mit dieser Einstellung zeigt die App auf einen anderen RecipeSage-Server. Sie dient nur für Entwickler und Benutzer, die RecipeSage selbst hosten. Ändere diese Einstellung nur, wenn du genau weißt, was du tust – andernfalls kann sich die App nicht mehr verbinden und du verlierst den Zugriff auf deine Rezepte.",
+    "pages.serverSettings.confirm": "Ich weiß, was ich tue",
+    "pages.serverSettings.description": "App auf einen anderen RecipeSage-Server zeigen lassen. Leer lassen, um den Standardserver zu verwenden.",
+    "pages.serverSettings.baseUrl.label": "Serverbasis-URL",
+    "pages.serverSettings.baseUrl.placeholder": "https://beispiel.com",
+    "pages.serverSettings.baseUrl.helper": "Die App erreicht die API unter dieser Adresse über das Suffix /api und Live-Updates über /grip/ws. Nach dem Speichern wird die App neu geladen.",
+    "pages.serverSettings.baseUrl.invalid": "Gib eine gültige URL ein oder lass das Feld leer, um den Standardserver zu verwenden.",
+    "pages.serverSettings.reset": "Auf Standard zurücksetzen"
 }
