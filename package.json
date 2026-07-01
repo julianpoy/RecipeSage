@@ -55,7 +55,7 @@
     "@fanoutio/grip": "^4.4.0",
     "@fanoutio/serve-grip": "^4.2.0",
     "@google-cloud/vision": "^5.3.7",
-    "@ionic/angular": "^8.8.10",
+    "@ionic/angular": "^8.8.12",
     "@ngx-loading-bar/core": "^7.0.1",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
