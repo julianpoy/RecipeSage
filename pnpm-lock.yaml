@@ -60,8 +60,8 @@ importers:
         specifier: ^8.0.3
         version: 8.0.3(@capacitor/core@8.4.1)
       '@elastic/elasticsearch':
-        specifier: ~9.3.4
-        version: 9.3.4
+        specifier: ~9.4.2
+        version: 9.4.2(apache-arrow@21.1.0)
       '@fanoutio/grip':
         specifier: ^4.4.0
         version: 4.4.0
@@ -2016,12 +2016,17 @@ packages:
     resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
     engines: {node: '>=14.17.0'}
 
-  '@elastic/elasticsearch@9.3.4':
-    resolution: {integrity: sha512-Mp14fPEYx+WTfZdcvAaZ9WkLYGHQCbwMx6EP5VCucYdhv4cn/g2sbnMT5HzK+gX3XEpBnnkEK/+WysCKzxuo3A==}
-    engines: {node: '>=18'}
+  '@elastic/elasticsearch@9.4.2':
+    resolution: {integrity: sha512-H9myMlLUeotkZhZ4ppinoMGDFxmW3lY8/s+4TIk1vFHyCvWU1Ej4T7azX5buCzemyFApgN0ywnEuvOtpel2VZg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      apache-arrow: 18.x - 21.x
+    peerDependenciesMeta:
+      apache-arrow:
+        optional: true
 
-  '@elastic/transport@9.3.5':
-    resolution: {integrity: sha512-hIMJbt1guqr3/N2zCN45k9hw9o78qcdsO0xietLe+Bfa+JL0YafHTgkWkM1oT3Ht5sGMJaDcJZiYomSMU6CtTA==}
+  '@elastic/transport@9.3.7':
+    resolution: {integrity: sha512-L38Ax21uF2OPUmCRWycZ/dZdMYf7gMrtClcxvVrqJVFmn8ET2M++GYmFGJpLqOHS1beATxOXLWe7y2ijSQz/ng==}
     engines: {node: '>=20'}
 
   '@electric-sql/pglite-socket@0.1.1':
@@ -17608,16 +17613,16 @@ snapshots:
 
   '@discoveryjs/json-ext@1.1.0': {}
 
-  '@elastic/elasticsearch@9.3.4':
+  '@elastic/elasticsearch@9.4.2(apache-arrow@21.1.0)':
     dependencies:
-      '@elastic/transport': 9.3.5
-      apache-arrow: 21.1.0
+      '@elastic/transport': 9.3.7
       tslib: 2.8.1
+    optionalDependencies:
+      apache-arrow: 21.1.0
     transitivePeerDependencies:
-      - '@75lb/nature'
       - supports-color
 
-  '@elastic/transport@9.3.5':
+  '@elastic/transport@9.3.7':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
@@ -21871,9 +21876,11 @@ snapshots:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.16
 
-  '@types/command-line-args@5.2.3': {}
+  '@types/command-line-args@5.2.3':
+    optional: true
 
-  '@types/command-line-usage@5.0.4': {}
+  '@types/command-line-usage@5.0.4':
+    optional: true
 
   '@types/compress-commons@7.0.1':
     dependencies:
@@ -22838,6 +22845,7 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - '@75lb/nature'
+    optional: true
 
   appdmg@0.6.6:
     dependencies:
@@ -22880,7 +22888,8 @@ snapshots:
 
   arr-union@3.1.0: {}
 
-  array-back@6.2.3: {}
+  array-back@6.2.3:
+    optional: true
 
   array-buffer-byte-length@1.0.2:
     dependencies:
@@ -23762,6 +23771,7 @@ snapshots:
   chalk-template@0.4.0:
     dependencies:
       chalk: 4.1.2
+    optional: true
 
   chalk@1.1.3:
     dependencies:
@@ -24000,6 +24010,7 @@ snapshots:
       find-replace: 5.0.2
       lodash.camelcase: 4.3.0
       typical: 7.3.0
+    optional: true
 
   command-line-usage@7.0.4:
     dependencies:
@@ -24007,6 +24018,7 @@ snapshots:
       chalk-template: 0.4.0
       table-layout: 4.1.1
       typical: 7.3.0
+    optional: true
 
   commander@11.1.0: {}
 
@@ -25447,7 +25459,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  find-replace@5.0.2: {}
+  find-replace@5.0.2:
+    optional: true
 
   find-up@1.1.2:
     dependencies:
@@ -25525,7 +25538,8 @@ snapshots:
 
   flat@5.0.2: {}
 
-  flatbuffers@25.9.23: {}
+  flatbuffers@25.9.23:
+    optional: true
 
   flatted@3.4.2: {}
 
@@ -27406,7 +27420,8 @@ snapshots:
     dependencies:
       bignumber.js: 9.3.1
 
-  json-bignum@0.0.3: {}
+  json-bignum@0.0.3:
+    optional: true
 
   json-buffer@3.0.1: {}
 
@@ -31407,6 +31422,7 @@ snapshots:
     dependencies:
       array-back: 6.2.3
       wordwrapjs: 5.1.1
+    optional: true
 
   tapable@2.3.3: {}
 
@@ -31891,7 +31907,8 @@ snapshots:
       - debug
       - supports-color
 
-  typical@7.3.0: {}
+  typical@7.3.0:
+    optional: true
 
   ufo@1.6.4: {}
 
@@ -32758,7 +32775,8 @@ snapshots:
 
   wordwrap@1.0.0: {}
 
-  wordwrapjs@5.1.1: {}
+  wordwrapjs@5.1.1:
+    optional: true
 
   workbox-background-sync@7.4.1:
     dependencies:
