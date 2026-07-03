@@ -129,7 +129,7 @@
     "sequelize": "6.37.8",
     "sharp": "^0.34.5",
     "showdown": "^2.1.0",
-    "stripe": "^18.0.0",
+    "stripe": "^22.2.3",
     "swiper": "^12.2.0",
     "trpc-to-openapi": "^3.3.0",
     "ts-dedent": "^2.2.0",
