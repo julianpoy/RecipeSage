@@ -125,7 +125,7 @@
     "sanitize-html": "^2.17.4",
     "semver": "7.8.5",
     "sequelize": "6.37.8",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.2",
     "showdown": "^2.1.0",
     "stripe": "^18.0.0",
     "swiper": "^12.2.0",
