@@ -147,6 +147,16 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
           return;
         }
         if (!redirectLoggedIn) return;
+        // Don't clobber an incoming Web Share Target request: index.astro
+        // redirects share params to /app/edit-recipe/new; skip the logged-in
+        // redirect so that destination is preserved instead of going to /app/.
+        const shareParams = new URLSearchParams(location.search);
+        if (
+          shareParams.has("sharetarget-title") ||
+          shareParams.has("sharetarget-text") ||
+          shareParams.has("autofill-url")
+        )
+          return;
         let token = null;
         try {
           token = localStorage.getItem("token");
