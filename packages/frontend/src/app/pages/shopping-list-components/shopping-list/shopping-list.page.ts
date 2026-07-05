@@ -73,6 +73,9 @@ const categoryTitlesToi18n: Record<string, string> = {
   frozen: "pages.shoppingList.category.frozen",
   canned: "pages.shoppingList.category.canned",
   beverages: "pages.shoppingList.category.beverages",
+  baking: "pages.shoppingList.category.baking",
+  spices: "pages.shoppingList.category.spices",
+  condiments: "pages.shoppingList.category.condiments",
 };
 
 @Component({

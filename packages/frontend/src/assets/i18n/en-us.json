@@ -1043,6 +1043,9 @@
   "pages.shoppingList.category.frozen": "Frozen",
   "pages.shoppingList.category.canned": "Canned",
   "pages.shoppingList.category.beverages": "Beverages",
+  "pages.shoppingList.category.baking": "Baking",
+  "pages.shoppingList.category.spices": "Spices",
+  "pages.shoppingList.category.condiments": "Condiments",
 
   "pages.shoppingListPopover.options.title": "Options",
   "pages.shoppingListPopover.sortBy": "Sort by",

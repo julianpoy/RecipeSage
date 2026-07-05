@@ -101,6 +101,9 @@ export class ShoppingListItemComponent {
     "pages.shoppingList.category.frozen",
     "pages.shoppingList.category.canned",
     "pages.shoppingList.category.beverages",
+    "pages.shoppingList.category.baking",
+    "pages.shoppingList.category.spices",
+    "pages.shoppingList.category.condiments",
   ];
   builtinCategories: string[] = [];
   userKnownCategories = this.getUserKnownCategories();
