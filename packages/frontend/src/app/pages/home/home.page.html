@@ -120,7 +120,11 @@
           </div>
         }
         <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
-          <div class="recipe-group" [class.single-col]="tileColCount === 1">
+          <div
+            class="recipe-group"
+            [class.single-col]="tileColCount === 1"
+            [style.--tile-width]="tileWidth + 'px'"
+          >
             @for (recipe of recipeGroup; track recipe.id) {
               <div
                 class="recipe-card"

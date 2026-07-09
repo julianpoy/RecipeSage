@@ -30,6 +30,10 @@ import type {
 } from "@recipesage/prisma";
 import { countActiveNutritionRanges } from "../../utils/nutritionFilter";
 import { maybeRequestPersistentStorage } from "../../utils/persistentStorage";
+import {
+  calculateRecipeTileLayout,
+  RECIPE_TILE_MAX_WIDTH,
+} from "../../utils/recipeTileLayout";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { NullStateComponent } from "../../components/null-state/null-state.component";
@@ -63,9 +67,6 @@ import {
   trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
-
-const TILE_WIDTH = 200;
-const TILE_PADD = 20;
 
 @Component({
   standalone: true,
@@ -150,7 +151,8 @@ export class HomePage implements OnDestroy {
   ratingFilter: (number | null)[] = [];
   nutritionFilter: NutritionFilter = {};
 
-  tileColCount: number = 1;
+  tileColCount = 1;
+  tileWidth = RECIPE_TILE_MAX_WIDTH;
 
   datasource = new Datasource<RecipeSummaryLite>({
     get: async (index: number, count: number) => {
@@ -371,13 +373,11 @@ export class HomePage implements OnDestroy {
     const isSidebarOpen = window.innerWidth >= 1200;
     const sidebarWidth = isSidebarEnabled && isSidebarOpen ? 300 : 0;
     const homePageWidth = window.innerWidth - sidebarWidth;
-    const tileColCount = Math.max(
-      Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD)),
-      1,
-    );
+    const { columnCount, tileWidth } = calculateRecipeTileLayout(homePageWidth);
+    this.tileWidth = tileWidth;
 
-    if (tileColCount !== this.tileColCount) {
-      this.tileColCount = tileColCount;
+    if (columnCount !== this.tileColCount) {
+      this.tileColCount = columnCount;
 
       // We set to zero since we don't know what the relative position would be now
       this.datasource.settings!.startIndex = 0;

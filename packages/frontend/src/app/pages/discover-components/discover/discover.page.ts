@@ -18,6 +18,10 @@ import {
   getDefaultDiscoverLanguages,
   DiscoverLanguageOption,
 } from "../../../utils/discoverLanguages";
+import {
+  calculateRecipeTileLayout,
+  RECIPE_TILE_MAX_WIDTH,
+} from "../../../utils/recipeTileLayout";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import {
@@ -45,8 +49,6 @@ type DiscoverRecipeSummary =
 type DiscoverRecipeAuthor = DiscoverRecipeSummary["author"];
 
 const PAGE_SIZE = 40;
-const TILE_WIDTH = 200;
-const TILE_PADD = 20;
 
 @Component({
   standalone: true,
@@ -95,6 +97,7 @@ export class DiscoverPage {
   recipes: DiscoverRecipeSummary[] = [];
   reachedEnd = false;
   tileColCount = 1;
+  tileWidth = RECIPE_TILE_MAX_WIDTH;
 
   datasource = new Datasource<DiscoverRecipeSummary>({
     get: async (index: number, count: number) => {
@@ -165,12 +168,11 @@ export class DiscoverPage {
     const isSidebarOpen = window.innerWidth >= 1200;
     const sidebarWidth = isSidebarEnabled && isSidebarOpen ? 300 : 0;
     const pageWidth = window.innerWidth - sidebarWidth;
-    const tileColCount = Math.max(
-      Math.floor(pageWidth / (TILE_WIDTH + TILE_PADD)),
-      1,
-    );
-    if (tileColCount !== this.tileColCount) {
-      this.tileColCount = tileColCount;
+    const { columnCount, tileWidth } = calculateRecipeTileLayout(pageWidth);
+    this.tileWidth = tileWidth;
+
+    if (columnCount !== this.tileColCount) {
+      this.tileColCount = columnCount;
       return true;
     }
     return false;

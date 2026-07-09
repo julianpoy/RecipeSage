@@ -66,9 +66,15 @@ ion-badge {
 }
 
 .recipe-group {
+  --tile-width: 200px;
+
   display: flex;
   justify-content: space-around;
   padding: 10px;
+
+  @media only screen and (max-width: 439px) {
+    gap: 10px;
+  }
 
   &.single-col .recipe-card {
     width: 100%;
@@ -98,7 +104,7 @@ ion-badge {
     );
 
     position: relative;
-    width: 200px;
+    width: var(--tile-width);
     height: calc(var(--image-size) + var(--content-height));
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.25);
     cursor: pointer;
@@ -111,7 +117,7 @@ ion-badge {
     }
 
     &.showImage {
-      --image-size: 200px;
+      --image-size: var(--tile-width);
     }
     &.showDescription {
       --description-height: var(--paragraph-line-height);

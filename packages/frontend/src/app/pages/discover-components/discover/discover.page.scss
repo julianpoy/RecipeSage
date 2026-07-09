@@ -28,11 +28,17 @@
 }
 
 .recipe-group {
+  --tile-width: 200px;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
   padding: 10px;
+
+  @media only screen and (max-width: 439px) {
+    gap: 10px;
+  }
 
   &.single-col .recipe-card {
     width: 100%;
@@ -40,10 +46,10 @@
 }
 
 .recipe-card {
-  width: 200px;
+  width: var(--tile-width);
   --paragraph-line-height: 1.188rem;
   --content-padding-leeway: 1.5rem;
-  --image-height: 190px;
+  --image-height: min(190px, var(--tile-width));
   --title-height: var(--paragraph-line-height);
   --description-height: calc(var(--paragraph-line-height) * 2);
   --author-height: var(--paragraph-line-height);
