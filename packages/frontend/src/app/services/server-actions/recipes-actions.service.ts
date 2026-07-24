@@ -6,6 +6,8 @@ import type {
 } from "@recipesage/prisma";
 import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
 
+const LOCAL_SEARCH_PAGE_SIZE = 100;
+
 const passesNutritionRange = (
   value: number | null,
   range: NutritionRange | undefined,
@@ -156,17 +158,17 @@ export class RecipesActionsService extends ActionsBase {
           const labelsSet = new Set(labels);
           recipes = recipes.filter((recipe) => {
             if (labelIntersection) {
-              return recipe.recipeLabels.some((recipeLabel) => {
-                return labelsSet.has(recipeLabel.label.title);
-              });
+              for (const requiredLabel of labelsSet) {
+                const hasLabel = recipe.recipeLabels.some((recipeLabel) => {
+                  return recipeLabel.label.title === requiredLabel;
+                });
+                if (!hasLabel) return false;
+              }
+              return true;
             }
-            for (const requiredLabel of labelsSet) {
-              const hasLabel = recipe.recipeLabels.some((recipeLabel) => {
-                return recipeLabel.label.title === requiredLabel;
-              });
-              if (!hasLabel) return false;
-            }
-            return true;
+            return recipe.recipeLabels.some((recipeLabel) => {
+              return labelsSet.has(recipeLabel.label.title);
+            });
           });
         }
 
@@ -358,14 +360,21 @@ export class RecipesActionsService extends ActionsBase {
         const searchManager = await this.searchService.getManager();
         const searchResults = searchManager.search(searchTerm);
 
-        let recipes: RecipeSummary[] = [];
-        for (const searchResult of searchResults) {
-          const recipe = await localDb.get(
-            ObjectStoreName.Recipes,
-            searchResult.recipeId,
-          );
-          if (recipe) recipes.push(recipe);
-        }
+        const recipesTx = localDb.transaction(
+          ObjectStoreName.Recipes,
+          "readonly",
+        );
+        const fetchedRecipes = await Promise.all(
+          searchResults.map((searchResult) =>
+            recipesTx.store.get(searchResult.recipeId),
+          ),
+        );
+        recipesTx.commit();
+        await recipesTx.done;
+
+        let recipes = fetchedRecipes.filter(
+          (recipe): recipe is RecipeSummary => !!recipe,
+        );
 
         if (userIds) {
           const friendships = await getKvStoreEntry(KVStoreKeys.MyFriends);
@@ -386,17 +395,17 @@ export class RecipesActionsService extends ActionsBase {
           const labelsSet = new Set(labels);
           recipes = recipes.filter((recipe) => {
             if (labelIntersection) {
-              return recipe.recipeLabels.some((recipeLabel) => {
-                return labelsSet.has(recipeLabel.label.title);
-              });
+              for (const requiredLabel of labelsSet) {
+                const hasLabel = recipe.recipeLabels.some((recipeLabel) => {
+                  return recipeLabel.label.title === requiredLabel;
+                });
+                if (!hasLabel) return false;
+              }
+              return true;
             }
-            for (const requiredLabel of labelsSet) {
-              const hasLabel = recipe.recipeLabels.some((recipeLabel) => {
-                return recipeLabel.label.title === requiredLabel;
-              });
-              if (!hasLabel) return false;
-            }
-            return true;
+            return recipe.recipeLabels.some((recipeLabel) => {
+              return labelsSet.has(recipeLabel.label.title);
+            });
           });
         }
 
@@ -418,7 +427,10 @@ export class RecipesActionsService extends ActionsBase {
           );
         }
 
-        return { recipes, totalCount: recipes.length };
+        return {
+          recipes: recipes.slice(0, LOCAL_SEARCH_PAGE_SIZE),
+          totalCount: recipes.length,
+        };
       },
       errorHandlers,
     );
