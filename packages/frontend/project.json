@@ -55,7 +55,7 @@
         "cwd": "packages/frontend",
         "commands": [
           "ng build --configuration=desktop",
-          "tsx build-service-worker.ts",
+          "IS_DESKTOP=true tsx build-service-worker.ts",
           "workbox injectManifest"
         ],
         "parallel": false

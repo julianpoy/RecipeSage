@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { AlertController } from "@ionic/angular/standalone";
 import { HttpService } from "./http.service";
 import { serverConfig } from "../utils/serverConfig";
+import { forceSWUpdate } from "../utils/forceSWUpdate";
 
 @Injectable({
   providedIn: "root",
@@ -32,13 +33,9 @@ export class VersionCheckService {
                 text: "Ok",
                 role: "cancel",
                 handler: () => {
-                  try {
-                    (window as any).forceSWUpdate().then(() => {
-                      (window as any).location.reload(true);
-                    });
-                  } catch (e) {
-                    (window as any).location.reload(true);
-                  }
+                  forceSWUpdate().finally(() => {
+                    window.location.reload();
+                  });
                 },
               },
             ],
