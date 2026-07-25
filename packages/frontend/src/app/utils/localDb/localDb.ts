@@ -35,6 +35,7 @@ export enum ObjectStoreName {
 export enum KVStoreKeys {
   Session = "session",
   RecipeSearchIndex = "recipeSearchIndex",
+  RecipeSearchIndexVersion = "recipeSearchIndexVersion",
   LastSync = "lastSync",
   LastSessionUserId = "lastSessionUserId",
   MyUserProfile = "myUserProfile",
@@ -51,6 +52,10 @@ export interface KVSession {
 export interface KVRecipeSearchIndex {
   key: KVStoreKeys.RecipeSearchIndex;
   value: string;
+}
+export interface KVRecipeSearchIndexVersion {
+  key: KVStoreKeys.RecipeSearchIndexVersion;
+  value: number;
 }
 export interface KVLastSync {
   key: KVStoreKeys.LastSync;
@@ -86,6 +91,7 @@ export interface KVPersistenceRequested {
 export type KVStoreValue = {
   [KVStoreKeys.Session]: KVSession;
   [KVStoreKeys.RecipeSearchIndex]: KVRecipeSearchIndex;
+  [KVStoreKeys.RecipeSearchIndexVersion]: KVRecipeSearchIndexVersion;
   [KVStoreKeys.LastSync]: KVLastSync;
   [KVStoreKeys.LastSessionUserId]: KVLastSessionUserId;
   [KVStoreKeys.MyUserProfile]: KVMyUserProfile;
