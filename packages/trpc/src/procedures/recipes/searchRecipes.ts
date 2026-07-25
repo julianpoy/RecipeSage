@@ -1,7 +1,8 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipesWithConstraints,
+  getRecipeConstraintsWhere,
+  getRecipesByRankedIds,
   getFriendshipIds,
 } from "@recipesage/util/server/db";
 import { sortRecipeImages } from "@recipesage/util/server/general";
@@ -59,24 +60,11 @@ export const searchRecipes = publicProcedure
 
     const recipeIds = await _searchRecipes(userIds, input.searchTerm);
 
-    const recipeIdsMap = recipeIds.reduce(
-      (acc, recipeId, idx) => {
-        acc[recipeId] = idx + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    const results = await getRecipesWithConstraints({
+    const where = await getRecipeConstraintsWhere({
       tx: prismaReplica,
       userId: ctx.session?.userId || undefined,
       userIds,
       folder: input.folder,
-      orderBy: {
-        title: "desc",
-      },
-      offset: 0,
-      limit: 100,
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
@@ -84,9 +72,18 @@ export const searchRecipes = publicProcedure
       recipeIds,
     });
 
-    results.recipes = results.recipes.map(sortRecipeImages).sort((a, b) => {
-      return recipeIdsMap[a.id] - recipeIdsMap[b.id];
+    if (!where) return { recipes: [], totalCount: 0 };
+
+    const results = await getRecipesByRankedIds({
+      tx: prismaReplica,
+      where,
+      rankedIds: recipeIds,
+      offset: 0,
+      limit: 100,
     });
 
-    return results;
+    return {
+      recipes: results.map(sortRecipeImages),
+      totalCount: results.length,
+    };
   });

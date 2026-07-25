@@ -1,37 +1,23 @@
 import { Prisma } from "@recipesage/prisma";
-import {
-  prisma,
-  RecipeSummaryLite,
-  recipeSummaryLite,
-  type NutritionFilter,
-  type NutritionRange,
-} from "@recipesage/prisma";
+import { type NutritionFilter, type NutritionRange } from "@recipesage/prisma";
 import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
-import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "./convertPrismaRecipeSummaries";
 
-export const getRecipesWithConstraints = async (args: {
+export const getRecipeConstraintsWhere = async (args: {
   tx?: Prisma.TransactionClient;
   userId?: string;
   userIds: string[];
   folder: string;
-  orderBy: Prisma.RecipeOrderByWithRelationInput;
-  offset: number;
-  limit: number;
   recipeIds?: string[];
   labels?: string[];
   labelIntersection?: boolean;
   ratings?: (number | null)[];
   nutritionFilter?: NutritionFilter;
   friendIds?: Set<string>;
-}): Promise<{ recipes: RecipeSummaryLite[]; totalCount: number }> => {
+}): Promise<Prisma.RecipeWhereInput | null> => {
   const {
-    tx = prisma,
     userId: contextUserId,
     userIds,
     folder,
-    orderBy,
-    offset,
-    limit,
     recipeIds,
     labels: _labels,
     labelIntersection,
@@ -49,11 +35,7 @@ export const getRecipesWithConstraints = async (args: {
     friendIds: args.friendIds,
   });
 
-  if (!queryFilters.length)
-    return {
-      recipes: [],
-      totalCount: 0,
-    };
+  if (!queryFilters.length) return null;
 
   const where = {
     AND: [] as Prisma.RecipeWhereInput[],
@@ -173,21 +155,5 @@ export const getRecipesWithConstraints = async (args: {
     });
   }
 
-  const [totalCount, recipes] = await Promise.all([
-    tx.recipe.count({
-      where,
-    }),
-    tx.recipe.findMany({
-      where,
-      ...recipeSummaryLite,
-      orderBy,
-      skip: offset,
-      take: limit,
-    }),
-  ]);
-
-  return {
-    recipes: convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes),
-    totalCount,
-  };
+  return where;
 };

@@ -49,6 +49,75 @@ describe("searchRecipes", () => {
     expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
   });
 
+  test("matches a term that only appears in the notes", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      notes: "Best with saffronzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "saffronzz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("matches a term that only appears in the description", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      description: "A hearty pilafzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "pilafzz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("matches a term that only appears in the source", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      source: "Grandmazz cookbook",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "grandmazz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("does not match a term that only appears in the instructions", async ({
+    user,
+    trpc,
+  }) => {
+    await createRecipe(user.id, {
+      title: "Plain bowl",
+      instructions: "Simmer the broth until reducedzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "reducedzz",
+      folder: "main",
+    });
+
+    expect(response.recipes).toEqual([]);
+    expect(response.totalCount).toBe(0);
+  });
+
   test("folds accents so an unaccented term matches accented content", async ({
     user,
     trpc,

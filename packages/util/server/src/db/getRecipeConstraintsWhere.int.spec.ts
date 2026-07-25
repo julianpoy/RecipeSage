@@ -1,11 +1,22 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { Prisma, prisma, User } from "@recipesage/prisma";
-import { getRecipesWithConstraints } from "./getRecipesWithConstraints";
+import {
+  Prisma,
+  prisma,
+  User,
+  recipeSummaryLite,
+  RecipeSummaryLite,
+} from "@recipesage/prisma";
+import { getRecipeConstraintsWhere } from "./getRecipeConstraintsWhere";
+import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "./convertPrismaRecipeSummaries";
 import { userFactory, recipeFactory, labelFactory } from "../general/factories";
 
-type CallArgs = Parameters<typeof getRecipesWithConstraints>[0];
+type CallArgs = Parameters<typeof getRecipeConstraintsWhere>[0] & {
+  orderBy?: Prisma.RecipeOrderByWithRelationInput;
+  offset?: number;
+  limit?: number;
+};
 
-describe("getRecipesWithConstraints", () => {
+describe("getRecipeConstraintsWhere", () => {
   let owner: User;
   const cleanupIds: string[] = [];
 
@@ -19,16 +30,41 @@ describe("getRecipesWithConstraints", () => {
     cleanupIds.length = 0;
   });
 
-  const run = (overrides: Partial<CallArgs> = {}) =>
-    getRecipesWithConstraints({
+  const run = async (
+    overrides: Partial<CallArgs> = {},
+  ): Promise<{ recipes: RecipeSummaryLite[]; totalCount: number }> => {
+    const {
+      orderBy = { title: "asc" },
+      offset = 0,
+      limit = 200,
+      ...whereArgs
+    } = overrides;
+
+    const where = await getRecipeConstraintsWhere({
       userId: owner.id,
       userIds: [owner.id],
       folder: "main",
-      orderBy: { title: "asc" },
-      offset: 0,
-      limit: 200,
-      ...overrides,
+      ...whereArgs,
     });
+
+    if (!where) return { recipes: [], totalCount: 0 };
+
+    const [totalCount, recipes] = await Promise.all([
+      prisma.recipe.count({ where }),
+      prisma.recipe.findMany({
+        where,
+        ...recipeSummaryLite,
+        orderBy,
+        skip: offset,
+        take: limit,
+      }),
+    ]);
+
+    return {
+      recipes: convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes),
+      totalCount,
+    };
+  };
 
   const createRecipe = (
     title: string,

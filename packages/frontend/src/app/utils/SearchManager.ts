@@ -41,7 +41,6 @@ const SEARCH_FIELD_BOOSTS = {
   ingredients: 2,
   source: 1,
   notes: 1,
-  instructions: 1,
 };
 
 export interface StoredSearchFields {
@@ -135,7 +134,6 @@ export class SearchManager {
       title: recipe.title ?? "",
       description: recipe.description ?? "",
       ingredients: recipe.ingredients ?? "",
-      instructions: recipe.instructions ?? "",
       notes: recipe.notes ?? "",
       source: recipe.source ?? "",
     };

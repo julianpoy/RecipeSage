@@ -1,6 +1,6 @@
 import { prismaReplica } from "@recipesage/prisma";
 
-const RESULT_LIMIT = 500;
+const RESULT_LIMIT = 1000;
 
 export const searchRecipes = async (userIds: string[], queryString: string) => {
   if (!userIds.length || !queryString.trim()) return [];

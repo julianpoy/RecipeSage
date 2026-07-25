@@ -1,7 +1,8 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipesWithConstraints,
+  getRecipeConstraintsWhere,
+  getRecipesByRankedIds,
   getFriendshipIds,
   findRecipesByIngredients,
 } from "@recipesage/util/server/db";
@@ -75,29 +76,31 @@ export const searchRecipesByIngredients = publicProcedure
 
     const recipeIds = matches.map((entry) => entry.recipeId);
 
-    const results = await getRecipesWithConstraints({
+    const where = await getRecipeConstraintsWhere({
       tx: prismaReplica,
       userId: ctx.session?.userId || undefined,
       userIds,
       folder: "main",
-      orderBy: {
-        title: "desc",
-      },
-      offset: 0,
-      limit: 100,
       recipeIds,
     });
 
-    const recipes = results.recipes
-      .map(sortRecipeImages)
-      .sort((a, b) => matchByRecipeId[a.id].order - matchByRecipeId[b.id].order)
-      .map((recipe) => ({
-        ...recipe,
-        matchedIngredients: matchByRecipeId[recipe.id].matchedIngredients,
-      }));
+    if (!where) return { recipes: [], totalCount: 0 };
+
+    const results = await getRecipesByRankedIds({
+      tx: prismaReplica,
+      where,
+      rankedIds: recipeIds,
+      offset: 0,
+      limit: 100,
+    });
+
+    const recipes = results.map(sortRecipeImages).map((recipe) => ({
+      ...recipe,
+      matchedIngredients: matchByRecipeId[recipe.id].matchedIngredients,
+    }));
 
     return {
       recipes,
-      totalCount: results.totalCount,
+      totalCount: results.length,
     };
   });

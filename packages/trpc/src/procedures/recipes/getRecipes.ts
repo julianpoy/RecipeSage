@@ -1,13 +1,16 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipesWithConstraints,
+  getRecipeConstraintsWhere,
   getFriendshipIds,
+  convertPrismaRecipeSummaryLitesToRecipeSummaryLites,
 } from "@recipesage/util/server/db";
 import { TRPCError } from "@trpc/server";
 import {
   nutritionFilterSchema,
   recipeSummaryLiteSchema,
+  prisma,
+  recipeSummaryLite,
 } from "@recipesage/prisma";
 
 export const getRecipes = publicProcedure
@@ -62,15 +65,10 @@ export const getRecipes = publicProcedure
       }
     }
 
-    const result = await getRecipesWithConstraints({
+    const where = await getRecipeConstraintsWhere({
       userId: ctx.session?.userId || undefined,
       userIds,
       folder: input.folder,
-      orderBy: {
-        [input.orderBy]: input.orderDirection,
-      },
-      offset: input.offset,
-      limit: input.limit,
       recipeIds: input.recipeIds,
       labels: input.labels,
       labelIntersection: input.labelIntersection,
@@ -79,5 +77,23 @@ export const getRecipes = publicProcedure
       friendIds,
     });
 
-    return result;
+    if (!where) return { recipes: [], totalCount: 0 };
+
+    const [totalCount, recipes] = await Promise.all([
+      prisma.recipe.count({ where }),
+      prisma.recipe.findMany({
+        where,
+        ...recipeSummaryLite,
+        orderBy: {
+          [input.orderBy]: input.orderDirection,
+        },
+        skip: input.offset,
+        take: input.limit,
+      }),
+    ]);
+
+    return {
+      recipes: convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes),
+      totalCount,
+    };
   });
