@@ -47,11 +47,7 @@ describe("findRecipesByIngredients", () => {
     );
 
     expect(titles).toEqual(["All three", "Two of three", "One of three"]);
-    expect(ranked[0].matchedIngredients.sort()).toEqual([
-      "chicken",
-      "onion",
-      "rice",
-    ]);
+    expect(ranked[0].matchedTerms.sort()).toEqual(["chicken", "onion", "rice"]);
   });
 
   it("ranks recipes matching more of the provided ingredients first", async () => {
@@ -174,7 +170,7 @@ describe("findRecipesByIngredients", () => {
     });
 
     expect(ranked).toHaveLength(1);
-    expect(ranked[0].matchedIngredients).toEqual(["onion"]);
+    expect(ranked[0].matchedTerms).toEqual(["onion"]);
   });
 
   it("respects the limit argument", async () => {
@@ -292,6 +288,6 @@ describe("findRecipesByIngredients", () => {
     });
 
     expect(ranked).toHaveLength(1);
-    expect(ranked[0].matchedIngredients).toEqual(["onion"]);
+    expect(ranked[0].matchedTerms).toEqual(["onion"]);
   });
 });

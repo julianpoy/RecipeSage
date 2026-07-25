@@ -29,7 +29,7 @@ export const findRecipesByIngredients = async (args: {
   folder: string;
   limit?: number;
   tx?: Prisma.TransactionClient;
-}): Promise<{ recipeId: string; matchedIngredients: string[] }[]> => {
+}): Promise<{ recipeId: string; matchedTerms: string[] }[]> => {
   const { userIds, folder, tx = prisma } = args;
   const limit = args.limit ?? DEFAULT_LIMIT;
   const terms = normalizeIngredientTerms(args.ingredients);
@@ -78,6 +78,6 @@ export const findRecipesByIngredients = async (args: {
 
   return rows.map((row) => ({
     recipeId: row.id,
-    matchedIngredients: row.matched,
+    matchedTerms: row.matched,
   }));
 };

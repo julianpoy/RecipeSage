@@ -24,6 +24,7 @@ import {
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RouterOutputs } from "../../../services/server-actions/actions-base";
+import type { RecipeSummaryLite } from "@recipesage/prisma";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   MyRecipesPreferenceKey,
@@ -36,7 +37,7 @@ import { RecipeListItemComponent } from "../../../components/recipe-list-item/re
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 type IngredientSearchResult =
-  RouterOutputs["recipes"]["searchRecipesByIngredients"]["recipes"][number];
+  RouterOutputs["recipes"]["searchRecipesByIngredients"]["results"][number];
 
 @Component({
   standalone: true,
@@ -152,28 +153,25 @@ export class SearchByIngredientsPage {
     this.loading = false;
     this.hasSearched = true;
     this.totalTerms = terms.length;
-    this.results = response?.recipes ?? [];
+    this.results = response?.results ?? [];
   }
 
-  private isFromAnotherUser(recipe: IngredientSearchResult): boolean {
+  private isFromAnotherUser(recipe: RecipeSummaryLite): boolean {
     const myProfileValue = this.myProfile();
     return !!myProfileValue && recipe.userId !== myProfileValue.id;
   }
 
-  getRecipeBadgeHandle(recipe: IngredientSearchResult): string | undefined {
+  getRecipeBadgeHandle(recipe: RecipeSummaryLite): string | undefined {
     if (!this.isFromAnotherUser(recipe)) return undefined;
     return recipe.user.handle ?? undefined;
   }
 
-  isFromSharedCollection(recipe: IngredientSearchResult): boolean {
+  isFromSharedCollection(recipe: RecipeSummaryLite): boolean {
     if (!this.isFromAnotherUser(recipe)) return false;
     return !recipe.user.handle;
   }
 
-  openRecipe(
-    recipe: IngredientSearchResult,
-    event?: MouseEvent | KeyboardEvent,
-  ) {
+  openRecipe(recipe: RecipeSummaryLite, event?: MouseEvent | KeyboardEvent) {
     this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 }

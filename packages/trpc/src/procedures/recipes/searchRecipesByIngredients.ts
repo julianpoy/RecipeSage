@@ -33,9 +33,10 @@ export const searchRecipesByIngredients = publicProcedure
   )
   .output(
     z.object({
-      recipes: z.array(
-        recipeSummaryLiteSchema.extend({
-          matchedIngredients: z.array(z.string()),
+      results: z.array(
+        z.object({
+          recipe: recipeSummaryLiteSchema,
+          matchedTerms: z.array(z.string()),
         }),
       ),
       totalCount: z.number().int(),
@@ -63,16 +64,9 @@ export const searchRecipesByIngredients = publicProcedure
       tx: prismaReplica,
     });
 
-    const matchByRecipeId: Record<
-      string,
-      { order: number; matchedIngredients: string[] }
-    > = {};
-    matches.forEach((entry, idx) => {
-      matchByRecipeId[entry.recipeId] = {
-        order: idx + 1,
-        matchedIngredients: entry.matchedIngredients,
-      };
-    });
+    const matchedTermsByRecipeId = new Map(
+      matches.map((entry) => [entry.recipeId, entry.matchedTerms]),
+    );
 
     const recipeIds = matches.map((entry) => entry.recipeId);
 
@@ -84,9 +78,9 @@ export const searchRecipesByIngredients = publicProcedure
       recipeIds,
     });
 
-    if (!where) return { recipes: [], totalCount: 0 };
+    if (!where) return { results: [], totalCount: 0 };
 
-    const results = await getRecipesByRankedIds({
+    const recipes = await getRecipesByRankedIds({
       tx: prismaReplica,
       where,
       rankedIds: recipeIds,
@@ -94,13 +88,13 @@ export const searchRecipesByIngredients = publicProcedure
       limit: 100,
     });
 
-    const recipes = results.map(sortRecipeImages).map((recipe) => ({
-      ...recipe,
-      matchedIngredients: matchByRecipeId[recipe.id].matchedIngredients,
+    const results = recipes.map(sortRecipeImages).map((recipe) => ({
+      recipe,
+      matchedTerms: matchedTermsByRecipeId.get(recipe.id) ?? [],
     }));
 
     return {
-      recipes,
+      results,
       totalCount: results.length,
     };
   });

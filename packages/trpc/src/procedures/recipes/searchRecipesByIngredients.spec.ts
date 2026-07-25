@@ -35,21 +35,18 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["chicken", "rice", "onion"],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "All three",
       "Two of three",
       "One of three",
     ]);
-    expect(response.recipes[0].matchedIngredients.sort()).toEqual([
+    expect(response.results[0].matchedTerms.sort()).toEqual([
       "chicken",
       "onion",
       "rice",
     ]);
-    expect(response.recipes[1].matchedIngredients.sort()).toEqual([
-      "onion",
-      "rice",
-    ]);
-    expect(response.recipes[2].matchedIngredients).toEqual(["onion"]);
+    expect(response.results[1].matchedTerms.sort()).toEqual(["onion", "rice"]);
+    expect(response.results[2].matchedTerms).toEqual(["onion"]);
     expect(response.totalCount).toBe(3);
   });
 
@@ -68,7 +65,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["chicken", "garlic"],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "Uses both",
       "Uses one",
     ]);
@@ -84,7 +81,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["onion"],
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
   });
 
   test("includes mutual friends' shared recipes when includeAllFriends is set", async ({
@@ -107,13 +104,13 @@ describe("searchRecipesByIngredients", () => {
     const withoutFriends = await trpc.recipes.searchRecipesByIngredients({
       ingredients: ["onion"],
     });
-    expect(withoutFriends.recipes).toEqual([]);
+    expect(withoutFriends.results).toEqual([]);
 
     const withFriends = await trpc.recipes.searchRecipesByIngredients({
       ingredients: ["onion"],
       includeAllFriends: true,
     });
-    expect(withFriends.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(withFriends.results.map((result) => result.recipe.title)).toEqual([
       "Friend recipe",
     ]);
   });
@@ -135,7 +132,7 @@ describe("searchRecipesByIngredients", () => {
       userIds: [user2.id],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "Public onion",
     ]);
   });
@@ -163,7 +160,7 @@ describe("searchRecipesByIngredients", () => {
       includeAllFriends: true,
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
   });
 
   test("rejects an empty ingredients array", async ({ trpc }) => {
@@ -184,7 +181,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients,
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
   });
 
   test("rejects more than the maximum number of ingredients", async ({
