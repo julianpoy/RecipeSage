@@ -29,62 +29,85 @@ import { z } from "zod";
 
 const appPreferencesSchema = z
   .object({
-    preferencesVersion: z.number().int(),
+    preferencesVersion: z.number().int().default(0),
 
     /**
      * New preferences or modifications here must be backwards-compatible.
      * If you're adding a new preference, make sure to add either default value or have it be optional.
      */
 
-    [GlobalPreferenceKey.EnableSplitPane]: z.boolean(),
-    [GlobalPreferenceKey.Language]: z.enum(SupportedLanguages).nullable(),
-    [GlobalPreferenceKey.FontSize]: z.enum(SupportedFontSize),
-    [GlobalPreferenceKey.Theme]: z.enum(AppTheme),
-    [GlobalPreferenceKey.PreferencesSync]: z.enum(PreferencesSync),
-    [GlobalPreferenceKey.StartPage]: z.enum(StartPageOptions),
+    [GlobalPreferenceKey.EnableSplitPane]: z.boolean().default(false),
+    [GlobalPreferenceKey.Language]: z
+      .enum(SupportedLanguages)
+      .nullable()
+      .default(null),
+    [GlobalPreferenceKey.FontSize]: z
+      .enum(SupportedFontSize)
+      .default(SupportedFontSize.X1_0),
+    [GlobalPreferenceKey.Theme]: z.enum(AppTheme).default(AppTheme.Default),
+    [GlobalPreferenceKey.PreferencesSync]: z
+      .enum(PreferencesSync)
+      .default(PreferencesSync.Enabled),
+    [GlobalPreferenceKey.StartPage]: z
+      .enum(StartPageOptions)
+      .default(StartPageOptions.MyRecipes),
     [GlobalPreferenceKey.OfflineModePrompt]: z
       .enum(OfflineModePromptOptions)
       .default(OfflineModePromptOptions.Ask),
 
-    [MyRecipesPreferenceKey.EnableLabelIntersection]: z.boolean(),
-    [MyRecipesPreferenceKey.ShowLabels]: z.boolean(),
-    [MyRecipesPreferenceKey.ShowLabelChips]: z.boolean(),
-    [MyRecipesPreferenceKey.ShowImages]: z.boolean(),
-    [MyRecipesPreferenceKey.ShowSource]: z.boolean(),
-    [MyRecipesPreferenceKey.ShowRecipeDescription]: z.boolean(),
+    [MyRecipesPreferenceKey.EnableLabelIntersection]: z
+      .boolean()
+      .default(false),
+    [MyRecipesPreferenceKey.ShowLabels]: z.boolean().default(true),
+    [MyRecipesPreferenceKey.ShowLabelChips]: z.boolean().default(false),
+    [MyRecipesPreferenceKey.ShowImages]: z.boolean().default(true),
+    [MyRecipesPreferenceKey.ShowSource]: z.boolean().default(false),
+    [MyRecipesPreferenceKey.ShowRecipeDescription]: z.boolean().default(true),
     [MyRecipesPreferenceKey.ShowRating]: z.boolean().default(false),
-    [MyRecipesPreferenceKey.ViewType]: z.enum(MyRecipesViewTypeOptions),
-    [MyRecipesPreferenceKey.SortBy]: z.enum(MyRecipesSortOptions),
-    [MyRecipesPreferenceKey.IncludeFriends]: z.enum(
-      MyRecipesIncludeFriendsOptions,
-    ),
+    [MyRecipesPreferenceKey.ViewType]: z
+      .enum(MyRecipesViewTypeOptions)
+      .default(MyRecipesViewTypeOptions.Tiles),
+    [MyRecipesPreferenceKey.SortBy]: z
+      .enum(MyRecipesSortOptions)
+      .default(MyRecipesSortOptions.TitleAsc),
+    [MyRecipesPreferenceKey.IncludeFriends]: z
+      .enum(MyRecipesIncludeFriendsOptions)
+      .default(MyRecipesIncludeFriendsOptions.No),
 
-    [RecipeDetailsPreferenceKey.EnableWakeLock]: z.boolean(),
-    [RecipeDetailsPreferenceKey.AutoExpandNutrition]: z.boolean(),
+    [RecipeDetailsPreferenceKey.EnableWakeLock]: z.boolean().default(true),
+    [RecipeDetailsPreferenceKey.AutoExpandNutrition]: z
+      .boolean()
+      .default(false),
 
     [CookModePreferenceKey.FontSize]: z
       .enum(SupportedFontSize)
       .default(SupportedFontSize.PX20),
 
-    [ManageLabelsPreferenceKey.ShowCreatedAt]: z.boolean(),
+    [ManageLabelsPreferenceKey.ShowCreatedAt]: z.boolean().default(true),
 
     [MeasurementConverterPreferenceKey.EnabledUnits]: z
       .array(z.string())
       .default([...VOLUME_UNITS_COMMON, ...WEIGHT_UNITS_COMMON]),
 
-    [MealPlanPreferenceKey.ShowAddedBy]: z.boolean(),
-    [MealPlanPreferenceKey.ShowAddedOn]: z.boolean(),
-    [MealPlanPreferenceKey.StartOfWeek]: z.enum(MealPlanStartOfWeekOptions),
-    [MealPlanPreferenceKey.ViewType]: z.enum(MealPlanViewTypeOptions),
+    [MealPlanPreferenceKey.ShowAddedBy]: z.boolean().default(false),
+    [MealPlanPreferenceKey.ShowAddedOn]: z.boolean().default(false),
+    [MealPlanPreferenceKey.StartOfWeek]: z
+      .enum(MealPlanStartOfWeekOptions)
+      .default(MealPlanStartOfWeekOptions.Monday),
+    [MealPlanPreferenceKey.ViewType]: z
+      .enum(MealPlanViewTypeOptions)
+      .default(MealPlanViewTypeOptions.Calendar),
 
-    [ShoppingListPreferenceKey.SortBy]: z.enum(ShoppingListSortOptions),
-    [ShoppingListPreferenceKey.ShowAddedBy]: z.boolean(),
-    [ShoppingListPreferenceKey.ShowAddedOn]: z.boolean(),
-    [ShoppingListPreferenceKey.ShowRecipeTitle]: z.boolean(),
-    [ShoppingListPreferenceKey.PreferDelete]: z.boolean(),
-    [ShoppingListPreferenceKey.GroupSimilar]: z.boolean(),
-    [ShoppingListPreferenceKey.GroupCategories]: z.boolean(),
-    [ShoppingListPreferenceKey.IgnoreItemTitles]: z.string(),
+    [ShoppingListPreferenceKey.SortBy]: z
+      .enum(ShoppingListSortOptions)
+      .default(ShoppingListSortOptions.CreatedAtDesc),
+    [ShoppingListPreferenceKey.ShowAddedBy]: z.boolean().default(false),
+    [ShoppingListPreferenceKey.ShowAddedOn]: z.boolean().default(false),
+    [ShoppingListPreferenceKey.ShowRecipeTitle]: z.boolean().default(true),
+    [ShoppingListPreferenceKey.PreferDelete]: z.boolean().default(false),
+    [ShoppingListPreferenceKey.GroupSimilar]: z.boolean().default(true),
+    [ShoppingListPreferenceKey.GroupCategories]: z.boolean().default(true),
+    [ShoppingListPreferenceKey.IgnoreItemTitles]: z.string().default(""),
   })
   .nullable();
 
