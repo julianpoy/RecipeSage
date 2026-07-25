@@ -2,6 +2,11 @@ import { Readable } from "stream";
 import { buffer as streamToBuffer } from "stream/consumers";
 import sharp from "sharp";
 import decodeHeic from "heic-decode";
+import pLimit from "p-limit";
+
+sharp.concurrency(1);
+
+const sharpConcurrencyLimit = pLimit(1);
 
 export class FileTransformError extends Error {
   constructor() {
@@ -67,6 +72,7 @@ export const transformImageStream = (
     .rotate() // Rotates based on EXIF data
     .resize(width, height, {
       fit,
+      withoutEnlargement: true,
     })
     .jpeg({
       quality,
@@ -91,20 +97,22 @@ export const transformImageBuffer = async (
   height: number,
   quality: number,
   fit: keyof sharp.FitEnum,
-) => {
-  try {
-    const pipeline = await createSharpFromBuffer(buffer);
-    return await pipeline
-      .rotate() // Rotates based on EXIF data (no-op when input is raw RGBA from HEIC)
-      .resize(width, height, {
-        fit,
-      })
-      .jpeg({
-        quality,
-        // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
-      })
-      .toBuffer();
-  } catch {
-    throw new FileTransformError();
-  }
-};
+) =>
+  sharpConcurrencyLimit(async () => {
+    try {
+      const pipeline = await createSharpFromBuffer(buffer);
+      return await pipeline
+        .rotate() // Rotates based on EXIF data (no-op when input is raw RGBA from HEIC)
+        .resize(width, height, {
+          fit,
+          withoutEnlargement: true,
+        })
+        .jpeg({
+          quality,
+          // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
+        })
+        .toBuffer();
+    } catch {
+      throw new FileTransformError();
+    }
+  });
