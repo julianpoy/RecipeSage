@@ -28,6 +28,7 @@ import type { RecipeSummaryLite } from "@recipesage/prisma";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   MyRecipesPreferenceKey,
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
 } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -115,6 +116,8 @@ export class SearchByIngredientsPage {
     for (const raw of text.split(/[\n,]+/)) {
       const trimmed = raw.trim();
       if (!trimmed) continue;
+      if (trimmed.length > SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH)
+        continue;
 
       const key = trimmed.toLowerCase();
       if (seen.has(key)) continue;
@@ -142,18 +145,21 @@ export class SearchByIngredientsPage {
 
     this.loading = true;
 
-    const response =
-      await this.serverActionsService.recipes.searchRecipesByIngredients({
+    const response = await this.serverActionsService.recipes
+      .searchRecipesByIngredients({
         ingredients: terms,
         includeAllFriends: this.includeFriends || undefined,
+      })
+      .finally(() => {
+        if (generation === this.searchGeneration) this.loading = false;
       });
 
     if (generation !== this.searchGeneration) return;
+    if (!response) return;
 
-    this.loading = false;
     this.hasSearched = true;
     this.totalTerms = terms.length;
-    this.results = response?.results ?? [];
+    this.results = response.results;
   }
 
   private isFromAnotherUser(recipe: RecipeSummaryLite): boolean {

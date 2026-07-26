@@ -9,7 +9,10 @@ import {
 import { sortRecipeImages } from "@recipesage/util/server/general";
 import { TRPCError } from "@trpc/server";
 import { prismaReplica, recipeSummaryLiteSchema } from "@recipesage/prisma";
-import { SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS } from "@recipesage/util/shared";
+import {
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
+} from "@recipesage/util/shared";
 
 export const searchRecipesByIngredients = publicProcedure
   .meta({
@@ -24,7 +27,13 @@ export const searchRecipesByIngredients = publicProcedure
   .input(
     z.object({
       ingredients: z
-        .array(z.string())
+        .array(
+          z
+            .string()
+            .trim()
+            .min(1)
+            .max(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH),
+        )
         .min(1)
         .max(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS),
       userIds: z.array(z.uuid()).optional(),
@@ -39,7 +48,6 @@ export const searchRecipesByIngredients = publicProcedure
           matchedTerms: z.array(z.string()),
         }),
       ),
-      totalCount: z.number().int(),
     }),
   )
   .query(async ({ ctx, input }) => {
@@ -78,7 +86,7 @@ export const searchRecipesByIngredients = publicProcedure
       recipeIds,
     });
 
-    if (!where) return { results: [], totalCount: 0 };
+    if (!where) return { results: [] };
 
     const recipes = await getRecipesByRankedIds({
       tx: prismaReplica,
@@ -95,6 +103,5 @@ export const searchRecipesByIngredients = publicProcedure
 
     return {
       results,
-      totalCount: results.length,
     };
   });

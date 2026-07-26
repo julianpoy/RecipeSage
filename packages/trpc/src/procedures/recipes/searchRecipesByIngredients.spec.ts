@@ -4,7 +4,10 @@ import {
   friendshipFactory,
   profileItemFactory,
 } from "@recipesage/util/server/general";
-import { SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS } from "@recipesage/util/shared";
+import {
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
+} from "@recipesage/util/shared";
 import { test, anonymousTrpc } from "../../testutils";
 
 const createRecipe = (
@@ -47,7 +50,6 @@ describe("searchRecipesByIngredients", () => {
     ]);
     expect(response.results[1].matchedTerms.sort()).toEqual(["onion", "rice"]);
     expect(response.results[2].matchedTerms).toEqual(["onion"]);
-    expect(response.totalCount).toBe(3);
   });
 
   test("ranks a recipe using more of the ingredients above a smaller partial match", async ({
@@ -195,5 +197,39 @@ describe("searchRecipesByIngredients", () => {
     await expect(
       trpc.recipes.searchRecipesByIngredients({ ingredients }),
     ).rejects.toThrow();
+  });
+
+  test("rejects a blank ingredient", async ({ trpc }) => {
+    await expect(
+      trpc.recipes.searchRecipesByIngredients({ ingredients: ["   "] }),
+    ).rejects.toThrow();
+  });
+
+  test("rejects an ingredient longer than the maximum term length", async ({
+    trpc,
+  }) => {
+    await expect(
+      trpc.recipes.searchRecipesByIngredients({
+        ingredients: [
+          "a".repeat(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH + 1),
+        ],
+      }),
+    ).rejects.toThrow();
+  });
+
+  test("trims surrounding whitespace from ingredients", async ({
+    user,
+    trpc,
+  }) => {
+    await createRecipe(user.id, "Onion soup", "1 onion\n2 cups stock");
+
+    const response = await trpc.recipes.searchRecipesByIngredients({
+      ingredients: ["  onion  "],
+    });
+
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
+      "Onion soup",
+    ]);
+    expect(response.results[0].matchedTerms).toEqual(["onion"]);
   });
 });
