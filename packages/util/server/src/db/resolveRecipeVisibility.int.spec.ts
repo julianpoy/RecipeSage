@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { prisma, User } from "@recipesage/prisma";
-import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
+import {
+  isRecipeVisibilityEmpty,
+  resolveRecipeVisibility,
+} from "./resolveRecipeVisibility";
+import { recipeVisibilityToPrismaWhere } from "./recipeVisibilityToPrismaWhere";
+import { recipeVisibilityToSql } from "./recipeVisibilityToSql";
 import {
   userFactory,
   recipeFactory,
@@ -14,22 +19,39 @@ async function materialize(args: {
   userIds: string[];
   folder?: "main" | "inbox";
 }): Promise<string[]> {
-  const filters = await getRecipeVisibilityQueryFilter({
+  const folder = args.folder ?? "main";
+  const visibility = await resolveRecipeVisibility({
     userId: args.userId,
     userIds: args.userIds,
   });
-  if (!filters.length) return [];
-  const recipes = await prisma.recipe.findMany({
-    where: {
-      AND: [{ OR: filters }, { folder: args.folder ?? "main" }],
-    },
-    select: { id: true },
-    orderBy: { title: "asc" },
-  });
-  return recipes.map((r) => r.id);
+
+  const filters = recipeVisibilityToPrismaWhere(visibility);
+  const viaPrisma = filters.length
+    ? await prisma.recipe
+        .findMany({
+          where: {
+            AND: [{ OR: filters }, { folder }],
+          },
+          select: { id: true },
+          orderBy: { title: "asc" },
+        })
+        .then((recipes) => recipes.map((r) => r.id))
+    : [];
+
+  const viaSql = await prisma.$queryRaw<{ id: string }[]>`
+    SELECT "Recipes".id
+    FROM "Recipes"
+    WHERE ${recipeVisibilityToSql(visibility)}
+      AND "Recipes".folder = ${folder}
+    ORDER BY "Recipes".title ASC
+  `.then((recipes) => recipes.map((r) => r.id));
+
+  expect(viaSql.sort()).toEqual([...viaPrisma].sort());
+
+  return viaPrisma;
 }
 
-describe("getRecipeVisibilityQueryFilter", () => {
+describe("resolveRecipeVisibility", () => {
   let owner: User;
   let friendA: User;
   let friendB: User;
@@ -640,12 +662,28 @@ describe("getRecipeVisibilityQueryFilter", () => {
   });
 
   describe("empty userIds", () => {
+    it("is not empty when only partial shares are present", async () => {
+      const visibility = {
+        allRecipesUserIds: [],
+        partialShares: [
+          {
+            userId: friendA.id,
+            labelIds: ["00000000-0000-0000-0000-000000000001"],
+            recipeIds: [],
+          },
+        ],
+      };
+      expect(isRecipeVisibilityEmpty(visibility)).toBe(false);
+      expect(recipeVisibilityToPrismaWhere(visibility)).toHaveLength(1);
+    });
+
     it("returns an empty filter array", async () => {
-      const filters = await getRecipeVisibilityQueryFilter({
+      const visibility = await resolveRecipeVisibility({
         userId: owner.id,
         userIds: [],
       });
-      expect(filters).toEqual([]);
+      expect(isRecipeVisibilityEmpty(visibility)).toBe(true);
+      expect(recipeVisibilityToPrismaWhere(visibility)).toEqual([]);
     });
   });
 });

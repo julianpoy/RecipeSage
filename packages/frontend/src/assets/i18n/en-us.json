@@ -176,6 +176,8 @@
   "pages.home.addLabel.placeholder": "Label Name",
   "pages.home.deleteSelected.header": "Confirm Delete",
   "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible. The following recipes will be deleted: {{recipeNames}}",
+  "pages.home.selectionNotOwned.header": "Recipes from other users selected",
+  "pages.home.selectionNotOwned.message": "You can only do this with your own recipes. These recipes belong to another user, so deselect them to continue: {{recipeNames}}",
   "pages.home.exportSelected.header": "Choose Format",
   "pages.home.exportSelected.message": "What format would you like to download these recipes in?",
   "pages.home.exportSelected.pdf": "PDF Format",

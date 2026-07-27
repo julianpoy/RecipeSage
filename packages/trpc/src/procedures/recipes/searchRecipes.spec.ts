@@ -230,6 +230,36 @@ describe("searchRecipes", () => {
     expect(response.recipes.map((r) => r.id)).toEqual([labeled.id]);
   });
 
+  test("finds a labeled match that ranks below a full page of unlabeled ones", async ({
+    user,
+    trpc,
+  }) => {
+    const label = await prisma.label.create({
+      data: { ...labelFactory(user.id), title: "keepzz" },
+    });
+
+    await prisma.recipe.createMany({
+      data: Array.from({ length: 1200 }, (_, index) => ({
+        ...recipeFactory(user.id),
+        title: `Onionzz filler ${index}`,
+      })),
+    });
+
+    const labeled = await createRecipe(user.id, {
+      title: "Zzz target",
+      notes: "onionzz",
+      recipeLabels: { create: [{ labelId: label.id }] },
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "onionzz",
+      folder: "main",
+      labels: ["keepzz"],
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([labeled.id]);
+  });
+
   test("requires all labels when labelIntersection is set", async ({
     user,
     trpc,

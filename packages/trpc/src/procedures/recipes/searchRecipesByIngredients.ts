@@ -1,14 +1,17 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipeConstraintsWhere,
-  getRecipesByRankedIds,
+  convertPrismaRecipeSummaryLitesToRecipeSummaryLites,
   getFriendshipIds,
   findRecipesByIngredients,
 } from "@recipesage/util/server/db";
 import { sortRecipeImages } from "@recipesage/util/server/general";
 import { TRPCError } from "@trpc/server";
-import { prismaReplica, recipeSummaryLiteSchema } from "@recipesage/prisma";
+import {
+  prismaReplica,
+  recipeSummaryLite,
+  recipeSummaryLiteSchema,
+} from "@recipesage/prisma";
 import {
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
@@ -60,46 +63,49 @@ export const searchRecipesByIngredients = publicProcedure
         code: "BAD_REQUEST",
       });
 
+    let friendIds: Set<string> | undefined;
     if (ctx.session?.userId && input.includeAllFriends) {
       const friendships = await getFriendshipIds(ctx.session.userId);
+      friendIds = new Set(friendships.friends);
       userIds.push(...friendships.friends);
     }
 
     const matches = await findRecipesByIngredients({
-      userIds,
+      constraints: {
+        sessionUserId: ctx.session?.userId,
+        userIds,
+        friendIds,
+        folder: "main",
+      },
       ingredients: input.ingredients,
-      folder: "main",
       tx: prismaReplica,
     });
 
-    const matchedTermsByRecipeId = new Map(
-      matches.map((entry) => [entry.recipeId, entry.matchedTerms]),
+    if (!matches.length) return { results: [] };
+
+    const recipes = await prismaReplica.recipe.findMany({
+      where: {
+        id: { in: matches.map((match) => match.recipeId) },
+      },
+      ...recipeSummaryLite,
+    });
+
+    const recipesById = new Map(
+      convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes).map(
+        (recipe) => [recipe.id, recipe],
+      ),
     );
 
-    const recipeIds = matches.map((entry) => entry.recipeId);
-
-    const where = await getRecipeConstraintsWhere({
-      tx: prismaReplica,
-      userId: ctx.session?.userId || undefined,
-      userIds,
-      folder: "main",
-      recipeIds,
+    const results = matches.flatMap((match) => {
+      const recipe = recipesById.get(match.recipeId);
+      if (!recipe) return [];
+      return [
+        {
+          recipe: sortRecipeImages(recipe),
+          matchedTerms: match.matchedTerms,
+        },
+      ];
     });
-
-    if (!where) return { results: [] };
-
-    const recipes = await getRecipesByRankedIds({
-      tx: prismaReplica,
-      where,
-      rankedIds: recipeIds,
-      offset: 0,
-      limit: 100,
-    });
-
-    const results = recipes.map(sortRecipeImages).map((recipe) => ({
-      recipe,
-      matchedTerms: matchedTermsByRecipeId.get(recipe.id) ?? [],
-    }));
 
     return {
       results,

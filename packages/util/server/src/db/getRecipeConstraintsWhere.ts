@@ -1,21 +1,17 @@
-import { Prisma } from "@recipesage/prisma";
-import { type NutritionFilter, type NutritionRange } from "@recipesage/prisma";
-import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
+import { Prisma, prisma } from "@recipesage/prisma";
+import { type NutritionRange } from "@recipesage/prisma";
+import { type RecipeConstraints } from "./recipeConstraints";
+import {
+  isRecipeVisibilityEmpty,
+  resolveRecipeVisibility,
+} from "./resolveRecipeVisibility";
+import { recipeVisibilityToPrismaWhere } from "./recipeVisibilityToPrismaWhere";
 
-export const getRecipeConstraintsWhere = async (args: {
-  tx?: Prisma.TransactionClient;
-  userId?: string;
-  userIds: string[];
-  folder: string;
-  recipeIds?: string[];
-  labels?: string[];
-  labelIntersection?: boolean;
-  ratings?: (number | null)[];
-  nutritionFilter?: NutritionFilter;
-  friendIds?: Set<string>;
-}): Promise<Prisma.RecipeWhereInput | null> => {
+export const getRecipeConstraintsWhere = async (
+  constraints: RecipeConstraints,
+  tx: Prisma.TransactionClient = prisma,
+): Promise<Prisma.RecipeWhereInput | null> => {
   const {
-    userId: contextUserId,
     userIds,
     folder,
     recipeIds,
@@ -23,17 +19,21 @@ export const getRecipeConstraintsWhere = async (args: {
     labelIntersection,
     ratings,
     nutritionFilter,
-  } = args;
+  } = constraints;
 
   const labels = _labels?.filter((label) => label !== "unlabeled");
   const mustBeUnlabeled = !!_labels?.includes("unlabeled");
 
-  const queryFilters = await getRecipeVisibilityQueryFilter({
-    tx: args.tx,
-    userId: contextUserId,
+  const visibility = await resolveRecipeVisibility({
+    tx,
+    userId: constraints.sessionUserId,
     userIds,
-    friendIds: args.friendIds,
+    friendIds: constraints.friendIds,
   });
+
+  if (isRecipeVisibilityEmpty(visibility)) return null;
+
+  const queryFilters = recipeVisibilityToPrismaWhere(visibility);
 
   if (!queryFilters.length) return null;
 
@@ -44,20 +44,25 @@ export const getRecipeConstraintsWhere = async (args: {
   where.AND.push({
     OR: queryFilters,
   });
-  where.AND.push({
-    folder,
-  });
+  if (folder) {
+    where.AND.push({
+      folder,
+    });
+  }
 
   if (recipeIds) {
     where.AND.push({ id: { in: recipeIds } });
   }
 
-  if (ratings) {
-    where.AND.push({
-      OR: ratings.map((rating) => ({
-        rating,
-      })),
-    });
+  if (ratings?.length) {
+    const usableRatings = ratings.filter(
+      (rating) => rating === null || Number.isInteger(rating),
+    );
+    where.AND.push(
+      usableRatings.length
+        ? { OR: usableRatings.map((rating) => ({ rating })) }
+        : { rating: { in: [] } },
+    );
   }
 
   const addNutritionFilter = (
@@ -132,6 +137,9 @@ export const getRecipeConstraintsWhere = async (args: {
             recipeLabels: {
               some: {
                 label: {
+                  userId: {
+                    in: userIds,
+                  },
                   title: label,
                 },
               },
@@ -146,6 +154,9 @@ export const getRecipeConstraintsWhere = async (args: {
       recipeLabels: {
         some: {
           label: {
+            userId: {
+              in: userIds,
+            },
             title: {
               in: labels,
             },

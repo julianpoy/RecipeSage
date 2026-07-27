@@ -3,6 +3,7 @@ import {
   recipeFactory,
   friendshipFactory,
   profileItemFactory,
+  labelFactory,
 } from "@recipesage/util/server/general";
 import {
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
@@ -163,6 +164,50 @@ describe("searchRecipesByIngredients", () => {
     });
 
     expect(response.results).toEqual([]);
+  });
+
+  test("returns a friend's shared recipe ranked below more of their unshared ones", async ({
+    user,
+    user2,
+    trpc,
+  }) => {
+    await prisma.friendship.createMany({
+      data: friendshipFactory(user.id, user2.id),
+    });
+
+    const label = await prisma.label.create({
+      data: labelFactory(user2.id),
+    });
+    await prisma.profileItem.create({
+      data: profileItemFactory({
+        userId: user2.id,
+        type: "label",
+        labelId: label.id,
+        visibility: "friends-only",
+      }),
+    });
+
+    await prisma.recipe.createMany({
+      data: Array.from({ length: 120 }, (_, index) => ({
+        ...recipeFactory(user2.id),
+        title: `Unshared ${index}`,
+        ingredients: "1 onion\n1 cup rice",
+      })),
+    });
+
+    const shared = await createRecipe(user2.id, "Shared", "1 onion");
+    await prisma.recipeLabel.create({
+      data: { recipeId: shared.id, labelId: label.id },
+    });
+
+    const response = await trpc.recipes.searchRecipesByIngredients({
+      ingredients: ["onion", "rice"],
+      includeAllFriends: true,
+    });
+
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
+      "Shared",
+    ]);
   });
 
   test("rejects an empty ingredients array", async ({ trpc }) => {

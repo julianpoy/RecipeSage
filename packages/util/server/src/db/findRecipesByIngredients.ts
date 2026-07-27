@@ -1,5 +1,7 @@
 import { prisma, Prisma } from "@recipesage/prisma";
 import { SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS } from "@recipesage/util/shared";
+import { type RecipeConstraints } from "./recipeConstraints";
+import { getRecipeConstraintsSql } from "./getRecipeConstraintsSql";
 
 const DEFAULT_LIMIT = 100;
 
@@ -24,25 +26,28 @@ const normalizeIngredientTerms = (ingredients: string[]): string[] => {
 };
 
 export const findRecipesByIngredients = async (args: {
-  userIds: string[];
+  constraints: RecipeConstraints;
   ingredients: string[];
-  folder: string;
   limit?: number;
   tx?: Prisma.TransactionClient;
 }): Promise<{ recipeId: string; matchedTerms: string[] }[]> => {
-  const { userIds, folder, tx = prisma } = args;
+  const { constraints, tx = prisma } = args;
   const limit = args.limit ?? DEFAULT_LIMIT;
   const terms = normalizeIngredientTerms(args.ingredients);
 
-  if (!userIds.length || !terms.length) return [];
+  if (!terms.length) return [];
+
+  const constraintsSql = await getRecipeConstraintsSql(constraints, tx);
+
+  if (!constraintsSql) return [];
 
   const rows = await tx.$queryRaw<{ id: string; matched: string[] }[]>`
     SELECT
-      r.id,
+      "Recipes".id,
       m.matched
-    FROM "Recipes" r
+    FROM "Recipes"
     CROSS JOIN LATERAL (
-      SELECT to_tsvector('simple', immutable_unaccent(left(coalesce(r.ingredients, ''), 3000))) AS iv
+      SELECT to_tsvector('simple', immutable_unaccent(left(coalesce("Recipes".ingredients, ''), 3000))) AS iv
     ) v
     CROSS JOIN LATERAL (
       SELECT
@@ -53,13 +58,12 @@ export const findRecipesByIngredients = async (args: {
     ) m
     CROSS JOIN LATERAL (
       SELECT count(*)::int AS ingredient_count
-      FROM unnest(string_to_array(coalesce(r.ingredients, ''), E'\n')) AS line
+      FROM unnest(string_to_array(coalesce("Recipes".ingredients, ''), E'\n')) AS line
       WHERE btrim(line, E' \t\r') <> ''
         AND btrim(line, E' \t\r') NOT LIKE '[%]'
     ) c
-    WHERE r."userId" = ANY(${userIds}::uuid[])
-      AND r.folder = ${folder}
-      AND r.tsv @@ (
+    WHERE ${constraintsSql}
+      AND "Recipes".tsv @@ (
         SELECT string_agg(q::text, ' | ')::tsquery
         FROM (
           SELECT phraseto_tsquery('simple', immutable_unaccent(term)) AS q
@@ -71,8 +75,8 @@ export const findRecipesByIngredients = async (args: {
     ORDER BY
       m.matched_count DESC,
       greatest(c.ingredient_count - m.matched_count, 0) ASC,
-      r.title ASC,
-      r.id ASC
+      "Recipes".title ASC,
+      "Recipes".id ASC
     LIMIT ${limit}
   `;
 

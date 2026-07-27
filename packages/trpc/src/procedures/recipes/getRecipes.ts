@@ -35,7 +35,7 @@ export const getRecipes = publicProcedure
       labelIntersection: z.boolean().optional(),
       includeAllFriends: z.boolean().optional(),
       ratings: z
-        .array(z.union([z.number().min(0).max(5), z.null()]))
+        .array(z.union([z.number().int().min(0).max(5), z.null()]))
         .optional(),
       nutritionFilter: nutritionFilterSchema.optional(),
     }),
@@ -66,15 +66,15 @@ export const getRecipes = publicProcedure
     }
 
     const where = await getRecipeConstraintsWhere({
-      userId: ctx.session?.userId || undefined,
+      sessionUserId: ctx.session?.userId,
       userIds,
+      friendIds,
       folder: input.folder,
       recipeIds: input.recipeIds,
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
       nutritionFilter: input.nutritionFilter,
-      friendIds,
     });
 
     if (!where) return { recipes: [], totalCount: 0 };

@@ -705,7 +705,40 @@ export class HomePage implements OnDestroy {
     return isRtlText(text, firstWordOnly);
   }
 
+  private async blockedBySelectedRecipesFromOtherUsers(): Promise<boolean> {
+    const myProfileValue = this.myProfile();
+    if (!myProfileValue) return false;
+
+    const fromOtherUsers = this.recipes.filter(
+      (recipe) =>
+        !!recipe &&
+        this.selectedRecipeIds.includes(recipe.id) &&
+        recipe.userId !== myProfileValue.id,
+    );
+    if (!fromOtherUsers.length) return false;
+
+    const recipeNames = fromOtherUsers.map((recipe) => recipe.title).join(", ");
+    const header = await this.translate
+      .get("pages.home.selectionNotOwned.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.home.selectionNotOwned.message", { recipeNames })
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [{ text: okay }],
+    });
+    alert.present();
+
+    return true;
+  }
+
   async addLabelToSelectedRecipes() {
+    if (await this.blockedBySelectedRecipesFromOtherUsers()) return;
+
     const header = await this.translate
       .get("pages.home.addLabel.header")
       .toPromise();
@@ -832,6 +865,8 @@ export class HomePage implements OnDestroy {
   }
 
   async deleteSelectedRecipes() {
+    if (await this.blockedBySelectedRecipesFromOtherUsers()) return;
+
     const recipeNames = this.selectedRecipeIds
       .map(
         (recipeId) =>

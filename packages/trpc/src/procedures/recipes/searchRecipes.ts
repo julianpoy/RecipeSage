@@ -1,16 +1,16 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipeConstraintsWhere,
-  getRecipesByRankedIds,
+  convertPrismaRecipeSummaryLitesToRecipeSummaryLites,
   getFriendshipIds,
 } from "@recipesage/util/server/db";
 import { sortRecipeImages } from "@recipesage/util/server/general";
-import { searchRecipes as _searchRecipes } from "@recipesage/util/server/search";
+import { searchRecipeIds } from "@recipesage/util/server/search";
 import { TRPCError } from "@trpc/server";
 import {
   nutritionFilterSchema,
   prismaReplica,
+  recipeSummaryLite,
   recipeSummaryLiteSchema,
 } from "@recipesage/prisma";
 
@@ -32,7 +32,7 @@ export const searchRecipes = publicProcedure
       labelIntersection: z.boolean().optional(),
       includeAllFriends: z.boolean().optional(),
       ratings: z
-        .array(z.union([z.number().min(0).max(5), z.null()]))
+        .array(z.union([z.number().int().min(0).max(5), z.null()]))
         .optional(),
       nutritionFilter: nutritionFilterSchema.optional(),
     }),
@@ -53,37 +53,49 @@ export const searchRecipes = publicProcedure
         code: "BAD_REQUEST",
       });
 
+    let friendIds: Set<string> | undefined;
     if (ctx.session?.userId && input.includeAllFriends) {
       const friendships = await getFriendshipIds(ctx.session.userId);
+      friendIds = new Set(friendships.friends);
       userIds.push(...friendships.friends);
     }
 
-    const recipeIds = await _searchRecipes(userIds, input.searchTerm);
-
-    const where = await getRecipeConstraintsWhere({
-      tx: prismaReplica,
-      userId: ctx.session?.userId || undefined,
-      userIds,
-      folder: input.folder,
-      labels: input.labels,
-      labelIntersection: input.labelIntersection,
-      ratings: input.ratings,
-      nutritionFilter: input.nutritionFilter,
-      recipeIds,
+    const rankedIds = await searchRecipeIds({
+      constraints: {
+        sessionUserId: ctx.session?.userId,
+        userIds,
+        friendIds,
+        folder: input.folder,
+        labels: input.labels,
+        labelIntersection: input.labelIntersection,
+        ratings: input.ratings,
+        nutritionFilter: input.nutritionFilter,
+      },
+      queryString: input.searchTerm,
     });
 
-    if (!where) return { recipes: [], totalCount: 0 };
+    if (!rankedIds.length) return { recipes: [], totalCount: 0 };
 
-    const results = await getRecipesByRankedIds({
-      tx: prismaReplica,
-      where,
-      rankedIds: recipeIds,
-      offset: 0,
-      limit: 100,
+    const recipes = await prismaReplica.recipe.findMany({
+      where: {
+        id: { in: rankedIds },
+      },
+      ...recipeSummaryLite,
+    });
+
+    const recipesById = new Map(
+      convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes).map(
+        (recipe) => [recipe.id, recipe],
+      ),
+    );
+
+    const results = rankedIds.flatMap((rankedId) => {
+      const recipe = recipesById.get(rankedId);
+      return recipe ? [sortRecipeImages(recipe)] : [];
     });
 
     return {
-      recipes: results.map(sortRecipeImages),
+      recipes: results,
       totalCount: results.length,
     };
   });

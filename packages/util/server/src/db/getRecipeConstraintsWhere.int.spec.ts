@@ -7,8 +7,15 @@ import {
   RecipeSummaryLite,
 } from "@recipesage/prisma";
 import { getRecipeConstraintsWhere } from "./getRecipeConstraintsWhere";
+import { getRecipeConstraintsSql } from "./getRecipeConstraintsSql";
 import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "./convertPrismaRecipeSummaries";
-import { userFactory, recipeFactory, labelFactory } from "../general/factories";
+import {
+  userFactory,
+  recipeFactory,
+  labelFactory,
+  friendshipFactory,
+  profileItemFactory,
+} from "../general/factories";
 
 type CallArgs = Parameters<typeof getRecipeConstraintsWhere>[0] & {
   orderBy?: Prisma.RecipeOrderByWithRelationInput;
@@ -40,12 +47,34 @@ describe("getRecipeConstraintsWhere", () => {
       ...whereArgs
     } = overrides;
 
-    const where = await getRecipeConstraintsWhere({
-      userId: owner.id,
-      userIds: [owner.id],
+    const userIds = whereArgs.userIds ?? [owner.id];
+
+    const constraints = {
+      sessionUserId: owner.id,
       folder: "main",
       ...whereArgs,
-    });
+      userIds,
+    };
+
+    const where = await getRecipeConstraintsWhere(constraints);
+    const constraintsSql = await getRecipeConstraintsSql(constraints);
+
+    const viaSql = constraintsSql
+      ? await prisma.$queryRaw<{ id: string }[]>`
+          SELECT "Recipes".id
+          FROM "Recipes"
+          WHERE ${constraintsSql}
+        `.then((rows) => rows.map((row) => row.id).sort())
+      : [];
+
+    const viaPrisma = where
+      ? await prisma.recipe
+          .findMany({ where, select: { id: true } })
+          .then((rows) => rows.map((row) => row.id).sort())
+      : [];
+
+    expect(!!constraintsSql).toEqual(!!where);
+    expect(viaSql).toEqual(viaPrisma);
 
     if (!where) return { recipes: [], totalCount: 0 };
 
@@ -246,11 +275,13 @@ describe("getRecipeConstraintsWhere", () => {
       const r3 = await createRecipe("three", { rating: 3 });
       const r5 = await createRecipe("five", { rating: 5 });
       const r1 = await createRecipe("one", { rating: 1 });
+      const unrated = await createRecipe("unrated", { rating: null });
 
       const result = await run({ ratings: [3, 5] });
       const ids = new Set(result.recipes.map((r) => r.id));
       expect(ids).toEqual(new Set([r3.id, r5.id]));
       expect(ids.has(r1.id)).toBe(false);
+      expect(ids.has(unrated.id)).toBe(false);
     });
 
     it("includes unrated recipes when null is in the ratings array", async () => {
@@ -413,6 +444,257 @@ describe("getRecipeConstraintsWhere", () => {
       expect(ids).not.toContain(wrongRating.id);
       expect(ids).not.toContain(wrongCalories.id);
       expect(ids).not.toContain(wrongLabel.id);
+    });
+  });
+
+  describe("clauses only the SQL renderer parity check covers", () => {
+    it("treats an empty ratings array as no rating constraint", async () => {
+      const a = await createRecipe("a", { rating: 3 });
+      const b = await createRecipe("b", { rating: null });
+
+      const result = await run({ ratings: [] });
+      expect(new Set(result.recipes.map((r) => r.id))).toEqual(
+        new Set([a.id, b.id]),
+      );
+    });
+
+    it("mixes null and numeric ratings", async () => {
+      const rated = await createRecipe("rated", { rating: 4 });
+      const unrated = await createRecipe("unrated", { rating: null });
+      await createRecipe("other", { rating: 1 });
+
+      const result = await run({ ratings: [null, 4] });
+      expect(new Set(result.recipes.map((r) => r.id))).toEqual(
+        new Set([rated.id, unrated.id]),
+      );
+    });
+
+    it("filters on every supported nutrition column", async () => {
+      const match = await createRecipe("match", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionTotalFat: 10,
+        nutritionSodium: 400,
+      });
+      await createRecipe("protein-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 900,
+        nutritionTotalCarbs: 30,
+        nutritionTotalFat: 10,
+        nutritionSodium: 400,
+      });
+      await createRecipe("calories-out", {
+        nutritionCalories: 9000,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionTotalFat: 10,
+        nutritionSodium: 400,
+      });
+      await createRecipe("carbs-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 900,
+        nutritionTotalFat: 10,
+        nutritionSodium: 400,
+      });
+      await createRecipe("fat-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionTotalFat: 900,
+        nutritionSodium: 400,
+      });
+      await createRecipe("sodium-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionTotalFat: 10,
+        nutritionSodium: 9000,
+      });
+
+      const result = await run({
+        nutritionFilter: {
+          calories: { min: 10, max: 800 },
+          protein: { min: 10, max: 50 },
+          totalCarbs: { min: 10, max: 50 },
+          totalFat: { min: 1, max: 50 },
+          sodium: { min: 100, max: 500 },
+        },
+      });
+      expect(result.recipes.map((r) => r.id)).toEqual([match.id]);
+    });
+
+    it("matches missing values on every supported nutrition column", async () => {
+      const missing = await createRecipe("missing");
+      await createRecipe("carbs-present", { nutritionTotalCarbs: 30 });
+      await createRecipe("fat-present", { nutritionTotalFat: 10 });
+      await createRecipe("sodium-present", { nutritionSodium: 400 });
+      await createRecipe("protein-present", { nutritionProtein: 20 });
+      await createRecipe("calories-present", { nutritionCalories: 500 });
+
+      const result = await run({
+        nutritionFilter: {
+          calories: { matchMissing: true },
+          protein: { matchMissing: true },
+          totalCarbs: { matchMissing: true },
+          totalFat: { matchMissing: true },
+          sodium: { matchMissing: true },
+        },
+      });
+      expect(result.recipes.map((r) => r.id)).toEqual([missing.id]);
+    });
+
+    it("combines unlabeled with a real label", async () => {
+      const label = await prisma.label.create({
+        data: { ...labelFactory(owner.id), title: "keep" },
+      });
+      await createRecipe("labeled", {
+        recipeLabels: { create: [{ labelId: label.id }] },
+      });
+      await createRecipe("bare");
+
+      const result = await run({ labels: ["unlabeled", "keep"] });
+      expect(result.recipes).toEqual([]);
+    });
+
+    it("ignores a label of the same title owned by another user", async () => {
+      const other = await prisma.user.create({ data: userFactory() });
+      cleanupIds.push(other.id);
+      const otherLabel = await prisma.label.create({
+        data: { ...labelFactory(other.id), title: "shared-title" },
+      });
+      await createRecipe("theirs-labelled", {
+        recipeLabels: { create: [{ labelId: otherLabel.id }] },
+      });
+
+      const result = await run({ labels: ["shared-title"] });
+      expect(result.recipes).toEqual([]);
+    });
+
+    it("applies no folder constraint when folder is omitted", async () => {
+      const main = await createRecipe("m", { folder: "main" });
+      const inbox = await createRecipe("i", { folder: "inbox" });
+
+      const result = await run({ folder: undefined });
+      expect(new Set(result.recipes.map((r) => r.id))).toEqual(
+        new Set([main.id, inbox.id]),
+      );
+    });
+
+    it("renders a friend's partial share alongside the filter clauses", async () => {
+      const friend = await prisma.user.create({ data: userFactory() });
+      cleanupIds.push(friend.id);
+      await prisma.friendship.createMany({
+        data: friendshipFactory(owner.id, friend.id),
+      });
+
+      const sharedLabel = await prisma.label.create({
+        data: { ...labelFactory(friend.id), title: "shared" },
+      });
+      await prisma.profileItem.create({
+        data: profileItemFactory({
+          userId: friend.id,
+          type: "label",
+          labelId: sharedLabel.id,
+          visibility: "friends-only",
+        }),
+      });
+
+      const shared = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(friend.id),
+          title: "shared-and-rated",
+          rating: 5,
+          recipeLabels: { create: [{ labelId: sharedLabel.id }] },
+        },
+      });
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(friend.id),
+          title: "shared-but-unrated",
+          rating: 1,
+          recipeLabels: { create: [{ labelId: sharedLabel.id }] },
+        },
+      });
+      await prisma.recipe.create({
+        data: { ...recipeFactory(friend.id), title: "unshared", rating: 5 },
+      });
+
+      const result = await run({
+        userIds: [owner.id, friend.id],
+        labels: ["shared"],
+        ratings: [5],
+      });
+      expect(result.recipes.map((r) => r.id)).toEqual([shared.id]);
+    });
+
+    it("ignores another user's label title under labelIntersection", async () => {
+      const other = await prisma.user.create({ data: userFactory() });
+      cleanupIds.push(other.id);
+      const mine = await prisma.label.create({
+        data: { ...labelFactory(owner.id), title: "mine" },
+      });
+      const theirs = await prisma.label.create({
+        data: { ...labelFactory(other.id), title: "theirs" },
+      });
+      await createRecipe("both-titles", {
+        recipeLabels: {
+          create: [{ labelId: mine.id }, { labelId: theirs.id }],
+        },
+      });
+
+      const result = await run({
+        labels: ["mine", "theirs"],
+        labelIntersection: true,
+      });
+      expect(result.recipes).toEqual([]);
+    });
+
+    it("does not count another user's label when deciding unlabeled", async () => {
+      const other = await prisma.user.create({ data: userFactory() });
+      cleanupIds.push(other.id);
+      const theirLabel = await prisma.label.create({
+        data: { ...labelFactory(other.id), title: "theirs" },
+      });
+      const onlyForeignLabel = await createRecipe("foreign-labelled", {
+        recipeLabels: { create: [{ labelId: theirLabel.id }] },
+      });
+
+      const result = await run({ labels: ["unlabeled"] });
+      expect(result.recipes.map((r) => r.id)).toEqual([onlyForeignLabel.id]);
+    });
+
+    it("includes nutrition values exactly on the range boundaries", async () => {
+      const atMin = await createRecipe("at-min", { nutritionCalories: 100 });
+      const atMax = await createRecipe("at-max", { nutritionCalories: 500 });
+      await createRecipe("below", { nutritionCalories: 99 });
+      await createRecipe("above", { nutritionCalories: 501 });
+
+      const result = await run({
+        nutritionFilter: { calories: { min: 100, max: 500 } },
+      });
+      expect(new Set(result.recipes.map((r) => r.id))).toEqual(
+        new Set([atMin.id, atMax.id]),
+      );
+    });
+
+    it("ignores a non-integer rating rather than matching a rounded one", async () => {
+      await createRecipe("two", { rating: 2 });
+      await createRecipe("three", { rating: 3 });
+
+      const dropped = await run({ ratings: [2.5] });
+      expect(dropped.recipes).toEqual([]);
+
+      const partial = await run({ ratings: [2.5, 3] });
+      expect(partial.recipes.map((r) => r.title)).toEqual(["three"]);
+    });
+
+    it("treats an empty recipeIds array as matching nothing", async () => {
+      await createRecipe("a");
+
+      const result = await run({ recipeIds: [] });
+      expect(result.recipes).toEqual([]);
     });
   });
 });

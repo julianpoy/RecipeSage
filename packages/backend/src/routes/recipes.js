@@ -269,8 +269,15 @@ router.get(
       userIds.push(...friendships.friends.map((friend) => friend.otherUser.id));
     }
 
-    console.log(userIds);
-    const recipeIds = await Search.searchRecipes(userIds, req.query.query);
+    const recipeIds = await Search.searchRecipeIds({
+      constraints: {
+        sessionUserId: res.locals.session?.userId || undefined,
+        userIds,
+        folder: "main",
+      },
+      queryString: req.query.query,
+      limit: 1000,
+    });
 
     const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
       acc[recipeId] = idx + 1;
