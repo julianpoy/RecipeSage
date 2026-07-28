@@ -17,6 +17,12 @@ describe("findRecipesByIngredients", () => {
     cleanupIds.length = 0;
   });
 
+  const ownerConstraints = () => ({
+    sessionUserId: owner.id,
+    userIds: [owner.id],
+    folder: "main",
+  });
+
   const createRecipe = (
     title: string,
     ingredients: string,
@@ -33,9 +39,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("None", "1 cup flour\n2 eggs");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["chicken", "rice", "onion"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -47,11 +52,7 @@ describe("findRecipesByIngredients", () => {
     );
 
     expect(titles).toEqual(["All three", "Two of three", "One of three"]);
-    expect(ranked[0].matchedIngredients.sort()).toEqual([
-      "chicken",
-      "onion",
-      "rice",
-    ]);
+    expect(ranked[0].matchedTerms.sort()).toEqual(["chicken", "onion", "rice"]);
   });
 
   it("ranks recipes matching more of the provided ingredients first", async () => {
@@ -62,9 +63,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Uses one", "1 whole chicken");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["chicken", "garlic"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -86,9 +86,8 @@ describe("findRecipesByIngredients", () => {
     );
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["rice", "onion"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -110,9 +109,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Plain", "1 cup rice\n1 onion\n1 tbsp oil");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["rice", "onion"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -132,9 +130,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Jalapeno", "1 jalapeño");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["rice", "jalapeno"],
-      folder: "main",
     });
 
     const titles = new Set(
@@ -156,9 +153,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Something", "1 onion");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["   ", ""],
-      folder: "main",
     });
 
     expect(ranked).toEqual([]);
@@ -168,13 +164,12 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Onion soup", "1 onion");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["onion", "&&&"],
-      folder: "main",
     });
 
     expect(ranked).toHaveLength(1);
-    expect(ranked[0].matchedIngredients).toEqual(["onion"]);
+    expect(ranked[0].matchedTerms).toEqual(["onion"]);
   });
 
   it("respects the limit argument", async () => {
@@ -183,9 +178,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("One of three", "1 onion");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["chicken", "rice", "onion"],
-      folder: "main",
       limit: 1,
     });
 
@@ -208,9 +202,8 @@ describe("findRecipesByIngredients", () => {
     });
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["onion"],
-      folder: "main",
     });
 
     expect(ranked).toEqual([]);
@@ -221,9 +214,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Inbox onion", "1 onion", { folder: "inbox" });
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["onion"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -242,9 +234,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Separated", "1 chicken thigh\n1 breast of lamb");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["chicken breast"],
-      folder: "main",
     });
 
     const titles = new Set(
@@ -266,9 +257,8 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Apple stew", "1 onion");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["onion"],
-      folder: "main",
     });
 
     const titles = await Promise.all(
@@ -286,12 +276,11 @@ describe("findRecipesByIngredients", () => {
     await createRecipe("Onion soup", "1 onion");
 
     const ranked = await findRecipesByIngredients({
-      userIds: [owner.id],
+      constraints: ownerConstraints(),
       ingredients: ["onion", "Onion", "  onion  "],
-      folder: "main",
     });
 
     expect(ranked).toHaveLength(1);
-    expect(ranked[0].matchedIngredients).toEqual(["onion"]);
+    expect(ranked[0].matchedTerms).toEqual(["onion"]);
   });
 });

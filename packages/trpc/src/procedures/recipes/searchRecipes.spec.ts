@@ -49,6 +49,75 @@ describe("searchRecipes", () => {
     expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
   });
 
+  test("matches a term that only appears in the notes", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      notes: "Best with saffronzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "saffronzz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("matches a term that only appears in the description", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      description: "A hearty pilafzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "pilafzz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("matches a term that only appears in the source", async ({
+    user,
+    trpc,
+  }) => {
+    const match = await createRecipe(user.id, {
+      title: "Plain bowl",
+      source: "Grandmazz cookbook",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "grandmazz",
+      folder: "main",
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([match.id]);
+  });
+
+  test("does not match a term that only appears in the instructions", async ({
+    user,
+    trpc,
+  }) => {
+    await createRecipe(user.id, {
+      title: "Plain bowl",
+      instructions: "Simmer the broth until reducedzz",
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "reducedzz",
+      folder: "main",
+    });
+
+    expect(response.recipes).toEqual([]);
+    expect(response.totalCount).toBe(0);
+  });
+
   test("folds accents so an unaccented term matches accented content", async ({
     user,
     trpc,
@@ -156,6 +225,36 @@ describe("searchRecipes", () => {
       searchTerm: "curryzz",
       folder: "main",
       labels: ["dinnerzz"],
+    });
+
+    expect(response.recipes.map((r) => r.id)).toEqual([labeled.id]);
+  });
+
+  test("finds a labeled match that ranks below a full page of unlabeled ones", async ({
+    user,
+    trpc,
+  }) => {
+    const label = await prisma.label.create({
+      data: { ...labelFactory(user.id), title: "keepzz" },
+    });
+
+    await prisma.recipe.createMany({
+      data: Array.from({ length: 1200 }, (_, index) => ({
+        ...recipeFactory(user.id),
+        title: `Onionzz filler ${index}`,
+      })),
+    });
+
+    const labeled = await createRecipe(user.id, {
+      title: "Zzz target",
+      notes: "onionzz",
+      recipeLabels: { create: [{ labelId: label.id }] },
+    });
+
+    const response = await trpc.recipes.searchRecipes({
+      searchTerm: "onionzz",
+      folder: "main",
+      labels: ["keepzz"],
     });
 
     expect(response.recipes.map((r) => r.id)).toEqual([labeled.id]);

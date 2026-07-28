@@ -3,8 +3,12 @@ import {
   recipeFactory,
   friendshipFactory,
   profileItemFactory,
+  labelFactory,
 } from "@recipesage/util/server/general";
-import { SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS } from "@recipesage/util/shared";
+import {
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
+} from "@recipesage/util/shared";
 import { test, anonymousTrpc } from "../../testutils";
 
 const createRecipe = (
@@ -35,22 +39,18 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["chicken", "rice", "onion"],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "All three",
       "Two of three",
       "One of three",
     ]);
-    expect(response.recipes[0].matchedIngredients.sort()).toEqual([
+    expect(response.results[0].matchedTerms.sort()).toEqual([
       "chicken",
       "onion",
       "rice",
     ]);
-    expect(response.recipes[1].matchedIngredients.sort()).toEqual([
-      "onion",
-      "rice",
-    ]);
-    expect(response.recipes[2].matchedIngredients).toEqual(["onion"]);
-    expect(response.totalCount).toBe(3);
+    expect(response.results[1].matchedTerms.sort()).toEqual(["onion", "rice"]);
+    expect(response.results[2].matchedTerms).toEqual(["onion"]);
   });
 
   test("ranks a recipe using more of the ingredients above a smaller partial match", async ({
@@ -68,7 +68,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["chicken", "garlic"],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "Uses both",
       "Uses one",
     ]);
@@ -84,7 +84,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients: ["onion"],
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
   });
 
   test("includes mutual friends' shared recipes when includeAllFriends is set", async ({
@@ -107,13 +107,13 @@ describe("searchRecipesByIngredients", () => {
     const withoutFriends = await trpc.recipes.searchRecipesByIngredients({
       ingredients: ["onion"],
     });
-    expect(withoutFriends.recipes).toEqual([]);
+    expect(withoutFriends.results).toEqual([]);
 
     const withFriends = await trpc.recipes.searchRecipesByIngredients({
       ingredients: ["onion"],
       includeAllFriends: true,
     });
-    expect(withFriends.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(withFriends.results.map((result) => result.recipe.title)).toEqual([
       "Friend recipe",
     ]);
   });
@@ -135,7 +135,7 @@ describe("searchRecipesByIngredients", () => {
       userIds: [user2.id],
     });
 
-    expect(response.recipes.map((recipe) => recipe.title)).toEqual([
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
       "Public onion",
     ]);
   });
@@ -163,7 +163,51 @@ describe("searchRecipesByIngredients", () => {
       includeAllFriends: true,
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
+  });
+
+  test("returns a friend's shared recipe ranked below more of their unshared ones", async ({
+    user,
+    user2,
+    trpc,
+  }) => {
+    await prisma.friendship.createMany({
+      data: friendshipFactory(user.id, user2.id),
+    });
+
+    const label = await prisma.label.create({
+      data: labelFactory(user2.id),
+    });
+    await prisma.profileItem.create({
+      data: profileItemFactory({
+        userId: user2.id,
+        type: "label",
+        labelId: label.id,
+        visibility: "friends-only",
+      }),
+    });
+
+    await prisma.recipe.createMany({
+      data: Array.from({ length: 120 }, (_, index) => ({
+        ...recipeFactory(user2.id),
+        title: `Unshared ${index}`,
+        ingredients: "1 onion\n1 cup rice",
+      })),
+    });
+
+    const shared = await createRecipe(user2.id, "Shared", "1 onion");
+    await prisma.recipeLabel.create({
+      data: { recipeId: shared.id, labelId: label.id },
+    });
+
+    const response = await trpc.recipes.searchRecipesByIngredients({
+      ingredients: ["onion", "rice"],
+      includeAllFriends: true,
+    });
+
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
+      "Shared",
+    ]);
   });
 
   test("rejects an empty ingredients array", async ({ trpc }) => {
@@ -184,7 +228,7 @@ describe("searchRecipesByIngredients", () => {
       ingredients,
     });
 
-    expect(response.recipes).toEqual([]);
+    expect(response.results).toEqual([]);
   });
 
   test("rejects more than the maximum number of ingredients", async ({
@@ -198,5 +242,39 @@ describe("searchRecipesByIngredients", () => {
     await expect(
       trpc.recipes.searchRecipesByIngredients({ ingredients }),
     ).rejects.toThrow();
+  });
+
+  test("rejects a blank ingredient", async ({ trpc }) => {
+    await expect(
+      trpc.recipes.searchRecipesByIngredients({ ingredients: ["   "] }),
+    ).rejects.toThrow();
+  });
+
+  test("rejects an ingredient longer than the maximum term length", async ({
+    trpc,
+  }) => {
+    await expect(
+      trpc.recipes.searchRecipesByIngredients({
+        ingredients: [
+          "a".repeat(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH + 1),
+        ],
+      }),
+    ).rejects.toThrow();
+  });
+
+  test("trims surrounding whitespace from ingredients", async ({
+    user,
+    trpc,
+  }) => {
+    await createRecipe(user.id, "Onion soup", "1 onion\n2 cups stock");
+
+    const response = await trpc.recipes.searchRecipesByIngredients({
+      ingredients: ["  onion  "],
+    });
+
+    expect(response.results.map((result) => result.recipe.title)).toEqual([
+      "Onion soup",
+    ]);
+    expect(response.results[0].matchedTerms).toEqual(["onion"]);
   });
 });

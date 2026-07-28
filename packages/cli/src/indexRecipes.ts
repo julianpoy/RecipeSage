@@ -13,16 +13,14 @@ const RECIPES_TSV = Prisma.sql`
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(description, ''), 255))), 'B') ||
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(ingredients, ''), 3000))), 'B') ||
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(source, ''), 255))), 'C') ||
-  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(notes, ''), 3000))), 'C') ||
-  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(instructions, ''), 3000))), 'C')
+  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(notes, ''), 3000))), 'C')
 `;
 
 const DISCOVER_RECIPES_TSV = Prisma.sql`
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(title, ''), 255))), 'A') ||
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(description, ''), 255))), 'B') ||
   setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(ingredients, ''), 3000))), 'B') ||
-  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(notes, ''), 3000))), 'C') ||
-  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(instructions, ''), 3000))), 'C')
+  setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(notes, ''), 3000))), 'C')
 `;
 
 const backfillTsv = async (

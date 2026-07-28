@@ -2,7 +2,7 @@ import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import {
   getFriendshipIds,
-  getRecipeVisibilityQueryFilter,
+  getRecipeConstraintsWhere,
   convertPrismaRecipeSummariesToRecipeSummaries,
 } from "@recipesage/util/server/db";
 import {
@@ -33,20 +33,17 @@ export const getRecipesByIds = authenticatedProcedure
     const friendships = await getFriendshipIds(ctx.session.userId);
     userIds.push(...friendships.friends);
 
-    const queryFilters = await getRecipeVisibilityQueryFilter({
-      userId: ctx.session.userId,
+    const where = await getRecipeConstraintsWhere({
+      sessionUserId: ctx.session.userId,
       userIds,
+      friendIds: new Set(friendships.friends),
+      recipeIds: input.ids,
     });
 
+    if (!where) return [];
+
     const recipes = await prisma.recipe.findMany({
-      where: {
-        AND: {
-          OR: queryFilters,
-          id: {
-            in: input.ids,
-          },
-        },
-      },
+      where,
       ...recipeSummary,
     });
 

@@ -2,20 +2,40 @@ import { Prisma, ProfileItem } from "@recipesage/prisma";
 import { prisma } from "@recipesage/prisma";
 import { getFriendshipIds } from "./getFriendshipIds";
 
-/**
- * Gets the Prisma filters that should be applied to get all recipes
- * a user can access given some parameters.
- * The result of this function should be ORd together
- */
-export const getRecipeVisibilityQueryFilter = async (args: {
+export interface RecipeVisibility {
+  allRecipesUserIds: string[];
+  partialShares: {
+    userId: string;
+    labelIds: string[];
+    recipeIds: string[];
+  }[];
+}
+
+export const isRecipeVisibilityEmpty = (visibility: RecipeVisibility) =>
+  !visibility.allRecipesUserIds.length && !visibility.partialShares.length;
+
+export const resolveRecipeVisibility = async (args: {
   tx?: Prisma.TransactionClient;
   userId?: string;
   userIds: string[];
   friendIds?: Set<string>;
-}) => {
+}): Promise<RecipeVisibility> => {
   const { tx = prisma, userId: contextUserId, userIds } = args;
 
-  let friendIds: Set<string> = args.friendIds ?? new Set();
+  if (
+    contextUserId &&
+    userIds.length &&
+    userIds.every((userId) => userId === contextUserId)
+  ) {
+    return {
+      allRecipesUserIds: [contextUserId],
+      partialShares: [],
+    };
+  }
+
+  let friendIds: Set<string> = contextUserId
+    ? (args.friendIds ?? new Set())
+    : new Set();
   if (contextUserId && !args.friendIds) {
     const friendships = await getFriendshipIds(contextUserId);
     friendIds = new Set(friendships.friends);
@@ -56,7 +76,7 @@ export const getRecipeVisibilityQueryFilter = async (args: {
   );
 
   const allRecipesUserIds: string[] = [];
-  const queryFilters: Prisma.RecipeWhereInput[] = [];
+  const partialShares: RecipeVisibility["partialShares"] = [];
   for (const userId of userIds) {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
@@ -70,43 +90,27 @@ export const getRecipeVisibilityQueryFilter = async (args: {
       continue;
     }
 
-    const sharedLabelIds = profileItemsForUser
+    const labelIds = profileItemsForUser
       .filter((profileItem) => profileItem.type === "label")
       .map((profileItem) => profileItem.labelId)
       .filter((labelId): labelId is string => !!labelId);
 
-    const sharedRecipeIds = profileItemsForUser
+    const recipeIds = profileItemsForUser
       .filter((profileItem) => profileItem.type === "recipe")
       .map((profileItem) => profileItem.recipeId)
       .filter((recipeId): recipeId is string => !!recipeId);
 
-    const userOrFilters: Prisma.RecipeWhereInput[] = [];
-
-    if (sharedLabelIds.length) {
-      userOrFilters.push({
-        recipeLabels: {
-          some: {
-            labelId: { in: sharedLabelIds },
-          },
-        },
-      });
-    }
-
-    if (sharedRecipeIds.length) {
-      userOrFilters.push({ id: { in: sharedRecipeIds } });
-    }
-
-    if (userOrFilters.length) {
-      queryFilters.push({
+    if (labelIds.length || recipeIds.length) {
+      partialShares.push({
         userId,
-        OR: userOrFilters,
+        labelIds,
+        recipeIds,
       });
     }
   }
 
-  if (allRecipesUserIds.length) {
-    queryFilters.push({ userId: { in: allRecipesUserIds } });
-  }
-
-  return queryFilters;
+  return {
+    allRecipesUserIds,
+    partialShares,
+  };
 };

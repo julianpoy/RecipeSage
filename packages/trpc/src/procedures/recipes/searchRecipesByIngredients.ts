@@ -1,14 +1,21 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipesWithConstraints,
+  convertPrismaRecipeSummaryLitesToRecipeSummaryLites,
   getFriendshipIds,
   findRecipesByIngredients,
 } from "@recipesage/util/server/db";
 import { sortRecipeImages } from "@recipesage/util/server/general";
 import { TRPCError } from "@trpc/server";
-import { prismaReplica, recipeSummaryLiteSchema } from "@recipesage/prisma";
-import { SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS } from "@recipesage/util/shared";
+import {
+  prismaReplica,
+  recipeSummaryLite,
+  recipeSummaryLiteSchema,
+} from "@recipesage/prisma";
+import {
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
+  SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
+} from "@recipesage/util/shared";
 
 export const searchRecipesByIngredients = publicProcedure
   .meta({
@@ -23,7 +30,13 @@ export const searchRecipesByIngredients = publicProcedure
   .input(
     z.object({
       ingredients: z
-        .array(z.string())
+        .array(
+          z
+            .string()
+            .trim()
+            .min(1)
+            .max(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH),
+        )
         .min(1)
         .max(SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS),
       userIds: z.array(z.uuid()).optional(),
@@ -32,12 +45,12 @@ export const searchRecipesByIngredients = publicProcedure
   )
   .output(
     z.object({
-      recipes: z.array(
-        recipeSummaryLiteSchema.extend({
-          matchedIngredients: z.array(z.string()),
+      results: z.array(
+        z.object({
+          recipe: recipeSummaryLiteSchema,
+          matchedTerms: z.array(z.string()),
         }),
       ),
-      totalCount: z.number().int(),
     }),
   )
   .query(async ({ ctx, input }) => {
@@ -50,54 +63,51 @@ export const searchRecipesByIngredients = publicProcedure
         code: "BAD_REQUEST",
       });
 
+    let friendIds: Set<string> | undefined;
     if (ctx.session?.userId && input.includeAllFriends) {
       const friendships = await getFriendshipIds(ctx.session.userId);
+      friendIds = new Set(friendships.friends);
       userIds.push(...friendships.friends);
     }
 
     const matches = await findRecipesByIngredients({
-      userIds,
-      ingredients: input.ingredients,
-      folder: "main",
-      tx: prismaReplica,
-    });
-
-    const matchByRecipeId: Record<
-      string,
-      { order: number; matchedIngredients: string[] }
-    > = {};
-    matches.forEach((entry, idx) => {
-      matchByRecipeId[entry.recipeId] = {
-        order: idx + 1,
-        matchedIngredients: entry.matchedIngredients,
-      };
-    });
-
-    const recipeIds = matches.map((entry) => entry.recipeId);
-
-    const results = await getRecipesWithConstraints({
-      tx: prismaReplica,
-      userId: ctx.session?.userId || undefined,
-      userIds,
-      folder: "main",
-      orderBy: {
-        title: "desc",
+      constraints: {
+        sessionUserId: ctx.session?.userId,
+        userIds,
+        friendIds,
+        folder: "main",
       },
-      offset: 0,
-      limit: 100,
-      recipeIds,
+      ingredients: input.ingredients,
+      tx: prismaReplica,
     });
 
-    const recipes = results.recipes
-      .map(sortRecipeImages)
-      .sort((a, b) => matchByRecipeId[a.id].order - matchByRecipeId[b.id].order)
-      .map((recipe) => ({
-        ...recipe,
-        matchedIngredients: matchByRecipeId[recipe.id].matchedIngredients,
-      }));
+    if (!matches.length) return { results: [] };
+
+    const recipes = await prismaReplica.recipe.findMany({
+      where: {
+        id: { in: matches.map((match) => match.recipeId) },
+      },
+      ...recipeSummaryLite,
+    });
+
+    const recipesById = new Map(
+      convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes).map(
+        (recipe) => [recipe.id, recipe],
+      ),
+    );
+
+    const results = matches.flatMap((match) => {
+      const recipe = recipesById.get(match.recipeId);
+      if (!recipe) return [];
+      return [
+        {
+          recipe: sortRecipeImages(recipe),
+          matchedTerms: match.matchedTerms,
+        },
+      ];
+    });
 
     return {
-      recipes,
-      totalCount: results.totalCount,
+      results,
     };
   });

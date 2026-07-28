@@ -19,6 +19,7 @@ const options: esbuild.BuildOptions = {
   define: {
     "process.env.ENVIRONMENT": JSON.stringify(process.env.ENVIRONMENT ?? ""),
     "process.env.APP_VERSION": JSON.stringify(process.env.APP_VERSION ?? ""),
+    "process.env.IS_DESKTOP": JSON.stringify(process.env.IS_DESKTOP ?? ""),
   },
   logLevel: "info",
   plugins: enableSourcemapUpload

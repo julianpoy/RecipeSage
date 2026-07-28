@@ -1,59 +1,41 @@
-import { Prisma } from "@recipesage/prisma";
+import { Prisma, prisma } from "@recipesage/prisma";
+import { type NutritionRange } from "@recipesage/prisma";
+import { type RecipeConstraints } from "./recipeConstraints";
 import {
-  prisma,
-  RecipeSummaryLite,
-  recipeSummaryLite,
-  type NutritionFilter,
-  type NutritionRange,
-} from "@recipesage/prisma";
-import { getRecipeVisibilityQueryFilter } from "./getRecipeVisibilityQueryFilter";
-import { convertPrismaRecipeSummaryLitesToRecipeSummaryLites } from "./convertPrismaRecipeSummaries";
+  isRecipeVisibilityEmpty,
+  resolveRecipeVisibility,
+} from "./resolveRecipeVisibility";
+import { recipeVisibilityToPrismaWhere } from "./recipeVisibilityToPrismaWhere";
 
-export const getRecipesWithConstraints = async (args: {
-  tx?: Prisma.TransactionClient;
-  userId?: string;
-  userIds: string[];
-  folder: string;
-  orderBy: Prisma.RecipeOrderByWithRelationInput;
-  offset: number;
-  limit: number;
-  recipeIds?: string[];
-  labels?: string[];
-  labelIntersection?: boolean;
-  ratings?: (number | null)[];
-  nutritionFilter?: NutritionFilter;
-  friendIds?: Set<string>;
-}): Promise<{ recipes: RecipeSummaryLite[]; totalCount: number }> => {
+export const getRecipeConstraintsWhere = async (
+  constraints: RecipeConstraints,
+  tx: Prisma.TransactionClient = prisma,
+): Promise<Prisma.RecipeWhereInput | null> => {
   const {
-    tx = prisma,
-    userId: contextUserId,
     userIds,
     folder,
-    orderBy,
-    offset,
-    limit,
     recipeIds,
     labels: _labels,
     labelIntersection,
     ratings,
     nutritionFilter,
-  } = args;
+  } = constraints;
 
   const labels = _labels?.filter((label) => label !== "unlabeled");
   const mustBeUnlabeled = !!_labels?.includes("unlabeled");
 
-  const queryFilters = await getRecipeVisibilityQueryFilter({
-    tx: args.tx,
-    userId: contextUserId,
+  const visibility = await resolveRecipeVisibility({
+    tx,
+    userId: constraints.sessionUserId,
     userIds,
-    friendIds: args.friendIds,
+    friendIds: constraints.friendIds,
   });
 
-  if (!queryFilters.length)
-    return {
-      recipes: [],
-      totalCount: 0,
-    };
+  if (isRecipeVisibilityEmpty(visibility)) return null;
+
+  const queryFilters = recipeVisibilityToPrismaWhere(visibility);
+
+  if (!queryFilters.length) return null;
 
   const where = {
     AND: [] as Prisma.RecipeWhereInput[],
@@ -62,20 +44,25 @@ export const getRecipesWithConstraints = async (args: {
   where.AND.push({
     OR: queryFilters,
   });
-  where.AND.push({
-    folder,
-  });
+  if (folder) {
+    where.AND.push({
+      folder,
+    });
+  }
 
   if (recipeIds) {
     where.AND.push({ id: { in: recipeIds } });
   }
 
-  if (ratings) {
-    where.AND.push({
-      OR: ratings.map((rating) => ({
-        rating,
-      })),
-    });
+  if (ratings?.length) {
+    const usableRatings = ratings.filter(
+      (rating) => rating === null || Number.isInteger(rating),
+    );
+    where.AND.push(
+      usableRatings.length
+        ? { OR: usableRatings.map((rating) => ({ rating })) }
+        : { rating: { in: [] } },
+    );
   }
 
   const addNutritionFilter = (
@@ -150,6 +137,9 @@ export const getRecipesWithConstraints = async (args: {
             recipeLabels: {
               some: {
                 label: {
+                  userId: {
+                    in: userIds,
+                  },
                   title: label,
                 },
               },
@@ -164,6 +154,9 @@ export const getRecipesWithConstraints = async (args: {
       recipeLabels: {
         some: {
           label: {
+            userId: {
+              in: userIds,
+            },
             title: {
               in: labels,
             },
@@ -173,21 +166,5 @@ export const getRecipesWithConstraints = async (args: {
     });
   }
 
-  const [totalCount, recipes] = await Promise.all([
-    tx.recipe.count({
-      where,
-    }),
-    tx.recipe.findMany({
-      where,
-      ...recipeSummaryLite,
-      orderBy,
-      skip: offset,
-      take: limit,
-    }),
-  ]);
-
-  return {
-    recipes: convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes),
-    totalCount,
-  };
+  return where;
 };

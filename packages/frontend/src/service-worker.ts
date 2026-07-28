@@ -29,7 +29,11 @@ if (process.env.ENVIRONMENT !== "selfhost") {
 import { registerRoute, NavigationRoute } from "workbox-routing";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
-import { CacheFirst, NetworkFirst } from "workbox-strategies";
+import {
+  CacheFirst,
+  NetworkFirst,
+  StaleWhileRevalidate,
+} from "workbox-strategies";
 import { ExpirationPlugin } from "workbox-expiration";
 import { initializeApp } from "firebase/app";
 import {
@@ -39,17 +43,18 @@ import {
 } from "firebase/messaging/sw";
 import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
 import { DebugStoreService } from "./app/services/debugStore.service";
+import { BASE_CACHE_NAME, LANG_CACHE_NAME } from "./app/utils/swCacheNames";
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
+
+const IS_DESKTOP = process.env.IS_DESKTOP === "true";
 
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST || []);
 
-const BASE_CACHE_NAME = "base-asset-cache";
-const LANG_CACHE_NAME = "language-cache";
-const MAX_OFFLINE_APP_AGE = 30; // Days
+const MAX_OFFLINE_APP_AGE = 14; // Days
 
-const indexNetworkFirstStrategy = new NetworkFirst({
+const indexStrategy = new StaleWhileRevalidate({
   cacheName: BASE_CACHE_NAME,
   plugins: [
     new ExpirationPlugin({
@@ -58,18 +63,20 @@ const indexNetworkFirstStrategy = new NetworkFirst({
   ],
 });
 
-registerRoute(
-  new NavigationRoute(
-    (options) =>
-      indexNetworkFirstStrategy.handle({
-        request: new Request("/app/index.html"),
-        event: options.event,
-      }),
-    { allowlist: [/^\/app(\/|$)/] },
-  ),
-);
+if (!IS_DESKTOP) {
+  registerRoute(
+    new NavigationRoute(
+      (options) =>
+        indexStrategy.handle({
+          request: new Request("/app/index.html"),
+          event: options.event,
+        }),
+      { allowlist: [/^\/app(\/|$)/] },
+    ),
+  );
+}
 
-const astroNetworkFirstStrategy = new NetworkFirst({
+const astroStrategy = new StaleWhileRevalidate({
   cacheName: "astro-pages",
   plugins: [
     new ExpirationPlugin({
@@ -83,7 +90,7 @@ registerRoute(
     url.origin === self.location.origin &&
     request.mode === "navigate" &&
     !url.pathname.startsWith("/app/"),
-  astroNetworkFirstStrategy,
+  astroStrategy,
 );
 
 registerRoute(
@@ -92,7 +99,7 @@ registerRoute(
     (url.pathname === "/manifest.json" ||
       url.pathname === "/robots.txt" ||
       url.pathname === "/sitemap.xml"),
-  astroNetworkFirstStrategy,
+  astroStrategy,
 );
 
 registerRoute(
@@ -104,23 +111,29 @@ registerRoute(
 clientsClaim();
 
 self.addEventListener("install", async (event) => {
-  const networkFirstPrecacheUrls = ["/app/index.html"];
-  event.waitUntil(
-    caches
-      .open(BASE_CACHE_NAME)
-      .then((cache) => cache.addAll(networkFirstPrecacheUrls)),
-  );
+  if (!IS_DESKTOP) {
+    event.waitUntil(
+      caches
+        .open(BASE_CACHE_NAME)
+        .then((cache) =>
+          cache.add(new Request("/app/index.html", { cache: "reload" })),
+        ),
+    );
 
-  const languagePrecacheUrls = [`/app/assets/i18n/en-us.json`];
-  event.waitUntil(
-    caches
-      .delete(LANG_CACHE_NAME)
-      .then(() =>
-        caches
-          .open(LANG_CACHE_NAME)
-          .then((cache) => cache.addAll(languagePrecacheUrls)),
-      ),
-  );
+    event.waitUntil(
+      caches
+        .delete(LANG_CACHE_NAME)
+        .then(() =>
+          caches
+            .open(LANG_CACHE_NAME)
+            .then((cache) =>
+              cache.add(
+                new Request("/app/assets/i18n/en-us.json", { cache: "reload" }),
+              ),
+            ),
+        ),
+    );
+  }
 
   self.skipWaiting();
 });
@@ -152,22 +165,24 @@ addEventListener("message", async (event) => {
   }
 });
 
-registerRoute(/\/app\/index\.html$/, indexNetworkFirstStrategy);
+const MAX_LANGUAGE_AGE = 14; // Days
 
-// Language files should always come from network first since they change frequently
-const MAX_LANGUAGE_AGE = 30; // Days
-registerRoute(
-  /\/app\/assets\/i18n\//,
-  new NetworkFirst({
-    cacheName: LANG_CACHE_NAME,
-    matchOptions: { ignoreSearch: true },
-    plugins: [
-      new ExpirationPlugin({
-        maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
-      }),
-    ],
-  }),
-);
+if (!IS_DESKTOP) {
+  registerRoute(/\/app\/index\.html$/, indexStrategy);
+
+  registerRoute(
+    /\/app\/assets\/i18n\//,
+    new StaleWhileRevalidate({
+      cacheName: LANG_CACHE_NAME,
+      matchOptions: { ignoreSearch: true },
+      plugins: [
+        new ExpirationPlugin({
+          maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
+        }),
+      ],
+    }),
+  );
+}
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.

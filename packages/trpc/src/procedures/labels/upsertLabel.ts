@@ -8,6 +8,7 @@ import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { cleanLabelTitle } from "@recipesage/util/shared";
+import { assertRecipesOwned } from "@recipesage/util/server/trpc";
 
 export const upsertLabel = authenticatedProcedure
   .meta({
@@ -32,7 +33,7 @@ export const upsertLabel = authenticatedProcedure
         .describe(
           "The label group to assign this label to. Null for no group, undefined to leave unchanged if-exists",
         ),
-      addToRecipeIds: z.array(z.string()).min(1).nullable(),
+      addToRecipeIds: z.array(z.uuid()).min(1).nullable(),
     }),
   )
   .mutation(async ({ ctx, input }): Promise<LabelSummary> => {
@@ -93,6 +94,7 @@ export const upsertLabel = authenticatedProcedure
 
       if (input.addToRecipeIds?.length) {
         const recipeIds = new Set(input.addToRecipeIds);
+        await assertRecipesOwned(Array.from(recipeIds), ctx.session.userId, tx);
         await tx.recipeLabel.createMany({
           data: Array.from(recipeIds).map((recipeId) => ({
             recipeId,

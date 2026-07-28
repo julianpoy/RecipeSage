@@ -1,13 +1,16 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
-  getRecipesWithConstraints,
+  getRecipeConstraintsWhere,
   getFriendshipIds,
+  convertPrismaRecipeSummaryLitesToRecipeSummaryLites,
 } from "@recipesage/util/server/db";
 import { TRPCError } from "@trpc/server";
 import {
   nutritionFilterSchema,
   recipeSummaryLiteSchema,
+  prisma,
+  recipeSummaryLite,
 } from "@recipesage/prisma";
 
 export const getRecipes = publicProcedure
@@ -32,7 +35,7 @@ export const getRecipes = publicProcedure
       labelIntersection: z.boolean().optional(),
       includeAllFriends: z.boolean().optional(),
       ratings: z
-        .array(z.union([z.number().min(0).max(5), z.null()]))
+        .array(z.union([z.number().int().min(0).max(5), z.null()]))
         .optional(),
       nutritionFilter: nutritionFilterSchema.optional(),
     }),
@@ -62,22 +65,35 @@ export const getRecipes = publicProcedure
       }
     }
 
-    const result = await getRecipesWithConstraints({
-      userId: ctx.session?.userId || undefined,
+    const where = await getRecipeConstraintsWhere({
+      sessionUserId: ctx.session?.userId,
       userIds,
+      friendIds,
       folder: input.folder,
-      orderBy: {
-        [input.orderBy]: input.orderDirection,
-      },
-      offset: input.offset,
-      limit: input.limit,
       recipeIds: input.recipeIds,
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
       nutritionFilter: input.nutritionFilter,
-      friendIds,
     });
 
-    return result;
+    if (!where) return { recipes: [], totalCount: 0 };
+
+    const [totalCount, recipes] = await Promise.all([
+      prisma.recipe.count({ where }),
+      prisma.recipe.findMany({
+        where,
+        ...recipeSummaryLite,
+        orderBy: {
+          [input.orderBy]: input.orderDirection,
+        },
+        skip: input.offset,
+        take: input.limit,
+      }),
+    ]);
+
+    return {
+      recipes: convertPrismaRecipeSummaryLitesToRecipeSummaryLites(recipes),
+      totalCount,
+    };
   });

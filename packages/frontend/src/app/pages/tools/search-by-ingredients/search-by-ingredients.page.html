@@ -75,25 +75,25 @@
 
   @if (!loading && results.length) {
     <div class="results">
-      @for (recipe of results; track recipe.id) {
+      @for (result of results; track result.recipe.id) {
         <recipe-list-item
-          [recipe]="recipe"
+          [recipe]="result.recipe"
           [viewType]="viewType"
           [showImage]="preferences[preferenceKeys.ShowImages]"
           [showDescription]="preferences[preferenceKeys.ShowRecipeDescription]"
           [showSource]="preferences[preferenceKeys.ShowSource]"
           [showLabels]="preferences[preferenceKeys.ShowLabels]"
           [showRating]="preferences[preferenceKeys.ShowRating]"
-          [badgeHandle]="getRecipeBadgeHandle(recipe)"
-          [fromSharedCollection]="isFromSharedCollection(recipe)"
-          (recipeClick)="openRecipe(recipe, $event)"
+          [badgeHandle]="getRecipeBadgeHandle(result.recipe)"
+          [fromSharedCollection]="isFromSharedCollection(result.recipe)"
+          (recipeClick)="openRecipe(result.recipe, $event)"
         >
           <p recipeMeta class="match-line" dir="auto">
             {{
               "pages.searchByIngredients.matchLabel"
                 | translate
                   : {
-                      matched: recipe.matchedIngredients.length,
+                      matched: result.matchedTerms.length,
                       total: totalTerms,
                     }
             }}
