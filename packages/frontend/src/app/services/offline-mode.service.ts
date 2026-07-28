@@ -9,6 +9,7 @@ import {
 import { PreferencesService } from "./preferences.service";
 import { SyncService } from "./sync.service";
 import { offlineModeState } from "./offlineModeState";
+import { EventName, EventService } from "./event.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +19,7 @@ export class OfflineModeService {
   private syncService = inject(SyncService);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
+  private events = inject(EventService);
 
   private promptedThisSession = false;
   private isPromptOpen = false;
@@ -27,6 +29,8 @@ export class OfflineModeService {
     offlineModeState.registerHooks({
       notifySlowRead: () => void this.promptSlowRead(),
       showBlockedError: () => void this.presentBlocked(),
+      notifyEnabledChanged: () =>
+        this.events.publish(EventName.ApplicationOfflineModeChanged),
     });
   }
 
