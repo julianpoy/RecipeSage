@@ -22,14 +22,6 @@ class OfflineModeState {
     this.hooks = hooks;
   }
 
-  setEnabled(value: boolean): void {
-    if (value) {
-      this.enable();
-    } else {
-      this.disable();
-    }
-  }
-
   enable(): void {
     if (this.sessionEnabled) return;
     this.sessionEnabled = true;

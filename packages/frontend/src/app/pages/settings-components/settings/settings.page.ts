@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, OnDestroy, inject } from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -104,7 +104,7 @@ import { addIcons } from "ionicons";
     IonSelectOption,
   ],
 })
-export class SettingsPage {
+export class SettingsPage implements OnDestroy {
   private events = inject(EventService);
   private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
@@ -127,13 +127,7 @@ export class SettingsPage {
   offlineModePromptOptions = OfflineModePromptOptions;
   recipeDetailsPreferenceKeys = RecipeDetailsPreferenceKey;
 
-  get offlineModeEnabled(): boolean {
-    return this.offlineModeService.enabled;
-  }
-
-  set offlineModeEnabled(value: boolean) {
-    this.offlineModeService.setEnabled(value);
-  }
+  offlineModeEnabled = this.offlineModeService.enabled;
 
   featureFlags = this.featureFlagService.flags;
   featureFlagKeys = FeatureFlagKeys;
@@ -211,10 +205,31 @@ export class SettingsPage {
         cssClass: "language-select-alert",
       };
     })();
+
+    this.events.subscribe(
+      EventName.ApplicationOfflineModeChanged,
+      this.syncOfflineModeToggle,
+    );
+  }
+
+  ngOnDestroy() {
+    this.events.unsubscribe(
+      EventName.ApplicationOfflineModeChanged,
+      this.syncOfflineModeToggle,
+    );
   }
 
   ionViewWillEnter() {
     this.isLoggedIn = this.utilService.isLoggedIn();
+  }
+
+  private syncOfflineModeToggle = () => {
+    this.offlineModeEnabled = this.offlineModeService.enabled;
+  };
+
+  async offlineModeChanged() {
+    await this.offlineModeService.setEnabled(this.offlineModeEnabled);
+    this.offlineModeEnabled = this.offlineModeService.enabled;
   }
 
   async logout() {

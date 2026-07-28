@@ -48,7 +48,10 @@
 
       <ion-item lines="inset">
         <ion-icon name="cloud-offline-outline" slot="start"></ion-icon>
-        <ion-toggle [(ngModel)]="offlineModeEnabled">
+        <ion-toggle
+          [(ngModel)]="offlineModeEnabled"
+          (ngModelChange)="offlineModeChanged()"
+        >
           <div class="ion-text-wrap">
             {{ "pages.settings.offlineMode.enable" | translate }}
           </div>

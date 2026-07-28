@@ -1757,6 +1757,10 @@
   "offlineMode.prompt.neverAsk": "Don't Ask Again",
   "offlineMode.blocked.header": "Offline Mode Enabled",
   "offlineMode.blocked.message": "This functionality is only available while online. You can turn off Offline Mode on the settings page.",
+  "offlineMode.enabled.header": "Offline Mode Enabled",
+  "offlineMode.enabled.message": "Your recipes are now served from the copy saved on this device, so browsing and searching stay instant even when your connection is weak.\n\nActions that need the server, such as creating or editing a recipe, are unavailable until you turn offline mode off. Offline mode lasts for this session only, and it turns itself off the next time you open the app.",
+  "offlineMode.syncRequired.header": "Sync Required",
+  "offlineMode.syncRequired.message": "This device does not have a full copy of your recipes yet, so offline mode has nothing to show you.\n\nUse Trigger Cache Sync for Offline while you have a good connection, then turn on offline mode once the sync has finished.",
 
   "pages.settings.tabTitle": "Settings - RecipeSage",
   "pages.settings.title": "Settings",
