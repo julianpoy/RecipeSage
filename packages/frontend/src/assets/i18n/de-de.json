@@ -2331,5 +2331,8 @@
     "pages.jobs.status.import.partial": "{{count}} Rezepte konnten nicht automatisch gelesen werden und wurden als Anmerkungen importiert.",
     "pages.jobs.status.import.failed": "{{count}} Rezepte wurden aufgrund eines Fehlers übersprungen.",
     "pages.import.jobs.label.unformatted": "Automatischer Import unformatiert",
-    "offlineMode.prompt.header": "Langsame Verbindung erkannt"
+    "offlineMode.prompt.header": "Langsame Verbindung erkannt",
+    "offlineMode.prompt.message": "Deine Netzwerkverbindung ist langsam. Aktiviere den Offline-Modus, um die auf diesem Gerät gespeicherten Rezepte schneller durchsuchen zu können. Diese Einstellung bleibt bis zum Schließen der App aktiviert und kann jederzeit auf der Einstellungen-Seite ausgeschaltet werden.",
+    "offlineMode.prompt.enable": "Aktivieren",
+    "offlineMode.prompt.notNow": "Nicht jetzt"
 }
