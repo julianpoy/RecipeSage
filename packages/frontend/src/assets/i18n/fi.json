@@ -1553,7 +1553,7 @@
     "pages.tools.cookbook.subtitle": "Luo resepteistäsi tulostettava PDF-keittokirja",
     "pages.tools.nutritionCalculator.subtitle": "Laske useiden reseptien ravintosisältö yhteen ja skaalaa annosten mukaan",
     "pages.tools.assistant.subtitle": "Keskustele tekoälyavustajan kanssa ruoanlaitosta ja resepteistäsi",
-    "pages.tools.measurementConverter.subtitle": "Muunna tilavuuksia, painoja, ainesosamääriä ja uunin lämpötiloja",
+    "pages.tools.measurementConverter.subtitle": "Muunna tilavuuksia, painoja, ainesosien määriä ja uunin lämpötiloja",
     "pages.tools.cookingTemperatures.subtitle": "Turvalliset sisälämpötilat, kypsyysasteet sekä uuni- ja uppopaistamisen viitearvot",
     "pages.tools.panBakewareConverter.subtitle": "Vaihda vuokien kokoja, skaalaa ainesosia ja säädä paistoaikaa ja -lämpötilaa",
     "pages.tools.userGuide.subtitle": "Ohjeet ja dokumentaatio RecipeSagen käyttöön",
@@ -1988,5 +1988,15 @@
     "pages.searchByIngredients.title": "Hae ainesosien mukaan",
     "pages.searchByIngredients.tabTitle": "Hae ainesosien mukaan - RecipeSage",
     "pages.searchByIngredients.info.title": "Kokkaa sillä, mitä sinulla jo on",
-    "pages.searchByIngredients.info.body1": "Listaa jääkaapissasi, pakastimessasi tai kaapissasi olevat ainekset, niin löydät reseptit, joissa käytetään niitä mahdollisimman paljon."
+    "pages.searchByIngredients.info.body1": "Listaa jääkaapissasi, pakastimessasi tai kaapissasi olevat ainekset, niin löydät reseptit, joissa käytetään niitä mahdollisimman paljon.",
+    "pages.tools.searchByIngredients.subtitle": "Etsi reseptejä, joita voit valmistaa jo sinulla olemassa olevista aineksista",
+    "pages.searchByIngredients.info.body2": "Reseptit on järjestetty sen mukaan, kuinka monta ainesosaa ne sisältävät.",
+    "pages.searchByIngredients.field.label": "Ainesosasi",
+    "pages.searchByIngredients.field.placeholder": "kana\nriisi\nsipuli\nvalkosipuli",
+    "pages.searchByIngredients.field.helper": "Syötä yksi ainesosa riviä kohden.",
+    "pages.searchByIngredients.includeFriends": "Sisällytä ystävien jakamia reseptejä",
+    "pages.searchByIngredients.searchButton": "Etsi",
+    "pages.searchByIngredients.searching": "Haetaan reseptejäsi...",
+    "pages.searchByIngredients.noResults": "Yhdessäkään reseptissäsi ei vielä käytetä näitä ainesosia. Kokeile vähemmän tai useampia yleisiä ainesosia.",
+    "pages.measurementConverter.intro.bridgeHint": "Tilavuus- ja paino-osioiden välissä näkyvää ainesosaa käytetään vain tilavuuden ja painon väliseen muuntamiseen. Jos haluat vain skaalata tilavuuden tilavuuteen (tai painon painoon), voit jättää sen asetukseksi neste ja jättää sen kokonaan huomiotta."
 }
