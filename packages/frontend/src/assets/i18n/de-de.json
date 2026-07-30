@@ -2325,5 +2325,7 @@
     "pages.searchByIngredients.searching": "Rezepte werden durchsucht …",
     "pages.searchByIngredients.noResults": "Es wurden keine Rezepte gefunden, die diese Zutaten enthalten. Suche stattdessen nach weniger oder gängigeren Zutaten.",
     "pages.searchByIngredients.matchLabel": "Enthält {{matched}} der angegebenen {{total}} Zutaten",
-    "pages.home.selectionNotOwned.header": "Rezepte von anderen Benutzern ausgewählt"
+    "pages.home.selectionNotOwned.header": "Rezepte von anderen Benutzern ausgewählt",
+    "pages.home.selectionNotOwned.message": "Dies ist nur mit deinen eigenen Rezepten möglich. Die folgenden Rezepte gehören einem anderen Benutzer und du musst sie abwählen, um fortfahren zu können: {{recipeNames}}",
+    "pages.homepopover.options.showRating": "Bewertung anzeigen"
 }
