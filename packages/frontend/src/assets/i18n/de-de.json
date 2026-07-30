@@ -2327,5 +2327,9 @@
     "pages.searchByIngredients.matchLabel": "Enthält {{matched}} der angegebenen {{total}} Zutaten",
     "pages.home.selectionNotOwned.header": "Rezepte von anderen Benutzern ausgewählt",
     "pages.home.selectionNotOwned.message": "Dies ist nur mit deinen eigenen Rezepten möglich. Die folgenden Rezepte gehören einem anderen Benutzer und du musst sie abwählen, um fortfahren zu können: {{recipeNames}}",
-    "pages.homepopover.options.showRating": "Bewertung anzeigen"
+    "pages.homepopover.options.showRating": "Bewertung anzeigen",
+    "pages.jobs.status.import.partial": "{{count}} Rezepte konnten nicht automatisch gelesen werden und wurden als Anmerkungen importiert.",
+    "pages.jobs.status.import.failed": "{{count}} Rezepte wurden aufgrund eines Fehlers übersprungen.",
+    "pages.import.jobs.label.unformatted": "Automatischer Import unformatiert",
+    "offlineMode.prompt.header": "Langsame Verbindung erkannt"
 }
