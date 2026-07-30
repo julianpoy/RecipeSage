@@ -1535,7 +1535,7 @@
     "pages.extensionAuth.signedInAs": "Olet kirjautunut sisään käyttäjänä {{email}}",
     "pages.extensionAuth.continue": "Jatka",
     "pages.extensionAuth.useDifferentAccount": "Käytä toista tiliä",
-    "pages.extensionAuth.officialBadge": "Virallinen RecipeSage-laajennus",
+    "pages.extensionAuth.officialBadge": "Virallinen RecipeSage laajennus",
     "pages.extensionAuth.unofficialWarning.title": "Emme voi vahvistaa, että tämä on virallinen RecipeSage-laajennus.",
     "pages.extensionAuth.unofficialWarning.body": "Jatka vain, jos asensit tämän laajennuksen itse ja luotat siihen. Muussa tapauksessa kyseessä voi olla yritys ottaa tilisi haltuun.",
     "pages.extensionAuth.invalidRequest.title": "Virheellinen kirjautumispyyntö",
