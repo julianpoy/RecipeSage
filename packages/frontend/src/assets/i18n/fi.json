@@ -2002,7 +2002,7 @@
     "pages.measurementConverter.unitsShort.cup": "kupillinen 2,5 dl metric",
     "pages.measurementConverter.unitsShort.tablespoon": "Ruokalusikallinen",
     "pages.measurementConverter.unitsShort.teaspoon": "Teelusikallinen",
-    "pages.measurementConverter.unitsShort.fluidOunce": "0,3 dl",
+    "pages.measurementConverter.unitsShort.fluidOunce": "0,3 dl (US)",
     "pages.measurementConverter.unitsShort.milliliter": "ml",
     "pages.measurementConverter.unitsShort.liter": "l"
 }
