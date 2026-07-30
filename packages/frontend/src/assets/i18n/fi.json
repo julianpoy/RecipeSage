@@ -1998,5 +1998,11 @@
     "pages.searchByIngredients.searchButton": "Etsi",
     "pages.searchByIngredients.searching": "Haetaan reseptejäsi...",
     "pages.searchByIngredients.noResults": "Yhdessäkään reseptissäsi ei vielä käytetä näitä ainesosia. Kokeile vähemmän tai useampia yleisiä ainesosia.",
-    "pages.measurementConverter.intro.bridgeHint": "Tilavuus- ja paino-osioiden välissä näkyvää ainesosaa käytetään vain tilavuuden ja painon väliseen muuntamiseen. Jos haluat vain skaalata tilavuuden tilavuuteen (tai painon painoon), voit jättää sen asetukseksi neste ja jättää sen kokonaan huomiotta."
+    "pages.measurementConverter.intro.bridgeHint": "Tilavuus- ja paino-osioiden välissä näkyvää ainesosaa käytetään vain tilavuuden ja painon väliseen muuntamiseen. Jos haluat vain skaalata tilavuuden tilavuuteen (tai painon painoon), voit jättää sen asetukseksi neste ja jättää sen kokonaan huomiotta.",
+    "pages.measurementConverter.unitsShort.cup": "kupillinen 2,5 dl metric",
+    "pages.measurementConverter.unitsShort.tablespoon": "Ruokalusikallinen",
+    "pages.measurementConverter.unitsShort.teaspoon": "Teelusikallinen",
+    "pages.measurementConverter.unitsShort.fluidOunce": "0,3 dl",
+    "pages.measurementConverter.unitsShort.milliliter": "ml",
+    "pages.measurementConverter.unitsShort.liter": "l"
 }
