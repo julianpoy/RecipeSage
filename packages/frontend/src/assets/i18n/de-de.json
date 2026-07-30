@@ -2360,5 +2360,9 @@
     "pages.serverSettings.gripWs.label": "WebSocket-Server-URL",
     "pages.serverSettings.gripWs.placeholder": "wss://beispiel.com/grip/ws",
     "pages.serverSettings.gripWs.helper": "Die WebSocket-URL, die von der App für Live-Updates genutzt wird. Sie kann sich auf einem anderen Host als die API befinden. Nach dem Speichern lädt die App neu.",
-    "pages.serverSettings.gripWs.invalid": "Bitte gib eine gültige ws(s)-URL ein."
+    "pages.serverSettings.gripWs.invalid": "Bitte gib eine gültige ws(s)-URL ein.",
+    "pages.shoppingList.category.baking": "Backen",
+    "pages.shoppingList.category.spices": "Gewürze",
+    "pages.shoppingList.category.condiments": "Würzmittel",
+    "components.rating.label": "Bewertung: {{rating}} von 5"
 }
