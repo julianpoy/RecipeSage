@@ -22,3 +22,4 @@ export * from "./toPascalCase";
 export * from "./getMealSortOrder";
 export * from "./discoverCategories";
 export * from "./desktopDownloads";
+export * from "./matomo";

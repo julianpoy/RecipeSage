@@ -12,7 +12,11 @@ import {
   NavController,
 } from "@ionic/angular/standalone";
 
-import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
+import {
+  ENABLE_ANALYTICS,
+  IS_DESKTOP,
+  IS_SELFHOST,
+} from "../environments/environment";
 
 import { UtilService, RouteMap, AuthType } from "./services/util.service";
 import { MessagingService } from "./services/messaging.service";
@@ -20,7 +24,12 @@ import { WebsocketService } from "./services/websocket.service";
 import { PreferencesService } from "./services/preferences.service";
 import { OfflineModeService } from "./services/offline-mode.service";
 import {
+  detectAppPlatform,
   GlobalPreferenceKey,
+  MATOMO_APP_PLATFORM_DIMENSION_ID,
+  MATOMO_CANONICAL_ORIGIN,
+  MATOMO_ORIGIN,
+  MATOMO_SITE_ID,
   SupportedLanguages,
 } from "@recipesage/util/shared";
 import { CookingToolbarService } from "./services/cooking-toolbar.service";
@@ -34,6 +43,7 @@ import { TRPCService } from "./services/trpc.service";
 import { ServerActionsService } from "./services/server-actions.service";
 import { SyncService } from "./services/sync.service";
 import { appIdbStorageManager } from "./utils/appIdbStorageManager";
+import { getRoutePattern } from "./utils/getRoutePattern";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
@@ -253,24 +263,30 @@ export class AppComponent {
   }
 
   initAnalytics() {
-    const _paq = (window as any)._paq || [];
+    const _paq = window._paq || [];
 
     /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
     // _paq.push(['trackPageView']);
+    _paq.push(["disableCookies"]);
+    _paq.push([
+      "setCustomDimension",
+      MATOMO_APP_PLATFORM_DIMENSION_ID,
+      detectAppPlatform(IS_DESKTOP),
+    ]);
     _paq.push(["enableLinkTracking"]);
 
-    const u = "//a.recipesage.com/";
-    _paq.push(["setTrackerUrl", u + "piwik.php"]);
-    _paq.push(["setSiteId", "1"]);
+    const u = `${MATOMO_ORIGIN}/`;
+    _paq.push(["setTrackerUrl", u + "matomo.php"]);
+    _paq.push(["setSiteId", MATOMO_SITE_ID]);
     const g = document.createElement("script");
     const s = document.getElementsByTagName("script")[0];
     g.type = "text/javascript";
     g.async = true;
     g.defer = true;
-    g.src = u + "piwik.js";
+    g.src = u + "matomo.js";
     s.parentNode?.insertBefore(g, s);
 
-    (window as any)._paq = _paq;
+    window._paq = _paq;
   }
 
   initUpdateListeners() {
@@ -595,7 +611,8 @@ export class AppComponent {
       });
     });
 
-    let currentUrl: string | undefined;
+    let previousUrl: string | undefined;
+    let previousPath: string | undefined;
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
@@ -607,19 +624,24 @@ export class AppComponent {
       this.checkBrowserCompatibility();
 
       try {
-        const viewName = event.url;
-
-        const _paq = (window as any)._paq;
+        const _paq = window._paq;
 
         if (!_paq) return;
 
-        if (currentUrl) _paq.push(["setReferrerUrl", currentUrl]);
-        currentUrl = "" + window.location.hash.substring(1);
-        _paq.push(["setCustomUrl", currentUrl]);
-        _paq.push(["setDocumentTitle", viewName]);
+        const path = event.urlAfterRedirects.split("?")[0];
+        if (path === previousPath) return;
+        previousPath = path;
 
-        // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
-        _paq.push(["deleteCustomVariables", "page"]);
+        const routePattern = getRoutePattern(
+          this.router.routerState.snapshot.root,
+        );
+        const url = `${MATOMO_CANONICAL_ORIGIN}/app${routePattern}`;
+
+        if (previousUrl) _paq.push(["setReferrerUrl", previousUrl]);
+        previousUrl = url;
+        _paq.push(["setCustomUrl", url]);
+        _paq.push(["setDocumentTitle", routePattern]);
+
         _paq.push(["trackPageView"]);
 
         // make Matomo aware of newly added content
