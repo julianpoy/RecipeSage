@@ -1,13 +1,334 @@
-.instruction {
-  line-height: 1.5;
+.page-wrapper {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 25vh;
+}
 
-  ion-icon {
-    vertical-align: middle;
-    font-size: 1.25rem;
+.page-intro {
+  margin: 0 0 16px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.section-label {
+  margin: 28px 0 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.install-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  text-align: start;
+  border: 1px solid var(--ion-color-primary);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ion-color-primary) 8%, transparent);
+  color: var(--ion-text-color, #1f1f1f);
+  cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--ion-color-primary) 14%, transparent);
+  }
+
+  > ion-icon {
+    flex-shrink: 0;
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
   }
 }
 
-.page-wrapper {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
+.install-cta-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.install-cta-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.install-cta-note {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.install-cta-arrow {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.platform-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent;
+}
+
+.platform-accordion {
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ion-card-background, #ffffff);
+
+  &.accordion-expanded {
+    border-color: var(--ion-color-step-250, #c8c8c8);
+  }
+}
+
+.platform-header {
+  --background: transparent;
+  --padding-start: 16px;
+  --inner-padding-end: 12px;
+  --min-height: 56px;
+
+  ion-icon[slot="start"] {
+    font-size: 1.3rem;
+    margin-inline-end: 14px;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+
+  ion-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+}
+
+.platform-content {
+  overflow: hidden;
+  padding: 4px 16px 18px;
+}
+
+.platform-lead {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+
+  li {
+    counter-increment: step;
+    position: relative;
+    padding-inline-start: 34px;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &::before {
+      content: counter(step);
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--ion-color-primary);
+      color: var(--ion-color-primary-contrast, #ffffff);
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+.key-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--ion-color-step-100, #ededed);
+  vertical-align: middle;
+  font-weight: 600;
+  line-height: 1;
+
+  ion-icon {
+    font-size: 0.95rem;
+  }
+}
+
+.platform-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.download-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-radius: 8px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast, #ffffff);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--ion-color-primary-shade);
+  }
+
+  ion-icon {
+    font-size: 1.15rem;
+  }
+}
+
+.downloads-label {
+  margin: 22px 0 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.download-group {
+  margin-bottom: 18px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ion-text-color, #1f1f1f);
+
+    ion-icon {
+      font-size: 1rem;
+      color: var(--ion-color-medium-shade, #5b5b5b);
+    }
+  }
+}
+
+.download-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--ion-text-color, #1f1f1f);
+  text-decoration: none;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    background: var(--ion-color-step-50, #f7f7f7);
+    border-color: var(--ion-color-primary);
+  }
+
+  ion-icon {
+    flex-shrink: 0;
+    font-size: 1rem;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+}
+
+.software-card {
+  padding: 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--ion-color-step-150, #e0e0e0);
+  border-radius: 10px;
+  background: var(--ion-card-background, #ffffff);
+
+  > p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+}
+
+.software-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+
+  ion-icon {
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    color: var(--ion-color-medium-shade, #5b5b5b);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+}
+
+.software-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid var(--ion-color-primary);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  text-decoration: none;
+
+  &:hover {
+    background: color-mix(in srgb, var(--ion-color-primary) 10%, transparent);
+  }
+}
+
+.bookmarklet {
+  cursor: grab;
+}
+
+.software-note {
+  margin: 10px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium-shade, #5b5b5b);
 }

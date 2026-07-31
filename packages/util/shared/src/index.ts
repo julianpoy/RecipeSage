@@ -21,3 +21,4 @@ export * from "./toCamelCase";
 export * from "./toPascalCase";
 export * from "./getMealSortOrder";
 export * from "./discoverCategories";
+export * from "./desktopDownloads";
