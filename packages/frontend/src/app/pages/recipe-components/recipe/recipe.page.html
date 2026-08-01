@@ -7,7 +7,7 @@
     <ion-title> {{ "pages.recipeDetails.pageTitle" | translate }} </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="presentPopover($event)">
+      <ion-button [disabled]="!recipe" (click)="presentPopover($event)">
         <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
