@@ -35,7 +35,7 @@ if (process.env.ENVIRONMENT !== "selfhost") {
 
   Sentry.init({
     release: process.env.APP_VERSION,
-    environment: process.env.ENVIRONMENT,
+    environment,
     dsn: "https://f6bf39d644968626a9d7207fe3ae58fd@o158500.ingest.us.sentry.io/4510138109853696",
     transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
 
