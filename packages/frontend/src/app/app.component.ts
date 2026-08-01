@@ -674,8 +674,6 @@ export class AppComponent {
         email: me.email,
         token,
       });
-
-      Sentry.captureMessage("Session migration success");
     } catch (e) {
       Sentry.captureException(e);
     }
