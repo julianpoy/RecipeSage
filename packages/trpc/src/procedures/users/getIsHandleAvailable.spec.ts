@@ -1,11 +1,11 @@
 import { prisma } from "@recipesage/prisma";
-import { test, anonymousTrpc } from "../../testutils";
+import { test, anonymousTrpc, uniqueHandle } from "../../testutils";
 
 describe("getIsHandleAvailable", () => {
   describe("success", () => {
     test("returns available when no user has the handle", async ({ trpc }) => {
       const response = await trpc.users.getIsHandleAvailable({
-        handle: "anunusedhandle",
+        handle: uniqueHandle(),
       });
 
       expect(response.available).toEqual(true);
@@ -15,26 +15,30 @@ describe("getIsHandleAvailable", () => {
       trpc,
       user2,
     }) => {
+      const handle = uniqueHandle();
+
       await prisma.user.update({
         where: { id: user2.id },
-        data: { handle: "taken" },
+        data: { handle },
       });
 
       const response = await trpc.users.getIsHandleAvailable({
-        handle: "taken",
+        handle,
       });
 
       expect(response.available).toEqual(false);
     });
 
     test("matches handles case-insensitively", async ({ trpc, user2 }) => {
+      const handle = uniqueHandle();
+
       await prisma.user.update({
         where: { id: user2.id },
-        data: { handle: "taken" },
+        data: { handle },
       });
 
       const response = await trpc.users.getIsHandleAvailable({
-        handle: "TAKEN",
+        handle: handle.toUpperCase(),
       });
 
       expect(response.available).toEqual(false);
@@ -44,13 +48,15 @@ describe("getIsHandleAvailable", () => {
       trpc,
       user,
     }) => {
+      const handle = uniqueHandle();
+
       await prisma.user.update({
         where: { id: user.id },
-        data: { handle: "myhandle" },
+        data: { handle },
       });
 
       const response = await trpc.users.getIsHandleAvailable({
-        handle: "myhandle",
+        handle,
       });
 
       expect(response.available).toEqual(true);
