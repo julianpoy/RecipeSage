@@ -41,6 +41,11 @@ export const metrics = {
     help: "A websocket message was sent from the server to a client",
     labelNames: ["message_type"],
   }),
+  websocketBroadcastFailed: new client.Counter({
+    name: "websocket_broadcast_failed",
+    help: "A websocket broadcast could not be delivered to the GRIP proxy and was dropped. Occasional failures are expected, a sustained rise means the proxy is unreachable or misconfigured",
+    labelNames: ["message_type"],
+  }),
 
   jobStarted: new client.Counter({
     name: "job_started",

@@ -1,7 +1,6 @@
 import { WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip/node";
 import { config } from "./config";
-import * as Sentry from "@sentry/node";
 import { metrics } from "./metrics";
 
 export const serveGrip = new ServeGrip({
@@ -81,6 +80,9 @@ export const broadcastWSEventIgnoringErrors = async function <
   try {
     await broadcastWSEvent(channel, type, data);
   } catch (e) {
-    Sentry.captureException(e);
+    metrics.websocketBroadcastFailed.inc({
+      message_type: type,
+    });
+    console.warn(e);
   }
 };
