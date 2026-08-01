@@ -6,6 +6,7 @@ import {
   SupportedLanguages,
 } from "@recipesage/util/shared";
 import { NavController } from "@ionic/angular/standalone";
+import dayjs from "dayjs";
 import { serverConfig } from "../utils/serverConfig";
 
 export interface RecipeTemplateModifiers {
@@ -445,12 +446,9 @@ export class UtilService {
   memoizedFormattedDates: Map<string, string> = new Map();
 
   constructor() {
-    setInterval(
-      () => {
-        this.memoizedFormattedDates.clear();
-      },
-      1000 * 60 * 5,
-    ); // Clear every 5 minutes
+    setInterval(() => {
+      this.memoizedFormattedDates.clear();
+    }, 1000 * 60);
   }
 
   getAppBrowserLang(): string {
@@ -611,19 +609,19 @@ export class UtilService {
     const thisWeekAfter = new Date();
     thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
 
-    const toFormat = new Date(date);
+    const toFormat = dayjs(date).toDate();
 
     if (options.now && aFewMomentsAgoAfter < toFormat) {
       const justNow = this.translate.instant("services.util.justNow");
       if (justNow) return justNow;
     }
 
-    if (!options.times && todayAfter < toFormat) {
+    if (!options.times && todayAfter <= toFormat) {
       const today = this.translate.instant("services.util.today");
       if (today) return today;
     }
 
-    if (options.times && todayAfter < toFormat) {
+    if (options.times && todayAfter <= toFormat) {
       return toFormat.toLocaleString(window.navigator.language, {
         hour: "numeric",
         minute: "numeric",
