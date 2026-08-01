@@ -807,6 +807,7 @@
   "pages.editRecipe.addImage.placeholder": "Image URL",
   "pages.editRecipe.addImage.downloading": "Downloading image...",
   "pages.editRecipe.addImage.invalidUrl": "Please enter a valid image URL",
+  "pages.editRecipe.addImage.fetchFailed": "We could not download an image from that URL. It may have been moved or deleted, or the site may not allow downloads.",
 
   "pages.editRecipePopover.actions": "Actions",
   "pages.editRecipePopover.addImage": "Add Image by URL",

@@ -7,7 +7,11 @@ import { FileTransformError } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
-import { ObjectTypes, writeImageURL } from "@recipesage/util/server/storage";
+import {
+  ImageFetchError,
+  ObjectTypes,
+  writeImageURL,
+} from "@recipesage/util/server/storage";
 
 export const createRecipeImageFromUrl = authenticatedProcedure
   .meta({
@@ -39,6 +43,12 @@ export const createRecipeImageFromUrl = authenticatedProcedure
         encodeInHighRes,
       );
     } catch (e) {
+      if (e instanceof ImageFetchError) {
+        throw new TRPCError({
+          message: "Could not fetch image from url",
+          code: "BAD_REQUEST",
+        });
+      }
       if (!(e instanceof FileTransformError)) {
         Sentry.captureException(e);
       }

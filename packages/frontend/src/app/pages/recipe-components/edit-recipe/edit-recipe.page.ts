@@ -1503,9 +1503,15 @@ export class EditRecipePage {
       await loading.present();
 
       const response =
-        await this.serverActionsService.images.createRecipeImageFromUrl({
-          url: imageUrl,
-        });
+        await this.serverActionsService.images.createRecipeImageFromUrl(
+          {
+            url: imageUrl,
+          },
+          {
+            400: () => this.presentAddImageByUrlFailed(),
+            415: () => this.presentAddImageByUrlFailed(),
+          },
+        );
       if (response) this.images.push(response);
 
       loading.dismiss();
@@ -1527,6 +1533,25 @@ export class EditRecipePage {
       });
       invalidUrlToast.present();
     }
+  }
+
+  async presentAddImageByUrlFailed() {
+    const header = await this.translate.get("generic.error").toPromise();
+    const message = await this.translate
+      .get("pages.editRecipe.addImage.fetchFailed")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const failedToast = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
+    failedToast.present();
   }
 
   async presentPopover(event: Event) {
