@@ -3,6 +3,7 @@ import {
   APICallError,
   JSONParseError,
   NoObjectGeneratedError,
+  NoOutputGeneratedError,
   TypeValidationError,
 } from "ai";
 import { withLLMRetry } from "./withLLMRetry";
@@ -92,6 +93,37 @@ describe("withLLMRetry", () => {
     const result = await withLLMRetry("text_to_recipe", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries after NoOutputGeneratedError and returns success", async () => {
+    const fn = vi
+      .fn()
+      .mockRejectedValueOnce(new NoOutputGeneratedError())
+      .mockResolvedValue("ok");
+    const result = await withLLMRetry("text_to_recipe", fn);
+    expect(result).toBe("ok");
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it("counts no_output retries and exhaustion under the no_output reason", async () => {
+    const attemptSpy = vi.spyOn(metrics.llmRetryAttempt, "inc");
+    const exhaustedSpy = vi.spyOn(metrics.llmRetryExhausted, "inc");
+
+    const fn = vi.fn().mockRejectedValue(new NoOutputGeneratedError());
+    await expect(withLLMRetry("text_to_nutrition", fn)).rejects.toBeDefined();
+
+    expect(fn).toHaveBeenCalledTimes(3);
+    expect(attemptSpy).toHaveBeenCalledWith({
+      category: "text_to_nutrition",
+      reason: "no_output",
+    });
+    expect(exhaustedSpy).toHaveBeenCalledWith({
+      category: "text_to_nutrition",
+      reason: "no_output",
+    });
+
+    attemptSpy.mockRestore();
+    exhaustedSpy.mockRestore();
   });
 
   it("does not retry transport errors, which the AI SDK already retries", async () => {

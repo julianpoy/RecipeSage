@@ -3,6 +3,7 @@ import {
   EmptyResponseBodyError,
   JSONParseError,
   NoObjectGeneratedError,
+  NoOutputGeneratedError,
   TypeValidationError,
 } from "ai";
 import { metrics } from "../general/metrics";
@@ -18,6 +19,7 @@ export type LLMRetryCategory =
 
 const retryReason = (error: unknown): string | undefined => {
   if (NoObjectGeneratedError.isInstance(error)) return "no_object";
+  if (NoOutputGeneratedError.isInstance(error)) return "no_output";
   if (EmptyResponseBodyError.isInstance(error)) return "empty_response";
   if (JSONParseError.isInstance(error)) return "json_parse";
   if (TypeValidationError.isInstance(error)) return "type_validation";
