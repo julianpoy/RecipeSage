@@ -9,6 +9,7 @@ export const getUserProfilesById = publicProcedure
       path: "/users/getUserProfilesById",
       tags: ["users"],
       summary: "Look up user profiles by id",
+      protect: false,
     },
   })
   .input(

@@ -25,6 +25,7 @@ export const searchRecipesByIngredients = publicProcedure
       tags: ["recipes"],
       summary:
         "Search recipes ranked by how many of the provided ingredients they contain",
+      protect: false,
     },
   })
   .input(

@@ -17,6 +17,7 @@ export const register = publicProcedure
       path: "/users/register",
       tags: ["users"],
       summary: "Create a new account with email and password",
+      protect: false,
     },
   })
   .input(

@@ -15,6 +15,7 @@ export const forgotPassword = publicProcedure
       path: "/users/forgotPassword",
       tags: ["users"],
       summary: "Send a password-reset email to the given address",
+      protect: false,
     },
   })
   .input(

@@ -40,13 +40,31 @@ export const trpcExpressMiddleware = createExpressMiddleware({
   createContext,
 });
 
-export const openApiDocument = generateOpenApiDocument(appRouter, {
+const generatedOpenApiDocument = generateOpenApiDocument(appRouter, {
   title: "RecipeSage API",
   description:
     "Public REST surface generated from RecipeSage's tRPC router. Procedures are grouped by tRPC sub-router (tag).",
   version: "1.0.0",
   baseUrl: "/compat/v2",
 });
+
+for (const pathItem of Object.values(generatedOpenApiDocument.paths || {})) {
+  const operations = [
+    pathItem.get,
+    pathItem.post,
+    pathItem.put,
+    pathItem.patch,
+    pathItem.delete,
+  ];
+
+  for (const operation of operations) {
+    if (operation && !operation.security) {
+      operation.security = [];
+    }
+  }
+}
+
+export const openApiDocument = generatedOpenApiDocument;
 
 export const openApiExpressMiddleware = createOpenApiExpressMiddleware({
   router: appRouter,

@@ -27,6 +27,7 @@ export const searchDiscoverRecipes = publicProcedure
       path: "/discover/searchDiscoverRecipes",
       tags: ["discover"],
       summary: "Browse and search the public discover recipe catalog",
+      protect: false,
     },
   })
   .input(

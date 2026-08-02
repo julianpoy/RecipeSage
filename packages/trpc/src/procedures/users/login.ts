@@ -17,6 +17,7 @@ export const login = publicProcedure
       tags: ["users"],
       summary:
         "Authenticate with email and password and receive a session token",
+      protect: false,
     },
   })
   .input(

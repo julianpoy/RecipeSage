@@ -10,6 +10,7 @@ export const getLabelsByUserId = publicProcedure
       path: "/labels/getLabelsByUserId",
       tags: ["labels"],
       summary: "Get labels visible to the caller for the given user ids",
+      protect: false,
     },
   })
   .input(

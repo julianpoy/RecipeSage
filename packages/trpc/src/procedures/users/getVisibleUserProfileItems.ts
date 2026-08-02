@@ -15,6 +15,7 @@ export const getVisibleUserProfileItems = publicProcedure
       tags: ["users"],
       summary:
         "Get the showcased profile items for a user, filtered by what the caller is allowed to see",
+      protect: false,
     },
   })
   .input(
