@@ -41,5 +41,6 @@ export * from "./throttleDropPromise";
 export * from "./translate";
 export * from "./getRequestLanguage";
 export * from "./sanitizeRemoveHtmlFromString";
+export * from "./formatDateUTC";
 
 export * from "./factories";

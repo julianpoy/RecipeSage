@@ -22,6 +22,7 @@ export interface RecipeTemplateModifiers {
   print?: boolean; // Triggers immediate print
   scale?: string;
   preferredLanguage?: string;
+  today?: string;
 }
 
 // TODO: Create more types for various page getPath methods
@@ -521,6 +522,7 @@ export class UtilService {
       groupCategories: boolean;
       sortBy?: string;
       preferredLanguage?: string;
+      today?: string;
     },
   ) {
     let query = `${this.getTokenQuery()}&version=${
@@ -532,6 +534,7 @@ export class UtilService {
     if (options.preferredLanguage)
       query += `&preferredLanguage=${options.preferredLanguage}`;
     if (options.sortBy) query += `&sortBy=${options.sortBy}`;
+    if (options.today) query += `&today=${options.today}`;
 
     return `${serverConfig.apiBase}print/shoppingList/${shoppingListId}${query}`;
   }
@@ -544,6 +547,7 @@ export class UtilService {
       calendarYear?: number;
       startOfWeek?: string;
       preferredLanguage?: string;
+      today?: string;
     },
   ) {
     let query = `${this.getTokenQuery()}&version=${
@@ -558,6 +562,7 @@ export class UtilService {
     if (options.startOfWeek) query += `&startOfWeek=${options.startOfWeek}`;
     if (options.preferredLanguage)
       query += `&preferredLanguage=${options.preferredLanguage}`;
+    if (options.today) query += `&today=${options.today}`;
 
     return `${serverConfig.apiBase}print/mealPlan/${mealPlanId}${query}`;
   }

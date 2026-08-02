@@ -1,4 +1,4 @@
-html
+html(lang=language, dir=direction)
   head
     title= recipe.title
     script(type="text/javascript").
@@ -377,8 +377,7 @@ html
       a(class="recipe-source-url" href=recipe.url)= recipe.url
 
     p(class="printed-on")
-      i Printed on&nbsp;
-      i= date
+      i= printedOn
 
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {

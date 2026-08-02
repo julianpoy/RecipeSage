@@ -1,6 +1,7 @@
 import { Component, Input, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
+import dayjs from "dayjs";
 
 import type { RecipeSummary } from "@recipesage/prisma";
 import {
@@ -145,6 +146,7 @@ export class PrintRecipeModalPage {
     for (const template of this.templates) {
       template.modifiers.scale = this.scale;
       template.modifiers.preferredLanguage = this.translate.getCurrentLang();
+      template.modifiers.today = dayjs().format("YYYY-MM-DD");
       template.url = this.utilService.generateRecipeTemplateURL(
         this.recipe.id,
         template.modifiers,

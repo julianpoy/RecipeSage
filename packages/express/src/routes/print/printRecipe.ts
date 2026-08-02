@@ -9,10 +9,13 @@ import {
   inferRecipeNotation,
 } from "@recipesage/util/shared";
 import {
+  formatDateUTC,
   getRequestLanguage,
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,
+  translate,
 } from "@recipesage/util/server/general";
+import { getLanguageDirection } from "@recipesage/util/shared";
 
 const schema = {
   query: z.object({
@@ -29,6 +32,11 @@ const schema = {
     print: z.string().optional(),
     scale: z.string().optional(),
     token: z.string().optional(),
+    preferredLanguage: z.string().optional(),
+    today: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
   }),
   params: z.object({
     recipeId: z.string(),
@@ -126,7 +134,11 @@ export const printRecipeHandler = defineHandler(
         }),
       },
       recipeURL: `https://recipesage.com/app/recipe/${sorted.id}`,
-      date: new Date().toDateString(),
+      printedOn: await translate(locale, "generic.printedOn", {
+        date: req.query.today || formatDateUTC(new Date()),
+      }),
+      language: locale,
+      direction: getLanguageDirection(locale),
       modifiers,
     });
   },

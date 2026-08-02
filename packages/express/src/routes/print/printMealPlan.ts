@@ -6,9 +6,15 @@ import {
 } from "@recipesage/util/server/db";
 import { NotFoundError } from "../../errors";
 import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
-import { getRequestLanguage, translate } from "@recipesage/util/server/general";
 import {
+  formatDateUTC,
+  getRequestLanguage,
+  translate,
+} from "@recipesage/util/server/general";
+import {
+  DAY_TITLE_I18N,
   DEFAULT_MEAL_I18N,
+  getLanguageDirection,
   getMealSortOrder,
   getOrderedMeals,
   getMealColors,
@@ -23,18 +29,15 @@ const schema = {
     calendarYear: z.string().optional(),
     startOfWeek: z.enum(["sunday", "monday"]).optional(),
     preferredLanguage: z.string().optional(),
+    today: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
   }),
   params: z.object({
     mealPlanId: z.string(),
   }),
 };
-
-function formatDateUTC(date: Date): string {
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 function formatDatePretty(dateStr: string, locale: string): string {
   const [year, month, day] = dateStr.split("-").map(Number);
@@ -160,15 +163,16 @@ export const printMealPlanHandler = defineHandler(
       );
     }
 
+    const todayStr = req.query.today || formatDateUTC(new Date());
+
     if (req.query.viewType === "calendar") {
-      const month = parseInt(
-        req.query.calendarMonth || String(new Date().getMonth() + 1),
-        10,
-      );
-      const year = parseInt(
-        req.query.calendarYear || String(new Date().getFullYear()),
-        10,
-      );
+      const [todayYear, todayMonth] = todayStr.split("-").map(Number);
+      const month = req.query.calendarMonth
+        ? parseInt(req.query.calendarMonth, 10)
+        : todayMonth;
+      const year = req.query.calendarYear
+        ? parseInt(req.query.calendarYear, 10)
+        : todayYear;
       const startOfWeek = req.query.startOfWeek || "sunday";
 
       const startOfMonth = new Date(Date.UTC(year, month - 1, 1));
@@ -187,13 +191,15 @@ export const printMealPlanHandler = defineHandler(
       const endOfCalendar = new Date(endOfMonth);
       endOfCalendar.setUTCDate(endOfCalendar.getUTCDate() + daysToAdd);
 
+      const dayTitleLabels = await Promise.all(
+        DAY_TITLE_I18N.map((key) => translate(language, key)),
+      );
       const dayTitles =
         startOfWeek === "monday"
-          ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-          : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+          ? [...dayTitleLabels.slice(1), dayTitleLabels[0]]
+          : dayTitleLabels;
 
       const orderedMeals = getOrderedMeals(mealPlan.customMealOptions);
-      const todayStr = formatDateUTC(new Date());
       const weeks: CalendarDay[][] = [];
       let currentWeek: CalendarDay[] = [];
       const iter = new Date(startOfCalendar);
@@ -250,11 +256,13 @@ export const printMealPlanHandler = defineHandler(
         weeks,
         mealLabels,
         mealColors: mealColorMap,
-        date: new Date().toDateString(),
+        printedOn: await translate(language, "generic.printedOn", {
+          date: todayStr,
+        }),
+        language,
+        direction: getLanguageDirection(language),
       });
     } else {
-      const todayStr = formatDateUTC(new Date());
-
       const futureDates = Array.from(itemsByDateStr.keys())
         .filter((dateStr) => dateStr >= todayStr)
         .sort();
@@ -270,7 +278,11 @@ export const printMealPlanHandler = defineHandler(
         viewType: "list",
         dates,
         mealColors: mealColorMap,
-        date: new Date().toDateString(),
+        printedOn: await translate(language, "generic.printedOn", {
+          date: todayStr,
+        }),
+        language,
+        direction: getLanguageDirection(language),
       });
     }
   },

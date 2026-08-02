@@ -11,11 +11,13 @@ import {
 import { NotFoundError } from "../../errors";
 import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
 import {
+  formatDateUTC,
   getRequestLanguage,
   getShoppingListItemGroupTitles,
   translate,
 } from "@recipesage/util/server/general";
 import {
+  getLanguageDirection,
   getShoppingListItemGroupings,
   ShoppingListSortOptions,
 } from "@recipesage/util/shared";
@@ -27,6 +29,10 @@ const schema = {
     groupSimilar: z.string().optional(),
     sortBy: z.enum(ShoppingListSortOptions).optional(),
     preferredLanguage: z.string().optional(),
+    today: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
   }),
   params: z.object({
     shoppingListId: z.string(),
@@ -119,7 +125,11 @@ export const printShoppingListHandler = defineHandler(
       itemsByGroupTitle,
       itemsByCategoryTitle,
       groupsByCategoryTitle,
-      date: new Date().toDateString(),
+      printedOn: await translate(language, "generic.printedOn", {
+        date: req.query.today || formatDateUTC(new Date()),
+      }),
+      language,
+      direction: getLanguageDirection(language),
       modifiers: {
         groupCategories: req.query.groupCategories === "true",
         groupSimilar: req.query.groupSimilar === "true",

@@ -19,9 +19,9 @@
       }"
     >
       <ion-row class="week-title">
-        @for (day of dayTitles; track day) {
+        @for (dayTitleKey of dayTitleKeys; track dayTitleKey) {
           <ion-col class="day-title">
-            {{ day }}
+            {{ dayTitleKey | translate }}
           </ion-col>
         }
       </ion-row>
