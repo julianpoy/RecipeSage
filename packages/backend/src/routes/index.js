@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-import * as Sentry from "@sentry/node";
 import semver from "semver";
 import { prisma } from "@recipesage/prisma";
 
@@ -51,7 +50,7 @@ router.get("/healthz", async (req, res) => {
     res.status(200).send("healthy");
   } catch (e) {
     res.status(500).send("unhealthy");
-    Sentry.captureException(e);
+    console.error(e);
   }
 });
 
