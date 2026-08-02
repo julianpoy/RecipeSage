@@ -1916,5 +1916,17 @@
     "pages.measurementConverter.ingredients.cornmealYellow": "Farine de maïs jaune",
     "pages.measurementConverter.ingredients.crackedWheat": "Blé concassé",
     "pages.measurementConverter.ingredients.granola": "Granola",
-    "pages.measurementConverter.ingredients.riceLongGrain": "Riz blanc (longs grains, sec)"
+    "pages.measurementConverter.ingredients.riceLongGrain": "Riz blanc (longs grains, sec)",
+    "pages.measurementConverter.ingredients.guavaPaste": "Pâte de goyave",
+    "pages.measurementConverter.ingredients.mayonnaise": "Mayonnaise",
+    "pages.measurementConverter.ingredients.marshmallowSpreadHomemade": "Crème de guimauve (maison)",
+    "pages.measurementConverter.ingredients.marshmallowSpread": "Crème de guimauve (du commerce)",
+    "pages.measurementConverter.ingredients.peanutButter": "Beurre de cacahuète",
+    "pages.measurementConverter.ingredients.pistachioPaste": "Pâte de pistache",
+    "pages.measurementConverter.ingredients.tahini": "Tahini",
+    "pages.measurementConverter.ingredients.breadCrumbsDried": "Chapelure (sèche)",
+    "pages.measurementConverter.ingredients.breadCrumbsFresh": "Chapelure (fraîche)",
+    "pages.measurementConverter.ingredients.panko": "Panko (chapelure japonaise)",
+    "pages.measurementConverter.ingredients.caramel": "Caramel",
+    "pages.cookingTemperatures.safety.safeMin": "Les indicateurs verts indiquent les températures internes minimales de sécurité de l'USDA. Mesurez avec un thermomètre de cuisine dans la partie la plus épaisse de l'aliment, en évitant l'os et la graisse."
 }
