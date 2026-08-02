@@ -5,6 +5,15 @@ import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { jsonLDToStandardizedRecipeImportEntry } from "../../../jsonLD";
+import {
+  ImportBadFormatError,
+  ImportNoRecipesError,
+} from "../../../jobs/jobErrors";
+import {
+  jobErrorsToReport,
+  jobErrorToResultCode,
+} from "../../../jobs/getJobResultCode";
+import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const importJobFinishCommon = vi.fn();
 
@@ -159,30 +168,61 @@ describe("jsonldImportJobHandler", () => {
   });
 
   describe("errors", () => {
-    it("throws when the file contains no recipes", async () => {
+    it("reports a file with no recipes as an empty file", async () => {
       jsonldPath = await writeJsonLd(
         JSON.stringify([{ "@type": "WebPage", name: "Not A Recipe" }]),
       );
 
       await expect(
         jsonldImportJobHandler(makeJob(), queueItem),
-      ).rejects.toThrow("Only supports JSON-LD");
+      ).rejects.toThrow(ImportNoRecipesError);
       expect(importJobFinishCommon).not.toHaveBeenCalled();
     });
 
-    it("throws when the file is not valid json", async () => {
+    it("reports invalid json as a bad file", async () => {
       jsonldPath = await writeJsonLd("not json at all");
 
       await expect(
         jsonldImportJobHandler(makeJob(), queueItem),
-      ).rejects.toThrow();
+      ).rejects.toThrow(ImportBadFormatError);
       expect(importJobFinishCommon).not.toHaveBeenCalled();
+    });
+
+    it("keeps input errors out of the errors reported to sentry", async () => {
+      jsonldPath = await writeJsonLd("not json at all");
+      const badFile = await jsonldImportJobHandler(makeJob(), queueItem).catch(
+        (e) => e,
+      );
+
+      jsonldPath = await writeJsonLd(
+        JSON.stringify([{ "@type": "WebPage", name: "Not A Recipe" }]),
+      );
+      const emptyFile = await jsonldImportJobHandler(
+        makeJob(),
+        queueItem,
+      ).catch((e) => e);
+
+      expect(jobErrorToResultCode(badFile)).toEqual(JOB_RESULT_CODES.badFile);
+      expect(jobErrorToResultCode(emptyFile)).toEqual(
+        JOB_RESULT_CODES.emptyFile,
+      );
+      expect(jobErrorsToReport).not.toContain(JOB_RESULT_CODES.badFile);
+      expect(jobErrorsToReport).not.toContain(JOB_RESULT_CODES.emptyFile);
     });
 
     it("throws when the queue item has no storage key", async () => {
       await expect(
         jsonldImportJobHandler(makeJob(), { jobId: queueItem.jobId }),
       ).rejects.toThrow("No S3 storage key");
+    });
+
+    it("reports a missing storage key as an unknown error", async () => {
+      const error = await jsonldImportJobHandler(makeJob(), {
+        jobId: queueItem.jobId,
+      }).catch((e) => e);
+
+      expect(jobErrorToResultCode(error)).toEqual(JOB_RESULT_CODES.unknown);
+      expect(jobErrorsToReport).toContain(JOB_RESULT_CODES.unknown);
     });
   });
 

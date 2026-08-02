@@ -40,7 +40,13 @@ export async function cookmateImportJobHandler(
   }
 
   const xml = await readFile(extractPath + "/" + filename, "utf8");
-  const data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
+
+  let data;
+  try {
+    data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
+  } catch {
+    throw new ImportBadFormatError();
+  }
 
   const grabFieldText = (field: any) => {
     if (!field) return "";

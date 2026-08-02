@@ -11,6 +11,7 @@ import path from "path";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
+import { ImportBadFormatError } from "../../../jobs/jobErrors";
 
 export async function paprikaImportJobHandler(
   job: ImportJobSummary,
@@ -45,9 +46,14 @@ export async function paprikaImportJobHandler(
     const filePath = path.join(extractPath, fileName);
 
     const fileBuf = await readFile(filePath);
-    const fileContents = await gunzipPromise(fileBuf);
 
-    const recipeData = JSON.parse(fileContents.toString().trim());
+    let recipeData;
+    try {
+      const fileContents = await gunzipPromise(fileBuf);
+      recipeData = JSON.parse(fileContents.toString().trim());
+    } catch {
+      throw new ImportBadFormatError();
+    }
 
     const notes = [
       recipeData.notes,

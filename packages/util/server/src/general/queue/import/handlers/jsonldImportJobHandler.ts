@@ -10,6 +10,10 @@ import { readFile } from "fs/promises";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
+import {
+  ImportBadFormatError,
+  ImportNoRecipesError,
+} from "../../../jobs/jobErrors";
 
 export async function jsonldImportJobHandler(
   job: ImportJobSummary,
@@ -27,10 +31,13 @@ export async function jsonldImportJobHandler(
 
   // Read and parse JSON-LD
   const fileContent = (await readFile(downloaded.filePath, "utf-8")).trim();
-  const input = JSON.parse(fileContent) as
-    | JsonLD
-    | JsonLD[]
-    | { recipes: JsonLD[] };
+
+  let input: JsonLD | JsonLD[] | { recipes: JsonLD[] };
+  try {
+    input = JSON.parse(fileContent);
+  } catch {
+    throw new ImportBadFormatError();
+  }
 
   let jsonLD: JsonLD[];
   if (Array.isArray(input)) jsonLD = input;
@@ -42,9 +49,7 @@ export async function jsonldImportJobHandler(
   jsonLD = jsonLD.filter((el: any) => el["@type"] === "Recipe");
 
   if (!jsonLD.length) {
-    throw new Error(
-      "Only supports JSON-LD or array of JSON-LD with type 'Recipe'",
-    );
+    throw new ImportNoRecipesError();
   }
 
   // Convert to standardized recipe format
