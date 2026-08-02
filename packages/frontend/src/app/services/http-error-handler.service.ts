@@ -36,18 +36,25 @@ export class HttpErrorHandlerService {
       if (error.message === "Daily credit limit reached") {
         this.presentCreditLimitNotice();
       } else {
-        this.presentAlert("generic.error", "errors.unexpected");
+        this.presentUnexpectedError(error, 429);
       }
     },
-    500: (error) => {
-      Sentry.captureException(error);
-      this.presentAlert(
-        "generic.error",
-        IS_SELFHOST ? "errors.unexpected.selfhost" : "errors.unexpected",
-      );
-    },
+    500: (error) => this.presentUnexpectedError(error, 500),
   };
   isErrorAlertOpen = false;
+
+  presentUnexpectedError(error: Error, statusCode: number) {
+    Sentry.captureException(error, {
+      extra: {
+        statusCode,
+      },
+    });
+
+    this.presentAlert(
+      "generic.error",
+      IS_SELFHOST ? "errors.unexpected.selfhost" : "errors.unexpected",
+    );
+  }
 
   async promptForAuth() {
     if (this.isAuthOpen) return;
@@ -166,36 +173,16 @@ export class HttpErrorHandlerService {
     }
 
     // Fallback to default error handlers to present more friendly messages
-    if (
-      this.defaultErrorHandlers[
-        statusCode as keyof typeof this.defaultErrorHandlers
-      ]
-    ) {
-      // We don't care about these errors since they're relatively expected
-      if (statusCode !== 0 && statusCode !== 401) {
-        Sentry.captureException(error, {
-          extra: {
-            statusCode,
-          },
-        });
-        console.error(error);
-      } else {
-        console.warn(error);
-      }
-      this.defaultErrorHandlers[
-        statusCode as keyof typeof this.defaultErrorHandlers
-      ](error);
+    const defaultErrorHandler = this.defaultErrorHandlers[statusCode];
+    if (defaultErrorHandler) {
+      console.warn(error);
+      defaultErrorHandler(error);
       return;
     }
 
     // All other errors use 500 by default for generic (unexpected) error
-    Sentry.captureException(error, {
-      extra: {
-        statusCode,
-      },
-    });
     console.error(error);
-    this.defaultErrorHandlers[500](error);
+    this.presentUnexpectedError(error, statusCode);
   }
 
   handleError(error: unknown, errorHandlers?: ErrorHandlers) {
@@ -206,7 +193,7 @@ export class HttpErrorHandlerService {
 
     // Error has been confirmed to have response property, treat as AxiosError
     const axiosError = error as AxiosError;
-    const statusCode = axiosError.response?.status ?? 500;
+    const statusCode = axiosError.response?.status ?? 0;
 
     this._handleError(statusCode, error, errorHandlers);
   }
@@ -215,7 +202,7 @@ export class HttpErrorHandlerService {
     error: TRPCClientError<AppRouter>,
     errorHandlers?: ErrorHandlers,
   ) {
-    const statusCode = error.data?.httpStatus ?? 500;
+    const statusCode = error.data?.httpStatus ?? 0;
 
     this._handleError(statusCode, error, errorHandlers);
   }
