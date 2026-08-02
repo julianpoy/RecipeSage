@@ -13,6 +13,7 @@ import {
 import { tmpdir } from "os";
 import { documentToRecipe } from "@recipesage/util/server/ml";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
+import { handleUploadErrors } from "../../util/handleUploadErrors";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
@@ -24,18 +25,20 @@ export const getRecipeFromDocumentHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-          filename: (_req, file, cb) => {
-            const extension = path.extname(file.originalname).toLowerCase();
-            cb(null, `${randomBytes(16).toString("hex")}${extension}`);
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+            filename: (_req, file, cb) => {
+              const extension = path.extname(file.originalname).toLowerCase();
+              cb(null, `${randomBytes(16).toString("hex")}${extension}`);
+            },
+          }),
+          limits: {
+            fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
           },
-        }),
-        limits: {
-          fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
-        },
-      }).single("file"),
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

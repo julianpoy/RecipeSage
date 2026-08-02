@@ -795,6 +795,7 @@
   "pages.editRecipe.clip.failed": "Failed to autofill. Unfortunately many sites block autofill - I recommend the RecipeSage browser extension, or copying the site text and using the autofill from text option",
   "pages.editRecipe.clip.emptyResult": "There was a problem autofilling from this URL. I recommend the RecipeSage browser extension, or copying the site text and using the autofill from text option",
   "pages.editRecipe.clip.failedSelfhost": "Please check your OpenAI credentials as described in the selfhosting readme",
+  "pages.editRecipe.clip.fileTooLarge": "That file is too large. Please try again with a smaller file.",
   "pages.editRecipe.missingLabelGroup.title": "Missing label group",
   "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the my labels page.",
   "pages.editRecipe.conflict.title": "Duplicate Title",

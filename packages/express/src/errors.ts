@@ -37,6 +37,12 @@ export class NotAcceptableError extends ServerError {
   }
 }
 
+export class PayloadTooLargeError extends ServerError {
+  constructor(...args: ConstructorParameters<typeof Error>) {
+    super(413, ...args);
+  }
+}
+
 export class UnsupportedMediaTypeError extends ServerError {
   constructor(...args: ConstructorParameters<typeof Error>) {
     super(415, ...args);

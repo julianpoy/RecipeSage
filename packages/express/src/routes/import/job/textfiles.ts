@@ -19,6 +19,7 @@ import { z } from "zod";
 import { BadRequestError } from "../../../errors";
 import { tmpdir } from "os";
 import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvailableExpress";
+import { handleUploadErrors } from "../../../util/handleUploadErrors";
 
 const schema = {
   query: z.object({
@@ -32,14 +33,16 @@ export const textfilesHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-        }),
-        limits: {
-          fileSize: MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024,
-        },
-      }).single("file"),
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+          }),
+          limits: {
+            fileSize: MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

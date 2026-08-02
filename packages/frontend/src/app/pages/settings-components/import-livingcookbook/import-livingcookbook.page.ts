@@ -51,6 +51,7 @@ export class ImportLivingcookbookPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   file?: File;
+  fileRejectedAsTooLarge = false;
   progress?: number;
 
   options = {
@@ -66,6 +67,7 @@ export class ImportLivingcookbookPage {
     }
 
     this.file = files[0];
+    this.fileRejectedAsTooLarge = false;
   }
 
   filePicker() {
@@ -73,6 +75,9 @@ export class ImportLivingcookbookPage {
   }
 
   isFileTooLarge() {
+    if (this.fileRejectedAsTooLarge) {
+      return true;
+    }
     if (this.file && this.file.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
       return true;
     }
@@ -102,7 +107,11 @@ export class ImportLivingcookbookPage {
       const response = await this.importService.importFdxz(
         this.file,
         this.options,
-        undefined,
+        {
+          413: () => {
+            this.fileRejectedAsTooLarge = true;
+          },
+        },
         (event) => {
           this.progress = event.progress;
         },
@@ -114,7 +123,11 @@ export class ImportLivingcookbookPage {
       const response = await this.importService.importLivingcookbook(
         this.file,
         this.options,
-        undefined,
+        {
+          413: () => {
+            this.fileRejectedAsTooLarge = true;
+          },
+        },
         (event) => {
           this.progress = event.progress;
         },
