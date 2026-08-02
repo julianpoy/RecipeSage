@@ -102,7 +102,21 @@ export const metrics = {
     help: "A clip request failed",
     labelNames: [
       "form", // Either 'html' or 'url'
-      "method", // One of: 'structured-parse' | 'jsonld' | 'microdata' | 'llm' | 'ungrounded' | 'pdf' | 'image' | 'timeout' | 'fetch' | 'empty'
+      "method", // One of: 'structured-parse' | 'jsonld' | 'microdata' | 'llm' | 'pdf' | 'image' | 'timeout' | 'fetch' | 'empty'
+    ],
+  }),
+  clipUngrounded: new client.Counter({
+    name: "clip_ungrounded",
+    help: "An LLM clip result was rejected because it was not grounded in the page text. The clip may still succeed via another method, so this is not counted as a clip error",
+    labelNames: [
+      "form", // Either 'html' or 'url'
+    ],
+  }),
+  clipPartialContent: new client.Counter({
+    name: "clip_partial_content",
+    help: "A clip collected results but the merge of them was still missing ingredients or instructions. These still count as a clip success, so a sustained rise means clip quality is degrading without clip_error moving",
+    labelNames: [
+      "form", // Either 'html' or 'url'
     ],
   }),
 

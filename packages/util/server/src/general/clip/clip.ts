@@ -367,15 +367,10 @@ export const clipHtml = async (
         }
 
         if (name === "llm" && !grounded) {
-          metrics.clipError.inc({
+          metrics.clipUngrounded.inc({
             form,
-            method: "ungrounded",
           });
-          Sentry.captureMessage("Clip LLM result rejected as ungrounded", {
-            extra: {
-              url,
-            },
-          });
+          console.warn("Clip LLM result rejected as ungrounded", { form, url });
           continue;
         }
 
@@ -392,12 +387,10 @@ export const clipHtml = async (
     );
 
     if (collectedResults.length > 0 && !mergedComplete) {
-      Sentry.captureMessage("Clip resulted in partial content", {
-        extra: {
-          url,
-          collectedResults: JSON.stringify(collectedResults),
-        },
+      metrics.clipPartialContent.inc({
+        form,
       });
+      console.warn("Clip resulted in partial content", { form, url });
     }
 
     return ["merged", merged];
