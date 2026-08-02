@@ -26,7 +26,7 @@ export async function jsonldImportJobHandler(
   await using downloaded = await downloadS3ToTemp(queueItem.storageKey);
 
   // Read and parse JSON-LD
-  const fileContent = await readFile(downloaded.filePath, "utf-8");
+  const fileContent = (await readFile(downloaded.filePath, "utf-8")).trim();
   const input = JSON.parse(fileContent) as
     | JsonLD
     | JsonLD[]

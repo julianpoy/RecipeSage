@@ -47,7 +47,7 @@ export async function paprikaImportJobHandler(
     const fileBuf = await readFile(filePath);
     const fileContents = await gunzipPromise(fileBuf);
 
-    const recipeData = JSON.parse(fileContents.toString());
+    const recipeData = JSON.parse(fileContents.toString().trim());
 
     const notes = [
       recipeData.notes,

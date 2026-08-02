@@ -60,7 +60,7 @@ export async function croutonImportJobHandler(
   const totalCount = recipeFiles.length;
   let processedCount = 0;
   for (const filePath of recipeFiles) {
-    const fileContents = await readFile(filePath, "utf8");
+    const fileContents = (await readFile(filePath, "utf8")).trim();
 
     const recipeData = JSON.parse(fileContents);
 
