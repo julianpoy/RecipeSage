@@ -2,6 +2,7 @@ import he from "he";
 import type { Result } from "htmlmetaparser";
 import type { StandardizedRecipeImportEntry } from "../../db";
 import { JsonLD, jsonLDToStandardizedRecipeImportEntry } from "../jsonLD";
+import { collectRecipeNodes } from "../collectRecipeNodes";
 import { recipeGroundingScore } from "./isRecipeGrounded";
 
 const cleanText = (value: string): string =>
@@ -36,30 +37,6 @@ const normalizeNode = (value: unknown): unknown => {
     return normalized;
   }
   return value;
-};
-
-const typeMatchesRecipe = (node: Record<string, unknown>): boolean => {
-  const type = node["@type"] ?? node["type"];
-  const types = Array.isArray(type) ? type : [type];
-  return types.some(
-    (value) =>
-      typeof value === "string" && value.toLowerCase().endsWith("recipe"),
-  );
-};
-
-const isRecipeNode = (node: unknown): node is JsonLD =>
-  isObject(node) && typeMatchesRecipe(node);
-
-const collectRecipeNodes = (node: unknown, found: JsonLD[]): void => {
-  if (Array.isArray(node)) {
-    for (const item of node) collectRecipeNodes(item, found);
-    return;
-  }
-  if (!isObject(node)) return;
-
-  if (isRecipeNode(node)) found.push(node);
-  if ("@graph" in node) collectRecipeNodes(node["@graph"], found);
-  if ("items" in node) collectRecipeNodes(node["items"], found);
 };
 
 const segmentCount = (value: unknown): number => {
@@ -101,8 +78,7 @@ export const htmlmetaparserToRecipe = (
     source === "jsonld" ? structured.jsonld : structured.microdata,
   );
 
-  const candidates: JsonLD[] = [];
-  collectRecipeNodes(root, candidates);
+  const candidates = collectRecipeNodes(root);
   if (candidates.length === 0) return undefined;
 
   if (candidates.length === 1 || pageText === undefined) {

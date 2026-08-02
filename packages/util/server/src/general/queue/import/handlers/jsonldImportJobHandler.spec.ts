@@ -117,6 +117,64 @@ describe("jsonldImportJobHandler", () => {
       expect(titlesOf(importedEntries())).toEqual(["Soup"]);
     });
 
+    it("imports from a graph document", async () => {
+      jsonldPath = await writeJsonLd(
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "WebPage", name: "Not A Recipe" },
+            recipe("Soup"),
+          ],
+        }),
+      );
+
+      await jsonldImportJobHandler(makeJob(), queueItem);
+
+      expect(titlesOf(importedEntries())).toEqual(["Soup"]);
+    });
+
+    it("imports recipes typed as several things at once", async () => {
+      jsonldPath = await writeJsonLd(
+        JSON.stringify([
+          { ...recipe("Soup"), "@type": ["NewsArticle", "Recipe"] },
+        ]),
+      );
+
+      await jsonldImportJobHandler(makeJob(), queueItem);
+
+      expect(titlesOf(importedEntries())).toEqual(["Soup"]);
+    });
+
+    it("imports recipes typed with a schema.org IRI", async () => {
+      jsonldPath = await writeJsonLd(
+        JSON.stringify([
+          { ...recipe("Soup"), "@type": "http://schema.org/Recipe" },
+        ]),
+      );
+
+      await jsonldImportJobHandler(makeJob(), queueItem);
+
+      expect(titlesOf(importedEntries())).toEqual(["Soup"]);
+    });
+
+    it.each([
+      ["only a title", { "@type": "Recipe", name: "Soup" }],
+      [
+        "only ingredients",
+        { "@type": "Recipe", recipeIngredient: ["1 cup flour"] },
+      ],
+      [
+        "only instructions",
+        { "@type": "Recipe", recipeInstructions: "Mix it" },
+      ],
+    ])("imports a recipe that has %s", async (_description, node) => {
+      jsonldPath = await writeJsonLd(JSON.stringify([node]));
+
+      await jsonldImportJobHandler(makeJob(), queueItem);
+
+      expect(importedEntries()).toHaveLength(1);
+    });
+
     it("ignores entries that are not typed as a Recipe", async () => {
       jsonldPath = await writeJsonLd(
         JSON.stringify([
@@ -177,6 +235,57 @@ describe("jsonldImportJobHandler", () => {
         jsonldImportJobHandler(makeJob(), queueItem),
       ).rejects.toThrow(ImportNoRecipesError);
       expect(importJobFinishCommon).not.toHaveBeenCalled();
+    });
+
+    it.each(["5", "null", '"Recipe"'])(
+      "reports a document of %s as an empty file",
+      async (body) => {
+        jsonldPath = await writeJsonLd(body);
+
+        await expect(
+          jsonldImportJobHandler(makeJob(), queueItem),
+        ).rejects.toThrow(ImportNoRecipesError);
+        expect(importJobFinishCommon).not.toHaveBeenCalled();
+      },
+    );
+
+    it("reports a deeply nested document as an empty file", async () => {
+      jsonldPath = await writeJsonLd("[".repeat(100_000) + "]".repeat(100_000));
+
+      await expect(
+        jsonldImportJobHandler(makeJob(), queueItem),
+      ).rejects.toThrow(ImportNoRecipesError);
+      expect(importJobFinishCommon).not.toHaveBeenCalled();
+    });
+
+    it("reports expanded form json-ld as an empty file rather than importing blanks", async () => {
+      jsonldPath = await writeJsonLd(
+        JSON.stringify([
+          {
+            "@type": ["http://schema.org/Recipe"],
+            "http://schema.org/name": [{ "@value": "Soup" }],
+            "http://schema.org/recipeIngredient": [{ "@value": "1 cup flour" }],
+          },
+        ]),
+      );
+
+      await expect(
+        jsonldImportJobHandler(makeJob(), queueItem),
+      ).rejects.toThrow(ImportNoRecipesError);
+      expect(importJobFinishCommon).not.toHaveBeenCalled();
+    });
+
+    it("drops recipe nodes with no usable content", async () => {
+      jsonldPath = await writeJsonLd(
+        JSON.stringify([
+          { "@type": "Recipe", "@id": "https://example.com/#recipe" },
+          recipe("Soup"),
+        ]),
+      );
+
+      await jsonldImportJobHandler(makeJob(), queueItem);
+
+      expect(titlesOf(importedEntries())).toEqual(["Soup"]);
     });
 
     it("reports invalid json as a bad file", async () => {
