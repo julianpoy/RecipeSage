@@ -53,6 +53,26 @@ describe("getDiscoverRecipesByAuthor", () => {
       expect(response.recipes).toHaveLength(3);
     });
 
+    test("does not reveal a shadowban to the author", async ({
+      trpc,
+      user,
+    }) => {
+      const shadowbanned = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          approvalState: DiscoverApprovalState.SHADOWBANNED,
+        },
+      });
+
+      const response = await trpc.discover.getDiscoverRecipesByAuthor({
+        authorId: user.id,
+      });
+      const returned = response.recipes.find(
+        (recipe) => recipe.id === shadowbanned.id,
+      );
+      expect(returned?.approvalState).toEqual(DiscoverApprovalState.PENDING);
+    });
+
     test("excludes soft-deleted recipes even from the author", async ({
       trpc,
       user,
