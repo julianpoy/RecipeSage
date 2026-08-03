@@ -48,6 +48,16 @@ export async function cookmateImportJobHandler(
     throw new ImportBadFormatError();
   }
 
+  if (!data?.cookbook) {
+    throw new ImportBadFormatError();
+  }
+
+  const cookmateRecipes = Array.isArray(data.cookbook.recipe)
+    ? data.cookbook.recipe
+    : data.cookbook.recipe
+      ? [data.cookbook.recipe]
+      : [];
+
   const grabFieldText = (field: any) => {
     if (!field) return "";
     if (field.li && Array.isArray(field.li)) {
@@ -102,9 +112,9 @@ export async function cookmateImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = data.cookbook.recipe.length;
+  const totalCount = cookmateRecipes.length;
   let processedCount = 0;
-  for (const cookmateRecipe of data.cookbook.recipe) {
+  for (const cookmateRecipe of cookmateRecipes) {
     standardizedRecipeImportInput.push({
       recipe: {
         title: grabFieldText(cookmateRecipe.title),

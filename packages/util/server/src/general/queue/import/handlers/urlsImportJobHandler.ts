@@ -29,7 +29,10 @@ export async function urlsImportJobHandler(
   await using downloaded = await downloadS3ToTemp(queueItem.storageKey);
 
   const urlsText = await readFile(downloaded.filePath, "utf-8");
-  const urls = urlsText.split("\n").filter((url) => url.trim().length > 0);
+  const urls = urlsText
+    .split("\n")
+    .map((url) => url.trim())
+    .filter((url) => url.length > 0);
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
