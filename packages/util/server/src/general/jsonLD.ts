@@ -15,6 +15,7 @@ type JsonLDImages =
           url: string;
         }
       | string
+      | null
     )[];
 
 export type NutritionInformation = {
@@ -50,6 +51,7 @@ export type JsonLD = {
     | string
     | (
         | string
+        | null
         | {
             "@type"?: string;
             name?: string;
@@ -58,6 +60,7 @@ export type JsonLD = {
               | string
               | (
                   | string
+                  | null
                   | {
                       text?: string;
                       name?: string;
@@ -69,11 +72,19 @@ export type JsonLD = {
     | string
     | (
         | string
+        | null
         | {
             text?: string;
           }
       )[];
-  recipeCategory?: string | string[];
+  recipeCategory?:
+    | string
+    | (
+        | string
+        | {
+            name?: string;
+          }
+      )[];
   comment?:
     | string
     | (
@@ -329,10 +340,10 @@ const getImageSRCsFromSchema = (jsonLD: JsonLD): (string | Buffer)[] => {
     imageSRCs = [images.url];
   else if (Array.isArray(images)) {
     for (const image of images) {
-      if (typeof image === "object" && typeof image.url === "string") {
-        imageSRCs.push(image.url);
-      } else if (typeof image === "string") {
+      if (typeof image === "string") {
         imageSRCs.push(image);
+      } else if (image && typeof image.url === "string") {
+        imageSRCs.push(image.url);
       }
     }
   }
@@ -434,6 +445,8 @@ const getInstructionsFromSchema = (jsonLD: JsonLD) => {
   for (const instruction of instructions) {
     if (typeof instruction === "string") {
       acc.push(instruction);
+    } else if (!instruction) {
+      continue;
     } else if (instruction["@type"] === "HowToSection") {
       if (instruction.name) acc.push(`[${instruction.name}]`);
       else if (instruction.text) acc.push(instruction.text);
@@ -444,7 +457,7 @@ const getInstructionsFromSchema = (jsonLD: JsonLD) => {
       } else if (Array.isArray(steps)) {
         for (const step of steps) {
           if (typeof step === "string") acc.push(step);
-          else acc.push(step.text || "");
+          else acc.push(step?.text || "");
         }
       }
     } else {
@@ -464,7 +477,7 @@ const getIngredientsFromSchema = (jsonLD: JsonLD) => {
     const acc: string[] = [];
     for (const ingredient of ingredients) {
       if (typeof ingredient === "string") acc.push(ingredient);
-      else acc.push(ingredient.text || "");
+      else acc.push(ingredient?.text || "");
     }
 
     return acc.join("\n");
@@ -479,8 +492,10 @@ const getLabelsFromSchema = (jsonLD: JsonLD) => {
 
   if (typeof recipeCategory === "string")
     return recipeCategory.split(",").map((el) => el.trim());
-  if (typeof recipeCategory[0] === "string")
-    return recipeCategory.map((el) => el.trim());
+  if (Array.isArray(recipeCategory))
+    return recipeCategory
+      .filter((el) => typeof el === "string")
+      .map((el) => el.trim());
 
   return [];
 };

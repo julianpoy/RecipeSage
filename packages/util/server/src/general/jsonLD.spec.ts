@@ -67,4 +67,58 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
       );
     });
   });
+
+  describe("null entries", () => {
+    it("skips a null instruction", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeInstructions: [null, { "@type": "HowToStep", text: "Step" }],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.instructions).toEqual("Step");
+    });
+
+    it("skips a null ingredient", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeIngredient: [null, "1 cup flour"],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.ingredients).toEqual("\n1 cup flour");
+    });
+
+    it("skips a null image", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        image: [null, "https://example.com/1.jpg"],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.images).toEqual(["https://example.com/1.jpg"]);
+    });
+
+    it("skips a non-string recipe category", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeCategory: ["Dessert", { name: "Cake" }],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.labels).toEqual(["Dessert"]);
+    });
+  });
 });
