@@ -19,6 +19,7 @@ import { enqueueJob } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { tmpdir } from "os";
 import { handleUploadErrors } from "../../../util/handleUploadErrors";
+import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvailableExpress";
 
 const schema = {
   query: z.object({
@@ -46,6 +47,8 @@ export const imagesHandler = defineHandler(
   },
   async (req, res) => {
     const userId = res.locals.session.userId;
+
+    await assertCreditsAvailableExpress(userId, "importImages");
 
     const file = req.file;
     if (!file) {

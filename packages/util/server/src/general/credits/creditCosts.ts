@@ -11,6 +11,8 @@ export const CreditOperations = {
   ClipUrl: "clipUrl",
   ImportUrls: "importUrls",
   ImportTextfiles: "importTextfiles",
+  ImportPdfs: "importPdfs",
+  ImportImages: "importImages",
   AssistantMessage: "assistantMessage",
 } as const;
 
@@ -27,5 +29,7 @@ export const CREDIT_COSTS: Record<CreditOperation, number> = {
   clipUrl: 2,
   importUrls: 5,
   importTextfiles: 5,
+  importPdfs: 5,
+  importImages: 5,
   assistantMessage: 1,
 };
