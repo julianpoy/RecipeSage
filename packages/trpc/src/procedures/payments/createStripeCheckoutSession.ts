@@ -84,19 +84,19 @@ export const createStripeCheckoutSession = publicProcedure
       });
     }
 
-    if (input.frequency === "monthly" && input.amount < 100) {
+    if (frequency === "monthly" && input.amount < 100) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $1 due to transaction fees, sorry!",
       });
     }
-    if (input.frequency === "yearly" && input.amount < 1000) {
+    if (frequency === "yearly" && input.amount < 1000) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $10 due to transaction fees, sorry!",
       });
     }
-    if (input.frequency === "single" && input.amount < 1000) {
+    if (frequency === "single" && input.amount < 1000) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $10 due to transaction fees, sorry!",
