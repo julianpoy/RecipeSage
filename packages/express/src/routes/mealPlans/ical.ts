@@ -106,7 +106,7 @@ export const mealPlansIcalHandler = defineHandler(
         allDay: true,
         summary: mealPlanItem.recipe?.title || mealPlanItem.title,
         description: mealPlanItem.notes || undefined,
-        url: `https://recipesage.com/app/meal-planners/${mealPlan.id}`,
+        url: `${process.env.APP_UI_BASE_URL || "https://recipesage.com"}/app/meal-planners/${mealPlan.id}`,
         attachments: signedImages,
         lastModified,
       });
