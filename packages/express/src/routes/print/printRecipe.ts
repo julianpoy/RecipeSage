@@ -10,6 +10,7 @@ import {
 } from "@recipesage/util/shared";
 import {
   formatDateUTC,
+  formatDateUTCLocalized,
   getRequestLanguage,
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,
@@ -68,7 +69,7 @@ export const printRecipeHandler = defineHandler(
 
     const scale =
       typeof req.query.scale === "string" && req.query.scale.trim()
-        ? req.query.scale
+        ? req.query.scale.trim()
         : "1";
 
     const locale = getRequestLanguage(req);
@@ -109,6 +110,30 @@ export const printRecipeHandler = defineHandler(
 
     const labels = isOwner ? sorted.recipeLabels.map((rl) => rl.label) : [];
 
+    const labelsText = labels.map((label) => label.title).join(" · ");
+
+    const appBaseURL = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+
+    const translations = {
+      openInRecipeSage: await translate(
+        locale,
+        "printViews.recipe.openInRecipeSage",
+      ),
+      source: await translate(locale, "pages.recipeDetails.source"),
+      activeTime: await translate(locale, "pages.recipeDetails.activeTime"),
+      totalTime: await translate(locale, "pages.recipeDetails.totalTime"),
+      yield: await translate(locale, "pages.recipeDetails.yield"),
+      notes: await translate(locale, "pages.recipeDetails.notes"),
+      sourceUrl: await translate(locale, "pages.editRecipe.input.sourceUrl"),
+      ingredientsAtScale: await translate(
+        locale,
+        "printViews.recipe.ingredientsAtScale",
+        {
+          scale,
+        },
+      ),
+    };
+
     res.render("recipe-default", {
       recipe: {
         id: sorted.id,
@@ -120,7 +145,7 @@ export const printRecipeHandler = defineHandler(
         source: sorted.source,
         url: sorted.url,
         images,
-        labels,
+        labelsText,
         ingredients: parseIngredients(ingredientsText, scale, {
           decimalNotationMode,
         }),
@@ -133,9 +158,14 @@ export const printRecipeHandler = defineHandler(
           images: inlineImageRefs,
         }),
       },
-      recipeURL: `https://recipesage.com/app/recipe/${sorted.id}`,
+      recipeURL: `${appBaseURL}/app/recipe/${sorted.id}`,
+      appBaseURL,
+      translations,
       printedOn: await translate(locale, "generic.printedOn", {
-        date: req.query.today || formatDateUTC(new Date()),
+        date: formatDateUTCLocalized(
+          req.query.today || formatDateUTC(new Date()),
+          locale,
+        ),
       }),
       language: locale,
       direction: getLanguageDirection(locale),

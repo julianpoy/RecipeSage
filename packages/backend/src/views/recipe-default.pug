@@ -69,7 +69,7 @@ html(lang=language, dir=direction)
 
       .image-container {
         width: 200px;
-        padding-right: 20px;
+        padding-inline-end: 20px;
       }
 
       .meta-container {
@@ -96,7 +96,7 @@ html(lang=language, dir=direction)
 
       .verticalInstrIng .ingredients {
         max-width: initial;
-        margin-left: 40px;
+        margin-inline-start: 40px;
         margin-bottom: 10px;
       }
 
@@ -107,7 +107,7 @@ html(lang=language, dir=direction)
       .ingredient {
         margin-top: 0px;
         margin-bottom: 8px;
-        padding-right: 20px;
+        padding-inline-end: 20px;
       }
 
       .verticalInstrIng .ingredient {
@@ -133,7 +133,7 @@ html(lang=language, dir=direction)
 
       .instruction .count {
         font-weight: bold;
-        padding-right: 10px;
+        padding-inline-end: 10px;
       }
 
       .action-buttons {
@@ -211,7 +211,10 @@ html(lang=language, dir=direction)
       .inlineImage {
         display: inline-block;
         vertical-align: top;
-        margin: 3px 6px 3px 0;
+        margin-block-start: 3px;
+        margin-block-end: 3px;
+        margin-inline-start: 0;
+        margin-inline-end: 6px;
         page-break-inside: avoid;
       }
 
@@ -307,8 +310,8 @@ html(lang=language, dir=direction)
         div(class="logo-icon")
           a(href=recipeURL target="_blank")
             div(class="bg")
-              img(src="https://recipesage.com/assets/imgs/logo_green.png")
-        a(class="openInRS" href=recipeURL target="_blank") Click to Open in RecipeSage
+              img(src=`${appBaseURL}/assets/imgs/logo_green.png`)
+        a(class="openInRS" href=recipeURL target="_blank")= translations.openInRecipeSage
       if modifiers.showPrintButton
         ion-icon(name="print" class="print-icon" onclick="window.print()")
     div(class="image-meta-container")
@@ -321,36 +324,34 @@ html(lang=language, dir=direction)
           div(class='meta')
             if recipe.source
               div
-                b(class='sans') Source:&nbsp;&nbsp;
+                b(class='sans')= translations.source
+                | &nbsp;&nbsp;
                 span= recipe.source
             if recipe.activeTime
               div
-                b(class='sans') Active Time:&nbsp;&nbsp;
+                b(class='sans')= translations.activeTime
+                | &nbsp;&nbsp;
                 span= recipe.activeTime
             if recipe.totalTime
               div
-                b(class='sans') Total Time:&nbsp;&nbsp;
+                b(class='sans')= translations.totalTime
+                | &nbsp;&nbsp;
                 span= recipe.totalTime
             if recipe.yield
               div
-                b(class='sans') Yield:&nbsp;&nbsp;
+                b(class='sans')= translations.yield
+                | &nbsp;&nbsp;
                 span= recipe.yield
         p= recipe.description
-        if recipe.labels
-          -var labelIdx = 0
-          each label in recipe.labels
-            i= label.title
-            if ++labelIdx < recipe.labels.length
-              i ,&nbsp;
+        if recipe.labelsText
+          i= recipe.labelsText
     div(class='ingrInstrContainer')
       div(class='ingredients')
         each ingredient in recipe.ingredients
           p(class=('ingredient ' + (ingredient.isHeader ? 'ingredientHeader' : ''))) !{ingredient.htmlContent}
-        if modifiers.scale !== 1
+        if modifiers.scale !== '1'
           p
-            i Ingredients at&nbsp;
-            i= modifiers.scale
-            i x scale
+            i= translations.ingredientsAtScale
       div(class='instructions')
         each instruction in recipe.instructions
           div(class='instruction')
@@ -363,7 +364,7 @@ html(lang=language, dir=direction)
 
     if recipe.notes && !modifiers.hideNotes
       p(class='sans')
-        b Notes:
+        b= translations.notes
       each note in recipe.notes
         if note.isTable
           div !{note.htmlContent}
@@ -372,7 +373,8 @@ html(lang=language, dir=direction)
       br
 
     if recipe.url && !modifiers.hideSourceURL
-      b(class='sans') Source URL:&nbsp;
+      b(class='sans')= translations.sourceUrl
+      | &nbsp;
       span(class="recipe-source-url")= recipe.url
       a(class="recipe-source-url" href=recipe.url)= recipe.url
 

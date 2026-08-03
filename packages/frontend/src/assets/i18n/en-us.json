@@ -2434,6 +2434,9 @@
   "generic.labeledPageTitle": "{{title}} - RecipeSage",
   "generic.printedOn": "Printed on {{date}}",
 
+  "printViews.recipe.openInRecipeSage": "Click to Open in RecipeSage",
+  "printViews.recipe.ingredientsAtScale": "Ingredients at {{scale}}x scale",
+
   "webextension.action.welcomeHeading": "Welcome!",
   "webextension.action.welcomeSubtitle": "You are logged out.",
   "webextension.action.signIn": "Sign in",
