@@ -29,18 +29,23 @@ export const updateLabel = authenticatedProcedure
       });
     }
 
-    const existingLabel = await prisma.label.findFirst({
-      where: {
-        userId: ctx.session.userId,
-        title: input.title,
-      },
-    });
-
-    if (existingLabel) {
-      throw new TRPCError({
-        message: "Conflicting label title",
-        code: "CONFLICT",
+    if (input.title) {
+      const existingLabel = await prisma.label.findFirst({
+        where: {
+          id: {
+            not: input.id,
+          },
+          userId: ctx.session.userId,
+          title: input.title,
+        },
       });
+
+      if (existingLabel) {
+        throw new TRPCError({
+          message: "Conflicting label title",
+          code: "CONFLICT",
+        });
+      }
     }
 
     if (input.labelGroupId) {
