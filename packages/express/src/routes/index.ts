@@ -1,6 +1,7 @@
 import express from "express";
 import { authRouter } from "./auth";
 import { clipRouter } from "./clip";
+import { healthRouter } from "./health";
 import { imageRouter } from "./image";
 import { importRouter } from "./import";
 import { mealPlansRouter } from "./mealPlans";
@@ -13,6 +14,7 @@ import { mlRouter } from "./ml";
 
 const router = express.Router();
 
+router.use("/", healthRouter);
 router.use("/auth", authRouter);
 router.use("/clip", clipRouter);
 router.use("/images", imageRouter);
