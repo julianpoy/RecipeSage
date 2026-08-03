@@ -143,10 +143,17 @@ export const recipeToJSONLD = (recipe: RecipeSummary) => {
     }).map((el) => (el.isHeader ? `[${el.content}]` : el.content)),
     recipeInstructions: parseInstructions(recipe.instructions, "1", {
       decimalNotationMode,
-    }).map((el) => ({
-      "@type": el.isHeader ? "HowToSection" : "HowToStep",
-      text: el.isHeader ? `[${el.content}]` : el.content,
-    })),
+    }).map((el) =>
+      el.isHeader
+        ? {
+            "@type": "HowToSection",
+            name: el.content,
+          }
+        : {
+            "@type": "HowToStep",
+            text: el.content,
+          },
+    ),
     recipeYield: recipe.yield,
     totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
     recipeCategory: (recipe.recipeLabels || []).map(
@@ -429,6 +436,7 @@ const getInstructionsFromSchema = (jsonLD: JsonLD) => {
       acc.push(instruction);
     } else if (instruction["@type"] === "HowToSection") {
       if (instruction.name) acc.push(`[${instruction.name}]`);
+      else if (instruction.text) acc.push(instruction.text);
 
       const steps = instruction.itemListElement;
       if (typeof steps === "string") {
