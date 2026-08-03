@@ -108,8 +108,9 @@ export const deleteObject = async (
   _objectType: ObjectTypes,
   key: string,
 ): Promise<void> => {
+  const fsLocation = join(FILESYSTEM_STORAGE_PATH, key);
   try {
-    await fs.unlink(key);
+    await fs.unlink(fsLocation);
   } catch (e) {
     console.warn(e);
   }
