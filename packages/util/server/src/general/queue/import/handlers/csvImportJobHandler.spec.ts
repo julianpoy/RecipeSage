@@ -238,6 +238,30 @@ describe("csvImportJobHandler", () => {
         "https://b.example.com/2.jpg",
       ]);
     });
+
+    it("keeps a single image url that contains http in its path", async () => {
+      csvPath = await writeCsv(
+        "title,image url\nSoup,https://a.example.com/httpd-logo.png\n",
+      );
+
+      await csvImportJobHandler(makeJob(), queueItem);
+
+      const [entry] = importedEntries();
+      expect(entry.images).toEqual(["https://a.example.com/httpd-logo.png"]);
+    });
+
+    it("keeps a single image url that contains an encoded url", async () => {
+      csvPath = await writeCsv(
+        "title,image url\nSoup,https://cdn.example.com/i?u=https%3A%2F%2Fx.com%2Fa.jpg\n",
+      );
+
+      await csvImportJobHandler(makeJob(), queueItem);
+
+      const [entry] = importedEntries();
+      expect(entry.images).toEqual([
+        "https://cdn.example.com/i?u=https%3A%2F%2Fx.com%2Fa.jpg",
+      ]);
+    });
   });
 
   describe("errors", () => {
