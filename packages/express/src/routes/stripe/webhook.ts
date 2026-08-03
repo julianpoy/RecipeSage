@@ -146,7 +146,7 @@ export const webhookHandler = defineHandler(
         invoice.customer_email,
       );
 
-      let subscriptionModelName = SubscriptionModelName.PyoMonthly;
+      let subscriptionModelName: SubscriptionModelName | undefined;
 
       const subscription = invoice.parent?.subscription_details?.subscription;
       const subscriptionId =
