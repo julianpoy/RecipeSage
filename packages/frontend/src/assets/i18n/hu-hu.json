@@ -2078,5 +2078,6 @@
     "webextension.inject.saveFailedTitle": "Nem sikerült menteni a receptet",
     "webextension.inject.missingTitleBody": "A recept címének megadása kötelező.",
     "webextension.inject.saveFailedBody": "Hiba történt a recept mentése közben. Kérjük, próbálja újra.",
-    "webextension.inject.duplicateConfirm": "Erről az oldalról már van mentett receptje. Kattintson az OK gombra egy újabb példány mentéséhez, vagy a Mégse gombra a kihagyáshoz."
+    "webextension.inject.duplicateConfirm": "Erről az oldalról már van mentett receptje. Kattintson az OK gombra egy újabb példány mentéséhez, vagy a Mégse gombra a kihagyáshoz.",
+    "pages.app.nav.discover": "Felfedezés"
 }
