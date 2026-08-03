@@ -27,7 +27,9 @@ module.exports = async function jobWorker(
     JOB_TIMEOUT_MINUTES * 60 * 1000,
   );
 
-  await processWorkerJob(args);
-
-  clearTimeout(killTimeout);
+  try {
+    await processWorkerJob(args);
+  } finally {
+    clearTimeout(killTimeout);
+  }
 };
