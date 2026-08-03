@@ -12,6 +12,7 @@ import { NotFoundError } from "../../errors";
 import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
 import {
   formatDateUTC,
+  formatDateUTCLocalized,
   getRequestLanguage,
   getShoppingListItemGroupTitles,
   translate,
@@ -126,7 +127,10 @@ export const printShoppingListHandler = defineHandler(
       itemsByCategoryTitle,
       groupsByCategoryTitle,
       printedOn: await translate(language, "generic.printedOn", {
-        date: req.query.today || formatDateUTC(new Date()),
+        date: formatDateUTCLocalized(
+          req.query.today || formatDateUTC(new Date()),
+          language,
+        ),
       }),
       language,
       direction: getLanguageDirection(language),

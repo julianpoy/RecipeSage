@@ -8,6 +8,7 @@ import { NotFoundError } from "../../errors";
 import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
 import {
   formatDateUTC,
+  formatDateUTCLocalized,
   getRequestLanguage,
   translate,
 } from "@recipesage/util/server/general";
@@ -40,14 +41,11 @@ const schema = {
 };
 
 function formatDatePretty(dateStr: string, locale: string): string {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return date.toLocaleDateString(locale, {
+  return formatDateUTCLocalized(dateStr, locale, {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "UTC",
   });
 }
 
@@ -257,7 +255,7 @@ export const printMealPlanHandler = defineHandler(
         mealLabels,
         mealColors: mealColorMap,
         printedOn: await translate(language, "generic.printedOn", {
-          date: todayStr,
+          date: formatDateUTCLocalized(todayStr, language),
         }),
         language,
         direction: getLanguageDirection(language),
@@ -279,7 +277,7 @@ export const printMealPlanHandler = defineHandler(
         dates,
         mealColors: mealColorMap,
         printedOn: await translate(language, "generic.printedOn", {
-          date: todayStr,
+          date: formatDateUTCLocalized(todayStr, language),
         }),
         language,
         direction: getLanguageDirection(language),
