@@ -14,6 +14,9 @@ export const deleteHangingImagesForUser = async (
       profileImages: {
         none: {},
       },
+      discoverRecipeImages: {
+        none: {},
+      },
     },
     select: {
       id: true,

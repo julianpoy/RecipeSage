@@ -27,6 +27,11 @@ export const deleteUser = authenticatedProcedure
             userId: ctx.session.userId,
           },
         });
+        await tx.discoverRecipe.deleteMany({
+          where: {
+            authorId: ctx.session.userId,
+          },
+        });
 
         await deleteHangingImagesForUser(ctx.session.userId, tx);
 
