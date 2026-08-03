@@ -6,6 +6,23 @@ import {
   createPYOSession,
 } from "@recipesage/util/server/capabilities";
 
+const ALLOWED_REDIRECT_HOSTNAME = "recipesage.com";
+
+const isAllowedRedirectUrl = (value: string) => {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+
+  return (
+    url.protocol === "https:" &&
+    (url.hostname === ALLOWED_REDIRECT_HOSTNAME ||
+      url.hostname.endsWith(`.${ALLOWED_REDIRECT_HOSTNAME}`))
+  );
+};
+
 export const createStripeCheckoutSession = publicProcedure
   .meta({
     openapi: {
@@ -49,7 +66,7 @@ export const createStripeCheckoutSession = publicProcedure
 
     if (
       process.env.NODE_ENV !== "development" &&
-      !input.successUrl.match(/https:\/\/(.*\.)?recipesage\.com(\/.*)?$/)
+      !isAllowedRedirectUrl(input.successUrl)
     ) {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -59,7 +76,7 @@ export const createStripeCheckoutSession = publicProcedure
 
     if (
       process.env.NODE_ENV !== "development" &&
-      !input.cancelUrl.match(/https:\/\/(.*\.)?recipesage\.com(\/.*)?$/)
+      !isAllowedRedirectUrl(input.cancelUrl)
     ) {
       throw new TRPCError({
         code: "BAD_REQUEST",
