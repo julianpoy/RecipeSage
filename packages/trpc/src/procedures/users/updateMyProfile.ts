@@ -61,6 +61,7 @@ export const updateMyProfile = authenticatedProcedure
           id: {
             in: input.profileImageIds,
           },
+          userId,
         },
         select: {
           id: true,
@@ -87,9 +88,7 @@ export const updateMyProfile = authenticatedProcedure
               const image = imagesById.get(imageId);
               if (!image) return false;
               return (
-                idx === 0 ||
-                image.userId !== userId ||
-                image.createdAt.getTime() + oneDayMs < Date.now()
+                idx === 0 || image.createdAt.getTime() + oneDayMs < Date.now()
               );
             },
           );

@@ -145,11 +145,7 @@ describe("updateMyProfile", () => {
       expect(profileImages).toHaveLength(0);
     });
 
-    test("keeps another user's image without the multiple images capability", async ({
-      trpc,
-      user,
-      user2,
-    }) => {
+    test("drops another user's image", async ({ trpc, user, user2 }) => {
       const ownFresh = await createOwnImage(user.id);
       const ownFreshExtra = await createOwnImage(user.id);
       const othersImage = await createOwnImage(user2.id);
@@ -163,7 +159,7 @@ describe("updateMyProfile", () => {
         orderBy: { order: "asc" },
       });
       expect(profileImages.map((profileImage) => profileImage.imageId)).toEqual(
-        [ownFresh.id, othersImage.id],
+        [ownFresh.id],
       );
     });
 
