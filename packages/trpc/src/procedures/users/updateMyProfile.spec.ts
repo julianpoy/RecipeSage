@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { recipeFactory } from "@recipesage/util/server/general";
-import { test, anonymousTrpc } from "../../testutils";
+import { test, anonymousTrpc, uniqueHandle } from "../../testutils";
 
 const createOwnImage = (userId: string) =>
   prisma.image.create({
@@ -15,9 +15,11 @@ const createOwnImage = (userId: string) =>
 describe("updateMyProfile", () => {
   describe("success", () => {
     test("updates name, handle, and enableProfile", async ({ trpc, user }) => {
+      const handle = uniqueHandle();
+
       await trpc.users.updateMyProfile({
         name: "New Name",
-        handle: "NewHandle",
+        handle: handle.toUpperCase(),
         enableProfile: true,
       });
 
@@ -25,7 +27,7 @@ describe("updateMyProfile", () => {
         where: { id: user.id },
       });
       expect(updated.name).toEqual("New Name");
-      expect(updated.handle).toEqual("newhandle");
+      expect(updated.handle).toEqual(handle);
       expect(updated.enableProfile).toEqual(true);
     });
 
@@ -205,27 +207,31 @@ describe("updateMyProfile", () => {
       trpc,
       user2,
     }) => {
+      const handle = uniqueHandle();
+
       await prisma.user.update({
         where: { id: user2.id },
-        data: { handle: "taken" },
+        data: { handle },
       });
 
-      await expect(
-        trpc.users.updateMyProfile({ handle: "taken" }),
-      ).rejects.toThrow("already in use");
+      await expect(trpc.users.updateMyProfile({ handle })).rejects.toThrow(
+        "already in use",
+      );
     });
 
     test("rejects a handle already in use regardless of casing", async ({
       trpc,
       user2,
     }) => {
+      const handle = uniqueHandle();
+
       await prisma.user.update({
         where: { id: user2.id },
-        data: { handle: "taken" },
+        data: { handle },
       });
 
       await expect(
-        trpc.users.updateMyProfile({ handle: "TAKEN" }),
+        trpc.users.updateMyProfile({ handle: handle.toUpperCase() }),
       ).rejects.toThrow("already in use");
     });
 

@@ -18,6 +18,7 @@ export const signInWithGoogle = publicProcedure
       tags: ["users"],
       summary:
         "Authenticate with a Google ID token and receive a session token",
+      protect: false,
     },
   })
   .input(

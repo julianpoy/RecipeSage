@@ -2,6 +2,7 @@ import { StorageObjectRecord, writeBuffer } from "./index";
 import { ObjectTypes } from "./shared";
 import { fetchURL, transformImageBuffer } from "../general";
 import { sanitizeFilePath } from "./sanitizeFilePath";
+import { ImageFetchError } from "./imageFetchError";
 import { createReadStream } from "fs";
 import { buffer as streamToBuffer } from "stream/consumers";
 import type { Readable } from "stream";
@@ -25,7 +26,7 @@ export const writeImageURL = async (
     timeout: WRITE_IMAGE_URL_TIMEOUT_SECONDS * 1000,
   });
   if (response.status !== 200 || !response.body)
-    throw new Error(`Could not fetch image: ${response.status}`);
+    throw new ImageFetchError(response.status);
 
   return writeImageStream(objectType, response.body, highResConversion);
 };

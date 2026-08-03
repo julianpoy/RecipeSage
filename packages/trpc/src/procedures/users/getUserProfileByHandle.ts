@@ -10,6 +10,7 @@ export const getUserProfileByHandle = publicProcedure
       path: "/users/getUserProfileByHandle",
       tags: ["users"],
       summary: "Look up a user profile by public handle",
+      protect: false,
     },
   })
   .input(

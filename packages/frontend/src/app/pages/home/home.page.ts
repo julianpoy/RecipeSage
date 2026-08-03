@@ -222,6 +222,7 @@ export class HomePage implements OnDestroy {
         EventName.LabelCreated,
         EventName.LabelUpdated,
         EventName.LabelDeleted,
+        EventName.ApplicationOfflineModeChanged,
       ],
       this.setReloadPending,
     );
@@ -241,6 +242,7 @@ export class HomePage implements OnDestroy {
         EventName.LabelCreated,
         EventName.LabelUpdated,
         EventName.LabelDeleted,
+        EventName.ApplicationOfflineModeChanged,
       ],
       this.setReloadPending,
     );

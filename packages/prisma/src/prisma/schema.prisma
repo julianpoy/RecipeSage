@@ -308,6 +308,8 @@ model Recipe {
   @@index([userId], map: "recipes_user_id")
   @@index([fromUserId], map: "recipes_from_user_id")
   @@index([userId, folder, createdAt(sort: Desc)], map: "recipes_user_folder_created_at")
+  @@index([userId, folder, updatedAt(sort: Desc), id], map: "recipes_user_folder_updated_at")
+  @@index([userId, folder, lastMadeAt(sort: Desc)], map: "recipes_user_folder_last_made_at")
   @@index([userId, folder, title], map: "recipes_user_folder_title")
   @@index([userId(ops: raw("uuid_ops")), tsv], type: Gin, map: "recipes_user_tsv_idx")
   @@map("Recipes")

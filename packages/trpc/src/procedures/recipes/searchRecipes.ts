@@ -21,6 +21,7 @@ export const searchRecipes = publicProcedure
       path: "/recipes/searchRecipes",
       tags: ["recipes"],
       summary: "Full-text search over recipes",
+      protect: false,
     },
   })
   .input(

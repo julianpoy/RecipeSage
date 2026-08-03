@@ -1,5 +1,14 @@
 ---
 import { Picture } from "astro:assets";
+import {
+  DESKTOP_DOWNLOADS,
+  DESKTOP_PLATFORMS,
+  DESKTOP_PLATFORM_BUTTON_LABEL_KEYS,
+  DESKTOP_PLATFORM_LABEL_KEYS,
+  DESKTOP_RECOMMENDED_DOWNLOADS,
+  getDesktopDownloadUrl,
+} from "../../../util/shared/src/desktopDownloads";
+import DesktopPlatformIcon from "./DesktopPlatformIcon.astro";
 import type { Translator } from "../i18n/translations";
 
 const heroBg =
@@ -139,16 +148,51 @@ const bookmarklet =
       <h2>{t("pages.downloadAndInstall.desktop.title")}</h2>
     </div>
     <p class="instruction-header">
-      {t("pages.downloadAndInstall.desktop.instructionHeader")}
+      {t("pages.downloadAndInstall.desktop.description")}
     </p>
-    <ol>
-      <li>{t("pages.downloadAndInstall.desktop.step.1")}</li>
-      <li>
-        {t("pages.downloadAndInstall.desktop.step.2")}
-        <span class="icon-hint" aria-label={t("pages.downloadAndInstall.icon.menuDots")}>⋮</span>
-      </li>
-      <li>{t("pages.downloadAndInstall.desktop.step.3")}</li>
-    </ol>
+
+    <div class="recommended">
+      {
+        DESKTOP_PLATFORMS.map((platform) => (
+          <a
+            class="recommended-link"
+            data-desktop-platform={platform}
+            href={getDesktopDownloadUrl(
+              DESKTOP_RECOMMENDED_DOWNLOADS[platform].file,
+            )}
+            hidden
+          >
+            <DesktopPlatformIcon platform={platform} />
+            {t(DESKTOP_PLATFORM_BUTTON_LABEL_KEYS[platform])}
+          </a>
+        ))
+      }
+    </div>
+
+    <h3 class="all-downloads">
+      {t("pages.downloadAndInstall.desktop.allDownloads")}
+    </h3>
+    <div class="platform-cards">
+      {
+        DESKTOP_PLATFORMS.map((platform) => (
+          <div class="platform-card">
+            <h4>
+              <DesktopPlatformIcon platform={platform} />
+              {t(DESKTOP_PLATFORM_LABEL_KEYS[platform])}
+            </h4>
+            <ul>
+              {DESKTOP_DOWNLOADS[platform].map((download) => (
+                <li>
+                  <a href={getDesktopDownloadUrl(download.file)}>
+                    {t(download.labelKey)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
   </section>
 
   <section class="other">
@@ -189,6 +233,18 @@ const bookmarklet =
     </div>
   </section>
 </article>
+
+<script>
+  import { detectDesktopPlatform } from "../../../util/shared/src/desktopDownloads";
+
+  const platform = detectDesktopPlatform(navigator.userAgent);
+  if (platform) {
+    const recommended = document.querySelector(
+      `[data-desktop-platform="${platform}"]`,
+    );
+    if (recommended instanceof HTMLElement) recommended.hidden = false;
+  }
+</script>
 
 <style>
   .download-hero {
@@ -308,6 +364,68 @@ const bookmarklet =
     .icon-hint {
       background: rgba(255, 255, 255, 0.1);
     }
+  }
+
+  .recommended-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 8px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .recommended-link[hidden] {
+    display: none;
+  }
+
+  .recommended-link:hover {
+    filter: brightness(1.08);
+  }
+
+  .all-downloads {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 28px 0 12px;
+  }
+
+  .platform-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+  }
+
+  .platform-card {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .platform-card h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    font-size: 1rem;
+  }
+
+  .platform-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .platform-card li + li {
+    margin-top: 8px;
+  }
+
+  .platform-card a {
+    color: var(--accent-text);
   }
 
   .other {

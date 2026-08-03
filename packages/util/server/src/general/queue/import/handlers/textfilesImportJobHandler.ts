@@ -76,7 +76,7 @@ export async function textfilesImportJobHandler(
 
       const recipeText =
         extension === ".txt"
-          ? await readFile(filePath, "utf-8")
+          ? (await readFile(filePath, "utf-8")).trim()
           : await extractTextFromDocument(filePath);
 
       const images = await readSideCarImages(extractPath, fileName);

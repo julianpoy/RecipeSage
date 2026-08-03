@@ -10,7 +10,7 @@ import { SyncService } from "../sync.service";
 import { SearchService } from "../search.service";
 import { offlineModeState } from "../offlineModeState";
 
-const SLOW_READ_PROMPT_MS = 4_000;
+const SLOW_READ_PROMPT_MS = 5_000;
 
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
@@ -18,6 +18,11 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type RefreshableSignal<T> = {
   value: Signal<T | undefined>;
   refresh: () => Promise<void>;
+};
+
+export type ExecuteQueryOptions = {
+  timeoutMs?: number;
+  promptOnSlowRead?: boolean;
 };
 
 export abstract class ActionsBase {
@@ -61,8 +66,10 @@ export abstract class ActionsBase {
     invoke: () => Promise<T>,
     fallback: () => Promise<T | undefined>,
     errorHandlers?: ErrorHandlers,
-    timeoutMs: number = 10000,
+    options?: ExecuteQueryOptions,
   ): Promise<T | undefined> {
+    const { timeoutMs = 10000, promptOnSlowRead = true } = options || {};
+
     if (offlineModeState.enabled) {
       return this.runOfflineFallback(fallback);
     }
@@ -70,9 +77,11 @@ export abstract class ActionsBase {
     const networkPromise = invoke();
     networkPromise.catch(() => {});
 
-    const slowHandle = setTimeout(() => {
-      offlineModeState.notifySlowRead();
-    }, SLOW_READ_PROMPT_MS);
+    const slowHandle = promptOnSlowRead
+      ? setTimeout(() => {
+          offlineModeState.notifySlowRead();
+        }, SLOW_READ_PROMPT_MS)
+      : undefined;
 
     const offlineWaiter = offlineModeState.whenEnabled();
 

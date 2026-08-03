@@ -24,6 +24,14 @@ export const signInWithDesktopGoogle = publicProcedure
       path: "/users/signInWithDesktopGoogle",
       tags: ["users"],
       summary: "Exchange a desktop Google auth code for a session token",
+      description:
+        "Requires no session token. Responds 401 if the supplied auth code has an invalid signature or has expired.",
+      protect: false,
+      errorResponses: {
+        400: "Invalid input data",
+        401: "The auth code signature is invalid or the auth code has expired",
+        500: "Internal server error",
+      },
     },
   })
   .input(

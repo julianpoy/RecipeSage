@@ -4,6 +4,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { UtilService } from "../../services/util.service";
 import { PreferencesService } from "../../services/preferences.service";
 import {
+  DAY_TITLE_I18N,
   MealPlanPreferenceKey,
   getMealSortOrder,
   getOrderedMeals,
@@ -93,7 +94,7 @@ export class MealCalendarComponent {
   weeksOfMonth: Dayjs[][] = [];
   today: Date = new Date();
   center: Date = new Date(this.today);
-  dayTitles?: string[];
+  dayTitleKeys?: string[];
 
   @Output() selectedDaysChange = new EventEmitter<string[]>();
 
@@ -140,7 +141,7 @@ export class MealCalendarComponent {
     const endOfCalendar = endOfMonth.endOf("week");
 
     if (preferences[MealPlanPreferenceKey.StartOfWeek] === "monday") {
-      this.dayTitles = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      this.dayTitleKeys = [...DAY_TITLE_I18N.slice(1), DAY_TITLE_I18N[0]];
       startOfCalendar = startOfCalendar.add(1, "day");
 
       // Special case for months starting on sunday: Add an additional week before
@@ -148,7 +149,7 @@ export class MealCalendarComponent {
         startOfCalendar = startOfMonth.subtract(1, "week").add(1, "day");
       }
     } else {
-      this.dayTitles = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      this.dayTitleKeys = [...DAY_TITLE_I18N];
     }
 
     let iteratorDate = dayjs(startOfCalendar);

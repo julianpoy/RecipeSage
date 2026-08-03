@@ -45,7 +45,7 @@ export async function melaImportJobHandler(
   let processedCount = 0;
   for (const filePath of recipeFiles) {
     try {
-      const fileContents = await readFile(filePath, "utf8");
+      const fileContents = (await readFile(filePath, "utf8")).trim();
       const recipeData = JSON.parse(fileContents);
 
       const totalTime = mergeTotalAndCookTime(

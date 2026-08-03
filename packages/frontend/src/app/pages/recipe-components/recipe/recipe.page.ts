@@ -359,6 +359,8 @@ export class RecipePage {
   }
 
   async presentPopover(event: Event) {
+    if (!this.recipe) return;
+
     const popover = await this.popoverCtrl.create({
       component: RecipeDetailsPopoverPage,
       componentProps: {

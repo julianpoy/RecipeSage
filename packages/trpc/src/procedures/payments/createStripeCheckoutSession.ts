@@ -14,6 +14,7 @@ export const createStripeCheckoutSession = publicProcedure
       tags: ["payments"],
       summary:
         "Create a Stripe checkout session for a one-time or recurring payment",
+      protect: false,
     },
   })
   .input(

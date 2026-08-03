@@ -1,4 +1,4 @@
-html
+html(lang=language, dir=direction)
   head
     title= title
     script(type="text/javascript").
@@ -100,7 +100,7 @@ html
         margin: 3px 0;
         padding: 4px 6px;
         font-size: 11px;
-        border-left: 4px solid #92949c;
+        border-inline-start: 4px solid var(--meal-color, #92949c);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -134,7 +134,7 @@ html
       .list-meal-item {
         padding: 6px 8px;
         margin: 4px 0;
-        border-left: 4px solid #92949c;
+        border-inline-start: 4px solid var(--meal-color, #92949c);
       }
 
       .list-item-header {
@@ -187,7 +187,7 @@ html
                     div(class="meal-group")
                       div(class="meal-title")= mealLabels[meal] || meal
                       each item in day.itemsByMeal[meal]
-                        div(class="meal-item" style="border-left-color: " + (mealColors[item.meal] || '#92949c'))
+                        div(class="meal-item" style="--meal-color: " + (mealColors[item.meal] || '#92949c'))
                           span= item.title
                           if item.notes
                             div(class="item-notes")= item.notes
@@ -197,7 +197,7 @@ html
         div(class="date-group")
           div(class="date-header")= dateGroup.formattedDate
           each item in dateGroup.items
-            div(class="list-meal-item" style="border-left-color: " + (mealColors[item.meal] || '#92949c'))
+            div(class="list-meal-item" style="--meal-color: " + (mealColors[item.meal] || '#92949c'))
               div(class="list-item-header")
                 span(class="list-meal-label")= item.mealLabel
                 span(class="list-item-title")= item.title
@@ -205,8 +205,7 @@ html
                 div(class="list-item-notes")= item.notes
 
     p(class="printed-on")
-      i Printed on&nbsp;
-      i= date
+      i= printedOn
 
     script(type='text/javascript').
       if (window.location.href.indexOf('print=true') > -1) {

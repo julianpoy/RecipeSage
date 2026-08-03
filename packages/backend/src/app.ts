@@ -90,7 +90,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-const rateLimitExemptPrefixes = ["/metrics", "/stripe/webhook"];
+const rateLimitExemptPrefixes = ["/metrics", "/stripe/webhook", "/health"];
 const globalRateLimitHandler = rateLimitHandler("global");
 app.use((req, res, next) => {
   if (rateLimitExemptPrefixes.some((prefix) => req.path.startsWith(prefix))) {

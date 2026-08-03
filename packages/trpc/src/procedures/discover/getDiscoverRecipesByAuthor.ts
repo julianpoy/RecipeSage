@@ -15,6 +15,7 @@ export const getDiscoverRecipesByAuthor = publicProcedure
       path: "/discover/getDiscoverRecipesByAuthor",
       tags: ["discover"],
       summary: "List an author's published discover recipes",
+      protect: false,
     },
   })
   .input(

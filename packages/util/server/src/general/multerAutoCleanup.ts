@@ -4,29 +4,33 @@ import "multer";
 import { unlink } from "fs/promises";
 import * as Sentry from "@sentry/node";
 
+const cleanupFile = (file: Express.Multer.File | undefined) => {
+  if (!file?.path) return;
+
+  unlink(file.path).catch((e) => {
+    if (e instanceof Error && "code" in e && e.code === "ENOENT") return;
+
+    Sentry.captureException(e);
+  });
+};
+
 export function multerAutoCleanup(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
   res.on("close", () => {
-    if (typeof req.file != "undefined") {
-      unlink(req.file.path).catch((e) => Sentry.captureException(e));
-    }
+    cleanupFile(req.file);
 
     const files = req.files;
     if (typeof files != "undefined") {
       if (Array.isArray(files)) {
-        files.forEach((file) => {
-          unlink(file.path).catch((e) => Sentry.captureException(e));
-        });
+        files.forEach((file) => cleanupFile(file));
       } else {
         Object.keys(files).forEach((key) => {
           const keyFiles = files[key];
           if (Array.isArray(keyFiles)) {
-            keyFiles.forEach((file) => {
-              unlink(file.path).catch((e) => Sentry.captureException(e));
-            });
+            keyFiles.forEach((file) => cleanupFile(file));
           }
         });
       }

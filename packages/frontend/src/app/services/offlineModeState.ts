@@ -6,6 +6,7 @@ export interface OfflineModeEnabledWaiter {
 export interface OfflineModeHooks {
   notifySlowRead: () => void;
   showBlockedError: () => void;
+  notifyEnabledChanged: () => void;
 }
 
 class OfflineModeState {
@@ -21,14 +22,6 @@ class OfflineModeState {
     this.hooks = hooks;
   }
 
-  setEnabled(value: boolean): void {
-    if (value) {
-      this.enable();
-    } else {
-      this.disable();
-    }
-  }
-
   enable(): void {
     if (this.sessionEnabled) return;
     this.sessionEnabled = true;
@@ -37,10 +30,13 @@ class OfflineModeState {
     for (const waiter of waiters) {
       waiter();
     }
+    this.hooks?.notifyEnabledChanged();
   }
 
   disable(): void {
+    if (!this.sessionEnabled) return;
     this.sessionEnabled = false;
+    this.hooks?.notifyEnabledChanged();
   }
 
   whenEnabled(): OfflineModeEnabledWaiter {

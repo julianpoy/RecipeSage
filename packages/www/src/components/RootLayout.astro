@@ -1,6 +1,10 @@
 ---
 import Nav from "./Nav.astro";
 import {
+  MATOMO_ORIGIN,
+  MATOMO_SITE_ID,
+} from "../../../util/shared/src/matomo";
+import {
   DEFAULT_LOCALE,
   WWW_SUPPORTED_LOCALES,
   isRtl,
@@ -255,18 +259,34 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
       set:html={JSON.stringify(finalStructuredData)}
     />
 
-    <script is:inline>
-      // eslint-disable-next-line prefer-const -- matomo.js reassigns _paq; const breaks it
-      let _paq = window._paq = window._paq || [];
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      _paq.push(['setTrackerUrl', 'https://a.recipesage.com/matomo.php']);
-      _paq.push(['setSiteId', '1']);
-      const loadMatomo = function() {
-        const d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.async=true; g.src='https://a.recipesage.com/matomo.js'; s.parentNode.insertBefore(g,s);
+    <script>
+      import {
+        MATOMO_APP_PLATFORM_DIMENSION_ID,
+        MATOMO_ORIGIN,
+        MATOMO_SITE_ID,
+        detectAppPlatform,
+      } from "../../../util/shared/src/matomo";
+
+      const _paq = (window._paq = window._paq || []);
+      _paq.push(["disableCookies"]);
+      _paq.push([
+        "setCustomDimension",
+        MATOMO_APP_PLATFORM_DIMENSION_ID,
+        detectAppPlatform(),
+      ]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      _paq.push(["setTrackerUrl", `${MATOMO_ORIGIN}/matomo.php`]);
+      _paq.push(["setSiteId", MATOMO_SITE_ID]);
+      const loadMatomo = () => {
+        const d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = `${MATOMO_ORIGIN}/matomo.js`;
+        s.parentNode?.insertBefore(g, s);
       };
-      if ('requestIdleCallback' in window) {
+      if ("requestIdleCallback" in window) {
         requestIdleCallback(loadMatomo, { timeout: 1500 });
       } else {
         loadMatomo();
@@ -275,7 +295,7 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
     <noscript>
       <img
         referrerpolicy="no-referrer-when-downgrade"
-        src={`https://a.recipesage.com/matomo.php?idsite=1&rec=1&action_name=${encodeURIComponent(title)}`}
+        src={`${MATOMO_ORIGIN}/matomo.php?idsite=${MATOMO_SITE_ID}&rec=1&action_name=${encodeURIComponent(title)}`}
         style="border:0"
         alt=""
       />

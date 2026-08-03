@@ -9,6 +9,7 @@ import {
   recordCreditsSpent,
 } from "@recipesage/util/server/general";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
+import { handleUploadErrors } from "../../util/handleUploadErrors";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
@@ -20,14 +21,16 @@ export const getRecipeFromPDFHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-        }),
-        limits: {
-          fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
-        },
-      }).single("file"),
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+          }),
+          limits: {
+            fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

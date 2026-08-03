@@ -114,6 +114,25 @@ describe("textfiles import fallback", () => {
     expect(fallback.labels).toContain(UNFORMATTED);
     expect(findByTitle("Structured").labels).not.toContain(UNFORMATTED);
   });
+
+  it("strips a byte order mark and surrounding whitespace before reaching the LLM", async () => {
+    fixtures = {
+      "Bommed.txt": "\uFEFF  Mix the flour and the sugar together.  \n",
+    };
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "Structured" },
+      labels: [],
+      images: [],
+    });
+
+    await textfilesImportJobHandler(job, queueItem);
+
+    expect(textToRecipe).toHaveBeenCalledTimes(1);
+    expect(textToRecipe.mock.calls[0][0]).toBe(
+      "Mix the flour and the sugar together.",
+    );
+  });
 });
 
 describe("images import failure handling", () => {

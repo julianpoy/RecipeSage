@@ -4,7 +4,7 @@ import { metrics } from "../general";
 import { config } from "../general/config";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
-import { withLLMRetry } from "./withLLMRetry";
+import { withLLMRetryOptional } from "./withLLMRetryOptional";
 
 export enum TextToRecipeInputType {
   OCR,
@@ -69,8 +69,8 @@ export const textToRecipe = async (
   if (text.length > OCR_MAX_VALID_TEXT)
     text = text.substring(0, OCR_MAX_VALID_TEXT);
 
-  const llmResponse = await withLLMRetry("text_to_recipe", () =>
-    generateText({
+  const llmResponse = await withLLMRetryOptional("text_to_recipe", async () => {
+    const response = await generateText({
       system: systemPrompts[inputType],
       model: aiProvider(models[inputType]),
       temperature: 0,
@@ -78,17 +78,21 @@ export const textToRecipe = async (
       output: Output.object({
         schema: ocrFormatRecipeSchema,
       }),
-    }),
-  );
+    });
 
-  if (llmResponse.totalUsage.totalTokens !== undefined) {
-    metrics.llmTokensConsumed.observe(
-      {
-        category: "textToRecipe_" + inputType,
-      },
-      llmResponse.totalUsage.totalTokens,
-    );
-  }
+    if (response.totalUsage.totalTokens !== undefined) {
+      metrics.llmTokensConsumed.observe(
+        {
+          category: "textToRecipe_" + inputType,
+        },
+        response.totalUsage.totalTokens,
+      );
+    }
+
+    return response.output;
+  });
+
+  if (!llmResponse) return;
 
   const markdownHeadersToRS = (line: string) => {
     if (line.startsWith("#")) {
@@ -99,37 +103,31 @@ export const textToRecipe = async (
 
   const entry: StandardizedRecipeImportEntry = {
     recipe: {
-      title: llmResponse.output.title || "Unnamed",
-      description: llmResponse.output.description || "",
+      title: llmResponse.title || "Unnamed",
+      description: llmResponse.description || "",
       folder: "main",
       source: "",
       url: "",
       rating: undefined,
-      yield: (llmResponse.output.yield || "").replaceAll("<UNKNOWN>", ""),
-      activeTime: (llmResponse.output.activeTime || "").replaceAll(
-        "<UNKNOWN>",
-        "",
-      ),
-      totalTime: (llmResponse.output.totalTime || "").replaceAll(
-        "<UNKNOWN>",
-        "",
-      ),
-      ingredients: (llmResponse.output.ingredients || "")
+      yield: (llmResponse.yield || "").replaceAll("<UNKNOWN>", ""),
+      activeTime: (llmResponse.activeTime || "").replaceAll("<UNKNOWN>", ""),
+      totalTime: (llmResponse.totalTime || "").replaceAll("<UNKNOWN>", ""),
+      ingredients: (llmResponse.ingredients || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
-      instructions: (llmResponse.output.instructions || "")
+      instructions: (llmResponse.instructions || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
-      notes: (llmResponse.output.notes || "")
+      notes: (llmResponse.notes || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
-      nutritionInfo: llmResponse.output.nutritionInfo || undefined,
+      nutritionInfo: llmResponse.nutritionInfo || undefined,
     },
     labels: [],
     images: [],

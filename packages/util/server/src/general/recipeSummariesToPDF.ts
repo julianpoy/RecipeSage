@@ -652,7 +652,7 @@ export const recipeToPDFMakeSchema = async (
     schema.push({
       text: [
         { text: strings.labels + ": ", bold: true },
-        { text: labelTitles.join(", ") },
+        { text: labelTitles.join(" · ") },
       ],
       margin: [0, 10, 0, 0] satisfies Margins,
     });

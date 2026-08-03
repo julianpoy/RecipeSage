@@ -68,6 +68,7 @@ export const deleteObject = storageProvider.deleteObject;
 export const deleteObjects = storageProvider.deleteObjects;
 export const readStream = storageProvider.readStream;
 export * from "./image";
+export * from "./imageFetchError";
 export * from "./shared";
 export * from "./gunzipPromise";
 export * from "./deleteHangingImagesForUser";

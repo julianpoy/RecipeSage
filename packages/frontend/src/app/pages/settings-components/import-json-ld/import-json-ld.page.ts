@@ -18,7 +18,7 @@ import {
   IonProgressBar,
 } from "@ionic/angular/standalone";
 
-const MAX_FILE_SIZE_MB = 3000;
+const MAX_FILE_SIZE_MB = 128;
 
 @Component({
   standalone: true,
@@ -49,6 +49,7 @@ export class ImportJSONLDPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   file?: File;
+  fileRejectedAsTooLarge = false;
   progress?: number;
 
   setFile(event: any) {
@@ -58,6 +59,7 @@ export class ImportJSONLDPage {
     }
 
     this.file = files[0];
+    this.fileRejectedAsTooLarge = false;
   }
 
   filePicker() {
@@ -65,6 +67,9 @@ export class ImportJSONLDPage {
   }
 
   isFileTooLarge() {
+    if (this.fileRejectedAsTooLarge) {
+      return true;
+    }
     if (this.file && this.file.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
       return true;
     }
@@ -81,7 +86,11 @@ export class ImportJSONLDPage {
 
     const response = await this.importService.importJsonLD(
       this.file,
-      undefined,
+      {
+        413: () => {
+          this.fileRejectedAsTooLarge = true;
+        },
+      },
       (event) => {
         this.progress = event.progress;
       },

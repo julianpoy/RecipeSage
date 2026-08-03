@@ -7,6 +7,8 @@ import { createCallerFactory } from "./trpc";
 
 export const createCaller = createCallerFactory(appRouter);
 
+export const uniqueHandle = () => `h${faker.string.numeric({ length: 23 })}`;
+
 export const anonymousTrpc = createCaller({
   session: null,
   language: "",

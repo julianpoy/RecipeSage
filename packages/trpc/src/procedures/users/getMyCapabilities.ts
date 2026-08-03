@@ -10,6 +10,7 @@ export const getMyCapabilities = publicProcedure
       path: "/users/getMyCapabilities",
       tags: ["users"],
       summary: "Get the caller's enabled subscription capabilities",
+      protect: false,
     },
   })
   .output(

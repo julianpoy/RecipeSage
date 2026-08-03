@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef, inject, signal } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
   IonHeader,
@@ -7,19 +7,41 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
-  IonList,
   IonItem,
   IonIcon,
   IonLabel,
+  IonAccordion,
+  IonAccordionGroup,
 } from "@ionic/angular/standalone";
 import {
+  chevronForwardOutline,
   cloudDownloadOutline,
-  ellipsisVerticalOutline,
-  laptopOutline,
-  phonePortraitOutline,
+  desktopOutline,
+  downloadOutline,
+  extensionPuzzleOutline,
+  bookmarkOutline,
+  logoAndroid,
+  logoApple,
+  logoTux,
+  logoWindows,
   shareOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import {
+  DESKTOP_DOWNLOADS,
+  DESKTOP_PLATFORMS,
+  DESKTOP_PLATFORM_BUTTON_LABEL_KEYS,
+  DESKTOP_PLATFORM_LABEL_KEYS,
+  DESKTOP_RECOMMENDED_DOWNLOADS,
+  detectDesktopPlatform,
+  getDesktopDownloadUrl,
+  type DesktopPlatform,
+} from "@recipesage/util/shared";
+import { IS_DESKTOP } from "../../../../environments/environment";
+import {
+  clearInstallPrompt,
+  getInstallPrompt,
+} from "../../../utils/pwaInstallPrompt";
 
 @Component({
   standalone: true,
@@ -34,61 +56,65 @@ import { addIcons } from "ionicons";
     IonMenuButton,
     IonTitle,
     IonContent,
-    IonList,
     IonItem,
     IonIcon,
     IonLabel,
+    IonAccordion,
+    IonAccordionGroup,
   ],
 })
 export class DownloadAndInstallPage {
-  showAndroid = false;
-  showIOS = false;
-  showDesktop = false;
+  private destroyRef = inject(DestroyRef);
+
+  isDesktopApp = IS_DESKTOP;
+  platforms = DESKTOP_PLATFORMS;
+  downloads = DESKTOP_DOWNLOADS;
+  recommendedDownloads = DESKTOP_RECOMMENDED_DOWNLOADS;
+  platformLabelKeys = DESKTOP_PLATFORM_LABEL_KEYS;
+  platformButtonLabelKeys = DESKTOP_PLATFORM_BUTTON_LABEL_KEYS;
+  platformIcons: Record<DesktopPlatform, string> = {
+    windows: "logo-windows",
+    macos: "logo-apple",
+    linux: "logo-tux",
+  };
+  recommendedPlatform = detectDesktopPlatform(navigator.userAgent);
+
+  pwaPromptAvailable = signal(!!getInstallPrompt());
+
+  downloadUrl = getDesktopDownloadUrl;
 
   constructor() {
     addIcons({
+      chevronForwardOutline,
       cloudDownloadOutline,
-      ellipsisVerticalOutline,
-      laptopOutline,
-      phonePortraitOutline,
+      desktopOutline,
+      downloadOutline,
+      extensionPuzzleOutline,
+      bookmarkOutline,
+      logoAndroid,
+      logoApple,
+      logoTux,
+      logoWindows,
       shareOutline,
     });
-    const wind = window as any;
-    if (wind.pwaPromptInterval) clearInterval(wind.pwaPromptInterval);
-    wind.pwaPromptInterval = setInterval(() => {
-      this.pwaPromptCapable();
-    }, 500);
+
+    const onInstallPrompt = () => this.pwaPromptAvailable.set(true);
+    window.addEventListener("beforeinstallprompt", onInstallPrompt);
+    this.destroyRef.onDestroy(() =>
+      window.removeEventListener("beforeinstallprompt", onInstallPrompt),
+    );
   }
 
-  toggleAndroid() {
-    this.showAndroid = !this.showAndroid;
-  }
+  async showPWAPrompt() {
+    const installPrompt = getInstallPrompt();
+    if (!installPrompt) return;
 
-  toggleIOS() {
-    this.showIOS = !this.showIOS;
-  }
+    await installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
 
-  toggleDesktop() {
-    this.showDesktop = !this.showDesktop;
-  }
-
-  pwaPromptCapable() {
-    return !!(window as any).deferredInstallPrompt;
-  }
-
-  showPWAPrompt() {
-    const installPrompt = (window as any).deferredInstallPrompt;
-    if (installPrompt) {
-      installPrompt.prompt();
-
-      installPrompt.userChoice.then((choiceResult: any) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("User accepted the A2HS prompt");
-          (window as any).deferredInstallPrompt = null;
-        } else {
-          console.log("User dismissed the A2HS prompt");
-        }
-      });
+    if (outcome === "accepted") {
+      clearInstallPrompt();
+      this.pwaPromptAvailable.set(false);
     }
   }
 }

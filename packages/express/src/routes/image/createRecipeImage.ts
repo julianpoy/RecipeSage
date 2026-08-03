@@ -12,6 +12,7 @@ import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
 import { imageSummary, prisma, type ImageSummary } from "@recipesage/prisma";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
+import { handleUploadErrors } from "../../util/handleUploadErrors";
 
 const FILE_SIZE_LIMIT_MB = 40;
 
@@ -23,14 +24,16 @@ export const createRecipeImageHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-        }),
-        limits: {
-          fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
-        },
-      }).single("file"),
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+          }),
+          limits: {
+            fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

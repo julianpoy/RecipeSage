@@ -1,4 +1,4 @@
-html
+html(lang=language, dir=direction)
   head
     title= title
     script(type="text/javascript").
@@ -43,7 +43,7 @@ html
       }
 
       .subSet {
-        margin-left: 15px;
+        margin-inline-start: 15px;
       }
 
       .hint {
@@ -105,8 +105,7 @@ html
                 div(class="setTitle")= group.items[0].title
 
   p(class="printed-on")
-    i Printed on&nbsp;
-    i= date
+    i= printedOn
 
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {

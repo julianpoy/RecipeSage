@@ -6,6 +6,7 @@ import {
   ModalController,
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
+import dayjs from "dayjs";
 
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -124,6 +125,7 @@ export class ShoppingListPopoverPage {
         sortBy: this.preferences[ShoppingListPreferenceKey.SortBy],
         preferredLanguage:
           this.preferences[GlobalPreferenceKey.Language] || undefined,
+        today: dayjs().format("YYYY-MM-DD"),
       }),
     );
   }

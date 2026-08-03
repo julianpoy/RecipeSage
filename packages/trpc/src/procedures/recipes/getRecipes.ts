@@ -20,6 +20,14 @@ export const getRecipes = publicProcedure
       path: "/recipes/getRecipes",
       tags: ["recipes"],
       summary: "List recipes for one or more users with filters and paging",
+      description:
+        "Callable without authentication when userIds is provided. Responds 401 if neither userIds nor a session token is supplied.",
+      protect: false,
+      errorResponses: {
+        400: "Invalid input data",
+        401: "Neither userIds nor a session was provided",
+        500: "Internal server error",
+      },
     },
   })
   .input(

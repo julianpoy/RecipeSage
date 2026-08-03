@@ -16,6 +16,7 @@ export const getDiscoverRecipe = publicProcedure
       path: "/discover/getDiscoverRecipe",
       tags: ["discover"],
       summary: "Get a single public discover recipe by id",
+      protect: false,
     },
   })
   .input(

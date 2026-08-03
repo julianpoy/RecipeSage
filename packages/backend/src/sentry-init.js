@@ -5,6 +5,11 @@ import { TRPCError } from "@trpc/server";
 
 const RS_VERSION = process.env.VERSION || "VERSION-missing";
 
+const CLIENT_DISCONNECT_MESSAGES = new Set([
+  "Request aborted",
+  "Request closed",
+]);
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
 
@@ -26,6 +31,14 @@ Sentry.init({
   release: RS_VERSION,
 
   beforeSend: (event, hint) => {
+    if (
+      hint.originalException instanceof Error &&
+      hint.originalException.name === "Error" &&
+      CLIENT_DISCONNECT_MESSAGES.has(hint.originalException.message)
+    ) {
+      return null;
+    }
+
     if (hint.originalException instanceof TRPCError) {
       const statusCode = getHTTPStatusCodeFromError(hint.originalException);
 

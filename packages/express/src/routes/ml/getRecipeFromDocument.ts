@@ -13,6 +13,7 @@ import {
 import { tmpdir } from "os";
 import { documentToRecipe } from "@recipesage/util/server/ml";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
+import { handleUploadErrors } from "../../util/handleUploadErrors";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
@@ -24,18 +25,32 @@ export const getRecipeFromDocumentHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-          filename: (_req, file, cb) => {
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+            filename: (_req, file, cb) => {
+              const extension = path.extname(file.originalname).toLowerCase();
+              cb(null, `${randomBytes(16).toString("hex")}${extension}`);
+            },
+          }),
+          fileFilter: (_req, file, cb) => {
             const extension = path.extname(file.originalname).toLowerCase();
-            cb(null, `${randomBytes(16).toString("hex")}${extension}`);
+            if (
+              extension !== ".txt" &&
+              !isExtractableDocumentExtension(extension)
+            ) {
+              cb(new BadRequestError("Unsupported document extension"));
+              return;
+            }
+
+            cb(null, true);
           },
-        }),
-        limits: {
-          fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
-        },
-      }).single("file"),
+          limits: {
+            fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

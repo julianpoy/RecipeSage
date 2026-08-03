@@ -2,14 +2,18 @@ import type { ImportJobSummary } from "@recipesage/prisma";
 
 import {
   importJobFinishCommon,
-  JsonLD,
   jsonLDToStandardizedRecipeImportEntry,
 } from "../../../index";
+import { collectRecipeNodes } from "../../../collectRecipeNodes";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile } from "fs/promises";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
+import {
+  ImportBadFormatError,
+  ImportNoRecipesError,
+} from "../../../jobs/jobErrors";
 
 export async function jsonldImportJobHandler(
   job: ImportJobSummary,
@@ -26,26 +30,21 @@ export async function jsonldImportJobHandler(
   await using downloaded = await downloadS3ToTemp(queueItem.storageKey);
 
   // Read and parse JSON-LD
-  const fileContent = await readFile(downloaded.filePath, "utf-8");
-  const input = JSON.parse(fileContent) as
-    | JsonLD
-    | JsonLD[]
-    | { recipes: JsonLD[] };
+  const fileContent = (await readFile(downloaded.filePath, "utf-8")).trim();
 
-  let jsonLD: JsonLD[];
-  if (Array.isArray(input)) jsonLD = input;
-  else if ("recipes" in input) jsonLD = input.recipes;
-  else jsonLD = [input];
-
-  // Filter for Recipe type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  jsonLD = jsonLD.filter((el: any) => el["@type"] === "Recipe");
-
-  if (!jsonLD.length) {
-    throw new Error(
-      "Only supports JSON-LD or array of JSON-LD with type 'Recipe'",
-    );
+  let input: unknown;
+  try {
+    input = JSON.parse(fileContent);
+  } catch {
+    throw new ImportBadFormatError();
   }
+
+  const documents =
+    input && typeof input === "object" && "recipes" in input
+      ? input.recipes
+      : input;
+
+  const jsonLD = collectRecipeNodes(documents);
 
   // Convert to standardized recipe format
   const onProgress = debounceJobUpdateProgress({
@@ -58,10 +57,13 @@ export async function jsonldImportJobHandler(
   const standardizedRecipeImportInput = [];
   for (const ld of jsonLD) {
     const result = jsonLDToStandardizedRecipeImportEntry(ld);
-    standardizedRecipeImportInput.push({
-      ...result,
-      labels: [...result.labels, ...importLabels],
-    });
+    const { title, ingredients, instructions } = result.recipe;
+    if (title || ingredients || instructions) {
+      standardizedRecipeImportInput.push({
+        ...result,
+        labels: [...result.labels, ...importLabels],
+      });
+    }
 
     processedCount++;
     onProgress({
@@ -70,6 +72,10 @@ export async function jsonldImportJobHandler(
       step: 1,
       totalStepCount: IMPORT_JOB_STEP_COUNT,
     });
+  }
+
+  if (!standardizedRecipeImportInput.length) {
+    throw new ImportNoRecipesError();
   }
 
   await importJobFinishCommon({

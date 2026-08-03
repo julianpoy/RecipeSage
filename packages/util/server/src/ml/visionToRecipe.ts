@@ -4,7 +4,7 @@ import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
 import { config } from "../general/config";
 import { metrics } from "../general/metrics";
-import { withLLMRetry } from "./withLLMRetry";
+import { withLLMRetryOptional } from "./withLLMRetryOptional";
 
 export enum VisionToRecipeInputType {
   Photo,
@@ -25,44 +25,51 @@ export const visionToRecipe = async (
   imageB64: (Uint8Array | ArrayBuffer | Buffer)[],
   inputType: VisionToRecipeInputType,
 ) => {
-  const llmResponse = await withLLMRetry("vision_to_recipe", () =>
-    generateText({
-      system:
-        "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank. A header can be denoted in the ingredients, instructions, or notes by prefixing the line with a # sign.",
-      model: aiProvider(config.ai.model.vision),
-      temperature: 0,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: prompts[inputType],
-            },
-            ...imageB64.map(
-              (el) =>
-                ({
-                  type: "image",
-                  image: el,
-                }) as const,
-            ),
-          ],
-        },
-      ],
-      output: Output.object({
-        schema: ocrFormatRecipeSchema,
-      }),
-    }),
+  const llmResponse = await withLLMRetryOptional(
+    "vision_to_recipe",
+    async () => {
+      const response = await generateText({
+        system:
+          "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank. A header can be denoted in the ingredients, instructions, or notes by prefixing the line with a # sign.",
+        model: aiProvider(config.ai.model.vision),
+        temperature: 0,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: prompts[inputType],
+              },
+              ...imageB64.map(
+                (el) =>
+                  ({
+                    type: "image",
+                    image: el,
+                  }) as const,
+              ),
+            ],
+          },
+        ],
+        output: Output.object({
+          schema: ocrFormatRecipeSchema,
+        }),
+      });
+
+      if (response.totalUsage.totalTokens !== undefined) {
+        metrics.llmTokensConsumed.observe(
+          {
+            category: "visionToRecipe",
+          },
+          response.totalUsage.totalTokens,
+        );
+      }
+
+      return response.output;
+    },
   );
 
-  if (llmResponse.totalUsage.totalTokens !== undefined) {
-    metrics.llmTokensConsumed.observe(
-      {
-        category: "visionToRecipe",
-      },
-      llmResponse.totalUsage.totalTokens,
-    );
-  }
+  if (!llmResponse) return;
 
   const markdownHeadersToRS = (line: string) => {
     if (line.startsWith("#")) {
@@ -73,32 +80,26 @@ export const visionToRecipe = async (
 
   const recipe: StandardizedRecipeImportEntry = {
     recipe: {
-      title: llmResponse.output.title || "Unnamed",
-      description: llmResponse.output.description || "",
+      title: llmResponse.title || "Unnamed",
+      description: llmResponse.description || "",
       folder: "main",
       source: "",
       url: "",
       rating: undefined,
-      yield: (llmResponse.output.yield || "").replaceAll("<UNKNOWN>", ""),
-      activeTime: (llmResponse.output.activeTime || "").replaceAll(
-        "<UNKNOWN>",
-        "",
-      ),
-      totalTime: (llmResponse.output.totalTime || "").replaceAll(
-        "<UNKNOWN>",
-        "",
-      ),
-      ingredients: (llmResponse.output.ingredients || "")
+      yield: (llmResponse.yield || "").replaceAll("<UNKNOWN>", ""),
+      activeTime: (llmResponse.activeTime || "").replaceAll("<UNKNOWN>", ""),
+      totalTime: (llmResponse.totalTime || "").replaceAll("<UNKNOWN>", ""),
+      ingredients: (llmResponse.ingredients || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
-      instructions: (llmResponse.output.instructions || "")
+      instructions: (llmResponse.instructions || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
-      notes: (llmResponse.output.notes || "")
+      notes: (llmResponse.notes || "")
         .replaceAll("\\n", "\n")
         .split("\n")
         .map(markdownHeadersToRS)

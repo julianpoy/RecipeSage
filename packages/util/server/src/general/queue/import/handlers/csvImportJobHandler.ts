@@ -32,6 +32,7 @@ export async function csvImportJobHandler(
 
   const fileReadStream = createReadStream(downloaded.filePath);
   const parser = parse({
+    bom: true,
     columns: true,
   });
 

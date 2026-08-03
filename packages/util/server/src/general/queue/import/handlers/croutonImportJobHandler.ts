@@ -10,6 +10,7 @@ import path from "path";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
+import { ImportBadFormatError } from "../../../jobs/jobErrors";
 
 const CROUTON_QUANTITY_UNITS: Record<string, string> = {
   ITEM: "",
@@ -60,9 +61,14 @@ export async function croutonImportJobHandler(
   const totalCount = recipeFiles.length;
   let processedCount = 0;
   for (const filePath of recipeFiles) {
-    const fileContents = await readFile(filePath, "utf8");
+    const fileContents = (await readFile(filePath, "utf8")).trim();
 
-    const recipeData = JSON.parse(fileContents);
+    let recipeData;
+    try {
+      recipeData = JSON.parse(fileContents);
+    } catch {
+      throw new ImportBadFormatError();
+    }
 
     const title = typeof recipeData.name === "string" ? recipeData.name : "";
 

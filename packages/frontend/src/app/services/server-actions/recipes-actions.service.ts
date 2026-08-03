@@ -241,6 +241,9 @@ export class RecipesActionsService extends ActionsBase {
           });
       },
       errorHandlers,
+      {
+        promptOnSlowRead: false,
+      },
     );
   }
 
@@ -433,6 +436,9 @@ export class RecipesActionsService extends ActionsBase {
         };
       },
       errorHandlers,
+      {
+        promptOnSlowRead: false,
+      },
     );
   }
 

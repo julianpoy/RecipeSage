@@ -6,6 +6,7 @@ import {
   PopoverController,
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
+import dayjs from "dayjs";
 
 import { LoadingService } from "../../../services/loading.service";
 import { RouteMap, UtilService } from "../../../services/util.service";
@@ -144,6 +145,7 @@ export class MealPlanPopoverPage {
           this.preferences[MealPlanPreferenceKey.StartOfWeek] || undefined,
         preferredLanguage:
           this.preferences[GlobalPreferenceKey.Language] || undefined,
+        today: dayjs().format("YYYY-MM-DD"),
       }),
     );
 

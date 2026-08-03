@@ -18,6 +18,7 @@ import {
 } from "@recipesage/util/server/storage";
 import { enqueueJob } from "@recipesage/util/server/general";
 import { tmpdir } from "os";
+import { handleUploadErrors } from "../../../util/handleUploadErrors";
 
 const schema = {
   query: z.object({
@@ -32,14 +33,16 @@ export const fdxzHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-        }),
-        limits: {
-          fileSize: MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024,
-        },
-      }).single("file"),
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+          }),
+          limits: {
+            fileSize: MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

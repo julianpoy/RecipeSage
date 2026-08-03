@@ -18,6 +18,9 @@ import {
 import { enqueueJob } from "@recipesage/util/server/general";
 import { tmpdir } from "os";
 import { createReadStream } from "fs";
+import { handleUploadErrors } from "../../../util/handleUploadErrors";
+
+const FILE_SIZE_LIMIT_MB = Math.min(MAX_IMPORT_FILE_SIZE_MB, 128);
 
 const schema = {
   query: z.object({
@@ -31,14 +34,16 @@ export const jsonldHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multerAutoCleanup,
-      multer({
-        storage: multer.diskStorage({
-          destination: tmpdir(),
-        }),
-        limits: {
-          fileSize: MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024,
-        },
-      }).single("file"),
+      handleUploadErrors(
+        multer({
+          storage: multer.diskStorage({
+            destination: tmpdir(),
+          }),
+          limits: {
+            fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
+          },
+        }).single("file"),
+      ),
     ],
   },
   async (req, res) => {

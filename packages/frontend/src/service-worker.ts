@@ -6,6 +6,23 @@ declare let self: ServiceWorkerGlobalScope;
 
 import * as Sentry from "@sentry/browser";
 
+const SUPPRESSED_WORKBOX_ERROR_CODES = ["no-response"] as const;
+
+const checkSuppressedError = (error: unknown) => {
+  if (!error || typeof error !== "object") return false;
+
+  const name =
+    "name" in error && typeof error.name === "string" ? error.name : undefined;
+  const message =
+    "message" in error && typeof error.message === "string"
+      ? error.message
+      : undefined;
+
+  return SUPPRESSED_WORKBOX_ERROR_CODES.some(
+    (code) => name === code || message?.startsWith(`${code} ::`),
+  );
+};
+
 if (process.env.ENVIRONMENT !== "selfhost") {
   const hostname = self.location.hostname;
 
@@ -18,11 +35,15 @@ if (process.env.ENVIRONMENT !== "selfhost") {
 
   Sentry.init({
     release: process.env.APP_VERSION,
-    environment: process.env.ENVIRONMENT,
+    environment,
     dsn: "https://f6bf39d644968626a9d7207fe3ae58fd@o158500.ingest.us.sentry.io/4510138109853696",
     transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
 
     tracesSampleRate: 1,
+    beforeSend(event, hint) {
+      if (checkSuppressedError(hint.originalException)) return null;
+      return event;
+    },
   });
 }
 
