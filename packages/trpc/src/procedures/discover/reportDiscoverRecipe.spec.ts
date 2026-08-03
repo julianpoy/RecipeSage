@@ -3,6 +3,7 @@ import {
   DiscoverApprovalState,
   DiscoverReportSource,
   DiscoverReportStatus,
+  UserDiscoverStanding,
 } from "@recipesage/prisma";
 import { discoverRecipeFactory } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
@@ -134,6 +135,42 @@ describe("reportDiscoverRecipe", () => {
       await expect(
         trpc.discover.reportDiscoverRecipe({
           id: "00000000-0c70-4718-aacc-05add19096b5",
+          reason: "This recipe is inappropriate",
+        }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("throws when the author is shadowbanned", async ({ trpc, user2 }) => {
+      await prisma.user.update({
+        where: { id: user2.id },
+        data: { discoverStanding: UserDiscoverStanding.SHADOWBANNED },
+      });
+      const recipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user2.id),
+      });
+
+      await expect(
+        trpc.discover.reportDiscoverRecipe({
+          id: recipe.id,
+          reason: "This recipe is inappropriate",
+        }),
+      ).rejects.toThrow("Could not find that discover recipe");
+    });
+
+    test("throws when another user's recipe is not yet approved", async ({
+      trpc,
+      user2,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user2.id),
+          approvalState: DiscoverApprovalState.PENDING,
+        },
+      });
+
+      await expect(
+        trpc.discover.reportDiscoverRecipe({
+          id: recipe.id,
           reason: "This recipe is inappropriate",
         }),
       ).rejects.toThrow("Could not find that discover recipe");
