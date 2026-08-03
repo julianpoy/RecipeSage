@@ -49,14 +49,22 @@ const queueItem: StandardJobQueueItem = {
   storageKey: "storage-key",
 };
 
-const recipeXml = (title: string) =>
-  `<recipe><title>${title}</title><ingredient><li>1 cup flour</li></ingredient><recipetext><li>Mix it</li></recipetext></recipe>`;
+const recipeXml = (title: string, ...ingredients: string[]) =>
+  `<recipe><title>${title}</title><ingredient>${ingredients
+    .map((ingredient) => `<li>${ingredient}</li>`)
+    .join("")}</ingredient><recipetext><li>Mix it</li></recipetext></recipe>`;
 
-const cookbookXml = (...titles: string[]) =>
-  `<?xml version="1.0" encoding="UTF-8"?><cookbook>${titles.map(recipeXml).join("")}</cookbook>`;
+const cookbookXml = (...recipes: string[]) =>
+  `<?xml version="1.0" encoding="UTF-8"?><cookbook>${recipes.join("")}</cookbook>`;
+
+const importedRecipes = () => {
+  expect(importJobFinishCommon).toHaveBeenCalledTimes(1);
+
+  return importJobFinishCommon.mock.calls[0][0].standardizedRecipeImportInput;
+};
 
 const importedTitles = () =>
-  importJobFinishCommon.mock.calls[0][0].standardizedRecipeImportInput.map(
+  importedRecipes().map(
     (entry: { recipe: { title: string } }) => entry.recipe.title,
   );
 
@@ -67,7 +75,7 @@ beforeEach(() => {
 
 describe("cookmateImportJobHandler", () => {
   it("imports an export containing a single recipe", async () => {
-    xmlFixture = cookbookXml("Only Recipe");
+    xmlFixture = cookbookXml(recipeXml("Only Recipe", "1 cup flour", "2 eggs"));
 
     await cookmateImportJobHandler(job, queueItem);
 
@@ -75,11 +83,48 @@ describe("cookmateImportJobHandler", () => {
   });
 
   it("imports an export containing multiple recipes", async () => {
-    xmlFixture = cookbookXml("First Recipe", "Second Recipe");
+    xmlFixture = cookbookXml(
+      recipeXml("First Recipe", "1 cup flour"),
+      recipeXml("Second Recipe", "2 eggs"),
+    );
 
     await cookmateImportJobHandler(job, queueItem);
 
     expect(importedTitles()).toEqual(["First Recipe", "Second Recipe"]);
+  });
+
+  it("imports a recipe whose ingredient list contains a single entry", async () => {
+    xmlFixture = cookbookXml(recipeXml("One Ingredient", "1 cup flour"));
+
+    await cookmateImportJobHandler(job, queueItem);
+
+    expect(importedRecipes()[0].recipe).toMatchObject({
+      title: "One Ingredient",
+      ingredients: "1 cup flour",
+      instructions: "Mix it",
+    });
+  });
+
+  it("imports a recipe whose ingredient list contains multiple entries", async () => {
+    xmlFixture = cookbookXml(
+      recipeXml("Two Ingredients", "1 cup flour", "2 eggs"),
+    );
+
+    await cookmateImportJobHandler(job, queueItem);
+
+    expect(importedRecipes()[0].recipe).toMatchObject({
+      title: "Two Ingredients",
+      ingredients: "1 cup flour\n2 eggs",
+      instructions: "Mix it",
+    });
+  });
+
+  it("imports nothing for a cookbook that contains no recipes", async () => {
+    xmlFixture = `<?xml version="1.0" encoding="UTF-8"?><cookbook></cookbook>`;
+
+    await cookmateImportJobHandler(job, queueItem);
+
+    expect(importedRecipes()).toEqual([]);
   });
 
   it("throws a bad format error for xml that is not a cookmate export", async () => {
@@ -90,7 +135,7 @@ describe("cookmateImportJobHandler", () => {
     );
   });
 
-  it("throws a bad format error for an empty cookbook", async () => {
+  it("throws a bad format error for xml with no root element", async () => {
     xmlFixture = `<?xml version="1.0" encoding="UTF-8"?>`;
 
     await expect(cookmateImportJobHandler(job, queueItem)).rejects.toThrow(

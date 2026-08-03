@@ -83,6 +83,7 @@ describe("urlsImportJobHandler", () => {
       "https://example.com/first",
       "https://example.com/second",
     ]);
+    expect(importJobFinishCommon).toHaveBeenCalledTimes(1);
     expect(importJobFinishCommon.mock.calls[0][0].failedCount).toBe(0);
   });
 

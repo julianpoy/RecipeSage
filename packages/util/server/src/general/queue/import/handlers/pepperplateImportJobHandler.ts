@@ -10,6 +10,7 @@ import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadCredentialsError } from "../../../jobs/jobErrors";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
+import { xmlNodeToArray } from "./shared/xmlNodeToArray";
 
 function escapeXml(str: string): string {
   return str
@@ -112,12 +113,13 @@ export async function pepperplateImportJobHandler(
         "RetrieveRecipesResult"
       ]["SynchronizationToken"]._text;
 
-    const items =
+    const items = xmlNodeToArray(
       recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"][
         "RetrieveRecipesResult"
-      ]["Items"]["RecipeSync"];
+      ]["Items"]["RecipeSync"],
+    );
 
-    if (items && items.length > 0) {
+    if (items.length > 0) {
       pepperplateRecipes.push(...items);
     } else {
       break;
@@ -133,12 +135,6 @@ export async function pepperplateImportJobHandler(
     return (pepperRecipe.Delete || {})._text !== "true";
   });
 
-  const objToArr = (item: any) => {
-    if (!item) return [];
-    if (item.length || item.length === 0) return item;
-    return [item];
-  };
-
   const onProgress = debounceJobUpdateProgress({
     jobId: job.id,
     userId: job.userId,
@@ -148,7 +144,7 @@ export async function pepperplateImportJobHandler(
   let processedCount = 0;
   // Process each recipe
   for (const pepperRecipe of pepperplateRecipes) {
-    const ingredientGroups = objToArr(
+    const ingredientGroups = xmlNodeToArray(
       (pepperRecipe.Ingredients || {}).IngredientSyncGroup,
     );
 
@@ -163,7 +159,7 @@ export async function pepperplateImportJobHandler(
         if (ingredientGroup.Title && ingredientGroup.Title._text) {
           ingredients.push(`[${ingredientGroup.Title._text}]`);
         }
-        const innerIngredients = objToArr(
+        const innerIngredients = xmlNodeToArray(
           (ingredientGroup.Ingredients || {}).IngredientSync,
         )
           .sort(
@@ -183,7 +179,7 @@ export async function pepperplateImportJobHandler(
       })
       .join("\r\n");
 
-    const directionGroups = objToArr(
+    const directionGroups = xmlNodeToArray(
       (pepperRecipe.Directions || {}).DirectionSyncGroup,
     );
 
@@ -198,7 +194,7 @@ export async function pepperplateImportJobHandler(
         if (directionGroup.Title && directionGroup.Title._text) {
           directions.push(`[${directionGroup.Title._text}]`);
         }
-        const innerDirections = objToArr(
+        const innerDirections = xmlNodeToArray(
           (directionGroup.Directions || {}).DirectionSync,
         )
           .sort(
@@ -232,7 +228,7 @@ export async function pepperplateImportJobHandler(
         folder: "main",
       },
       labels: [
-        ...objToArr((pepperRecipe.Tags || {}).TagSync).map(
+        ...xmlNodeToArray((pepperRecipe.Tags || {}).TagSync).map(
           (tag: any) => tag.Text._text,
         ),
         ...importLabels,

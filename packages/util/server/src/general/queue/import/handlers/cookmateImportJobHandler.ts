@@ -8,6 +8,7 @@ import { cleanLabelTitle } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readdir, readFile, stat, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
+import { xmlNodeToArray } from "./shared/xmlNodeToArray";
 import xmljs from "xml-js";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
@@ -52,16 +53,14 @@ export async function cookmateImportJobHandler(
     throw new ImportBadFormatError();
   }
 
-  const cookmateRecipes = Array.isArray(data.cookbook.recipe)
-    ? data.cookbook.recipe
-    : data.cookbook.recipe
-      ? [data.cookbook.recipe]
-      : [];
+  const cookmateRecipes = xmlNodeToArray(data.cookbook.recipe);
 
   const grabFieldText = (field: any) => {
     if (!field) return "";
-    if (field.li && Array.isArray(field.li)) {
-      return field.li.map((item: any) => item._text).join("\n");
+
+    const listItems = xmlNodeToArray(field.li);
+    if (listItems.length) {
+      return listItems.map((item: any) => item._text).join("\n");
     }
 
     return field._text || "";
