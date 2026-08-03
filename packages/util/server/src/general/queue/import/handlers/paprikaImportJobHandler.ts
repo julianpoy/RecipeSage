@@ -102,7 +102,7 @@ export async function paprikaImportJobHandler(
         ingredients: recipeData.ingredients,
         instructions: recipeData.directions,
         yield: recipeData.servings,
-        rating: parseInt(recipeData.rating),
+        rating: parseInt(recipeData.rating) || undefined,
         totalTime,
         activeTime: recipeData.prep_time,
         notes,
