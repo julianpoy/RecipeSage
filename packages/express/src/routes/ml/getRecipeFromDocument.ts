@@ -34,6 +34,18 @@ export const getRecipeFromDocumentHandler = defineHandler(
               cb(null, `${randomBytes(16).toString("hex")}${extension}`);
             },
           }),
+          fileFilter: (_req, file, cb) => {
+            const extension = path.extname(file.originalname).toLowerCase();
+            if (
+              extension !== ".txt" &&
+              !isExtractableDocumentExtension(extension)
+            ) {
+              cb(new BadRequestError("Unsupported document extension"));
+              return;
+            }
+
+            cb(null, true);
+          },
           limits: {
             fileSize: FILE_SIZE_LIMIT_MB * 1024 * 1024,
           },

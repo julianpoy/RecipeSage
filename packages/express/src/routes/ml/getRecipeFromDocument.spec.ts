@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import express from "express";
 import request from "supertest";
+import { readdir } from "fs/promises";
+import { tmpdir } from "os";
+
+const REJECTED_EXTENSION = ".unsupportedbyfilter";
+
+const rejectedUploads = async () =>
+  (await readdir(tmpdir())).filter((name) => name.endsWith(REJECTED_EXTENSION));
 
 const documentToRecipeMock = vi.fn();
 
@@ -107,6 +114,43 @@ describe("POST /ml/getRecipeFromDocument", () => {
 
     expect(response.status).toBe(400);
     expect(documentToRecipeMock).not.toHaveBeenCalled();
+  });
+
+  it("rejects an unsupported extension before writing it to disk", async () => {
+    const before = await rejectedUploads();
+
+    const app = await buildApp();
+    const response = await request(app)
+      .post("/ml/getRecipeFromDocument")
+      .set("Authorization", "Bearer token")
+      .attach("file", Buffer.from("not a recipe"), {
+        filename: `recipe${REJECTED_EXTENSION}`,
+        contentType: "application/octet-stream",
+      });
+
+    expect(response.status).toBe(400);
+    expect(documentToRecipeMock).not.toHaveBeenCalled();
+    expect(await rejectedUploads()).toEqual(before);
+  });
+
+  it("accepts an uppercase extension", async () => {
+    documentToRecipeMock.mockResolvedValue({
+      recipe: { title: "Notes", ingredients: "", instructions: "" },
+      images: [],
+      labels: [],
+    });
+
+    const app = await buildApp();
+    const response = await request(app)
+      .post("/ml/getRecipeFromDocument")
+      .set("Authorization", "Bearer token")
+      .attach("file", Buffer.from("plain text recipe"), {
+        filename: "recipe.TXT",
+        contentType: "text/plain",
+      });
+
+    expect(response.status).toBe(200);
+    expect(documentToRecipeMock).toHaveBeenCalledOnce();
   });
 
   it("accepts .txt files", async () => {
