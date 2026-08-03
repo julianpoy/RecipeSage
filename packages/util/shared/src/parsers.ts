@@ -381,25 +381,26 @@ export const getTitleForIngredient = (ingredient: string): string => {
  * 3 apples, blended => apples
  */
 export const stripIngredient = (ingredient: string): string => {
-  ingredient = stripNewlines(ingredient);
-  const trimmed = replaceFractionsInText(ingredient)
-    .trim()
-    .replace(new RegExp(`^(${measurementRegexp.source})`), "")
-    .trim()
-    .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
-    .trim()
-    .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`,$`, "i"), "")
-    .trim();
-  if (trimmed !== ingredient) {
-    return stripIngredient(trimmed);
-  } else {
-    return trimmed;
+  let current = stripNewlines(ingredient);
+
+  for (;;) {
+    const trimmed = replaceFractionsInText(current)
+      .trim()
+      .replace(new RegExp(`^(${measurementRegexp.source})`), "")
+      .trim()
+      .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
+      .trim()
+      .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`,$`, "i"), "")
+      .trim();
+
+    if (trimmed === current) return trimmed;
+    current = trimmed;
   }
 };
 

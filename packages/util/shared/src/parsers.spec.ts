@@ -392,6 +392,11 @@ describe("parsers", () => {
         const result = stripIngredient("2 cups flour,");
         expect(result).toBe("flour");
       });
+
+      it("handles a very long quantity prefixed line", () => {
+        const result = stripIngredient("1 ".repeat(5000) + "apples");
+        expect(result).toBe("apples");
+      });
     });
 
     describe("filler words", () => {
