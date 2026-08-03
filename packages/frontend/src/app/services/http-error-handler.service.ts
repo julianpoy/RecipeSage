@@ -13,6 +13,9 @@ export interface ErrorHandlers {
   [code: string]: (error: Error) => any;
 }
 
+const TRANSPORT_FAILURE_STATUS_CODE = 0;
+const UNKNOWN_FAILURE_STATUS_CODE = 500;
+
 @Injectable({
   providedIn: "root",
 })
@@ -198,11 +201,22 @@ export class HttpErrorHandlerService {
     this._handleError(statusCode, error, errorHandlers);
   }
 
+  private inferTransportFailureStatusCode(
+    error: TRPCClientError<AppRouter>,
+  ): number {
+    if (!navigator.onLine) return TRANSPORT_FAILURE_STATUS_CODE;
+
+    return error.cause instanceof TypeError
+      ? TRANSPORT_FAILURE_STATUS_CODE
+      : UNKNOWN_FAILURE_STATUS_CODE;
+  }
+
   handleTrpcError(
     error: TRPCClientError<AppRouter>,
     errorHandlers?: ErrorHandlers,
   ) {
-    const statusCode = error.data?.httpStatus ?? 0;
+    const statusCode =
+      error.data?.httpStatus ?? this.inferTransportFailureStatusCode(error);
 
     this._handleError(statusCode, error, errorHandlers);
   }
