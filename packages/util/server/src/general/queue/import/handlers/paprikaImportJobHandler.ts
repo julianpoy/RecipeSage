@@ -13,6 +13,26 @@ import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
 
+async function collectPaprikaRecipeFiles(root: string): Promise<string[]> {
+  const results: string[] = [];
+  const stack: string[] = [root];
+  while (stack.length) {
+    const current = stack.pop();
+    if (current === undefined) break;
+    const entries = await readdir(current, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.name.startsWith(".")) continue;
+      const entryPath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(entryPath);
+      } else if (entry.isFile()) {
+        results.push(entryPath);
+      }
+    }
+  }
+  return results;
+}
+
 export async function paprikaImportJobHandler(
   job: ImportJobSummary,
   queueItem: StandardJobQueueItem,
@@ -31,7 +51,7 @@ export async function paprikaImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
+  const filePaths = await collectPaprikaRecipeFiles(extractPath);
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
@@ -40,15 +60,12 @@ export async function paprikaImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = fileNames.length;
+  const totalCount = filePaths.length;
   let processedCount = 0;
-  for (const fileName of fileNames) {
-    const filePath = path.join(extractPath, fileName);
-
-    const fileBuf = await readFile(filePath);
-
+  for (const filePath of filePaths) {
     let recipeData;
     try {
+      const fileBuf = await readFile(filePath);
       const fileContents = await gunzipPromise(fileBuf);
       recipeData = JSON.parse(fileContents.toString().trim());
     } catch {
