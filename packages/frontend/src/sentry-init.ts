@@ -6,7 +6,7 @@ import {
 } from "./environments/environment";
 
 const SUPPRESSED_ERROR_MESSAGES =
-  /(Loading chunk \d+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(Cannot read properties of undefined \(reading 'isProxied'\))|(\.isProxied)|(\[object Undefined\])/;
+  /(dynamically imported module)|(Importing a module script failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(Cannot read properties of undefined \(reading 'isProxied'\))|(\.isProxied)|(\[object Undefined\])/;
 
 const checkSuppressedError = (error: unknown) => {
   if (!error || typeof error !== "object") return false;
