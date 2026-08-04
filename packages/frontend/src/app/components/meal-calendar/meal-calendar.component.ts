@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  type OnDestroy,
+} from "@angular/core";
 import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
@@ -45,7 +52,7 @@ import { addIcons } from "ionicons";
     IonLabel,
   ],
 })
-export class MealCalendarComponent {
+export class MealCalendarComponent implements OnDestroy {
   private utilService = inject(UtilService);
   private preferencesService = inject(PreferencesService);
 
@@ -123,10 +130,16 @@ export class MealCalendarComponent {
     });
     this.generateCalendar();
 
-    document.addEventListener("mouseup", () => {
-      this.dayDragInProgress = false;
-    });
+    document.addEventListener("mouseup", this.onDocumentMouseUp);
   }
+
+  ngOnDestroy() {
+    document.removeEventListener("mouseup", this.onDocumentMouseUp);
+  }
+
+  private onDocumentMouseUp = () => {
+    this.dayDragInProgress = false;
+  };
 
   // Generates calendar array centered around specified day (today).
   generateCalendar() {
