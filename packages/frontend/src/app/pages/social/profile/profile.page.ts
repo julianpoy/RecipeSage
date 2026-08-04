@@ -278,10 +278,12 @@ export class ProfilePage {
 
     const loading = this.loadingService.start();
 
-    await this.serverActionsService.users.createFriendship({
+    const response = await this.serverActionsService.users.createFriendship({
       friendId: this.profile.id,
     });
     loading.dismiss();
+
+    if (!response) return;
 
     const message = await this.translate
       .get("pages.profile.inviteSent")
@@ -309,10 +311,12 @@ export class ProfilePage {
 
     const loading = this.loadingService.start();
 
-    await this.serverActionsService.users.deleteFriendship({
+    const response = await this.serverActionsService.users.deleteFriendship({
       friendId: this.profile.id,
     });
     loading.dismiss();
+
+    if (!response) return;
 
     const message = await this.translate
       .get("pages.profile.inviteRemoved")
