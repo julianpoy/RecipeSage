@@ -1,8 +1,11 @@
 const QUANTITY = String.raw`\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?`;
 
-const HOUR_MATCHER = new RegExp(`(${QUANTITY}) *(?:hours?|hrs?|h)\\b`, "i");
+const HOUR_MATCHER = new RegExp(
+  `(${QUANTITY}) *(?:hours?|hrs?|h)(?![a-z])`,
+  "i",
+);
 const MINUTE_MATCHER = new RegExp(
-  `(${QUANTITY}) *(?:minutes?|mins?|m)\\b`,
+  `(${QUANTITY}) *(?:minutes?|mins?|m)(?![a-z])`,
   "i",
 );
 

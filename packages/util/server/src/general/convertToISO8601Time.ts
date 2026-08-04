@@ -1,5 +1,7 @@
 const ISO8601_TIME =
-  /^PT(?:(\d+(?:\.\d+)?)H)?(?:(\d+(?:\.\d+)?)M)?(?:(\d+(?:\.\d+)?)S)?$/;
+  /^P(?:(\d+(?:\.\d+)?)D)?(?:T(?:(\d+(?:\.\d+)?)H)?(?:(\d+(?:\.\d+)?)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
+
+const HOURS_PER_DAY = 24;
 
 const formatLocalizedTime = (
   units: [number, "hour" | "minute" | "second"][],
@@ -22,10 +24,15 @@ export const convertFromISO8601Time = (time: string, locale = "en") => {
   const match = time.match(ISO8601_TIME);
   if (!match) return time;
 
+  const days = Number(match[1] ?? 0);
+  const hours = Number(match[2] ?? 0) + days * HOURS_PER_DAY;
+  const minutes = Number(match[3] ?? 0);
+  const seconds = Number(match[4] ?? 0);
+
   const units: [number, "hour" | "minute" | "second"][] = [];
-  if (match[1]) units.push([Number(match[1]), "hour"]);
-  if (match[2]) units.push([Number(match[2]), "minute"]);
-  if (match[3]) units.push([Number(match[3]), "second"]);
+  if (hours) units.push([hours, "hour"]);
+  if (minutes) units.push([minutes, "minute"]);
+  if (seconds) units.push([seconds, "second"]);
   if (units.length === 0) return "";
 
   try {

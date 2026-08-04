@@ -13,6 +13,16 @@ describe("convertToISO8601Time", () => {
     expect(convertToISO8601Time("45 min")).toBe("PT45M");
   });
 
+  it("converts unspaced abbreviations", () => {
+    expect(convertToISO8601Time("1h30m")).toBe("PT1H30M");
+    expect(convertToISO8601Time("2hr15min")).toBe("PT2H15M");
+  });
+
+  it("does not treat a longer word as an abbreviation", () => {
+    expect(convertToISO8601Time("1 handful")).toBe("");
+    expect(convertToISO8601Time("2 medium onions")).toBe("");
+  });
+
   it("converts fractional and mixed quantities to decimals", () => {
     expect(convertToISO8601Time("1.5 hours")).toBe("PT1.5H");
     expect(convertToISO8601Time("1 1/2 hours")).toBe("PT1.5H");
@@ -92,6 +102,17 @@ describe("convertFromISO8601Time", () => {
 
   it("returns non-ISO input unchanged", () => {
     expect(convertFromISO8601Time("about 40 minutes")).toBe("about 40 minutes");
-    expect(convertFromISO8601Time("P1DT2H")).toBe("P1DT2H");
+    expect(convertFromISO8601Time("1DT2H")).toBe("1DT2H");
+  });
+
+  it("folds a day component into hours", () => {
+    expect(convertFromISO8601Time("P1DT2H")).toBe("26 hours");
+    expect(convertFromISO8601Time("P0DT1H30M")).toBe("1 hour 30 minutes");
+  });
+
+  it("skips zero valued components", () => {
+    expect(convertFromISO8601Time("P0DT0H30M")).toBe("30 minutes");
+    expect(convertFromISO8601Time("PT1H0M0S")).toBe("1 hour");
+    expect(convertFromISO8601Time("PT0H0M0S")).toBe("");
   });
 });
