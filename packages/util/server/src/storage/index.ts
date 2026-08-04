@@ -72,3 +72,4 @@ export * from "./imageFetchError";
 export * from "./shared";
 export * from "./gunzipPromise";
 export * from "./deleteHangingImagesForUser";
+export * from "./deleteHangingImagesByIds";
