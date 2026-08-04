@@ -233,8 +233,6 @@ model RecipeLabel {
 
   @@unique([labelId, recipeId], map: "Recipe_Labels_labelId_recipeId_uk")
   @@unique([recipeId, labelId])
-  @@index([labelId], map: "recipe__labels_label_id")
-  @@index([recipeId], map: "recipe__labels_recipe_id")
   @@map("Recipe_Labels")
 }
 
