@@ -201,6 +201,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     const idx = selectedItems.findIndex(
       (selectedItem) => selectedItem.id === item.id,
     );
+    if (idx === -1) return;
     selectedItems.splice(idx, 1);
 
     this.selectedItems = selectedItems;

@@ -53,6 +53,7 @@ export class CookingToolbarService {
     const recipeIdx = this.pinnedRecipes.findIndex(
       (recipe) => recipe.id === recipeId,
     );
+    if (recipeIdx === -1) return;
 
     this.pinnedRecipes.splice(recipeIdx, 1);
     this.save();

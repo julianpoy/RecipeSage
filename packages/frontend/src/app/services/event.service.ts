@@ -49,14 +49,13 @@ export class EventService {
 
     for (const eventName of eventNames) {
       this.eventListeners[eventName] = this.eventListeners[eventName] || [];
-      this.eventListeners[eventName].splice(
-        this.eventListeners[eventName].indexOf(listener),
-        1,
-      );
+      const idx = this.eventListeners[eventName].indexOf(listener);
+      if (idx === -1) continue;
+      this.eventListeners[eventName].splice(idx, 1);
     }
   }
 
   publish(eventName: EventName, data?: any) {
-    this.eventListeners[eventName]?.map((cb) => cb(data));
+    this.eventListeners[eventName]?.slice().map((cb) => cb(data));
   }
 }
