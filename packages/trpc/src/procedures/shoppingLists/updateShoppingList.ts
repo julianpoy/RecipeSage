@@ -77,12 +77,6 @@ export const updateShoppingList = authenticatedProcedure
         });
       }
 
-      await prisma.shoppingListCollaborator.deleteMany({
-        where: {
-          shoppingListId: input.id,
-        },
-      });
-
       collaboratorUsersUpdate = {
         createMany: {
           data: collaboratorUsers.map((collaboratorUser) => ({
@@ -92,16 +86,28 @@ export const updateShoppingList = authenticatedProcedure
       };
     }
 
-    const updatedShoppingList = await prisma.shoppingList.update({
-      where: {
-        id: input.id,
-      },
-      data: {
-        title: input.title,
-        userId: ctx.session.userId,
-        collaboratorUsers: collaboratorUsersUpdate,
-        categoryOrder: input.categoryOrder,
-      },
+    const replaceCollaborators = input.collaboratorUserIds !== undefined;
+
+    const updatedShoppingList = await prisma.$transaction(async (tx) => {
+      if (replaceCollaborators) {
+        await tx.shoppingListCollaborator.deleteMany({
+          where: {
+            shoppingListId: input.id,
+          },
+        });
+      }
+
+      return tx.shoppingList.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          userId: ctx.session.userId,
+          collaboratorUsers: collaboratorUsersUpdate,
+          categoryOrder: input.categoryOrder,
+        },
+      });
     });
 
     const reference = crypto.randomUUID();
