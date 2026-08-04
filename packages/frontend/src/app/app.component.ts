@@ -1,5 +1,5 @@
 import { Component, inject, NgZone } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
 import { NgxLoadingBar } from "@ngx-loading-bar/core";
@@ -119,7 +119,6 @@ interface NavPage {
 export class AppComponent {
   private translate = inject(TranslateService);
   private navCtrl = inject(NavController);
-  private route = inject(ActivatedRoute);
   private trpcService = inject(TRPCService);
   private serverActionsService = inject(ServerActionsService);
   private syncService = inject(SyncService);
@@ -319,12 +318,7 @@ export class AppComponent {
     });
 
     this.websocketService.on("messages:new", async (payload) => {
-      if (
-        this.route.snapshot.url
-          .toString()
-          .indexOf(RouteMap.MessagesPage.getPath())
-      )
-        return;
+      if (this.router.url.startsWith(RouteMap.MessagesPage.getPath())) return;
       const notification = "New message from " + payload.otherUser.name;
 
       const myMessage = payload;
