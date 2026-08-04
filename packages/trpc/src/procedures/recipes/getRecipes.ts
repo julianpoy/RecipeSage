@@ -92,9 +92,7 @@ export const getRecipes = publicProcedure
       prisma.recipe.findMany({
         where,
         ...recipeSummaryLite,
-        orderBy: {
-          [input.orderBy]: input.orderDirection,
-        },
+        orderBy: [{ [input.orderBy]: input.orderDirection }, { id: "asc" }],
         skip: input.offset,
         take: input.limit,
       }),
