@@ -331,7 +331,7 @@ export class RecipesActionsService extends ActionsBase {
           let count = 1;
           while (count < 1000) {
             uniqueTitle = `${strippedRecipeTitle} (${count})`;
-            const isConflict = recipeTitles.has(title);
+            const isConflict = recipeTitles.has(uniqueTitle);
             if (!isConflict) break;
             count++;
           }
