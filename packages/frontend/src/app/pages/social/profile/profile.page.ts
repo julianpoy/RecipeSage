@@ -165,6 +165,9 @@ export class ProfilePage {
       this.applyRouteParams();
       this.profile = undefined;
       this.publishedRecipes = [];
+      this.profileItems = [];
+      this.incomingFriendship = false;
+      this.outgoingFriendship = false;
     }
 
     this.meQuery.refresh();
