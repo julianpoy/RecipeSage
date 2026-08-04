@@ -19,10 +19,18 @@ describe("getVisibleLabels", () => {
 
   beforeEach(async () => {
     owner = await prisma.user.create({ data: userFactory() });
-    friendA = await prisma.user.create({ data: userFactory() });
-    friendB = await prisma.user.create({ data: userFactory() });
-    friendC = await prisma.user.create({ data: userFactory() });
-    stranger = await prisma.user.create({ data: userFactory() });
+    friendA = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    friendB = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    friendC = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    stranger = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
     cleanupIds.push(owner.id, friendA.id, friendB.id, friendC.id, stranger.id);
   });
 

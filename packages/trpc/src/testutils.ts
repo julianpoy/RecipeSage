@@ -67,6 +67,13 @@ export async function createUser() {
   });
 }
 
+export async function enableProfileForUser(userId: string) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { enableProfile: true },
+  });
+}
+
 export async function createActiveSubscription(userId: string) {
   const nextYear = new Date();
   nextYear.setFullYear(nextYear.getFullYear() + 1);

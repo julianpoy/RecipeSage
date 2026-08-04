@@ -29,6 +29,9 @@ export const getVisibleProfileItems = async (
 
   const profileItems = await prisma.profileItem.findMany({
     where: {
+      user: {
+        enableProfile: true,
+      },
       OR: [
         {
           userId: {
