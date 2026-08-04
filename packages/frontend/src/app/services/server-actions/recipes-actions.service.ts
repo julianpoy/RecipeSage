@@ -133,20 +133,27 @@ export class RecipesActionsService extends ActionsBase {
 
         recipes = recipes.filter((recipe) => recipe.folder === folder);
 
-        recipes = recipes.sort((_a, _b) => {
-          const a = orderDirection === "asc" ? _a : _b;
-          const b = orderDirection === "asc" ? _b : _a;
+        const direction = orderDirection === "asc" ? 1 : -1;
+        recipes = recipes.sort((a, b) => {
+          let comparison = 0;
 
           if (orderBy === "title") {
-            return a.title.localeCompare(b.title);
+            comparison = direction * a.title.localeCompare(b.title);
+          } else if (orderBy === "createdAt") {
+            comparison =
+              direction * (a.createdAt.getTime() - b.createdAt.getTime());
+          } else if (orderBy === "updatedAt") {
+            comparison =
+              direction * (a.updatedAt.getTime() - b.updatedAt.getTime());
+          } else if (orderBy === "lastMadeAt") {
+            if (!a.lastMadeAt && !b.lastMadeAt) comparison = 0;
+            else if (!a.lastMadeAt) comparison = 1;
+            else if (!b.lastMadeAt) comparison = -1;
+            else
+              comparison = direction * a.lastMadeAt.localeCompare(b.lastMadeAt);
           }
-          if (orderBy === "createdAt") {
-            return b.createdAt.getTime() - a.createdAt.getTime();
-          }
-          if (orderBy === "updatedAt") {
-            return b.updatedAt.getTime() - a.updatedAt.getTime();
-          }
-          return 0;
+
+          return comparison || a.id.localeCompare(b.id);
         });
 
         if (recipeIds) {
