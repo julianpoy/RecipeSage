@@ -29,13 +29,19 @@ export const getJobDownloadUrlById = authenticatedProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const _job = await prisma.job.findUniqueOrThrow({
+    const _job = await prisma.job.findUnique({
       where: {
         userId: ctx.session.userId,
         id: input.id,
       },
       ...jobSummary,
     });
+
+    if (!_job) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+      });
+    }
 
     const job = prismaJobSummaryToJobSummary(_job);
 

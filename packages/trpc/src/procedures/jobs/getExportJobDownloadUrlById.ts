@@ -30,7 +30,7 @@ export const getExportJobDownloadUrlById = authenticatedProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const _job = await prisma.job.findUniqueOrThrow({
+    const _job = await prisma.job.findUnique({
       where: {
         userId: ctx.session.userId,
         id: input.id,

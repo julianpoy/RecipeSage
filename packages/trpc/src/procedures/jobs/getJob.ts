@@ -25,7 +25,7 @@ export const getJob = authenticatedProcedure
   )
   .output(jobSummarySchema)
   .query(async ({ input, ctx }) => {
-    const job = await prisma.job.findUniqueOrThrow({
+    const job = await prisma.job.findUnique({
       where: {
         userId: ctx.session.userId,
         id: input.id,
