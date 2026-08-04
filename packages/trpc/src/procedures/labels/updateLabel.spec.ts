@@ -23,6 +23,49 @@ describe("updateLabel", () => {
       expect(updatedLabel?.title).toEqual("fish");
     });
 
+    test("cleans the title before saving it", async ({ trpc, user }) => {
+      const label = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "meat",
+        },
+      });
+
+      await trpc.labels.updateLabel({
+        id: label.id,
+        title: "  Fish, Fresh  ",
+        labelGroupId: null,
+      });
+
+      const updatedLabel = await prisma.label.findUnique({
+        where: { id: label.id },
+      });
+      expect(updatedLabel?.title).toEqual("fish fresh");
+    });
+
+    test("cleans a title that collides with the unlabeled sentinel", async ({
+      trpc,
+      user,
+    }) => {
+      const label = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "meat",
+        },
+      });
+
+      await trpc.labels.updateLabel({
+        id: label.id,
+        title: "Unlabeled",
+        labelGroupId: null,
+      });
+
+      const updatedLabel = await prisma.label.findUnique({
+        where: { id: label.id },
+      });
+      expect(updatedLabel?.title).toEqual("un-labeled");
+    });
+
     test("assigns the label to a group without a title", async ({
       trpc,
       user,

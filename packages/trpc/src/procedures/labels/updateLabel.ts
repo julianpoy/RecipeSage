@@ -2,6 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const updateLabel = authenticatedProcedure
   .meta({
@@ -29,14 +30,23 @@ export const updateLabel = authenticatedProcedure
       });
     }
 
-    if (input.title) {
+    const title = input.title ? cleanLabelTitle(input.title) : undefined;
+
+    if (input.title && !title) {
+      throw new TRPCError({
+        message: "Label title cannot be empty",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    if (title) {
       const existingLabel = await prisma.label.findFirst({
         where: {
           id: {
             not: input.id,
           },
           userId: ctx.session.userId,
-          title: input.title,
+          title,
         },
       });
 
@@ -70,7 +80,7 @@ export const updateLabel = authenticatedProcedure
         id: input.id,
       },
       data: {
-        title: input.title,
+        title,
         labelGroupId: input.labelGroupId,
       },
     });
