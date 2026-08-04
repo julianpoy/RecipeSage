@@ -321,7 +321,10 @@ export class ShoppingListPage {
         })),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
 
@@ -348,7 +351,10 @@ export class ShoppingListPage {
         })),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
 
@@ -405,7 +411,10 @@ export class ShoppingListPage {
         ids: items.map((el) => el.id),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
     loading.dismiss();
@@ -467,7 +476,10 @@ export class ShoppingListPage {
         items: sanitizedItems,
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
     loading.dismiss();
