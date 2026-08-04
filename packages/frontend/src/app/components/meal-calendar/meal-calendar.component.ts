@@ -306,9 +306,14 @@ export class MealCalendarComponent {
   ): string[] {
     const dateStamps: string[] = [];
 
-    let iterDate = dayjs(dateStamp1);
+    const first = dayjs(dateStamp1);
+    const second = dayjs(dateStamp2);
+    const start = first.isAfter(second) ? second : first;
+    const end = first.isAfter(second) ? first : second;
 
-    while (iterDate <= dayjs(dateStamp2)) {
+    let iterDate = start;
+
+    while (iterDate <= end) {
       dateStamps.push(iterDate.format("YYYY-MM-DD"));
 
       iterDate = dayjs(iterDate).add(1, "day");
