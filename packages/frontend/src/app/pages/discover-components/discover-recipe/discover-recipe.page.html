@@ -119,12 +119,12 @@
       @if (!isAuthor()) {
         <div class="discover-action-row actions">
           @if (isLoggedIn()) {
-            <ion-button (click)="save()">
+            <ion-button (click)="save()" [disabled]="saving">
               <ion-icon name="bookmark-outline" slot="start"></ion-icon>
               {{ "pages.discoverRecipe.save" | translate }}
             </ion-button>
           } @else {
-            <ion-button (click)="authAndSave()">
+            <ion-button (click)="authAndSave()" [disabled]="saving">
               <ion-icon name="bookmark-outline" slot="start"></ion-icon>
               {{ "pages.discoverRecipe.save" | translate }}
             </ion-button>

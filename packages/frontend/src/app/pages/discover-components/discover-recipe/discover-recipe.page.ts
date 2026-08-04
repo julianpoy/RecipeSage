@@ -139,6 +139,8 @@ export class DiscoverRecipePage {
   decimalNotationMode: DecimalNotation = ".";
   unitSystem: UnitSystem = "original";
 
+  saving = false;
+
   wakeLockRequest: null | {
     release: () => void;
   } = null;
@@ -625,66 +627,72 @@ export class DiscoverRecipePage {
   }
 
   async save() {
+    if (this.saving) return;
     if (!this.recipe) return;
 
-    const title = this.recipe.title;
+    this.saving = true;
+    try {
+      const title = this.recipe.title;
 
-    const loading = this.loadingService.start();
-    const conflictingRecipes =
-      await this.serverActionsService.recipes.getRecipesByTitle({
-        title,
+      const loading = this.loadingService.start();
+      const conflictingRecipes =
+        await this.serverActionsService.recipes.getRecipesByTitle({
+          title,
+        });
+      const uniqueTitle =
+        await this.serverActionsService.recipes.getUniqueRecipeTitle({
+          title,
+        });
+      loading.dismiss();
+
+      if (!conflictingRecipes || !uniqueTitle) return;
+
+      if (!conflictingRecipes.length) {
+        await this._save(title);
+        return;
+      }
+
+      const header = await this.translate
+        .get("pages.editRecipe.conflict.title")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.editRecipe.conflict.message", { title, uniqueTitle })
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const rename = await this.translate
+        .get("pages.editRecipe.conflict.rename")
+        .toPromise();
+      const ignore = await this.translate
+        .get("pages.editRecipe.conflict.ignore")
+        .toPromise();
+
+      const confirmPrompt = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: cancel,
+            role: "cancel",
+          },
+          {
+            text: rename,
+            role: "rename",
+          },
+          {
+            text: ignore,
+            role: "ignore",
+          },
+        ],
       });
-    const uniqueTitle =
-      await this.serverActionsService.recipes.getUniqueRecipeTitle({
-        title,
-      });
-    loading.dismiss();
 
-    if (!conflictingRecipes || !uniqueTitle) return;
+      await confirmPrompt.present();
+      const { role } = await confirmPrompt.onDidDismiss();
 
-    if (!conflictingRecipes.length) {
-      await this._save(title);
-      return;
+      if (role === "rename") await this._save(uniqueTitle);
+      if (role === "ignore") await this._save(title);
+    } finally {
+      this.saving = false;
     }
-
-    const header = await this.translate
-      .get("pages.editRecipe.conflict.title")
-      .toPromise();
-    const message = await this.translate
-      .get("pages.editRecipe.conflict.message", { title, uniqueTitle })
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const rename = await this.translate
-      .get("pages.editRecipe.conflict.rename")
-      .toPromise();
-    const ignore = await this.translate
-      .get("pages.editRecipe.conflict.ignore")
-      .toPromise();
-
-    const confirmPrompt = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: cancel,
-          role: "cancel",
-        },
-        {
-          text: rename,
-          handler: () => {
-            this._save(uniqueTitle);
-          },
-        },
-        {
-          text: ignore,
-          handler: () => {
-            this._save(title);
-          },
-        },
-      ],
-    });
-
-    await confirmPrompt.present();
   }
 
   private async _save(title: string) {
@@ -725,16 +733,23 @@ export class DiscoverRecipePage {
   }
 
   async authAndSave() {
-    const authModal = await this.modalCtrl.create({
-      component: AuthPage,
-      componentProps: {
-        startWithRegister: true,
-      },
-    });
-    await authModal.present();
-    await authModal.onDidDismiss();
+    if (this.saving) return;
 
-    await this.meQuery.refresh();
+    this.saving = true;
+    try {
+      const authModal = await this.modalCtrl.create({
+        component: AuthPage,
+        componentProps: {
+          startWithRegister: true,
+        },
+      });
+      await authModal.present();
+      await authModal.onDidDismiss();
+
+      await this.meQuery.refresh();
+    } finally {
+      this.saving = false;
+    }
 
     if (this.isLoggedIn()) {
       await this.save();
