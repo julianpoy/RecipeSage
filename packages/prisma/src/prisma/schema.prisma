@@ -117,6 +117,7 @@ model MealPlanCollaborator {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([mealPlanId, userId])
+  @@index([userId])
   @@map("MealPlan_Collaborators")
 }
 
@@ -131,6 +132,7 @@ model MealPlan {
   collaboratorUsers MealPlanCollaborator[]
   user              User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("MealPlans")
 }
 
@@ -170,6 +172,7 @@ model AssistantMessage {
   user      User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
   recipe    Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("AssistantMessages")
 }
 
@@ -504,6 +507,7 @@ model ShoppingListCollaborator {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([shoppingListId, userId])
+  @@index([userId])
   @@map("ShoppingList_Collaborators")
 }
 
@@ -518,6 +522,7 @@ model ShoppingList {
   collaboratorUsers ShoppingListCollaborator[]
   user              User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("ShoppingLists")
 }
 
@@ -558,6 +563,7 @@ model UserSubscription {
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("UserSubscriptions")
 }
 
@@ -651,6 +657,8 @@ model Job {
   updatedAt  DateTime  @updatedAt @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum JobType {
