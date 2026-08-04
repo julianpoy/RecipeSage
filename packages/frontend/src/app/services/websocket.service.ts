@@ -12,6 +12,7 @@ export class WebsocketService {
 
   connection: WebSocket | undefined;
   reconnectTimeout: NodeJS.Timeout | undefined;
+  private connecting = false;
 
   listeners: Record<string, Set<(msg: Record<string, any>) => void>> = {};
 
@@ -52,54 +53,76 @@ export class WebsocketService {
   }
 
   async triggerReconnect() {
+    this.detachConnection();
+    await this.connect();
+  }
+
+  private detachConnection() {
+    const previous = this.connection;
+    this.connection = undefined;
+    if (!previous) return;
+
+    previous.onopen = null;
+    previous.onmessage = null;
+    previous.onerror = null;
+    previous.onclose = null;
+
     try {
-      this.connection?.close();
+      previous.close();
     } catch (e) {
       console.warn(e);
     }
-    this.connect();
   }
 
   // Connection
   private async connect() {
-    if (!this.utilService.isLoggedIn()) return this.queueReconnect();
+    if (this.connecting) return;
+    this.connecting = true;
 
-    let unauthorized = false;
-    const session = await this.serverActionsService.users.validateSession({
-      401: () => {
-        unauthorized = true;
-      },
-      "*": () => {},
-    });
-    if (unauthorized) {
-      // We break the reconnect loop until the next auth
-      return;
-    }
-    if (!session) return this.queueReconnect();
+    try {
+      if (!this.utilService.isLoggedIn()) return this.queueReconnect();
 
-    this.connection = new WebSocket(
-      serverConfig.gripWsBase + this.utilService.getTokenQuery(),
-    );
-
-    this.connection.onopen = () => {
-      this.handleMessage({
-        type: "connected",
+      let unauthorized = false;
+      const session = await this.serverActionsService.users.validateSession({
+        401: () => {
+          unauthorized = true;
+        },
+        "*": () => {},
       });
-    };
+      if (unauthorized) {
+        // We break the reconnect loop until the next auth
+        return;
+      }
+      if (!session) return this.queueReconnect();
 
-    this.connection.onmessage = (payload: { data: string }) => {
-      this.handleMessage(JSON.parse(payload.data));
-    };
+      const connection = new WebSocket(
+        serverConfig.gripWsBase + this.utilService.getTokenQuery(),
+      );
+      this.connection = connection;
 
-    this.connection.onerror = () => {
-      if (this.connection?.readyState === WebSocket.OPEN)
-        this.connection.close();
-      this.queueReconnect();
-    };
+      connection.onopen = () => {
+        this.handleMessage({
+          type: "connected",
+        });
+      };
 
-    this.connection.onclose = () => {
-      this.queueReconnect();
-    };
+      connection.onmessage = (payload: { data: string }) => {
+        this.handleMessage(JSON.parse(payload.data));
+      };
+
+      connection.onerror = () => {
+        if (this.connection !== connection) return;
+        if (connection.readyState === WebSocket.OPEN) connection.close();
+        this.queueReconnect();
+      };
+
+      connection.onclose = () => {
+        if (this.connection !== connection) return;
+        this.queueReconnect();
+      };
+    } finally {
+      this.connecting = false;
+    }
   }
 
   private queueReconnect() {
@@ -108,8 +131,8 @@ export class WebsocketService {
     if (this.reconnectTimeout) return;
 
     this.reconnectTimeout = setTimeout(async () => {
-      this.triggerReconnect();
       this.reconnectTimeout = undefined;
+      await this.triggerReconnect();
     }, RECONNECT_TIMEOUT_WAIT);
   }
 
