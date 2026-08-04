@@ -167,10 +167,12 @@ export class CookPage {
   }
 
   private async loadRecipe(): Promise<CookableRecipe | null> {
+    const requestedRecipeId = this.recipeId;
     const response = await this.serverActionsService.recipes.getRecipe({
-      id: this.recipeId,
+      id: requestedRecipeId,
     });
     if (!response) return null;
+    if (requestedRecipeId !== this.recipeId) return null;
 
     return {
       title: response.title,

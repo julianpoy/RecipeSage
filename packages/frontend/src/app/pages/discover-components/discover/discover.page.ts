@@ -94,6 +94,7 @@ export class DiscoverPage {
   loadedAny = false;
   recipes: DiscoverRecipeSummary[] = [];
   reachedEnd = false;
+  private searchGeneration = 0;
   tileColCount = 1;
 
   datasource = new Datasource<DiscoverRecipeSummary>({
@@ -231,6 +232,7 @@ export class DiscoverPage {
 
   async reload() {
     const loading = this.loadingService.start();
+    this.searchGeneration++;
     this.recipes = [];
     this.reachedEnd = false;
     this.loadedAny = false;
@@ -247,6 +249,7 @@ export class DiscoverPage {
   }
 
   private async fetchPage(offset: number): Promise<boolean> {
+    const generation = this.searchGeneration;
     const response =
       await this.serverActionsService.discover.searchDiscoverRecipes({
         searchTerm: this.searchTerm.trim() || undefined,
@@ -266,6 +269,7 @@ export class DiscoverPage {
       });
 
     if (!response) return false;
+    if (generation !== this.searchGeneration) return false;
 
     for (let i = 0; i < response.recipes.length; i++) {
       this.recipes[offset + i] = response.recipes[i];

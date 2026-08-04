@@ -261,10 +261,12 @@ export class RecipePage {
   }
 
   async _loadRecipe() {
+    const requestedRecipeId = this.recipeId;
     const response = await this.serverActionsService.recipes.getRecipe({
-      id: this.recipeId,
+      id: requestedRecipeId,
     });
     if (!response) return;
+    if (requestedRecipeId !== this.recipeId) return;
 
     this.recipe = response;
     if (this.recipe && "recipeLinks" in this.recipe) {
