@@ -2,29 +2,6 @@ import { prisma } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import { anonymousTrpc } from "../../testutils";
 
-const originalEnv = vi.hoisted(() => {
-  const previous = {
-    GOOGLE_GSI_CLIENT_ID: process.env.GOOGLE_GSI_CLIENT_ID,
-    GOOGLE_GSI_CLIENT_SECRET: process.env.GOOGLE_GSI_CLIENT_SECRET,
-  };
-  process.env.GOOGLE_GSI_CLIENT_ID = "test-client-id";
-  process.env.GOOGLE_GSI_CLIENT_SECRET = "test-client-secret";
-  return previous;
-});
-
-afterAll(() => {
-  if (originalEnv.GOOGLE_GSI_CLIENT_ID === undefined) {
-    delete process.env.GOOGLE_GSI_CLIENT_ID;
-  } else {
-    process.env.GOOGLE_GSI_CLIENT_ID = originalEnv.GOOGLE_GSI_CLIENT_ID;
-  }
-  if (originalEnv.GOOGLE_GSI_CLIENT_SECRET === undefined) {
-    delete process.env.GOOGLE_GSI_CLIENT_SECRET;
-  } else {
-    process.env.GOOGLE_GSI_CLIENT_SECRET = originalEnv.GOOGLE_GSI_CLIENT_SECRET;
-  }
-});
-
 const verifyIdTokenMock = vi.fn();
 
 vi.mock("google-auth-library", () => ({

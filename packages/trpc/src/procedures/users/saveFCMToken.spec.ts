@@ -1,13 +1,16 @@
 import { prisma } from "@recipesage/prisma";
+import { faker } from "@faker-js/faker";
 import { test, anonymousTrpc } from "../../testutils";
 
 describe("saveFCMToken", () => {
   describe("success", () => {
     test("creates an fcm token for the caller", async ({ trpc, user }) => {
-      await trpc.users.saveFCMToken({ fcmToken: "token-1" });
+      const token = faker.string.alphanumeric(24);
+
+      await trpc.users.saveFCMToken({ fcmToken: token });
 
       const tokens = await prisma.fCMToken.findMany({
-        where: { token: "token-1" },
+        where: { token },
       });
       expect(tokens).toHaveLength(1);
       expect(tokens[0].userId).toEqual(user.id);
@@ -17,11 +20,13 @@ describe("saveFCMToken", () => {
       trpc,
       user,
     }) => {
-      await trpc.users.saveFCMToken({ fcmToken: "token-1" });
-      await trpc.users.saveFCMToken({ fcmToken: "token-1" });
+      const token = faker.string.alphanumeric(24);
+
+      await trpc.users.saveFCMToken({ fcmToken: token });
+      await trpc.users.saveFCMToken({ fcmToken: token });
 
       const tokens = await prisma.fCMToken.findMany({
-        where: { token: "token-1", userId: user.id },
+        where: { token, userId: user.id },
       });
       expect(tokens).toHaveLength(1);
     });
@@ -31,14 +36,15 @@ describe("saveFCMToken", () => {
       user,
       user2,
     }) => {
+      const token = faker.string.alphanumeric(24);
       await prisma.fCMToken.create({
-        data: { token: "token-1", userId: user2.id },
+        data: { token, userId: user2.id },
       });
 
-      await trpc.users.saveFCMToken({ fcmToken: "token-1" });
+      await trpc.users.saveFCMToken({ fcmToken: token });
 
       const tokens = await prisma.fCMToken.findMany({
-        where: { token: "token-1" },
+        where: { token },
       });
       expect(tokens).toHaveLength(1);
       expect(tokens[0].userId).toEqual(user.id);
@@ -48,7 +54,9 @@ describe("saveFCMToken", () => {
   describe("error", () => {
     test("throws when the caller is not logged in", async () => {
       await expect(
-        anonymousTrpc.users.saveFCMToken({ fcmToken: "token-1" }),
+        anonymousTrpc.users.saveFCMToken({
+          fcmToken: faker.string.alphanumeric(24),
+        }),
       ).rejects.toThrow("Must be logged in");
     });
   });

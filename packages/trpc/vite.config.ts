@@ -5,6 +5,13 @@ import * as path from "path";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
 
+const SPECS_REQUIRING_MODULE_MOCKS = [
+  "src/procedures/discover/publishDiscoverRecipe.spec.ts",
+  "src/procedures/discover/updateDiscoverRecipe.spec.ts",
+  "src/procedures/users/forgotPassword.spec.ts",
+  "src/procedures/users/signInWithGoogle.spec.ts",
+];
+
 export default defineConfig(() => ({
   root: __dirname,
   cacheDir: "../../node_modules/.vite/packages/trpc",
@@ -47,8 +54,33 @@ export default defineConfig(() => ({
     watch: false,
     globals: true,
     environment: "node",
-    include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],
+    maxWorkers: 4,
+    env: {
+      GOOGLE_GSI_CLIENT_ID: "test-client-id",
+      GOOGLE_GSI_CLIENT_SECRET: "test-client-secret",
+    },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "shared",
+          include: [
+            "{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+          ],
+          exclude: SPECS_REQUIRING_MODULE_MOCKS,
+          isolate: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "module-mocks",
+          include: SPECS_REQUIRING_MODULE_MOCKS,
+          isolate: true,
+        },
+      },
+    ],
     coverage: {
       reportsDirectory: "../../coverage/packages/trpc",
       provider: "v8" as const,
