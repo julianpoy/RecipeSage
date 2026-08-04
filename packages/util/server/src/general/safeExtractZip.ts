@@ -7,7 +7,7 @@ import { Transform } from "stream";
 
 const DEFAULT_MAX_TOTAL_UNCOMPRESSED_SIZE = 10 * 1024 * 1024 * 1024;
 const DEFAULT_MAX_ENTRY_UNCOMPRESSED_SIZE = 500 * 1024 * 1024;
-const DEFAULT_MAX_ENTRY_COUNT = 1000;
+const DEFAULT_MAX_ENTRY_COUNT = 10000;
 
 export class ZipTooLargeError extends Error {
   constructor(message: string) {
