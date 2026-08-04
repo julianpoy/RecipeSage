@@ -1128,6 +1128,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.data.recipe.ingredients || "";
     this.recipe.instructions = response.data.recipe.instructions || "";
     this.recipe.notes = response.data.recipe.notes || "";
+    this.markAsDirty();
 
     if (includeNutrition && response.data.recipe.nutritionInfo) {
       await this.parseAndApplyNutrition(response.data.recipe.nutritionInfo);
@@ -1251,6 +1252,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.data.recipe.ingredients || "";
     this.recipe.instructions = response.data.recipe.instructions || "";
     this.recipe.notes = response.data.recipe.notes || "";
+    this.markAsDirty();
 
     const imageResponse = await this.imageService.create(files[0], {
       "*": () => {},
@@ -1341,6 +1343,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.recipe.ingredients || "";
     this.recipe.instructions = response.recipe.instructions || "";
     this.recipe.notes = response.recipe.notes || "";
+    this.markAsDirty();
 
     if (includeNutrition && response.recipe.nutritionInfo) {
       await this.parseAndApplyNutrition(response.recipe.nutritionInfo);
@@ -1454,6 +1457,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.ingredients || "";
     this.recipe.instructions = response.instructions || "";
     this.recipe.notes = response.notes || "";
+    this.markAsDirty();
     this.recipe.url = url;
 
     if (includeNutrition && response.nutritionInfo) {
@@ -1652,6 +1656,7 @@ export class EditRecipePage {
 
   setLastMadeAtToday() {
     this.recipe.lastMadeAt = dayjs().format("YYYY-MM-DD");
+    this.markAsDirty();
   }
 
   linkedRecipeSelected(recipe: RecipeSummary | undefined) {

@@ -21,7 +21,7 @@
 <ion-content>
   <multi-image-upload
     [images]="images"
-    (onImageAdded)="markAsDirty()"
+    (imageUpdate)="markAsDirty()"
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
@@ -274,7 +274,7 @@
           </div>
           <rating
             [rating]="recipe.rating"
-            (ratingChanged)="recipe.rating = $event"
+            (ratingChanged)="recipe.rating = $event; markAsDirty()"
             [enableEdit]="true"
           ></rating>
         </div>
