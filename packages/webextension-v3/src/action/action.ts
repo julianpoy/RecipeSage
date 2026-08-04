@@ -89,6 +89,7 @@ const fetchActivePageHtml = async (tabId: number): Promise<string | null> => {
 
 const handleNotLoggedIn = async () => {
   await setToken(null);
+  showOnly("login");
   window.alert(t("webextension.action.notLoggedInPrompt"));
 };
 
@@ -159,10 +160,12 @@ const autoClip = async () => {
     html = await fetchActivePageHtml(tab.id);
   } catch (e) {
     console.error(e);
+    showOnly("start");
     window.alert(t("webextension.action.fetchFailed"));
     return;
   }
   if (!html) {
+    showOnly("start");
     window.alert(t("webextension.action.fetchFailed"));
     return;
   }
@@ -176,10 +179,12 @@ const autoClip = async () => {
       return;
     }
     if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
+      showOnly("start");
       window.alert(t("webextension.creditLimitAlert"));
       return;
     }
     console.error(e);
+    showOnly("start");
     window.alert(t("webextension.action.clipFailed"));
     return;
   }
@@ -234,10 +239,12 @@ const autoClip = async () => {
       return;
     }
     if (e instanceof MissingTitleError) {
+      showOnly("start");
       window.alert(t("webextension.action.missingTitle"));
       return;
     }
     console.error(e);
+    showOnly("start");
     window.alert(t("webextension.action.saveFailed"));
   }
 };
