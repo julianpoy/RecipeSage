@@ -287,46 +287,6 @@ const getNutritionForExport = (
   return hasAnyValue ? nutrition : undefined;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getImageSrcFromSchema = (jsonLD: JsonLD): string | Buffer => {
-  const images = jsonLD.images || jsonLD.image;
-  if (!images) return "";
-
-  let imageSrc: string | undefined;
-  if (typeof images === "string") imageSrc = images;
-  else if ("url" in images && images.url === "string") imageSrc = images.url;
-  else if (Array.isArray(images) && typeof images[0] === "string")
-    [imageSrc] = images[0] as string;
-  else if (
-    Array.isArray(images) &&
-    typeof images[0] === "object" &&
-    typeof images[0]?.url === "string"
-  )
-    imageSrc = images[0].url;
-
-  if (imageSrc) {
-    try {
-      const url = new URL(imageSrc);
-
-      if (url.protocol === "http:" || url.protocol === "https:")
-        return imageSrc;
-      if (
-        url.protocol === "data:" &&
-        url.href.startsWith("data:image/png;base64,")
-      ) {
-        return Buffer.from(
-          url.href.replace("data:image/png;base64,", ""),
-          "base64",
-        );
-      }
-    } catch (_) {
-      // Do nothing
-    }
-  }
-
-  return "";
-};
-
 const getLongestString = (strings: string[]) =>
   strings.reduce((acc, el) => (el.length > acc.length ? el : acc), "");
 
