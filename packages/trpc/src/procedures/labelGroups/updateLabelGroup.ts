@@ -44,45 +44,47 @@ export const updateLabelGroup = authenticatedProcedure
       });
     }
 
-    await prisma.labelGroup.update({
-      where: {
-        userId: ctx.session.userId,
-        id: input.id,
-      },
-      data: {
-        title: input.title,
-        warnWhenNotPresent: input.warnWhenNotPresent,
-      },
-    });
-
-    await prisma.label.updateMany({
-      where: {
-        userId: ctx.session.userId,
-        labelGroupId: input.id,
-      },
-      data: {
-        labelGroupId: null,
-      },
-    });
-
-    await prisma.label.updateMany({
-      where: {
-        userId: ctx.session.userId,
-        id: {
-          in: input.labelIds,
+    const labelGroup = await prisma.$transaction(async (tx) => {
+      await tx.labelGroup.update({
+        where: {
+          userId: ctx.session.userId,
+          id: input.id,
         },
-      },
-      data: {
-        labelGroupId: input.id,
-      },
-    });
+        data: {
+          title: input.title,
+          warnWhenNotPresent: input.warnWhenNotPresent,
+        },
+      });
 
-    const labelGroup = await prisma.labelGroup.findUniqueOrThrow({
-      where: {
-        userId: ctx.session.userId,
-        id: input.id,
-      },
-      ...labelGroupSummary,
+      await tx.label.updateMany({
+        where: {
+          userId: ctx.session.userId,
+          labelGroupId: input.id,
+        },
+        data: {
+          labelGroupId: null,
+        },
+      });
+
+      await tx.label.updateMany({
+        where: {
+          userId: ctx.session.userId,
+          id: {
+            in: input.labelIds,
+          },
+        },
+        data: {
+          labelGroupId: input.id,
+        },
+      });
+
+      return tx.labelGroup.findUniqueOrThrow({
+        where: {
+          userId: ctx.session.userId,
+          id: input.id,
+        },
+        ...labelGroupSummary,
+      });
     });
 
     return labelGroup;
