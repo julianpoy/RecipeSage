@@ -259,10 +259,11 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
       this.nutritionById.delete(id);
     }
 
-    await this.fetchNutritionForIds(ids);
+    const answeredIds = await this.fetchNutritionForIds(ids);
 
-    this.recipes = this.recipes.filter((recipe) =>
-      this.nutritionById.has(recipe.id),
+    this.recipes = this.recipes.filter(
+      (recipe) =>
+        this.nutritionById.has(recipe.id) || !answeredIds.has(recipe.id),
     );
 
     this.loadingRecipes = false;
@@ -387,8 +388,13 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     }
   }
 
-  private async fetchNutritionForIds(ids: string[]) {
+  private async fetchNutritionForIds(ids: string[]): Promise<Set<string>> {
+    const answeredIds = new Set<string>();
     const missingIds = ids.filter((id) => !this.nutritionById.has(id));
+
+    for (const id of ids) {
+      if (this.nutritionById.has(id)) answeredIds.add(id);
+    }
 
     for (let i = 0; i < missingIds.length; i += FETCH_CHUNK_SIZE) {
       const chunk = missingIds.slice(i, i + FETCH_CHUNK_SIZE);
@@ -396,10 +402,15 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
         ids: chunk,
       });
       if (!response) continue;
+      for (const id of chunk) {
+        answeredIds.add(id);
+      }
       for (const recipe of response) {
         this.nutritionById.set(recipe.id, recipe);
       }
     }
+
+    return answeredIds;
   }
 
   private async fetchMissingNutrition() {
