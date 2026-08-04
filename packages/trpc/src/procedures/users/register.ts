@@ -51,7 +51,7 @@ export const register = publicProcedure
     }
 
     const sessionDTO = await prisma.$transaction(async (tx) => {
-      const existingUser = await prisma.user.findFirst({
+      const existingUser = await tx.user.findFirst({
         where: {
           email: sanitizedEmail,
         },
