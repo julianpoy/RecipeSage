@@ -76,9 +76,8 @@ function createWindow(): void {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith("http://") || url.startsWith("https://")) {
       shell.openExternal(url);
-      return { action: "deny" };
     }
-    return { action: "allow" };
+    return { action: "deny" };
   });
 
   if (isDev && WEBUI_URL) {
