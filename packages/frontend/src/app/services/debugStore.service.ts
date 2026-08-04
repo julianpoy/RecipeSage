@@ -118,7 +118,7 @@ export class DebugStoreService {
           value: args,
         });
         if (store.logs.length > CONSOLE_LOGS_HISTORY_MAX) {
-          store.logs.splice(CONSOLE_LOGS_HISTORY_MAX);
+          store.logs.splice(0, store.logs.length - CONSOLE_LOGS_HISTORY_MAX);
         }
 
         boundMethod.apply(console, args);
@@ -168,6 +168,6 @@ export class DebugStoreService {
 export function captureTrpcRequest(entry: unknown) {
   store.trpc.push(entry);
   if (store.trpc.length > TRPC_REQUEST_HISTORY_MAX) {
-    store.trpc.splice(TRPC_REQUEST_HISTORY_MAX);
+    store.trpc.splice(0, store.trpc.length - TRPC_REQUEST_HISTORY_MAX);
   }
 }
