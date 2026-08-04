@@ -7,6 +7,7 @@ import { importJobFinishCommon } from "../../../index";
 import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
+import { findFilesByName } from "./shared/findFilesByName";
 import { readdir, mkdtempDisposable, stat } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
@@ -368,9 +369,9 @@ export async function lcbImportJobHandler(
       for (const img of imageData) {
         if (img.filename) {
           try {
-            const possibleImageFiles = await findFilesByRegex(
+            const possibleImageFiles = await findFilesByName(
               extractPath,
-              new RegExp(`(${img.filename})$`, "i"),
+              img.filename,
             );
             if (possibleImageFiles.length > 0) {
               try {

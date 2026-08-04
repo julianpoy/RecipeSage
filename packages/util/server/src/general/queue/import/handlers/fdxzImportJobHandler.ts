@@ -7,7 +7,8 @@ import { importJobFinishCommon } from "../../../index";
 import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
-import { readdir, readFile, mkdtempDisposable, stat } from "fs/promises";
+import { findFilesByName } from "./shared/findFilesByName";
+import { readFile, mkdtempDisposable, stat } from "fs/promises";
 import { safeExtractZip, ZipMalformedError } from "../../../safeExtractZip";
 import xmljs from "xml-js";
 import path from "path";
@@ -30,32 +31,6 @@ function fetchDeepProp(base: any, propName: string): any[] {
   const raw = nested ? nested[propName] : flat; // Result is either an object, array, or null
 
   return arrayifyAssociation(raw);
-}
-
-async function findFilesByRegex(
-  dirPath: string,
-  regex: RegExp,
-): Promise<string[]> {
-  const results: string[] = [];
-
-  try {
-    const entries = await readdir(dirPath, { withFileTypes: true });
-
-    for (const entry of entries) {
-      const fullPath = path.join(dirPath, entry.name);
-
-      if (entry.isDirectory()) {
-        const subResults = await findFilesByRegex(fullPath, regex);
-        results.push(...subResults);
-      } else if (entry.isFile() && regex.test(entry.name)) {
-        results.push(fullPath);
-      }
-    }
-  } catch (_e) {
-    // Ignore errors reading directory
-  }
-
-  return results;
 }
 
 export async function fdxzImportJobHandler(
@@ -207,11 +182,11 @@ export async function fdxzImportJobHandler(
       if (imageRef._text) {
         images.push(Buffer.from(imageRef._text, "base64"));
       } else if (imageRef._attributes?.FileName && extractPath) {
-        const fileNameRegex = imageRef._attributes.FileName;
+        const fileName = imageRef._attributes.FileName;
         try {
-          const possibleImageFiles = await findFilesByRegex(
+          const possibleImageFiles = await findFilesByName(
             extractPath,
-            new RegExp(`(${fileNameRegex})$`, "i"),
+            fileName,
           );
           if (possibleImageFiles.length > 0) {
             try {
