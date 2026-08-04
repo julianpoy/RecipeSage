@@ -82,6 +82,7 @@ export class AddRecipeToMealPlanModalPage {
   selectedMealPlanItems?: MealPlanItemSummary[];
   meal?: string;
   notes = "";
+  saving = false;
 
   readonly notesMaxLength = MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT;
 
@@ -153,8 +154,10 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async save() {
+    if (this.saving) return;
     if (!this.selectedMealPlan || !this.selectedDays[0] || !this.meal) return;
 
+    this.saving = true;
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
@@ -173,6 +176,7 @@ export class AddRecipeToMealPlanModalPage {
         ],
       });
     loading.dismiss();
+    this.saving = false;
 
     if (result) this.modalCtrl.dismiss();
   }

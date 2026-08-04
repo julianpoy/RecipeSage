@@ -59,6 +59,7 @@ export class UpdateMealPlanModalPage {
   mealPlan!: Readonly<MealPlanSummary>;
 
   mealPlanTitle = "";
+  saving = false;
   customMealOptions: string | null = null;
   selectedCollaboratorIds: string[] = [];
   loaded = false;
@@ -89,6 +90,9 @@ export class UpdateMealPlanModalPage {
   }
 
   async save() {
+    if (this.saving) return;
+
+    this.saving = true;
     const loading = this.loadingService.start();
 
     const result = await this.serverActionsService.mealPlans.updateMealPlan({
@@ -98,6 +102,7 @@ export class UpdateMealPlanModalPage {
       customMealOptions: this.customMealOptions,
     });
     loading.dismiss();
+    this.saving = false;
     if (!result) return;
 
     this.modalCtrl.dismiss({
