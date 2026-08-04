@@ -216,7 +216,7 @@ export class MealCalendarComponent implements OnDestroy {
   }
 
   prettyMonthName(date: Date) {
-    return date.toLocaleString(window.navigator.language, { month: "long" });
+    return this.utilService.formatMonthName(date);
   }
 
   getYMD(stamp: string | Date | Dayjs) {

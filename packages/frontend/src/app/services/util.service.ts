@@ -452,6 +452,14 @@ export class UtilService {
     }, 1000 * 60);
   }
 
+  getDisplayLocale(): string {
+    return this.translate.getCurrentLang() || window.navigator.language;
+  }
+
+  formatMonthName(date: Date): string {
+    return date.toLocaleString(this.getDisplayLocale(), { month: "long" });
+  }
+
   getAppBrowserLang(): string {
     const isSupported = (
       lang: string | undefined,
@@ -627,14 +635,14 @@ export class UtilService {
     }
 
     if (options.times && todayAfter <= toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         hour: "numeric",
         minute: "numeric",
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         weekday: "long",
         hour: "numeric",
         minute: "numeric",
@@ -642,19 +650,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         weekday: "long",
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         month: "numeric",
         day: "numeric",
         year: "numeric",
       });
     } else {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         hour: "numeric",
         minute: "numeric",
         month: "numeric",
