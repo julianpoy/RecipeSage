@@ -291,7 +291,7 @@ export class MessageThreadPage {
     const p = new Date(previous.createdAt);
     const n = new Date(next.createdAt);
 
-    return p.getDay() !== n.getDay();
+    return p.toDateString() !== n.toDateString();
   }
 
   formatMessageDividerDate(plainTextDate: Date | string | number) {
