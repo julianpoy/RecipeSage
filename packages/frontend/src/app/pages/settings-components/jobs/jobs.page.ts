@@ -113,8 +113,6 @@ export class JobsPage {
       this.jobs = response.sort((a, b) => {
         return b.createdAt.getTime() - a.createdAt.getTime();
       });
-    } else {
-      clearInterval(this.jobPollInterval);
     }
   }
 

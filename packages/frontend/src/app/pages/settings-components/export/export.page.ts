@@ -118,8 +118,6 @@ export class ExportPage {
           return b.createdAt.getTime() - a.createdAt.getTime();
         })
         .filter((job): job is ExportJobSummary => job.type === "EXPORT");
-    } else {
-      clearInterval(this.jobPollInterval);
     }
   }
 

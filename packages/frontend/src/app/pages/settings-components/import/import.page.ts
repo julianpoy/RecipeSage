@@ -127,8 +127,6 @@ export class ImportPage {
           return b.createdAt.getTime() - a.createdAt.getTime();
         })
         .filter((job): job is ImportJobSummary => job.type === "IMPORT");
-    } else {
-      clearInterval(this.jobPollInterval);
     }
   }
 
