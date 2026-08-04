@@ -1,9 +1,5 @@
 import { RecipeSummary } from "@recipesage/prisma";
-import {
-  parseIngredients,
-  parseInstructions,
-  inferRecipeNotation,
-} from "@recipesage/util/shared";
+import { splitRecipeLines } from "@recipesage/util/shared";
 import { convertFromISO8601Time } from "./convertToISO8601Time";
 import { convertToISO8601Time } from "./convertFromISO8601Time";
 import { StandardizedRecipeImportEntry } from "../db";
@@ -135,9 +131,9 @@ const formatMilligrams = (value: number) => `${value} mg`;
 const formatMicrograms = (value: number) => `${value} mcg`;
 const formatCalories = (value: number) => `${value} kcal`;
 
-export const recipeToJSONLD = (recipe: RecipeSummary) => {
-  const decimalNotationMode = inferRecipeNotation(recipe, undefined);
+const SECTION_HEADER_REGEXP = /^\[.*\]$/;
 
+export const recipeToJSONLD = (recipe: RecipeSummary) => {
   return {
     "@context": "http://schema.org",
     "@type": "Recipe",
@@ -149,22 +145,19 @@ export const recipeToJSONLD = (recipe: RecipeSummary) => {
     ),
     name: recipe.title,
     prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
-    recipeIngredient: parseIngredients(recipe.ingredients, "1", {
-      decimalNotationMode,
-    }).map((el) => (el.isHeader ? `[${el.content}]` : el.content)),
-    recipeInstructions: parseInstructions(recipe.instructions, "1", {
-      decimalNotationMode,
-    }).map((el) =>
-      el.isHeader
+    recipeIngredient: splitRecipeLines(recipe.ingredients),
+    recipeInstructions: splitRecipeLines(recipe.instructions).map((line) => {
+      const headerMatch = line.match(SECTION_HEADER_REGEXP);
+      return headerMatch
         ? {
             "@type": "HowToSection",
-            name: el.content,
+            name: line.substring(1, line.length - 1),
           }
         : {
             "@type": "HowToStep",
-            text: el.content,
-          },
-    ),
+            text: line,
+          };
+    }),
     recipeYield: recipe.yield,
     totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
     recipeCategory: (recipe.recipeLabels || []).map(

@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { jsonLDToStandardizedRecipeImportEntry, type JsonLD } from "./jsonLD";
+import type { RecipeSummary } from "@recipesage/prisma";
+import {
+  jsonLDToStandardizedRecipeImportEntry,
+  recipeToJSONLD,
+  type JsonLD,
+} from "./jsonLD";
 
 describe("jsonLDToStandardizedRecipeImportEntry", () => {
   describe("recipeInstructions", () => {
@@ -120,5 +125,101 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
 
       expect(entry.labels).toEqual(["Dessert"]);
     });
+  });
+});
+
+describe("recipeToJSONLD", () => {
+  const user = {
+    id: "0f5b1b1e-0000-4000-8000-00000000000a",
+    name: "Tester",
+    handle: null,
+    enableProfile: false,
+    incomingFriendship: false,
+    outgoingFriendship: false,
+    isMe: false,
+    profileImages: [],
+  };
+
+  const baseRecipe: RecipeSummary = {
+    id: "0f5b1b1e-0000-4000-8000-000000000000",
+    userId: user.id,
+    fromUserId: null,
+    title: "Test",
+    description: "",
+    yield: "",
+    activeTime: "",
+    totalTime: "",
+    source: "",
+    url: "",
+    folder: "main",
+    ingredients: "",
+    instructions: "",
+    notes: "",
+    createdAt: new Date("2026-01-01T00:00:00.000Z"),
+    updatedAt: new Date("2026-01-01T00:00:00.000Z"),
+    lastMadeAt: null,
+    rating: null,
+    nutritionServingSize: null,
+    nutritionCalories: null,
+    nutritionTotalFat: null,
+    nutritionSaturatedFat: null,
+    nutritionTransFat: null,
+    nutritionPolyunsaturatedFat: null,
+    nutritionMonounsaturatedFat: null,
+    nutritionCholesterol: null,
+    nutritionSodium: null,
+    nutritionTotalCarbs: null,
+    nutritionDietaryFiber: null,
+    nutritionTotalSugars: null,
+    nutritionAddedSugars: null,
+    nutritionProtein: null,
+    nutritionVitaminD: null,
+    nutritionCalcium: null,
+    nutritionIron: null,
+    nutritionPotassium: null,
+    nutritionOtherDetails: null,
+    recipeLabels: [],
+    recipeImages: [],
+    recipeLinks: [],
+    fromUser: null,
+    user,
+  };
+
+  const exportOf = (ingredients: string, instructions: string) =>
+    recipeToJSONLD({
+      ...baseRecipe,
+      ingredients,
+      instructions,
+    });
+
+  it("keeps scaling braces in exported ingredients", () => {
+    const jsonLD = exportOf("{2 cups} flour", "");
+    expect(jsonLD.recipeIngredient).toEqual(["{2 cups} flour"]);
+  });
+
+  it("keeps scaling braces in exported instructions", () => {
+    const jsonLD = exportOf("", "Add {2 cups} water");
+    expect(jsonLD.recipeInstructions).toEqual([
+      { "@type": "HowToStep", text: "Add {2 cups} water" },
+    ]);
+  });
+
+  it("keeps a line continuation as a single ingredient", () => {
+    const jsonLD = exportOf("2 cups flour\\\nsifted", "");
+    expect(jsonLD.recipeIngredient).toEqual(["2 cups flour\\\nsifted"]);
+  });
+
+  it("keeps unicode fractions in exported ingredients", () => {
+    const jsonLD = exportOf("\u00bd cup milk", "");
+    expect(jsonLD.recipeIngredient).toEqual(["\u00bd cup milk"]);
+  });
+
+  it("exports section headers as sections", () => {
+    const jsonLD = exportOf("[Sauce]\n1 cup water", "[Prep]\nChop");
+    expect(jsonLD.recipeIngredient).toEqual(["[Sauce]", "1 cup water"]);
+    expect(jsonLD.recipeInstructions).toEqual([
+      { "@type": "HowToSection", name: "Prep" },
+      { "@type": "HowToStep", text: "Chop" },
+    ]);
   });
 });

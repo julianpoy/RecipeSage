@@ -36,6 +36,12 @@ export const stripBlankLines = (text: string): string =>
     .filter((line) => line.trim().length > 0)
     .join("\n");
 
+export const splitRecipeLines = (text: string): string[] =>
+  (text || "")
+    .split(lineSplitRegex)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
 const fractionMatchers = {
   // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, " 1/2"], // ½  \u00BD;
