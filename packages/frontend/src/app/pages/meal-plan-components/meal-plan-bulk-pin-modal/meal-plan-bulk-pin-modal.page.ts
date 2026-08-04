@@ -93,7 +93,7 @@ export class MealPlanBulkPinModalPage {
   }
 
   checkboxChanged(event: any, recipeId: string) {
-    this.recipeIdSelectionMap[recipeId] = event.detail.value;
+    this.recipeIdSelectionMap[recipeId] = event.detail.checked;
   }
 
   close(args?: any) {
