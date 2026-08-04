@@ -98,7 +98,7 @@ export async function fdxzImportJobHandler(
     data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
   } catch (err: any) {
     if (err.message?.toLowerCase().includes("invalid attribute name")) {
-      xml = xml.replace(/<RecipeNutrition.*\/>/g, "");
+      xml = xml.replace(/<RecipeNutrition[^>]*\/>/g, "");
       try {
         data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
       } catch (_err2) {
