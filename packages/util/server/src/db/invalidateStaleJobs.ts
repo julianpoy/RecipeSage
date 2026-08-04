@@ -23,7 +23,9 @@ export const invalidateStaleJobs = async () => {
       updatedAt: {
         lt: staleAfterDate,
       },
-      status: JobStatus.RUN,
+      status: {
+        in: [JobStatus.CREATE, JobStatus.RUN],
+      },
     },
     data: {
       status: JobStatus.FAIL,
