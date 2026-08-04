@@ -151,7 +151,7 @@ export class MealCalendarComponent implements OnDestroy {
     const startOfMonth = base.startOf("month");
     let startOfCalendar = startOfMonth.startOf("week");
     const endOfMonth = base.endOf("month");
-    const endOfCalendar = endOfMonth.endOf("week");
+    let endOfCalendar = endOfMonth.endOf("week");
 
     if (preferences[MealPlanPreferenceKey.StartOfWeek] === "monday") {
       this.dayTitleKeys = [...DAY_TITLE_I18N.slice(1), DAY_TITLE_I18N[0]];
@@ -161,6 +161,9 @@ export class MealCalendarComponent implements OnDestroy {
       if (startOfMonth.day() === 0) {
         startOfCalendar = startOfMonth.subtract(1, "week").add(1, "day");
       }
+
+      endOfCalendar =
+        endOfMonth.day() === 0 ? endOfMonth : endOfCalendar.add(1, "day");
     } else {
       this.dayTitleKeys = [...DAY_TITLE_I18N];
     }
