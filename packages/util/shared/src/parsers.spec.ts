@@ -152,6 +152,23 @@ describe("parsers", () => {
         const result = getMeasurementsForIngredient("1—2 cups flour");
         expect(result).toEqual(["1—2 cups"]);
       });
+
+      it("handles a spaced en-dash range", () => {
+        const result = getMeasurementsForIngredient("1 – 2 cups flour");
+        expect(result).toEqual(["1 – 2 cups"]);
+      });
+
+      it("handles a spaced em-dash range", () => {
+        const result = getMeasurementsForIngredient("1 — 2 cups flour");
+        expect(result).toEqual(["1 — 2 cups"]);
+      });
+
+      it("scales both endpoints of a spaced en-dash range", () => {
+        const result = parseIngredients("1 – 2 cups flour", "2", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual(["2–4 cups flour"]);
+      });
     });
 
     describe("English false-positive guards", () => {

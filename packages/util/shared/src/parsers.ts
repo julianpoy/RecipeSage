@@ -202,7 +202,7 @@ const multipartQuantifierRegexp = / \+ | plus | or | oder | und /;
  * ("2"), and ranges joined by "-", " - ", or " to ".
  */
 const measurementRegexp =
-  /((\d+ )?\d+([/.,]\d+)?((-)|( to )|( - )|(–)|(—))(\d+ )?\d+([/.,]\d+)?)|((\d+ )?\d+[/.,]\d+)|\d+/;
+  /((\d+ )?\d+([/.,]\d+)?((-)|( to )|( - )|( ?– ?)|( ?— ?))(\d+ )?\d+([/.,]\d+)?)|((\d+ )?\d+[/.,]\d+)|\d+/;
 
 /**
  * All known unit names sanitized for use within a regex pattern.
