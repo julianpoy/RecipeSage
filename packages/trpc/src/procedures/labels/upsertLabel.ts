@@ -25,9 +25,7 @@ export const upsertLabel = authenticatedProcedure
     z.object({
       title: z.string().min(1).max(100),
       labelGroupId: z
-        .string()
-        .min(1)
-        .max(100)
+        .uuid()
         .nullable()
         .optional()
         .describe(
