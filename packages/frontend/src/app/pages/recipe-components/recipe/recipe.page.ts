@@ -736,7 +736,7 @@ export class RecipePage {
     const loading = this.loadingService.start();
 
     const labelIds =
-      this.me()?.id === this.recipe.id
+      this.recipe.userId === this.me()?.id
         ? this.recipe.recipeLabels.map((recipeLabel) => recipeLabel.label.id)
         : [];
 
