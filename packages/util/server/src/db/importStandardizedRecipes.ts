@@ -14,6 +14,7 @@ import {
   ObjectTypes,
 } from "../storage";
 import { translate } from "../general";
+import { randomUUID } from "crypto";
 
 export class ImportStandardizedRecipesTooManyRecipesError extends Error {
   constructor(message?: string) {
@@ -121,8 +122,11 @@ export const importStandardizedRecipes = async (
 
   return prisma.$transaction(
     async (tx) => {
-      const recipes = await tx.recipe.createManyAndReturn({
-        data: entries.map((entry) => ({
+      const recipeIds = entries.map(() => randomUUID());
+
+      await tx.recipe.createMany({
+        data: entries.map((entry, idx) => ({
+          id: recipeIds[idx],
           title: (entry.recipe.title || untitledFallback).slice(0, 254),
           description: entry.recipe.description || "",
           yield: entry.recipe.yield || "",
@@ -168,12 +172,12 @@ export const importStandardizedRecipes = async (
       const recipeIdsByLabelTitle: Record<string, string[]> = {};
 
       entries.forEach((entry, idx) => {
-        const recipe = recipes[idx];
+        const recipeId = recipeIds[idx];
         entry.labels.map((labelTitle) => {
           labelTitle = cleanLabelTitle(labelTitle);
           recipeIdsByLabelTitle[labelTitle] =
             recipeIdsByLabelTitle[labelTitle] || [];
-          recipeIdsByLabelTitle[labelTitle].push(recipe.id);
+          recipeIdsByLabelTitle[labelTitle].push(recipeId);
         });
       });
 
@@ -208,16 +212,18 @@ export const importStandardizedRecipes = async (
           images
             .filter((image) => !!image)
             .map((image, imageIdx) => ({
+              id: randomUUID(),
               image,
-              recipeId: recipes[recipeIdx].id,
+              recipeId: recipeIds[recipeIdx],
               order: imageIdx,
             })),
         )
         .flat()
         .filter((e) => e);
 
-      const savedImages = await tx.image.createManyAndReturn({
+      await tx.image.createMany({
         data: pendingImages.map((p) => ({
+          id: p.id,
           userId,
           location: p.image.location,
           key: p.image.key,
@@ -226,14 +232,14 @@ export const importStandardizedRecipes = async (
       });
 
       await tx.recipeImage.createMany({
-        data: pendingImages.map((p, idx) => ({
+        data: pendingImages.map((p) => ({
           recipeId: p.recipeId,
-          imageId: savedImages[idx].id,
+          imageId: p.id,
           order: p.order,
         })),
       });
 
-      return recipes.map((recipe) => recipe.id);
+      return recipeIds;
     },
     {
       timeout: IMPORT_TRANSACTION_TIMEOUT_MS,
