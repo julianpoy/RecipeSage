@@ -14,6 +14,7 @@ router.all(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async function (req: any, res) {
     if (!req.grip.isProxied) {
+      res.status(400).send("Not a grip request");
       return;
     }
 
