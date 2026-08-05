@@ -122,6 +122,7 @@ export class LabelsPage {
   async load() {
     this.labels = [];
     this.labelGroups = [];
+    this.applyFilter();
     this.loading = true;
 
     const [labelsResponse, labelGroupsResponse] = await Promise.all([
@@ -135,6 +136,10 @@ export class LabelsPage {
     this.labels = labelsResponse.sort((a, b) => a.title.localeCompare(b.title));
     this.labelGroups = labelGroupsResponse.sort((a, b) =>
       a.title.localeCompare(b.title),
+    );
+
+    this.selectedLabelIds = this.selectedLabelIds.filter((labelId) =>
+      this.labels.some((label) => label.id === labelId),
     );
 
     this.applyFilter();
@@ -253,9 +258,9 @@ export class LabelsPage {
   async deleteSelectedLabels() {
     const labelTitles = this.selectedLabelIds
       .map(
-        (labelId) =>
-          this.labels.filter((label) => label.id === labelId)[0].title,
+        (labelId) => this.labels.find((label) => label.id === labelId)?.title,
       )
+      .filter((labelTitle) => !!labelTitle)
       .join(", ");
 
     const header = await this.translate

@@ -14,6 +14,7 @@ import { WebsocketService } from "../../../services/websocket.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
+  SHOPPING_LIST_CATEGORY_I18N,
   ShoppingListItemSummariesByGroupAndCategory,
   ShoppingListPreferenceKey,
 } from "@recipesage/util/shared";
@@ -56,23 +57,7 @@ import {
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
-const categoryTitlesToi18n: Record<string, string> = {
-  uncategorized: "pages.shoppingList.category.uncategorized",
-  produce: "pages.shoppingList.category.produce",
-  dairy: "pages.shoppingList.category.dairy",
-  meat: "pages.shoppingList.category.meat",
-  bakery: "pages.shoppingList.category.bakery",
-  grocery: "pages.shoppingList.category.grocery",
-  liquor: "pages.shoppingList.category.liquor",
-  seafood: "pages.shoppingList.category.seafood",
-  nonfood: "pages.shoppingList.category.nonfood",
-  frozen: "pages.shoppingList.category.frozen",
-  canned: "pages.shoppingList.category.canned",
-  beverages: "pages.shoppingList.category.beverages",
-  baking: "pages.shoppingList.category.baking",
-  spices: "pages.shoppingList.category.spices",
-  condiments: "pages.shoppingList.category.condiments",
-};
+const categoryTitlesToi18n = SHOPPING_LIST_CATEGORY_I18N;
 
 @Component({
   standalone: true,
@@ -321,7 +306,10 @@ export class ShoppingListPage {
         })),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
 
@@ -348,7 +336,10 @@ export class ShoppingListPage {
         })),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
 
@@ -405,7 +396,10 @@ export class ShoppingListPage {
         ids: items.map((el) => el.id),
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
     loading.dismiss();
@@ -467,7 +461,10 @@ export class ShoppingListPage {
         items: sanitizedItems,
         reference,
       });
-    if (!response) return;
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
 
     this.loadList();
     loading.dismiss();
@@ -530,6 +527,8 @@ export class ShoppingListPage {
     if (title.startsWith("::")) {
       const i18nKey = title.substring(2);
       const i18nStr = categoryTitlesToi18n[i18nKey];
+      if (!i18nStr)
+        return this.translate.instant(categoryTitlesToi18n.uncategorized);
 
       return this.translate.instant(i18nStr);
     }

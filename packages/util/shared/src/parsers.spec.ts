@@ -152,6 +152,39 @@ describe("parsers", () => {
         const result = getMeasurementsForIngredient("1—2 cups flour");
         expect(result).toEqual(["1—2 cups"]);
       });
+
+      it("handles a spaced en-dash range", () => {
+        const result = getMeasurementsForIngredient("1 – 2 cups flour");
+        expect(result).toEqual(["1 – 2 cups"]);
+      });
+
+      it("handles a spaced em-dash range", () => {
+        const result = getMeasurementsForIngredient("1 — 2 cups flour");
+        expect(result).toEqual(["1 — 2 cups"]);
+      });
+
+      it("scales both endpoints of a spaced en-dash range", () => {
+        const result = parseIngredients("1 – 2 cups flour", "2", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual(["2 – 4 cups flour"]);
+      });
+
+      it("leaves a spaced en-dash range untouched at scale 1", () => {
+        const result = parseIngredients("1 – 2 cups flour", "1", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual(["1 – 2 cups flour"]);
+      });
+
+      it("leaves a spaced em-dash range untouched at scale 1", () => {
+        const result = parseIngredients("2 1/2 — 3 cups sugar", "1", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual([
+          "2 1/2 — 3 cups sugar",
+        ]);
+      });
     });
 
     describe("English false-positive guards", () => {
@@ -391,6 +424,11 @@ describe("parsers", () => {
       it("removes trailing commas", () => {
         const result = stripIngredient("2 cups flour,");
         expect(result).toBe("flour");
+      });
+
+      it("handles a very long quantity prefixed line", () => {
+        const result = stripIngredient("1 ".repeat(5000) + "apples");
+        expect(result).toBe("apples");
       });
     });
 

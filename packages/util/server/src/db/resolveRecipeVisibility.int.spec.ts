@@ -61,10 +61,18 @@ describe("resolveRecipeVisibility", () => {
 
   beforeEach(async () => {
     owner = await prisma.user.create({ data: userFactory() });
-    friendA = await prisma.user.create({ data: userFactory() });
-    friendB = await prisma.user.create({ data: userFactory() });
-    friendC = await prisma.user.create({ data: userFactory() });
-    stranger = await prisma.user.create({ data: userFactory() });
+    friendA = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    friendB = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    friendC = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
+    stranger = await prisma.user.create({
+      data: { ...userFactory(), enableProfile: true },
+    });
     cleanupIds.push(owner.id, friendA.id, friendB.id, friendC.id, stranger.id);
   });
 
@@ -152,6 +160,60 @@ describe("resolveRecipeVisibility", () => {
         new Set([ownR.id, friendR1.id, friendR2.id]),
       );
       expect(ids).not.toContain(friendInbox.id);
+    });
+  });
+
+  describe("sharer with a disabled profile", () => {
+    it("hides an all-recipes share from a friend", async () => {
+      await prisma.friendship.createMany({
+        data: friendshipFactory(owner.id, friendA.id),
+      });
+      await prisma.profileItem.create({
+        data: profileItemFactory({
+          userId: friendA.id,
+          type: "all-recipes",
+          visibility: "friends-only",
+        }),
+      });
+      await prisma.user.update({
+        where: { id: friendA.id },
+        data: { enableProfile: false },
+      });
+
+      await prisma.recipe.create({
+        data: { ...recipeFactory(friendA.id), title: "fA1" },
+      });
+
+      const ids = await materialize({
+        userId: owner.id,
+        userIds: [friendA.id],
+        folder: "main",
+      });
+      expect(ids).toEqual([]);
+    });
+
+    it("hides a public all-recipes share from an anonymous viewer", async () => {
+      await prisma.profileItem.create({
+        data: profileItemFactory({
+          userId: stranger.id,
+          type: "all-recipes",
+          visibility: "public",
+        }),
+      });
+      await prisma.user.update({
+        where: { id: stranger.id },
+        data: { enableProfile: false },
+      });
+
+      await prisma.recipe.create({
+        data: { ...recipeFactory(stranger.id), title: "s1" },
+      });
+
+      const ids = await materialize({
+        userIds: [stranger.id],
+        folder: "main",
+      });
+      expect(ids).toEqual([]);
     });
   });
 

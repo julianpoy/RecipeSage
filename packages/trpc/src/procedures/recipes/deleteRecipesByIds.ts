@@ -1,6 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
+import { deleteHangingImagesByIds } from "@recipesage/util/server/storage";
 
 export const deleteRecipesByIds = authenticatedProcedure
   .meta({
@@ -26,9 +27,25 @@ export const deleteRecipesByIds = authenticatedProcedure
       },
     };
 
+    const recipeImages = await prisma.recipeImage.findMany({
+      where: {
+        recipe: where,
+      },
+      select: {
+        imageId: true,
+      },
+    });
+
     await prisma.recipe.deleteMany({
       where,
     });
+
+    const purgeFromStorage = await deleteHangingImagesByIds(
+      ctx.session.userId,
+      recipeImages.map((recipeImage) => recipeImage.imageId),
+    );
+
+    await purgeFromStorage();
 
     return "Ok";
   });

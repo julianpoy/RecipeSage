@@ -1,5 +1,8 @@
 import { prisma } from "@recipesage/prisma";
-import { recipeFactory } from "@recipesage/util/server/general";
+import {
+  recipeFactory,
+  discoverRecipeFactory,
+} from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
 
 describe("deleteUser", () => {
@@ -38,6 +41,37 @@ describe("deleteUser", () => {
         where: { id: recipe.id },
       });
       expect(otherRecipe?.id).toEqual(recipe.id);
+    });
+
+    test("deletes images used only by the caller's discover recipes", async ({
+      trpc,
+      user,
+    }) => {
+      const image = await prisma.image.create({
+        data: {
+          userId: user.id,
+          location: "https://example.com/image.jpg",
+          key: "example-key",
+          json: {},
+        },
+      });
+      const discoverRecipe = await prisma.discoverRecipe.create({
+        data: discoverRecipeFactory(user.id),
+      });
+      await prisma.discoverRecipeImage.create({
+        data: {
+          discoverRecipeId: discoverRecipe.id,
+          imageId: image.id,
+          order: 0,
+        },
+      });
+
+      await trpc.users.deleteUser();
+
+      const deletedImage = await prisma.image.findUnique({
+        where: { id: image.id },
+      });
+      expect(deletedImage).toBeNull();
     });
   });
 

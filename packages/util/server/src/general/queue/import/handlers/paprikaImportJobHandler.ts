@@ -12,6 +12,37 @@ import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
+import * as Sentry from "@sentry/node";
+
+const PAPRIKA_RECIPE_EXTENSION = ".paprikarecipe";
+const APPLE_DOUBLE_PREFIX = "._";
+
+async function collectPaprikaRecipeFiles(root: string): Promise<string[]> {
+  const results: string[] = [];
+  const stack: string[] = [root];
+  while (stack.length) {
+    const current = stack.pop();
+    if (current === undefined) break;
+    const entries = await readdir(current, { withFileTypes: true });
+    for (const entry of entries) {
+      const entryPath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name.startsWith(".")) continue;
+        stack.push(entryPath);
+      } else if (entry.isFile()) {
+        if (entry.name.startsWith(APPLE_DOUBLE_PREFIX)) continue;
+        if (entry.name === ".DS_Store") continue;
+        results.push(entryPath);
+      }
+    }
+  }
+
+  const recipeFiles = results.filter((filePath) =>
+    filePath.toLowerCase().endsWith(PAPRIKA_RECIPE_EXTENSION),
+  );
+
+  return recipeFiles.length > 0 ? recipeFiles : results;
+}
 
 export async function paprikaImportJobHandler(
   job: ImportJobSummary,
@@ -31,7 +62,7 @@ export async function paprikaImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
+  const filePaths = await collectPaprikaRecipeFiles(extractPath);
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
@@ -40,64 +71,62 @@ export async function paprikaImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = fileNames.length;
+  const totalCount = filePaths.length;
   let processedCount = 0;
-  for (const fileName of fileNames) {
-    const filePath = path.join(extractPath, fileName);
-
-    const fileBuf = await readFile(filePath);
-
-    let recipeData;
+  let failedCount = 0;
+  for (const filePath of filePaths) {
     try {
+      const fileBuf = await readFile(filePath);
       const fileContents = await gunzipPromise(fileBuf);
-      recipeData = JSON.parse(fileContents.toString().trim());
-    } catch {
-      throw new ImportBadFormatError();
+      const recipeData = JSON.parse(fileContents.toString().trim());
+
+      const notes = [
+        recipeData.notes,
+        recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : "",
+      ]
+        .filter((e) => e && e.length > 0)
+        .join("\n");
+
+      const totalTime = [
+        recipeData.total_time,
+        recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : "",
+      ]
+        .filter((e) => e)
+        .join(" ");
+
+      const labels = (recipeData.categories || [])
+        .map((e: string) => cleanLabelTitle(e))
+        .filter((e: string) => e);
+
+      // Supports only the first image at the moment
+      const images = recipeData.photo_data
+        ? [Buffer.from(recipeData.photo_data, "base64")]
+        : [];
+
+      standardizedRecipeImportInput.push({
+        recipe: {
+          title: recipeData.name,
+          description: recipeData.description,
+          ingredients: recipeData.ingredients,
+          instructions: recipeData.directions,
+          yield: recipeData.servings,
+          rating: parseInt(recipeData.rating) || undefined,
+          totalTime,
+          activeTime: recipeData.prep_time,
+          notes,
+          source: recipeData.source,
+          folder: "main",
+          url: recipeData.source_url,
+          nutritionOtherDetails: recipeData.nutritional_info || undefined,
+        },
+
+        labels: [...labels, ...importLabels],
+        images,
+      });
+    } catch (e) {
+      Sentry.captureException(e, { extra: { jobId: job.id } });
+      failedCount++;
     }
-
-    const notes = [
-      recipeData.notes,
-      recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : "",
-    ]
-      .filter((e) => e && e.length > 0)
-      .join("\n");
-
-    const totalTime = [
-      recipeData.total_time,
-      recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : "",
-    ]
-      .filter((e) => e)
-      .join(" ");
-
-    const labels = (recipeData.categories || [])
-      .map((e: string) => cleanLabelTitle(e))
-      .filter((e: string) => e);
-
-    // Supports only the first image at the moment
-    const images = recipeData.photo_data
-      ? [Buffer.from(recipeData.photo_data, "base64")]
-      : [];
-
-    standardizedRecipeImportInput.push({
-      recipe: {
-        title: recipeData.name,
-        description: recipeData.description,
-        ingredients: recipeData.ingredients,
-        instructions: recipeData.directions,
-        yield: recipeData.servings,
-        rating: parseInt(recipeData.rating),
-        totalTime,
-        activeTime: recipeData.prep_time,
-        notes,
-        source: recipeData.source,
-        folder: "main",
-        url: recipeData.source_url,
-        nutritionOtherDetails: recipeData.nutritional_info || undefined,
-      },
-
-      labels: [...labels, ...importLabels],
-      images,
-    });
 
     processedCount++;
     onProgress({
@@ -108,10 +137,15 @@ export async function paprikaImportJobHandler(
     });
   }
 
+  if (!standardizedRecipeImportInput.length && failedCount > 0) {
+    throw new ImportBadFormatError();
+  }
+
   await importJobFinishCommon({
     job,
     userId: job.userId,
     standardizedRecipeImportInput,
     importTempDirectory: undefined,
+    failedCount,
   });
 }

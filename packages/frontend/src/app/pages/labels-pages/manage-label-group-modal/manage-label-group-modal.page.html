@@ -33,11 +33,10 @@
 
   <ion-item lines="none">
     <ion-toggle [checked]="warnWhenNotPresent" (ionChange)="warnToggle($event)">
-      Warn me when I do not add
+      {{ "pages.manageLabelGroupModal.warn" | translate }}
       <ion-label>
         <p class="ion-text-wrap">
-          When enabled, you will be warned if saving a recipe without a label in
-          this category attached
+          {{ "pages.manageLabelGroupModal.warnDescription" | translate }}
         </p>
       </ion-label>
     </ion-toggle>

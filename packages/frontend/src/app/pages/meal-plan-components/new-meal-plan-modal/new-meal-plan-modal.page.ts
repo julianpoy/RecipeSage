@@ -55,6 +55,7 @@ export class NewMealPlanModalPage {
   private serverActionsService = inject(ServerActionsService);
 
   mealPlanTitle = "";
+  saving = false;
   customMealOptions: string | null = null;
   selectedCollaboratorIds: any = [];
 
@@ -75,6 +76,9 @@ export class NewMealPlanModalPage {
   }
 
   async save() {
+    if (this.saving) return;
+
+    this.saving = true;
     const loading = this.loadingService.start();
 
     const result = await this.serverActionsService.mealPlans.createMealPlan({
@@ -83,6 +87,7 @@ export class NewMealPlanModalPage {
       customMealOptions: this.customMealOptions,
     });
     loading.dismiss();
+    this.saving = false;
     if (!result) return;
 
     this.modalCtrl.dismiss({

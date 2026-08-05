@@ -7,6 +7,7 @@ import { importJobFinishCommon } from "../../../index";
 import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
+import { buildFileNameIndex } from "./shared/buildFileNameIndex";
 import { readdir, mkdtempDisposable, stat } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
@@ -111,6 +112,8 @@ export async function lcbImportJobHandler(
   const extractPath = extractDir.path;
 
   await safeExtractZip(downloaded.filePath, extractPath);
+
+  const fileNameIndex = await buildFileNameIndex(extractPath);
 
   const mdbFiles = await findFilesByRegex(extractPath, /\.mdb$/i);
   if (mdbFiles.length === 0) {
@@ -368,10 +371,8 @@ export async function lcbImportJobHandler(
       for (const img of imageData) {
         if (img.filename) {
           try {
-            const possibleImageFiles = await findFilesByRegex(
-              extractPath,
-              new RegExp(`(${img.filename})$`, "i"),
-            );
+            const possibleImageFiles =
+              fileNameIndex.get(img.filename.toLowerCase()) || [];
             if (possibleImageFiles.length > 0) {
               try {
                 await stat(possibleImageFiles[0]);

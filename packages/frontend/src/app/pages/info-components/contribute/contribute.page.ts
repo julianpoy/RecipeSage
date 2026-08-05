@@ -67,13 +67,19 @@ export class ContributePage {
   constructor() {
     addIcons({ arrowForwardOutline });
     if (IS_SELFHOST) {
-      window.alert(
-        "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",
-      );
-      window.location.href = `https://recipesage.com/#${RouteMap.ContributePage.getPath()}`;
+      void this.redirectSelfhost();
+      return;
     }
 
     this.capabilitiesService.updateCapabilities();
+  }
+
+  private async redirectSelfhost() {
+    const message = await this.translate
+      .get("pages.contribute.selfhostRedirect")
+      .toPromise();
+    window.alert(message);
+    window.location.href = `https://recipesage.com/#${RouteMap.ContributePage.getPath()}`;
   }
 
   ionViewWillEnter() {

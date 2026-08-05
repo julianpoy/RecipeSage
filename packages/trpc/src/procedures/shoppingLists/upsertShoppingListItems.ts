@@ -40,7 +40,7 @@ export const upsertShoppingListItems = authenticatedProcedure
               .max(SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT),
             recipeId: z.uuid().nullable(),
             completed: z.boolean().optional(),
-            categoryTitle: z.string().optional(),
+            categoryTitle: z.string().trim().min(1).optional(),
             createdAt: z.coerce.date().optional(),
             updatedAt: z.coerce.date(),
           }),

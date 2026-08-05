@@ -9,15 +9,24 @@ export async function downloadS3ToTemp(
 ): Promise<{ filePath: string } & AsyncDisposable> {
   const tempDir = await mkdtempDisposable("/tmp/");
 
-  const filePath = path.join(tempDir.path, "downloadedBlob");
+  try {
+    const filePath = path.join(tempDir.path, "downloadedBlob");
 
-  const sourceStream = await readStream(ObjectTypes.IMPORT_DATA, key);
-  const fileStream = createWriteStream(filePath);
+    const sourceStream = await readStream(ObjectTypes.IMPORT_DATA, key);
+    const fileStream = createWriteStream(filePath);
 
-  await pipeline(sourceStream, fileStream);
+    await pipeline(sourceStream, fileStream);
 
-  return {
-    filePath,
-    [Symbol.asyncDispose]: () => tempDir.remove(),
-  };
+    return {
+      filePath,
+      [Symbol.asyncDispose]: () => tempDir.remove(),
+    };
+  } catch (e) {
+    try {
+      await tempDir.remove();
+    } catch (removeError) {
+      console.error(removeError);
+    }
+    throw e;
+  }
 }

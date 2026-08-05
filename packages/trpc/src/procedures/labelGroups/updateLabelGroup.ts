@@ -1,6 +1,7 @@
 import {
   labelGroupSummary,
   labelGroupSummarySchema,
+  Prisma,
   prisma,
 } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
@@ -27,62 +28,77 @@ export const updateLabelGroup = authenticatedProcedure
   )
   .output(labelGroupSummarySchema)
   .mutation(async ({ ctx, input }) => {
-    const existingLabelGroup = await prisma.labelGroup.findFirst({
-      where: {
-        id: {
-          not: input.id,
+    const labelGroup = await prisma.$transaction(async (tx) => {
+      const existingLabelGroup = await tx.labelGroup.findFirst({
+        where: {
+          id: {
+            not: input.id,
+          },
+          userId: ctx.session.userId,
+          title: input.title,
         },
-        userId: ctx.session.userId,
-        title: input.title,
-      },
-    });
-
-    if (existingLabelGroup) {
-      throw new TRPCError({
-        message: "Conflicting labelGroup title",
-        code: "CONFLICT",
       });
-    }
 
-    await prisma.labelGroup.update({
-      where: {
-        userId: ctx.session.userId,
-        id: input.id,
-      },
-      data: {
-        title: input.title,
-        warnWhenNotPresent: input.warnWhenNotPresent,
-      },
-    });
+      if (existingLabelGroup) {
+        throw new TRPCError({
+          message: "Conflicting labelGroup title",
+          code: "CONFLICT",
+        });
+      }
 
-    await prisma.label.updateMany({
-      where: {
-        userId: ctx.session.userId,
-        labelGroupId: input.id,
-      },
-      data: {
-        labelGroupId: null,
-      },
-    });
+      try {
+        await tx.labelGroup.update({
+          where: {
+            userId: ctx.session.userId,
+            id: input.id,
+          },
+          data: {
+            title: input.title,
+            warnWhenNotPresent: input.warnWhenNotPresent,
+          },
+        });
+      } catch (e) {
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === "P2002"
+        ) {
+          throw new TRPCError({
+            message: "Conflicting labelGroup title",
+            code: "CONFLICT",
+          });
+        }
+        throw e;
+      }
 
-    await prisma.label.updateMany({
-      where: {
-        userId: ctx.session.userId,
-        id: {
-          in: input.labelIds,
+      await tx.label.updateMany({
+        where: {
+          userId: ctx.session.userId,
+          labelGroupId: input.id,
         },
-      },
-      data: {
-        labelGroupId: input.id,
-      },
-    });
+        data: {
+          labelGroupId: null,
+        },
+      });
 
-    const labelGroup = await prisma.labelGroup.findUniqueOrThrow({
-      where: {
-        userId: ctx.session.userId,
-        id: input.id,
-      },
-      ...labelGroupSummary,
+      await tx.label.updateMany({
+        where: {
+          userId: ctx.session.userId,
+          id: {
+            in: input.labelIds,
+          },
+        },
+        data: {
+          labelGroupId: input.id,
+        },
+      });
+
+      return tx.labelGroup.findUniqueOrThrow({
+        where: {
+          userId: ctx.session.userId,
+          id: input.id,
+        },
+        ...labelGroupSummary,
+      });
     });
 
     return labelGroup;

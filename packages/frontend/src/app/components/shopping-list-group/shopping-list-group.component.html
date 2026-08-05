@@ -3,9 +3,11 @@
     [id]="group.items[0].id"
     [title]="group.items[0].title"
     [completed]="group.items[0].completed"
-    [recipeTitle]="showRecipeTitle && group.items[0].recipe?.title"
-    [createdAt]="showAddedOn && group.items[0].createdAt"
-    [ownerName]="showAddedBy && group.items[0].owner?.name"
+    [recipeTitle]="
+      (showRecipeTitle && group.items[0].recipe?.title) || undefined
+    "
+    [createdAt]="(showAddedOn && group.items[0].createdAt) || undefined"
+    [ownerName]="(showAddedBy && group.items[0].user.name) || undefined"
     (completeToggle)="completeToggle.emit(group.items)"
     (recategorize)="recategorize.emit([group.items, $event])"
   ></shopping-list-item>
@@ -51,12 +53,14 @@
           <ion-col size="12">
             @for (item of group.items; track item) {
               <shopping-list-item
-                [id]="group.items[0].id"
+                [id]="item.id"
                 [title]="item.title"
                 [completed]="item.completed"
-                [recipeTitle]="showRecipeTitle && item.recipe?.title"
-                [createdAt]="showAddedOn && item.createdAt"
-                [ownerName]="showAddedBy && item.owner?.name"
+                [recipeTitle]="
+                  (showRecipeTitle && item.recipe?.title) || undefined
+                "
+                [createdAt]="(showAddedOn && item.createdAt) || undefined"
+                [ownerName]="(showAddedBy && item.user.name) || undefined"
                 (completeToggle)="completeToggle.emit([item])"
                 (recategorize)="recategorize.emit([[item], $event])"
               ></shopping-list-item>

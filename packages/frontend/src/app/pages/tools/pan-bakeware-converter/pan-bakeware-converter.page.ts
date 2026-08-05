@@ -111,6 +111,19 @@ interface PanState {
   capacityOverride: string;
 }
 
+interface ConverterState {
+  from: PanState;
+  to: PanState;
+  originalBakeTemp: string;
+}
+
+interface UnitToggleSnapshot {
+  unit: UnitSystem;
+  stateAfterToggle: ConverterState;
+  previousUnit: UnitSystem;
+  stateBeforeToggle: ConverterState;
+}
+
 interface ShapeOption {
   key: PanShape;
   iconName: string;
@@ -289,6 +302,7 @@ export class PanBakewareConverterPage implements OnInit {
   readonly batterTypes = BATTER_TYPES;
 
   unit: UnitSystem = "imperial";
+  private unitToggleSnapshot: UnitToggleSnapshot | null = null;
   batterType: BatterType = "cake";
 
   from: PanState = this.makeDefaultState("round", "round9x2");
@@ -351,15 +365,9 @@ export class PanBakewareConverterPage implements OnInit {
       length: this.formatDim(preset?.length),
       width: this.formatDim(preset?.width),
       depth: this.formatDim(preset?.depth ?? this.defaultDepth(shape)),
-      cavities: preset?.cavities !== undefined ? String(preset.cavities) : "",
-      cavityCapacity:
-        preset?.cavityCapacity !== undefined
-          ? String(preset.cavityCapacity)
-          : "",
-      capacityOverride:
-        preset?.capacityOverride !== undefined
-          ? String(preset.capacityOverride)
-          : "",
+      cavities: this.formatDim(preset?.cavities),
+      cavityCapacity: this.formatDim(preset?.cavityCapacity),
+      capacityOverride: this.formatDim(preset?.capacityOverride),
     };
   }
 
@@ -371,7 +379,10 @@ export class PanBakewareConverterPage implements OnInit {
 
   private formatDim(value: number | undefined): string {
     if (value === undefined) return "";
-    return this.unit === "metric" ? formatCm(value) : formatInches(value);
+    return value.toLocaleString(this.translate.getCurrentLang(), {
+      maximumFractionDigits: 3,
+      useGrouping: false,
+    });
   }
 
   presetsForShape(shape: PanShape): PanPreset[] {
@@ -410,14 +421,9 @@ export class PanBakewareConverterPage implements OnInit {
     state.length = this.formatDim(preset.length);
     state.width = this.formatDim(preset.width);
     state.depth = this.formatDim(preset.depth);
-    state.cavities =
-      preset.cavities !== undefined ? String(preset.cavities) : "";
-    state.cavityCapacity =
-      preset.cavityCapacity !== undefined ? String(preset.cavityCapacity) : "";
-    state.capacityOverride =
-      preset.capacityOverride !== undefined
-        ? String(preset.capacityOverride)
-        : "";
+    state.cavities = this.formatDim(preset.cavities);
+    state.cavityCapacity = this.formatDim(preset.cavityCapacity);
+    state.capacityOverride = this.formatDim(preset.capacityOverride);
     this.recomputeAll();
   }
 
@@ -443,14 +449,96 @@ export class PanBakewareConverterPage implements OnInit {
   onUnitToggle(newUnit: string | number | undefined) {
     if (newUnit !== "imperial" && newUnit !== "metric") return;
     if (newUnit === this.unit) return;
-    this.convertStateUnits(this.from, this.unit, newUnit);
-    this.convertStateUnits(this.to, this.unit, newUnit);
-    this.convertBakeTempUnits(this.unit, newUnit);
-    this.from.selectedPresetKey = null;
-    this.to.selectedPresetKey = null;
+
+    const previousUnit = this.unit;
+    const stateBeforeToggle = this.captureConverterState();
+    const previousToggle = this.unitToggleSnapshot;
+
+    const isReverseToggle =
+      previousToggle !== null &&
+      previousToggle.unit === previousUnit &&
+      previousToggle.previousUnit === newUnit;
+
+    if (isReverseToggle) {
+      this.from = this.restorePanState(
+        this.from,
+        previousToggle.stateAfterToggle.from,
+        previousToggle.stateBeforeToggle.from,
+        previousUnit,
+        newUnit,
+      );
+      this.to = this.restorePanState(
+        this.to,
+        previousToggle.stateAfterToggle.to,
+        previousToggle.stateBeforeToggle.to,
+        previousUnit,
+        newUnit,
+      );
+
+      if (
+        this.originalBakeTemp ===
+        previousToggle.stateAfterToggle.originalBakeTemp
+      ) {
+        this.originalBakeTemp =
+          previousToggle.stateBeforeToggle.originalBakeTemp;
+      } else {
+        this.convertBakeTempUnits(previousUnit, newUnit);
+      }
+    } else {
+      this.convertStateUnits(this.from, previousUnit, newUnit);
+      this.convertStateUnits(this.to, previousUnit, newUnit);
+      this.convertBakeTempUnits(previousUnit, newUnit);
+      this.from.selectedPresetKey = null;
+      this.to.selectedPresetKey = null;
+    }
+
     this.unit = newUnit;
+    this.unitToggleSnapshot = {
+      unit: newUnit,
+      stateAfterToggle: this.captureConverterState(),
+      previousUnit,
+      stateBeforeToggle,
+    };
     this.recomputeRecipeScale();
     this.recomputeBakeAdvice();
+  }
+
+  private captureConverterState(): ConverterState {
+    return {
+      from: { ...this.from },
+      to: { ...this.to },
+      originalBakeTemp: this.originalBakeTemp,
+    };
+  }
+
+  private restorePanState(
+    current: PanState,
+    producedByLastToggle: PanState,
+    beforeLastToggle: PanState,
+    fromUnit: UnitSystem,
+    toUnit: UnitSystem,
+  ): PanState {
+    if (this.panStateEquals(current, producedByLastToggle)) {
+      return { ...beforeLastToggle };
+    }
+
+    this.convertStateUnits(current, fromUnit, toUnit);
+    current.selectedPresetKey = null;
+    return current;
+  }
+
+  private panStateEquals(a: PanState, b: PanState): boolean {
+    return (
+      a.shape === b.shape &&
+      a.selectedPresetKey === b.selectedPresetKey &&
+      a.diameter === b.diameter &&
+      a.length === b.length &&
+      a.width === b.width &&
+      a.depth === b.depth &&
+      a.cavities === b.cavities &&
+      a.cavityCapacity === b.cavityCapacity &&
+      a.capacityOverride === b.capacityOverride
+    );
   }
 
   private convertBakeTempUnits(fromUnit: UnitSystem, toUnit: UnitSystem) {

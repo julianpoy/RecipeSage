@@ -10,5 +10,7 @@ export async function validateSession(
     },
   });
 
-  return session || undefined;
+  if (!session || session.expires < new Date()) return undefined;
+
+  return session;
 }

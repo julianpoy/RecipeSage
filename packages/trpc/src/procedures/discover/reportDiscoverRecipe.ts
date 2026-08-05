@@ -6,6 +6,8 @@ import {
   DiscoverReportStatus,
 } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
+import { discoverRecipeVisibilitySelect } from "@recipesage/util/server/db";
+import { assertDiscoverRecipeVisible } from "@recipesage/util/server/trpc";
 
 export const reportDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -29,13 +31,13 @@ export const reportDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    const discoverRecipe = await prisma.discoverRecipe.findFirst({
+    const discoverRecipe = await prisma.discoverRecipe.findUnique({
       where: {
         id: input.id,
-        deletedAt: null,
       },
       select: {
         id: true,
+        ...discoverRecipeVisibilitySelect,
       },
     });
 
@@ -45,6 +47,8 @@ export const reportDiscoverRecipe = authenticatedProcedure
         message: "Could not find that discover recipe",
       });
     }
+
+    assertDiscoverRecipeVisible(discoverRecipe, ctx.session.userId);
 
     const reason = input.reason.trim();
 

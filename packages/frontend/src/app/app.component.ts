@@ -1,5 +1,5 @@
 import { Component, inject, NgZone } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
 import { NgxLoadingBar } from "@ngx-loading-bar/core";
@@ -32,6 +32,7 @@ import {
   MATOMO_SITE_ID,
   SupportedLanguages,
 } from "@recipesage/util/shared";
+import { CapabilitiesService } from "./services/capabilities.service";
 import { CookingToolbarService } from "./services/cooking-toolbar.service";
 import { EventName, EventService } from "./services/event.service";
 import {
@@ -49,6 +50,7 @@ import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-to
 import { VersionCheckService } from "./services/versioncheck.service";
 import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DebugStoreService } from "./services/debugStore.service";
+import { setLocalDbUpgradeMessages } from "./utils/localDb/localDbUpgradeMessages";
 import {
   IonApp,
   IonSplitPane,
@@ -119,7 +121,6 @@ interface NavPage {
 export class AppComponent {
   private translate = inject(TranslateService);
   private navCtrl = inject(NavController);
-  private route = inject(ActivatedRoute);
   private trpcService = inject(TRPCService);
   private serverActionsService = inject(ServerActionsService);
   private syncService = inject(SyncService);
@@ -136,6 +137,7 @@ export class AppComponent {
   private preferencesService = inject(PreferencesService);
   private offlineModeService = inject(OfflineModeService);
   private featureFlagService = inject(FeatureFlagService);
+  private capabilitiesService = inject(CapabilitiesService);
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
@@ -191,6 +193,7 @@ export class AppComponent {
 
     this.translate.onLangChange.subscribe((params) => {
       (window as any).currentRSLanguage = params.lang;
+      this.updateLocalDbUpgradeMessages();
     });
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
@@ -311,6 +314,10 @@ export class AppComponent {
       this.updateNavList();
     });
 
+    this.events.subscribe(EventName.CapabilitiesUpdated, () => {
+      this.updateNavList();
+    });
+
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
@@ -319,13 +326,17 @@ export class AppComponent {
     });
 
     this.websocketService.on("messages:new", async (payload) => {
+      const currentPath = this.router.url.split("?")[0];
+      if (currentPath === RouteMap.MessagesPage.getPath()) return;
       if (
-        this.route.snapshot.url
-          .toString()
-          .indexOf(RouteMap.MessagesPage.getPath())
-      )
+        currentPath === RouteMap.MessageThreadPage.getPath(payload.otherUser.id)
+      ) {
         return;
-      const notification = "New message from " + payload.otherUser.name;
+      }
+      const notification = this.translate.instant(
+        "pages.app.newMessageToast.message",
+        { name: payload.otherUser.name },
+      );
 
       const myMessage = payload;
 
@@ -334,7 +345,7 @@ export class AppComponent {
         duration: 7000,
         buttons: [
           {
-            text: "View",
+            text: this.translate.instant("pages.app.newMessageToast.view"),
             role: "cancel",
             handler: () => {
               this.navCtrl.navigateForward(
@@ -350,6 +361,15 @@ export class AppComponent {
 
   updateIsLoggedIn() {
     this.isLoggedIn = this.utilService.isLoggedIn();
+  }
+
+  private async updateLocalDbUpgradeMessages() {
+    const [confirm, notRefreshed] = await Promise.all([
+      this.translate.get("pages.app.localDbUpgrade.confirm").toPromise(),
+      this.translate.get("pages.app.localDbUpgrade.notRefreshed").toPromise(),
+    ]);
+
+    setLocalDbUpgradeMessages({ confirm, notRefreshed });
   }
 
   async updateNavList() {
@@ -392,7 +412,8 @@ export class AppComponent {
     const enableContribution =
       this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
     const enableDiscover =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover];
+      this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover] ||
+      this.capabilitiesService.capabilities.discoverPublish;
     const loggedOutPages = [
       [
         true,

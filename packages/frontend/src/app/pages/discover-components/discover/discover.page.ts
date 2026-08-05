@@ -9,6 +9,7 @@ import {
 } from "@recipesage/util/shared";
 
 import { RouteMap } from "../../../services/util.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
 import { LoadingService } from "../../../services/loading.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -76,6 +77,7 @@ export class DiscoverPage {
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
+  capabilitiesService = inject(CapabilitiesService);
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -94,6 +96,7 @@ export class DiscoverPage {
   loadedAny = false;
   recipes: DiscoverRecipeSummary[] = [];
   reachedEnd = false;
+  private searchGeneration = 0;
   tileColCount = 1;
 
   datasource = new Datasource<DiscoverRecipeSummary>({
@@ -231,11 +234,18 @@ export class DiscoverPage {
 
   async reload() {
     const loading = this.loadingService.start();
+    const generation = ++this.searchGeneration;
     this.recipes = [];
     this.reachedEnd = false;
     this.loadedAny = false;
     this.datasource.settings!.startIndex = 0;
-    await this.datasource.adapter.reset();
+
+    await this.fetchPage(0);
+
+    if (generation === this.searchGeneration) {
+      await this.datasource.adapter.reset();
+    }
+
     loading.dismiss();
   }
 
@@ -247,6 +257,7 @@ export class DiscoverPage {
   }
 
   private async fetchPage(offset: number): Promise<boolean> {
+    const generation = this.searchGeneration;
     const response =
       await this.serverActionsService.discover.searchDiscoverRecipes({
         searchTerm: this.searchTerm.trim() || undefined,
@@ -266,6 +277,7 @@ export class DiscoverPage {
       });
 
     if (!response) return false;
+    if (generation !== this.searchGeneration) return false;
 
     for (let i = 0; i < response.recipes.length; i++) {
       this.recipes[offset + i] = response.recipes[i];

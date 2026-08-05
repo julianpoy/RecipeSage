@@ -681,11 +681,10 @@ export class HomePage implements OnDestroy {
       })
       .finally(loading.dismiss);
 
-    if (!result) return;
     if (this.recipeLoadGeneration !== generation) return;
 
     this.resetRecipes();
-    this.recipes = result.recipes;
+    this.recipes = result?.recipes || [];
     await this.datasource.adapter.reset();
   }
 

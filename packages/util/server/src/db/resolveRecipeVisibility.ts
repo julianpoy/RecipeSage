@@ -50,6 +50,9 @@ export const resolveRecipeVisibility = async (args: {
 
   const profileItems = await tx.profileItem.findMany({
     where: {
+      user: {
+        enableProfile: true,
+      },
       OR: [
         {
           userId: {

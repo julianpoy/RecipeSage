@@ -36,6 +36,12 @@ export const stripBlankLines = (text: string): string =>
     .filter((line) => line.trim().length > 0)
     .join("\n");
 
+export const splitRecipeLines = (text: string): string[] =>
+  (text || "")
+    .split(lineSplitRegex)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
 const fractionMatchers = {
   // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, " 1/2"], // ½  \u00BD;
@@ -196,7 +202,7 @@ const multipartQuantifierRegexp = / \+ | plus | or | oder | und /;
  * ("2"), and ranges joined by "-", " - ", or " to ".
  */
 const measurementRegexp =
-  /((\d+ )?\d+([/.,]\d+)?((-)|( to )|( - )|(–)|(—))(\d+ )?\d+([/.,]\d+)?)|((\d+ )?\d+[/.,]\d+)|\d+/;
+  /((\d+ )?\d+([/.,]\d+)?((-)|( to )|( - )|( ?– ?)|( ?— ?))(\d+ )?\d+([/.,]\d+)?)|((\d+ )?\d+[/.,]\d+)|\d+/;
 
 /**
  * All known unit names sanitized for use within a regex pattern.
@@ -381,25 +387,26 @@ export const getTitleForIngredient = (ingredient: string): string => {
  * 3 apples, blended => apples
  */
 export const stripIngredient = (ingredient: string): string => {
-  ingredient = stripNewlines(ingredient);
-  const trimmed = replaceFractionsInText(ingredient)
-    .trim()
-    .replace(new RegExp(`^(${measurementRegexp.source})`), "")
-    .trim()
-    .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
-    .trim()
-    .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
-    .trim()
-    .replace(new RegExp(`,$`, "i"), "")
-    .trim();
-  if (trimmed !== ingredient) {
-    return stripIngredient(trimmed);
-  } else {
-    return trimmed;
+  let current = stripNewlines(ingredient);
+
+  for (;;) {
+    const trimmed = replaceFractionsInText(current)
+      .trim()
+      .replace(new RegExp(`^(${measurementRegexp.source})`), "")
+      .trim()
+      .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
+      .trim()
+      .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
+      .trim()
+      .replace(new RegExp(`,$`, "i"), "")
+      .trim();
+
+    if (trimmed === current) return trimmed;
+    current = trimmed;
   }
 };
 
@@ -855,7 +862,7 @@ export const parseIngredients = (
         try {
           const measurement = el[0];
           const measurementPartDelimiters =
-            measurement.match(/(-)|( to )|( - )|(–)|(—)/g) ?? [];
+            measurement.match(/( – )|( — )|( to )|( - )|(-)|(–)|(—)/g) ?? [];
           const measurementParts = measurement.split(/-|to|–|—/);
           const isRange = measurementParts.length > 1;
 
@@ -1029,7 +1036,7 @@ const scaleBraceContent = (
   const hasUnit = afterNumber.trim().length > 0;
 
   const measurementPartDelimiters = numberText.match(
-    /(-)|( to )|( - )|(–)|(—)/g,
+    /( – )|( — )|( to )|( - )|(-)|(–)|(—)/g,
   );
   const measurementParts = numberText.split(/-|to|–|—/);
   const isRange = measurementParts.length > 1;

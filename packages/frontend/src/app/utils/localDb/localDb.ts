@@ -14,6 +14,7 @@ import type {
   UserPublic,
 } from "@recipesage/prisma";
 import { trpcClient as trpc } from "../trpcClient";
+import { getLocalDbUpgradeMessages } from "./localDbUpgradeMessages";
 import { localDBMigration_1 } from "./migrations/localDBMigration_1";
 import { localDBMigration_2 } from "./migrations/localDBMigration_2";
 import { localDBMigration_3 } from "./migrations/localDBMigration_3";
@@ -198,11 +199,10 @@ const connect = () => {
           self.registration.update();
         } else {
           // We're in a window
-          const confirmed = prompt(
-            "A new version of the app is available. The app will refresh to load the new version",
-          );
+          const messages = getLocalDbUpgradeMessages();
+          const confirmed = confirm(messages.confirm);
           if (confirmed) self.location.reload();
-          else alert("The app will not work correctly until it is refreshed");
+          else alert(messages.notRefreshed);
         }
       });
     },

@@ -98,6 +98,11 @@ export const saveRecipe = async (
 ): Promise<SaveRecipeResult> => {
   const trpc = createTrpc(apiBase, token);
 
+  const title = recipe.title?.trim() ?? "";
+  if (title.length === 0) {
+    throw new MissingTitleError();
+  }
+
   let imageIds: string[] = [];
   if (recipe.imageURL && recipe.imageURL.trim().length > 0) {
     try {
@@ -108,11 +113,6 @@ export const saveRecipe = async (
     } catch (e) {
       console.error("Failed to create image from URL", e);
     }
-  }
-
-  const title = recipe.title?.trim() ?? "";
-  if (title.length === 0) {
-    throw new MissingTitleError();
   }
 
   try {

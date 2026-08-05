@@ -19,7 +19,7 @@
       <ion-chip (click)="deselectItem(selectedItem)">
         @if (selectedItem.image) {
           <ion-avatar aria-hidden="true">
-            <img alt="Selected item image" [src]="selectedItem.image" />
+            <img alt="" [src]="selectedItem.image" />
           </ion-avatar>
         }
         @if (selectedItem.icon) {
@@ -76,7 +76,7 @@
               >
                 @if (result.image) {
                   <ion-avatar aria-hidden="true" slot="start">
-                    <img alt="Image of selectable item" [src]="result.image" />
+                    <img alt="" [src]="result.image" />
                   </ion-avatar>
                 }
                 @if (result.icon) {
@@ -98,10 +98,7 @@
               <ion-item>
                 @if (exactItemMatch.image) {
                   <ion-avatar aria-hidden="true" slot="start">
-                    <img
-                      alt="Image of selectable item"
-                      [src]="exactItemMatch.image"
-                    />
+                    <img alt="" [src]="exactItemMatch.image" />
                   </ion-avatar>
                 }
                 @if (exactItemMatch.icon) {
@@ -144,7 +141,7 @@
               enableCreateNew &&
               !exactItemMatch &&
               searchText.length > 0 &&
-              !disallowedTitles[searchText]
+              !disallowedTitleReason
             ) {
               <ion-item
                 (mousedown)="$event.preventDefault()"
@@ -168,7 +165,7 @@
               enableCreateNew &&
               !exactItemMatch &&
               searchText.length > 0 &&
-              disallowedTitles[searchText]
+              disallowedTitleReason
             ) {
               <ion-item>
                 <ion-icon
@@ -179,7 +176,7 @@
                 <ion-label>
                   <h2>{{ searchText }}</h2>
                   <p>
-                    {{ disallowedTitles[searchText] | translate }}
+                    {{ disallowedTitleReason | translate }}
                   </p>
                 </ion-label>
               </ion-item>

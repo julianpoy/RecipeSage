@@ -146,7 +146,7 @@ export const webhookHandler = defineHandler(
         invoice.customer_email,
       );
 
-      let subscriptionModelName = SubscriptionModelName.PyoMonthly;
+      let subscriptionModelName: SubscriptionModelName | undefined;
 
       const subscription = invoice.parent?.subscription_details?.subscription;
       const subscriptionId =
@@ -163,9 +163,13 @@ export const webhookHandler = defineHandler(
       }
 
       if (!subscriptionModelName) {
-        throw new InternalServerError(
-          `Invoice paid with unknown product ${invoice.id}`,
-        );
+        Sentry.captureMessage("Invoice paid with unknown product", {
+          extra: {
+            type: event.type,
+            invoiceId: invoice.id,
+            paidProducts,
+          },
+        });
       }
 
       await prisma.$transaction(async (tx) => {
@@ -191,9 +195,9 @@ export const webhookHandler = defineHandler(
           },
         });
 
-        if (user) {
+        if (user && subscriptionModelName) {
           await extendSubscription(user.id, subscriptionModelName, tx);
-        } else {
+        } else if (!user) {
           console.warn("Payment collected for unknown user");
           Sentry.captureMessage("Payment collected for unknown user", {
             extra: {

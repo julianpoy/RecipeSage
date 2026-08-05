@@ -33,7 +33,7 @@ export const updateShoppingListItem = authenticatedProcedure
         .optional(),
       recipeId: z.uuid().nullable().optional(),
       completed: z.boolean().optional(),
-      categoryTitle: z.string().optional(),
+      categoryTitle: z.string().trim().min(1).optional(),
     }),
   )
   .output(

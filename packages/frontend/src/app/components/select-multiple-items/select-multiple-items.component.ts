@@ -58,6 +58,8 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   @Input() searchPlaceholderText?: string;
   @Input() reserveSelectedItemsHeight = true;
   @Input() reserveSearchResultsHeight = true;
+  @Input() normalizeTitle: (title: string) => string = (title) =>
+    title.normalize("NFC").toLowerCase();
 
   @Input({
     required: true,
@@ -68,6 +70,38 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     required: false,
   })
   disallowedTitles: { [title: string]: string } = {}; // Keys are label titles, values are lang keys
+
+  private normalizedDisallowedTitlesCache?: {
+    source: { [title: string]: string };
+    normalize: (title: string) => string;
+    normalized: Map<string, string>;
+  };
+
+  private get normalizedDisallowedTitles(): Map<string, string> {
+    const cache = this.normalizedDisallowedTitlesCache;
+    if (
+      cache &&
+      cache.source === this.disallowedTitles &&
+      cache.normalize === this.normalizeTitle
+    ) {
+      return cache.normalized;
+    }
+
+    const normalized = new Map(
+      Object.entries(this.disallowedTitles).map(([title, reason]) => [
+        this.normalizeTitle(title),
+        reason,
+      ]),
+    );
+
+    this.normalizedDisallowedTitlesCache = {
+      source: this.disallowedTitles,
+      normalize: this.normalizeTitle,
+      normalized,
+    };
+
+    return normalized;
+  }
 
   _selectedItems: T[] = [];
   @Input()
@@ -126,7 +160,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   }
 
   onEnter() {
-    if (this.disallowedTitles[this.searchText]) return;
+    if (this.disallowedTitleReason) return;
 
     const isAlreadyAdded = this.selectedItems.some((item) =>
       this.isExactMatch(item),
@@ -166,8 +200,18 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
       .includes(this.searchText.toLowerCase() || "");
   }
 
+  private matchesSearchText(title: string): boolean {
+    return this.normalizeTitle(title) === this.normalizeTitle(this.searchText);
+  }
+
+  get disallowedTitleReason(): string | undefined {
+    return this.normalizedDisallowedTitles.get(
+      this.normalizeTitle(this.searchText),
+    );
+  }
+
   isExactMatch(item: T) {
-    return item.title.toLowerCase() === this.searchText.toLowerCase();
+    return this.matchesSearchText(item.title);
   }
 
   updateResults() {
@@ -201,6 +245,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     const idx = selectedItems.findIndex(
       (selectedItem) => selectedItem.id === item.id,
     );
+    if (idx === -1) return;
     selectedItems.splice(idx, 1);
 
     this.selectedItems = selectedItems;

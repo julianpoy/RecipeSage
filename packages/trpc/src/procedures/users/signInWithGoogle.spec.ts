@@ -2,29 +2,6 @@ import { prisma } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import { anonymousTrpc } from "../../testutils";
 
-const originalEnv = vi.hoisted(() => {
-  const previous = {
-    GOOGLE_GSI_CLIENT_ID: process.env.GOOGLE_GSI_CLIENT_ID,
-    GOOGLE_GSI_CLIENT_SECRET: process.env.GOOGLE_GSI_CLIENT_SECRET,
-  };
-  process.env.GOOGLE_GSI_CLIENT_ID = "test-client-id";
-  process.env.GOOGLE_GSI_CLIENT_SECRET = "test-client-secret";
-  return previous;
-});
-
-afterAll(() => {
-  if (originalEnv.GOOGLE_GSI_CLIENT_ID === undefined) {
-    delete process.env.GOOGLE_GSI_CLIENT_ID;
-  } else {
-    process.env.GOOGLE_GSI_CLIENT_ID = originalEnv.GOOGLE_GSI_CLIENT_ID;
-  }
-  if (originalEnv.GOOGLE_GSI_CLIENT_SECRET === undefined) {
-    delete process.env.GOOGLE_GSI_CLIENT_SECRET;
-  } else {
-    process.env.GOOGLE_GSI_CLIENT_SECRET = originalEnv.GOOGLE_GSI_CLIENT_SECRET;
-  }
-});
-
 const verifyIdTokenMock = vi.fn();
 
 vi.mock("google-auth-library", () => ({
@@ -35,7 +12,7 @@ vi.mock("google-auth-library", () => ({
 
 const setVerifiedEmail = (email: string) => {
   verifyIdTokenMock.mockResolvedValue({
-    getPayload: () => ({ email }),
+    getPayload: () => ({ email, email_verified: true }),
   });
 };
 
@@ -190,6 +167,44 @@ describe("signInWithGoogle", () => {
           credential: "valid-credential",
         }),
       ).rejects.toThrow("Invalid clientId or credential");
+    });
+
+    test("throws when the verified payload email is not verified", async () => {
+      const email = faker.internet.email().toLowerCase();
+      verifyIdTokenMock.mockResolvedValue({
+        getPayload: () => ({ email, email_verified: false }),
+      });
+
+      await expect(
+        anonymousTrpc.users.signInWithGoogle({
+          clientId: "test-client-id",
+          credential: "valid-credential",
+        }),
+      ).rejects.toThrow("Invalid clientId or credential");
+
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+      expect(user).toBeNull();
+    });
+  });
+
+  describe("audience", () => {
+    test("verifies against the configured client id, not the caller supplied one", async () => {
+      const email = faker.internet.email().toLowerCase();
+      createdEmails.push(email);
+      setVerifiedEmail(email);
+
+      await anonymousTrpc.users.signInWithGoogle({
+        clientId: "attacker-controlled-client-id",
+        credential: "valid-credential",
+      });
+
+      expect(verifyIdTokenMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          audience: "test-client-id",
+        }),
+      );
     });
   });
 });

@@ -452,6 +452,14 @@ export class UtilService {
     }, 1000 * 60);
   }
 
+  getDisplayLocale(): string {
+    return this.translate.getCurrentLang() || window.navigator.language;
+  }
+
+  formatMonthName(date: Date): string {
+    return date.toLocaleString(this.getDisplayLocale(), { month: "long" });
+  }
+
   getAppBrowserLang(): string {
     const isSupported = (
       lang: string | undefined,
@@ -586,7 +594,8 @@ export class UtilService {
     date: string | number | Date,
     options: { now?: boolean; times?: boolean } = {},
   ): string {
-    const memoKey = date.toString() + options.now + options.times;
+    const memoKey =
+      this.getDisplayLocale() + date.toString() + options.now + options.times;
     const memoizedValue = this.memoizedFormattedDates.get(memoKey);
     if (memoizedValue) return memoizedValue;
 
@@ -611,6 +620,9 @@ export class UtilService {
     todayAfter.setSeconds(0);
     todayAfter.setMilliseconds(0);
 
+    const todayBefore = new Date(todayAfter);
+    todayBefore.setDate(todayBefore.getDate() + 1);
+
     const thisWeekAfter = new Date();
     thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
 
@@ -621,20 +633,22 @@ export class UtilService {
       if (justNow) return justNow;
     }
 
-    if (!options.times && todayAfter <= toFormat) {
+    const isToday = todayAfter <= toFormat && toFormat < todayBefore;
+
+    if (!options.times && isToday) {
       const today = this.translate.instant("services.util.today");
       if (today) return today;
     }
 
-    if (options.times && todayAfter <= toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+    if (options.times && isToday) {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         hour: "numeric",
         minute: "numeric",
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         weekday: "long",
         hour: "numeric",
         minute: "numeric",
@@ -642,19 +656,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         weekday: "long",
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         month: "numeric",
         day: "numeric",
         year: "numeric",
       });
     } else {
-      return toFormat.toLocaleString(window.navigator.language, {
+      return toFormat.toLocaleString(this.getDisplayLocale(), {
         hour: "numeric",
         minute: "numeric",
         month: "numeric",

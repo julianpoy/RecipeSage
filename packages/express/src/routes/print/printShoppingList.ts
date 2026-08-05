@@ -20,6 +20,7 @@ import {
 import {
   getLanguageDirection,
   getShoppingListItemGroupings,
+  SHOPPING_LIST_CATEGORY_I18N,
   ShoppingListSortOptions,
 } from "@recipesage/util/shared";
 
@@ -70,26 +71,16 @@ export const printShoppingListHandler = defineHandler(
       shoppingList.items,
       language,
     ) satisfies ShoppingListItemSummary[];
-    const categoryTitlesToi18n: Record<string, string> = {
-      uncategorized: await translate(
-        language,
-        "pages.shoppingList.category.uncategorized",
+    const categoryTitlesToi18n: Record<string, string> = Object.fromEntries(
+      await Promise.all(
+        Object.entries(SHOPPING_LIST_CATEGORY_I18N).map(
+          async ([categoryTitle, i18nKey]) => [
+            categoryTitle,
+            await translate(language, i18nKey),
+          ],
+        ),
       ),
-      produce: await translate(language, "pages.shoppingList.category.produce"),
-      dairy: await translate(language, "pages.shoppingList.category.dairy"),
-      meat: await translate(language, "pages.shoppingList.category.meat"),
-      bakery: await translate(language, "pages.shoppingList.category.bakery"),
-      grocery: await translate(language, "pages.shoppingList.category.grocery"),
-      liquor: await translate(language, "pages.shoppingList.category.liquor"),
-      seafood: await translate(language, "pages.shoppingList.category.seafood"),
-      nonfood: await translate(language, "pages.shoppingList.category.nonfood"),
-      frozen: await translate(language, "pages.shoppingList.category.frozen"),
-      canned: await translate(language, "pages.shoppingList.category.canned"),
-      beverages: await translate(
-        language,
-        "pages.shoppingList.category.beverages",
-      ),
-    };
+    );
 
     const itemSummariesTranslated = itemSummaries.map((el) => {
       const categoryTitle = el.categoryTitle || "::uncategorized";

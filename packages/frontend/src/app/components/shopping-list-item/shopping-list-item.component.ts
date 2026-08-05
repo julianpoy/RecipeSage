@@ -22,6 +22,7 @@ import {
   IonListHeader,
   IonLabel,
 } from "@ionic/angular/standalone";
+import { SHOPPING_LIST_CATEGORY_I18N } from "@recipesage/util/shared";
 import { ellipsisVerticalOutline, trashOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -88,23 +89,7 @@ export class ShoppingListItemComponent {
 
   @ViewChild("moveToPopover") moveToPopover!: HTMLIonPopoverElement;
 
-  builtinCategoryI18n = [
-    "pages.shoppingList.category.uncategorized",
-    "pages.shoppingList.category.produce",
-    "pages.shoppingList.category.dairy",
-    "pages.shoppingList.category.meat",
-    "pages.shoppingList.category.bakery",
-    "pages.shoppingList.category.grocery",
-    "pages.shoppingList.category.liquor",
-    "pages.shoppingList.category.seafood",
-    "pages.shoppingList.category.nonfood",
-    "pages.shoppingList.category.frozen",
-    "pages.shoppingList.category.canned",
-    "pages.shoppingList.category.beverages",
-    "pages.shoppingList.category.baking",
-    "pages.shoppingList.category.spices",
-    "pages.shoppingList.category.condiments",
-  ];
+  builtinCategoryI18n = Object.values(SHOPPING_LIST_CATEGORY_I18N);
   builtinCategories: string[] = [];
   userKnownCategories = this.getUserKnownCategories();
 
@@ -204,6 +189,8 @@ export class ShoppingListItemComponent {
         {
           text: save,
           role: "confirm",
+          handler: (values: { category?: string }) =>
+            (values.category || "").trim().length > 0,
         },
       ],
     });
@@ -211,8 +198,11 @@ export class ShoppingListItemComponent {
     await alert.present();
     const detail = await alert.onDidDismiss();
     if (detail.role === "confirm") {
-      this.addUserKnownCategory(detail.data.values.category);
-      this.moveToCategoryCustom(detail.data.values.category);
+      const category = (detail.data.values.category || "").trim();
+      if (!category) return;
+
+      this.addUserKnownCategory(category);
+      this.moveToCategoryCustom(category);
     }
   }
 }

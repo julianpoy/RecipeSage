@@ -583,7 +583,9 @@ describe("getRecipeConstraintsWhere", () => {
     });
 
     it("renders a friend's partial share alongside the filter clauses", async () => {
-      const friend = await prisma.user.create({ data: userFactory() });
+      const friend = await prisma.user.create({
+        data: { ...userFactory(), enableProfile: true },
+      });
       cleanupIds.push(friend.id);
       await prisma.friendship.createMany({
         data: friendshipFactory(owner.id, friend.id),

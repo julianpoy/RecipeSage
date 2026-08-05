@@ -48,9 +48,15 @@ export class ShoppingListIgnoreModalPage {
   private modalCtrl = inject(ModalController);
   public preferencesService = inject(PreferencesService);
 
-  preferenceKey = ShoppingListPreferenceKey;
+  ignoreItemTitles =
+    this.preferencesService.preferences[
+      ShoppingListPreferenceKey.IgnoreItemTitles
+    ];
 
   async save() {
+    this.preferencesService.preferences[
+      ShoppingListPreferenceKey.IgnoreItemTitles
+    ] = this.ignoreItemTitles;
     this.preferencesService.save();
   }
 

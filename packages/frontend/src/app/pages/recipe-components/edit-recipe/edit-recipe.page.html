@@ -21,7 +21,7 @@
 <ion-content>
   <multi-image-upload
     [images]="images"
-    (onImageAdded)="markAsDirty()"
+    (imageUpdate)="markAsDirty()"
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
@@ -274,7 +274,7 @@
           </div>
           <rating
             [rating]="recipe.rating"
-            (ratingChanged)="recipe.rating = $event"
+            (ratingChanged)="recipe.rating = $event; markAsDirty()"
             [enableEdit]="true"
           ></rating>
         </div>
@@ -687,6 +687,7 @@
           "
           (selectedItemsChange)="selectedLabelsChange(null, $event)"
           (newItem)="addLabel($event, null)"
+          [normalizeTitle]="cleanLabelTitle"
           [disallowedTitles]="disallowedTitleMap(labels, null)"
           [reserveSearchResultsHeight]="false"
           noSelectedItemsText="{{
@@ -720,6 +721,7 @@
             "
             (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
             (newItem)="addLabel($event, labelGroup.id)"
+            [normalizeTitle]="cleanLabelTitle"
             [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
             [reserveSearchResultsHeight]="false"
             noSelectedItemsText="{{

@@ -226,12 +226,17 @@ export const fahrenheitToCelsius = (fahrenheit: number): number =>
 export const GAS_MARK_MIN = 1;
 export const GAS_MARK_MAX = 9;
 
-export const gasMarkToFahrenheit = (mark: number): number =>
-  275 + (mark - 1) * 25;
+const gasMarkFahrenheit = (mark: number): number => 275 + (mark - 1) * 25;
 
-export const fahrenheitToGasMark = (fahrenheit: number): number => {
-  const raw = (fahrenheit - 275) / 25 + 1;
-  return Math.min(GAS_MARK_MAX, Math.max(GAS_MARK_MIN, Math.round(raw)));
+const isGasMarkInRange = (mark: number): boolean =>
+  mark >= GAS_MARK_MIN && mark <= GAS_MARK_MAX;
+
+export const gasMarkToFahrenheit = (mark: number): number | null =>
+  isGasMarkInRange(mark) ? gasMarkFahrenheit(mark) : null;
+
+export const fahrenheitToGasMark = (fahrenheit: number): number | null => {
+  const mark = Math.round((fahrenheit - 275) / 25 + 1);
+  return isGasMarkInRange(mark) ? mark : null;
 };
 
 export interface OvenTemperature {
@@ -243,7 +248,7 @@ export interface OvenTemperature {
 export const OVEN_TEMPERATURES: OvenTemperature[] = (() => {
   const temperatures: OvenTemperature[] = [];
   for (let mark = GAS_MARK_MIN; mark <= GAS_MARK_MAX; mark++) {
-    const fahrenheit = gasMarkToFahrenheit(mark);
+    const fahrenheit = gasMarkFahrenheit(mark);
     temperatures.push({
       gasMark: mark,
       fahrenheit,

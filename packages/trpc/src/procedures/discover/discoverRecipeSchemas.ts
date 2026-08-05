@@ -1,6 +1,11 @@
-import { Prisma } from "@recipesage/prisma";
+import { DiscoverApprovalState, Prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/db";
+
+const toPublicApprovalState = (approvalState: DiscoverApprovalState) =>
+  approvalState === DiscoverApprovalState.SHADOWBANNED
+    ? DiscoverApprovalState.PENDING
+    : approvalState;
 
 export const DISCOVER_APPROVAL_STATES = [
   "PENDING",
@@ -200,7 +205,7 @@ export const prismaDiscoverRecipeToSummary = (
     description: discoverRecipe.description,
     language: discoverRecipe.language,
     categories: discoverRecipe.categories,
-    approvalState: discoverRecipe.approvalState,
+    approvalState: toPublicApprovalState(discoverRecipe.approvalState),
     ratingAverage: discoverRecipe.ratingAverage,
     ratingCount: discoverRecipe.ratingCount,
     saveCount: discoverRecipe.saveCount,

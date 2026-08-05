@@ -11,6 +11,7 @@ import {
   recipeSummaryLiteSchema,
   prisma,
   recipeSummaryLite,
+  Prisma,
 } from "@recipesage/prisma";
 
 export const getRecipes = publicProcedure
@@ -87,14 +88,17 @@ export const getRecipes = publicProcedure
 
     if (!where) return { recipes: [], totalCount: 0 };
 
+    const primaryOrderBy: Prisma.RecipeOrderByWithRelationInput =
+      input.orderBy === "lastMadeAt"
+        ? { lastMadeAt: { sort: input.orderDirection, nulls: "last" } }
+        : { [input.orderBy]: input.orderDirection };
+
     const [totalCount, recipes] = await Promise.all([
       prisma.recipe.count({ where }),
       prisma.recipe.findMany({
         where,
         ...recipeSummaryLite,
-        orderBy: {
-          [input.orderBy]: input.orderDirection,
-        },
+        orderBy: [primaryOrderBy, { id: "asc" }],
         skip: input.offset,
         take: input.limit,
       }),

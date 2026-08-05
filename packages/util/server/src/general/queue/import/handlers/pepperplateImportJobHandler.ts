@@ -108,16 +108,14 @@ export async function pepperplateImportJobHandler(
       xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 }),
     );
 
-    syncToken =
-      recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"][
+    const retrieveResult =
+      recipeJson["soap:Envelope"]?.["soap:Body"]?.["RetrieveRecipesResponse"]?.[
         "RetrieveRecipesResult"
-      ]["SynchronizationToken"]._text;
+      ] || {};
 
-    const items = xmlNodeToArray(
-      recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"][
-        "RetrieveRecipesResult"
-      ]["Items"]["RecipeSync"],
-    );
+    syncToken = (retrieveResult["SynchronizationToken"] || {})._text;
+
+    const items = xmlNodeToArray((retrieveResult["Items"] || {})["RecipeSync"]);
 
     if (items.length > 0) {
       pepperplateRecipes.push(...items);
@@ -171,7 +169,7 @@ export async function pepperplateImportJobHandler(
             (
               ((ingredient.Quantity || {})._text || "") +
               " " +
-              ingredient.Text._text
+              ((ingredient.Text || {})._text || "")
             ).trim(),
           )
           .join("\r\n");
@@ -202,7 +200,7 @@ export async function pepperplateImportJobHandler(
               parseInt((a.DisplayOrder || {})._text || 0, 10) -
               parseInt((b.DisplayOrder || {})._text || 0, 10),
           )
-          .map((direction: any) => direction.Text._text)
+          .map((direction: any) => (direction.Text || {})._text || "")
           .join("\r\n");
         return [...directions, innerDirections].join("\r\n");
       })
@@ -212,7 +210,7 @@ export async function pepperplateImportJobHandler(
 
     standardizedRecipeImportInput.push({
       recipe: {
-        title: pepperRecipe.Title._text,
+        title: (pepperRecipe.Title || {})._text || "",
         description: (pepperRecipe.Description || {})._text || "",
         notes: (pepperRecipe.Note || {})._text || "",
         ingredients: finalIngredients || "",
@@ -228,9 +226,9 @@ export async function pepperplateImportJobHandler(
         folder: "main",
       },
       labels: [
-        ...xmlNodeToArray((pepperRecipe.Tags || {}).TagSync).map(
-          (tag: any) => tag.Text._text,
-        ),
+        ...xmlNodeToArray((pepperRecipe.Tags || {}).TagSync)
+          .map((tag: any) => (tag.Text || {})._text || "")
+          .filter((tag: string) => tag),
         ...importLabels,
       ],
       images: imageUrl ? [imageUrl] : [],

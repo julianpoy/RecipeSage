@@ -94,6 +94,7 @@ export async function pdfsImportJobHandler(
     userId: job.userId,
     standardizedRecipeImportInput,
     importTempDirectory: extractPath,
+    creditOperation: "importPdfs",
     failedCount,
   });
 }

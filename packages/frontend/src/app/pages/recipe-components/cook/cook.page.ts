@@ -42,7 +42,7 @@ import {
   IonSpinner,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { closeOutline } from "ionicons/icons";
+import { alertCircleOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 interface CookableRecipe {
@@ -93,6 +93,7 @@ export class CookPage {
   } = null;
 
   loading = true;
+  notFound = false;
   recipe: CookableRecipe | null = null;
   isDiscover = false;
   recipeId = "";
@@ -104,7 +105,7 @@ export class CookPage {
   unitSystem: UnitSystem = "original";
 
   constructor() {
-    addIcons({ closeOutline });
+    addIcons({ alertCircleOutline, closeOutline });
     this.applyRouteParams();
   }
 
@@ -128,14 +129,10 @@ export class CookPage {
   }
 
   ionViewWillEnter() {
-    const snapshotRecipeId = this.route.snapshot.paramMap.get(
-      this.routeParamName,
-    );
-    if (snapshotRecipeId && snapshotRecipeId !== this.recipeId) {
-      this.applyRouteParams();
-    }
-
     this.recipe = null;
+    this.ingredients = undefined;
+    this.instructions = undefined;
+    this.notes = undefined;
     this.load();
 
     this.setupWakeLock();
@@ -148,11 +145,18 @@ export class CookPage {
     this.fullscreenService.exit();
   }
 
+  backToRecipes() {
+    this.navCtrl.navigateBack(RouteMap.HomePage.getPath("main"));
+  }
+
   async load() {
     this.loading = true;
-    this.recipe = this.isDiscover
+    this.notFound = false;
+    const recipe = this.isDiscover
       ? await this.loadDiscoverRecipe()
       : await this.loadRecipe();
+
+    this.recipe = recipe;
     this.loading = false;
     if (!this.recipe) return;
 
@@ -167,9 +171,14 @@ export class CookPage {
   }
 
   private async loadRecipe(): Promise<CookableRecipe | null> {
-    const response = await this.serverActionsService.recipes.getRecipe({
-      id: this.recipeId,
-    });
+    const response = await this.serverActionsService.recipes.getRecipe(
+      {
+        id: this.recipeId,
+      },
+      {
+        404: () => (this.notFound = true),
+      },
+    );
     if (!response) return null;
 
     return {
@@ -189,6 +198,9 @@ export class CookPage {
     const response = await this.serverActionsService.discover.getDiscoverRecipe(
       {
         id: this.recipeId,
+      },
+      {
+        404: () => (this.notFound = true),
       },
     );
     if (!response) return null;
@@ -244,6 +256,8 @@ export class CookPage {
         ...note,
         htmlContent: linkifyHtml(note.htmlContent),
       }));
+    } else {
+      this.notes = undefined;
     }
   }
 

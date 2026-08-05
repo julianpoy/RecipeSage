@@ -10,16 +10,12 @@ export class UnsavedChangesService {
   private translate = inject(TranslateService);
 
   private pendingChanges = false;
-  public unsavedChangesMessage = "";
+
+  public get unsavedChangesMessage(): string {
+    return this.translate.instant("services.unsavedChanges.message");
+  }
 
   constructor() {
-    this.translate
-      .get("services.unsavedChanges.message")
-      .toPromise()
-      .then((unsavedChangesMessage) => {
-        this.unsavedChangesMessage = unsavedChangesMessage;
-      });
-
     // Reset pending changes after every navigation event
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

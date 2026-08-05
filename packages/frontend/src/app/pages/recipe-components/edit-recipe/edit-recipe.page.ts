@@ -29,6 +29,7 @@ import { ImageService } from "../../../services/image.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   RecipeDetailsPreferenceKey,
+  cleanLabelTitle,
   decodeBasicHtmlEntities,
 } from "@recipesage/util/shared";
 import { getQueryParam } from "../../../utils/queryParams";
@@ -298,20 +299,35 @@ export class EditRecipePage {
     return filtered;
   }
 
+  cleanLabelTitle = cleanLabelTitle;
+
+  private disallowedTitleMapCache = new Map<
+    string,
+    { labels: LabelSummary[]; map: Record<string, string> }
+  >();
+
   disallowedTitleMap(labels: LabelSummary[], labelGroupId: string | null) {
+    const cacheKey = labelGroupId ?? "";
+    const cached = this.disallowedTitleMapCache.get(cacheKey);
+    if (cached && cached.labels === labels) return cached.map;
+
     const labelsNotInGroup = this.labelsNotInGroupId(labels, labelGroupId);
 
     const labelTitlesInOtherGroups = labelsNotInGroup.map(
       (label) => label.title,
     );
 
-    return labelTitlesInOtherGroups.reduce(
+    const map = labelTitlesInOtherGroups.reduce(
       (acc, title) => {
         acc[title] = "pages.editRecipe.addLabel.otherGroup";
         return acc;
       },
       {} as Record<string, string>,
     );
+
+    this.disallowedTitleMapCache.set(cacheKey, { labels, map });
+
+    return map;
   }
 
   checkAutoClip() {
@@ -347,15 +363,21 @@ export class EditRecipePage {
     this.markAsDirty();
   }
 
+  private toTrimmedString(value: unknown): string {
+    return typeof value === "string" ? value.trim() : String(value ?? "");
+  }
+
   private isValidNutritionValue(value: unknown): boolean {
-    if (value == null || value === "") return true;
-    const num = Number(value);
+    const text = this.toTrimmedString(value);
+    if (text === "") return true;
+    const num = Number(text);
     return !isNaN(num) && num >= 0;
   }
 
   private toNutritionNumber(value: unknown): number | null {
-    if (value == null || value === "") return null;
-    return Number(value);
+    const text = this.toTrimmedString(value);
+    if (text === "") return null;
+    return Number(text);
   }
 
   private nutritionFieldValues(): unknown[] {
@@ -585,30 +607,28 @@ export class EditRecipePage {
         },
       },
     );
-
-    if (response) {
-      this.recipe.nutritionServingSize = response.servingSize;
-      this.recipe.nutritionCalories = response.calories;
-      this.recipe.nutritionTotalFat = response.totalFat;
-      this.recipe.nutritionSaturatedFat = response.saturatedFat;
-      this.recipe.nutritionTransFat = response.transFat;
-      this.recipe.nutritionPolyunsaturatedFat = response.polyunsaturatedFat;
-      this.recipe.nutritionMonounsaturatedFat = response.monounsaturatedFat;
-      this.recipe.nutritionCholesterol = response.cholesterol;
-      this.recipe.nutritionSodium = response.sodium;
-      this.recipe.nutritionTotalCarbs = response.totalCarbs;
-      this.recipe.nutritionDietaryFiber = response.dietaryFiber;
-      this.recipe.nutritionTotalSugars = response.totalSugars;
-      this.recipe.nutritionAddedSugars = response.addedSugars;
-      this.recipe.nutritionProtein = response.protein;
-      this.recipe.nutritionVitaminD = response.vitaminD;
-      this.recipe.nutritionCalcium = response.calcium;
-      this.recipe.nutritionIron = response.iron;
-      this.recipe.nutritionPotassium = response.potassium;
-      this.markAsDirty();
-    }
-
     loading.dismiss();
+    if (!response) return;
+
+    this.recipe.nutritionServingSize = response.servingSize;
+    this.recipe.nutritionCalories = response.calories;
+    this.recipe.nutritionTotalFat = response.totalFat;
+    this.recipe.nutritionSaturatedFat = response.saturatedFat;
+    this.recipe.nutritionTransFat = response.transFat;
+    this.recipe.nutritionPolyunsaturatedFat = response.polyunsaturatedFat;
+    this.recipe.nutritionMonounsaturatedFat = response.monounsaturatedFat;
+    this.recipe.nutritionCholesterol = response.cholesterol;
+    this.recipe.nutritionSodium = response.sodium;
+    this.recipe.nutritionTotalCarbs = response.totalCarbs;
+    this.recipe.nutritionDietaryFiber = response.dietaryFiber;
+    this.recipe.nutritionTotalSugars = response.totalSugars;
+    this.recipe.nutritionAddedSugars = response.addedSugars;
+    this.recipe.nutritionProtein = response.protein;
+    this.recipe.nutritionVitaminD = response.vitaminD;
+    this.recipe.nutritionCalcium = response.calcium;
+    this.recipe.nutritionIron = response.iron;
+    this.recipe.nutritionPotassium = response.potassium;
+    this.markAsDirty();
   }
 
   async _create(title: string) {
@@ -827,6 +847,8 @@ export class EditRecipePage {
   }
 
   async save() {
+    this.recipe.title = this.recipe.title?.trim();
+
     if (!this.recipe.title) {
       const header = await this.translate.get("generic.error").toPromise();
       const message = await this.translate
@@ -1069,16 +1091,29 @@ export class EditRecipePage {
     const pleaseWait = await this.translate
       .get("pages.editRecipe.clip.loading")
       .toPromise();
-    const failedHeader = await this.translate.get("generic.error").toPromise();
-    const failedMessage = await this.translate
-      .get("pages.editRecipe.clip.failed")
-      .toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
 
     const loading = await this.loadingCtrl.create({
       message: pleaseWait,
     });
     await loading.present();
+
+    try {
+      await this._applyScannedDocument(file, extension, includeNutrition);
+    } finally {
+      loading.dismiss();
+    }
+  }
+
+  private async _applyScannedDocument(
+    file: PickFilesResult["files"][number],
+    extension: string,
+    includeNutrition: boolean,
+  ) {
+    const failedHeader = await this.translate.get("generic.error").toPromise();
+    const failedMessage = await this.translate
+      .get("pages.editRecipe.clip.failed")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
     const blob = await (async () => {
       if (file.blob) return file.blob;
@@ -1114,10 +1149,7 @@ export class EditRecipePage {
         ? await this.mlService.getRecipeFromPDF(webFile, errorHandlers)
         : await this.mlService.getRecipeFromDocument(webFile, errorHandlers);
 
-    if (!response.success) {
-      loading.dismiss();
-      return;
-    }
+    if (!response.success) return;
 
     this.recipe.title = response.data.recipe.title || "";
     this.recipe.description = response.data.recipe.description || "";
@@ -1128,12 +1160,11 @@ export class EditRecipePage {
     this.recipe.ingredients = response.data.recipe.ingredients || "";
     this.recipe.instructions = response.data.recipe.instructions || "";
     this.recipe.notes = response.data.recipe.notes || "";
+    this.markAsDirty();
 
     if (includeNutrition && response.data.recipe.nutritionInfo) {
       await this.parseAndApplyNutrition(response.data.recipe.nutritionInfo);
     }
-
-    loading.dismiss();
   }
 
   async scanImage() {
@@ -1206,51 +1237,54 @@ export class EditRecipePage {
     await loading.present();
 
     const files: File[] = [];
-    for (const capturedPhoto of capturedPhotos) {
-      const blob = await (async () => {
-        const webPath = capturedPhoto.webPath
-          ? capturedPhoto.webPath
-          : Capacitor.convertFileSrc(capturedPhoto.path!);
-        const response = await fetch(webPath);
-        return response.blob();
-      })();
-      const webFile = new File([blob], `scan.${capturedPhoto.format}`, {
-        type: `image/${capturedPhoto.format}`,
+    try {
+      for (const capturedPhoto of capturedPhotos) {
+        const blob = await (async () => {
+          const webPath = capturedPhoto.webPath
+            ? capturedPhoto.webPath
+            : Capacitor.convertFileSrc(capturedPhoto.path!);
+          const response = await fetch(webPath);
+          return response.blob();
+        })();
+        const webFile = new File([blob], `scan.${capturedPhoto.format}`, {
+          type: `image/${capturedPhoto.format}`,
+        });
+        files.push(webFile);
+      }
+
+      const response = await this.mlService.getRecipeFromOCR(files, {
+        ...this.getSelfhostErrorHandlers(),
+        ...this.getFileTooLargeErrorHandlers(),
+        400: async () => {
+          (
+            await this.alertCtrl.create({
+              header: failedHeader,
+              message: failedMessage,
+              buttons: [
+                {
+                  text: okay,
+                },
+              ],
+            })
+          ).present();
+        },
       });
-      files.push(webFile);
+
+      if (!response.success) return;
+
+      this.recipe.title = response.data.recipe.title || "";
+      this.recipe.description = response.data.recipe.description || "";
+      this.recipe.source = response.data.recipe.source || "";
+      this.recipe.yield = response.data.recipe.yield || "";
+      this.recipe.activeTime = response.data.recipe.activeTime || "";
+      this.recipe.totalTime = response.data.recipe.totalTime || "";
+      this.recipe.ingredients = response.data.recipe.ingredients || "";
+      this.recipe.instructions = response.data.recipe.instructions || "";
+      this.recipe.notes = response.data.recipe.notes || "";
+      this.markAsDirty();
+    } finally {
+      loading.dismiss();
     }
-
-    const response = await this.mlService.getRecipeFromOCR(files, {
-      ...this.getSelfhostErrorHandlers(),
-      ...this.getFileTooLargeErrorHandlers(),
-      400: async () => {
-        (
-          await this.alertCtrl.create({
-            header: failedHeader,
-            message: failedMessage,
-            buttons: [
-              {
-                text: okay,
-              },
-            ],
-          })
-        ).present();
-      },
-    });
-
-    loading.dismiss();
-
-    if (!response.success) return;
-
-    this.recipe.title = response.data.recipe.title || "";
-    this.recipe.description = response.data.recipe.description || "";
-    this.recipe.source = response.data.recipe.source || "";
-    this.recipe.yield = response.data.recipe.yield || "";
-    this.recipe.activeTime = response.data.recipe.activeTime || "";
-    this.recipe.totalTime = response.data.recipe.totalTime || "";
-    this.recipe.ingredients = response.data.recipe.ingredients || "";
-    this.recipe.instructions = response.data.recipe.instructions || "";
-    this.recipe.notes = response.data.recipe.notes || "";
 
     const imageResponse = await this.imageService.create(files[0], {
       "*": () => {},
@@ -1305,6 +1339,7 @@ export class EditRecipePage {
       message: pleaseWait,
     });
     await loading.present();
+
     const response = await this.serverActionsService.ml.getRecipeFromText(
       {
         text,
@@ -1341,6 +1376,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.recipe.ingredients || "";
     this.recipe.instructions = response.recipe.instructions || "";
     this.recipe.notes = response.recipe.notes || "";
+    this.markAsDirty();
 
     if (includeNutrition && response.recipe.nutritionInfo) {
       await this.parseAndApplyNutrition(response.recipe.nutritionInfo);
@@ -1420,6 +1456,7 @@ export class EditRecipePage {
       message: pleaseWait,
     });
     await loading.present();
+
     const response = await this.serverActionsService.ml.clipFromUrl(
       {
         url,
@@ -1454,6 +1491,7 @@ export class EditRecipePage {
     this.recipe.ingredients = response.ingredients || "";
     this.recipe.instructions = response.instructions || "";
     this.recipe.notes = response.notes || "";
+    this.markAsDirty();
     this.recipe.url = url;
 
     if (includeNutrition && response.nutritionInfo) {
@@ -1539,7 +1577,10 @@ export class EditRecipePage {
             415: () => this.presentAddImageByUrlFailed(),
           },
         );
-      if (response) this.images.push(response);
+      if (response) {
+        this.images.push(response);
+        this.markAsDirty();
+      }
 
       loading.dismiss();
     } else {
@@ -1632,9 +1673,23 @@ export class EditRecipePage {
       ...unrelatedSelectedLabels,
       ...updatedSelectedLabelsForGroup,
     ];
-    this.selectedLabels = unrelatedAndChangedLabels
+    const updatedSelectedLabels = unrelatedAndChangedLabels
       .map((selectedLabel) => labelsById[selectedLabel.id])
       .filter((label) => label);
+
+    const previousIds = this.selectedLabels
+      .map((label) => label.id)
+      .sort()
+      .join(",");
+    const updatedIds = updatedSelectedLabels
+      .map((label) => label.id)
+      .sort()
+      .join(",");
+
+    if (previousIds === updatedIds) return;
+
+    this.selectedLabels = updatedSelectedLabels;
+    this.markAsDirty();
   }
 
   async addLabel(title: string, labelGroupId: string | null) {
@@ -1646,12 +1701,14 @@ export class EditRecipePage {
     });
     if (!label) return;
 
-    this.labels.push(label);
-    this.selectedLabels.push(label);
+    this.labels = [...this.labels, label];
+    this.selectedLabels = [...this.selectedLabels, label];
+    this.markAsDirty();
   }
 
   setLastMadeAtToday() {
     this.recipe.lastMadeAt = dayjs().format("YYYY-MM-DD");
+    this.markAsDirty();
   }
 
   linkedRecipeSelected(recipe: RecipeSummary | undefined) {

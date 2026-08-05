@@ -4,7 +4,8 @@ import {
   sendMessageToSW,
   SWMessageType,
 } from "../utils/localDb/sendMessageToSW";
-import { environment } from "../../environments/environment";
+import { environment, IS_DESKTOP } from "../../environments/environment";
+import { detectAppPlatform } from "@recipesage/util/shared";
 
 const CONSOLE_LOGS_HISTORY_MAX = 500;
 const TRPC_REQUEST_HISTORY_MAX = 200;
@@ -36,6 +37,7 @@ export class DebugStoreService {
       manifestDb: await this.dumpLocalDb(),
       logs: this.store.logs,
       trpc: this.store.trpc,
+      platform: detectAppPlatform(IS_DESKTOP),
       userAgent: navigator.userAgent,
       windowWidth: self.innerWidth,
       windowHeight: self.innerHeight,
@@ -105,41 +107,40 @@ export class DebugStoreService {
       return;
     }
 
-    const _this = this;
     const methodsToPatch = ["log", "info", "warn", "error"] as const;
 
     for (const method of methodsToPatch) {
       const boundMethod = console[method].bind(console);
 
-      console[method] = function (...args) {
-        store.logs.push({
-          type: method,
-          datetime: Date().toLocaleString(),
-          value: args,
-        });
-        if (store.logs.length > CONSOLE_LOGS_HISTORY_MAX) {
-          store.logs.splice(CONSOLE_LOGS_HISTORY_MAX);
-        }
+      console[method] = (...args) => {
+        this.pushLog(method, args);
 
         boundMethod.apply(console, args);
       };
     }
 
     self.addEventListener("error", (event) => {
-      _this.store.logs.push({
-        type: "uncaughtError",
-        datetime: new Date().toLocaleString(),
-        value: event,
-      });
+      this.pushLog("uncaughtError", event);
     });
 
     self.addEventListener("unhandledrejection", (event) => {
-      _this.store.logs.push({
-        type: "unhandledRejection",
-        datetime: new Date().toLocaleString(),
-        value: event,
-      });
+      this.pushLog("unhandledRejection", event);
     });
+  }
+
+  private pushLog(type: string, value: unknown) {
+    this.store.logs.push({
+      type,
+      datetime: new Date().toLocaleString(),
+      value,
+    });
+
+    if (this.store.logs.length > CONSOLE_LOGS_HISTORY_MAX) {
+      this.store.logs.splice(
+        0,
+        this.store.logs.length - CONSOLE_LOGS_HISTORY_MAX,
+      );
+    }
   }
 
   private jsonFriendlyErrorReplacer(_key: string, value: unknown) {
@@ -168,6 +169,6 @@ export class DebugStoreService {
 export function captureTrpcRequest(entry: unknown) {
   store.trpc.push(entry);
   if (store.trpc.length > TRPC_REQUEST_HISTORY_MAX) {
-    store.trpc.splice(TRPC_REQUEST_HISTORY_MAX);
+    store.trpc.splice(0, store.trpc.length - TRPC_REQUEST_HISTORY_MAX);
   }
 }

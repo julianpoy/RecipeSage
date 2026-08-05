@@ -118,6 +118,7 @@ export class AssistantPage {
 
   ionViewWillLeave() {
     this.isViewLoaded = false;
+    this.removeResizeListener();
   }
 
   reload() {
@@ -169,11 +170,18 @@ export class AssistantPage {
     }
   }
 
+  private onWindowResize = () => {
+    this.removeResizeListener();
+    this.scrollToBottom(false, true);
+  };
+
+  private removeResizeListener() {
+    window.removeEventListener("resize", this.onWindowResize);
+  }
+
   keyboardOpened() {
-    window.onresize = () => {
-      this.scrollToBottom(false, true);
-      window.onresize = null;
-    };
+    this.removeResizeListener();
+    window.addEventListener("resize", this.onWindowResize);
   }
 
   trackByFn(_: number, item: { id: string }) {
@@ -309,7 +317,7 @@ export class AssistantPage {
     const p = new Date(previous.createdAt);
     const n = new Date(next.createdAt);
 
-    return p.getDay() !== n.getDay();
+    return p.toDateString() !== n.toDateString();
   }
 
   formatMessageDividerDate(plainTextDate: Date | string | number) {

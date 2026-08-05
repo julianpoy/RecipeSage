@@ -360,7 +360,7 @@ export class SyncManager {
               title: pendingUpdate.title,
               recipeId: pendingUpdate.recipeId,
               completed: pendingUpdate.completed,
-              categoryTitle: pendingUpdate.categoryTitle ?? undefined,
+              categoryTitle: pendingUpdate.categoryTitle?.trim() || undefined,
               createdAt: pendingUpdate.createdAt,
               updatedAt: pendingUpdate.updatedAt,
             })),

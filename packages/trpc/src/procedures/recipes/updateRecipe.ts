@@ -22,7 +22,7 @@ export const updateRecipe = authenticatedProcedure
   .input(
     z.object({
       id: z.uuid(),
-      title: z.string().min(1).max(254),
+      title: z.string().trim().min(1).max(254),
       description: z.string(),
       yield: z.string(),
       activeTime: z.string(),

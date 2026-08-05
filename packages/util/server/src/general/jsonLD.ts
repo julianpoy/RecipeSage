@@ -1,20 +1,19 @@
 import { RecipeSummary } from "@recipesage/prisma";
-import {
-  parseIngredients,
-  parseInstructions,
-  inferRecipeNotation,
-} from "@recipesage/util/shared";
-import { convertFromISO8601Time } from "./convertToISO8601Time";
-import { convertToISO8601Time } from "./convertFromISO8601Time";
+import { splitRecipeLines } from "@recipesage/util/shared";
+import { convertFromISO8601Time } from "./convertFromISO8601Time";
+import { convertToISO8601Time } from "./convertToISO8601Time";
 import { StandardizedRecipeImportEntry } from "../db";
 
 type JsonLDImages =
   | string
+  | number
+  | boolean
   | (
       | {
           url: string;
         }
       | string
+      | null
     )[];
 
 export type NutritionInformation = {
@@ -42,14 +41,15 @@ export type JsonLD = {
   inLanguage?: string;
   datePublished?: string;
   description?: string;
-  recipeYield?: string | string[];
-  prepTime?: string | string[];
-  cookTime?: string | string[];
-  totalTime?: string | string[];
+  recipeYield?: string | (string | null)[];
+  prepTime?: string | (string | null)[];
+  cookTime?: string | (string | null)[];
+  totalTime?: string | (string | null)[];
   recipeInstructions?:
     | string
     | (
         | string
+        | null
         | {
             "@type"?: string;
             name?: string;
@@ -58,6 +58,7 @@ export type JsonLD = {
               | string
               | (
                   | string
+                  | null
                   | {
                       text?: string;
                       name?: string;
@@ -69,17 +70,27 @@ export type JsonLD = {
     | string
     | (
         | string
+        | null
         | {
             text?: string;
           }
       )[];
-  recipeCategory?: string | string[];
+  recipeCategory?:
+    | string
+    | (
+        | string
+        | null
+        | {
+            name?: string;
+          }
+      )[];
   comment?:
     | string
     | (
         | string
+        | null
         | {
-            "@type": string;
+            "@type"?: string;
             name?: string;
             text?: string;
           }
@@ -124,9 +135,15 @@ const formatMilligrams = (value: number) => `${value} mg`;
 const formatMicrograms = (value: number) => `${value} mcg`;
 const formatCalories = (value: number) => `${value} kcal`;
 
-export const recipeToJSONLD = (recipe: RecipeSummary) => {
-  const decimalNotationMode = inferRecipeNotation(recipe, undefined);
+const SECTION_HEADER_REGEXP = /^\[.*\]$/;
+const MAX_SECTION_HEADER_LENGTH = 80;
 
+const looksLikeSectionHeader = (text: string) =>
+  text.length <= MAX_SECTION_HEADER_LENGTH &&
+  !/[\r\n]/.test(text) &&
+  !/[.!?]$/.test(text);
+
+export const recipeToJSONLD = (recipe: RecipeSummary) => {
   return {
     "@context": "http://schema.org",
     "@type": "Recipe",
@@ -138,15 +155,19 @@ export const recipeToJSONLD = (recipe: RecipeSummary) => {
     ),
     name: recipe.title,
     prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
-    recipeIngredient: parseIngredients(recipe.ingredients, "1", {
-      decimalNotationMode,
-    }).map((el) => (el.isHeader ? `[${el.content}]` : el.content)),
-    recipeInstructions: parseInstructions(recipe.instructions, "1", {
-      decimalNotationMode,
-    }).map((el) => ({
-      "@type": el.isHeader ? "HowToSection" : "HowToStep",
-      text: el.isHeader ? `[${el.content}]` : el.content,
-    })),
+    recipeIngredient: splitRecipeLines(recipe.ingredients),
+    recipeInstructions: splitRecipeLines(recipe.instructions).map((line) => {
+      const headerMatch = line.match(SECTION_HEADER_REGEXP);
+      return headerMatch
+        ? {
+            "@type": "HowToSection",
+            name: line.substring(1, line.length - 1),
+          }
+        : {
+            "@type": "HowToStep",
+            text: line,
+          };
+    }),
     recipeYield: recipe.yield,
     totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
     recipeCategory: (recipe.recipeLabels || []).map(
@@ -269,48 +290,10 @@ const getNutritionForExport = (
   return hasAnyValue ? nutrition : undefined;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getImageSrcFromSchema = (jsonLD: JsonLD): string | Buffer => {
-  const images = jsonLD.images || jsonLD.image;
-  if (!images) return "";
-
-  let imageSrc: string | undefined;
-  if (typeof images === "string") imageSrc = images;
-  else if ("url" in images && images.url === "string") imageSrc = images.url;
-  else if (Array.isArray(images) && typeof images[0] === "string")
-    [imageSrc] = images[0] as string;
-  else if (
-    Array.isArray(images) &&
-    typeof images[0] === "object" &&
-    typeof images[0]?.url === "string"
-  )
-    imageSrc = images[0].url;
-
-  if (imageSrc) {
-    try {
-      const url = new URL(imageSrc);
-
-      if (url.protocol === "http:" || url.protocol === "https:")
-        return imageSrc;
-      if (
-        url.protocol === "data:" &&
-        url.href.startsWith("data:image/png;base64,")
-      ) {
-        return Buffer.from(
-          url.href.replace("data:image/png;base64,", ""),
-          "base64",
-        );
-      }
-    } catch (_) {
-      // Do nothing
-    }
-  }
-
-  return "";
-};
-
-const getLongestString = (strings: string[]) =>
-  strings.reduce((acc, el) => (el.length > acc.length ? el : acc), "");
+const getLongestString = (strings: unknown[]) =>
+  strings
+    .filter((el): el is string => typeof el === "string")
+    .reduce((acc, el) => (el.length > acc.length ? el : acc), "");
 
 const getImageSRCsFromSchema = (jsonLD: JsonLD): (string | Buffer)[] => {
   const images = jsonLD.images || jsonLD.image;
@@ -318,14 +301,18 @@ const getImageSRCsFromSchema = (jsonLD: JsonLD): (string | Buffer)[] => {
 
   let imageSRCs: string[] = [];
   if (typeof images === "string") imageSRCs = [images];
-  else if ("url" in images && typeof images.url === "string")
+  else if (
+    typeof images === "object" &&
+    "url" in images &&
+    typeof images.url === "string"
+  )
     imageSRCs = [images.url];
   else if (Array.isArray(images)) {
     for (const image of images) {
-      if (typeof image === "object" && typeof image.url === "string") {
-        imageSRCs.push(image.url);
-      } else if (typeof image === "string") {
+      if (typeof image === "string") {
         imageSRCs.push(image);
+      } else if (image && typeof image.url === "string") {
+        imageSRCs.push(image.url);
       }
     }
   }
@@ -427,8 +414,16 @@ const getInstructionsFromSchema = (jsonLD: JsonLD) => {
   for (const instruction of instructions) {
     if (typeof instruction === "string") {
       acc.push(instruction);
+    } else if (!instruction) {
+      continue;
     } else if (instruction["@type"] === "HowToSection") {
       if (instruction.name) acc.push(`[${instruction.name}]`);
+      else if (instruction.text) {
+        const header = instruction.text.trim();
+        if (SECTION_HEADER_REGEXP.test(header)) acc.push(header);
+        else if (looksLikeSectionHeader(header)) acc.push(`[${header}]`);
+        else acc.push(header);
+      }
 
       const steps = instruction.itemListElement;
       if (typeof steps === "string") {
@@ -436,7 +431,7 @@ const getInstructionsFromSchema = (jsonLD: JsonLD) => {
       } else if (Array.isArray(steps)) {
         for (const step of steps) {
           if (typeof step === "string") acc.push(step);
-          else acc.push(step.text || "");
+          else acc.push(step?.text || "");
         }
       }
     } else {
@@ -456,6 +451,7 @@ const getIngredientsFromSchema = (jsonLD: JsonLD) => {
     const acc: string[] = [];
     for (const ingredient of ingredients) {
       if (typeof ingredient === "string") acc.push(ingredient);
+      else if (!ingredient) continue;
       else acc.push(ingredient.text || "");
     }
 
@@ -471,8 +467,12 @@ const getLabelsFromSchema = (jsonLD: JsonLD) => {
 
   if (typeof recipeCategory === "string")
     return recipeCategory.split(",").map((el) => el.trim());
-  if (typeof recipeCategory[0] === "string")
-    return recipeCategory.map((el) => el.trim());
+  if (Array.isArray(recipeCategory))
+    return recipeCategory.flatMap((el) => {
+      if (typeof el === "string") return [el.trim()];
+      if (el && typeof el.name === "string") return [el.name.trim()];
+      return [];
+    });
 
   return [];
 };
@@ -482,7 +482,11 @@ const getAuthorNotesCommentFromSchema = (jsonLD: JsonLD) => {
 
   if (Array.isArray(jsonLD.comment)) {
     for (const comment of jsonLD.comment) {
-      if (typeof comment === "object" && comment.name === "Author Notes") {
+      if (
+        comment &&
+        typeof comment === "object" &&
+        comment.name === "Author Notes"
+      ) {
         return comment.text || "";
       }
     }

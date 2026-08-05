@@ -160,7 +160,9 @@
 
       <div class="ends-preview">
         @if (preview.error) {
-          <ion-note color="danger">{{ preview.error }}</ion-note>
+          <ion-note color="danger">
+            {{ "components.recurrenceEditor.preview.invalid" | translate }}
+          </ion-note>
         } @else if (preview.count === 0) {
           <ion-note color="danger">
             {{ "components.recurrenceEditor.preview.empty" | translate }}

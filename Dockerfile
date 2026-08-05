@@ -29,6 +29,7 @@ COPY .prettierrc.json .prettierrc.json
 COPY .nvmrc .nvmrc
 COPY tsconfig.base.json tsconfig.base.json
 COPY nx.json nx.json
+COPY .nxignore .nxignore
 COPY prisma.config.ts prisma.config.ts
 COPY packages packages
 COPY scripts scripts

@@ -18,6 +18,7 @@ model FCMToken {
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("FCMTokens")
 }
 
@@ -104,6 +105,7 @@ model MealPlanItem {
 
   @@index([mealPlanId], map: "meal_plan_items_meal_plan_id")
   @@index([recipeId], map: "meal_plan_items_recipe_id")
+  @@index([userId])
   @@map("MealPlanItems")
 }
 
@@ -117,6 +119,7 @@ model MealPlanCollaborator {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([mealPlanId, userId])
+  @@index([userId])
   @@map("MealPlan_Collaborators")
 }
 
@@ -131,6 +134,7 @@ model MealPlan {
   collaboratorUsers MealPlanCollaborator[]
   user              User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("MealPlans")
 }
 
@@ -170,6 +174,7 @@ model AssistantMessage {
   user      User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
   recipe    Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("AssistantMessages")
 }
 
@@ -230,8 +235,6 @@ model RecipeLabel {
 
   @@unique([labelId, recipeId], map: "Recipe_Labels_labelId_recipeId_uk")
   @@unique([recipeId, labelId])
-  @@index([labelId], map: "recipe__labels_label_id")
-  @@index([recipeId], map: "recipe__labels_recipe_id")
   @@map("Recipe_Labels")
 }
 
@@ -309,7 +312,6 @@ model Recipe {
   @@index([fromUserId], map: "recipes_from_user_id")
   @@index([userId, folder, createdAt(sort: Desc)], map: "recipes_user_folder_created_at")
   @@index([userId, folder, updatedAt(sort: Desc), id], map: "recipes_user_folder_updated_at")
-  @@index([userId, folder, lastMadeAt(sort: Desc)], map: "recipes_user_folder_last_made_at")
   @@index([userId, folder, title], map: "recipes_user_folder_title")
   @@index([userId(ops: raw("uuid_ops")), tsv], type: Gin, map: "recipes_user_tsv_idx")
   @@map("Recipes")
@@ -491,6 +493,7 @@ model ShoppingListItem {
   @@index([recipeId], map: "shopping_list_items_recipe_id")
   @@index([mealPlanItemId], map: "shopping_list_items_meal_plan_item_id")
   @@index([shoppingListId], map: "shopping_list_items_shopping_list_id")
+  @@index([userId])
   @@map("ShoppingListItems")
 }
 
@@ -504,6 +507,7 @@ model ShoppingListCollaborator {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([shoppingListId, userId])
+  @@index([userId])
   @@map("ShoppingList_Collaborators")
 }
 
@@ -518,6 +522,7 @@ model ShoppingList {
   collaboratorUsers ShoppingListCollaborator[]
   user              User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("ShoppingLists")
 }
 
@@ -530,6 +535,7 @@ model StripeEvent {
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("StripeEvents")
 }
 
@@ -546,6 +552,7 @@ model StripePayment {
   updatedAt       DateTime @updatedAt @db.Timestamptz(6)
   user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("StripePayments")
 }
 
@@ -558,6 +565,7 @@ model UserSubscription {
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("UserSubscriptions")
 }
 
@@ -571,6 +579,7 @@ model UserProfileImage {
   image     Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("User_Profile_Images")
 }
 
@@ -651,6 +660,8 @@ model Job {
   updatedAt  DateTime  @updatedAt @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum JobType {

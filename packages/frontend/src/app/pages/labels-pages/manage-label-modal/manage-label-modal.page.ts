@@ -9,6 +9,7 @@ import { UtilService, RouteMap } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary } from "@recipesage/prisma";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
@@ -95,22 +96,50 @@ export class ManageLabelModalPage {
   }
 
   async _rename(newTitle: string) {
-    const loading = this.loadingService.start();
-
     const header = await this.translate
       .get("pages.manageLabelModal.renameConflict.header")
       .toPromise();
     const message = await this.translate
       .get("pages.manageLabelModal.renameConflict.message")
       .toPromise();
+    const invalidHeader = await this.translate
+      .get("pages.manageLabelModal.renameInvalid.header")
+      .toPromise();
+    const invalidMessage = await this.translate
+      .get("pages.manageLabelModal.renameInvalid.message")
+      .toPromise();
     const okay = await this.translate.get("generic.okay").toPromise();
+
+    const presentInvalidTitle = async () => {
+      (
+        await this.alertCtrl.create({
+          header: invalidHeader,
+          message: invalidMessage,
+          buttons: [
+            {
+              text: okay,
+              handler: () => {},
+            },
+          ],
+        })
+      ).present();
+    };
+
+    const cleanedTitle = cleanLabelTitle(newTitle);
+    if (!cleanedTitle) {
+      await presentInvalidTitle();
+      return;
+    }
+
+    const loading = this.loadingService.start();
 
     const response = await this.serverActionsService.labels.updateLabel(
       {
         id: this.label.id,
-        title: newTitle,
+        title: cleanedTitle,
       },
       {
+        400: presentInvalidTitle,
         409: async () => {
           (
             await this.alertCtrl.create({
@@ -130,7 +159,7 @@ export class ManageLabelModalPage {
     loading.dismiss();
     if (!response) return;
 
-    this.label.title = newTitle;
+    this.label.title = cleanedTitle;
   }
 
   async view() {

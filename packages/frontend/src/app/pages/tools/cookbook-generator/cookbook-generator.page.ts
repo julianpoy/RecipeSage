@@ -130,29 +130,32 @@ export class CookbookGeneratorPage {
     this.loadingRecipes = true;
 
     const collected = new Map<string, CookbookRecipe>();
-    let offset = 0;
-    while (true) {
-      const response = await this.serverActionsService.recipes.getRecipes({
-        folder: "main",
-        orderBy: "title",
-        orderDirection: "asc",
-        offset,
-        limit: RECIPE_PAGE_SIZE,
-        labels: [labelTitle],
-      });
-      if (!response) break;
+    try {
+      let offset = 0;
+      while (true) {
+        const response = await this.serverActionsService.recipes.getRecipes({
+          folder: "main",
+          orderBy: "title",
+          orderDirection: "asc",
+          offset,
+          limit: RECIPE_PAGE_SIZE,
+          labels: [labelTitle],
+        });
+        if (!response) break;
 
-      for (const recipe of response.recipes) {
-        collected.set(recipe.id, { id: recipe.id, title: recipe.title });
-      }
-      offset += response.recipes.length;
+        for (const recipe of response.recipes) {
+          collected.set(recipe.id, { id: recipe.id, title: recipe.title });
+        }
+        offset += response.recipes.length;
 
-      if (response.recipes.length === 0 || offset >= response.totalCount) {
-        break;
+        if (response.recipes.length === 0 || offset >= response.totalCount) {
+          break;
+        }
       }
+    } finally {
+      this.loadingRecipes = false;
     }
 
-    this.loadingRecipes = false;
     this.addRecipes([...collected.values()]);
   }
 
@@ -189,17 +192,21 @@ export class CookbookGeneratorPage {
     if (!this.canGenerate() || this.startingJob) return;
 
     this.startingJob = true;
-    const response = await this.serverActionsService.jobs.startCookbookJob({
-      title: this.title.trim(),
-      subtitle: this.subtitle.trim() || undefined,
-      introduction: this.introduction.trim() || undefined,
-      author: this.author.trim() || undefined,
-      includeToc: this.includeToc,
-      includeImages: this.includeImages,
-      includeLabels: this.includeLabels,
-      recipeIds: this.recipes.map((recipe) => recipe.id),
-    });
-    this.startingJob = false;
+    let response;
+    try {
+      response = await this.serverActionsService.jobs.startCookbookJob({
+        title: this.title.trim(),
+        subtitle: this.subtitle.trim() || undefined,
+        introduction: this.introduction.trim() || undefined,
+        author: this.author.trim() || undefined,
+        includeToc: this.includeToc,
+        includeImages: this.includeImages,
+        includeLabels: this.includeLabels,
+        recipeIds: this.recipes.map((recipe) => recipe.id),
+      });
+    } finally {
+      this.startingJob = false;
+    }
 
     if (response) {
       this.navCtrl.navigateForward(RouteMap.JobsPage.getPath());

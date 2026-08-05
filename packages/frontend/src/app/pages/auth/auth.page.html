@@ -78,7 +78,7 @@
             fill="clear"
             size="small"
             slot="end"
-            aria-label="Show/hide password"
+            [attr.aria-label]="'pages.auth.showHidePassword' | translate"
             (click)="revealPassword = !revealPassword"
           >
             <ion-icon
@@ -103,7 +103,7 @@
                 fill="clear"
                 size="small"
                 slot="end"
-                aria-label="Show/hide password"
+                [attr.aria-label]="'pages.auth.showHidePassword' | translate"
                 (click)="revealPassword = !revealPassword"
               >
                 <ion-icon

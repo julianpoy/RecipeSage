@@ -82,6 +82,7 @@ export class AddRecipeToMealPlanModalPage {
   selectedMealPlanItems?: MealPlanItemSummary[];
   meal?: string;
   notes = "";
+  saving = false;
 
   readonly notesMaxLength = MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT;
 
@@ -153,26 +154,29 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async save() {
+    if (this.saving) return;
     if (!this.selectedMealPlan || !this.selectedDays[0] || !this.meal) return;
 
+    this.saving = true;
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
 
+    const meal = this.meal;
+
     const result =
       await this.serverActionsService.mealPlans.createMealPlanItems({
         mealPlanId: this.selectedMealPlan.id,
-        items: [
-          {
-            title: this.recipe.title,
-            recipeId: this.recipe.id,
-            meal: this.meal as any, // TODO: Refine this type so that it aligns with Zod
-            notes: this.notes,
-            scheduledDate: this.selectedDays[0],
-          },
-        ],
+        items: this.selectedDays.map((scheduledDate) => ({
+          title: this.recipe.title,
+          recipeId: this.recipe.id,
+          meal,
+          notes: this.notes,
+          scheduledDate,
+        })),
       });
     loading.dismiss();
+    this.saving = false;
 
     if (result) this.modalCtrl.dismiss();
   }

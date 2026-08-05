@@ -9,7 +9,7 @@ import {
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERM_LENGTH,
   SEARCH_RECIPES_BY_INGREDIENTS_MAX_TERMS,
 } from "@recipesage/util/shared";
-import { test, anonymousTrpc } from "../../testutils";
+import { test, anonymousTrpc, enableProfileForUser } from "../../testutils";
 
 const createRecipe = (
   userId: string,
@@ -95,6 +95,7 @@ describe("searchRecipesByIngredients", () => {
     await prisma.friendship.createMany({
       data: friendshipFactory(user.id, user2.id),
     });
+    await enableProfileForUser(user2.id);
     await prisma.profileItem.create({
       data: profileItemFactory({
         userId: user2.id,
@@ -121,6 +122,7 @@ describe("searchRecipesByIngredients", () => {
   test("searches explicit userIds of a public sharer without a session", async ({
     user2,
   }) => {
+    await enableProfileForUser(user2.id);
     await prisma.profileItem.create({
       data: profileItemFactory({
         userId: user2.id,
@@ -178,6 +180,7 @@ describe("searchRecipesByIngredients", () => {
     const label = await prisma.label.create({
       data: labelFactory(user2.id),
     });
+    await enableProfileForUser(user2.id);
     await prisma.profileItem.create({
       data: profileItemFactory({
         userId: user2.id,

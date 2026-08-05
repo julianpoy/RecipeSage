@@ -1,5 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { AlertController } from "@ionic/angular/standalone";
+import { TranslateService } from "@ngx-translate/core";
 import { HttpService } from "./http.service";
 import { serverConfig } from "../utils/serverConfig";
 import { forceSWUpdate } from "../utils/forceSWUpdate";
@@ -10,6 +11,7 @@ import { forceSWUpdate } from "../utils/forceSWUpdate";
 export class VersionCheckService {
   private httpService = inject(HttpService);
   private alertCtrl = inject(AlertController);
+  private translate = inject(TranslateService);
 
   async checkVersion() {
     const version = (window as any).version;
@@ -24,13 +26,20 @@ export class VersionCheckService {
       })
       .then(async (res) => {
         if (res && res.data && !res.data.supported) {
+          const header = await this.translate
+            .get("services.versionCheck.outOfDate.header")
+            .toPromise();
+          const subHeader = await this.translate
+            .get("services.versionCheck.outOfDate.message")
+            .toPromise();
+          const okay = await this.translate.get("generic.okay").toPromise();
+
           const alert = await this.alertCtrl.create({
-            header: "App is out of date",
-            subHeader:
-              "The cached app version is very old. The app will restart to update.",
+            header,
+            subHeader,
             buttons: [
               {
-                text: "Ok",
+                text: okay,
                 role: "cancel",
                 handler: () => {
                   forceSWUpdate().finally(() => {

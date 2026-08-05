@@ -73,28 +73,30 @@ export const updateMealPlan = authenticatedProcedure
         });
       }
 
-      await prisma.mealPlanCollaborator.deleteMany({
-        where: {
-          mealPlanId: input.id,
-        },
-      });
+      const updatedMealPlan = await prisma.$transaction(async (tx) => {
+        await tx.mealPlanCollaborator.deleteMany({
+          where: {
+            mealPlanId: input.id,
+          },
+        });
 
-      const updatedMealPlan = await prisma.mealPlan.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          title: input.title,
-          customMealOptions: input.customMealOptions,
-          userId: ctx.session.userId,
-          collaboratorUsers: {
-            createMany: {
-              data: collaboratorUsers.map((collaboratorUser) => ({
-                userId: collaboratorUser.id,
-              })),
+        return tx.mealPlan.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            title: input.title,
+            customMealOptions: input.customMealOptions,
+            userId: ctx.session.userId,
+            collaboratorUsers: {
+              createMany: {
+                data: collaboratorUsers.map((collaboratorUser) => ({
+                  userId: collaboratorUser.id,
+                })),
+              },
             },
           },
-        },
+        });
       });
 
       const reference = crypto.randomUUID();

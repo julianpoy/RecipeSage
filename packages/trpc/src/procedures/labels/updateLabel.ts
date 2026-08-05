@@ -2,6 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const updateLabel = authenticatedProcedure
   .meta({
@@ -29,18 +30,32 @@ export const updateLabel = authenticatedProcedure
       });
     }
 
-    const existingLabel = await prisma.label.findFirst({
-      where: {
-        userId: ctx.session.userId,
-        title: input.title,
-      },
-    });
+    const title = input.title ? cleanLabelTitle(input.title) : undefined;
 
-    if (existingLabel) {
+    if (input.title && !title) {
       throw new TRPCError({
-        message: "Conflicting label title",
-        code: "CONFLICT",
+        message: "Label title cannot be empty",
+        code: "BAD_REQUEST",
       });
+    }
+
+    if (title) {
+      const existingLabel = await prisma.label.findFirst({
+        where: {
+          id: {
+            not: input.id,
+          },
+          userId: ctx.session.userId,
+          title,
+        },
+      });
+
+      if (existingLabel) {
+        throw new TRPCError({
+          message: "Conflicting label title",
+          code: "CONFLICT",
+        });
+      }
     }
 
     if (input.labelGroupId) {
@@ -65,7 +80,7 @@ export const updateLabel = authenticatedProcedure
         id: input.id,
       },
       data: {
-        title: input.title,
+        title,
         labelGroupId: input.labelGroupId,
       },
     });

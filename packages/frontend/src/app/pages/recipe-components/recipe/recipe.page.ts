@@ -144,6 +144,7 @@ export class RecipePage {
   private meQuery = this.serverActionsService.users.getMe({ 401: () => {} });
   me = this.meQuery.value;
   recipe: RecipeSummary | null = null;
+  recipeLinkUrl = "";
   similarRecipes: RecipeSummaryLite[] = [];
   linkedRecipes: Array<{
     id: string;
@@ -234,6 +235,10 @@ export class RecipePage {
     }
 
     this.recipe = null;
+    this.recipeLinkUrl = "";
+    this.ingredients = undefined;
+    this.instructions = undefined;
+    this.notes = undefined;
     this.similarRecipes = [];
     this.linkedRecipes = [];
 
@@ -288,9 +293,12 @@ export class RecipePage {
       .toPromise();
     this.titleService.setTitle(title);
 
-    if (this.recipe.url && !this.recipe.url.trim().startsWith("http")) {
-      this.recipe.url = "http://" + this.recipe.url.trim();
-    }
+    const url = this.recipe.url?.trim() || "";
+    const isAlreadyNavigable =
+      /^[a-z][a-z0-9+.-]*:\/\//i.test(url) ||
+      /^(mailto|tel):/i.test(url) ||
+      url.startsWith("//");
+    this.recipeLinkUrl = !url || isAlreadyNavigable ? url : `http://${url}`;
 
     const groupIdsSet = new Set<string>();
     for (const recipeLabel of this.recipe.recipeLabels) {
@@ -518,6 +526,8 @@ export class RecipePage {
         ...note,
         htmlContent: linkifyHtml(note.htmlContent),
       }));
+    } else {
+      this.notes = undefined;
     }
   }
 
@@ -736,7 +746,7 @@ export class RecipePage {
     const loading = this.loadingService.start();
 
     const labelIds =
-      this.me()?.id === this.recipe.id
+      this.recipe.userId === this.me()?.id
         ? this.recipe.recipeLabels.map((recipeLabel) => recipeLabel.label.id)
         : [];
 

@@ -36,6 +36,7 @@ export class LabelGroupsActionsService extends ActionsBase {
       () => this.trpc.labelGroups.createLabelGroup.mutate(input),
       () => {
         void this.syncService.syncLabels();
+        void this.syncService.syncLabelGroups();
       },
       errorHandlers,
     );
@@ -49,6 +50,7 @@ export class LabelGroupsActionsService extends ActionsBase {
       () => this.trpc.labelGroups.updateLabelGroup.mutate(input),
       () => {
         void this.syncService.syncLabels();
+        void this.syncService.syncLabelGroups();
       },
       errorHandlers,
     );
@@ -62,6 +64,7 @@ export class LabelGroupsActionsService extends ActionsBase {
       () => this.trpc.labelGroups.deleteLabelGroup.mutate(input),
       () => {
         void this.syncService.syncLabels();
+        void this.syncService.syncLabelGroups();
       },
       errorHandlers,
     );

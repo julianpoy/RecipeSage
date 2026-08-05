@@ -15,6 +15,8 @@ import { RouteMap, UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { EventName, EventService } from "../../../services/event.service";
 import { LoadingService } from "../../../services/loading.service";
+import { TranslateService } from "@ngx-translate/core";
+import { parseQuantity } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
 import { SelectRecipeModalComponent } from "../../../components/select-recipe-modal/select-recipe-modal.component";
@@ -174,6 +176,7 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
   private router = inject(Router);
   private events = inject(EventService);
   private loadingService = inject(LoadingService);
+  private translate = inject(TranslateService);
 
   private presetRecipeIds: string[] = [];
   private reloadPending = false;
@@ -252,15 +255,21 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     this.loadingRecipes = true;
 
     const ids = this.recipes.map((recipe) => recipe.id);
+    const previousNutrition = new Map(
+      ids.map((id) => [id, this.nutritionById.get(id)]),
+    );
+
     for (const id of ids) {
       this.nutritionById.delete(id);
     }
 
     await this.fetchNutritionForIds(ids);
 
-    this.recipes = this.recipes.filter((recipe) =>
-      this.nutritionById.has(recipe.id),
-    );
+    for (const id of ids) {
+      if (this.nutritionById.has(id)) continue;
+      const stale = previousNutrition.get(id);
+      if (stale) this.nutritionById.set(id, stale);
+    }
 
     this.loadingRecipes = false;
     this.recompute();
@@ -384,15 +393,18 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     }
   }
 
-  private async fetchNutritionForIds(ids: string[]) {
+  private async fetchNutritionForIds(ids: string[]): Promise<void> {
     const missingIds = ids.filter((id) => !this.nutritionById.has(id));
 
     for (let i = 0; i < missingIds.length; i += FETCH_CHUNK_SIZE) {
       const chunk = missingIds.slice(i, i + FETCH_CHUNK_SIZE);
+
       const response = await this.serverActionsService.recipes.getRecipesByIds({
         ids: chunk,
       });
+
       if (!response) continue;
+
       for (const recipe of response) {
         this.nutritionById.set(recipe.id, recipe);
       }
@@ -415,6 +427,10 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     this.recompute();
   }
 
+  private toServingsNumber(value: string | number): number | null {
+    return parseQuantity(String(value), this.translate.getCurrentLang());
+  }
+
   private clampServingsValue(value: number, min: number): number {
     if (!Number.isFinite(value)) return min;
     const clamped = Math.min(MAX_SERVINGS, Math.max(min, value));
@@ -422,21 +438,24 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
   }
 
   clampServings(recipe: SelectedRecipe) {
-    recipe.servings = this.clampServingsValue(Number(recipe.servings), 0);
+    recipe.servings = this.clampServingsValue(
+      this.toServingsNumber(recipe.servings) ?? NaN,
+      0,
+    );
     this.recompute();
   }
 
   stepServings(recipe: SelectedRecipe, delta: number) {
     recipe.servings = this.clampServingsValue(
-      (Number(recipe.servings) || 0) + delta,
+      (this.toServingsNumber(recipe.servings) ?? 0) + delta,
       0,
     );
     this.recompute();
   }
 
   onBulkServingsInput() {
-    const raw = Number(this.bulkServings);
-    if (!Number.isFinite(raw)) return;
+    const raw = this.toServingsNumber(this.bulkServings);
+    if (raw === null) return;
     const value = this.clampServingsValue(raw, 0);
     for (const recipe of this.recipes) {
       recipe.servings = value;
@@ -445,7 +464,10 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
   }
 
   clampBulkServings() {
-    const value = this.clampServingsValue(Number(this.bulkServings) || 0, 0);
+    const value = this.clampServingsValue(
+      this.toServingsNumber(this.bulkServings) ?? 0,
+      0,
+    );
     this.bulkServings = value;
     for (const recipe of this.recipes) {
       recipe.servings = value;
@@ -455,7 +477,7 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
 
   stepBulkServings(delta: number) {
     const value = this.clampServingsValue(
-      (Number(this.bulkServings) || 0) + delta,
+      (this.toServingsNumber(this.bulkServings) ?? 0) + delta,
       0,
     );
     this.bulkServings = value;
@@ -470,8 +492,8 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
   }
 
   averageDivisor(): number {
-    const value = Number(this.divideAmong);
-    if (!Number.isFinite(value) || value <= 0) return 1;
+    const value = this.toServingsNumber(this.divideAmong);
+    if (value === null || value <= 0) return 1;
     const clamped = this.clampServingsValue(value, 0);
     return clamped > 0 ? clamped : 1;
   }

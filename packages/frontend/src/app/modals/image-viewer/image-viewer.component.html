@@ -12,7 +12,7 @@
 <ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
   @if (slideNum > 0) {
     <ion-icon
-      (click)="swiperContainer.swiper.slidePrev()"
+      (click)="slidePrev()"
       name="arrow-back-outline"
       class="back"
     ></ion-icon>
@@ -31,7 +31,7 @@
   </swiper-container>
   @if (slideNum < imageUrls.length - 1) {
     <ion-icon
-      (click)="swiperContainer.swiper.slideNext()"
+      (click)="slideNext()"
       name="arrow-forward-outline"
       class="forward"
     ></ion-icon>

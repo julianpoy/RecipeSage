@@ -266,7 +266,7 @@
             color="primary"
             slot="end"
             size="small"
-            alt="Restore All"
+            [attr.aria-label]="'pages.shoppingList.restoreAll' | translate"
             (click)="completeItems(completedItems, false)"
           >
             <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
@@ -275,7 +275,7 @@
             color="danger"
             slot="end"
             size="small"
-            alt="Delete All"
+            [attr.aria-label]="'pages.shoppingList.deleteAll' | translate"
             (click)="removeItemsConfirm(completedItems)"
           >
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>

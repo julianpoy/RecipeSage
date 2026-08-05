@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import type { ShoppingListItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ShoppingListItemComponent } from "../shopping-list-item/shopping-list-item.component";
 import {
@@ -36,7 +37,7 @@ export class ShoppingListGroupComponent {
   @Input({
     required: true,
   })
-  group!: { title: string; items: any[] };
+  group!: { title: string; items: ShoppingListItemSummary[] };
   @Input({
     required: true,
   })
@@ -53,8 +54,10 @@ export class ShoppingListGroupComponent {
     required: true,
   })
   showAddedBy!: boolean;
-  @Output() completeToggle = new EventEmitter<any>();
-  @Output() recategorize = new EventEmitter<[any[], string]>();
+  @Output() completeToggle = new EventEmitter<ShoppingListItemSummary[]>();
+  @Output() recategorize = new EventEmitter<
+    [ShoppingListItemSummary[], string]
+  >();
 
   constructor() {
     addIcons({ caretDown, caretUp });

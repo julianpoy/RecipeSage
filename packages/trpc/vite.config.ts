@@ -4,6 +4,9 @@ import dts from "vite-plugin-dts";
 import * as path from "path";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
+import { SPECS_REQUIRING_MODULE_MOCKS } from "./specsRequiringModuleMocks";
+
+const ALWAYS_EXCLUDED = ["**/node_modules/**", "**/dist/**"];
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -47,8 +50,34 @@ export default defineConfig(() => ({
     watch: false,
     globals: true,
     environment: "node",
-    include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],
+    maxWorkers: 4,
+    env: {
+      GOOGLE_GSI_CLIENT_ID: "test-client-id",
+      GOOGLE_GSI_CLIENT_SECRET: "test-client-secret",
+    },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "shared",
+          include: [
+            "{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+          ],
+          exclude: [...ALWAYS_EXCLUDED, ...SPECS_REQUIRING_MODULE_MOCKS],
+          isolate: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "module-mocks",
+          include: SPECS_REQUIRING_MODULE_MOCKS,
+          exclude: ALWAYS_EXCLUDED,
+          isolate: true,
+        },
+      },
+    ],
     coverage: {
       reportsDirectory: "../../coverage/packages/trpc",
       provider: "v8" as const,

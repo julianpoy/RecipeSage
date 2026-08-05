@@ -15,7 +15,7 @@ export const deleteUser = authenticatedProcedure
   })
   .output(z.string())
   .mutation(async ({ ctx }): Promise<string> => {
-    await prisma.$transaction(
+    const purgeFromStorage = await prisma.$transaction(
       async (tx) => {
         await tx.recipe.deleteMany({
           where: {
@@ -27,19 +27,31 @@ export const deleteUser = authenticatedProcedure
             userId: ctx.session.userId,
           },
         });
+        await tx.discoverRecipe.deleteMany({
+          where: {
+            authorId: ctx.session.userId,
+          },
+        });
 
-        await deleteHangingImagesForUser(ctx.session.userId, tx);
+        const purgeFromStorage = await deleteHangingImagesForUser(
+          ctx.session.userId,
+          tx,
+        );
 
         await tx.user.delete({
           where: {
             id: ctx.session.userId,
           },
         });
+
+        return purgeFromStorage;
       },
       {
         timeout: 60000,
       },
     );
+
+    await purgeFromStorage();
 
     return "Deleted";
   });

@@ -54,7 +54,7 @@ export async function csvImportJobHandler(
   };
 
   const negotiateUrls = (str: string) => {
-    const urls = str.split(/(https?:\/\/.+?(?=https?))/);
+    const urls = str.split(/(https?:\/\/.+?(?=https?:\/\/))/);
 
     return urls
       .map((url) => {

@@ -79,6 +79,7 @@ export class JobsPage {
   showJobs = 10;
   jobs: JobSummary[] = [];
   jobPollInterval?: NodeJS.Timeout;
+  consecutiveJobPollFailures = 0;
 
   ionViewWillEnter() {
     this.setupJobStatusPoll();
@@ -92,6 +93,7 @@ export class JobsPage {
 
   setupJobStatusPoll() {
     if (this.jobPollInterval) clearInterval(this.jobPollInterval);
+    this.consecutiveJobPollFailures = 0;
     this.load();
 
     this.jobPollInterval = setInterval(() => {
@@ -104,18 +106,21 @@ export class JobsPage {
   };
 
   async load() {
-    const response = await this.serverActionsService.jobs.getJobs({
-      "0": () => {
-        // Do nothing
-      },
-    });
-    if (response) {
-      this.jobs = response.sort((a, b) => {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
-    } else {
-      clearInterval(this.jobPollInterval);
+    const response = await this.serverActionsService.jobs.getJobs(
+      this.consecutiveJobPollFailures > 0
+        ? { "0": () => {}, 500: () => {} }
+        : { "0": () => {} },
+    );
+
+    if (!response) {
+      this.consecutiveJobPollFailures++;
+      return;
     }
+
+    this.consecutiveJobPollFailures = 0;
+    this.jobs = response.sort((a, b) => {
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
   }
 
   formatItemCreationDate(plainTextDate: string | Date) {

@@ -127,7 +127,7 @@ export class ProfilePage {
 
     if (!handle) {
       this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
-      throw new Error("No handle specified");
+      return;
     }
 
     this.handle = handle;
@@ -165,7 +165,12 @@ export class ProfilePage {
       this.applyRouteParams();
       this.profile = undefined;
       this.publishedRecipes = [];
+      this.profileItems = [];
+      this.incomingFriendship = false;
+      this.outgoingFriendship = false;
     }
+
+    if (!this.handle) return;
 
     this.meQuery.refresh();
     this.load();
@@ -275,10 +280,12 @@ export class ProfilePage {
 
     const loading = this.loadingService.start();
 
-    await this.serverActionsService.users.createFriendship({
+    const response = await this.serverActionsService.users.createFriendship({
       friendId: this.profile.id,
     });
     loading.dismiss();
+
+    if (!response) return;
 
     const message = await this.translate
       .get("pages.profile.inviteSent")
@@ -306,10 +313,12 @@ export class ProfilePage {
 
     const loading = this.loadingService.start();
 
-    await this.serverActionsService.users.deleteFriendship({
+    const response = await this.serverActionsService.users.deleteFriendship({
       friendId: this.profile.id,
     });
     loading.dismiss();
+
+    if (!response) return;
 
     const message = await this.translate
       .get("pages.profile.inviteRemoved")

@@ -113,7 +113,7 @@ export const searchDiscoverRecipes = publicProcedure
       SELECT id
       FROM "Discover_Recipes"
       WHERE ${Prisma.join(conditions, " AND ")}
-      ORDER BY ${orderBy}
+      ORDER BY ${orderBy}, id DESC
       LIMIT ${input.limit} OFFSET ${input.offset}
     `);
 

@@ -103,6 +103,7 @@ export async function imagesImportJobHandler(
     userId: job.userId,
     standardizedRecipeImportInput,
     importTempDirectory: extractPath,
+    creditOperation: "importImages",
     failedCount,
   });
 }

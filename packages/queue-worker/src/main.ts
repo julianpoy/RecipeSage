@@ -28,7 +28,10 @@ const server = app.listen(port, () => {
 const close = async () => {
   console.log("CLOSING WORKER DUE TO SIGNAL");
 
-  await Promise.allSettled([jobQueueWorker.close(), promisify(server.close)()]);
+  await Promise.allSettled([
+    jobQueueWorker.close(),
+    promisify(server.close.bind(server))(),
+  ]);
 
   console.log("EXITED");
 

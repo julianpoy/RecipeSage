@@ -23,7 +23,7 @@ export const signInWithGoogle = publicProcedure
   })
   .input(
     z.object({
-      clientId: z.string(),
+      clientId: z.string().optional(),
       credential: z.string(),
       allowRegistration: z.boolean().default(true),
     }),
@@ -40,11 +40,11 @@ export const signInWithGoogle = publicProcedure
     );
     const ticket = await client.verifyIdToken({
       idToken: input.credential,
-      audience: input.clientId,
+      audience: config.google.gsi.clientId,
     });
     const payload = ticket.getPayload();
     const email = payload?.email;
-    if (!email) {
+    if (!email || !payload?.email_verified) {
       throw new TRPCError({
         message: "Invalid clientId or credential",
         code: "BAD_REQUEST",
