@@ -306,28 +306,28 @@ export class MeasurementConverterPage implements OnInit {
       ? this.volumeValues[unit]
       : this.weightValues[unit];
     const value = parseQuantity(raw, this.translate.getCurrentLang());
-    if (value === null || value <= 0) return;
+    if (value === null && raw.trim().length > 0) return;
 
-    const panel = buildPanel(value, unit, this.currentGramsPerMl());
+    const panel =
+      value === null || value <= 0
+        ? null
+        : buildPanel(value, unit, this.currentGramsPerMl());
 
-    if (panel.volumes) {
-      for (const volumeUnit of VOLUME_UNITS) {
-        if (volumeUnit === unit) continue;
-        this.volumeValues[volumeUnit] = this.formatVolume(
-          volumeUnit,
-          panel.volumes[volumeUnit],
-        );
-      }
+    for (const volumeUnit of VOLUME_UNITS) {
+      if (volumeUnit === unit) continue;
+      this.volumeValues[volumeUnit] = panel?.volumes
+        ? this.formatVolume(volumeUnit, panel.volumes[volumeUnit])
+        : "";
     }
 
-    if (panel.weights) {
-      for (const weightUnit of WEIGHT_UNITS) {
-        if (weightUnit === unit) continue;
-        this.weightValues[weightUnit] = formatDecimal(
-          panel.weights[weightUnit],
-          this.translate.getCurrentLang(),
-        );
-      }
+    for (const weightUnit of WEIGHT_UNITS) {
+      if (weightUnit === unit) continue;
+      this.weightValues[weightUnit] = panel?.weights
+        ? formatDecimal(
+            panel.weights[weightUnit],
+            this.translate.getCurrentLang(),
+          )
+        : "";
     }
   }
 
@@ -350,42 +350,55 @@ export class MeasurementConverterPage implements OnInit {
   }
 
   onCountWeightInput(unit: WeightUnit) {
-    const value = parseQuantity(
-      this.countWeightValues[unit],
-      this.translate.getCurrentLang(),
-    );
-    const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
-    if (value === null || value <= 0 || !item) return;
+    const raw = this.countWeightValues[unit];
+    const value = parseQuantity(raw, this.translate.getCurrentLang());
+    if (value === null && raw.trim().length > 0) return;
 
-    const grams = convertWeight(value, unit, "gram");
-    this.countQuantity = formatDecimal(
-      grams / item.gramsPerUnit,
-      this.translate.getCurrentLang(),
-    );
+    const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
+    const grams =
+      value === null || value <= 0 || !item
+        ? null
+        : convertWeight(value, unit, "gram");
+
+    this.countQuantity =
+      grams === null || !item
+        ? ""
+        : formatDecimal(
+            grams / item.gramsPerUnit,
+            this.translate.getCurrentLang(),
+          );
 
     for (const weightUnit of WEIGHT_UNITS) {
       if (weightUnit === unit) continue;
-      this.countWeightValues[weightUnit] = formatDecimal(
-        convertWeight(grams, "gram", weightUnit),
-        this.translate.getCurrentLang(),
-      );
+      this.countWeightValues[weightUnit] =
+        grams === null
+          ? ""
+          : formatDecimal(
+              convertWeight(grams, "gram", weightUnit),
+              this.translate.getCurrentLang(),
+            );
     }
   }
 
   private recomputeCount() {
-    const quantity = parseQuantity(
-      this.countQuantity,
-      this.translate.getCurrentLang(),
-    );
-    const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
-    if (quantity === null || quantity <= 0 || !item) return;
+    const raw = this.countQuantity;
+    const quantity = parseQuantity(raw, this.translate.getCurrentLang());
+    if (quantity === null && raw.trim().length > 0) return;
 
-    const grams = quantity * item.gramsPerUnit;
+    const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
+    const grams =
+      quantity === null || quantity <= 0 || !item
+        ? null
+        : quantity * item.gramsPerUnit;
+
     for (const weightUnit of WEIGHT_UNITS) {
-      this.countWeightValues[weightUnit] = formatDecimal(
-        convertWeight(grams, "gram", weightUnit),
-        this.translate.getCurrentLang(),
-      );
+      this.countWeightValues[weightUnit] =
+        grams === null
+          ? ""
+          : formatDecimal(
+              convertWeight(grams, "gram", weightUnit),
+              this.translate.getCurrentLang(),
+            );
     }
   }
 
