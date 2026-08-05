@@ -42,7 +42,7 @@ import {
   IonSpinner,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { closeOutline } from "ionicons/icons";
+import { alertCircleOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 interface CookableRecipe {
@@ -104,7 +104,7 @@ export class CookPage {
   unitSystem: UnitSystem = "original";
 
   constructor() {
-    addIcons({ closeOutline });
+    addIcons({ alertCircleOutline, closeOutline });
     this.applyRouteParams();
   }
 

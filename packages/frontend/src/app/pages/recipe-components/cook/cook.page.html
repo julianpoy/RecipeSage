@@ -27,6 +27,21 @@
       </ion-label>
     </null-state>
   }
+  @if (!loading && !recipe) {
+    <null-state>
+      <ion-icon
+        name="alert-circle-outline"
+        class="big-icon"
+        virtualSlot="header"
+      ></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>{{ "pages.cook.loadFailed" | translate }}</p>
+        <ion-button fill="clear" (click)="load()">
+          {{ "generic.retry" | translate }}
+        </ion-button>
+      </ion-label>
+    </null-state>
+  }
   @if (recipe) {
     <div class="cook-wrapper">
       <div class="ingredients-instructions">

@@ -319,6 +319,7 @@
 
   "pages.cook.tabTitle": "Cook Mode - RecipeSage",
   "pages.cook.loading": "Loading recipe...",
+  "pages.cook.loadFailed": "We couldn't load this recipe. Please check your connection and try again.",
 
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
@@ -2427,6 +2428,7 @@
   "generic.save": "Save",
   "generic.done": "Done",
   "generic.okay": "Okay",
+  "generic.retry": "Retry",
   "generic.ok": "Ok",
   "generic.ignore": "Ignore",
   "generic.options": "Options",
