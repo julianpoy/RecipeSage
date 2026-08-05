@@ -58,6 +58,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   @Input() searchPlaceholderText?: string;
   @Input() reserveSelectedItemsHeight = true;
   @Input() reserveSearchResultsHeight = true;
+  @Input() caseSensitive = false;
 
   @Input({
     required: true,
@@ -126,7 +127,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   }
 
   onEnter() {
-    if (this.disallowedTitles[this.searchText]) return;
+    if (this.disallowedTitleReason) return;
 
     const isAlreadyAdded = this.selectedItems.some((item) =>
       this.isExactMatch(item),
@@ -166,8 +167,21 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
       .includes(this.searchText.toLowerCase() || "");
   }
 
+  private matchesSearchText(title: string): boolean {
+    return this.caseSensitive
+      ? title === this.searchText
+      : title.toLowerCase() === this.searchText.toLowerCase();
+  }
+
+  get disallowedTitleReason(): string | undefined {
+    const match = Object.entries(this.disallowedTitles).find(([title]) =>
+      this.matchesSearchText(title),
+    );
+    return match?.[1];
+  }
+
   isExactMatch(item: T) {
-    return item.title.toLowerCase() === this.searchText.toLowerCase();
+    return this.matchesSearchText(item.title);
   }
 
   updateResults() {

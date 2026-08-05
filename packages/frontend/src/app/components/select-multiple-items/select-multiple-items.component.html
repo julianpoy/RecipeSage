@@ -144,7 +144,7 @@
               enableCreateNew &&
               !exactItemMatch &&
               searchText.length > 0 &&
-              !disallowedTitles[searchText]
+              !disallowedTitleReason
             ) {
               <ion-item
                 (mousedown)="$event.preventDefault()"
@@ -168,7 +168,7 @@
               enableCreateNew &&
               !exactItemMatch &&
               searchText.length > 0 &&
-              disallowedTitles[searchText]
+              disallowedTitleReason
             ) {
               <ion-item>
                 <ion-icon
@@ -179,7 +179,7 @@
                 <ion-label>
                   <h2>{{ searchText }}</h2>
                   <p>
-                    {{ disallowedTitles[searchText] | translate }}
+                    {{ disallowedTitleReason | translate }}
                   </p>
                 </ion-label>
               </ion-item>
