@@ -223,9 +223,6 @@
     "pages.downloadAndInstall.ios.instructionHeader": "A RecipeSage telepítése Apple (iOS) készülékekre:",
     "pages.downloadAndInstall.ios.step.1": "Safari megnyitása",
     "pages.downloadAndInstall.ios.step.2": "Nyissa meg a megosztási menüt az alsó sávon található gombbal, amely így néz ki:",
-    "pages.downloadAndInstall.desktop.instructionHeader": "A RecipeSage telepítése asztali számítógépre vagy laptopra:",
-    "pages.downloadAndInstall.desktop.step.1": "Google Chrome böngésző megnyitása",
-    "pages.downloadAndInstall.desktop.step.3": "Kattintson a \"RecipeSage telepítése...\" gombra",
     "pages.downloadAndInstall.other": "Egyéb RecipeSage szoftverek",
     "pages.downloadAndInstall.bookmark.instructions": "Húzza ezt a hivatkozást a könyvjelzősávra.",
     "pages.downloadAndInstall.extension.description": "Automatikusan lekéri a recepttartalmat a weboldalakról, és nagyobb kompatibilitást biztosít azokkal a webhelyekkel, amelyek esetleg nem importálhatók az alkalmazáson belül.",
@@ -764,7 +761,6 @@
     "pages.recipeDetails.addToShoppingList": "Hozzáadás a bevásárlólistához",
     "pages.recipeDetails.unPinRecipe": "Recept kitűzésének feloldása",
     "pages.contributeCancel.cta.3": "Annak érdekében, hogy a dolgok ingyenesek maradjanak, miközben kifizetjük a szerverköltségeket, szükségünk van az Ön segítségére.",
-    "pages.downloadAndInstall.desktop.step.2": "Nyissa meg a böngésző menüjét a jobb felső sarokban található gombbal, amely így néz ki:",
     "pages.labels.modal.delete.message": "Ezzel véglegesen törli a kiválasztott címkéket a fiókjából. Ez a művelet visszafordíthatatlan. A következő címkék törlésre kerülnek: {{labelTitles}}",
     "pages.newLabelItemModal.groupDescription": "A címkekategóriák a „címkék kategóriái”, és több különböző címke csoportba rendezésére használhatók. Néhány példa a gyakori címkekategóriákra: Például az „étkezés” vagy a „diéta”. Például a „reggeli”, „ebéd” és „vacsora” címkéket egy „étkezés” nevű címkekategória alá helyezheti.",
     "pages.manageLabelModal.renameConflict.message": "Már létezik ilyen címke",
@@ -2078,5 +2074,6 @@
     "webextension.inject.saveFailedTitle": "Nem sikerült menteni a receptet",
     "webextension.inject.missingTitleBody": "A recept címének megadása kötelező.",
     "webextension.inject.saveFailedBody": "Hiba történt a recept mentése közben. Kérjük, próbálja újra.",
-    "webextension.inject.duplicateConfirm": "Erről az oldalról már van mentett receptje. Kattintson az OK gombra egy újabb példány mentéséhez, vagy a Mégse gombra a kihagyáshoz."
+    "webextension.inject.duplicateConfirm": "Erről az oldalról már van mentett receptje. Kattintson az OK gombra egy újabb példány mentéséhez, vagy a Mégse gombra a kihagyáshoz.",
+    "pages.app.nav.discover": "Felfedezés"
 }
