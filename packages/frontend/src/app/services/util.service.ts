@@ -619,6 +619,9 @@ export class UtilService {
     todayAfter.setSeconds(0);
     todayAfter.setMilliseconds(0);
 
+    const todayBefore = new Date(todayAfter);
+    todayBefore.setDate(todayBefore.getDate() + 1);
+
     const thisWeekAfter = new Date();
     thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
 
@@ -629,12 +632,14 @@ export class UtilService {
       if (justNow) return justNow;
     }
 
-    if (!options.times && todayAfter <= toFormat) {
+    const isToday = todayAfter <= toFormat && toFormat < todayBefore;
+
+    if (!options.times && isToday) {
       const today = this.translate.instant("services.util.today");
       if (today) return today;
     }
 
-    if (options.times && todayAfter <= toFormat) {
+    if (options.times && isToday) {
       return toFormat.toLocaleString(this.getDisplayLocale(), {
         hour: "numeric",
         minute: "numeric",
