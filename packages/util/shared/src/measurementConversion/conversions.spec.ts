@@ -166,8 +166,23 @@ describe("measurement conversions", () => {
       expect(gasMarkToFahrenheit(4)).toBe(350);
       expect(gasMarkToFahrenheit(9)).toBe(475);
       expect(fahrenheitToGasMark(350)).toBe(4);
-      expect(fahrenheitToGasMark(100)).toBe(1);
-      expect(fahrenheitToGasMark(900)).toBe(9);
+    });
+
+    it("has no gas mark outside the 1 to 9 scale", () => {
+      expect(fahrenheitToGasMark(100)).toBeNull();
+      expect(fahrenheitToGasMark(900)).toBeNull();
+      expect(gasMarkToFahrenheit(0)).toBeNull();
+      expect(gasMarkToFahrenheit(12)).toBeNull();
+    });
+
+    it("round trips every gas mark on the scale", () => {
+      for (let mark = 1; mark <= 9; mark++) {
+        const fahrenheit = gasMarkToFahrenheit(mark);
+        if (fahrenheit === null) {
+          throw new Error(`gas mark ${mark} should have a fahrenheit value`);
+        }
+        expect(fahrenheitToGasMark(fahrenheit)).toBe(mark);
+      }
     });
 
     it("exposes a complete oven reference table", () => {

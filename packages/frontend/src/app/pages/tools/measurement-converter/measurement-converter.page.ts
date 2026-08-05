@@ -407,6 +407,10 @@ export class MeasurementConverterPage implements OnInit {
       Math.round(n).toLocaleString(this.translate.getCurrentLang(), {
         useGrouping: false,
       });
+    const formatGasMark = (fahrenheit: number) => {
+      const mark = fahrenheitToGasMark(fahrenheit);
+      return mark === null ? "" : formatInt(mark);
+    };
     if (field === "celsius") {
       const celsius = parseQuantity(
         this.tempCelsius,
@@ -415,7 +419,7 @@ export class MeasurementConverterPage implements OnInit {
       if (celsius === null) return;
       const fahrenheit = celsiusToFahrenheit(celsius);
       this.tempFahrenheit = formatInt(fahrenheit);
-      this.tempGasMark = formatInt(fahrenheitToGasMark(fahrenheit));
+      this.tempGasMark = formatGasMark(fahrenheit);
     } else if (field === "fahrenheit") {
       const fahrenheit = parseQuantity(
         this.tempFahrenheit,
@@ -423,7 +427,7 @@ export class MeasurementConverterPage implements OnInit {
       );
       if (fahrenheit === null) return;
       this.tempCelsius = formatInt(fahrenheitToCelsius(fahrenheit));
-      this.tempGasMark = formatInt(fahrenheitToGasMark(fahrenheit));
+      this.tempGasMark = formatGasMark(fahrenheit);
     } else {
       const mark = parseQuantity(
         this.tempGasMark,
@@ -431,6 +435,11 @@ export class MeasurementConverterPage implements OnInit {
       );
       if (mark === null) return;
       const fahrenheit = gasMarkToFahrenheit(mark);
+      if (fahrenheit === null) {
+        this.tempFahrenheit = "";
+        this.tempCelsius = "";
+        return;
+      }
       this.tempFahrenheit = formatInt(fahrenheit);
       this.tempCelsius = formatInt(fahrenheitToCelsius(fahrenheit));
     }
