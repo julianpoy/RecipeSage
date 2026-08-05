@@ -199,6 +199,7 @@ export class MealPlanPage {
   }
 
   ionViewWillEnter() {
+    this.mealPlanCalendar?.refreshToday();
     this.loadWithProgress();
 
     this.websocketService.on("mealplan:updated", this.onWSEvent);

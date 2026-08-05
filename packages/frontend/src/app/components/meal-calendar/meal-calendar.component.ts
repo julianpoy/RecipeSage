@@ -196,6 +196,18 @@ export class MealCalendarComponent implements OnDestroy {
     return dayjs().format("YYYY-MM-DD");
   }
 
+  refreshToday() {
+    const today = this.getToday();
+    const staleToday = dayjs(this.today).format("YYYY-MM-DD");
+    if (staleToday === today) return;
+
+    this.today = new Date();
+    if (this.selectedDays.length === 1 && this.selectedDays[0] === staleToday) {
+      this.selectedDays = [today];
+    }
+    this.generateCalendar();
+  }
+
   // Moves the calendar. Positive = next month, negative = last month
   moveCalendar(direction: -1 | 1) {
     this.center = this.getNewCenter(direction);
