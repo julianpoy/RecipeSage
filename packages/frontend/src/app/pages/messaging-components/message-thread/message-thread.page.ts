@@ -147,6 +147,7 @@ export class MessageThreadPage {
   }
 
   ionViewWillLeave() {
+    this.removeResizeListener();
     this.websocketService.off("messages:new", this.onWSEvent);
     this.events.unsubscribe(
       EventName.ApplicationMultitaskingResumed,
@@ -185,11 +186,18 @@ export class MessageThreadPage {
     }
   }
 
+  private onWindowResize = () => {
+    this.removeResizeListener();
+    this.scrollToBottom(false, true);
+  };
+
+  private removeResizeListener() {
+    window.removeEventListener("resize", this.onWindowResize);
+  }
+
   keyboardOpened() {
-    window.onresize = () => {
-      this.scrollToBottom(false, true);
-      window.onresize = null;
-    };
+    this.removeResizeListener();
+    window.addEventListener("resize", this.onWindowResize);
   }
 
   trackByFn(_: number, item: ThreadMessage) {
