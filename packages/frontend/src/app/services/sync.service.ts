@@ -23,7 +23,7 @@ export class SyncService {
     return new SyncManager(localDb, searchManager);
   })();
 
-  private whenOnlineQueue = new Set<() => Promise<void>>();
+  private whenOnlineQueue = new Map<string, () => Promise<void>>();
   get needsSync(): boolean {
     return this.whenOnlineQueue.size > 0;
   }
@@ -32,7 +32,7 @@ export class SyncService {
     this.syncAll();
 
     window.addEventListener("online", async () => {
-      const drained = [...this.whenOnlineQueue];
+      const drained = [...this.whenOnlineQueue.values()];
       this.whenOnlineQueue.clear();
       for (const listener of drained) {
         try {
@@ -53,7 +53,7 @@ export class SyncService {
 
   async syncAll(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncAll());
+      this.whenOnlineQueue.set("syncAll", () => this.syncAll());
       return;
     }
 
@@ -91,7 +91,9 @@ export class SyncService {
 
   async syncRecipe(recipeId: string): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncRecipe(recipeId));
+      this.whenOnlineQueue.set(`syncRecipe:${recipeId}`, () =>
+        this.syncRecipe(recipeId),
+      );
       return;
     }
 
@@ -103,7 +105,7 @@ export class SyncService {
 
   async syncRecipes(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncRecipes());
+      this.whenOnlineQueue.set("syncRecipes", () => this.syncRecipes());
       return;
     }
 
@@ -115,7 +117,7 @@ export class SyncService {
 
   async syncLabels(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncLabels());
+      this.whenOnlineQueue.set("syncLabels", () => this.syncLabels());
       return;
     }
 
@@ -127,7 +129,7 @@ export class SyncService {
 
   async syncLabelGroups(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncLabelGroups());
+      this.whenOnlineQueue.set("syncLabelGroups", () => this.syncLabelGroups());
       return;
     }
 
@@ -139,7 +141,7 @@ export class SyncService {
 
   async syncMyFriends(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncMyFriends());
+      this.whenOnlineQueue.set("syncMyFriends", () => this.syncMyFriends());
       return;
     }
 
@@ -151,7 +153,9 @@ export class SyncService {
 
   async syncShoppingLists(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncShoppingLists());
+      this.whenOnlineQueue.set("syncShoppingLists", () =>
+        this.syncShoppingLists(),
+      );
       return;
     }
 
@@ -163,7 +167,7 @@ export class SyncService {
 
   async syncMealPlans(): Promise<void> {
     if (!navigator.onLine) {
-      this.whenOnlineQueue.add(() => this.syncMealPlans());
+      this.whenOnlineQueue.set("syncMealPlans", () => this.syncMealPlans());
       return;
     }
 
