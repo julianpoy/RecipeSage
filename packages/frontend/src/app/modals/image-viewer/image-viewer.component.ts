@@ -61,6 +61,7 @@ export class ImageViewerComponent {
 
   ionViewWillEnter() {
     const swiper = this.getSwiperInstance();
+    if (!swiper) return;
 
     swiper.update();
     swiper.on("slideChange", () => {
@@ -68,7 +69,7 @@ export class ImageViewerComponent {
     });
   }
 
-  getSwiperInstance(): Swiper {
+  getSwiperInstance(): Swiper | undefined {
     return this.swiperContainer?.nativeElement.swiper;
   }
 
