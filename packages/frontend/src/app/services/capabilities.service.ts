@@ -38,7 +38,7 @@ export class CapabilitiesService {
   }
 
   async updateCapabilities() {
-    if (!this.utilService.isLoggedIn()) return this.retry();
+    if (!this.utilService.isLoggedIn()) return;
 
     const response = await this.serverActionsService.users.getMyCapabilities({
       401: () => {},
