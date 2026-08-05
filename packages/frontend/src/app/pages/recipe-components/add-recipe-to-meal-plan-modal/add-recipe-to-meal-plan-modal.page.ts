@@ -162,13 +162,15 @@ export class AddRecipeToMealPlanModalPage {
 
     this.saveLastUsedMealPlan();
 
+    const meal = this.meal;
+
     const result =
       await this.serverActionsService.mealPlans.createMealPlanItems({
         mealPlanId: this.selectedMealPlan.id,
         items: this.selectedDays.map((scheduledDate) => ({
           title: this.recipe.title,
           recipeId: this.recipe.id,
-          meal: this.meal as any, // TODO: Refine this type so that it aligns with Zod
+          meal,
           notes: this.notes,
           scheduledDate,
         })),

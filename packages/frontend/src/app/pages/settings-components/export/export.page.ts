@@ -82,6 +82,7 @@ export class ExportPage {
   showJobs = 5;
   exportJobs: ExportJobSummary[] = [];
   jobPollInterval?: NodeJS.Timeout;
+  consecutiveJobPollFailures = 0;
 
   ionViewWillEnter() {
     this.setupJobStatusPoll();
@@ -95,6 +96,7 @@ export class ExportPage {
 
   setupJobStatusPoll() {
     if (this.jobPollInterval) clearInterval(this.jobPollInterval);
+    this.consecutiveJobPollFailures = 0;
     this.load();
 
     this.jobPollInterval = setInterval(() => {
@@ -107,18 +109,23 @@ export class ExportPage {
   };
 
   async load() {
-    const response = await this.serverActionsService.jobs.getJobs({
-      "0": () => {
-        // Do nothing
-      },
-    });
-    if (response) {
-      this.exportJobs = response
-        .sort((a, b) => {
-          return b.createdAt.getTime() - a.createdAt.getTime();
-        })
-        .filter((job): job is ExportJobSummary => job.type === "EXPORT");
+    const response = await this.serverActionsService.jobs.getJobs(
+      this.consecutiveJobPollFailures > 0
+        ? { "0": () => {}, 500: () => {} }
+        : { "0": () => {} },
+    );
+
+    if (!response) {
+      this.consecutiveJobPollFailures++;
+      return;
     }
+
+    this.consecutiveJobPollFailures = 0;
+    this.exportJobs = response
+      .sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      })
+      .filter((job): job is ExportJobSummary => job.type === "EXPORT");
   }
 
   getRunningJob() {

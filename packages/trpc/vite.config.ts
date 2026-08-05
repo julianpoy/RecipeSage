@@ -4,13 +4,9 @@ import dts from "vite-plugin-dts";
 import * as path from "path";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { nxCopyAssetsPlugin } from "@nx/vite/plugins/nx-copy-assets.plugin";
+import { SPECS_REQUIRING_MODULE_MOCKS } from "./specsRequiringModuleMocks";
 
-const SPECS_REQUIRING_MODULE_MOCKS = [
-  "src/procedures/discover/publishDiscoverRecipe.spec.ts",
-  "src/procedures/discover/updateDiscoverRecipe.spec.ts",
-  "src/procedures/users/forgotPassword.spec.ts",
-  "src/procedures/users/signInWithGoogle.spec.ts",
-];
+const ALWAYS_EXCLUDED = ["**/node_modules/**", "**/dist/**"];
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -68,7 +64,7 @@ export default defineConfig(() => ({
           include: [
             "{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
           ],
-          exclude: SPECS_REQUIRING_MODULE_MOCKS,
+          exclude: [...ALWAYS_EXCLUDED, ...SPECS_REQUIRING_MODULE_MOCKS],
           isolate: false,
         },
       },
@@ -77,6 +73,7 @@ export default defineConfig(() => ({
         test: {
           name: "module-mocks",
           include: SPECS_REQUIRING_MODULE_MOCKS,
+          exclude: ALWAYS_EXCLUDED,
           isolate: true,
         },
       },

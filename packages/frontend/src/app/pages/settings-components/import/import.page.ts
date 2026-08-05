@@ -101,6 +101,7 @@ export class ImportPage {
   showJobs = 5;
   importJobs: ImportJobSummary[] = [];
   jobPollInterval?: NodeJS.Timeout;
+  consecutiveJobPollFailures = 0;
 
   ionViewWillEnter() {
     this.setupJobStatusPoll();
@@ -112,6 +113,7 @@ export class ImportPage {
 
   setupJobStatusPoll() {
     if (this.jobPollInterval) clearInterval(this.jobPollInterval);
+    this.consecutiveJobPollFailures = 0;
     this.load();
 
     this.jobPollInterval = setInterval(() => {
@@ -120,14 +122,23 @@ export class ImportPage {
   }
 
   async load() {
-    const response = await this.serverActionsService.jobs.getJobs();
-    if (response) {
-      this.importJobs = response
-        .sort((a, b) => {
-          return b.createdAt.getTime() - a.createdAt.getTime();
-        })
-        .filter((job): job is ImportJobSummary => job.type === "IMPORT");
+    const response = await this.serverActionsService.jobs.getJobs(
+      this.consecutiveJobPollFailures > 0
+        ? { "0": () => {}, 500: () => {} }
+        : { "0": () => {} },
+    );
+
+    if (!response) {
+      this.consecutiveJobPollFailures++;
+      return;
     }
+
+    this.consecutiveJobPollFailures = 0;
+    this.importJobs = response
+      .sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      })
+      .filter((job): job is ImportJobSummary => job.type === "IMPORT");
   }
 
   getRunningJob() {

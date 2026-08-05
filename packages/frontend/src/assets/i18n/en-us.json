@@ -323,6 +323,10 @@
   "pages.cook.tabTitle": "Cook Mode - RecipeSage",
   "pages.cook.loading": "Loading recipe...",
   "pages.cook.loadFailed": "We couldn't load this recipe. Please check your connection and try again.",
+  "pages.app.localDbUpgrade.confirm": "A new version of the app is available. The app will refresh to load the new version",
+  "pages.app.localDbUpgrade.notRefreshed": "The app will not work correctly until it is refreshed",
+  "pages.cook.notFound": "This recipe is no longer available. It may have been deleted or is no longer shared with you.",
+  "pages.cook.backToRecipes": "Back to my recipes",
 
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
@@ -523,6 +527,8 @@
   "pages.manageLabelModal.deleteWithRecipes": "Delete Including Recipes",
   "pages.manageLabelModal.renameConflict.header": "Error",
   "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
+  "pages.manageLabelModal.renameInvalid.header": "Error",
+  "pages.manageLabelModal.renameInvalid.message": "Please enter a label title",
   "pages.manageLabelModal.rename.header": "Rename label: {{name}}",
   "pages.manageLabelModal.rename.placeholder": "New label name",
   "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
@@ -2266,8 +2272,6 @@
   "components.selectLabel.search": "Type to search for a label...",
   "components.selectLabel.null": "No labels called \"{{name}}\"",
 
-  "components.selectMultipleItems.selectedItemImage": "Selected item image",
-  "components.selectMultipleItems.selectableItemImage": "Image of selectable item",
   "components.selectMultipleItems.null": "No results for {{searchText}}",
   "components.selectMultipleItems.select": "Click to select",
   "components.selectMultipleItems.create": "Click to create",

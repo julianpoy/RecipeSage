@@ -169,19 +169,21 @@ export const importStandardizedRecipes = async (
         })),
       });
 
-      const recipeIdsByLabelTitle: Record<string, string[]> = {};
+      const recipeIdsByLabelTitle = new Map<string, string[]>();
 
       entries.forEach((entry, idx) => {
         const recipeId = recipeIds[idx];
-        entry.labels.map((labelTitle) => {
-          labelTitle = cleanLabelTitle(labelTitle);
-          recipeIdsByLabelTitle[labelTitle] =
-            recipeIdsByLabelTitle[labelTitle] || [];
-          recipeIdsByLabelTitle[labelTitle].push(recipeId);
+        entry.labels.forEach((rawLabelTitle) => {
+          const labelTitle = cleanLabelTitle(rawLabelTitle);
+          if (!labelTitle) return;
+
+          const existing = recipeIdsByLabelTitle.get(labelTitle);
+          if (existing) existing.push(recipeId);
+          else recipeIdsByLabelTitle.set(labelTitle, [recipeId]);
         });
       });
 
-      for (const labelTitle of Object.keys(recipeIdsByLabelTitle)) {
+      for (const [labelTitle, labelRecipeIds] of recipeIdsByLabelTitle) {
         const label = await tx.label.upsert({
           where: {
             userId_title: {
@@ -197,7 +199,7 @@ export const importStandardizedRecipes = async (
         });
 
         await tx.recipeLabel.createMany({
-          data: recipeIdsByLabelTitle[labelTitle].map((recipeId) => {
+          data: labelRecipeIds.map((recipeId) => {
             return {
               labelId: label.id,
               recipeId,

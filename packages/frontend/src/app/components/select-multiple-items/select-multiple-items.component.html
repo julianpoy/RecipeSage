@@ -19,12 +19,7 @@
       <ion-chip (click)="deselectItem(selectedItem)">
         @if (selectedItem.image) {
           <ion-avatar aria-hidden="true">
-            <img
-              [alt]="
-                'components.selectMultipleItems.selectedItemImage' | translate
-              "
-              [src]="selectedItem.image"
-            />
+            <img alt="" [src]="selectedItem.image" />
           </ion-avatar>
         }
         @if (selectedItem.icon) {
@@ -81,13 +76,7 @@
               >
                 @if (result.image) {
                   <ion-avatar aria-hidden="true" slot="start">
-                    <img
-                      [alt]="
-                        'components.selectMultipleItems.selectableItemImage'
-                          | translate
-                      "
-                      [src]="result.image"
-                    />
+                    <img alt="" [src]="result.image" />
                   </ion-avatar>
                 }
                 @if (result.icon) {
@@ -109,13 +98,7 @@
               <ion-item>
                 @if (exactItemMatch.image) {
                   <ion-avatar aria-hidden="true" slot="start">
-                    <img
-                      [alt]="
-                        'components.selectMultipleItems.selectableItemImage'
-                          | translate
-                      "
-                      [src]="exactItemMatch.image"
-                    />
+                    <img alt="" [src]="exactItemMatch.image" />
                   </ion-avatar>
                 }
                 @if (exactItemMatch.icon) {

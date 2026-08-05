@@ -73,6 +73,14 @@ export class ImageViewerComponent {
     return this.swiperContainer?.nativeElement.swiper;
   }
 
+  slidePrev() {
+    this.getSwiperInstance()?.slidePrev();
+  }
+
+  slideNext() {
+    this.getSwiperInstance()?.slideNext();
+  }
+
   async slideDidChange() {
     const swiper = this.getSwiperInstance();
 

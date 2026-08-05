@@ -1,5 +1,6 @@
 export const cleanLabelTitle = (labelTitle: string): string => {
   const cleanedTitle = (labelTitle || "")
+    .normalize("NFC")
     .trim()
     .toLowerCase()
     .replace(/,/g, "")

@@ -1,2 +1,2 @@
 -- CreateIndex
-CREATE INDEX CONCURRENTLY "MealPlans_userId_idx" ON "MealPlans"("userId");
+CREATE INDEX CONCURRENTLY IF NOT EXISTS "MealPlans_userId_idx" ON "MealPlans"("userId");

@@ -56,6 +56,6 @@ export class EventService {
   }
 
   publish(eventName: EventName, data?: any) {
-    this.eventListeners[eventName]?.slice().map((cb) => cb(data));
+    this.eventListeners[eventName]?.slice().forEach((cb) => cb(data));
   }
 }

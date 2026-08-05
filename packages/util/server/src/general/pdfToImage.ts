@@ -49,6 +49,7 @@ export const pdfToImage = async (
 
     const result: Buffer[] = [];
     let errorOutput = "";
+    let stdinError: Error | undefined;
 
     proc.stdout.on("data", (data) => {
       result.push(data);
@@ -70,13 +71,18 @@ export const pdfToImage = async (
       } else {
         reject(
           new PDFToImageError(
-            `pdftoppm exited with code ${code}: ${errorOutput}`,
+            `pdftoppm exited with code ${code}: ${errorOutput}${
+              stdinError ? ` (stdin: ${stdinError.message})` : ""
+            }`,
           ),
         );
       }
     });
 
     if (!isFilePath) {
+      proc.stdin.on("error", (err) => {
+        stdinError = err;
+      });
       proc.stdin.write(source, (err) => {
         if (err) {
           clearTimeout(timeout);

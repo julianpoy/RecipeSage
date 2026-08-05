@@ -268,5 +268,42 @@ describe("searchDiscoverRecipes", () => {
         middle.id,
       ]);
     });
+
+    test("pages consistently when recipes share a sort value", async ({
+      user,
+    }) => {
+      const language = uniqueLanguage();
+      const createdAt = new Date("2023-01-01T00:00:00Z");
+      const created = [];
+      for (let i = 0; i < 6; i++) {
+        created.push(
+          await createActive(user.id, {
+            language,
+            createdAt,
+            ratingAverage: 4,
+            ratingCount: 2,
+            saveCount: 7,
+          }),
+        );
+      }
+
+      const expected = created
+        .map((recipe) => recipe.id)
+        .sort()
+        .reverse();
+
+      const paged: string[] = [];
+      for (let offset = 0; offset < expected.length; offset += 2) {
+        const page = await anonymousTrpc.discover.searchDiscoverRecipes({
+          languages: [language],
+          sortBy: "newest",
+          offset,
+          limit: 2,
+        });
+        paged.push(...page.recipes.map((recipe) => recipe.id));
+      }
+
+      expect(paged).toEqual(expected);
+    });
   });
 });

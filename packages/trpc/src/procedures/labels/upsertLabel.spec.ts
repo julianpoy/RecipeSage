@@ -81,4 +81,14 @@ describe("upsertLabel", () => {
       }),
     ).rejects.toThrow();
   });
+
+  test("rejects a label group id that is not a uuid", async ({ trpc }) => {
+    await expect(
+      trpc.labels.upsertLabel({
+        title: "dinner",
+        labelGroupId: "not-a-uuid",
+        addToRecipeIds: null,
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
 });

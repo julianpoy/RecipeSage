@@ -270,6 +270,9 @@ export class DiscoverRecipePage {
       this.applyRouteParams();
     }
     this.recipe = undefined;
+    this.ingredients = undefined;
+    this.instructions = undefined;
+    this.notes = undefined;
     this.notFound = false;
     this.meQuery.refresh();
     this.load();
@@ -349,6 +352,8 @@ export class DiscoverRecipePage {
         ...note,
         htmlContent: linkifyHtml(note.htmlContent),
       }));
+    } else {
+      this.notes = undefined;
     }
   }
 

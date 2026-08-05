@@ -167,7 +167,23 @@ describe("parsers", () => {
         const result = parseIngredients("1 – 2 cups flour", "2", {
           decimalNotationMode: ".",
         });
-        expect(result.map((el) => el.content)).toEqual(["2–4 cups flour"]);
+        expect(result.map((el) => el.content)).toEqual(["2 – 4 cups flour"]);
+      });
+
+      it("leaves a spaced en-dash range untouched at scale 1", () => {
+        const result = parseIngredients("1 – 2 cups flour", "1", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual(["1 – 2 cups flour"]);
+      });
+
+      it("leaves a spaced em-dash range untouched at scale 1", () => {
+        const result = parseIngredients("2 1/2 — 3 cups sugar", "1", {
+          decimalNotationMode: ".",
+        });
+        expect(result.map((el) => el.content)).toEqual([
+          "2 1/2 — 3 cups sugar",
+        ]);
       });
     });
 

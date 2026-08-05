@@ -99,10 +99,15 @@ export class CookingTemperaturesPage implements OnInit {
       flameOutline,
     });
 
-    this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(() => {
+    const rebuild = () => {
       this.buildGroups();
       this.applyFilter();
-    });
+    };
+
+    this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(rebuild);
+    this.translate.onTranslationChange
+      .pipe(takeUntilDestroyed())
+      .subscribe(rebuild);
   }
 
   ngOnInit() {

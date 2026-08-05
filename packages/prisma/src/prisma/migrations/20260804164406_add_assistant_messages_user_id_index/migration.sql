@@ -1,2 +1,2 @@
 -- CreateIndex
-CREATE INDEX CONCURRENTLY "AssistantMessages_userId_idx" ON "AssistantMessages"("userId");
+CREATE INDEX CONCURRENTLY IF NOT EXISTS "AssistantMessages_userId_idx" ON "AssistantMessages"("userId");

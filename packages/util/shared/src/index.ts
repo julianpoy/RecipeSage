@@ -21,6 +21,7 @@ export * from "./toCamelCase";
 export * from "./toPascalCase";
 export * from "./getMealSortOrder";
 export * from "./DAY_TITLE_I18N";
+export * from "./SHOPPING_LIST_CATEGORY_I18N";
 export * from "./getLanguageDirection";
 export * from "./discoverCategories";
 export * from "./desktopDownloads";

@@ -34,12 +34,21 @@
         class="big-icon"
         virtualSlot="header"
       ></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>{{ "pages.cook.loadFailed" | translate }}</p>
-        <ion-button fill="clear" (click)="load()">
-          {{ "generic.retry" | translate }}
-        </ion-button>
-      </ion-label>
+      @if (notFound) {
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.cook.notFound" | translate }}</p>
+          <ion-button fill="clear" (click)="backToRecipes()">
+            {{ "pages.cook.backToRecipes" | translate }}
+          </ion-button>
+        </ion-label>
+      } @else {
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.cook.loadFailed" | translate }}</p>
+          <ion-button fill="clear" (click)="load()">
+            {{ "generic.retry" | translate }}
+          </ion-button>
+        </ion-label>
+      }
     </null-state>
   }
   @if (recipe) {

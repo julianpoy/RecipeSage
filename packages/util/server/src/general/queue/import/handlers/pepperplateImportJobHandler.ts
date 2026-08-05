@@ -108,16 +108,14 @@ export async function pepperplateImportJobHandler(
       xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 }),
     );
 
-    syncToken =
-      recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"][
+    const retrieveResult =
+      recipeJson["soap:Envelope"]?.["soap:Body"]?.["RetrieveRecipesResponse"]?.[
         "RetrieveRecipesResult"
-      ]["SynchronizationToken"]._text;
+      ] || {};
 
-    const items = xmlNodeToArray(
-      recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"][
-        "RetrieveRecipesResult"
-      ]["Items"]["RecipeSync"],
-    );
+    syncToken = (retrieveResult["SynchronizationToken"] || {})._text;
+
+    const items = xmlNodeToArray((retrieveResult["Items"] || {})["RecipeSync"]);
 
     if (items.length > 0) {
       pepperplateRecipes.push(...items);

@@ -1,5 +1,8 @@
 import { Input, Component, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  ModalController,
+  type CheckboxCustomEvent,
+} from "@ionic/angular/standalone";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -92,7 +95,7 @@ export class MealPlanBulkPinModalPage {
     });
   }
 
-  checkboxChanged(event: any, recipeId: string) {
+  checkboxChanged(event: CheckboxCustomEvent, recipeId: string) {
     this.recipeIdSelectionMap[recipeId] = event.detail.checked;
   }
 

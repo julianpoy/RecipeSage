@@ -106,7 +106,7 @@ export class SearchByIngredientsPage {
   }
 
   onIncludeFriendsChange() {
-    if (this.hasSearched) this.search();
+    if (this.ingredientsText.trim()) this.search();
   }
 
   private parseTerms(text: string): string[] {

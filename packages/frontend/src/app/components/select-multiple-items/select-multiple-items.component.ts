@@ -58,7 +58,8 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   @Input() searchPlaceholderText?: string;
   @Input() reserveSelectedItemsHeight = true;
   @Input() reserveSearchResultsHeight = true;
-  @Input() caseSensitive = false;
+  @Input() normalizeTitle: (title: string) => string = (title) =>
+    title.normalize("NFC").toLowerCase();
 
   @Input({
     required: true,
@@ -69,6 +70,38 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     required: false,
   })
   disallowedTitles: { [title: string]: string } = {}; // Keys are label titles, values are lang keys
+
+  private normalizedDisallowedTitlesCache?: {
+    source: { [title: string]: string };
+    normalize: (title: string) => string;
+    normalized: Map<string, string>;
+  };
+
+  private get normalizedDisallowedTitles(): Map<string, string> {
+    const cache = this.normalizedDisallowedTitlesCache;
+    if (
+      cache &&
+      cache.source === this.disallowedTitles &&
+      cache.normalize === this.normalizeTitle
+    ) {
+      return cache.normalized;
+    }
+
+    const normalized = new Map(
+      Object.entries(this.disallowedTitles).map(([title, reason]) => [
+        this.normalizeTitle(title),
+        reason,
+      ]),
+    );
+
+    this.normalizedDisallowedTitlesCache = {
+      source: this.disallowedTitles,
+      normalize: this.normalizeTitle,
+      normalized,
+    };
+
+    return normalized;
+  }
 
   _selectedItems: T[] = [];
   @Input()
@@ -168,16 +201,13 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   }
 
   private matchesSearchText(title: string): boolean {
-    return this.caseSensitive
-      ? title === this.searchText
-      : title.toLowerCase() === this.searchText.toLowerCase();
+    return this.normalizeTitle(title) === this.normalizeTitle(this.searchText);
   }
 
   get disallowedTitleReason(): string | undefined {
-    const match = Object.entries(this.disallowedTitles).find(([title]) =>
-      this.matchesSearchText(title),
+    return this.normalizedDisallowedTitles.get(
+      this.normalizeTitle(this.searchText),
     );
-    return match?.[1];
   }
 
   isExactMatch(item: T) {

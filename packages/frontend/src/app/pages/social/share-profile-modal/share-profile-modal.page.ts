@@ -108,12 +108,16 @@ export class ShareProfileModalPage implements OnInit {
     )}`;
   }
 
+  private openShareUrl(url: string) {
+    window.open(url, "_blank", "noopener");
+  }
+
   openFacebook() {
-    const win = window.open() as any;
-    win.opener = null;
-    win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      this.getProfileUrl(),
-    )}`;
+    this.openShareUrl(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        this.getProfileUrl(),
+      )}`,
+    );
   }
 
   async openTwitter() {
@@ -121,11 +125,11 @@ export class ShareProfileModalPage implements OnInit {
       .get("pages.shareProfileModal.shareTitle", { name: this.profile.name })
       .toPromise();
 
-    const win = window.open() as any;
-    win.opener = null;
-    win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      this.getProfileUrl(),
-    )}&text=${encodeURIComponent(message)}`;
+    this.openShareUrl(
+      `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        this.getProfileUrl(),
+      )}&text=${encodeURIComponent(message)}`,
+    );
   }
 
   async openPinterest() {
@@ -137,11 +141,12 @@ export class ShareProfileModalPage implements OnInit {
       this.profile.profileImages?.[0]?.image?.location || "",
     );
     const url = encodeURIComponent(this.getProfileUrl());
-    const win = window.open() as any;
-    win.opener = null;
-    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(
-      message,
-    )}`;
+
+    this.openShareUrl(
+      `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(
+        message,
+      )}`,
+    );
   }
 
   async openEmail() {
@@ -153,10 +158,10 @@ export class ShareProfileModalPage implements OnInit {
       .toPromise();
     const url = encodeURIComponent(` ${this.getProfileUrl()}`);
 
-    const win = window.open() as any;
-    win.opener = null;
-    win.location = `mailto:info@example.com?&subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(message)}${url}`;
+    this.openShareUrl(
+      `mailto:info@example.com?&subject=${encodeURIComponent(
+        subject,
+      )}&body=${encodeURIComponent(message)}${url}`,
+    );
   }
 }

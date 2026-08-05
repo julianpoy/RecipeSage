@@ -14,6 +14,9 @@ import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
 import * as Sentry from "@sentry/node";
 
+const PAPRIKA_RECIPE_EXTENSION = ".paprikarecipe";
+const APPLE_DOUBLE_PREFIX = "._";
+
 async function collectPaprikaRecipeFiles(root: string): Promise<string[]> {
   const results: string[] = [];
   const stack: string[] = [root];
@@ -22,16 +25,23 @@ async function collectPaprikaRecipeFiles(root: string): Promise<string[]> {
     if (current === undefined) break;
     const entries = await readdir(current, { withFileTypes: true });
     for (const entry of entries) {
-      if (entry.name.startsWith(".")) continue;
       const entryPath = path.join(current, entry.name);
       if (entry.isDirectory()) {
+        if (entry.name.startsWith(".")) continue;
         stack.push(entryPath);
       } else if (entry.isFile()) {
+        if (entry.name.startsWith(APPLE_DOUBLE_PREFIX)) continue;
+        if (entry.name === ".DS_Store") continue;
         results.push(entryPath);
       }
     }
   }
-  return results;
+
+  const recipeFiles = results.filter((filePath) =>
+    filePath.toLowerCase().endsWith(PAPRIKA_RECIPE_EXTENSION),
+  );
+
+  return recipeFiles.length > 0 ? recipeFiles : results;
 }
 
 export async function paprikaImportJobHandler(

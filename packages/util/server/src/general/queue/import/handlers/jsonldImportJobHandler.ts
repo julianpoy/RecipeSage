@@ -1,4 +1,5 @@
 import type { ImportJobSummary } from "@recipesage/prisma";
+import * as Sentry from "@sentry/node";
 
 import {
   importJobFinishCommon,
@@ -54,15 +55,21 @@ export async function jsonldImportJobHandler(
 
   const totalCount = jsonLD.length;
   let processedCount = 0;
+  let failedCount = 0;
   const standardizedRecipeImportInput = [];
   for (const ld of jsonLD) {
-    const result = jsonLDToStandardizedRecipeImportEntry(ld);
-    const { title, ingredients, instructions } = result.recipe;
-    if (title || ingredients || instructions) {
-      standardizedRecipeImportInput.push({
-        ...result,
-        labels: [...result.labels, ...importLabels],
-      });
+    try {
+      const result = jsonLDToStandardizedRecipeImportEntry(ld);
+      const { title, ingredients, instructions } = result.recipe;
+      if (title || ingredients || instructions) {
+        standardizedRecipeImportInput.push({
+          ...result,
+          labels: [...result.labels, ...importLabels],
+        });
+      }
+    } catch (e) {
+      Sentry.captureException(e, { extra: { jobId: job.id } });
+      failedCount++;
     }
 
     processedCount++;
@@ -83,5 +90,6 @@ export async function jsonldImportJobHandler(
     userId: job.userId,
     standardizedRecipeImportInput,
     importTempDirectory: undefined,
+    failedCount,
   });
 }

@@ -29,7 +29,7 @@ export class WakeLockService {
       },
     };
     this.wakeLockRequests.push(wakeLockRequest);
-    await this.requestWakeLock();
+    void this.requestWakeLock();
     return wakeLockRequest;
   }
 

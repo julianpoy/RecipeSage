@@ -29,6 +29,7 @@ import { ImageService } from "../../../services/image.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   RecipeDetailsPreferenceKey,
+  cleanLabelTitle,
   decodeBasicHtmlEntities,
 } from "@recipesage/util/shared";
 import { getQueryParam } from "../../../utils/queryParams";
@@ -298,20 +299,35 @@ export class EditRecipePage {
     return filtered;
   }
 
+  cleanLabelTitle = cleanLabelTitle;
+
+  private disallowedTitleMapCache = new Map<
+    string,
+    { labels: LabelSummary[]; map: Record<string, string> }
+  >();
+
   disallowedTitleMap(labels: LabelSummary[], labelGroupId: string | null) {
+    const cacheKey = labelGroupId ?? "";
+    const cached = this.disallowedTitleMapCache.get(cacheKey);
+    if (cached && cached.labels === labels) return cached.map;
+
     const labelsNotInGroup = this.labelsNotInGroupId(labels, labelGroupId);
 
     const labelTitlesInOtherGroups = labelsNotInGroup.map(
       (label) => label.title,
     );
 
-    return labelTitlesInOtherGroups.reduce(
+    const map = labelTitlesInOtherGroups.reduce(
       (acc, title) => {
         acc[title] = "pages.editRecipe.addLabel.otherGroup";
         return acc;
       },
       {} as Record<string, string>,
     );
+
+    this.disallowedTitleMapCache.set(cacheKey, { labels, map });
+
+    return map;
   }
 
   checkAutoClip() {
@@ -591,30 +607,28 @@ export class EditRecipePage {
         },
       },
     );
-
-    if (response) {
-      this.recipe.nutritionServingSize = response.servingSize;
-      this.recipe.nutritionCalories = response.calories;
-      this.recipe.nutritionTotalFat = response.totalFat;
-      this.recipe.nutritionSaturatedFat = response.saturatedFat;
-      this.recipe.nutritionTransFat = response.transFat;
-      this.recipe.nutritionPolyunsaturatedFat = response.polyunsaturatedFat;
-      this.recipe.nutritionMonounsaturatedFat = response.monounsaturatedFat;
-      this.recipe.nutritionCholesterol = response.cholesterol;
-      this.recipe.nutritionSodium = response.sodium;
-      this.recipe.nutritionTotalCarbs = response.totalCarbs;
-      this.recipe.nutritionDietaryFiber = response.dietaryFiber;
-      this.recipe.nutritionTotalSugars = response.totalSugars;
-      this.recipe.nutritionAddedSugars = response.addedSugars;
-      this.recipe.nutritionProtein = response.protein;
-      this.recipe.nutritionVitaminD = response.vitaminD;
-      this.recipe.nutritionCalcium = response.calcium;
-      this.recipe.nutritionIron = response.iron;
-      this.recipe.nutritionPotassium = response.potassium;
-      this.markAsDirty();
-    }
-
     loading.dismiss();
+    if (!response) return;
+
+    this.recipe.nutritionServingSize = response.servingSize;
+    this.recipe.nutritionCalories = response.calories;
+    this.recipe.nutritionTotalFat = response.totalFat;
+    this.recipe.nutritionSaturatedFat = response.saturatedFat;
+    this.recipe.nutritionTransFat = response.transFat;
+    this.recipe.nutritionPolyunsaturatedFat = response.polyunsaturatedFat;
+    this.recipe.nutritionMonounsaturatedFat = response.monounsaturatedFat;
+    this.recipe.nutritionCholesterol = response.cholesterol;
+    this.recipe.nutritionSodium = response.sodium;
+    this.recipe.nutritionTotalCarbs = response.totalCarbs;
+    this.recipe.nutritionDietaryFiber = response.dietaryFiber;
+    this.recipe.nutritionTotalSugars = response.totalSugars;
+    this.recipe.nutritionAddedSugars = response.addedSugars;
+    this.recipe.nutritionProtein = response.protein;
+    this.recipe.nutritionVitaminD = response.vitaminD;
+    this.recipe.nutritionCalcium = response.calcium;
+    this.recipe.nutritionIron = response.iron;
+    this.recipe.nutritionPotassium = response.potassium;
+    this.markAsDirty();
   }
 
   async _create(title: string) {
@@ -739,7 +753,6 @@ export class EditRecipePage {
   }
 
   async _save() {
-    this.recipe.title = this.recipe.title?.trim();
     if (!this.recipe.title) return;
     if (this.saving) return;
 
@@ -834,6 +847,8 @@ export class EditRecipePage {
   }
 
   async save() {
+    this.recipe.title = this.recipe.title?.trim();
+
     if (!this.recipe.title) {
       const header = await this.translate.get("generic.error").toPromise();
       const message = await this.translate
@@ -1324,6 +1339,7 @@ export class EditRecipePage {
       message: pleaseWait,
     });
     await loading.present();
+
     const response = await this.serverActionsService.ml.getRecipeFromText(
       {
         text,
@@ -1440,6 +1456,7 @@ export class EditRecipePage {
       message: pleaseWait,
     });
     await loading.present();
+
     const response = await this.serverActionsService.ml.clipFromUrl(
       {
         url,
@@ -1560,7 +1577,10 @@ export class EditRecipePage {
             415: () => this.presentAddImageByUrlFailed(),
           },
         );
-      if (response) this.images.push(response);
+      if (response) {
+        this.images.push(response);
+        this.markAsDirty();
+      }
 
       loading.dismiss();
     } else {
@@ -1653,9 +1673,23 @@ export class EditRecipePage {
       ...unrelatedSelectedLabels,
       ...updatedSelectedLabelsForGroup,
     ];
-    this.selectedLabels = unrelatedAndChangedLabels
+    const updatedSelectedLabels = unrelatedAndChangedLabels
       .map((selectedLabel) => labelsById[selectedLabel.id])
       .filter((label) => label);
+
+    const previousIds = this.selectedLabels
+      .map((label) => label.id)
+      .sort()
+      .join(",");
+    const updatedIds = updatedSelectedLabels
+      .map((label) => label.id)
+      .sort()
+      .join(",");
+
+    if (previousIds === updatedIds) return;
+
+    this.selectedLabels = updatedSelectedLabels;
+    this.markAsDirty();
   }
 
   async addLabel(title: string, labelGroupId: string | null) {
@@ -1667,8 +1701,9 @@ export class EditRecipePage {
     });
     if (!label) return;
 
-    this.labels.push(label);
-    this.selectedLabels.push(label);
+    this.labels = [...this.labels, label];
+    this.selectedLabels = [...this.selectedLabels, label];
+    this.markAsDirty();
   }
 
   setLastMadeAtToday() {

@@ -97,7 +97,7 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
 
       const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
 
-      expect(entry.recipe.ingredients).toEqual("\n1 cup flour");
+      expect(entry.recipe.ingredients).toEqual("1 cup flour");
     });
 
     it("skips a null image", () => {
@@ -113,7 +113,7 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
       expect(entry.images).toEqual(["https://example.com/1.jpg"]);
     });
 
-    it("skips a non-string recipe category", () => {
+    it("reads the name of an object recipe category", () => {
       const jsonLD: JsonLD = {
         "@context": "https://schema.org",
         "@type": "Recipe",
@@ -123,7 +123,105 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
 
       const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
 
+      expect(entry.labels).toEqual(["Dessert", "Cake"]);
+    });
+
+    it("skips a recipe category that carries no name", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeCategory: ["Dessert", {}, null],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
       expect(entry.labels).toEqual(["Dessert"]);
+    });
+
+    it("does not throw on a scalar image node", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        image: 1,
+      };
+
+      expect(() => jsonLDToStandardizedRecipeImportEntry(jsonLD)).not.toThrow();
+    });
+
+    it("does not throw on a null entry in a yield array", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeYield: ["4 servings", null],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.yield).toEqual("4 servings");
+    });
+
+    it("does not throw on a null entry in a comment array", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        comment: ["x", null],
+      };
+
+      expect(() => jsonLDToStandardizedRecipeImportEntry(jsonLD)).not.toThrow();
+    });
+
+    it("wraps an unbracketed section title as a header", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeInstructions: [
+          { "@type": "HowToSection", text: "For the sauce" },
+          { "@type": "HowToStep", text: "Simmer" },
+        ],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.instructions).toEqual("[For the sauce]\nSimmer");
+    });
+
+    it("leaves section body prose as an ordinary instruction line", () => {
+      const prose =
+        "Before you begin, read through the whole recipe and make sure every ingredient is at room temperature.";
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeInstructions: [
+          { "@type": "HowToSection", text: prose },
+          { "@type": "HowToStep", text: "Simmer" },
+        ],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.instructions).toEqual(`${prose}\nSimmer`);
+    });
+
+    it("does not double wrap a section title that is already bracketed", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        recipeInstructions: [
+          { "@type": "HowToSection", text: "[Prep]" },
+          { "@type": "HowToStep", text: "Chop" },
+        ],
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.instructions).toEqual("[Prep]\nChop");
     });
   });
 });

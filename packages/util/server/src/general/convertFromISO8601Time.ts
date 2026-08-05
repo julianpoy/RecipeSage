@@ -1,52 +1,44 @@
-const QUANTITY = String.raw`\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?`;
+const ISO8601_TIME =
+  /^P(?:(\d+(?:\.\d+)?)D)?(?:T(?:(\d+(?:\.\d+)?)H)?(?:(\d+(?:\.\d+)?)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 
-const HOUR_MATCHER = new RegExp(
-  `(${QUANTITY}) *(?:hours?|hrs?|h)(?![a-z])`,
-  "i",
-);
-const MINUTE_MATCHER = new RegExp(
-  `(${QUANTITY}) *(?:minutes?|mins?|m)(?![a-z])`,
-  "i",
-);
+type LocalizedTimeUnit = "day" | "hour" | "minute" | "second";
 
-const parseQuantity = (value: string): number | null => {
-  const mixed = value.match(/^(\d+)\s+(\d+)\/(\d+)$/);
-  if (mixed) {
-    const denominator = Number(mixed[3]);
-    if (denominator === 0) return null;
-    return Number(mixed[1]) + Number(mixed[2]) / denominator;
-  }
+const formatLocalizedTime = (
+  units: [number, LocalizedTimeUnit][],
+  locale: string,
+): string => {
+  const parts = units.map(([value, unit]) =>
+    new Intl.NumberFormat(locale, {
+      style: "unit",
+      unit,
+      unitDisplay: "long",
+    }).format(value),
+  );
 
-  const fraction = value.match(/^(\d+)\/(\d+)$/);
-  if (fraction) {
-    const denominator = Number(fraction[2]);
-    if (denominator === 0) return null;
-    return Number(fraction[1]) / denominator;
-  }
-
-  const decimal = Number(value);
-  return Number.isFinite(decimal) ? decimal : null;
+  return new Intl.ListFormat(locale, { style: "narrow", type: "unit" }).format(
+    parts,
+  );
 };
 
-const formatQuantity = (value: number) =>
-  Number.isInteger(value) ? `${value}` : `${Number(value.toFixed(4))}`;
+export const convertFromISO8601Time = (time: string, locale = "en") => {
+  const match = time.match(ISO8601_TIME);
+  if (!match) return time;
 
-const matchQuantity = (time: string, matcher: RegExp): number | null => {
-  const match = time.match(matcher);
-  if (!match) return null;
-  return parseQuantity(match[1].trim());
-};
+  const days = Number(match[1] ?? 0);
+  const hours = Number(match[2] ?? 0);
+  const minutes = Number(match[3] ?? 0);
+  const seconds = Number(match[4] ?? 0);
 
-export const convertToISO8601Time = (time: string) => {
-  let timeString = "";
+  const units: [number, LocalizedTimeUnit][] = [];
+  if (days) units.push([days, "day"]);
+  if (hours) units.push([hours, "hour"]);
+  if (minutes) units.push([minutes, "minute"]);
+  if (seconds) units.push([seconds, "second"]);
+  if (units.length === 0) return "";
 
-  const hours = matchQuantity(time, HOUR_MATCHER);
-  if (hours !== null) timeString += `${formatQuantity(hours)}H`;
-
-  const minutes = matchQuantity(time, MINUTE_MATCHER);
-  if (minutes !== null) timeString += `${formatQuantity(minutes)}M`;
-
-  if (timeString) return `PT${timeString}`;
-
-  return "";
+  try {
+    return formatLocalizedTime(units, locale);
+  } catch {
+    return formatLocalizedTime(units, "en");
+  }
 };

@@ -255,16 +255,21 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     this.loadingRecipes = true;
 
     const ids = this.recipes.map((recipe) => recipe.id);
+    const previousNutrition = new Map(
+      ids.map((id) => [id, this.nutritionById.get(id)]),
+    );
+
     for (const id of ids) {
       this.nutritionById.delete(id);
     }
 
-    const answeredIds = await this.fetchNutritionForIds(ids);
+    await this.fetchNutritionForIds(ids);
 
-    this.recipes = this.recipes.filter(
-      (recipe) =>
-        this.nutritionById.has(recipe.id) || !answeredIds.has(recipe.id),
-    );
+    for (const id of ids) {
+      if (this.nutritionById.has(id)) continue;
+      const stale = previousNutrition.get(id);
+      if (stale) this.nutritionById.set(id, stale);
+    }
 
     this.loadingRecipes = false;
     this.recompute();
@@ -388,29 +393,22 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
     }
   }
 
-  private async fetchNutritionForIds(ids: string[]): Promise<Set<string>> {
-    const answeredIds = new Set<string>();
+  private async fetchNutritionForIds(ids: string[]): Promise<void> {
     const missingIds = ids.filter((id) => !this.nutritionById.has(id));
-
-    for (const id of ids) {
-      if (this.nutritionById.has(id)) answeredIds.add(id);
-    }
 
     for (let i = 0; i < missingIds.length; i += FETCH_CHUNK_SIZE) {
       const chunk = missingIds.slice(i, i + FETCH_CHUNK_SIZE);
+
       const response = await this.serverActionsService.recipes.getRecipesByIds({
         ids: chunk,
       });
+
       if (!response) continue;
-      for (const id of chunk) {
-        answeredIds.add(id);
-      }
+
       for (const recipe of response) {
         this.nutritionById.set(recipe.id, recipe);
       }
     }
-
-    return answeredIds;
   }
 
   private async fetchMissingNutrition() {

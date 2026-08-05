@@ -138,6 +138,10 @@ export class LabelsPage {
       a.title.localeCompare(b.title),
     );
 
+    this.selectedLabelIds = this.selectedLabelIds.filter((labelId) =>
+      this.labels.some((label) => label.id === labelId),
+    );
+
     this.applyFilter();
   }
 

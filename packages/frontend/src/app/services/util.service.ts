@@ -594,7 +594,8 @@ export class UtilService {
     date: string | number | Date,
     options: { now?: boolean; times?: boolean } = {},
   ): string {
-    const memoKey = date.toString() + options.now + options.times;
+    const memoKey =
+      this.getDisplayLocale() + date.toString() + options.now + options.times;
     const memoizedValue = this.memoizedFormattedDates.get(memoKey);
     if (memoizedValue) return memoizedValue;
 

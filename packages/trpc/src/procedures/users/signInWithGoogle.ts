@@ -23,7 +23,7 @@ export const signInWithGoogle = publicProcedure
   })
   .input(
     z.object({
-      clientId: z.string(),
+      clientId: z.string().optional(),
       credential: z.string(),
       allowRegistration: z.boolean().default(true),
     }),

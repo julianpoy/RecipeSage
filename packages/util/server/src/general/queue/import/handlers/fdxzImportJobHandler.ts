@@ -7,7 +7,7 @@ import { importJobFinishCommon } from "../../../index";
 import { userHasCapability } from "../../../../capabilities/index";
 import { cleanLabelTitle, Capabilities } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
-import { findFilesByName } from "./shared/findFilesByName";
+import { buildFileNameIndex } from "./shared/buildFileNameIndex";
 import { readFile, mkdtempDisposable, stat } from "fs/promises";
 import { safeExtractZip, ZipMalformedError } from "../../../safeExtractZip";
 import xmljs from "xml-js";
@@ -65,6 +65,10 @@ export async function fdxzImportJobHandler(
       throw e;
     }
   }
+
+  const fileNameIndex = extractPath
+    ? await buildFileNameIndex(extractPath)
+    : new Map<string, string[]>();
 
   let xml = await readFile(xmlPath, "utf8");
   let data;
@@ -184,10 +188,8 @@ export async function fdxzImportJobHandler(
       } else if (imageRef._attributes?.FileName && extractPath) {
         const fileName = imageRef._attributes.FileName;
         try {
-          const possibleImageFiles = await findFilesByName(
-            extractPath,
-            fileName,
-          );
+          const possibleImageFiles =
+            fileNameIndex.get(fileName.toLowerCase()) || [];
           if (possibleImageFiles.length > 0) {
             try {
               await stat(possibleImageFiles[0]);

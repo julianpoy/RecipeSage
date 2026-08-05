@@ -178,21 +178,16 @@ export class ProfilePage {
 
   async load() {
     const loading = this.loadingService.start();
-    const requestedHandle = this.handle;
 
     const profileResponse =
       await this.serverActionsService.users.getUserProfileByHandle(
-        { handle: requestedHandle },
+        { handle: this.handle },
         {
           404: () => this.profileDisabledError(),
         },
       );
 
     if (!profileResponse) {
-      loading.dismiss();
-      return;
-    }
-    if (requestedHandle !== this.handle) {
       loading.dismiss();
       return;
     }
@@ -213,8 +208,6 @@ export class ProfilePage {
     ]);
 
     loading.dismiss();
-
-    if (requestedHandle !== this.handle) return;
 
     this.profile = profileResponse;
     this.profileItems = items ?? [];

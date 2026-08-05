@@ -26,16 +26,20 @@ export class VersionCheckService {
       })
       .then(async (res) => {
         if (res && res.data && !res.data.supported) {
+          const header = await this.translate
+            .get("services.versionCheck.outOfDate.header")
+            .toPromise();
+          const subHeader = await this.translate
+            .get("services.versionCheck.outOfDate.message")
+            .toPromise();
+          const okay = await this.translate.get("generic.okay").toPromise();
+
           const alert = await this.alertCtrl.create({
-            header: this.translate.instant(
-              "services.versionCheck.outOfDate.header",
-            ),
-            subHeader: this.translate.instant(
-              "services.versionCheck.outOfDate.message",
-            ),
+            header,
+            subHeader,
             buttons: [
               {
-                text: this.translate.instant("generic.okay"),
+                text: okay,
                 role: "cancel",
                 handler: () => {
                   forceSWUpdate().finally(() => {

@@ -687,6 +687,7 @@
           "
           (selectedItemsChange)="selectedLabelsChange(null, $event)"
           (newItem)="addLabel($event, null)"
+          [normalizeTitle]="cleanLabelTitle"
           [disallowedTitles]="disallowedTitleMap(labels, null)"
           [reserveSearchResultsHeight]="false"
           noSelectedItemsText="{{
@@ -720,6 +721,7 @@
             "
             (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
             (newItem)="addLabel($event, labelGroup.id)"
+            [normalizeTitle]="cleanLabelTitle"
             [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
             [reserveSearchResultsHeight]="false"
             noSelectedItemsText="{{

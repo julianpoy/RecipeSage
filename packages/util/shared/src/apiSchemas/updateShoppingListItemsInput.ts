@@ -17,7 +17,7 @@ export const updateShoppingListItemsInput = z.object({
           .optional(),
         recipeId: z.uuid().nullable().optional(),
         completed: z.boolean().optional(),
-        categoryTitle: z.string().min(1).optional(),
+        categoryTitle: z.string().trim().min(1).optional(),
       }),
     )
     .min(1)

@@ -862,7 +862,7 @@ export const parseIngredients = (
         try {
           const measurement = el[0];
           const measurementPartDelimiters =
-            measurement.match(/(-)|( to )|( - )|(–)|(—)/g) ?? [];
+            measurement.match(/( – )|( — )|( to )|( - )|(-)|(–)|(—)/g) ?? [];
           const measurementParts = measurement.split(/-|to|–|—/);
           const isRange = measurementParts.length > 1;
 
@@ -1036,7 +1036,7 @@ const scaleBraceContent = (
   const hasUnit = afterNumber.trim().length > 0;
 
   const measurementPartDelimiters = numberText.match(
-    /(-)|( to )|( - )|(–)|(—)/g,
+    /( – )|( — )|( to )|( - )|(-)|(–)|(—)/g,
   );
   const measurementParts = numberText.split(/-|to|–|—/);
   const isRange = measurementParts.length > 1;

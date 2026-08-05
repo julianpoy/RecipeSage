@@ -50,10 +50,12 @@ export const deleteRecipe = authenticatedProcedure
       },
     });
 
-    await deleteHangingImagesByIds(
+    const purgeFromStorage = await deleteHangingImagesByIds(
       ctx.session.userId,
       recipeImages.map((recipeImage) => recipeImage.imageId),
     );
+
+    await purgeFromStorage();
 
     return "Ok";
   });

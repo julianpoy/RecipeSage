@@ -65,7 +65,6 @@ export const updateMyProfile = authenticatedProcedure
         },
         select: {
           id: true,
-          userId: true,
           createdAt: true,
         },
       });

@@ -88,7 +88,7 @@ export const desktopGoogleCallbackHandler = defineHandler(
       audience: clientId,
     });
     const payload = ticket.getPayload();
-    if (!payload?.email) {
+    if (!payload?.email || !payload.email_verified) {
       throw new BadRequestError("No email in token payload");
     }
 

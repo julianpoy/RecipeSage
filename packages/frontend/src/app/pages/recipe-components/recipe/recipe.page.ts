@@ -266,12 +266,10 @@ export class RecipePage {
   }
 
   async _loadRecipe() {
-    const requestedRecipeId = this.recipeId;
     const response = await this.serverActionsService.recipes.getRecipe({
-      id: requestedRecipeId,
+      id: this.recipeId,
     });
     if (!response) return;
-    if (requestedRecipeId !== this.recipeId) return;
 
     this.recipe = response;
     if (this.recipe && "recipeLinks" in this.recipe) {
@@ -296,7 +294,11 @@ export class RecipePage {
     this.titleService.setTitle(title);
 
     const url = this.recipe.url?.trim() || "";
-    this.recipeLinkUrl = !url || url.startsWith("http") ? url : `http://${url}`;
+    const isAlreadyNavigable =
+      /^[a-z][a-z0-9+.-]*:\/\//i.test(url) ||
+      /^(mailto|tel):/i.test(url) ||
+      url.startsWith("//");
+    this.recipeLinkUrl = !url || isAlreadyNavigable ? url : `http://${url}`;
 
     const groupIdsSet = new Set<string>();
     for (const recipeLabel of this.recipe.recipeLabels) {

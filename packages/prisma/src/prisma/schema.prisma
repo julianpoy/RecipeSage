@@ -18,6 +18,7 @@ model FCMToken {
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("FCMTokens")
 }
 
@@ -104,6 +105,7 @@ model MealPlanItem {
 
   @@index([mealPlanId], map: "meal_plan_items_meal_plan_id")
   @@index([recipeId], map: "meal_plan_items_recipe_id")
+  @@index([userId])
   @@map("MealPlanItems")
 }
 
@@ -310,7 +312,6 @@ model Recipe {
   @@index([fromUserId], map: "recipes_from_user_id")
   @@index([userId, folder, createdAt(sort: Desc)], map: "recipes_user_folder_created_at")
   @@index([userId, folder, updatedAt(sort: Desc), id], map: "recipes_user_folder_updated_at")
-  @@index([userId, folder, lastMadeAt(sort: Desc)], map: "recipes_user_folder_last_made_at")
   @@index([userId, folder, title], map: "recipes_user_folder_title")
   @@index([userId(ops: raw("uuid_ops")), tsv], type: Gin, map: "recipes_user_tsv_idx")
   @@map("Recipes")
@@ -492,6 +493,7 @@ model ShoppingListItem {
   @@index([recipeId], map: "shopping_list_items_recipe_id")
   @@index([mealPlanItemId], map: "shopping_list_items_meal_plan_item_id")
   @@index([shoppingListId], map: "shopping_list_items_shopping_list_id")
+  @@index([userId])
   @@map("ShoppingListItems")
 }
 
@@ -533,6 +535,7 @@ model StripeEvent {
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("StripeEvents")
 }
 
@@ -549,6 +552,7 @@ model StripePayment {
   updatedAt       DateTime @updatedAt @db.Timestamptz(6)
   user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("StripePayments")
 }
 
@@ -575,6 +579,7 @@ model UserProfileImage {
   image     Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("User_Profile_Images")
 }
 

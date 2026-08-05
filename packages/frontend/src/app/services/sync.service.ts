@@ -32,12 +32,15 @@ export class SyncService {
     this.syncAll();
 
     window.addEventListener("online", async () => {
-      const drained = [...this.whenOnlineQueue.values()];
+      const drained = [...this.whenOnlineQueue.entries()];
       this.whenOnlineQueue.clear();
-      for (const listener of drained) {
+      for (const [key, listener] of drained) {
         try {
           await listener();
         } catch (e) {
+          if (!this.whenOnlineQueue.has(key)) {
+            this.whenOnlineQueue.set(key, listener);
+          }
           this.handleSyncManagerError(e);
         }
       }

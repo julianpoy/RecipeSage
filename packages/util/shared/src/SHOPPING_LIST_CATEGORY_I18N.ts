@@ -1,0 +1,17 @@
+export const SHOPPING_LIST_CATEGORY_I18N: Record<string, string> = {
+  uncategorized: "pages.shoppingList.category.uncategorized",
+  produce: "pages.shoppingList.category.produce",
+  dairy: "pages.shoppingList.category.dairy",
+  meat: "pages.shoppingList.category.meat",
+  bakery: "pages.shoppingList.category.bakery",
+  grocery: "pages.shoppingList.category.grocery",
+  liquor: "pages.shoppingList.category.liquor",
+  seafood: "pages.shoppingList.category.seafood",
+  nonfood: "pages.shoppingList.category.nonfood",
+  frozen: "pages.shoppingList.category.frozen",
+  canned: "pages.shoppingList.category.canned",
+  beverages: "pages.shoppingList.category.beverages",
+  baking: "pages.shoppingList.category.baking",
+  spices: "pages.shoppingList.category.spices",
+  condiments: "pages.shoppingList.category.condiments",
+};

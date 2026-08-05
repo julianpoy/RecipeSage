@@ -46,9 +46,7 @@ export const getDiscoverRecipesByAuthor = publicProcedure
     const discoverRecipes = await prismaReplica.discoverRecipe.findMany({
       where,
       select: discoverRecipeSummarySelect,
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       skip: input.offset,
       take: input.limit,
     });

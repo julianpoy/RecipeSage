@@ -1,2 +1,2 @@
 -- CreateIndex
-CREATE INDEX CONCURRENTLY "ShoppingList_Collaborators_userId_idx" ON "ShoppingList_Collaborators"("userId");
+CREATE INDEX CONCURRENTLY IF NOT EXISTS "ShoppingList_Collaborators_userId_idx" ON "ShoppingList_Collaborators"("userId");

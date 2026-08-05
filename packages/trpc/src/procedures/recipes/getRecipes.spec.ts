@@ -93,6 +93,76 @@ describe("getRecipes", () => {
       expect(response.totalCount).toEqual(1);
       expect(response.recipes[0].title).toEqual("myTitle");
     });
+
+    test("sorts recipes that have never been made last", async ({
+      trpc,
+      user,
+    }) => {
+      const neverMade = await prisma.recipe.create({
+        data: { ...recipeFactory(user.id), lastMadeAt: null },
+      });
+      const madeLongAgo = await prisma.recipe.create({
+        data: { ...recipeFactory(user.id), lastMadeAt: new Date("2020-01-01") },
+      });
+      const madeRecently = await prisma.recipe.create({
+        data: { ...recipeFactory(user.id), lastMadeAt: new Date("2024-01-01") },
+      });
+
+      const descending = await trpc.recipes.getRecipes({
+        limit: 10,
+        folder: "main",
+        orderBy: "lastMadeAt",
+        orderDirection: "desc",
+        offset: 0,
+      });
+
+      expect(descending.recipes.map((r) => r.id)).toEqual([
+        madeRecently.id,
+        madeLongAgo.id,
+        neverMade.id,
+      ]);
+
+      const ascending = await trpc.recipes.getRecipes({
+        limit: 10,
+        folder: "main",
+        orderBy: "lastMadeAt",
+        orderDirection: "asc",
+        offset: 0,
+      });
+
+      expect(ascending.recipes.map((r) => r.id)).toEqual([
+        madeLongAgo.id,
+        madeRecently.id,
+        neverMade.id,
+      ]);
+    });
+
+    test("pages consistently when recipes share a sort value", async ({
+      trpc,
+      user,
+    }) => {
+      const createdAt = new Date("2024-06-01T00:00:00.000Z");
+      for (let i = 0; i < 5; i++) {
+        await prisma.recipe.create({
+          data: { ...recipeFactory(user.id), createdAt },
+        });
+      }
+
+      const seen: string[] = [];
+      for (let offset = 0; offset < 6; offset += 2) {
+        const page = await trpc.recipes.getRecipes({
+          limit: 2,
+          folder: "main",
+          orderBy: "createdAt",
+          orderDirection: "desc",
+          offset,
+        });
+        seen.push(...page.recipes.map((r) => r.id));
+      }
+
+      expect(seen).toHaveLength(5);
+      expect(new Set(seen).size).toEqual(5);
+    });
   });
 
   describe("error", () => {

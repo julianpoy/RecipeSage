@@ -110,6 +110,8 @@ export class MealCalendarComponent implements OnDestroy {
   @Output() dayClicked = new EventEmitter<any>();
 
   private _selectedDays: string[] = [this.getToday()];
+  private dragAnchor?: string = this.getToday();
+  private selectionIsDefault = true;
   highlightedDay?: Dayjs;
   dayDragInProgress = false;
 
@@ -201,15 +203,30 @@ export class MealCalendarComponent implements OnDestroy {
     const staleToday = dayjs(this.today).format("YYYY-MM-DD");
     if (staleToday === today) return;
 
+    const wasCenteredOnStaleToday = dayjs(this.center).isSame(
+      dayjs(staleToday),
+      "month",
+    );
+
     this.today = new Date();
-    if (this.selectedDays.length === 1 && this.selectedDays[0] === staleToday) {
+    this.dragAnchor = undefined;
+
+    if (
+      this.selectionIsDefault &&
+      this.selectedDays.length === 1 &&
+      this.selectedDays[0] === staleToday
+    ) {
       this.selectedDays = [today];
+      if (wasCenteredOnStaleToday) this.center = new Date(this.today);
     }
+
     this.generateCalendar();
   }
 
   // Moves the calendar. Positive = next month, negative = last month
   moveCalendar(direction: -1 | 1) {
+    this.selectionIsDefault = false;
+    this.dragAnchor = undefined;
     this.center = this.getNewCenter(direction);
     const bounds = this.generateCalendar();
 
@@ -322,9 +339,13 @@ export class MealCalendarComponent implements OnDestroy {
 
   dayMouseDown(event: any, day: Dayjs) {
     this.dayDragInProgress = true;
-    if (event.shiftKey)
-      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
-    else this.selectedDays = [day.format("YYYY-MM-DD")];
+    this.selectionIsDefault = false;
+    if (event.shiftKey && this.dragAnchor) {
+      this.selectedDays = this.getDaysBetween(this.dragAnchor, day);
+    } else {
+      this.dragAnchor = day.format("YYYY-MM-DD");
+      this.selectedDays = [this.dragAnchor];
+    }
     this.dayClicked.emit(day.toDate());
   }
 
@@ -351,8 +372,8 @@ export class MealCalendarComponent implements OnDestroy {
   }
 
   dayMouseOver(_: any, day: Dayjs) {
-    if (this.dayDragInProgress) {
-      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
+    if (this.dayDragInProgress && this.dragAnchor) {
+      this.selectedDays = this.getDaysBetween(this.dragAnchor, day);
     }
   }
 

@@ -93,6 +93,7 @@ export class CookPage {
   } = null;
 
   loading = true;
+  notFound = false;
   recipe: CookableRecipe | null = null;
   isDiscover = false;
   recipeId = "";
@@ -128,13 +129,6 @@ export class CookPage {
   }
 
   ionViewWillEnter() {
-    const snapshotRecipeId = this.route.snapshot.paramMap.get(
-      this.routeParamName,
-    );
-    if (snapshotRecipeId && snapshotRecipeId !== this.recipeId) {
-      this.applyRouteParams();
-    }
-
     this.recipe = null;
     this.ingredients = undefined;
     this.instructions = undefined;
@@ -151,11 +145,18 @@ export class CookPage {
     this.fullscreenService.exit();
   }
 
+  backToRecipes() {
+    this.navCtrl.navigateBack(RouteMap.HomePage.getPath("main"));
+  }
+
   async load() {
     this.loading = true;
-    this.recipe = this.isDiscover
+    this.notFound = false;
+    const recipe = this.isDiscover
       ? await this.loadDiscoverRecipe()
       : await this.loadRecipe();
+
+    this.recipe = recipe;
     this.loading = false;
     if (!this.recipe) return;
 
@@ -170,12 +171,15 @@ export class CookPage {
   }
 
   private async loadRecipe(): Promise<CookableRecipe | null> {
-    const requestedRecipeId = this.recipeId;
-    const response = await this.serverActionsService.recipes.getRecipe({
-      id: requestedRecipeId,
-    });
+    const response = await this.serverActionsService.recipes.getRecipe(
+      {
+        id: this.recipeId,
+      },
+      {
+        404: () => (this.notFound = true),
+      },
+    );
     if (!response) return null;
-    if (requestedRecipeId !== this.recipeId) return null;
 
     return {
       title: response.title,
@@ -194,6 +198,9 @@ export class CookPage {
     const response = await this.serverActionsService.discover.getDiscoverRecipe(
       {
         id: this.recipeId,
+      },
+      {
+        404: () => (this.notFound = true),
       },
     );
     if (!response) return null;

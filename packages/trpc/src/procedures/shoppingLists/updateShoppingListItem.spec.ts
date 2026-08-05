@@ -35,9 +35,69 @@ describe("updateShoppingListItem", () => {
       expect(updated?.completed).toEqual(true);
       expect(updated?.categoryTitle).toEqual("Bakery");
     });
+
+    test("trims a padded category title", async ({ trpc, user }) => {
+      const shoppingList = await prisma.shoppingList.create({
+        data: {
+          title: faker.string.alphanumeric(10),
+          userId: user.id,
+        },
+      });
+      const item = await prisma.shoppingListItem.create({
+        data: {
+          shoppingListId: shoppingList.id,
+          userId: user.id,
+          title: "Apples",
+          completed: false,
+          categoryTitle: "::uncategorized",
+        },
+      });
+
+      await trpc.shoppingLists.updateShoppingListItem({
+        id: item.id,
+        categoryTitle: "  Bakery  ",
+      });
+
+      const updated = await prisma.shoppingListItem.findUnique({
+        where: { id: item.id },
+      });
+      expect(updated?.categoryTitle).toEqual("Bakery");
+    });
   });
 
   describe("error", () => {
+    test("rejects a blank category title", async ({ trpc, user }) => {
+      const shoppingList = await prisma.shoppingList.create({
+        data: {
+          title: faker.string.alphanumeric(10),
+          userId: user.id,
+        },
+      });
+      const item = await prisma.shoppingListItem.create({
+        data: {
+          shoppingListId: shoppingList.id,
+          userId: user.id,
+          title: "Apples",
+          completed: false,
+          categoryTitle: "::uncategorized",
+        },
+      });
+
+      await expect(
+        trpc.shoppingLists.updateShoppingListItem({
+          id: item.id,
+          categoryTitle: "   ",
+        }),
+      ).rejects.toThrow();
+
+      await expect(
+        trpc.shoppingLists.updateShoppingListItem({
+          id: item.id,
+          categoryTitle: "",
+        }),
+      ).rejects.toThrow();
+    });
+
     test("throws when no properties are provided", async ({ trpc, user }) => {
       const shoppingList = await prisma.shoppingList.create({
         data: {
