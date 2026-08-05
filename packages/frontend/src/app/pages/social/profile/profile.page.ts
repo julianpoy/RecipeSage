@@ -127,7 +127,7 @@ export class ProfilePage {
 
     if (!handle) {
       this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
-      throw new Error("No handle specified");
+      return;
     }
 
     this.handle = handle;
@@ -169,6 +169,8 @@ export class ProfilePage {
       this.incomingFriendship = false;
       this.outgoingFriendship = false;
     }
+
+    if (!this.handle) return;
 
     this.meQuery.refresh();
     this.load();

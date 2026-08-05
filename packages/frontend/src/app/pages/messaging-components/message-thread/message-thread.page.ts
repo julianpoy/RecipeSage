@@ -106,7 +106,7 @@ export class MessageThreadPage {
     const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
     if (!otherUserId) {
       this.navCtrl.navigateBack(this.defaultBackHref);
-      throw new Error("OtherUserId not provided");
+      return;
     }
     this.otherUserId = otherUserId;
   }
@@ -118,6 +118,8 @@ export class MessageThreadPage {
       this.messages = [];
       this.parsedBodyById.clear();
     }
+
+    if (!this.otherUserId) return;
 
     this.translate
       .get("pages.messageThread.messagePlaceholder")
