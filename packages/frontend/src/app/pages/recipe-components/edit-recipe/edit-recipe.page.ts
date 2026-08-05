@@ -1076,16 +1076,29 @@ export class EditRecipePage {
     const pleaseWait = await this.translate
       .get("pages.editRecipe.clip.loading")
       .toPromise();
-    const failedHeader = await this.translate.get("generic.error").toPromise();
-    const failedMessage = await this.translate
-      .get("pages.editRecipe.clip.failed")
-      .toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
 
     const loading = await this.loadingCtrl.create({
       message: pleaseWait,
     });
     await loading.present();
+
+    try {
+      await this._applyScannedDocument(file, extension, includeNutrition);
+    } finally {
+      loading.dismiss();
+    }
+  }
+
+  private async _applyScannedDocument(
+    file: PickFilesResult["files"][number],
+    extension: string,
+    includeNutrition: boolean,
+  ) {
+    const failedHeader = await this.translate.get("generic.error").toPromise();
+    const failedMessage = await this.translate
+      .get("pages.editRecipe.clip.failed")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
     const blob = await (async () => {
       if (file.blob) return file.blob;
@@ -1121,10 +1134,7 @@ export class EditRecipePage {
         ? await this.mlService.getRecipeFromPDF(webFile, errorHandlers)
         : await this.mlService.getRecipeFromDocument(webFile, errorHandlers);
 
-    if (!response.success) {
-      loading.dismiss();
-      return;
-    }
+    if (!response.success) return;
 
     this.recipe.title = response.data.recipe.title || "";
     this.recipe.description = response.data.recipe.description || "";
@@ -1140,8 +1150,6 @@ export class EditRecipePage {
     if (includeNutrition && response.data.recipe.nutritionInfo) {
       await this.parseAndApplyNutrition(response.data.recipe.nutritionInfo);
     }
-
-    loading.dismiss();
   }
 
   async scanImage() {
@@ -1214,52 +1222,54 @@ export class EditRecipePage {
     await loading.present();
 
     const files: File[] = [];
-    for (const capturedPhoto of capturedPhotos) {
-      const blob = await (async () => {
-        const webPath = capturedPhoto.webPath
-          ? capturedPhoto.webPath
-          : Capacitor.convertFileSrc(capturedPhoto.path!);
-        const response = await fetch(webPath);
-        return response.blob();
-      })();
-      const webFile = new File([blob], `scan.${capturedPhoto.format}`, {
-        type: `image/${capturedPhoto.format}`,
+    try {
+      for (const capturedPhoto of capturedPhotos) {
+        const blob = await (async () => {
+          const webPath = capturedPhoto.webPath
+            ? capturedPhoto.webPath
+            : Capacitor.convertFileSrc(capturedPhoto.path!);
+          const response = await fetch(webPath);
+          return response.blob();
+        })();
+        const webFile = new File([blob], `scan.${capturedPhoto.format}`, {
+          type: `image/${capturedPhoto.format}`,
+        });
+        files.push(webFile);
+      }
+
+      const response = await this.mlService.getRecipeFromOCR(files, {
+        ...this.getSelfhostErrorHandlers(),
+        ...this.getFileTooLargeErrorHandlers(),
+        400: async () => {
+          (
+            await this.alertCtrl.create({
+              header: failedHeader,
+              message: failedMessage,
+              buttons: [
+                {
+                  text: okay,
+                },
+              ],
+            })
+          ).present();
+        },
       });
-      files.push(webFile);
+
+      if (!response.success) return;
+
+      this.recipe.title = response.data.recipe.title || "";
+      this.recipe.description = response.data.recipe.description || "";
+      this.recipe.source = response.data.recipe.source || "";
+      this.recipe.yield = response.data.recipe.yield || "";
+      this.recipe.activeTime = response.data.recipe.activeTime || "";
+      this.recipe.totalTime = response.data.recipe.totalTime || "";
+      this.recipe.ingredients = response.data.recipe.ingredients || "";
+      this.recipe.instructions = response.data.recipe.instructions || "";
+      this.recipe.notes = response.data.recipe.notes || "";
+      this.markAsDirty();
+    } finally {
+      loading.dismiss();
     }
-
-    const response = await this.mlService.getRecipeFromOCR(files, {
-      ...this.getSelfhostErrorHandlers(),
-      ...this.getFileTooLargeErrorHandlers(),
-      400: async () => {
-        (
-          await this.alertCtrl.create({
-            header: failedHeader,
-            message: failedMessage,
-            buttons: [
-              {
-                text: okay,
-              },
-            ],
-          })
-        ).present();
-      },
-    });
-
-    loading.dismiss();
-
-    if (!response.success) return;
-
-    this.recipe.title = response.data.recipe.title || "";
-    this.recipe.description = response.data.recipe.description || "";
-    this.recipe.source = response.data.recipe.source || "";
-    this.recipe.yield = response.data.recipe.yield || "";
-    this.recipe.activeTime = response.data.recipe.activeTime || "";
-    this.recipe.totalTime = response.data.recipe.totalTime || "";
-    this.recipe.ingredients = response.data.recipe.ingredients || "";
-    this.recipe.instructions = response.data.recipe.instructions || "";
-    this.recipe.notes = response.data.recipe.notes || "";
-    this.markAsDirty();
 
     const imageResponse = await this.imageService.create(files[0], {
       "*": () => {},
