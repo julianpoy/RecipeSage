@@ -211,8 +211,11 @@ export class ShoppingListItemComponent {
     await alert.present();
     const detail = await alert.onDidDismiss();
     if (detail.role === "confirm") {
-      this.addUserKnownCategory(detail.data.values.category);
-      this.moveToCategoryCustom(detail.data.values.category);
+      const category = (detail.data.values.category || "").trim();
+      if (!category) return;
+
+      this.addUserKnownCategory(category);
+      this.moveToCategoryCustom(category);
     }
   }
 }
