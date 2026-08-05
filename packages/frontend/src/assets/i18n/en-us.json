@@ -34,6 +34,8 @@
   "pages.app.nav.github": "GitHub",
   "pages.app.nav.pricing": "Pricing",
   "pages.app.nav.legal": "Legal",
+  "pages.app.newMessageToast.message": "New message from {{name}}",
+  "pages.app.newMessageToast.view": "View",
 
   "pages.pricing.tabTitle": "Pricing - RecipeSage",
   "pages.pricing.title": "Pricing",
@@ -105,6 +107,7 @@
   "pages.auth.input.name": "Full Name or Nickname",
   "pages.auth.input.email": "Email",
   "pages.auth.input.password": "Password",
+  "pages.auth.showHidePassword": "Show/hide password",
   "pages.auth.input.confirmPassword": "Confirm Password",
   "pages.auth.selfhostWarning2": "Make sure you trust the site owner of this selfhost copy",
   "pages.auth.button.login": "Log In",
@@ -365,6 +368,7 @@
   "pages.contact.socialTitle": "Social Media",
 
   "pages.contribute.tabTitle": "Contribute - RecipeSage",
+  "pages.contribute.selfhostRedirect": "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",
   "pages.contribute.title": "Contribute",
   "pages.contribute.subtitle": "Contribute to RecipeSage",
   "pages.contribute.mission": "My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.",
@@ -436,6 +440,7 @@
   "pages.downloadAndInstall.desktop.file.linuxZip": "Linux, portable (.zip)",
   "pages.downloadAndInstall.other": "Other RecipeSage Software",
   "pages.downloadAndInstall.bookmark": "Recipe auto-clip bookmark",
+  "pages.downloadAndInstall.bookmark.linkTitle": "Autoclip to RecipeSage",
   "pages.downloadAndInstall.bookmark.instructions": "Drag this link to your bookmarks bar.",
   "pages.downloadAndInstall.bookmark.usage": "Click the bookmark to import the current site you're on.",
   "pages.downloadAndInstall.bookmark.description": "Automatically grabs recipe content from webpages. The browser extension is recommended instead of this bookmark.",
@@ -1856,6 +1861,7 @@
   "pages.share.byAccount": "RecipeSage",
   "pages.share.byLink": "Link",
   "pages.share.byEmbed": "Embed",
+  "pages.share.embedPreview": "Embed Preview",
   "pages.share.byAccount.description": "Recipient must have a RecipeSage account. If you'd like to share with a non-RecipeSage user, use the link sharing option.",
   "pages.share.byEmbed.image": "Show Title Image",
   "pages.share.byEmbed.columns": "Disable Columns",
@@ -1895,6 +1901,8 @@
   "pages.shoppingList.nullState.add": "Add the first item",
   "pages.shoppingList.recipes": "Recipes in this list",
   "pages.shoppingList.completed": "Completed Items",
+  "pages.shoppingList.restoreAll": "Restore all completed items",
+  "pages.shoppingList.deleteAll": "Delete all completed items",
   "pages.shoppingList.removeMultiple.header": "Confirm Removal",
   "pages.shoppingList.removeMultiple.message": "This will permanently delete these items from this list.",
   "pages.shoppingList.removed": "Removed {{itemCount}} item(s)",
@@ -2258,6 +2266,8 @@
   "components.selectLabel.search": "Type to search for a label...",
   "components.selectLabel.null": "No labels called \"{{name}}\"",
 
+  "components.selectMultipleItems.selectedItemImage": "Selected item image",
+  "components.selectMultipleItems.selectableItemImage": "Image of selectable item",
   "components.selectMultipleItems.null": "No results for {{searchText}}",
   "components.selectMultipleItems.select": "Click to select",
   "components.selectMultipleItems.create": "Click to create",
@@ -2306,6 +2316,7 @@
   "components.recurrenceEditor.preview.count": "This will create {{count}} item(s).",
   "components.recurrenceEditor.preview.truncated": "Limited to {{count}} items (max {{max}}).",
   "components.recurrenceEditor.preview.empty": "This rule produces no items. Check your settings.",
+  "components.recurrenceEditor.preview.invalid": "This repeat rule isn't valid. Please check your settings.",
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",
@@ -2405,6 +2416,9 @@
   "services.util.today": "today",
 
   "services.unsavedChanges.message": "It looks like you have been editing something. If you leave before saving, your changes will be lost.",
+
+  "services.versionCheck.outOfDate.header": "App is out of date",
+  "services.versionCheck.outOfDate.message": "The cached app version is very old. The app will restart to update.",
 
   "errors.offline": "A connectivity error occurred. While offline, you're only able to do read-only actions, and view content if your device has it cached locally.",
   "errors.unexpected": "An unexpected error occurred and the app may not work correctly. Please reload the app and try again. If this continues to occur, please contact me.",

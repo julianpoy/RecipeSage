@@ -319,7 +319,10 @@ export class AppComponent {
 
     this.websocketService.on("messages:new", async (payload) => {
       if (this.router.url.startsWith(RouteMap.MessagesPage.getPath())) return;
-      const notification = "New message from " + payload.otherUser.name;
+      const notification = this.translate.instant(
+        "pages.app.newMessageToast.message",
+        { name: payload.otherUser.name },
+      );
 
       const myMessage = payload;
 
@@ -328,7 +331,7 @@ export class AppComponent {
         duration: 7000,
         buttons: [
           {
-            text: "View",
+            text: this.translate.instant("pages.app.newMessageToast.view"),
             role: "cancel",
             handler: () => {
               this.navCtrl.navigateForward(

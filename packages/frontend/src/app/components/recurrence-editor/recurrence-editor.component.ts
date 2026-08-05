@@ -75,10 +75,10 @@ export class RecurrenceEditorComponent implements OnChanges {
   readonly weekdayLabels = WEEKDAY_LABELS;
   readonly maxOccurrences = MAX_OCCURRENCES;
 
-  preview: { count: number; truncated: boolean; error: string | null } = {
+  preview: { count: number; truncated: boolean; error: boolean } = {
     count: 0,
     truncated: false,
-    error: null,
+    error: false,
   };
 
   ngOnChanges(changes: SimpleChanges) {
@@ -120,13 +120,9 @@ export class RecurrenceEditorComponent implements OnChanges {
   private updatePreview() {
     try {
       const { dates, truncated } = expandRecurrence(this.baseDate, this.rule);
-      this.preview = { count: dates.length, truncated, error: null };
-    } catch (err) {
-      this.preview = {
-        count: 0,
-        truncated: false,
-        error: err instanceof Error ? err.message : "Invalid rule",
-      };
+      this.preview = { count: dates.length, truncated, error: false };
+    } catch {
+      this.preview = { count: 0, truncated: false, error: true };
     }
   }
 

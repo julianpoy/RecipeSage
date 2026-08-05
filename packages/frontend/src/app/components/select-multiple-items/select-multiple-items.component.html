@@ -19,7 +19,12 @@
       <ion-chip (click)="deselectItem(selectedItem)">
         @if (selectedItem.image) {
           <ion-avatar aria-hidden="true">
-            <img alt="Selected item image" [src]="selectedItem.image" />
+            <img
+              [alt]="
+                'components.selectMultipleItems.selectedItemImage' | translate
+              "
+              [src]="selectedItem.image"
+            />
           </ion-avatar>
         }
         @if (selectedItem.icon) {
@@ -76,7 +81,13 @@
               >
                 @if (result.image) {
                   <ion-avatar aria-hidden="true" slot="start">
-                    <img alt="Image of selectable item" [src]="result.image" />
+                    <img
+                      [alt]="
+                        'components.selectMultipleItems.selectableItemImage'
+                          | translate
+                      "
+                      [src]="result.image"
+                    />
                   </ion-avatar>
                 }
                 @if (result.icon) {
@@ -99,7 +110,10 @@
                 @if (exactItemMatch.image) {
                   <ion-avatar aria-hidden="true" slot="start">
                     <img
-                      alt="Image of selectable item"
+                      [alt]="
+                        'components.selectMultipleItems.selectableItemImage'
+                          | translate
+                      "
                       [src]="exactItemMatch.image"
                     />
                   </ion-avatar>
