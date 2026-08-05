@@ -371,7 +371,7 @@ export class PanBakewareConverterPage implements OnInit {
 
   private formatDim(value: number | undefined): string {
     if (value === undefined) return "";
-    return this.unit === "metric" ? formatCm(value) : formatInches(value);
+    return String(value);
   }
 
   presetsForShape(shape: PanShape): PanPreset[] {
