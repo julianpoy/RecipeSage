@@ -32,6 +32,7 @@ import {
   MATOMO_SITE_ID,
   SupportedLanguages,
 } from "@recipesage/util/shared";
+import { CapabilitiesService } from "./services/capabilities.service";
 import { CookingToolbarService } from "./services/cooking-toolbar.service";
 import { EventName, EventService } from "./services/event.service";
 import {
@@ -136,6 +137,7 @@ export class AppComponent {
   private preferencesService = inject(PreferencesService);
   private offlineModeService = inject(OfflineModeService);
   private featureFlagService = inject(FeatureFlagService);
+  private capabilitiesService = inject(CapabilitiesService);
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
@@ -312,6 +314,10 @@ export class AppComponent {
       this.updateNavList();
     });
 
+    this.events.subscribe(EventName.CapabilitiesUpdated, () => {
+      this.updateNavList();
+    });
+
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
@@ -406,7 +412,8 @@ export class AppComponent {
     const enableContribution =
       this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
     const enableDiscover =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover];
+      this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover] ||
+      this.capabilitiesService.capabilities.discoverPublish;
     const loggedOutPages = [
       [
         true,

@@ -2080,6 +2080,7 @@
   "pages.discover.filters.sort.mostSaved": "Most saved",
   "pages.discover.empty.title": "No recipes found",
   "pages.discover.empty.message": "Try adjusting your search or filters.",
+  "pages.discover.publishCta": "Please help me build out RecipeSage's Discover section. You can use the \"Publish to Discover\" button while on one of your recipes to publish it here.",
   "pages.discover.recipe.by": "by {{handle}}",
   "pages.discover.recipe.saves": "{{count}} saves",
   "pages.discover.categoryGroups.course": "Course",

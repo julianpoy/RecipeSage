@@ -9,6 +9,7 @@ import {
 } from "@recipesage/util/shared";
 
 import { RouteMap } from "../../../services/util.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
 import { LoadingService } from "../../../services/loading.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -76,6 +77,7 @@ export class DiscoverPage {
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
+  capabilitiesService = inject(CapabilitiesService);
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -232,12 +234,18 @@ export class DiscoverPage {
 
   async reload() {
     const loading = this.loadingService.start();
-    this.searchGeneration++;
+    const generation = ++this.searchGeneration;
     this.recipes = [];
     this.reachedEnd = false;
     this.loadedAny = false;
     this.datasource.settings!.startIndex = 0;
-    await this.datasource.adapter.reset();
+
+    await this.fetchPage(0);
+
+    if (generation === this.searchGeneration) {
+      await this.datasource.adapter.reset();
+    }
+
     loading.dismiss();
   }
 

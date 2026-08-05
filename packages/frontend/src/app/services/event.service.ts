@@ -15,6 +15,7 @@ export enum EventName {
   ApplicationSplitPaneChanged = "application:splitpane:changed",
   ApplicationOfflineModeChanged = "application:offlinemode:changed",
   Auth = "auth",
+  CapabilitiesUpdated = "capabilities:updated",
 }
 
 @Injectable({

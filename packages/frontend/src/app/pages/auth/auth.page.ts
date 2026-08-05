@@ -13,7 +13,6 @@ import { EventName, EventService } from "../../services/event.service";
 import { LoadingService } from "../../services/loading.service";
 import { MessagingService } from "../../services/messaging.service";
 import { RouteMap, AuthType } from "../../services/util.service";
-import { CapabilitiesService } from "../../services/capabilities.service";
 import { ServerActionsService } from "../../services/server-actions.service";
 import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
 import type { SessionDTO } from "@recipesage/prisma";
@@ -67,7 +66,6 @@ export class AuthPage {
   private navCtrl = inject(NavController);
   private loadingService = inject(LoadingService);
   private messagingService = inject(MessagingService);
-  private capabilitiesService = inject(CapabilitiesService);
   private swCommunicationService = inject(SwCommunicationService);
   private websocketService = inject(WebsocketService);
   private alertCtrl = inject(AlertController);
@@ -220,7 +218,6 @@ export class AuthPage {
     await appIdbStorageManager.setSession(response);
     this.swCommunicationService.triggerFullCacheSync();
 
-    this.capabilitiesService.updateCapabilities();
     this.websocketService.triggerReconnect();
 
     if (
@@ -247,7 +244,6 @@ export class AuthPage {
     await appIdbStorageManager.setSession(session);
     this.swCommunicationService.triggerFullCacheSync();
 
-    this.capabilitiesService.updateCapabilities();
     this.websocketService.triggerReconnect();
 
     if (
