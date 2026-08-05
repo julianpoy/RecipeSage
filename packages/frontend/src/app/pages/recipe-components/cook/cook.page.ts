@@ -136,6 +136,9 @@ export class CookPage {
     }
 
     this.recipe = null;
+    this.ingredients = undefined;
+    this.instructions = undefined;
+    this.notes = undefined;
     this.load();
 
     this.setupWakeLock();
@@ -246,6 +249,8 @@ export class CookPage {
         ...note,
         htmlContent: linkifyHtml(note.htmlContent),
       }));
+    } else {
+      this.notes = undefined;
     }
   }
 

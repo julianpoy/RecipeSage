@@ -234,6 +234,9 @@ export class RecipePage {
     }
 
     this.recipe = null;
+    this.ingredients = undefined;
+    this.instructions = undefined;
+    this.notes = undefined;
     this.similarRecipes = [];
     this.linkedRecipes = [];
 
@@ -520,6 +523,8 @@ export class RecipePage {
         ...note,
         htmlContent: linkifyHtml(note.htmlContent),
       }));
+    } else {
+      this.notes = undefined;
     }
   }
 
