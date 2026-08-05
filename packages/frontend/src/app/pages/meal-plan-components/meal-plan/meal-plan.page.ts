@@ -479,7 +479,8 @@ export class MealPlanPage {
       return;
     }
 
-    const daysList = this.selectedDays
+    const daysToDelete = [...this.selectedDays];
+    const daysList = daysToDelete
       .map((day) => dayjs(day).format("MMM D"))
       .join(", ");
 
@@ -504,7 +505,7 @@ export class MealPlanPage {
           text: del,
           cssClass: "alertDanger",
           handler: () => {
-            this._deleteSelected();
+            this._deleteItemsOnDays(daysToDelete);
           },
         },
       ],
@@ -832,8 +833,8 @@ export class MealPlanPage {
     this.loadWithProgress();
   }
 
-  async _deleteSelected() {
-    const itemIds = this.selectedDays
+  async _deleteItemsOnDays(days: string[]) {
+    const itemIds = days
       .map((day) => this.getItemsOnDay(day).map((item) => item.id))
       .flat();
 
