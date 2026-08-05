@@ -7,7 +7,7 @@
       : ('components.rating.label' | translate: { rating: filledStarCount })
   "
 >
-  @for (star of ratingVisual; track star; let i = $index) {
+  @for (star of ratingVisual; track i; let i = $index) {
     <ion-icon
       [name]="star"
       [attr.aria-hidden]="enableEdit ? null : 'true'"
