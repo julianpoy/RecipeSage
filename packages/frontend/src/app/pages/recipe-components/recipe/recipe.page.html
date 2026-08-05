@@ -53,7 +53,7 @@
                       <b>{{ "pages.recipeDetails.source" | translate }}: </b>
                       @if (recipe.url.trim()) {
                         <a
-                          href="{{ recipe.url ? recipe.url : '' }}"
+                          href="{{ recipeLinkUrl }}"
                           target="_blank"
                           rel="noreferrer noopener"
                           >{{
@@ -123,7 +123,7 @@
                     <b>{{ "pages.recipeDetails.source" | translate }}: </b>
                     @if (recipe.url.trim()) {
                       <a
-                        href="{{ recipe.url ? recipe.url : '' }}"
+                        href="{{ recipeLinkUrl }}"
                         target="_blank"
                         rel="noreferrer noopener"
                         >{{ recipe.source.trim() || recipe.url }}</a
