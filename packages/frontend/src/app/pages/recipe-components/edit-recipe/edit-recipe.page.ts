@@ -347,15 +347,21 @@ export class EditRecipePage {
     this.markAsDirty();
   }
 
+  private toTrimmedString(value: unknown): string {
+    return typeof value === "string" ? value.trim() : String(value ?? "");
+  }
+
   private isValidNutritionValue(value: unknown): boolean {
-    if (value == null || value === "") return true;
-    const num = Number(value);
+    const text = this.toTrimmedString(value);
+    if (text === "") return true;
+    const num = Number(text);
     return !isNaN(num) && num >= 0;
   }
 
   private toNutritionNumber(value: unknown): number | null {
-    if (value == null || value === "") return null;
-    return Number(value);
+    const text = this.toTrimmedString(value);
+    if (text === "") return null;
+    return Number(text);
   }
 
   private nutritionFieldValues(): unknown[] {
@@ -733,6 +739,7 @@ export class EditRecipePage {
   }
 
   async _save() {
+    this.recipe.title = this.recipe.title?.trim();
     if (!this.recipe.title) return;
     if (this.saving) return;
 
