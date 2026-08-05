@@ -198,7 +198,7 @@ const connect = () => {
           self.registration.update();
         } else {
           // We're in a window
-          const confirmed = prompt(
+          const confirmed = confirm(
             "A new version of the app is available. The app will refresh to load the new version",
           );
           if (confirmed) self.location.reload();
