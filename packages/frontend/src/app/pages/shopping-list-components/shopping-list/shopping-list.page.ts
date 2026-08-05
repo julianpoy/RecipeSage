@@ -542,6 +542,8 @@ export class ShoppingListPage {
     if (title.startsWith("::")) {
       const i18nKey = title.substring(2);
       const i18nStr = categoryTitlesToi18n[i18nKey];
+      if (!i18nStr)
+        return this.translate.instant(categoryTitlesToi18n.uncategorized);
 
       return this.translate.instant(i18nStr);
     }
