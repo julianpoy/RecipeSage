@@ -10,6 +10,7 @@ interface WakelockRequest {
 export class WakeLockService {
   isCapable = "wakeLock" in navigator;
   wakeLock: WakeLockSentinel | null = null;
+  wakeLockPending: Promise<WakeLockSentinel> | null = null;
   wakeLockRequests: WakelockRequest[] = [];
 
   constructor() {
@@ -40,31 +41,43 @@ export class WakeLockService {
   }
 
   private async requestWakeLock() {
-    if (!this.wakeLock && this.isCapable) {
-      try {
-        this.wakeLock = await navigator.wakeLock.request("screen");
-        if (!this.wakeLock) return;
+    if (this.wakeLock || this.wakeLockPending || !this.isCapable) return;
 
-        this.wakeLock.addEventListener("release", () => {
-          this.wakeLock = null;
-        });
-
-        console.log("WakeLock requested");
-      } catch (e) {
-        this.wakeLock = null;
-      }
+    let wakeLock: WakeLockSentinel;
+    try {
+      this.wakeLockPending = navigator.wakeLock.request("screen");
+      wakeLock = await this.wakeLockPending;
+    } catch (e) {
+      return;
+    } finally {
+      this.wakeLockPending = null;
     }
+
+    if (this.wakeLockRequests.length === 0) {
+      this.releaseSentinel(wakeLock);
+      return;
+    }
+
+    this.wakeLock = wakeLock;
+    wakeLock.addEventListener("release", () => {
+      if (this.wakeLock === wakeLock) this.wakeLock = null;
+    });
+
+    console.log("WakeLock requested");
   }
 
   private async releaseWakeLock() {
-    if (this.wakeLock) {
-      try {
-        this.wakeLock.release();
-      } catch (e) {}
-      this.wakeLock = null;
+    if (!this.wakeLock) return;
 
-      console.log("WakeLock released");
-    }
+    const wakeLock = this.wakeLock;
+    this.wakeLock = null;
+    this.releaseSentinel(wakeLock);
+
+    console.log("WakeLock released");
+  }
+
+  private releaseSentinel(wakeLock: WakeLockSentinel) {
+    wakeLock.release().catch(() => {});
   }
 
   private onVisiblityChange() {
