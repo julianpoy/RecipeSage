@@ -155,7 +155,13 @@ export class SearchByIngredientsPage {
       });
 
     if (generation !== this.searchGeneration) return;
-    if (!response) return;
+
+    if (!response) {
+      this.hasSearched = false;
+      this.totalTerms = 0;
+      this.results = [];
+      return;
+    }
 
     this.hasSearched = true;
     this.totalTerms = terms.length;
