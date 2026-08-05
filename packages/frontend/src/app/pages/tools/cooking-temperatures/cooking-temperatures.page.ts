@@ -1,4 +1,5 @@
 import { Component, inject, type OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 import { fahrenheitToCelsius } from "@recipesage/util/shared";
@@ -96,6 +97,11 @@ export class CookingTemperaturesPage implements OnInit {
       waterOutline,
       warningOutline,
       flameOutline,
+    });
+
+    this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.buildGroups();
+      this.applyFilter();
     });
   }
 
