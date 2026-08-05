@@ -89,6 +89,12 @@ export const printShoppingListHandler = defineHandler(
         language,
         "pages.shoppingList.category.beverages",
       ),
+      baking: await translate(language, "pages.shoppingList.category.baking"),
+      spices: await translate(language, "pages.shoppingList.category.spices"),
+      condiments: await translate(
+        language,
+        "pages.shoppingList.category.condiments",
+      ),
     };
 
     const itemSummariesTranslated = itemSummaries.map((el) => {
