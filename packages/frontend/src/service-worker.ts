@@ -50,6 +50,7 @@ if (process.env.ENVIRONMENT !== "selfhost") {
 import { registerRoute, NavigationRoute } from "workbox-routing";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
+import type { WorkboxPlugin } from "workbox-core";
 import {
   CacheFirst,
   NetworkFirst,
@@ -74,10 +75,27 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST || []);
 
 const MAX_OFFLINE_APP_AGE = 14; // Days
+const INDEX_NETWORK_TIMEOUT_SECONDS = 1.5;
 
-const indexStrategy = new StaleWhileRevalidate({
+/**
+ * We load the full response here to workaround this:
+ * https://github.com/GoogleChromeLabs/sw-toolbox/issues/221
+ */
+const drainResponseBodyPlugin: WorkboxPlugin = {
+  fetchDidSucceed: async ({ response }) => {
+    if (!response.body) return response;
+
+    await response.clone().arrayBuffer();
+
+    return response;
+  },
+};
+
+const indexStrategy = new NetworkFirst({
   cacheName: BASE_CACHE_NAME,
+  networkTimeoutSeconds: INDEX_NETWORK_TIMEOUT_SECONDS,
   plugins: [
+    drainResponseBodyPlugin,
     new ExpirationPlugin({
       maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_APP_AGE,
     }),
@@ -89,7 +107,7 @@ if (!IS_DESKTOP) {
     new NavigationRoute(
       (options) =>
         indexStrategy.handle({
-          request: new Request("/app/index.html"),
+          request: new Request("/app/index.html", { cache: "no-cache" }),
           event: options.event,
         }),
       { allowlist: [/^\/app(\/|$)/] },
