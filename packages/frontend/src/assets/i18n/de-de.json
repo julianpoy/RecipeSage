@@ -2360,5 +2360,8 @@
     "pages.shoppingList.category.baking": "Backen",
     "pages.shoppingList.category.spices": "Gewürze",
     "pages.shoppingList.category.condiments": "Würzmittel",
-    "components.rating.label": "Bewertung: {{rating}} von 5"
+    "components.rating.label": "Bewertung: {{rating}} von 5",
+    "pages.app.newMessageToast.message": "Neue Nachricht von {{name}}",
+    "pages.cook.loadFailed": "Rezept konnte nicht geladen werden. Bitte checke deine Verbindung und versuche es erneut.",
+    "pages.app.localDbUpgrade.confirm": "Eine neue Version der App ist verfügbar. Die App wird aktualisiert um die neueste Version zu laden"
 }
