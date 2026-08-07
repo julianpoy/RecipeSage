@@ -25,17 +25,23 @@ if (!FONT_PATH) throw new Error("FONTS_PATH must be provided");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const pdfmake = _pdfmake as any;
 
-pdfmake.addFonts({
+const FONTS = {
   NotoSans: {
     normal: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Regular.ttf"),
     bold: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Bold.ttf"),
     italics: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Italic.ttf"),
     bolditalics: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-BoldItalic.ttf"),
   },
-});
+};
+
+pdfmake.addFonts(FONTS);
+
+const allowedFontPaths = new Set(Object.values(FONTS.NotoSans));
 
 pdfmake.setUrlAccessPolicy(() => false);
-pdfmake.setLocalAccessPolicy(() => false);
+pdfmake.setLocalAccessPolicy((filePath: string) =>
+  allowedFontPaths.has(path.resolve(filePath)),
+);
 
 export interface RecipePDFStrings {
   untitled: string;
