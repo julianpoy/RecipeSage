@@ -24,7 +24,9 @@ router.all(
       return;
     }
 
-    const session = await validateSession(req.query.token);
+    const token =
+      typeof req.query.token === "string" ? req.query.token : undefined;
+    const session = token ? await validateSession(token) : undefined;
     if (!session) {
       res.status(401).send("Unauthorized");
       ws.close();
