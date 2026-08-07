@@ -1924,5 +1924,8 @@
     "pages.measurementConverter.ingredients.breadCrumbsFresh": "Chapelure (fraîche)",
     "pages.measurementConverter.ingredients.panko": "Panko (chapelure japonaise)",
     "pages.measurementConverter.ingredients.caramel": "Caramel",
-    "pages.cookingTemperatures.safety.safeMin": "Les indicateurs verts indiquent les températures internes minimales de sécurité de l'USDA. Mesurez avec un thermomètre de cuisine dans la partie la plus épaisse de l'aliment, en évitant l'os et la graisse."
+    "pages.cookingTemperatures.safety.safeMin": "Les indicateurs verts indiquent les températures internes minimales de sécurité de l'USDA. Mesurez avec un thermomètre de cuisine dans la partie la plus épaisse de l'aliment, en évitant l'os et la graisse.",
+    "pages.cookingTemperatures.items.poultryAll.state": "Entier, morceaux, filets, cuisses, ailes",
+    "pages.cookingTemperatures.items.groundPoultry.label": "Volaille hachée",
+    "pages.cookingTemperatures.items.groundPoultry.state": "Poulet haché, dinde, canard"
 }
