@@ -121,9 +121,10 @@ export type JsonLD = {
 };
 
 const parseSchemaOrgNumber = (
-  value: string | undefined,
+  value: string | number | null | undefined,
 ): number | undefined => {
-  if (!value) return undefined;
+  if (value === null || value === undefined) return undefined;
+  if (typeof value === "number") return isNaN(value) ? undefined : value;
   const match = value.match(/-?\d+(?:\.\d+)?/);
   if (!match) return undefined;
   const parsed = parseFloat(match[0]);

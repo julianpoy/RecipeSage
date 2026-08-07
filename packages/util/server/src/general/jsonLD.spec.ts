@@ -224,6 +224,43 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
       expect(entry.recipe.instructions).toEqual("[Prep]\nChop");
     });
   });
+
+  describe("nutrition", () => {
+    it("parses nutrition values supplied as strings", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        nutrition: {
+          "@type": "NutritionInformation",
+          calories: "250 kcal",
+          proteinContent: "12.5 g",
+        },
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.nutritionCalories).toEqual(250);
+      expect(entry.recipe.nutritionProtein).toEqual(12.5);
+    });
+
+    it("parses nutrition values supplied as numbers", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        nutrition: JSON.parse(
+          '{"@type":"NutritionInformation","calories":250,"proteinContent":12.5,"transFatContent":0}',
+        ),
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.nutritionCalories).toEqual(250);
+      expect(entry.recipe.nutritionProtein).toEqual(12.5);
+      expect(entry.recipe.nutritionTransFat).toEqual(0);
+    });
+  });
 });
 
 describe("recipeToJSONLD", () => {
