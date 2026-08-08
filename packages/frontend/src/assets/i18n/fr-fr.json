@@ -1942,5 +1942,10 @@
     "pages.cookingTemperatures.items.lambMediumRare.state": "Cœur rose et tiède",
     "pages.cookingTemperatures.items.lambMediumWell.label": "Agneau (bien cuit)",
     "pages.cookingTemperatures.items.lambMediumWell.state": "Cuisson quasi complète, légère trace de rose",
-    "pages.cookingTemperatures.items.lambWellDone.label": "Agneau (bien cuit)"
+    "pages.cookingTemperatures.items.lambWellDone.label": "Agneau (bien cuit)",
+    "pages.cookingTemperatures.items.eggDishes.state": "Quiches, frittatas, crèmes cuites au four, gratins aux œufs",
+    "pages.cookingTemperatures.items.custard.label": "Crème anglaise / curd",
+    "pages.cookingTemperatures.items.custard.state": "Crème anglaise, crème pâtissière, crème de citron. Retirez du feu juste avant l'ébullition ; les œufs se brouillent au-dessus de ~85 °C / 185 °F.",
+    "pages.cookingTemperatures.items.leftovers.label": "Restes et gratins",
+    "pages.settings.jobs": "Afficher tous les travaux en arrière-plan"
 }
