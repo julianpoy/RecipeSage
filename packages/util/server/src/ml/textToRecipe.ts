@@ -1,4 +1,4 @@
-import { ocrFormatRecipeSchema } from "../ml/chatFunctionsVercel";
+import { ocrFormatRecipeModelSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { metrics } from "../general";
 import { config } from "../general/config";
@@ -76,7 +76,7 @@ export const textToRecipe = async (
       temperature: 0,
       prompt: prompts[inputType] + text,
       output: Output.object({
-        schema: ocrFormatRecipeSchema,
+        schema: ocrFormatRecipeModelSchema,
       }),
     });
 

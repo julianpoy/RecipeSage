@@ -1,4 +1,4 @@
-import { ocrFormatRecipeSchema } from "../ml/chatFunctionsVercel";
+import { ocrFormatRecipeModelSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
@@ -52,7 +52,7 @@ export const visionToRecipe = async (
           },
         ],
         output: Output.object({
-          schema: ocrFormatRecipeSchema,
+          schema: ocrFormatRecipeModelSchema,
         }),
       });
 

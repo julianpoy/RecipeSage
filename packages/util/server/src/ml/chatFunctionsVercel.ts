@@ -5,6 +5,7 @@ import {
   convertPrismaRecipeSummaryToRecipeSummary,
 } from "../db";
 import { prisma, recipeSummary, RecipeSummary } from "@recipesage/prisma";
+import { aiStructuredModel } from "./aiStructuredModel";
 
 export type CreateAssistantRecipeToolResult = {
   storedRecipeInfo: RecipeSummary;
@@ -140,6 +141,10 @@ export const ocrFormatRecipeSchema = z.object({
       "Any nutrition information present in the source text, preserved as-is. Include all nutrition values found (calories, fat, protein, carbs, etc). Null if no nutrition information is present.",
     ),
 });
+
+export const ocrFormatRecipeModelSchema = aiStructuredModel(
+  ocrFormatRecipeSchema,
+);
 
 export const initOCRFormatRecipeTool = (
   result: StandardizedRecipeImportEntry[],

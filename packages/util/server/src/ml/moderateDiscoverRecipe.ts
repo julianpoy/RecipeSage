@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { generateText, Output, type ImagePart } from "ai";
+import { aiStructuredModel } from "./aiStructuredModel";
 import {
   prisma,
   DiscoverApprovalState,
@@ -38,6 +39,8 @@ const moderationResultSchema = z.object({
   categories: z.array(z.string()),
   language: z.string(),
 });
+
+const moderationResultModelSchema = aiStructuredModel(moderationResultSchema);
 
 const sanitizeForPrompt = (value: string) => value.replace(/[<>]/g, " ");
 
@@ -118,7 +121,7 @@ export const moderateDiscoverRecipe = async (discoverRecipeId: string) => {
         },
       ],
       output: Output.object({
-        schema: moderationResultSchema,
+        schema: moderationResultModelSchema,
       }),
     });
 
