@@ -21,7 +21,6 @@ import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
 import * as Search from "@recipesage/util/server/search";
 import * as SubscriptionsService from "../services/subscriptions.js";
-import * as JSONLDService from "../services/json-ld.js";
 import { getRecipesWithConstraints } from "../services/database/getRecipesWithConstraints";
 
 // Util
@@ -358,39 +357,6 @@ router.get(
     if (!recipe.isOwner) recipe.labels = [];
 
     res.status(200).json(recipe);
-  }),
-);
-
-router.get(
-  "/:recipeId/json-ld",
-  cors(),
-  MiddlewareService.validateSession(["user"], true),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    let recipe = await Recipe.findOne({
-      where: {
-        id: req.params.recipeId,
-      },
-      include: [
-        {
-          model: Image,
-          as: "images",
-          attributes: ["id", "location"],
-        },
-      ],
-      order: [["title", "ASC"]],
-    });
-
-    if (!recipe) {
-      throw NotFound("Recipe with that ID not found!");
-    }
-
-    recipe = recipe.toJSON();
-
-    recipe = UtilService.sortRecipeImages(recipe);
-
-    const jsonLD = JSONLDService.recipeToJSONLD(recipe);
-
-    res.status(200).json(jsonLD);
   }),
 );
 
