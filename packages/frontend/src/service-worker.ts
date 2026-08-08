@@ -75,6 +75,7 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST || []);
 
 const MAX_OFFLINE_APP_AGE = 14; // Days
+const MAX_LANGUAGE_AGE = 14; // Days
 const INDEX_NETWORK_TIMEOUT_SECONDS = 1.5;
 
 /**
@@ -94,10 +95,26 @@ const drainResponseBodyPlugin: WorkboxPlugin = {
 const indexStrategy = new NetworkFirst({
   cacheName: BASE_CACHE_NAME,
   networkTimeoutSeconds: INDEX_NETWORK_TIMEOUT_SECONDS,
+  fetchOptions: {
+    cache: "no-cache",
+  },
   plugins: [
     drainResponseBodyPlugin,
     new ExpirationPlugin({
       maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_APP_AGE,
+    }),
+  ],
+});
+
+const langStrategy = new StaleWhileRevalidate({
+  cacheName: LANG_CACHE_NAME,
+  fetchOptions: {
+    cache: "no-cache",
+  },
+  plugins: [
+    new ExpirationPlugin({
+      maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
+      maxEntries: 25,
     }),
   ],
 });
@@ -156,21 +173,23 @@ self.addEventListener("install", async (event) => {
         .open(BASE_CACHE_NAME)
         .then((cache) =>
           cache.add(new Request("/app/index.html", { cache: "reload" })),
-        ),
+        )
+        .catch((e) => {
+          console.error(e);
+        }),
     );
 
+    const [, langWarmDone] = langStrategy.handleAll({
+      request: new Request(
+        `/app/assets/i18n/en-us.json?version=${process.env.APP_VERSION}`,
+      ),
+      event,
+    });
+
     event.waitUntil(
-      caches
-        .delete(LANG_CACHE_NAME)
-        .then(() =>
-          caches
-            .open(LANG_CACHE_NAME)
-            .then((cache) =>
-              cache.add(
-                new Request("/app/assets/i18n/en-us.json", { cache: "reload" }),
-              ),
-            ),
-        ),
+      langWarmDone.catch((e) => {
+        console.error(e);
+      }),
     );
   }
 
@@ -204,23 +223,10 @@ addEventListener("message", async (event) => {
   }
 });
 
-const MAX_LANGUAGE_AGE = 14; // Days
-
 if (!IS_DESKTOP) {
   registerRoute(/\/app\/index\.html$/, indexStrategy);
 
-  registerRoute(
-    /\/app\/assets\/i18n\//,
-    new StaleWhileRevalidate({
-      cacheName: LANG_CACHE_NAME,
-      matchOptions: { ignoreSearch: true },
-      plugins: [
-        new ExpirationPlugin({
-          maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
-        }),
-      ],
-    }),
-  );
+  registerRoute(/\/app\/assets\/i18n\//, langStrategy);
 }
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
