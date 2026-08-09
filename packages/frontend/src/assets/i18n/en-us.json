@@ -554,6 +554,8 @@
   "pages.mealPlan.list.empty": "No meals are scheduled. Press the + button to add one.",
   "pages.mealPlan.list.noUpcoming": "No upcoming meals planned. Press + to plan your next meal.",
   "pages.mealPlan.list.pastMeals": "Past Meals",
+  "pages.mealPlan.list.noMealsForMonth": "No meals for {{monthYear}}",
+  "pages.mealPlan.list.showMore": "Show more",
   "pages.mealPlan.modal.emptyDays.header": "Empty day(s) selected",
   "pages.mealPlan.modal.emptyDays.message": "The day(s) you've selected do not contain any meal plan items. You'll need to select at least one day with meal plan items.",
   "pages.mealPlan.modal.copy.header": "Copy To",

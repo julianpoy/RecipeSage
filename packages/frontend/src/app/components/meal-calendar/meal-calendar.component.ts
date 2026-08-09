@@ -104,6 +104,7 @@ export class MealCalendarComponent implements OnDestroy {
   dayTitleKeys?: string[];
 
   @Output() selectedDaysChange = new EventEmitter<string[]>();
+  @Output() visibleRangeChange = new EventEmitter<[Dayjs, Dayjs]>();
 
   @Output() itemMoved = new EventEmitter<any>();
   @Output() itemClicked = new EventEmitter<any>();
@@ -229,6 +230,8 @@ export class MealCalendarComponent implements OnDestroy {
     this.dragAnchor = undefined;
     this.center = this.getNewCenter(direction);
     const bounds = this.generateCalendar();
+
+    this.visibleRangeChange.emit([bounds[0], bounds[1]]);
 
     if (
       dayjs(this.selectedDays[0]).isBefore(bounds[0]) ||

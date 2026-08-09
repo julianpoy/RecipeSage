@@ -146,6 +146,18 @@ export class MealPlansActionsService extends ActionsBase {
     );
   }
 
+  getMealPlanItemsByDateRange(
+    input: RouterInputs["mealPlans"]["getMealPlanItemsByDateRange"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<
+    RouterOutputs["mealPlans"]["getMealPlanItemsByDateRange"] | undefined
+  > {
+    return this.passThrough(
+      () => this.trpc.mealPlans.getMealPlanItemsByDateRange.query(input),
+      errorHandlers,
+    );
+  }
+
   createMealPlan(
     input: RouterInputs["mealPlans"]["createMealPlan"],
     errorHandlers?: ErrorHandlers,

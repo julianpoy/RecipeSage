@@ -460,6 +460,13 @@ export class UtilService {
     return date.toLocaleString(this.getDisplayLocale(), { month: "long" });
   }
 
+  formatMonthYear(date: Date): string {
+    return date.toLocaleDateString(this.getDisplayLocale(), {
+      month: "long",
+      year: "numeric",
+    });
+  }
+
   getAppBrowserLang(): string {
     const isSupported = (
       lang: string | undefined,
