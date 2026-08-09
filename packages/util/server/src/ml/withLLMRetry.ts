@@ -10,6 +10,9 @@ import { metrics } from "../general/metrics";
 
 const MAX_ATTEMPTS = 3;
 const RETRY_WAIT_MS = 400;
+const RETRY_TEMPERATURE_STEP = 0.3;
+
+const retryTemperature = (attempt: number) => attempt * RETRY_TEMPERATURE_STEP;
 
 export type LLMRetryCategory =
   | "text_to_recipe"
@@ -28,12 +31,12 @@ const retryReason = (error: unknown): string | undefined => {
 
 export async function withLLMRetry<T>(
   category: LLMRetryCategory,
-  fn: () => Promise<T>,
+  fn: (temperature: number) => Promise<T>,
 ): Promise<T> {
   let attempt = 0;
   while (true) {
     try {
-      return await fn();
+      return await fn(retryTemperature(attempt));
     } catch (err) {
       attempt++;
       const reason = retryReason(err);

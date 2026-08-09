@@ -48,6 +48,7 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   isElectron = getIsElectron();
 
   private removeAuthCodeListener?: () => void;
+  private removeGoogleScriptLoadListener?: () => void;
 
   ngAfterViewInit() {
     if (IS_SELFHOST) return;
@@ -59,27 +60,39 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const googleScriptNodeId = "google-auth-script";
-    const existingNode = document.getElementById(googleScriptNodeId);
-    if (!existingNode) {
-      const googleScriptNode = document.createElement("script");
-      googleScriptNode.src = "https://accounts.google.com/gsi/client";
-      googleScriptNode.async = true;
-      googleScriptNode.id = googleScriptNodeId;
-      googleScriptNode.addEventListener("load", () => {
-        this.initializeGoogleAccounts();
-        if (this.showButton) this.renderGoogleButton();
-        if (this.autoPrompt) this.showGoogleAuthPrompt();
-      });
-      document.head.appendChild(googleScriptNode);
-    } else {
+    const onGoogleReady = () => {
+      this.initializeGoogleAccounts();
       if (this.showButton) this.renderGoogleButton();
       if (this.autoPrompt) this.showGoogleAuthPrompt();
+    };
+
+    if (getGoogleRef()?.accounts) {
+      onGoogleReady();
+      return;
     }
+
+    const googleScriptNodeId = "google-auth-script";
+    const existingNode = document.getElementById(googleScriptNodeId);
+    if (existingNode) {
+      existingNode.addEventListener("load", onGoogleReady);
+      this.removeGoogleScriptLoadListener = () =>
+        existingNode.removeEventListener("load", onGoogleReady);
+      return;
+    }
+
+    const googleScriptNode = document.createElement("script");
+    googleScriptNode.src = "https://accounts.google.com/gsi/client";
+    googleScriptNode.async = true;
+    googleScriptNode.id = googleScriptNodeId;
+    googleScriptNode.addEventListener("load", onGoogleReady);
+    this.removeGoogleScriptLoadListener = () =>
+      googleScriptNode.removeEventListener("load", onGoogleReady);
+    document.head.appendChild(googleScriptNode);
   }
 
   ngOnDestroy() {
     this.removeAuthCodeListener?.();
+    this.removeGoogleScriptLoadListener?.();
   }
 
   startDesktopGoogleSignIn() {
@@ -135,7 +148,7 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   }
 
   renderGoogleButton() {
-    getGoogleRef().accounts.id.renderButton(
+    getGoogleRef()?.accounts.id.renderButton(
       this.googleButtonContainer.nativeElement,
       {
         type: "standard",

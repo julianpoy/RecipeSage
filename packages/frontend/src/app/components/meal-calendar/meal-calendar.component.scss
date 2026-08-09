@@ -26,6 +26,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  > span {
+    flex: 1;
+    max-width: 16rem;
+  }
 }
 
 .calendar {

@@ -3,7 +3,10 @@ import * as Sentry from "@sentry/node";
 import { authenticatedProcedure } from "../../trpc";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
-import { FileTransformError } from "@recipesage/util/server/general";
+import {
+  FetchURLError,
+  FileTransformError,
+} from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
@@ -43,7 +46,7 @@ export const createRecipeImageFromUrl = authenticatedProcedure
         encodeInHighRes,
       );
     } catch (e) {
-      if (e instanceof ImageFetchError) {
+      if (e instanceof ImageFetchError || e instanceof FetchURLError) {
         throw new TRPCError({
           message: "Could not fetch image from url",
           code: "BAD_REQUEST",

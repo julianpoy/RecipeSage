@@ -2,25 +2,41 @@ import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import type { LanguageModel } from "ai";
 import { config } from "../general/config";
 
-export const aiProvider = (() => {
+export const aiProvider: (
+  modelId: string,
+  options?: {
+    requireParameters?: boolean;
+  },
+) => LanguageModel = (() => {
   const commonConfig = {
     apiKey: process.env.AI_API_KEY || "selfhost-invalid-placeholder",
     baseURL: process.env.AI_API_BASE_URL || undefined,
   };
   switch (config.ai.provider) {
     case "openrouter": {
-      return createOpenRouter(commonConfig);
+      const provider = createOpenRouter(commonConfig);
+      return (modelId, options) =>
+        provider(
+          modelId,
+          options?.requireParameters
+            ? { provider: { require_parameters: true } }
+            : undefined,
+        );
     }
     case "google": {
-      return createGoogleGenerativeAI(commonConfig);
+      const provider = createGoogleGenerativeAI(commonConfig);
+      return (modelId) => provider(modelId);
     }
     case "openai": {
-      return createOpenAI(commonConfig);
+      const provider = createOpenAI(commonConfig);
+      return (modelId) => provider(modelId);
     }
     case "anthropic": {
-      return createAnthropic(commonConfig);
+      const provider = createAnthropic(commonConfig);
+      return (modelId) => provider(modelId);
     }
     default: {
       throw new Error(`Unsupported AI provider: ${config.ai.provider}`);

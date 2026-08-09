@@ -187,6 +187,18 @@ describe("withLLMRetry", () => {
     exhaustedSpy.mockRestore();
   });
 
+  it("starts at temperature 0 and increases it on each retry", async () => {
+    const fn = vi
+      .fn()
+      .mockRejectedValueOnce(makeNoObjectError())
+      .mockRejectedValueOnce(makeNoObjectError())
+      .mockResolvedValue("ok");
+    await withLLMRetry("text_to_recipe", fn);
+    expect(fn).toHaveBeenNthCalledWith(1, 0);
+    expect(fn).toHaveBeenNthCalledWith(2, 0.3);
+    expect(fn).toHaveBeenNthCalledWith(3, 0.6);
+  });
+
   it("waits ~400ms between attempts", async () => {
     const fn = vi
       .fn()

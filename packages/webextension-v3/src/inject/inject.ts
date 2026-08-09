@@ -20,7 +20,23 @@ import { initI18n, t } from "../i18n/t";
 
 const EXTENSION_CONTAINER_ID = "recipeSageBrowserExtensionRootContainer";
 
-const MOVE_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>`;
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+const MOVE_ICON_PATH =
+  "M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z";
+
+const createMoveIcon = () => {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "currentColor");
+  svg.setAttribute("aria-hidden", "true");
+
+  const path = document.createElementNS(SVG_NS, "path");
+  path.setAttribute("d", MOVE_ICON_PATH);
+  svg.appendChild(path);
+
+  return svg;
+};
 
 interface ExtensionWindow extends Window {
   [EXTENSION_CONTAINER_ID]?: boolean;
@@ -398,7 +414,7 @@ function initEditor(
 
     const moveHandle = document.createElement("span");
     moveHandle.className = "move-handle";
-    moveHandle.innerHTML = MOVE_ICON_SVG;
+    moveHandle.appendChild(createMoveIcon());
     leftHeadline.appendChild(moveHandle);
 
     const logoLink = document.createElement("a");

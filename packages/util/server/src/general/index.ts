@@ -32,6 +32,7 @@ export * from "./firebaseAdmin";
 export * from "./firebase";
 export * from "./dispatchMessageNotification";
 export * from "./fetch";
+export * from "./fetchURLError";
 export * from "./jsonLD";
 export * from "./collectRecipeNodes";
 export * from "./multerAutoCleanup";

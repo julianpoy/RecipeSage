@@ -1,4 +1,4 @@
-import { ocrFormatRecipeSchema } from "../ml/chatFunctionsVercel";
+import { ocrFormatRecipeModelSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
@@ -27,12 +27,12 @@ export const visionToRecipe = async (
 ) => {
   const llmResponse = await withLLMRetryOptional(
     "vision_to_recipe",
-    async () => {
+    async (temperature) => {
       const response = await generateText({
         system:
           "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank. A header can be denoted in the ingredients, instructions, or notes by prefixing the line with a # sign.",
         model: aiProvider(config.ai.model.vision),
-        temperature: 0,
+        temperature,
         messages: [
           {
             role: "user",
@@ -52,7 +52,7 @@ export const visionToRecipe = async (
           },
         ],
         output: Output.object({
-          schema: ocrFormatRecipeSchema,
+          schema: ocrFormatRecipeModelSchema,
         }),
       });
 
