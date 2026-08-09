@@ -22,6 +22,9 @@ import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvaila
 import { handleUploadErrors } from "../../../util/handleUploadErrors";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   query: z.object({
     labels: z.string().optional(),
   }),
@@ -31,6 +34,16 @@ export const textfilesHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/textfiles",
+      tags: ["import"],
+      summary: "Import recipes from plain text files",
+      successStatus: 201,
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(

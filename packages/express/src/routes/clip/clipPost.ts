@@ -13,11 +13,15 @@ import {
 } from "@recipesage/util/server/general";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
 import { stripBlankLines } from "@recipesage/util/shared";
+import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 
 const schema = {
   body: z.object({
     url: z.string().optional(),
     html: z.string().optional(),
+  }),
+  response: standardizedRecipeImportEntryForWebSchema.shape.recipe.extend({
+    imageURL: z.string(),
   }),
 };
 
@@ -25,6 +29,12 @@ export const clipPostHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/clip",
+      tags: ["clip"],
+      summary: "Clip a recipe from a URL or raw HTML",
+    },
   },
   async (req, res) => {
     const userId = res.locals.session.userId;
@@ -51,7 +61,10 @@ export const clipPostHandler = defineHandler(
 
         return {
           statusCode: 200,
-          data: results,
+          data: {
+            ...results.recipe,
+            imageURL: results.images[0] || "",
+          },
         };
       } catch (e) {
         if (e instanceof ClipTimeoutError || e instanceof ClipFetchError) {

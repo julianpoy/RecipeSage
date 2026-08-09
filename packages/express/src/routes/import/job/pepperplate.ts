@@ -8,6 +8,9 @@ import { enqueueJob } from "@recipesage/util/server/general";
 import { getRequestLanguage } from "@recipesage/util/server/general";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   body: z.object({
     username: z.string(),
     password: z.string(),
@@ -21,6 +24,13 @@ export const pepperplateHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/pepperplate",
+      tags: ["import"],
+      summary: "Import recipes from a Pepperplate account",
+      successStatus: 201,
+    },
   },
   async (req, res) => {
     const userId = res.locals.session.userId;

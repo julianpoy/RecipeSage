@@ -14,15 +14,27 @@ import { tmpdir } from "os";
 import { documentToRecipe } from "@recipesage/util/server/ml";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
 import { handleUploadErrors } from "../../util/handleUploadErrors";
+import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
-const schema = {};
+const schema = {
+  response: standardizedRecipeImportEntryForWebSchema,
+};
 
 export const getRecipeFromDocumentHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/ml/getRecipeFromDocument",
+      tags: ["ml"],
+      summary: "Recognize a recipe from an uploaded document",
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(

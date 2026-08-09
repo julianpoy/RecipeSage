@@ -6,6 +6,7 @@ import { tmpdir } from "os";
 import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
 import { createReadStream } from "fs";
 import type { StandardizedRecipeImportEntryForWeb } from "@recipesage/prisma";
+import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 import {
   isRecipeRecognitionSuccess,
   recordCreditsSpent,
@@ -15,12 +16,24 @@ import { handleUploadErrors } from "../../util/handleUploadErrors";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
-const schema = {};
+const schema = {
+  response: standardizedRecipeImportEntryForWebSchema,
+};
 
 export const getRecipeFromOCRHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/ml/getRecipeFromOCR",
+      tags: ["ml"],
+      summary: "Recognize a recipe from one or more images using OCR",
+      upload: {
+        field: "file",
+        multiple: true,
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(
