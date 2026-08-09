@@ -23,6 +23,13 @@ export class ClipError extends Error {
   }
 }
 
+export class PageTooLargeError extends Error {
+  constructor() {
+    super("Page too large to clip");
+    this.name = "PageTooLargeError";
+  }
+}
+
 export const clipFromHtml = async (
   apiBase: string,
   token: string,

@@ -1,4 +1,4 @@
-import { ClipError } from "../api/clip";
+import { ClipError, PageTooLargeError } from "../api/clip";
 import type { ClipResult } from "../api/clip";
 import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
@@ -17,6 +17,7 @@ import {
 } from "../api/storage";
 import { getEffectiveBases } from "../config";
 import { initI18n, t } from "../i18n/t";
+import { pruneDomForClip } from "../api/pruneDomForClip";
 
 const EXTENSION_CONTAINER_ID = "recipeSageBrowserExtensionRootContainer";
 
@@ -123,7 +124,7 @@ async function autoSnipFromPage(
 ): Promise<ClipResult | undefined> {
   if (!token) return undefined;
   try {
-    return await clipFromHtmlViaBg(document.documentElement.outerHTML);
+    return await clipFromHtmlViaBg(pruneDomForClip());
   } catch (e) {
     if (e instanceof ClipError && e.status === 401) {
       await setToken(null);
@@ -131,6 +132,10 @@ async function autoSnipFromPage(
     }
     if (e instanceof ClipError && e.status === 429) {
       window.alert(t("webextension.creditLimitAlert"));
+      return undefined;
+    }
+    if (e instanceof PageTooLargeError) {
+      window.alert(t("webextension.pageTooLarge"));
       return undefined;
     }
     console.warn("Auto-fill from page failed; opening empty editor", e);

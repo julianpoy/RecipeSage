@@ -108,7 +108,7 @@ app.set("view engine", "pug");
 if (process.env.NODE_ENV !== "test") app.use(logger("dev"));
 app.use(
   bodyParser.json({
-    limit: "1MB",
+    limit: "2MB",
     verify: (req, res, buf) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;

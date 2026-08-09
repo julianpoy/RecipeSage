@@ -1,4 +1,5 @@
 import { ClipError, clipFromHtml } from "../api/clip";
+import { pruneDomForClip } from "../api/pruneDomForClip";
 import {
   MissingTitleError,
   NotLoggedInError,
@@ -81,7 +82,7 @@ const login = async () => {
 const fetchActivePageHtml = async (tabId: number): Promise<string | null> => {
   const [scriptResult] = await chrome.scripting.executeScript({
     target: { tabId },
-    func: () => document.documentElement.outerHTML,
+    func: pruneDomForClip,
   });
   if (typeof scriptResult.result !== "string") return null;
   return scriptResult.result;
@@ -181,6 +182,11 @@ const autoClip = async () => {
     if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
       showOnly("start");
       window.alert(t("webextension.creditLimitAlert"));
+      return;
+    }
+    if (e instanceof ClipError && e.status === 413) {
+      showOnly("start");
+      window.alert(t("webextension.pageTooLarge"));
       return;
     }
     console.error(e);
