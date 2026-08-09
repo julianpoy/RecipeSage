@@ -1983,5 +1983,13 @@
     "pages.discover.categories.southeastAsian": "Asie du Sud-Est",
     "pages.discover.categories.vegetarian": "Végétarien",
     "pages.discover.categories.vegan": "Ou, ajuster selon vos portions (la recette originale est de {{originalServings}} portions)\"",
-    "components.scaleRecipe.servingsLabel": "Ou, ajuster selon vos portions (la recette originale est de {{originalServings}} portions)"
+    "components.scaleRecipe.servingsLabel": "Ou, ajuster selon vos portions (la recette originale est de {{originalServings}} portions)",
+    "pages.tools.searchByIngredients.subtitle": "Trouvez les recettes que vous pouvez préparer avec les ingrédients que vous avez déjà",
+    "components.recurrenceEditor.weekday.3": "Mercredi",
+    "components.recurrenceEditor.weekday.1": "Lundi",
+    "components.recurrenceEditor.weekday.2": "Mardi",
+    "components.recurrenceEditor.weekday.4": "Jeudi",
+    "components.recurrenceEditor.weekday.5": "Vendredi",
+    "components.recurrenceEditor.weekday.6": "Samedi",
+    "components.recurrenceEditor.weekday.0": "Dimanche"
 }
