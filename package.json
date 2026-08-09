@@ -141,6 +141,7 @@
     "workbox-routing": "^7.4.1",
     "workbox-strategies": "^7.4.1",
     "xml-js": "^1.6.11",
+    "yaml": "^2.9.0",
     "yauzl-promise": "^4.0.0",
     "zip-stream": "^7.0.5",
     "zod": "^4.4.3",

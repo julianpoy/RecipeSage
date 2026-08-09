@@ -17,6 +17,7 @@ import { fdxzImportJobHandler } from "./handlers/fdxzImportJobHandler";
 import { lcbImportJobHandler } from "./handlers/lcbImportJobHandler";
 import { melaImportJobHandler } from "./handlers/melaImportJobHandler";
 import { croutonImportJobHandler } from "./handlers/croutonImportJobHandler";
+import { cookbookManagerComImportJobHandler } from "./handlers/cookbookManagerComImportJobHandler";
 
 export const IMPORT_JOB_STEP_COUNT = 3;
 
@@ -76,6 +77,9 @@ export const processImportJob = async (
       break;
     case "crouton":
       await croutonImportJobHandler(job, jobQueueItem);
+      break;
+    case "cookbookmanagercom":
+      await cookbookManagerComImportJobHandler(job, jobQueueItem);
       break;
     default:
       throw new Error(`Unsupported import type: ${job.meta.importType}`);
