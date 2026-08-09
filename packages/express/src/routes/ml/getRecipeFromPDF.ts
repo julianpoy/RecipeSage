@@ -10,15 +10,27 @@ import {
 } from "@recipesage/util/server/general";
 import { assertCreditsAvailableExpress } from "../../util/assertCreditsAvailableExpress";
 import { handleUploadErrors } from "../../util/handleUploadErrors";
+import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 
 const FILE_SIZE_LIMIT_MB = 50;
 
-const schema = {};
+const schema = {
+  response: standardizedRecipeImportEntryForWebSchema,
+};
 
 export const getRecipeFromPDFHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/ml/getRecipeFromPDF",
+      tags: ["ml"],
+      summary: "Recognize a recipe from a PDF file",
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(

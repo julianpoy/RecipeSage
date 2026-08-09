@@ -14,6 +14,7 @@ import {
 } from "@recipesage/util/server/general";
 import { Session } from "@recipesage/prisma";
 import { rateLimitHandler } from "./rateLimitHandler";
+import { OpenApiRouteMeta, registerOpenApiRoute } from "./openapi/registry";
 
 const handleServerError = (e: unknown, res: Response) => {
   if (e instanceof ServerError) {
@@ -69,6 +70,7 @@ export const defineHandler = <
     rateLimit?: RateLimitTier;
     beforeHandlers?: Handler[];
     afterHandlers?: Handler[];
+    openapi?: OpenApiRouteMeta;
   },
   handler: (
     req: Request<GParams, GResponse, GBody, GQuery>,
@@ -83,6 +85,13 @@ export const defineHandler = <
     next: NextFunction,
   ) => Promise<HandlerResult | void>,
 ) => {
+  if (opts.openapi) {
+    registerOpenApiRoute({
+      openapi: opts.openapi,
+      schema: opts.schema,
+    });
+  }
+
   return [
     ...(opts.rateLimit ? [rateLimitHandler(opts.rateLimit)] : []),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -141,7 +150,24 @@ export const defineHandler = <
         const result = await handler(req as any, res as any, next);
 
         if (result) {
-          res.status(result.statusCode).send(result.data);
+          let data = result.data;
+          if (opts.schema.response) {
+            try {
+              data = opts.schema.response.parse(result.data);
+            } catch (e) {
+              if (e instanceof ZodError) {
+                const routeLabel = opts.openapi
+                  ? `${opts.openapi.method.toUpperCase()} ${opts.openapi.path}`
+                  : req.path;
+                throw new InternalServerError(
+                  `Response validation failed for ${routeLabel}`,
+                  { cause: e },
+                );
+              }
+              throw e;
+            }
+          }
+          res.status(result.statusCode).send(data);
         }
       } catch (e) {
         handleServerError(e, res);

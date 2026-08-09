@@ -10,6 +10,9 @@ import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvaila
 import { getRequestLanguage } from "@recipesage/util/server/general";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   body: z.object({
     urls: z.array(z.string()).min(1).max(5000),
   }),
@@ -22,6 +25,13 @@ export const urlsHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/urls",
+      tags: ["import"],
+      summary: "Import recipes from a list of URLs",
+      successStatus: 201,
+    },
   },
   async (req, res) => {
     const userId = res.locals.session.userId;

@@ -22,6 +22,9 @@ import { handleUploadErrors } from "../../../util/handleUploadErrors";
 import { assertCreditsAvailableExpress } from "../../../util/assertCreditsAvailableExpress";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   query: z.object({
     labels: z.string().optional(),
   }),
@@ -31,6 +34,16 @@ export const pdfsHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/pdfs",
+      tags: ["import"],
+      summary: "Import recipes from PDF files",
+      successStatus: 201,
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(
