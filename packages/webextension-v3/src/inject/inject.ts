@@ -282,8 +282,9 @@ function initEditor(
   nutritionPromise: Promise<Nutrition | undefined>,
 ) {
   const currentSnip: CurrentSnip = {
-    url: window.location.href,
     ...autoSnipResults,
+    source: autoSnipResults.source || window.location.hostname,
+    url: window.location.href,
   };
   let isDirty = false;
   let container: HTMLDivElement | undefined;
