@@ -24,16 +24,6 @@ const isAllowedRedirectUrl = (value: string) => {
 };
 
 export const createStripeCheckoutSession = publicProcedure
-  .meta({
-    openapi: {
-      method: "POST",
-      path: "/payments/createStripeCheckoutSession",
-      tags: ["payments"],
-      summary:
-        "Create a Stripe checkout session for a one-time or recurring payment",
-      protect: false,
-    },
-  })
   .input(
     z.object({
       frequency: z.enum(["monthly", "yearly", "single"]).optional(), // Backwards compat - field marked as optional

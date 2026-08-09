@@ -1,4 +1,5 @@
 import { ClipError, clipFromHtml } from "../api/clip";
+import { pruneDomForClip } from "../api/pruneDomForClip";
 import {
   MissingTitleError,
   NotLoggedInError,
@@ -19,7 +20,10 @@ import { validateSession } from "../api/session";
 import {
   NutritionAuthError,
   NutritionRateLimitError,
+  clipToNutritionFields,
   getNutritionFromText,
+  hasStructuredNutrition,
+  stripClipNutrition,
 } from "../api/nutrition";
 import { initI18n, t } from "../i18n/t";
 import { applyI18nToDom } from "../i18n/applyDom";
@@ -81,7 +85,7 @@ const login = async () => {
 const fetchActivePageHtml = async (tabId: number): Promise<string | null> => {
   const [scriptResult] = await chrome.scripting.executeScript({
     target: { tabId },
-    func: () => document.documentElement.outerHTML,
+    func: pruneDomForClip,
   });
   if (typeof scriptResult.result !== "string") return null;
   return scriptResult.result;
@@ -183,6 +187,11 @@ const autoClip = async () => {
       window.alert(t("webextension.creditLimitAlert"));
       return;
     }
+    if (e instanceof ClipError && e.status === 413) {
+      showOnly("start");
+      window.alert(t("webextension.pageTooLarge"));
+      return;
+    }
     console.error(e);
     showOnly("start");
     window.alert(t("webextension.action.clipFailed"));
@@ -190,34 +199,37 @@ const autoClip = async () => {
   }
 
   let nutritionFields: NutritionFields = {};
-  if (
-    includeNutrition &&
-    clip.nutritionInfo &&
-    clip.nutritionInfo.trim().length > 0
-  ) {
-    try {
-      const nutrition = await getNutritionFromText(
-        apiBase,
-        token,
-        clip.nutritionInfo,
-      );
-      nutritionFields = nutritionToFields(nutrition);
-    } catch (e) {
-      if (e instanceof NutritionAuthError) {
-        await handleNotLoggedIn();
-        return;
-      }
-      if (e instanceof NutritionRateLimitError) {
-        window.alert(t("webextension.creditLimitAlert"));
-      } else {
-        console.warn("Failed to parse nutrition; saving without nutrition", e);
+  if (includeNutrition) {
+    if (hasStructuredNutrition(clip)) {
+      nutritionFields = clipToNutritionFields(clip);
+    } else if (clip.nutritionInfo && clip.nutritionInfo.trim().length > 0) {
+      try {
+        const nutrition = await getNutritionFromText(
+          apiBase,
+          token,
+          clip.nutritionInfo,
+        );
+        nutritionFields = nutritionToFields(nutrition);
+      } catch (e) {
+        if (e instanceof NutritionAuthError) {
+          await handleNotLoggedIn();
+          return;
+        }
+        if (e instanceof NutritionRateLimitError) {
+          window.alert(t("webextension.creditLimitAlert"));
+        } else {
+          console.warn(
+            "Failed to parse nutrition; saving without nutrition",
+            e,
+          );
+        }
       }
     }
   }
 
   try {
     const saved = await saveRecipe(apiBase, token, {
-      ...clip,
+      ...stripClipNutrition(clip),
       ...nutritionFields,
       title: clip.title || tab.title || "",
       url: tab.url || "",

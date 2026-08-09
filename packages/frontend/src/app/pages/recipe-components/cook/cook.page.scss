@@ -51,6 +51,15 @@
   padding: 10px 0;
   line-height: 1.4;
 
+  &.header {
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  &:first-child.header {
+    margin-top: 0;
+  }
+
   &.ingredientContent {
     cursor: pointer;
   }
@@ -69,7 +78,13 @@
   .sectionHeader {
     display: block;
     font-weight: bold;
-    margin: 8px 0;
+    margin: 8px 0 4px;
+  }
+
+  &:first-child {
+    .sectionHeader {
+      margin-top: 0;
+    }
   }
 
   .instructionContent {

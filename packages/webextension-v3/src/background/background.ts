@@ -100,6 +100,9 @@ const handleClipRecipe = async (
     if (e instanceof ClipError && (e.status === 420 || e.status === 429)) {
       return { ok: false, error: { code: "rate-limited" } };
     }
+    if (e instanceof ClipError && e.status === 413) {
+      return { ok: false, error: { code: "too-large" } };
+    }
     return {
       ok: false,
       error: {
