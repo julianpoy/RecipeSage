@@ -422,6 +422,15 @@ export const appRoutes: Routes = [
     title: "pages.importCrouton.tabTitle",
   },
   {
+    path: RouteMap.ImportCookbookManagerComPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/import-cookbookmanagercom/import-cookbookmanagercom.page").then(
+        (m) => m.ImportCookbookManagerComPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.importCookbookManagerCom.tabTitle",
+  },
+  {
     path: RouteMap.ImportJSONLDPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import-json-ld/import-json-ld.page").then(

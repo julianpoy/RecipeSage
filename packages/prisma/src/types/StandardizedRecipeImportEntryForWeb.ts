@@ -14,6 +14,7 @@ export interface StandardizedRecipeImportEntryForWeb {
     instructions?: string;
     folder?: string;
     rating?: number;
+    lastMadeAt?: string | null;
     nutritionInfo?: string;
     nutritionServingSize?: string | null;
     nutritionCalories?: number | null;
@@ -53,6 +54,11 @@ export const standardizedRecipeImportEntryForWebSchema = z.object({
     instructions: z.string().optional(),
     folder: z.string().optional(),
     rating: z.number().optional(),
+    lastMadeAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable()
+      .optional(),
     nutritionInfo: z.string().optional(),
     nutritionServingSize: z.string().nullable().optional(),
     nutritionCalories: z.number().nullable().optional(),

@@ -138,6 +138,9 @@ export const importStandardizedRecipes = async (
           ingredients: stripBlankLines(entry.recipe.ingredients || ""),
           instructions: stripBlankLines(entry.recipe.instructions || ""),
           rating: entry.recipe.rating,
+          lastMadeAt: entry.recipe.lastMadeAt
+            ? new Date(entry.recipe.lastMadeAt)
+            : undefined,
           nutritionServingSize: entry.recipe.nutritionServingSize ?? undefined,
           nutritionCalories: entry.recipe.nutritionCalories ?? undefined,
           nutritionTotalFat: entry.recipe.nutritionTotalFat ?? undefined,

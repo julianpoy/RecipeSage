@@ -134,6 +134,12 @@
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
             <ion-label> {{ "pages.import.crouton" | translate }} </ion-label>
           </ion-item>
+          <ion-item (click)="startImport('cookbookmanagercom')" detail button>
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+            <ion-label>
+              {{ "pages.import.cookbookManagerCom" | translate }}
+            </ion-label>
+          </ion-item>
           <ion-item (click)="startImport('recipekeeper')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
             <ion-label>

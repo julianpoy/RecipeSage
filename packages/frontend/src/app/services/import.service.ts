@@ -221,6 +221,30 @@ export class ImportService {
     });
   }
 
+  importCookbookManagerCom(
+    file: Blob,
+    errorHandlers?: ErrorHandlers,
+    onUploadProgress?: UploadProgressHandler,
+  ) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<{
+      jobId: string;
+    }>({
+      path: "import/job/cookbookmanagercom",
+      method: "POST",
+      payload: formData,
+      query: {
+        labels: this.getImportLabel(),
+      },
+      errorHandlers,
+      listeners: {
+        onUploadProgress,
+      },
+    });
+  }
+
   importPepperplate(
     payload: {
       username: string;

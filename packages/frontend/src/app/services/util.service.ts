@@ -321,6 +321,12 @@ export const RouteMap = {
     },
     path: "settings/import/crouton",
   },
+  ImportCookbookManagerComPage: {
+    getPath() {
+      return `/settings/import/cookbookmanagercom`;
+    },
+    path: "settings/import/cookbookmanagercom",
+  },
   ImportJSONLDPage: {
     getPath() {
       return `/settings/import/json-ld`;

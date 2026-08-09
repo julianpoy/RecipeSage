@@ -53,6 +53,7 @@ type ImportFormat =
   | "paprika"
   | "mela"
   | "crouton"
+  | "cookbookmanagercom"
   | "cookmate"
   | "recipekeeper"
   | "textfiles"
@@ -184,6 +185,12 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportCroutonPage.getPath());
         break;
       }
+      case "cookbookmanagercom": {
+        this.navCtrl.navigateForward(
+          RouteMap.ImportCookbookManagerComPage.getPath(),
+        );
+        break;
+      }
       case "cookmate": {
         this.navCtrl.navigateForward(RouteMap.ImportCookmatePage.getPath());
         break;
@@ -263,6 +270,9 @@ export class ImportPage {
       }
       case "crouton": {
         return "pages.import.crouton";
+      }
+      case "cookbookmanagercom": {
+        return "pages.import.cookbookManagerCom";
       }
       case "jsonld": {
         return "pages.import.jsonld";
