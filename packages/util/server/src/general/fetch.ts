@@ -34,6 +34,10 @@ export const fetchURL = (
     throw new FetchURLError(destURL);
   }
 
+  if (parsedURL.protocol !== "http:" && parsedURL.protocol !== "https:") {
+    throw new FetchURLError(destURL);
+  }
+
   const fetchOpts: RequestInit = {
     method: "GET",
     signal: options?.timeout ? AbortSignal.timeout(options.timeout) : undefined,
