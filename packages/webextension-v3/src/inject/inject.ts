@@ -2,7 +2,11 @@ import { ClipError, PageTooLargeError } from "../api/clip";
 import type { ClipResult } from "../api/clip";
 import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
-import { NutritionRateLimitError } from "../api/nutrition";
+import {
+  NutritionRateLimitError,
+  hasStructuredNutrition,
+  stripClipNutrition,
+} from "../api/nutrition";
 import {
   clipFromHtmlViaBg,
   findRecipesByUrlViaBg,
@@ -97,7 +101,9 @@ async function bootstrap() {
   const wantsNutrition = preferences.autoClipNutrition !== false;
   const nutritionPromise: Promise<Nutrition | undefined> = (async () => {
     const text = autoSnipResults.nutritionInfo?.trim();
-    if (!wantsNutrition || !text) return undefined;
+    if (!wantsNutrition || !text || hasStructuredNutrition(autoSnipResults)) {
+      return undefined;
+    }
     try {
       return await getNutritionFromTextViaBg(text);
     } catch (e) {
@@ -110,13 +116,11 @@ async function bootstrap() {
     }
   })();
 
-  initEditor(
-    shadowRoot,
-    preferences,
-    autoSnipResults,
-    webBase,
-    nutritionPromise,
-  );
+  const editorSnip = wantsNutrition
+    ? autoSnipResults
+    : stripClipNutrition(autoSnipResults);
+
+  initEditor(shadowRoot, preferences, editorSnip, webBase, nutritionPromise);
 }
 
 async function autoSnipFromPage(
@@ -143,7 +147,7 @@ async function autoSnipFromPage(
   }
 }
 
-interface CurrentSnip extends ClipResult, NutritionFields {
+interface CurrentSnip extends ClipResult {
   url: string;
 }
 

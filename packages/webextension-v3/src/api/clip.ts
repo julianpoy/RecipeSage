@@ -1,4 +1,6 @@
-export interface ClipResult {
+import type { NutritionFields } from "./saveRecipe";
+
+export interface ClipResult extends NutritionFields {
   title?: string;
   description?: string;
   yield?: string;
