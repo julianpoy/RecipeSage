@@ -23,6 +23,9 @@ import { handleUploadErrors } from "../../../util/handleUploadErrors";
 const FILE_SIZE_LIMIT_MB = Math.min(MAX_IMPORT_FILE_SIZE_MB, 128);
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   query: z.object({
     labels: z.string().optional(),
   }),
@@ -32,6 +35,16 @@ export const jsonldHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/jsonld",
+      tags: ["import"],
+      summary: "Import recipes from a JSON-LD file",
+      successStatus: 201,
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(

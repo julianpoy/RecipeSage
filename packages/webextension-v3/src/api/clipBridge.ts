@@ -1,4 +1,4 @@
-import { ClipError } from "./clip";
+import { ClipError, PageTooLargeError } from "./clip";
 import type { ClipResult } from "./clip";
 import { MissingTitleError, NotLoggedInError } from "./saveRecipe";
 import type {
@@ -20,6 +20,7 @@ const bridgeErrorToException = (error: BridgeError): Error => {
   if (error.code === "not-logged-in") return new NotLoggedInError();
   if (error.code === "missing-title") return new MissingTitleError();
   if (error.code === "rate-limited") return new ClipError("Rate limited", 429);
+  if (error.code === "too-large") return new PageTooLargeError();
   return new Error(error.message || "Unknown error");
 };
 

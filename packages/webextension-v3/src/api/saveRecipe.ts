@@ -45,7 +45,7 @@ export interface NutritionFields {
   nutritionOtherDetails?: string | null;
 }
 
-export interface SaveRecipeInput extends ClipResult, NutritionFields {
+export interface SaveRecipeInput extends ClipResult {
   url: string;
 }
 

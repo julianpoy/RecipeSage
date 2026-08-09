@@ -5,6 +5,7 @@ import {
   ServerError,
   rateLimitHandler,
   typesafeExpressIndexRouter,
+  generateExpressOpenApiParts,
 } from "@recipesage/express";
 
 import express from "express";
@@ -108,7 +109,7 @@ app.set("view engine", "pug");
 if (process.env.NODE_ENV !== "test") app.use(logger("dev"));
 app.use(
   bodyParser.json({
-    limit: "1MB",
+    limit: "2MB",
     verify: (req, res, buf) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;
@@ -148,8 +149,28 @@ app.disable("x-powered-by");
 app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
+
+const expressOpenApiParts = generateExpressOpenApiParts();
+const mergedOpenApiDocument = {
+  ...openApiDocument,
+  paths: {
+    ...openApiDocument.paths,
+    ...expressOpenApiParts.paths,
+  },
+  components: {
+    ...openApiDocument.components,
+    securitySchemes: {
+      ...openApiDocument.components?.securitySchemes,
+      ...expressOpenApiParts.securitySchemes,
+    },
+    schemas: {
+      ...openApiDocument.components?.schemas,
+      ...expressOpenApiParts.schemas,
+    },
+  },
+};
 app.get("/compat/openapi.json", (_req, res) => {
-  res.json(openApiDocument);
+  res.json(mergedOpenApiDocument);
 });
 app.use("/compat/v2", openApiExpressMiddleware);
 app.use("/users", users);

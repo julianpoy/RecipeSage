@@ -336,6 +336,52 @@ export const clipHtml = async (
           instructions: acc.recipe.instructions || entry.recipe.instructions,
           notes: acc.recipe.notes || entry.recipe.notes,
           nutritionInfo: acc.recipe.nutritionInfo || entry.recipe.nutritionInfo,
+          nutritionServingSize:
+            acc.recipe.nutritionServingSize ??
+            entry.recipe.nutritionServingSize,
+          nutritionCalories:
+            acc.recipe.nutritionCalories ?? entry.recipe.nutritionCalories,
+          nutritionTotalFat:
+            acc.recipe.nutritionTotalFat ?? entry.recipe.nutritionTotalFat,
+          nutritionSaturatedFat:
+            acc.recipe.nutritionSaturatedFat ??
+            entry.recipe.nutritionSaturatedFat,
+          nutritionTransFat:
+            acc.recipe.nutritionTransFat ?? entry.recipe.nutritionTransFat,
+          nutritionPolyunsaturatedFat:
+            acc.recipe.nutritionPolyunsaturatedFat ??
+            entry.recipe.nutritionPolyunsaturatedFat,
+          nutritionMonounsaturatedFat:
+            acc.recipe.nutritionMonounsaturatedFat ??
+            entry.recipe.nutritionMonounsaturatedFat,
+          nutritionCholesterol:
+            acc.recipe.nutritionCholesterol ??
+            entry.recipe.nutritionCholesterol,
+          nutritionSodium:
+            acc.recipe.nutritionSodium ?? entry.recipe.nutritionSodium,
+          nutritionTotalCarbs:
+            acc.recipe.nutritionTotalCarbs ?? entry.recipe.nutritionTotalCarbs,
+          nutritionDietaryFiber:
+            acc.recipe.nutritionDietaryFiber ??
+            entry.recipe.nutritionDietaryFiber,
+          nutritionTotalSugars:
+            acc.recipe.nutritionTotalSugars ??
+            entry.recipe.nutritionTotalSugars,
+          nutritionAddedSugars:
+            acc.recipe.nutritionAddedSugars ??
+            entry.recipe.nutritionAddedSugars,
+          nutritionProtein:
+            acc.recipe.nutritionProtein ?? entry.recipe.nutritionProtein,
+          nutritionVitaminD:
+            acc.recipe.nutritionVitaminD ?? entry.recipe.nutritionVitaminD,
+          nutritionCalcium:
+            acc.recipe.nutritionCalcium ?? entry.recipe.nutritionCalcium,
+          nutritionIron: acc.recipe.nutritionIron ?? entry.recipe.nutritionIron,
+          nutritionPotassium:
+            acc.recipe.nutritionPotassium ?? entry.recipe.nutritionPotassium,
+          nutritionOtherDetails:
+            acc.recipe.nutritionOtherDetails ??
+            entry.recipe.nutritionOtherDetails,
         },
         images: acc.images.length ? acc.images : entry.images,
         labels: acc.labels.length ? acc.labels : entry.labels,

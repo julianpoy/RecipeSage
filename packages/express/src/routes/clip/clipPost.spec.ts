@@ -50,8 +50,8 @@ describe("POST /clip", () => {
   });
 
   describe("with url body", () => {
-    it("returns the raw clip results for a url", async () => {
-      const results = {
+    it("returns flattened recipe with imageURL for a url", async () => {
+      clipUrlMock.mockResolvedValue({
         recipe: {
           title: "Tacos",
           ingredients: "tortilla\nbeef",
@@ -59,8 +59,7 @@ describe("POST /clip", () => {
         },
         images: ["https://example.com/taco.jpg"],
         labels: [],
-      };
-      clipUrlMock.mockResolvedValue(results);
+      });
 
       const app = await buildApp();
       const response = await request(app)
@@ -69,7 +68,12 @@ describe("POST /clip", () => {
         .send({ url: "https://example.com/taco" });
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(results);
+      expect(response.body).toEqual({
+        title: "Tacos",
+        ingredients: "tortilla\nbeef",
+        instructions: "cook\nassemble",
+        imageURL: "https://example.com/taco.jpg",
+      });
       expect(clipUrlMock).toHaveBeenCalledWith("https://example.com/taco");
       expect(clipHtmlMock).not.toHaveBeenCalled();
     });
