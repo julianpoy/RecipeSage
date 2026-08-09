@@ -116,6 +116,12 @@ html(lang=language, dir=direction)
 
       .ingredient.ingredientHeader {
         line-height: 170%;
+        margin-top: 8px;
+        margin-bottom: 4px;
+      }
+
+      .ingredients .ingredient:first-child.ingredientHeader {
+        margin-top: 0;
       }
 
       .instruction {
@@ -125,6 +131,15 @@ html(lang=language, dir=direction)
         margin-top: 0;
         vertical-align: top;
         padding-bottom: 10px;
+      }
+
+      .instruction.instructionHeader {
+        margin-top: 8px;
+        margin-bottom: 4px;
+      }
+
+      .instructions .instruction:first-child.instructionHeader {
+        margin-top: 0;
       }
 
       .verticalInstrIng .instruction {
@@ -354,7 +369,7 @@ html(lang=language, dir=direction)
             i= translations.ingredientsAtScale
       div(class='instructions')
         each instruction in recipe.instructions
-          div(class='instruction')
+          div(class=('instruction ' + (instruction.isHeader ? 'instructionHeader' : '')))
             if instruction.isHeader
               span
               b !{instruction.htmlContent}
