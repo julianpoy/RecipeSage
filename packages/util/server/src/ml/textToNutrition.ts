@@ -74,14 +74,14 @@ export const textToNutrition = async (
 
   const llmResponse = await withLLMRetryOptional(
     "text_to_nutrition",
-    async () => {
+    async (temperature) => {
       const response = await generateText({
         system:
           "You are a nutrition data extraction utility. Extract nutrition information from the provided text. Only extract values that are explicitly stated in the text. If a value is not present, return null for that field. Do not estimate or calculate values that are not provided. All values should be per serving.",
         model: aiProvider(config.ai.model.nutrition, {
           requireParameters: true,
         }),
-        temperature: 0,
+        temperature,
         prompt:
           "Extract the nutrition information from this text. Only include values that are explicitly mentioned. Return null for any values not found in the text.\n\n" +
           text,
