@@ -152,6 +152,12 @@
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
             <ion-label> {{ "pages.import.cookmate" | translate }} </ion-label>
           </ion-item>
+          <ion-item (click)="startImport('cookbookmanagercom')" detail button>
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+            <ion-label>
+              {{ "pages.import.cookbookManagerCom" | translate }}
+            </ion-label>
+          </ion-item>
           <ion-item (click)="startImport('pepperplate')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
             <ion-label>

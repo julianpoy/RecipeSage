@@ -98,15 +98,13 @@ h2.recipeTitle {
   }
 
   .ingredient {
-    .sectionHeader {
-      display: block;
-      margin: 4px 0;
+    &.header {
+      margin-top: 8px;
+      margin-bottom: 4px;
     }
 
-    &:first-child {
-      .sectionHeader {
-        margin-top: 0;
-      }
+    &:first-child.header {
+      margin-top: 0;
     }
 
     &.complete {
@@ -131,6 +129,18 @@ h2.recipeTitle {
 
   .instruction {
     margin-bottom: 15px;
+
+    .sectionHeader {
+      display: block;
+      padding-top: 8px;
+      padding-bottom: 4px;
+    }
+
+    &:first-child {
+      .sectionHeader {
+        padding-top: 0;
+      }
+    }
 
     .instructionContent {
       cursor: pointer;

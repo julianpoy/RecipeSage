@@ -196,6 +196,7 @@
                   dir="auto"
                   class="ingredient ion-text-wrap"
                   [ngClass]="{
+                    header: ingredient.isHeader,
                     ingredientContent: !ingredient.isHeader,
                     complete: getIngredientComplete(ingredientIdx),
                   }"

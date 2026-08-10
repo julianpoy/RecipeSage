@@ -516,11 +516,16 @@ export const recipeToPDFMakeSchema = async (
 
   const buildIngredientStack = async (maxWidth: number): Promise<Content[]> => {
     const out: Content[] = [];
-    for (const item of parsedIngredients) {
+    for (const [index, item] of parsedIngredients.entries()) {
       out.push(
         ...(await renderItem(item.content, {
           bold: item.isHeader,
-          margin: [0, 0, 0, 5],
+          margin: [
+            0,
+            item.isHeader && index > 0 ? 6 : 0,
+            0,
+            item.isHeader ? 8 : 5,
+          ],
           renderInlineImages,
           imageLocations,
           maxWidth,
@@ -534,12 +539,17 @@ export const recipeToPDFMakeSchema = async (
     maxWidth: number,
   ): Promise<Content[]> => {
     const out: Content[] = [];
-    for (const item of parsedInstructions) {
+    for (const [index, item] of parsedInstructions.entries()) {
       out.push(
         ...(await renderItem(item.content, {
           bold: item.isHeader,
           numberPrefix: item.isHeader ? undefined : item.count,
-          margin: [0, 0, 0, 5],
+          margin: [
+            0,
+            item.isHeader && index > 0 ? 6 : 0,
+            0,
+            item.isHeader ? 8 : 5,
+          ],
           renderInlineImages,
           imageLocations,
           maxWidth,

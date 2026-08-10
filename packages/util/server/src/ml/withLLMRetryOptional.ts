@@ -3,7 +3,7 @@ import { withLLMRetry, type LLMRetryCategory } from "./withLLMRetry";
 
 export async function withLLMRetryOptional<T>(
   category: LLMRetryCategory,
-  fn: () => Promise<T>,
+  fn: (temperature: number) => Promise<T>,
 ): Promise<T | undefined> {
   try {
     return await withLLMRetry(category, fn);

@@ -68,6 +68,7 @@
               dir="auto"
               class="ingredient"
               [ngClass]="{
+                header: ingredient.isHeader,
                 ingredientContent: !ingredient.isHeader,
                 complete: getIngredientComplete(ingredientIdx),
               }"

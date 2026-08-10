@@ -1,4 +1,6 @@
-export interface ClipResult {
+import type { NutritionFields } from "./saveRecipe";
+
+export interface ClipResult extends NutritionFields {
   title?: string;
   description?: string;
   yield?: string;
@@ -20,6 +22,13 @@ export class ClipError extends Error {
   ) {
     super(message);
     this.name = "ClipError";
+  }
+}
+
+export class PageTooLargeError extends Error {
+  constructor() {
+    super("Page too large to clip");
+    this.name = "PageTooLargeError";
   }
 }
 

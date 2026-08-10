@@ -1,8 +1,12 @@
-import { ClipError } from "../api/clip";
+import { ClipError, PageTooLargeError } from "../api/clip";
 import type { ClipResult } from "../api/clip";
 import { MissingTitleError, NotLoggedInError } from "../api/saveRecipe";
 import type { Nutrition, NutritionFields } from "../api/saveRecipe";
-import { NutritionRateLimitError } from "../api/nutrition";
+import {
+  NutritionRateLimitError,
+  hasStructuredNutrition,
+  stripClipNutrition,
+} from "../api/nutrition";
 import {
   clipFromHtmlViaBg,
   findRecipesByUrlViaBg,
@@ -17,6 +21,7 @@ import {
 } from "../api/storage";
 import { getEffectiveBases } from "../config";
 import { initI18n, t } from "../i18n/t";
+import { pruneDomForClip } from "../api/pruneDomForClip";
 
 const EXTENSION_CONTAINER_ID = "recipeSageBrowserExtensionRootContainer";
 
@@ -96,7 +101,9 @@ async function bootstrap() {
   const wantsNutrition = preferences.autoClipNutrition !== false;
   const nutritionPromise: Promise<Nutrition | undefined> = (async () => {
     const text = autoSnipResults.nutritionInfo?.trim();
-    if (!wantsNutrition || !text) return undefined;
+    if (!wantsNutrition || !text || hasStructuredNutrition(autoSnipResults)) {
+      return undefined;
+    }
     try {
       return await getNutritionFromTextViaBg(text);
     } catch (e) {
@@ -109,13 +116,11 @@ async function bootstrap() {
     }
   })();
 
-  initEditor(
-    shadowRoot,
-    preferences,
-    autoSnipResults,
-    webBase,
-    nutritionPromise,
-  );
+  const editorSnip = wantsNutrition
+    ? autoSnipResults
+    : stripClipNutrition(autoSnipResults);
+
+  initEditor(shadowRoot, preferences, editorSnip, webBase, nutritionPromise);
 }
 
 async function autoSnipFromPage(
@@ -123,7 +128,7 @@ async function autoSnipFromPage(
 ): Promise<ClipResult | undefined> {
   if (!token) return undefined;
   try {
-    return await clipFromHtmlViaBg(document.documentElement.outerHTML);
+    return await clipFromHtmlViaBg(pruneDomForClip());
   } catch (e) {
     if (e instanceof ClipError && e.status === 401) {
       await setToken(null);
@@ -133,12 +138,16 @@ async function autoSnipFromPage(
       window.alert(t("webextension.creditLimitAlert"));
       return undefined;
     }
+    if (e instanceof PageTooLargeError) {
+      window.alert(t("webextension.pageTooLarge"));
+      return undefined;
+    }
     console.warn("Auto-fill from page failed; opening empty editor", e);
     return undefined;
   }
 }
 
-interface CurrentSnip extends ClipResult, NutritionFields {
+interface CurrentSnip extends ClipResult {
   url: string;
 }
 
@@ -282,8 +291,9 @@ function initEditor(
   nutritionPromise: Promise<Nutrition | undefined>,
 ) {
   const currentSnip: CurrentSnip = {
-    url: window.location.href,
     ...autoSnipResults,
+    source: autoSnipResults.source || window.location.hostname,
+    url: window.location.href,
   };
   let isDirty = false;
   let container: HTMLDivElement | undefined;

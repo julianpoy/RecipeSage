@@ -15,6 +15,7 @@ import { imagesHandler } from "./images";
 import { enexHandler } from "./enex";
 import { melaHandler } from "./mela";
 import { croutonHandler } from "./crouton";
+import { cookbookmanagercomHandler } from "./cookbookmanagercom";
 
 const router = express.Router();
 
@@ -34,5 +35,6 @@ router.post("/pdfs", ...pdfsHandler);
 router.post("/images", ...imagesHandler);
 router.post("/mela", ...melaHandler);
 router.post("/crouton", ...croutonHandler);
+router.post("/cookbookmanagercom", ...cookbookmanagercomHandler);
 
 export { router as importJobRouter };

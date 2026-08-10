@@ -26,6 +26,7 @@ export type BridgeErrorCode =
   | "not-logged-in"
   | "rate-limited"
   | "missing-title"
+  | "too-large"
   | "unknown";
 
 export interface BridgeError {

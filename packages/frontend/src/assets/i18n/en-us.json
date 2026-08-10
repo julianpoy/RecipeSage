@@ -1691,6 +1691,7 @@
   "pages.import.paprika": "Import from Paprika Recipes file",
   "pages.import.mela": "Import from Mela file",
   "pages.import.crouton": "Import from Crouton file",
+  "pages.import.cookbookManagerCom": "Import from CookBookManager.com file",
   "pages.import.textFiles": "Import from documents (.txt, .rtf, .odt, .docx, .md, .html)",
   "pages.import.enex": "Import from Evernote file",
   "pages.import.urls": "Import from a list of URLs",
@@ -1739,6 +1740,9 @@
   "pages.importCrouton.tabTitle": "Import from Crouton - RecipeSage",
   "pages.importCrouton.title": "Import Recipes from Crouton File",
   "pages.importCrouton.description": "This will import a Crouton export (a .zip archive containing .crumb recipe files) into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
+  "pages.importCookbookManagerCom.tabTitle": "Import from CookBookManager.com - RecipeSage",
+  "pages.importCookbookManagerCom.title": "Import Recipes from CookBookManager.com File",
+  "pages.importCookbookManagerCom.description": "This will import a CookBookManager.com export (a .zip archive containing .yml recipe files) into your RecipeSage account. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.importPepperplate.tabTitle": "Import from Pepperplate - RecipeSage",
   "pages.importPepperplate.title": "Import Recipes from Pepperplate",
@@ -2554,5 +2558,6 @@
   "webextension.inject.saveFailedTitle": "Could Not Save Recipe",
   "webextension.inject.missingTitleBody": "A recipe title is required.",
   "webextension.inject.saveFailedBody": "An error occurred while saving the recipe. Please try again.",
+  "webextension.pageTooLarge": "This page is too large to import automatically. Try importing it by its web address from the RecipeSage website instead.",
   "webextension.inject.duplicateConfirm": "You already have a recipe saved from this page. Click OK to save another copy, or Cancel to skip."
 }

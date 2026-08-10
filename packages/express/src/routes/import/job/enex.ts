@@ -21,6 +21,9 @@ import { tmpdir } from "os";
 import { handleUploadErrors } from "../../../util/handleUploadErrors";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   query: z.object({
     labels: z.string().optional(),
   }),
@@ -30,6 +33,16 @@ export const enexHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/enex",
+      tags: ["import"],
+      summary: "Import recipes from an Evernote ENEX export",
+      successStatus: 201,
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(

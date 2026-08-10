@@ -69,28 +69,31 @@ export const textToRecipe = async (
   if (text.length > OCR_MAX_VALID_TEXT)
     text = text.substring(0, OCR_MAX_VALID_TEXT);
 
-  const llmResponse = await withLLMRetryOptional("text_to_recipe", async () => {
-    const response = await generateText({
-      system: systemPrompts[inputType],
-      model: aiProvider(models[inputType]),
-      temperature: 0,
-      prompt: prompts[inputType] + text,
-      output: Output.object({
-        schema: ocrFormatRecipeModelSchema,
-      }),
-    });
+  const llmResponse = await withLLMRetryOptional(
+    "text_to_recipe",
+    async (temperature) => {
+      const response = await generateText({
+        system: systemPrompts[inputType],
+        model: aiProvider(models[inputType]),
+        temperature,
+        prompt: prompts[inputType] + text,
+        output: Output.object({
+          schema: ocrFormatRecipeModelSchema,
+        }),
+      });
 
-    if (response.totalUsage.totalTokens !== undefined) {
-      metrics.llmTokensConsumed.observe(
-        {
-          category: "textToRecipe_" + inputType,
-        },
-        response.totalUsage.totalTokens,
-      );
-    }
+      if (response.totalUsage.totalTokens !== undefined) {
+        metrics.llmTokensConsumed.observe(
+          {
+            category: "textToRecipe_" + inputType,
+          },
+          response.totalUsage.totalTokens,
+        );
+      }
 
-    return response.output;
-  });
+      return response.output;
+    },
+  );
 
   if (!llmResponse) return;
 

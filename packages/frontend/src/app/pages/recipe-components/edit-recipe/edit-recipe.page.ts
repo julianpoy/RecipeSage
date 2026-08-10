@@ -41,6 +41,7 @@ import type {
   LabelSummary,
   RecipeSummary,
   RecipeSummaryLite,
+  StandardizedRecipeImportEntryForWeb,
 } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import {
@@ -462,6 +463,58 @@ export class EditRecipePage {
     this.recipe.nutritionIron = response.iron;
     this.recipe.nutritionPotassium = response.potassium;
     this.markAsDirty();
+  }
+
+  applyClipNutrition(
+    source: StandardizedRecipeImportEntryForWeb["recipe"],
+  ): boolean {
+    const hasStructuredNutrition = [
+      source.nutritionServingSize,
+      source.nutritionCalories,
+      source.nutritionTotalFat,
+      source.nutritionSaturatedFat,
+      source.nutritionTransFat,
+      source.nutritionPolyunsaturatedFat,
+      source.nutritionMonounsaturatedFat,
+      source.nutritionCholesterol,
+      source.nutritionSodium,
+      source.nutritionTotalCarbs,
+      source.nutritionDietaryFiber,
+      source.nutritionTotalSugars,
+      source.nutritionAddedSugars,
+      source.nutritionProtein,
+      source.nutritionVitaminD,
+      source.nutritionCalcium,
+      source.nutritionIron,
+      source.nutritionPotassium,
+      source.nutritionOtherDetails,
+    ].some((value) => value !== null && value !== undefined);
+
+    if (!hasStructuredNutrition) return false;
+
+    this.recipe.nutritionServingSize = source.nutritionServingSize;
+    this.recipe.nutritionCalories = source.nutritionCalories;
+    this.recipe.nutritionTotalFat = source.nutritionTotalFat;
+    this.recipe.nutritionSaturatedFat = source.nutritionSaturatedFat;
+    this.recipe.nutritionTransFat = source.nutritionTransFat;
+    this.recipe.nutritionPolyunsaturatedFat =
+      source.nutritionPolyunsaturatedFat;
+    this.recipe.nutritionMonounsaturatedFat =
+      source.nutritionMonounsaturatedFat;
+    this.recipe.nutritionCholesterol = source.nutritionCholesterol;
+    this.recipe.nutritionSodium = source.nutritionSodium;
+    this.recipe.nutritionTotalCarbs = source.nutritionTotalCarbs;
+    this.recipe.nutritionDietaryFiber = source.nutritionDietaryFiber;
+    this.recipe.nutritionTotalSugars = source.nutritionTotalSugars;
+    this.recipe.nutritionAddedSugars = source.nutritionAddedSugars;
+    this.recipe.nutritionProtein = source.nutritionProtein;
+    this.recipe.nutritionVitaminD = source.nutritionVitaminD;
+    this.recipe.nutritionCalcium = source.nutritionCalcium;
+    this.recipe.nutritionIron = source.nutritionIron;
+    this.recipe.nutritionPotassium = source.nutritionPotassium;
+    this.recipe.nutritionOtherDetails = source.nutritionOtherDetails;
+    this.markAsDirty();
+    return true;
   }
 
   async confirmClearNutrition() {
@@ -1494,8 +1547,11 @@ export class EditRecipePage {
     this.markAsDirty();
     this.recipe.url = url;
 
-    if (includeNutrition && response.nutritionInfo) {
-      await this.parseAndApplyNutrition(response.nutritionInfo);
+    if (includeNutrition) {
+      const appliedStructuredNutrition = this.applyClipNutrition(response);
+      if (!appliedStructuredNutrition && response.nutritionInfo) {
+        await this.parseAndApplyNutrition(response.nutritionInfo);
+      }
     }
 
     if (!this.recipe.ingredients?.trim() && !this.recipe.instructions?.trim()) {

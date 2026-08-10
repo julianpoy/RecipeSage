@@ -21,6 +21,9 @@ import { tmpdir } from "os";
 import { handleUploadErrors } from "../../../util/handleUploadErrors";
 
 const schema = {
+  response: z.object({
+    jobId: z.string(),
+  }),
   query: z.object({
     excludeImages: z.union([z.literal("true"), z.literal("false")]),
     includeStockRecipes: z.union([z.literal("true"), z.literal("false")]),
@@ -33,6 +36,16 @@ export const livingcookbookHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
+    openapi: {
+      method: "post",
+      path: "/import/job/livingcookbook",
+      tags: ["import"],
+      summary: "Import recipes from a Living Cookbook export",
+      successStatus: 201,
+      upload: {
+        field: "file",
+      },
+    },
     beforeHandlers: [
       multerAutoCleanup,
       handleUploadErrors(
