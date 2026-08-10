@@ -19,6 +19,7 @@ import { AuthType, RouteMap } from "../../../services/util.service";
 
 const OFFICIAL_REDIRECT_URI_PREFIXES = [
   "https://oepplnnfceidfaaacjpdpobnjkcpgcpo.chromiumapp.org/",
+  "https://d673274367b633a37d65c677789efa4e718ae7e6.extensions.allizom.org/",
 ];
 
 function isValidExtensionRedirectUri(value: string): boolean {
@@ -94,10 +95,6 @@ export class ExtensionAuthPage {
     const session = await appIdbStorageManager.getSession();
     if (!session) {
       this.redirectToLogin();
-      return;
-    }
-    if (this.isOfficial) {
-      this.handoff(session.token);
       return;
     }
     this.existingSession = session;
