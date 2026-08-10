@@ -36,4 +36,15 @@
     --padding-start: 16px;
     border-inline-start: 4px solid var(--ion-text-color);
   }
+
+  .past-empty-month {
+    font-style: italic;
+    --color: var(--ion-color-medium);
+  }
+
+  .show-more-container {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 16px;
+  }
 }

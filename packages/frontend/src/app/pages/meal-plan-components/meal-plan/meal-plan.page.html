@@ -18,7 +18,7 @@
 
 <ion-content>
   <br />
-  @if (!mealPlanItems()) {
+  @if (!allMealPlanItems()) {
     <null-state>
       <ion-spinner virtualSlot="header"></ion-spinner>
       <ion-label virtualSlot="body">
@@ -26,7 +26,7 @@
       </ion-label>
     </null-state>
   }
-  @if (mealPlanItems(); as mealPlanItemsValue) {
+  @if (allMealPlanItems(); as mealPlanItemsValue) {
     @if (preferences[preferenceKeys.ViewType] === viewTypeOptions.List) {
       @if (upcomingDates.length === 0 && pastDates.length === 0) {
         <null-state>
@@ -74,37 +74,45 @@
             }
           </ion-item-group>
         }
-        @if (pastDates.length > 0) {
-          <ion-item-group>
-            <ion-item-divider
-              class="past-header"
-              (click)="pastMealsExpanded = !pastMealsExpanded"
-              button
-            >
-              <ion-label>
-                {{ "pages.mealPlan.list.pastMeals" | translate }}
-              </ion-label>
-              <ion-icon
-                [name]="
-                  pastMealsExpanded
-                    ? 'chevron-up-outline'
-                    : 'chevron-down-outline'
-                "
-                slot="end"
-              ></ion-icon>
-            </ion-item-divider>
-          </ion-item-group>
-          @if (pastMealsExpanded) {
-            @for (dateStr of pastDates; track dateStr) {
+        <ion-item-group>
+          <ion-item-divider
+            class="past-header"
+            (click)="pastMealsExpanded = !pastMealsExpanded"
+            button
+          >
+            <ion-label>
+              {{ "pages.mealPlan.list.pastMeals" | translate }}
+            </ion-label>
+            <ion-icon
+              [name]="
+                pastMealsExpanded
+                  ? 'chevron-up-outline'
+                  : 'chevron-down-outline'
+              "
+              slot="end"
+            ></ion-icon>
+          </ion-item-divider>
+        </ion-item-group>
+        @if (pastMealsExpanded) {
+          @for (
+            entry of pastEntries;
+            track entry.type === "date" ? entry.dateStr : entry.key
+          ) {
+            @if (entry.type === "date") {
               <ion-item-group>
                 <ion-item-divider
                   class="date-header"
-                  [class.selected]="selectedDaysSet.has(dateStr)"
-                  (click)="toggleDaySelection(dateStr)"
+                  [class.selected]="selectedDaysSet.has(entry.dateStr)"
+                  (click)="toggleDaySelection(entry.dateStr)"
                 >
-                  <ion-label>{{ listFormattedDates.get(dateStr) }}</ion-label>
+                  <ion-label>{{
+                    listFormattedDates.get(entry.dateStr)
+                  }}</ion-label>
                 </ion-item-divider>
-                @for (item of listItemsByDate.get(dateStr); track item.id) {
+                @for (
+                  item of listItemsByDate.get(entry.dateStr);
+                  track item.id
+                ) {
                   <ion-item
                     class="meal-list-item"
                     [style.border-left-color]="getMealBorderColor(item.meal)"
@@ -117,8 +125,27 @@
                   </ion-item>
                 }
               </ion-item-group>
+            } @else {
+              <ion-item class="past-empty-month" lines="none">
+                <ion-label>{{
+                  "pages.mealPlan.list.noMealsForMonth"
+                    | translate: { monthYear: entry.label }
+                }}</ion-label>
+              </ion-item>
             }
           }
+          <div class="show-more-container">
+            <ion-button
+              fill="clear"
+              (click)="showMorePastMonths()"
+              [disabled]="loadingHistory()"
+            >
+              @if (loadingHistory()) {
+                <ion-spinner slot="start" name="crescent"></ion-spinner>
+              }
+              {{ "pages.mealPlan.list.showMore" | translate }}
+            </ion-button>
+          </div>
         }
       </ion-list>
     } @else {
@@ -131,6 +158,7 @@
           (itemMoved)="itemMoved($event)"
           (dayClicked)="dayClicked($event)"
           (mealsByDateChange)="setMealsByDate($event)"
+          (visibleRangeChange)="onCalendarVisibleRange($event)"
           [enableEditing]="true"
           [mode]="calendarMode"
         ></meal-calendar>

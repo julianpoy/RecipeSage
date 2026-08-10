@@ -8,6 +8,7 @@ import { deleteMealPlanItems } from "./deleteMealPlanItems";
 import { detachMealPlan } from "./detachMealPlan";
 import { getMealPlan } from "./getMealPlan";
 import { getMealPlanItems } from "./getMealPlanItems";
+import { getMealPlanItemsByDateRange } from "./getMealPlanItemsByDateRange";
 import { getMealPlans } from "./getMealPlans";
 import { getMealPlansWithItems } from "./getMealPlansWithItems";
 import { updateMealPlan } from "./updateMealPlan";
@@ -25,6 +26,7 @@ export const mealPlansRouter = router({
   detachMealPlan,
   getMealPlan,
   getMealPlanItems,
+  getMealPlanItemsByDateRange,
   getMealPlans,
   getMealPlansWithItems,
   updateMealPlan,

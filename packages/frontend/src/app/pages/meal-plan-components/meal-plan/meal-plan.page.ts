@@ -1,4 +1,11 @@
-import { Component, ViewChild, effect, inject } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  signal,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -13,7 +20,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "../../../services/loading.service";
 import { WebsocketService } from "../../../services/websocket.service";
 import { EventName, EventService } from "../../../services/event.service";
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import {
   MealPlanPreferenceKey,
@@ -103,6 +110,7 @@ export class MealPlanPage {
   private alertCtrl = inject(AlertController);
   private toastCtrl = inject(ToastController);
   private titleService = inject(Title);
+  private utilService = inject(UtilService);
 
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
 
@@ -141,6 +149,30 @@ export class MealPlanPage {
   mealPlan = this.mealPlanQuery.value;
   mealPlanItems = this.mealPlanItemsQuery.value;
 
+  private readonly initialHistoryLookbackDays = 60;
+  historyItems = signal<MealPlanItemSummary[]>([]);
+  private historyStart?: dayjs.Dayjs;
+  loadingHistory = signal(false);
+  private historyRequestSeq = 0;
+
+  allMealPlanItems = computed<MealPlanItemSummary[] | undefined>(() => {
+    const base = this.mealPlanItems();
+    if (!base) return undefined;
+
+    const seen = new Set<string>();
+    const result: MealPlanItemSummary[] = [];
+    for (const item of base) {
+      seen.add(item.id);
+      result.push(item);
+    }
+    for (const item of this.historyItems()) {
+      if (seen.has(item.id)) continue;
+      seen.add(item.id);
+      result.push(item);
+    }
+    return result;
+  });
+
   mealsByDate: {
     [year: number]: {
       [month: number]: {
@@ -166,6 +198,10 @@ export class MealPlanPage {
   pastDates: string[] = [];
   listItemsByDate = new Map<string, MealPlanItemSummary[]>();
   listFormattedDates = new Map<string, string>();
+  pastEntries: Array<
+    | { type: "date"; dateStr: string }
+    | { type: "emptyMonth"; key: string; label: string }
+  > = [];
 
   reference = "0";
 
@@ -184,7 +220,7 @@ export class MealPlanPage {
     });
     effect(() => {
       const mealPlan = this.mealPlan();
-      const mealPlanItems = this.mealPlanItems();
+      const mealPlanItems = this.allMealPlanItems();
       if (!mealPlan || !mealPlanItems) return;
       this.mealColors = getMealColors(mealPlan.customMealOptions);
       if (
@@ -240,6 +276,74 @@ export class MealPlanPage {
   loadMealPlan() {
     this.mealPlanQuery.refresh();
     this.mealPlanItemsQuery.refresh();
+    const isListView =
+      this.preferences[MealPlanPreferenceKey.ViewType] ===
+      MealPlanViewTypeOptions.List;
+    if (isListView) {
+      const floor = this.baseHistoryFloorMonth();
+      const target = this.historyStart?.isBefore(floor)
+        ? this.historyStart
+        : floor;
+      void this.loadHistory(target);
+    } else {
+      void this.loadHistory();
+    }
+  }
+
+  private baseHistoryFloorMonth(): dayjs.Dayjs {
+    return dayjs()
+      .subtract(this.initialHistoryLookbackDays, "day")
+      .startOf("month");
+  }
+
+  private async loadHistory(targetStart?: dayjs.Dayjs) {
+    const start = targetStart ?? this.historyStart;
+    if (!start) {
+      if (this.historyItems().length) this.historyItems.set([]);
+      this.historyStart = undefined;
+      return;
+    }
+
+    const startDate = start.format("YYYY-MM-DD");
+    const endDate = dayjs().format("YYYY-MM-DD");
+
+    const seq = ++this.historyRequestSeq;
+    this.loadingHistory.set(true);
+    try {
+      const items =
+        await this.serverActionsService.mealPlans.getMealPlanItemsByDateRange({
+          mealPlanId: this.mealPlanId,
+          startDate,
+          endDate,
+        });
+      if (seq !== this.historyRequestSeq) return;
+      if (!items) return;
+      this.historyStart = start;
+      this.historyItems.set(items);
+    } finally {
+      if (seq === this.historyRequestSeq) {
+        this.loadingHistory.set(false);
+      }
+    }
+  }
+
+  private extendHistoryTo(monthStart: dayjs.Dayjs) {
+    const start = monthStart.startOf("month");
+    const current = this.historyStart;
+    if (current && !start.isBefore(current)) return;
+    void this.loadHistory(start);
+  }
+
+  onCalendarVisibleRange([start]: [dayjs.Dayjs, dayjs.Dayjs]) {
+    const visibleStart = start.startOf("month");
+    if (!visibleStart.isAfter(this.baseHistoryFloorMonth())) {
+      this.extendHistoryTo(visibleStart);
+    }
+  }
+
+  showMorePastMonths() {
+    const from = this.historyStart ?? this.baseHistoryFloorMonth();
+    this.extendHistoryTo(from.subtract(1, "month"));
   }
 
   async handlePlanNoLongerAvailable() {
@@ -896,7 +1000,7 @@ export class MealPlanPage {
   }
 
   processItemsForListView() {
-    const mealPlanItems = this.mealPlanItems();
+    const mealPlanItems = this.allMealPlanItems();
     if (!mealPlanItems) return;
 
     const sortOrder = getMealSortOrder(this.mealPlan()?.customMealOptions);
@@ -958,8 +1062,47 @@ export class MealPlanPage {
       this.listFormattedDates.set(dateStr, d.format("MMMM D, YYYY"));
     }
 
+    this.pastEntries = this.buildPastEntries();
+
     this.selectedDays = [];
     this.selectedDaysSet = new Set();
+  }
+
+  private buildPastEntries() {
+    const pastDatesByMonth = new Map<string, string[]>();
+    for (const dateStr of this.pastDates) {
+      const key = dateStr.slice(0, 7);
+      const dates = pastDatesByMonth.get(key) || [];
+      dates.push(dateStr);
+      pastDatesByMonth.set(key, dates);
+    }
+
+    const entries: typeof this.pastEntries = [];
+    const currentMonthStart = dayjs().startOf("month");
+    const horizon = this.historyStart ?? this.baseHistoryFloorMonth();
+
+    let cursor = currentMonthStart;
+    while (!cursor.isBefore(horizon)) {
+      const key = cursor.format("YYYY-MM");
+      const datesInMonth = pastDatesByMonth.get(key);
+      const isCurrentMonth = cursor.isSame(currentMonthStart, "month");
+
+      if (datesInMonth && datesInMonth.length > 0) {
+        for (const dateStr of datesInMonth) {
+          entries.push({ type: "date", dateStr });
+        }
+      } else if (!isCurrentMonth) {
+        entries.push({
+          type: "emptyMonth",
+          key,
+          label: this.utilService.formatMonthYear(cursor.toDate()),
+        });
+      }
+
+      cursor = cursor.subtract(1, "month");
+    }
+
+    return entries;
   }
 
   toggleDaySelection(dateStr: string) {
