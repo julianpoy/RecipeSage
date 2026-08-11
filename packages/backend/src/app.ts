@@ -150,28 +150,54 @@ app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
 
+const mergeOpenApiEntries = <T>(
+  label: string,
+  base: Record<string, T> | undefined,
+  extra: Record<string, T> | undefined,
+): Record<string, T> => {
+  const merged: Record<string, T> = { ...base };
+  for (const [key, value] of Object.entries(extra ?? {})) {
+    if (
+      key in merged &&
+      JSON.stringify(merged[key]) !== JSON.stringify(value)
+    ) {
+      throw new Error(
+        `OpenAPI ${label} collision: "${key}" is defined by both the tRPC and Express specs with differing definitions`,
+      );
+    }
+    merged[key] = value;
+  }
+  return merged;
+};
+
 const expressOpenApiParts = generateExpressOpenApiParts();
 const mergedOpenApiDocument = {
   ...openApiDocument,
-  paths: {
-    ...openApiDocument.paths,
-    ...expressOpenApiParts.paths,
-  },
+  servers: [{ url: config.api.publicUrl }],
+  paths: mergeOpenApiEntries(
+    "path",
+    openApiDocument.paths,
+    expressOpenApiParts.paths,
+  ),
   components: {
     ...openApiDocument.components,
-    securitySchemes: {
-      ...openApiDocument.components?.securitySchemes,
-      ...expressOpenApiParts.securitySchemes,
-    },
-    schemas: {
-      ...openApiDocument.components?.schemas,
-      ...expressOpenApiParts.schemas,
-    },
+    securitySchemes: mergeOpenApiEntries(
+      "securityScheme",
+      openApiDocument.components?.securitySchemes,
+      expressOpenApiParts.securitySchemes,
+    ),
+    schemas: mergeOpenApiEntries(
+      "schema",
+      openApiDocument.components?.schemas,
+      expressOpenApiParts.schemas,
+    ),
   },
 };
-app.get("/compat/openapi.json", (_req, res) => {
+const serveOpenApiDocument = (_req: express.Request, res: express.Response) => {
   res.json(mergedOpenApiDocument);
-});
+};
+app.get("/openapi.json", serveOpenApiDocument);
+app.get("/compat/openapi.json", serveOpenApiDocument);
 app.use("/compat/v2", openApiExpressMiddleware);
 app.use("/users", users);
 app.use("/recipes", recipes);
