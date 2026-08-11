@@ -2070,5 +2070,18 @@
     "pages.manageLabelModal.renameInvalid.message": "Veuillez entrer un nom d'étiquette",
     "pages.mealPlan.list.noMealsForMonth": "Aucun repas pour {{monthYear}}",
     "pages.editRecipe.clip.fileTooLarge": "Ce fichier est trop volumineux. Veuillez réessayer avec un fichier plus petit.",
-    "pages.editRecipe.addImage.fetchFailed": "Impossible de télécharger une image à partir de cette URL. Elle a peut-être été déplacée ou supprimée, ou le site n'autorise peut-être pas les téléchargements."
+    "pages.editRecipe.addImage.fetchFailed": "Impossible de télécharger une image à partir de cette URL. Elle a peut-être été déplacée ou supprimée, ou le site n'autorise peut-être pas les téléchargements.",
+    "pages.measurementConverter.ingredients.cookieButter": "Pâte de biscuit Speculoos",
+    "pages.cookingTemperatures.safety.preference": "Les puces grises indiquent des valeurs de préférence personnelle (degrés de cuisson, retraits BBQ, températures d'huile). Ce ne sont pas des recommandations de sécurité alimentaire.",
+    "pages.cookingTemperatures.safety.carryover": "Cuisson résiduelle : la viande continue de cuire après avoir été retirée du feu, augmentant généralement de 5–10 °F / 3–6 °C. Pour les gros rôtis, retirez-les un peu avant votre température cible.",
+    "pages.cookingTemperatures.safety.source": "Températures minimales de sécurité selon l'USDA FSIS et FoodSafety.gov.",
+    "pages.cookingTemperatures.categories.poultry.title": "Volaille",
+    "pages.cookingTemperatures.categories.redMeatPork.title": "Viande rouge et porc",
+    "pages.cookingTemperatures.categories.seafood.title": "Poisson et fruits de mer",
+    "pages.cookingTemperatures.categories.eggs.title": "Œufs",
+    "pages.cookingTemperatures.categories.sugarCandy.title": "Sucre et confiseries",
+    "pages.cookingTemperatures.categories.chocolate.title": "Tempérage du chocolat",
+    "pages.cookingTemperatures.categories.other.title": "Autre",
+    "pages.cookingTemperatures.categories.oilSmokePoints.title": "Points de fumée des huiles",
+    "pages.cookingTemperatures.items.poultryAll.label": "Poulet, dinde, canard, oie"
 }
