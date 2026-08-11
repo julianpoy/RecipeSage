@@ -2083,5 +2083,11 @@
     "pages.cookingTemperatures.categories.chocolate.title": "Tempérage du chocolat",
     "pages.cookingTemperatures.categories.other.title": "Autre",
     "pages.cookingTemperatures.categories.oilSmokePoints.title": "Points de fumée des huiles",
-    "pages.cookingTemperatures.items.poultryAll.label": "Poulet, dinde, canard, oie"
+    "pages.cookingTemperatures.items.poultryAll.label": "Poulet, dinde, canard, oie",
+    "pages.serverSettings.switchConfirm.header": "Changer de serveurs ?",
+    "pages.serverSettings.switchConfirm.message": "À faire uniquement si vous savez ce que vous faites. Ne le faites pas si quelqu’un vous a demandé de le faire (cela peut permettre de prendre le contrôle de votre compte !). Vous serez déconnecté·e après confirmation.",
+    "pages.serverSettings.switchConfirm.confirm": "Changer de serveurs",
+    "pages.serverSettings.intro.title": "Choisissez votre serveur",
+    "pages.serverSettings.intro.body": "Sélectionnez le serveur RecipeSage auquel cette application se connecte. La plupart des utilisateurs doivent rester sur Par défaut.",
+    "pages.serverSettings.endpoint": "Point d'accès API"
 }
