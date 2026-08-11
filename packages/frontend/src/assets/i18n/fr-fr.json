@@ -2035,5 +2035,6 @@
     "pages.measurementConverter.ingredients.almondPaste": "Pâte d'amande (emballée)",
     "pages.measurementConverter.ingredients.basilPesto": "Pesto au basilic",
     "pages.cookingTemperatures.items.poultryDarkMeatPreference.state": "Cuisses et pilons ; cuire au-dessus de la température minimale de sécurité pour une texture tendre et goûteuse",
-    "webextension.action.includeNutrition": "Inclure les informations nutritionnelles"
+    "webextension.action.includeNutrition": "Inclure les informations nutritionnelles",
+    "webextension.action.interactiveImport": "Importation interactive"
 }
