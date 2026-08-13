@@ -1,26 +1,19 @@
+import { config } from "../../general";
 import { stripe } from "./stripe";
-
-export const YEARLY_PYO_PRODUCT_ID = "pyo-yearly";
 
 export async function createYearlyPYOSession(args: {
   amount: number;
   stripeCustomerId?: string;
   successUrl: string;
   cancelUrl: string;
+  currency?: string;
 }) {
-  let product;
+  const currency = args.currency || "usd";
+  let lookupKey = `pyo-yearly-${args.amount}`;
 
-  try {
-    product = await stripe.products.retrieve(YEARLY_PYO_PRODUCT_ID);
-  } catch (_e) {
-    product = await stripe.products.create({
-      id: YEARLY_PYO_PRODUCT_ID,
-      name: "RecipeSage Yearly Membership - Choose Your Own Price",
-      type: "service",
-    });
+  if (args.currency !== "usd") {
+    lookupKey += args.currency;
   }
-
-  const lookupKey = `pyo-yearly-${args.amount}`;
 
   let price = (
     await stripe.prices.list({
@@ -34,8 +27,8 @@ export async function createYearlyPYOSession(args: {
       recurring: {
         interval: "year",
       },
-      product: product.id,
-      currency: "usd",
+      product: config.stripe.productId.yearly,
+      currency,
       lookup_key: lookupKey,
     });
   }
@@ -51,5 +44,8 @@ export async function createYearlyPYOSession(args: {
         quantity: 1,
       },
     ],
+    managed_payments: {
+      enabled: config.stripe.enableManagedPayments,
+    },
   });
 }

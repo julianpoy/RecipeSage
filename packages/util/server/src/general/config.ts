@@ -58,6 +58,17 @@ export const config = {
     )?.toLowerCase(),
     trustProxyHops: parseInt(getEnvString("TRUST_PROXY_HOPS", []) || "0", 10),
   },
+  stripe: {
+    sk: getEnvString("STRIPE_SK", [Environment.Prod]) || "no_key_provided",
+    webhookSecret: getEnvString("STRIPE_WEBHOOK_SECRET", [Environment.Prod]),
+    productId: {
+      monthly: getEnvString("STRIPE_PRODUCT_ID_MONTHLY", [Environment.Prod]),
+      yearly: getEnvString("STRIPE_PRODUCT_ID_YEARLY", [Environment.Prod]),
+      onetime: getEnvString("STRIPE_PRODUCT_ID_ONETIME", [Environment.Prod]),
+    },
+    enableManagedPayments:
+      getEnvString("STRIPE_ENABLE_MANAGED_PAYMENTS", []) === "true",
+  },
   google: {
     gsi: {
       clientId: getEnvString("GOOGLE_GSI_CLIENT_ID", [Environment.Prod]),

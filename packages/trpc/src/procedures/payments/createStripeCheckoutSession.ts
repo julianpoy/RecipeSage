@@ -26,11 +26,11 @@ const isAllowedRedirectUrl = (value: string) => {
 export const createStripeCheckoutSession = publicProcedure
   .input(
     z.object({
-      frequency: z.enum(["monthly", "yearly", "single"]).optional(), // Backwards compat - field marked as optional
-      isRecurring: z.boolean().optional(), // Backwards compat - field still included, can be removed
+      frequency: z.enum(["monthly", "yearly", "single"]),
       amount: z.number().min(0).max(1000000),
       successUrl: z.string(),
       cancelUrl: z.string(),
+      currency: z.string().default("usd"),
     }),
   )
   .output(
@@ -41,11 +41,6 @@ export const createStripeCheckoutSession = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    let frequency = input.frequency;
-    // Backwards compat
-    if (!frequency) {
-      frequency = input.isRecurring ? "monthly" : "single";
-    }
 
     if (process.env.NODE_ENV === "selfhost") {
       throw new TRPCError({
@@ -74,19 +69,19 @@ export const createStripeCheckoutSession = publicProcedure
       });
     }
 
-    if (frequency === "monthly" && input.amount < 100) {
+    if (input.frequency === "monthly" && input.amount < 100) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $1 due to transaction fees, sorry!",
       });
     }
-    if (frequency === "yearly" && input.amount < 1000) {
+    if (input.frequency === "yearly" && input.amount < 1000) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $10 due to transaction fees, sorry!",
       });
     }
-    if (frequency === "single" && input.amount < 1000) {
+    if (input.frequency === "single" && input.amount < 1000) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
         message: "Minimum is $10 due to transaction fees, sorry!",
@@ -99,11 +94,12 @@ export const createStripeCheckoutSession = publicProcedure
     }
 
     const stripeSession = await createPYOSession({
-      frequency,
+      frequency: input.frequency,
       stripeCustomerId,
       amount: input.amount,
       successUrl: input.successUrl,
       cancelUrl: input.cancelUrl,
+      currency: input.currency,
     });
 
     return {
