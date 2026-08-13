@@ -2413,5 +2413,12 @@
     "pages.share.embedPreview": "Anteprima dell'incorporamento",
     "services.versionCheck.outOfDate.header": "L'app non è aggiornata",
     "services.versionCheck.outOfDate.message": "La versione memorizzata nella cache dell'app è molto vecchia. L'app verrà riavviata per aggiornarsi.",
-    "generic.retry": "Riprova"
+    "generic.retry": "Riprova",
+    "pages.settings.offlineMode.prompt.never": "Mai",
+    "pages.app.newMessageToast.view": "Visualizza",
+    "pages.serverSettings.preset.custom": "Personalizzato",
+    "pages.myProfile.view.unsaved.header": "Modifiche non Salvate",
+    "pages.manageLabelModal.renameInvalid.header": "Errore",
+    "pages.importCookbookManagerCom.description": "Questa operazione importerà un'esportazione Crouton (un archivio .zip contenente file di ricette .crumb) nel tuo account RecipeSage. Ti invitiamo a contribuire se il file contiene un numero elevato di ricette o immagini.",
+    "offlineMode.prompt.enable": "Abilita"
 }
