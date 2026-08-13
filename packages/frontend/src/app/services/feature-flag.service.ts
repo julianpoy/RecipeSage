@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { environment, IS_SELFHOST } from "../../environments/environment";
+import { IS_SELFHOST } from "../../environments/environment";
 import { canCustomizeServerUrls } from "../utils/serverConfig";
 
 export enum FeatureFlagKeys {
@@ -31,9 +31,7 @@ export class FeatureFlagService {
       "ios.recipesage.com",
       "android.recipesage.com",
     ]),
-    [FeatureFlagKeys.EnableDiscover]:
-      !IS_SELFHOST &&
-      (!environment.production || this.isHost("beta.recipesage.com")),
+    [FeatureFlagKeys.EnableDiscover]: !IS_SELFHOST,
     [FeatureFlagKeys.EnableServerSettings]: canCustomizeServerUrls,
     [FeatureFlagKeys.EnableBetaServerPreset]:
       !IS_SELFHOST && !this.isHost("beta.recipesage.com"),

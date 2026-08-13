@@ -12,7 +12,6 @@ const DEFAULT_CAPABILITIES: RouterOutputs["users"]["getMyCapabilities"] = {
   expandablePreviews: false,
   assistantMoreMessages: false,
   moreUsageCredits: false,
-  discoverPublish: false,
 };
 
 @Injectable({

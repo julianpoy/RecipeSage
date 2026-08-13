@@ -13,19 +13,14 @@ describe("getMyCapabilities", () => {
         expandablePreviews: false,
         assistantMoreMessages: false,
         moreUsageCredits: false,
-        discoverPublish: false,
       });
     });
 
-    test("enables capabilities, including discoverPublish, for a contributor", async ({
-      trpc,
-      user,
-    }) => {
+    test("enables capabilities for a contributor", async ({ trpc, user }) => {
       await createActiveSubscription(user.id);
 
       const response = await trpc.users.getMyCapabilities();
 
-      expect(response.discoverPublish).toEqual(true);
       expect(response.multipleImages).toEqual(true);
     });
 
@@ -38,7 +33,6 @@ describe("getMyCapabilities", () => {
         expandablePreviews: false,
         assistantMoreMessages: false,
         moreUsageCredits: false,
-        discoverPublish: false,
       });
     });
   });

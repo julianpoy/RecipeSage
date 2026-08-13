@@ -26,6 +26,12 @@
       </ion-button>
     </div>
 
+    @if (loadedAny && !searchTerm.trim()) {
+      <p class="discover-publish-cta">
+        {{ "pages.discover.publishCta" | translate }}
+      </p>
+    }
+
     @if (recipes.length && preferences[preferenceKeys.ViewType] === "tiles") {
       <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
         <div class="recipe-group" [class.single-col]="tileColCount === 1">
@@ -138,12 +144,6 @@
         <h2>{{ "pages.discover.empty.title" | translate }}</h2>
         <p>{{ "pages.discover.empty.message" | translate }}</p>
       </div>
-    }
-
-    @if (loadedAny && capabilitiesService.capabilities.discoverPublish) {
-      <p class="discover-publish-cta">
-        {{ "pages.discover.publishCta" | translate }}
-      </p>
     }
   </div>
 </ion-content>

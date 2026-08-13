@@ -150,24 +150,6 @@ describe("publishDiscoverRecipe", () => {
         }),
       ).rejects.toThrow("linked recipes could not be found");
     });
-
-    test("rejects publishing without the discover publish capability", async ({
-      trpc,
-      user,
-    }) => {
-      const recipe = await eligibleRecipe(user.id);
-
-      await expect(
-        trpc.discover.publishDiscoverRecipe({
-          recipeId: recipe.id,
-          content: discoverRecipeContentFactory(),
-          language: "en",
-          imageIds: [],
-          linkedDiscoverRecipeIds: [],
-          agreedToTos: true,
-        }),
-      ).rejects.toThrow("contributor subscription");
-    });
   });
 
   describe("publish limit", () => {

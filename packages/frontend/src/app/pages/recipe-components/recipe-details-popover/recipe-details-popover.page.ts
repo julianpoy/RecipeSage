@@ -4,7 +4,6 @@ import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { WakeLockService } from "../../../services/wakelock.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
-import { CapabilitiesService } from "../../../services/capabilities.service";
 import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
@@ -73,7 +72,6 @@ export class RecipeDetailsPopoverPage {
   private preferencesService = inject(PreferencesService);
   private wakeLockService = inject(WakeLockService);
   cookingToolbarService = inject(CookingToolbarService);
-  capabilitiesService = inject(CapabilitiesService);
   private featureFlagService = inject(FeatureFlagService);
   private popoverCtrl = inject(PopoverController);
 

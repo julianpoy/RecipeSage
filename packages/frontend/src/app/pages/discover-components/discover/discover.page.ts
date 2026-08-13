@@ -9,7 +9,6 @@ import {
 } from "@recipesage/util/shared";
 
 import { RouteMap } from "../../../services/util.service";
-import { CapabilitiesService } from "../../../services/capabilities.service";
 import { LoadingService } from "../../../services/loading.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -77,7 +76,6 @@ export class DiscoverPage {
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
-  capabilitiesService = inject(CapabilitiesService);
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
