@@ -1,5 +1,6 @@
 import { anylist } from "./anylist";
 import { bigoven } from "./bigoven";
+import { cookbookmanager } from "./cookbookmanager";
 import { cookmate } from "./cookmate";
 import { copymethat } from "./copymethat";
 import { crouton } from "./crouton";
@@ -24,6 +25,7 @@ export const competitors: Record<string, CompetitorData> = {
   [crouton.slug]: crouton,
   [recipeKeeper.slug]: recipeKeeper,
   [cookmate.slug]: cookmate,
+  [cookbookmanager.slug]: cookbookmanager,
   [evernote.slug]: evernote,
 };
 
