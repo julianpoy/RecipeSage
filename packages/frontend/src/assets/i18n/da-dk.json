@@ -2402,5 +2402,22 @@
     "pages.app.newMessageToast.view": "Vis",
     "pages.cook.loading": "Indlæser opskrifter...",
     "pages.manageLabelModal.renameInvalid.header": "Fejl",
-    "offlineMode.prompt.enable": "Aktivér"
+    "offlineMode.prompt.enable": "Aktivér",
+    "offlineMode.prompt.notNow": "Ikke nu",
+    "offlineMode.prompt.neverAsk": "Spørg ikke igen",
+    "offlineMode.blocked.message": "Denne funktionalitet er kun tilgængelig, når du er online. Du kan slå offlinetilstand fra på indstillingssiden.",
+    "pages.settings.offlineMode.enable": "Aktivér offlinetilstand",
+    "pages.settings.offlineMode.prompt": "Prompt for offlinetilstand",
+    "pages.settings.offlineMode.prompt.ask": "Spørg mig",
+    "pages.serverSettings.switchConfirm.header": "Skifte server?",
+    "pages.serverSettings.switchConfirm.message": "Gør kun dette, hvis du ved, hvad du gør. Gør ikke dette, hvis nogen har bedt dig om det (det kan bruges til at overtage din konto!). Du bliver logget ud, når du har bekræftet.",
+    "pages.serverSettings.switchConfirm.confirm": "Skift server",
+    "pages.serverSettings.intro.title": "Vælg din server",
+    "pages.serverSettings.intro.body": "Vælg, hvilken RecipeSage-server denne app opretter forbindelse til. Næsten alle bør blive på Standard.",
+    "pages.serverSettings.endpoint": "API-slutpunkt",
+    "pages.serverSettings.preset.default": "Standard",
+    "pages.serverSettings.preset.beta": "Beta",
+    "pages.serverSettings.default.description": "Bruger den standardserver, som denne app er konfigureret til. Dette er det rigtige valg for næsten alle.",
+    "pages.serverSettings.beta.description": "Opretter forbindelse til RecipeSages beta-servere, hvor nye funktioner testes før udgivelsen. Disse servere kan være ustabile.",
+    "pages.serverSettings.apiBase.label": "API-basis-URL"
 }
