@@ -2419,5 +2419,6 @@
     "pages.serverSettings.preset.beta": "Beta",
     "pages.serverSettings.default.description": "Bruger den standardserver, som denne app er konfigureret til. Dette er det rigtige valg for næsten alle.",
     "pages.serverSettings.beta.description": "Opretter forbindelse til RecipeSages beta-servere, hvor nye funktioner testes før udgivelsen. Disse servere kan være ustabile.",
-    "pages.serverSettings.apiBase.label": "API-basis-URL"
+    "pages.serverSettings.apiBase.label": "API-basis-URL",
+    "offlineMode.blocked.header": "Offlinetilstand aktiveret"
 }
