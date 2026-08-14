@@ -6,18 +6,18 @@ export const recipeKeeper: CompetitorData = {
   url: "https://recipekeeperonline.com/",
   tagline: "The free, open source Recipe Keeper alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and no per-platform upgrade fees.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no recipe cap and no per-platform upgrade fees.",
   seoDescription:
     "A free, open source Recipe Keeper alternative. RecipeSage adds web clipping, photo and PDF import, meal planning, and nutrition tracking. Always free.",
   cardSummary:
     "Freemium with a 20-recipe cap, then a one-time Pro upgrade purchased separately on each platform.",
   intro: [
     "Recipe Keeper is a closed-source recipe app where the free tier stops at 20 recipes. Past that, Pro is a one-time purchase per platform: around $19.99 on iOS, $19.99 on Android, $29.99 on macOS, and a separate purchase on Windows. Apple Family Sharing is not enabled, so two iOS devices on different Apple IDs each need their own Pro upgrade. There's no web app and no real browser extension.",
-    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, and on Android. Auto-import works from URLs, photos, PDFs, and Word docs, and there's a Firefox and Chrome extension for one-click clipping from any desktop.",
+    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, on Android, and on the desktop. Auto-import works from URLs, photos, PDFs, and Word docs, and there's a Firefox and Chrome extension for one-click clipping from any desktop.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no subscription, no per-device fees. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall, no per-device fees. Open source under the AGPL.",
     competitor:
       "Free up to 20 recipes. Pro is a one-time upgrade purchased separately on each platform: around $19.99 iOS, $19.99 Android, $29.99 macOS, plus a separate purchase on Windows.",
   },
@@ -35,9 +35,9 @@ export const recipeKeeper: CompetitorData = {
     { feature: "iOS app", recipesage: "Free", competitor: "$19.99 Pro" },
     { feature: "Android app", recipesage: "Free", competitor: "$19.99 Pro" },
     {
-      feature: "Mac and Windows",
-      recipesage: "Free web app",
-      competitor: "$29.99 Mac, separate Windows purchase",
+      feature: "Desktop app (Mac, Windows, Linux)",
+      recipesage: "Free native apps",
+      competitor: "$29.99 Mac, separate Windows purchase, no Linux",
     },
     {
       feature: "Apple Family Sharing",
@@ -136,13 +136,33 @@ export const recipeKeeper: CompetitorData = {
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Recipe Keeper shares one recipe at a time by email or social, with no public profile or embed.",
     },
     {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Recipe Keeper offers hands-free cooking through an Amazon Alexa skill. RecipeSage has an on-device Cook Mode that shows the ingredients and steps together, lets you check off each as you cook, scale on the fly, and keeps the screen awake with a large adjustable font.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Recipe Keeper converts units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
-      competitor: false,
-      note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+      competitor: true,
+      note: "Both can build a printable PDF cookbook. Recipe Keeper offers customizable layouts and fonts. RecipeSage adds a cover page, an optional clickable table of contents, and each recipe on its own page.",
     },
   ],
   whySwitch: [
+    {
+      title: "On-device Cook Mode",
+      body: "RecipeSage's on-device Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font. Recipe Keeper's hands-free cooking is Alexa-only, so it needs an Echo.",
+    },
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage has built-in converters for units, pan sizes, and cooking temperatures. Recipe Keeper converts units only.",
+    },
     {
       title: "No 20-recipe cap and no per-platform upgrade fees",
       body: "RecipeSage is free on every device and never caps your library. Equipping a household across iPhone, Android, and a desktop in Recipe Keeper Pro passes $50 to $70.",
@@ -166,10 +186,6 @@ export const recipeKeeper: CompetitorData = {
     {
       title: "Open source and self-hostable",
       body: "RecipeSage's code is on GitHub under the AGPL, and exports use well-recognized standardized formats. Recipe Keeper is closed source with a proprietary undocumented .zip.",
-    },
-    {
-      title: "Turn your collection into a printable cookbook",
-      body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. Recipe Keeper has no built-in cookbook generator.",
     },
   ],
   competitorWins: [
@@ -216,7 +232,7 @@ export const recipeKeeper: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Recipe Keeper?",
-      a: "Yes. RecipeSage is a free, open source alternative to Recipe Keeper, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Recipe Keeper, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

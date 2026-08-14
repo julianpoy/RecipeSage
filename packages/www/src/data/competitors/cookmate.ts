@@ -6,7 +6,7 @@ export const cookmate: CompetitorData = {
   url: "https://www.cookmate.online/",
   tagline: "The free, open source Cookmate alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and no ads inside your recipes.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no recipe cap and no ads inside your recipes.",
   seoDescription:
     "A free, open source Cookmate alternative with no ads. RecipeSage offers recipe import, meal planning, smart shopping lists, and nutrition. Always free.",
   cardSummary:
@@ -17,7 +17,7 @@ export const cookmate: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no subscription. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
     competitor:
       "Free up to 60 cloud recipes and 1 shopping list, with ads inside recipes. Premium is $1.99/month or $22.99/year on iOS, or 20 EUR/year.",
   },
@@ -141,6 +141,24 @@ export const cookmate: CompetitorData = {
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Cookmate's friends feature is view-only between accounts, with no public profile or embed.",
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. Cookmate runs on the web and mobile only.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: false,
+      note: "Cookmate has cooking timers but no dedicated cook mode.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Cookmate has none of these.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -149,8 +167,16 @@ export const cookmate: CompetitorData = {
   ],
   whySwitch: [
     {
+      title: "Cook Mode",
+      body: "RecipeSage's full-screen Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font. Cookmate has no dedicated cook mode.",
+    },
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage has built-in converters for units, pan sizes, and cooking temperatures. Cookmate has none of these.",
+    },
+    {
       title: "No 60-recipe cap",
-      body: "Save 600 recipes, save 60,000. RecipeSage is free and does not cap. Cookmate's free cloud stops at 60 recipes and 1 shopping list.",
+      body: "Save 100 recipes, save 10,000. RecipeSage is free and does not cap. Cookmate's free cloud stops at 60 recipes and 1 shopping list.",
     },
     {
       title: "No ads while you cook",
@@ -202,7 +228,7 @@ export const cookmate: CompetitorData = {
   faqs: [
     {
       q: "How is RecipeSage free when Cookmate caps the free tier at 60?",
-      a: "RecipeSage is a side project from the two of us, not a business with employees and a marketing budget. Hosting is funded by optional donations and has been since 2018.",
+      a: "RecipeSage is a side project from the two of us, not a business with employees and a marketing budget. Hosting is funded by optional contributions and has been since 2018.",
     },
     {
       q: "Will my Cookmate photos come through?",
@@ -214,7 +240,7 @@ export const cookmate: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Cookmate?",
-      a: "Yes. RecipeSage is a free, open source alternative to Cookmate, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Cookmate, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

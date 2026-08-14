@@ -17,7 +17,7 @@ export const evernote: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no ads, no per-device fees, no note caps, and no selling your data.",
+      "Free forever. No paywall, no ads, no per-device fees, no note caps, and no selling your data.",
     competitor:
       "Free plan capped at 50 notes total on 1 device. Starter around $99/year, Advanced around $250/year, with sizeable renewal increases reported since 2024.",
   },
@@ -135,6 +135,24 @@ export const evernote: CompetitorData = {
       note: "Evernote exports to .enex, which is a documented XML format but specific to Evernote. RecipeSage supports well-recognized standardized recipe formats like JSON-LD.",
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Evernote has native Windows and Mac apps but no official Linux app. RecipeSage has native apps for all three.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: false,
+      note: "Evernote is a general note app with no cooking view.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Evernote has none of these.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -142,6 +160,14 @@ export const evernote: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Cook Mode",
+      body: "RecipeSage's full-screen Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font. Evernote is a general note app with no cooking view.",
+    },
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage has built-in converters for units, pan sizes, and cooking temperatures. Evernote has none of these.",
+    },
     {
       title: "Structure is what unlocks recipe features",
       body: "A shopping list that combines garlic across three recipes, 2x scaling, nutrition per serving, and an ingredient-aware search all require parsed ingredients. Evernote stores recipes as free text in a note, so none of those features can exist there.",
@@ -230,7 +256,7 @@ export const evernote: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Evernote for recipes?",
-      a: "Yes. RecipeSage is a free, open source alternative to Evernote for recipes, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Evernote for recipes, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

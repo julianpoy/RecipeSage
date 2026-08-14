@@ -6,7 +6,7 @@ export const copymethat: CompetitorData = {
   url: "https://www.copymethat.com/",
   tagline: "The free, open source CopyMeThat alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no recipe cap and browser extension for grabbing recipes from any site.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no recipe cap and browser extension for grabbing recipes from any site.",
   seoDescription:
     "A CopyMeThat alternative with no 40-recipe cap. RecipeSage is free and open source, with web clipping plus photo and PDF import and nutrition. Always free.",
   cardSummary:
@@ -17,7 +17,7 @@ export const copymethat: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no subscription. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
     competitor:
       "Free up to 40 recipes. Premium is $1/month, $12/year, or $65 lifetime to lift the cap.",
   },
@@ -130,6 +130,24 @@ export const copymethat: CompetitorData = {
       note: "CopyMeThat can share a recipe link, but people without an account see only the image, source link, and ingredients, and there's no website embed.",
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. CopyMeThat is a web app (installable) and mobile only.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+      note: "Both offer a cook mode that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. CopyMeThat has none of these.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -137,6 +155,10 @@ export const copymethat: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds built-in converters for units, pan sizes, and cooking temperatures. CopyMeThat has no built-in kitchen tools.",
+    },
     {
       title: "No 40-recipe cap",
       body: "Save 400 recipes, save 40,000. RecipeSage is free and does not cap. CopyMeThat's free tier stops at 40.",
@@ -194,7 +216,7 @@ export const copymethat: CompetitorData = {
   faqs: [
     {
       q: "How is RecipeSage free when CopyMeThat caps the free tier at 40?",
-      a: "RecipeSage is a side project from the two of us, not a business with employees and a marketing budget. Hosting is funded by donations and has been since 2018.",
+      a: "RecipeSage is a side project from the two of us, not a business with employees and a marketing budget. Hosting is funded by optional contributions and has been since 2018.",
     },
     {
       q: "Is RecipeSage's web clipper as good as CopyMeThat's?",
@@ -210,7 +232,7 @@ export const copymethat: CompetitorData = {
     },
     {
       q: "Is there a free alternative to CopyMeThat?",
-      a: "Yes. RecipeSage is a free, open source alternative to CopyMeThat, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to CopyMeThat, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

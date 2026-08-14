@@ -204,13 +204,13 @@ const bookmarklet =
       <p class="store-links">
         <a
           class="store-link"
-          href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/"
+          href="https://addons.mozilla.org/firefox/addon/recipesage/"
           target="_blank"
           rel="noopener">{t("pages.downloadAndInstall.extension.installFirefox")}</a
         >
         <a
           class="store-link"
-          href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo"
+          href="https://chromewebstore.google.com/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo"
           target="_blank"
           rel="noopener">{t("pages.downloadAndInstall.extension.installChrome")}</a
         >
@@ -225,7 +225,7 @@ const bookmarklet =
           class="bookmarklet"
           href={bookmarklet}
           onclick="return false"
-          title="Autoclip to RecipeSage"
+          title={t("pages.downloadAndInstall.bookmark.linkTitle")}
           >{t("pages.downloadAndInstall.bookmark.instructions")}</a
         >
         {t("pages.downloadAndInstall.bookmark.usage")}
@@ -340,7 +340,7 @@ const bookmarklet =
 
   .platform ol {
     margin: 0;
-    padding-left: 20px;
+    padding-inline-start: 20px;
     color: var(--text);
   }
 
@@ -356,7 +356,7 @@ const bookmarklet =
     height: 24px;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.07);
-    margin-left: 4px;
+    margin-inline-start: 4px;
     font-weight: 600;
   }
 

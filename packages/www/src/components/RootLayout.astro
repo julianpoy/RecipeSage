@@ -143,6 +143,7 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
 <!doctype html>
 <html lang={htmlLang} dir={htmlDir}>
   <head>
+    <meta charset="utf-8" />
     <slot name="head" />
     <script is:inline define:vars={{ redirectLoggedIn }}>
       (function () {
@@ -168,7 +169,6 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
         if (token) location.replace("/app/");
       })();
     </script>
-    <meta charset="utf-8" />
     <title>{title}</title>
     <meta
       name="viewport"

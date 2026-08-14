@@ -6,18 +6,18 @@ export const samsungFood: CompetitorData = {
   url: "https://samsungfood.com/",
   tagline: "The free, open source Samsung Food alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no Samsung account required.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no Samsung account required.",
   seoDescription:
     "A Samsung Food alternative with no ads and no Samsung account. RecipeSage is free, open source, with photo import, meal planning, and nutrition. Always free.",
   cardSummary:
     "Whisk after Samsung's 2019 acquisition. Best features need Samsung Food+ or Samsung hardware.",
   intro: [
-    "Whisk was an independent recipe app from 2012. Samsung acquired it in 2019 and rebranded it Samsung Food on August 30, 2023. The free tier exists, but photo scanning, AI meal plans, Smart Cook Mode, Vision AI ingredient scanning, and ad removal all sit behind Samsung Food+ at $6.99 per month or $59.99 per year. The deepest features expect a Samsung Account and ideally a Samsung Family Hub fridge.",
+    "Whisk was an independent recipe app from 2012. Samsung acquired it in 2019 and rebranded it Samsung Food on August 30, 2023. The free tier exists, but photo scanning, AI meal plans, Smart Cooking Mode, Vision AI ingredient scanning, and ad removal all sit behind Samsung Food+ at $6.99 per month or $59.99 per year. The deepest features expect a Samsung Account and ideally a Samsung Family Hub fridge.",
     "My wife and I made RecipeSage as a free, open source alternative with no ads and no Samsung lock-in. Photo and PDF import, drag-and-drop meal planning, smart shopping lists, recipe scaling, and typo-tolerant search are all free.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No ads, no Samsung account, no subscription tier. Open source under the AGPL.",
+      "Free forever. No ads, no Samsung account, no paywall. Open source under the AGPL.",
     competitor:
       "Free tier with ads. Samsung Food+ is $6.99/month or $59.99/year. Several core features require Samsung Food+.",
   },
@@ -63,6 +63,12 @@ export const samsungFood: CompetitorData = {
       feature: "Import from PDF and Word documents",
       recipesage: true,
       competitor: false,
+    },
+    {
+      feature: "Firefox and Chrome extension",
+      recipesage: true,
+      competitor: true,
+      note: "Both have a one-click browser extension for saving recipes from the web.",
     },
     {
       feature: "Data portability",
@@ -118,6 +124,24 @@ export const samsungFood: CompetitorData = {
       note: "Samsung's Terms grant Samsung a continuing content license that survives account deletion. See RecipeSage's legal page for our terms.",
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. Samsung Food is web and mobile only.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Samsung Food's Smart Cooking Mode requires the paid Food+ tier. RecipeSage's Cook Mode is free.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Samsung Food converts units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -125,6 +149,14 @@ export const samsungFood: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Free Cook Mode",
+      body: "RecipeSage's full-screen Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font, all free. Samsung Food's Smart Cooking Mode requires the paid Food+ tier.",
+    },
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds converters for pan sizes and cooking temperatures on top of unit conversion. Samsung Food converts units only.",
+    },
     {
       title: "Made by two people, not a hardware company",
       body: "RecipeSage is built and run by a small team of two, not folded into a smart-appliance ecosystem.",
@@ -154,10 +186,6 @@ export const samsungFood: CompetitorData = {
     {
       title: "Samsung smart-appliance integration",
       body: "If you own a Samsung Family Hub fridge, Bespoke oven, or cooktop, Samsung Food integrates directly with the hardware: fridge inventory, cook-setting handoff, and grocery ordering from the fridge. We don't.",
-    },
-    {
-      title: "First-party recipe catalog",
-      body: "Samsung Food inherited Whisk's social Communities layer with creator follows and a larger built-in recipe catalog. RecipeSage is a personal keeper, not a recipe network.",
     },
   ],
   migration: {
@@ -191,7 +219,7 @@ export const samsungFood: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Samsung Food?",
-      a: "Yes. RecipeSage is a free, open source alternative to Samsung Food, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Samsung Food, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

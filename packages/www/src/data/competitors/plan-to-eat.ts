@@ -6,9 +6,9 @@ export const planToEat: CompetitorData = {
   url: "https://www.plantoeat.com/",
   tagline: "The free, open source Plan to Eat alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no subscription and no time limit.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no paywall and no time limit.",
   seoDescription:
-    "A free alternative to Plan to Eat's subscription. RecipeSage handles meal planning, shopping lists, and recipe import. Free and open source, no subscription.",
+    "A free alternative to Plan to Eat's subscription. RecipeSage handles meal planning, shopping lists, and recipe import. Free and open source, no paywall.",
   cardSummary:
     "A $49 to $54.99 per year meal-planning subscription with no free tier.",
   intro: [
@@ -17,7 +17,7 @@ export const planToEat: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no ads. Unlimited recipes, meal planning, and shopping lists for every account.",
+      "Free forever. No paywall, no ads. Unlimited recipes, meal planning, and shopping lists for every account.",
     competitor:
       "$5.95 per month or $49 per year direct (USD). $54.99 per year on the iOS App Store. 14-day free trial, then paid. No free tier.",
   },
@@ -69,9 +69,9 @@ export const planToEat: CompetitorData = {
     },
     {
       feature: "Reusable meal-plan templates",
-      recipesage: "partial",
+      recipesage: false,
       competitor: true,
-      note: "Plan to Eat's Menus feature is more developed than RecipeSage's equivalent.",
+      note: "Plan to Eat's Menus let you save reusable bundles of recipes to drop into a plan. RecipeSage has no equivalent.",
     },
     {
       feature: "Freezer / batch-cooking tracker",
@@ -92,7 +92,7 @@ export const planToEat: CompetitorData = {
       feature: "Nutrition tracking (macros, vitamins, minerals)",
       recipesage: true,
       competitor: "partial",
-      note: "Plan to Eat focuses on macros; vitamin and mineral depth is less documented.",
+      note: "Plan to Eat focuses on macros, and vitamin and mineral depth is less documented.",
     },
     {
       feature: "AI cooking assistant",
@@ -127,6 +127,24 @@ export const planToEat: CompetitorData = {
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Plan to Eat sharing is limited to its Friends feature, where both people must be subscribers.",
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. Plan to Eat is web and mobile only.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+      note: "Both offer a full-screen cooking view that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Plan to Eat has none of these.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -135,8 +153,12 @@ export const planToEat: CompetitorData = {
   ],
   whySwitch: [
     {
-      title: "No subscription",
-      body: "RecipeSage is free, with no recurring bill and no time-limited trial. Plan to Eat is $49 to $54.99 per year with a 14-day trial.",
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds built-in converters for units, pan sizes, and cooking temperatures. Plan to Eat has none of these.",
+    },
+    {
+      title: "No paywall",
+      body: "RecipeSage is free, with nothing you're required to pay and no time-limited trial. Plan to Eat is $49 to $54.99 per year with a 14-day trial.",
     },
     {
       title: "More import options",
@@ -166,7 +188,7 @@ export const planToEat: CompetitorData = {
   competitorWins: [
     {
       title: "Reusable Menus templates",
-      body: "Plan to Eat's Menus (saved templates of recipes and notes) is more developed than RecipeSage's equivalents today.",
+      body: "Plan to Eat's Menus let you save reusable bundles of recipes and notes to drop into a plan. RecipeSage doesn't have a saved-menu feature.",
     },
     {
       title: "Freezer and batch-cooking tracker",
@@ -197,7 +219,7 @@ export const planToEat: CompetitorData = {
   faqs: [
     {
       q: "How can you offer this for free when Plan to Eat charges $49 a year?",
-      a: "Plan to Eat has a team they need to pay. RecipeSage is a side project for the two of us. Hosting is funded by optional donations and has been since 2018.",
+      a: "Plan to Eat has a team they need to pay. RecipeSage is a side project for the two of us. Hosting is funded by optional contributions and has been since 2018.",
     },
     {
       q: "Will I lose my meal plans when I switch?",
@@ -213,7 +235,7 @@ export const planToEat: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Plan to Eat?",
-      a: "Yes. RecipeSage is a free, open source alternative to Plan to Eat, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Plan to Eat, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [
