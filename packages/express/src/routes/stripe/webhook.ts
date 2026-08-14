@@ -7,12 +7,10 @@ import {
   findCheckoutUser,
   SubscriptionModelName,
   validateStripeEvent,
-  YEARLY_PYO_PRODUCT_ID,
-  MONTHLY_PYO_PRODUCT_ID,
 } from "@recipesage/util/server/capabilities";
 import assert from "assert";
 import { prisma } from "@recipesage/prisma";
-import { metrics } from "@recipesage/util/server/general";
+import { config, metrics } from "@recipesage/util/server/general";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
 
 const schema = {
@@ -155,10 +153,10 @@ export const webhookHandler = defineHandler(
       const paidProducts = invoice.lines.data.map(
         (line) => line.pricing?.price_details?.product,
       );
-      if (paidProducts.includes(MONTHLY_PYO_PRODUCT_ID)) {
+      if (paidProducts.includes(config.stripe.productId.monthly)) {
         subscriptionModelName = SubscriptionModelName.PyoMonthly;
       }
-      if (paidProducts.includes(YEARLY_PYO_PRODUCT_ID)) {
+      if (paidProducts.includes(config.stripe.productId.yearly)) {
         subscriptionModelName = SubscriptionModelName.PyoYearly;
       }
 

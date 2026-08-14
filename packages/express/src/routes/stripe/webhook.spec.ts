@@ -35,6 +35,15 @@ vi.mock("@recipesage/util/server/general", () => ({
   validateSession: vi.fn(),
   extendSession: vi.fn(),
   RateLimitTier: {},
+  config: {
+    stripe: {
+      productId: {
+        monthly: "pyo-monthly",
+        yearly: "pyo-yearly",
+        onetime: "pyo-single",
+      },
+    },
+  },
   metrics: {
     stripeWebhookSuccess: { inc: vi.fn() },
   },

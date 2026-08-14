@@ -1,6 +1,6 @@
 export * from "./createOrRetrieveCustomerId";
 export * from "./createPYOSession";
-export * from "./createRecurringPYOSession";
+export * from "./createMonthlyPYOSession";
 export * from "./createYearlyPYOSession";
 export * from "./createSinglePYOSession";
 export * from "./findCheckoutUser";

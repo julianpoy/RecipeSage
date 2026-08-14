@@ -1,25 +1,13 @@
+import { config } from "../../general";
 import { stripe } from "./stripe";
 
-export const MONTHLY_PYO_PRODUCT_ID = "pyo-monthly";
-
-export async function createRecurringPYOSession(args: {
+export async function createMonthlyPYOSession(args: {
   amount: number;
   stripeCustomerId?: string;
   successUrl: string;
   cancelUrl: string;
+  currency?: string;
 }) {
-  let product;
-
-  try {
-    product = await stripe.products.retrieve(MONTHLY_PYO_PRODUCT_ID);
-  } catch (_e) {
-    product = await stripe.products.create({
-      id: MONTHLY_PYO_PRODUCT_ID,
-      name: "RecipeSage Monthly Membership - Choose Your Own Price",
-      type: "service",
-    });
-  }
-
   const lookupKey = `pyo-monthly-${args.amount}`;
 
   let price = (
@@ -34,8 +22,8 @@ export async function createRecurringPYOSession(args: {
       recurring: {
         interval: "month",
       },
-      product: product.id,
-      currency: "usd",
+      product: config.stripe.productId.monthly,
+      currency: args.currency || "usd",
       lookup_key: lookupKey,
     });
   }
@@ -51,5 +39,8 @@ export async function createRecurringPYOSession(args: {
         quantity: 1,
       },
     ],
+    managed_payments: {
+      enabled: config.stripe.enableManagedPayments,
+    },
   });
 }
