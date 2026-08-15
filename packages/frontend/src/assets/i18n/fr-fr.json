@@ -1708,8 +1708,8 @@
     "pages.panBakewareConverter.presets.format.bakingTray": "Plaque à pâtisserie ({{w}} × {{l}} {{u}})",
     "pages.panBakewareConverter.presets.format.tube": "{{d}} {{u}} moule à savarin",
     "pages.panBakewareConverter.presets.format.muffin": "Moule à muffins ({{n}}-empreintes)",
-    "pages.panBakewareConverter.presets.format.muffinMini": "Moule à mini-muffins ({{n}}-empreintes)",
-    "pages.panBakewareConverter.presets.format.muffinStandard": "Moule à muffins standard ({{n}}-empreintes)",
+    "pages.panBakewareConverter.presets.format.muffinMini": "Mini muffins ({{n}}-empreintes)",
+    "pages.panBakewareConverter.presets.format.muffinStandard": "Muffins standard ({{n}}-empreintes)",
     "pages.panBakewareConverter.presets.format.muffinJumbo": "Muffin géant ({{n}}-empreintes)",
     "pages.cookbook.tabTitle": "Générateur de livre de recettes - RecipeSage",
     "pages.cookbook.title": "Générateur de livre de recettes",
@@ -2254,5 +2254,16 @@
     "pages.cookingTemperatures.items.tunaMedium.label": "Thon (à point)",
     "pages.cookingTemperatures.items.tunaMedium.state": "Centre légèrement rosé, bords complètement cuits",
     "pages.cookingTemperatures.items.finfish.label": "Poisson",
-    "pages.cookingTemperatures.items.eggDishes.label": "Plats à base d'œufs"
+    "pages.cookingTemperatures.items.eggDishes.label": "Plats à base d'œufs",
+    "pages.jobs.status.import.partial": "{{count}} recette(s) n'ont pas pu être lues automatiquement et ont été importées sous forme de notes simples.",
+    "pages.jobs.status.import.failed": "{{count}} recette(s) ont été ignorées en raison d'une erreur.",
+    "pages.import.jobs.label.unformatted": "Importation automatique non formatée",
+    "pages.import.cookbookManagerCom": "Importer depuis un fichier de CookBookManager.com",
+    "pages.importCookbookManagerCom.tabTitle": "Importation depuis CookBookManager.com - RecipeSage",
+    "pages.importCookbookManagerCom.title": "Importer des recettes à partir d'un fichier de CookBookManager.com",
+    "pages.importCookbookManagerCom.description": "Cette opération importera une exportation de CookBookManager.com (une archive .zip contenant des fichiers de recettes au format .yml) dans votre compte RecipeSage. N'hésitez pas à contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
+    "offlineMode.prompt.header": "Connexion lente détectée",
+    "offlineMode.prompt.message": "Votre connexion semble lente. Activez le mode hors ligne pour consulter instantanément les recettes enregistrées sur cet appareil. Ce réglage reste actif jusqu'à ce que vous fermiez l'application et vous pouvez le désactiver à tout moment depuis la page des paramètres.",
+    "offlineMode.prompt.enable": "Activer",
+    "offlineMode.prompt.notNow": "Pas maintenant"
 }
