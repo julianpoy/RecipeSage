@@ -1704,7 +1704,7 @@
     "pages.panBakewareConverter.presets.format.bundt": "Moule bundt de {{c}} tasses",
     "pages.panBakewareConverter.presets.format.bundtMini": "Moule cannelé (type Kouglof) mini de {{c}} tasses",
     "pages.panBakewareConverter.presets.format.bundtMetric": "Moule cannelé (type Kouglof) {{v}} L",
-    "pages.panBakewareConverter.presets.format.swissRoll": "Roulé ({{w}} × {{l}} {{u}})",
+    "pages.panBakewareConverter.presets.format.swissRoll": "Gâteau roulé ({{w}} × {{l}} {{u}})",
     "pages.panBakewareConverter.presets.format.bakingTray": "Plaque à pâtisserie ({{w}} × {{l}} {{u}})",
     "pages.panBakewareConverter.presets.format.tube": "{{d}} {{u}} moule à savarin",
     "pages.panBakewareConverter.presets.format.muffin": "Moule à muffins ({{n}}-empreintes)",
