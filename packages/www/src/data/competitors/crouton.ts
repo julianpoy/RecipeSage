@@ -7,18 +7,18 @@ export const crouton: CompetitorData = {
   tagline:
     "The free, open source Crouton alternative for Android, Windows, Linux, and the web",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, so the whole household can use it even if not everyone is on Apple.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, so the whole household can use it even if not everyone is on Apple.",
   seoDescription:
     "A Crouton alternative that works beyond Apple devices. RecipeSage is free and open source, with recipe import, meal planning, and sync on every device.",
   cardSummary:
     "Apple-only recipe app with a three-tier pricing model. AI photo import and the recipe-blog Discover feed are paywalled behind a $14.99/year subscription.",
   intro: [
     "Crouton is a recipe collection app that runs only on Apple devices (iPhone, iPad, Mac, Apple Watch, Vision Pro) and syncs through iCloud. Pricing has three tiers: a free tier with a small recipe import cap, a $24.99 one-time Plus unlock for unlimited recipes, and a $14.99/year Discover subscription that adds an AI photo importer and the recipe-blog feed reader.",
-    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, and on Android. You can import from URLs, photos, PDFs, and Word docs entirely for free.",
+    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, on Android, and on the desktop. You can import from URLs, photos, PDFs, and Word docs entirely for free.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no ads, no per-device fees, and no selling your data.",
+      "Free forever. No paywall, no ads, no per-device fees, and no selling your data.",
     competitor:
       "Three tiers. Free with a small recipe import cap, $24.99 one-time for Plus, and $14.99/year for Discover (required for AI photo import and the recipe-blog feed reader).",
   },
@@ -120,9 +120,10 @@ export const crouton: CompetitorData = {
       note: "Crouton auto-detects timers from recipe text and surfaces them on the Lock Screen, Apple Watch, and Vision Pro.",
     },
     {
-      feature: "Hands-free cook mode (TrueDepth wink/mouth control)",
-      recipesage: false,
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
       competitor: true,
+      note: "Both offer a full-screen cooking view that keeps the screen awake. RecipeSage lets you check off ingredients and steps as you cook and scale servings without leaving, while Crouton adds TrueDepth wink and mouth gestures to advance without touching the screen.",
     },
     {
       feature: "Real multi-user collaboration with separate accounts",
@@ -153,6 +154,12 @@ export const crouton: CompetitorData = {
       note: "RecipeSage's public profile, link sharing, and website embeds are free. Crouton's shareable recipe links require the paid Discover tier, and it has no website embed.",
     },
     {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Crouton converts units and connects to Combustion temperature probes. RecipeSage's toolkit adds a measurement converter, a pan and bakeware converter that suggests bake time and temperature adjustments, and a built-in cooking-temperature reference.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -161,8 +168,12 @@ export const crouton: CompetitorData = {
   ],
   whySwitch: [
     {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds converters for pan sizes and cooking temperatures on top of unit conversion. Crouton converts units and links to temperature probes, but has no pan or bakeware converter and no built-in temperature reference.",
+    },
+    {
       title: "Works on Android, Windows, and Linux",
-      body: "RecipeSage runs in any browser and has a native Android app. Crouton is Apple-only. Its officially recommended way to share a recipe with an Android friend is to email a PDF.",
+      body: "RecipeSage runs in any browser and has a native Android app. Crouton is Apple-only, and officially suggests exporting a recipe as a PDF to share it with Android friends.",
     },
     {
       title: "A web app",
@@ -247,7 +258,7 @@ export const crouton: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Crouton?",
-      a: "Yes. RecipeSage is a free, open source alternative to Crouton, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Crouton, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

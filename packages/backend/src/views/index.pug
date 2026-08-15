@@ -2,7 +2,20 @@ extends layout
 
 block content
   h1 RecipeSage API
-  p Welcome to the RecipeSage API
-  p Feel free to contact me if you'd like to discuss licensing for API usage
-  a julian@recipesage.com
+  p
+    | Welcome to the RecipeSage API
+    br
+    | Usage of the RecipeSage API is free for personal, non-commercial use.
+  p
+    | You can view the OpenAPI spec at:
+    br
+    a(href=`${apiPublicUrl}/openapi.json`) #{apiPublicUrl}/openapi.json
+    br
+    | Or the API documentation at:
+    br
+    a(href="https://docs.recipesage.com/api/") https://docs.recipesage.com/api/
+  p
+    | Feel free to contact me if you'd like to discuss simple licensing terms for commercial, business, or non-personal API usage:
+    br
+    | julian@recipesage.com
   p(style="position: absolute; bottom: 0") Version #{version}

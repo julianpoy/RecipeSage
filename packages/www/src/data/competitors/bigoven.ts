@@ -6,13 +6,13 @@ export const bigoven: CompetitorData = {
   url: "https://www.bigoven.com/",
   tagline: "The free, open source BigOven alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no ads and no recipe cap.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no ads and no recipe cap.",
   seoDescription:
     "A BigOven alternative with no ads and no 200-recipe cap. RecipeSage is free and open source, with instant photo and PDF recipe import. Always free.",
   cardSummary:
     "A million-recipe community catalog wrapped in a free tier that shows ads and caps at 200 saved recipes.",
   intro: [
-    "BigOven hosts a public catalog of over a million recipes with ratings and reviews. As a personal recipe keeper, the free tier caps at 200 saved recipes, shows ads (including video pop-ups and ads on printed recipes), and gates custom folders, advanced search, ingredient-level nutrition, and multi-account planner sharing behind BigOven Pro ($2.99 per month or $24.99 per year). BigOven's free tier also includes only 1 \"RecipeScan\" credit.",
+    "BigOven hosts a public catalog of over a million recipes with ratings and reviews. As a personal recipe keeper, the free tier caps at 200 saved recipes, shows ads (including video pop-ups and ads on printed recipes), and gates custom folders, advanced search, ingredient-level nutrition, and multi-account planner sharing behind BigOven Pro ($2.99 per month or $24.99 per year). BigOven's free tier also includes only 3 \"RecipeScan\" credits.",
     "My wife and I made RecipeSage as a free, open source personal recipe keeper with no ads and no cap. Photo and PDF import are instant, not human-assisted. You can export everything in standard formats anytime if you decide to leave.",
   ],
   pricingSummary: {
@@ -63,7 +63,7 @@ export const bigoven: CompetitorData = {
       feature: "Instant photo import (OCR)",
       recipesage: true,
       competitor: "partial",
-      note: "BigOven's RecipeScan is human-assisted and takes 2-5 days. The free tier includes 1 credit.",
+      note: "BigOven's RecipeScan is human-assisted and takes 2-5 days. The free tier includes 3 credits.",
     },
     {
       feature: "Import from PDF and Word documents",
@@ -130,6 +130,23 @@ export const bigoven: CompetitorData = {
       competitor: false,
     },
     {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: "partial",
+      note: "BigOven has a native Windows app, while Mac and Linux use the browser. RecipeSage has native apps for all three.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "BigOven converts units within a recipe. RecipeSage's toolkit adds a measurement converter, a pan and bakeware converter that suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -137,6 +154,14 @@ export const bigoven: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Cook Mode",
+      body: "RecipeSage's full-screen Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font. BigOven has no cook mode.",
+    },
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage has built-in converters for units, pan sizes, and cooking temperatures. BigOven converts units within a recipe but has no pan or temperature tools.",
+    },
     {
       title: "No ads",
       body: "RecipeSage is ad-free and tracking-free. Cooking from a tablet in the kitchen shouldn't mean video pop-ups in the middle of your recipe.",
@@ -162,16 +187,7 @@ export const bigoven: CompetitorData = {
       body: "RecipeSage's Cookbook Generator assembles your recipes into a single PDF, with a cover page, an optional table of contents, and each recipe on its own page with its image and nutrition. It's an easy way to print a personal cookbook or give one as a gift. BigOven has no built-in cookbook generator.",
     },
   ],
-  competitorWins: [
-    {
-      title: "Public recipe community catalog",
-      body: "BigOven's catalog of over a million public recipes with ratings and reviews is a real strength if you want to browse other people's recipes. RecipeSage is a personal recipe keeper, not a discovery network.",
-    },
-    {
-      title: "Use Up Leftovers",
-      body: "BigOven's Use Up Leftovers feature matches recipes against ingredients you already have. RecipeSage doesn't have a direct equivalent.",
-    },
-  ],
+  competitorWins: [],
   migration: {
     headline: "Bringing your BigOven recipes over",
     summary:
@@ -195,7 +211,7 @@ export const bigoven: CompetitorData = {
     },
     {
       q: "Do I lose access to the BigOven recipe community?",
-      a: "Yes. RecipeSage is a personal keeper, not a discovery network. If browsing other people's ratings and reviews is the main reason you use BigOven, keep it for that and use RecipeSage for your own recipe library.",
+      a: "BigOven's public community of rated and reviewed recipes stays on BigOven, so you can keep using BigOven for that whenever you like. This import copies your saved recipes into RecipeSage, where you can keep, plan, and cook them.",
     },
     {
       q: "Will RecipeSage scan photos of recipes the way BigOven RecipeScan does?",
@@ -207,7 +223,7 @@ export const bigoven: CompetitorData = {
     },
     {
       q: "Is there a free alternative to BigOven?",
-      a: "Yes. RecipeSage is a free, open source alternative to BigOven, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to BigOven, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

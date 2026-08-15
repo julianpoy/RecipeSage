@@ -6,18 +6,18 @@ export const mela: CompetitorData = {
   url: "https://mela.recipes/",
   tagline: "The free, open source Mela alternative for iOS, Android, Windows, and Linux",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs on Android, iOS, and in any browser, not just Apple devices.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs on Android, iOS, in any browser, and as native desktop apps for Windows, macOS, and Linux, not just Apple devices.",
   seoDescription:
     "A Mela alternative that runs on Android, Windows, and Linux too, not just Apple. RecipeSage is free, open source, and works in any browser. Always free.",
   cardSummary:
     "Apple-only. No Android, no Windows, no Linux, no web app, and no Apple Watch app.",
   intro: [
     "Mela is a native iOS and macOS app with a one-time in-app purchase per storefront: $6.99 on iOS/iPadOS and $14.99 on macOS. Sync goes through the user's own iCloud account, but there's no Android app, no Windows or Linux app, and no web app.",
-    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, and on Android. Auto-import works from URLs, photos, PDFs, and Word docs, and the whole household can use it from any device with a browser.",
+    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, on Android, and on the desktop. Auto-import works from URLs, photos, PDFs, and Word docs, and the whole household can use it from any device with a browser.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no per-platform fees, runs on Android and any browser too.",
+      "Free forever. No paywall, no per-platform fees, runs on Android and any browser too.",
     competitor:
       "In-app purchase per device type: $6.99 iOS/iPadOS and $14.99 macOS. An Apple-only household with iPhone and Mac pays roughly $21.98.",
   },
@@ -36,7 +36,7 @@ export const mela: CompetitorData = {
       feature: "iOS app",
       recipesage: "Free",
       competitor: "$6.99",
-      note: "Mela is a free download with a small free tier; the in-app purchase unlocks unlimited recipes.",
+      note: "Mela is a free download with a small free tier, and the in-app purchase unlocks unlimited recipes.",
     },
     { feature: "Android app", recipesage: "Free", competitor: false },
     {
@@ -127,6 +127,17 @@ export const mela: CompetitorData = {
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Mela shares through iCloud (everyone needs an Apple ID and Mela) or by sending files.",
     },
     {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Mela converts units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -134,6 +145,10 @@ export const mela: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds a pan and bakeware converter and a safe cooking-temperature reference on top of unit conversion. Mela converts units only.",
+    },
     {
       title: "Works on Android, Windows, and Linux",
       body: "RecipeSage runs natively on every device, not just Apple. Mela is Apple-only, so a household with even one non-Apple device can't share a library.",
@@ -166,7 +181,7 @@ export const mela: CompetitorData = {
   competitorWins: [
     {
       title: "Recipe blog feed subscriptions",
-      body: "Mela lets you subscribe to cooking blogs by RSS and triage new posts in a Feeds inbox, promoting the ones you like into your library. RecipeSage is focused only on personal recipe collecting and has no inbuilt feed-reader.",
+      body: "Mela lets you subscribe to cooking blogs by RSS and triage new posts in a Feeds inbox, promoting the ones you like into your library. RecipeSage has no inbuilt RSS feed-reader.",
     },
   ],
   migration: {
@@ -209,7 +224,7 @@ export const mela: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Mela?",
-      a: "Yes. RecipeSage is a free, open source alternative to Mela, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Mela, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

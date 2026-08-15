@@ -6,18 +6,18 @@ export const paprika: CompetitorData = {
   url: "https://www.paprikaapp.com/",
   tagline: "The free, open source Paprika alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no per-device fees.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no per-device fees.",
   seoDescription:
-    "A free, open source Paprika alternative. RecipeSage imports recipes, plans meals, and syncs across web, iOS, and Android with no per-device fee. Always free.",
+    "A free, open source Paprika alternative. RecipeSage imports recipes, plans meals, and syncs across web, desktop, iOS, and Android with no per-device fee. Always free.",
   cardSummary:
     "Paid per platform. $4.99 mobile, $29.99 desktop, no web app, no built-in nutrition.",
   intro: [
     "Paprika is a paid recipe app sold per platform: $4.99 on iOS, $4.99 on Android, $29.99 each on macOS and Windows. There's no web app, and each license covers a single platform.",
-    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, and on Android. Auto-import works from URLs, photos, PDFs, and Word docs.",
+    "My wife and I made RecipeSage as the recipe app we wanted ourselves. It's free, open source, and runs in any browser, on iOS, on Android, and on the desktop. Auto-import works from URLs, photos, PDFs, and Word docs.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no ads, no per-device fees, and no selling your data.",
+      "Free forever. No paywall, no ads, no per-device fees, and no selling your data.",
     competitor:
       "One-time purchase per platform: $4.99 iOS, $4.99 Android, $29.99 macOS, $29.99 Windows. A full household easily passes $40.",
   },
@@ -35,9 +35,10 @@ export const paprika: CompetitorData = {
     { feature: "iOS app", recipesage: "Free", competitor: "$4.99" },
     { feature: "Android app", recipesage: "Free", competitor: "$4.99" },
     {
-      feature: "Mac and Windows",
-      recipesage: "Free web app",
-      competitor: "$29.99 each",
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: "Free",
+      competitor: "$29.99 each (Mac and Windows only)",
+      note: "Paprika sells native Mac and Windows apps separately and has no Linux app. RecipeSage's desktop app is free on all three.",
     },
     {
       feature: "Apple Watch app",
@@ -75,7 +76,8 @@ export const paprika: CompetitorData = {
     {
       feature: "Recurring meal plan items",
       recipesage: true,
-      competitor: true,
+      competitor: false,
+      note: "Paprika adds meals to specific dates only. You can save and reapply menus, but there's no repeating option.",
     },
     {
       feature: "Smart shopping list with aisle categorization",
@@ -110,6 +112,17 @@ export const paprika: CompetitorData = {
       competitor: true,
     },
     {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Paprika converts ingredient units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
+    },
+    {
       feature: "Open source",
       recipesage: true,
       competitor: false,
@@ -139,6 +152,10 @@ export const paprika: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Kitchen tools beyond unit conversion",
+      body: "RecipeSage adds a pan and bakeware converter and a safe cooking-temperature reference on top of unit conversion. Paprika converts ingredient units only.",
+    },
     {
       title: "No per-device fees",
       body: "Setting up a household with Paprika across phone, tablet, and desktop quickly passes $40. RecipeSage is free on every device, for everyone in the family.",
@@ -174,8 +191,8 @@ export const paprika: CompetitorData = {
   ],
   competitorWins: [
     {
-      title: "Native Mac, Windows, and Apple Watch apps",
-      body: "Paprika ships native desktop apps and a watchOS app for timers and grocery lists. RecipeSage runs in the browser everywhere instead.",
+      title: "Apple Watch app",
+      body: "Paprika has a watchOS app for timers and grocery lists on your wrist. RecipeSage doesn't have an Apple Watch app.",
     },
     {
       title: "Pantry with expiration dates",
@@ -207,7 +224,7 @@ export const paprika: CompetitorData = {
   faqs: [
     {
       q: "Is RecipeSage actually free? What's the catch?",
-      a: "Genuinely free. No ads, no premium tier, no email upsells. We accept donations from people who want to support development, but every feature is available to everyone.",
+      a: "Genuinely free. No ads, no premium tier, no email upsells. We accept contributions from people who want to support development, but every feature is available to everyone.",
     },
     {
       q: "Can I keep using Paprika while I try RecipeSage?",
@@ -219,7 +236,7 @@ export const paprika: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Paprika?",
-      a: "Yes. RecipeSage is a free, open source alternative to Paprika, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Paprika, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

@@ -1,9 +1,13 @@
 import express from "express";
 const router = express.Router();
 import semver from "semver";
+import { config } from "@recipesage/util/server/general";
 
 router.get("/", function (req, res) {
-  res.render("index", { version: process.env.VERSION });
+  res.render("index", {
+    version: process.env.VERSION,
+    apiPublicUrl: config.api.publicUrl,
+  });
 });
 
 const MIN_SUPPORTED_FRONTEND_VERSION = ">=3.0.0";

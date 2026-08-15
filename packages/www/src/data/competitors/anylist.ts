@@ -6,18 +6,18 @@ export const anylist: CompetitorData = {
   url: "https://www.anylist.com/",
   tagline: "The free, open source AnyList alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, with no paywall on web access and no Apple-only assumptions.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no paywall on web access and no Apple-only assumptions.",
   seoDescription:
     "An AnyList alternative with free web access and unlimited imports. RecipeSage is free and open source, with meal planning and nutrition built in. Always free.",
   cardSummary:
     "Free for shared shopping lists, but web access, meal planning, and more than 5 recipe imports require the AnyList Complete subscription.",
   intro: [
     "AnyList is a shopping list and recipe app. Their free tier covers shared shopping lists and basic recipe collection, but web access, the meal planner, the Apple Watch app, location reminders, item photos, and recipe imports (more than 5) all require AnyList Complete which costs $9.99 per year for an individual or $14.99 per year for a household.",
-    "My wife and I made RecipeSage as a free, open source alternative. The web app, meal planner, unlimited recipe imports, nutrition tracking, and photo, PDF, and Word document import are all free, with no subscription and no per-feature gating.",
+    "My wife and I made RecipeSage as a free, open source alternative. The web app, meal planner, unlimited recipe imports, nutrition tracking, and photo, PDF, and Word document import are all free, with no paywall and no per-feature gating.",
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No subscription, no ads. Unlimited recipes, meal planning, web access, and shopping lists for every account.",
+      "Free forever. No paywall, no ads. Unlimited recipes, meal planning, web access, and shopping lists for every account.",
     competitor:
       "Very basic free tier for shared shopping lists and up to 5 imported recipes. AnyList Complete is $9.99/year for an individual or $14.99/year for a household. Web app, meal planning, Apple Watch, location reminders, item photos, and unlimited recipe imports all require payment.",
   },
@@ -30,8 +30,8 @@ export const anylist: CompetitorData = {
     {
       feature: "Web app",
       recipesage: true,
-      competitor: true,
-      note: "AnyList requires a subscription to use their web app, no free tier access.",
+      competitor: "partial",
+      note: "AnyList requires a paid Complete subscription to use their web app, with no free-tier access.",
     },
     { feature: "iOS app", recipesage: true, competitor: true },
     {
@@ -41,10 +41,10 @@ export const anylist: CompetitorData = {
       note: "AnyList's Android app is less polished than its iOS app.",
     },
     {
-      feature: "macOS app",
+      feature: "Native desktop app (Windows, macOS, Linux)",
       recipesage: true,
-      competitor: true,
-      note: "RecipeSage is fully functional within your browser and can be installed to your desktop via Chrome.",
+      competitor: "partial",
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux, plus the web app. AnyList's Mac app requires a paid Complete subscription, and there's no Windows or Linux app.",
     },
     {
       feature: "Apple Watch app",
@@ -59,8 +59,8 @@ export const anylist: CompetitorData = {
     {
       feature: "Auto import from a URL",
       recipesage: true,
-      competitor: true,
-      note: "AnyList limits this to 5 total imports for free",
+      competitor: "partial",
+      note: "AnyList limits this to 5 total imports for free. Unlimited imports require Complete.",
     },
     {
       feature: "Import from a photo (OCR)",
@@ -75,14 +75,14 @@ export const anylist: CompetitorData = {
     {
       feature: "Free drag-and-drop meal planner",
       recipesage: true,
-      competitor: true,
-      note: "Meal planning is an AnyList Complete feature.",
+      competitor: "partial",
+      note: "Meal planning requires a paid AnyList Complete subscription.",
     },
     {
       feature: "Reusable meal-plan templates",
-      recipesage: "partial",
+      recipesage: false,
       competitor: true,
-      note: "AnyList's v6 Templates are more developed than RecipeSage's equivalent today.",
+      note: "AnyList's Templates let you save and reapply a meal-plan layout. RecipeSage has no reusable meal-plan template feature.",
     },
     {
       feature: "Smart shopping list with aisle categorization",
@@ -148,6 +148,18 @@ export const anylist: CompetitorData = {
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. AnyList sharing is account-to-account only, with no public link for non-users.",
     },
     {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: "partial",
+      note: "AnyList has a cooking view that highlights the current step. RecipeSage's Cook Mode shows the ingredients and steps together, lets you check off each as you cook, scale servings on the fly, and keeps the screen awake with a large adjustable font.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. AnyList has none of these.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
@@ -155,6 +167,10 @@ export const anylist: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage has built-in converters for units, pan sizes, and cooking temperatures. AnyList has none of these.",
+    },
     {
       title: "No paywall on web, meal planner, or recipe imports",
       body: "RecipeSage's web app, drag-and-drop meal planner, and recipe imports are all free. AnyList paywalls all three behind Complete and caps the free tier at 5 imported recipes total.",
@@ -173,7 +189,7 @@ export const anylist: CompetitorData = {
     },
     {
       title: "Cross-platform without Apple bias",
-      body: "RecipeSage runs equally well in any browser, on iOS, and on Android. AnyList's deepest features assume the Apple ecosystem, and Chromebook, Windows, and Linux users can only reach AnyList through the Complete-gated web app.",
+      body: "RecipeSage runs equally well in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux. AnyList's deepest features assume the Apple ecosystem, and Chromebook, Windows, and Linux users can only reach AnyList through the Complete-gated web app.",
     },
     {
       title: "Share your recipes with anyone",
@@ -222,7 +238,7 @@ export const anylist: CompetitorData = {
     },
     {
       q: "Is there a free alternative to AnyList?",
-      a: "Yes. RecipeSage is a free, open source alternative to AnyList, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to AnyList, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

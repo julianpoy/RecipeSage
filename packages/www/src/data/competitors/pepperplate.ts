@@ -4,9 +4,9 @@ export const pepperplate: CompetitorData = {
   slug: "pepperplate",
   name: "Pepperplate",
   url: "https://www.pepperplate.com/",
-  tagline: "A free, open source Pepperplate alternative",
+  tagline: "The free, open source Pepperplate alternative",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, and on Android, and we'll move your Pepperplate library over in one click.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, and we'll move your Pepperplate library over in one click.",
   seoDescription:
     "A free, open source Pepperplate alternative. RecipeSage imports recipes, plans meals, and builds shopping lists across web, iOS, and Android. Always free.",
   cardSummary:
@@ -17,7 +17,7 @@ export const pepperplate: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever, open source, actively maintained. No ads, no subscription.",
+      "Free forever, open source, actively maintained. No ads, no paywall.",
     competitor:
       "$2.99 per month or $32.99 per year. The iOS app has not received an update since April 2023.",
   },
@@ -113,14 +113,32 @@ export const pepperplate: CompetitorData = {
     {
       feature: "Data portability",
       recipesage: true,
-      competitor: "Plain .txt",
-      note: "Pepperplate's only export is unstructured plain text that other apps can't reliably re-import. RecipeSage supports well-recognized standardized formats.",
+      competitor: "Plain-text .zip",
+      note: "Pepperplate's only export is a .zip of unstructured plain-text files that other apps can't reliably re-import. RecipeSage supports well-recognized standardized formats.",
     },
     {
       feature: "Public sharing by link or embed, no account needed",
       recipesage: true,
       competitor: false,
       note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Pepperplate shares one recipe at a time by email or social post, with no public profile or embed.",
+    },
+    {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. Pepperplate is web and mobile only.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+      note: "Both offer a cook mode that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Pepperplate has none of these.",
     },
     {
       feature: "Printable PDF cookbook generator",
@@ -130,6 +148,10 @@ export const pepperplate: CompetitorData = {
     },
   ],
   whySwitch: [
+    {
+      title: "Built-in kitchen toolkit",
+      body: "RecipeSage adds built-in converters for units, pan sizes, and cooking temperatures. Pepperplate has none of these.",
+    },
     {
       title: "Your recipes belong to you",
       body: "Pepperplate's only export is a .zip of plain text files that other apps can't reliably re-import. RecipeSage exports JSON-LD, PDF, or text any time.",
@@ -212,7 +234,7 @@ export const pepperplate: CompetitorData = {
     },
     {
       q: "Is there a free alternative to Pepperplate?",
-      a: "Yes. RecipeSage is a free, open source alternative to Pepperplate, with no subscription and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
+      a: "Yes. RecipeSage is a free, open source alternative to Pepperplate, with no paywall and no ads. You can import your recipes, plan meals, build shopping lists, track nutrition, and use it on the web, desktop, iOS, and Android. If you ever decide to leave, you can export everything or self-host.",
     },
   ],
   closing: [

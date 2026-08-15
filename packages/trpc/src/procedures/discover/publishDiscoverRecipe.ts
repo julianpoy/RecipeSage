@@ -5,7 +5,6 @@ import { TRPCError } from "@trpc/server";
 import { createDiscoverRecipeFromRecipe } from "@recipesage/util/server/db";
 import { enqueueJob } from "@recipesage/util/server/general";
 import {
-  assertCanPublishDiscover,
   assertImagesOwned,
   assertDiscoverRecipesExist,
 } from "@recipesage/util/server/trpc";
@@ -42,8 +41,6 @@ export const publishDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    await assertCanPublishDiscover(ctx.session.userId);
-
     const author = await prisma.user.findUnique({
       where: {
         id: ctx.session.userId,

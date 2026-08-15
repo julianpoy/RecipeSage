@@ -155,7 +155,7 @@
         <ion-icon name="share-outline" slot="start"></ion-icon>
         {{ "pages.recipeDetailsPopover.share" | translate }}
       </ion-button>
-      @if (enableDiscover && capabilitiesService.capabilities.discoverPublish) {
+      @if (enableDiscover) {
         <ion-button
           (click)="closeWithAction('publishToDiscover')"
           expand="block"

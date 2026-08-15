@@ -20,7 +20,6 @@ export const getMyCapabilities = publicProcedure
       expandablePreviews: z.boolean(),
       assistantMoreMessages: z.boolean(),
       moreUsageCredits: z.boolean(),
-      discoverPublish: z.boolean(),
     }),
   )
   .query(async ({ ctx }) => {
@@ -31,7 +30,6 @@ export const getMyCapabilities = publicProcedure
         expandablePreviews: false,
         assistantMoreMessages: false,
         moreUsageCredits: false,
-        discoverPublish: false,
       };
     }
 
@@ -49,6 +47,5 @@ export const getMyCapabilities = publicProcedure
       moreUsageCredits: userCapabilities.includes(
         Capabilities.MoreUsageCredits,
       ),
-      discoverPublish: userCapabilities.includes(Capabilities.DiscoverPublish),
     };
   });

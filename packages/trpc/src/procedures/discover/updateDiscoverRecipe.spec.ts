@@ -154,24 +154,5 @@ describe("updateDiscoverRecipe", () => {
         }),
       ).rejects.toThrow("linked recipes could not be found");
     });
-
-    test("rejects editing without the discover publish capability", async ({
-      trpc,
-      user,
-    }) => {
-      const recipe = await prisma.discoverRecipe.create({
-        data: discoverRecipeFactory(user.id),
-      });
-
-      await expect(
-        trpc.discover.updateDiscoverRecipe({
-          id: recipe.id,
-          content: discoverRecipeContentFactory(),
-          language: "en",
-          imageIds: [],
-          linkedDiscoverRecipeIds: [],
-        }),
-      ).rejects.toThrow("contributor subscription");
-    });
   });
 });

@@ -21,11 +21,14 @@ const { t, locale } = Astro.props;
 const featureSlugs = [
   "import",
   "nutrition",
-  "cookingAssistant",
+  "cookMode",
+  "tools",
+  "apps",
   "offline",
   "mealPlanning",
   "shoppingLists",
   "scaling",
+  "editor",
   "search",
   "sharing",
   "migration",
@@ -36,9 +39,9 @@ const ctaSlugs = [
   "noAds",
   "crossPlatform",
   "autoImport",
-  "aiAssistant",
   "collaboration",
   "selfHost",
+  "api",
 ];
 
 const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
@@ -112,6 +115,18 @@ const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
             if (iosSrc) s.src = iosSrc;
           }
           v.load();
+        })();
+      </script>
+      <script is:inline>
+        (function () {
+          if (!window.matchMedia) return;
+          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+            return;
+          const v = document.querySelector("video.demo-video");
+          if (!v) return;
+          v.removeAttribute("autoplay");
+          v.removeAttribute("loop");
+          v.pause();
         })();
       </script>
     </div>
@@ -357,7 +372,7 @@ const localeHref = (loc: string) => (loc === DEFAULT_LOCALE ? "/" : `/${loc}/`);
   }
 
   .reasons {
-    padding-left: 20px;
+    padding-inline-start: 20px;
     color: var(--text-muted);
   }
 

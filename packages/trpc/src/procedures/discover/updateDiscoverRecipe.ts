@@ -4,7 +4,6 @@ import { prisma, DiscoverApprovalState } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { enqueueJob } from "@recipesage/util/server/general";
 import {
-  assertCanPublishDiscover,
   assertImagesOwned,
   assertDiscoverRecipesExist,
 } from "@recipesage/util/server/trpc";
@@ -35,8 +34,6 @@ export const updateDiscoverRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    await assertCanPublishDiscover(ctx.session.userId);
-
     const existing = await prisma.discoverRecipe.findFirst({
       where: {
         id: input.id,
