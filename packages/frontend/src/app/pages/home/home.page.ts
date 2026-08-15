@@ -22,6 +22,7 @@ import {
 import { HomePopoverPage } from "../home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "../home-search-popover/home-search-filter-popover.page";
 import { ServerActionsService } from "../../services/server-actions.service";
+import { CookingToolbarService } from "../../services/cooking-toolbar.service";
 import type {
   LabelSummary,
   NutritionFilter,
@@ -111,6 +112,7 @@ export class HomePage implements OnDestroy {
   private websocketService = inject(WebsocketService);
   private serverActionsService = inject(ServerActionsService);
   private utilService = inject(UtilService);
+  private cookingToolbarService = inject(CookingToolbarService);
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   aboutHref: string = RouteMap.AboutPage.getPath();
@@ -905,6 +907,9 @@ export class HomePage implements OnDestroy {
                   ids: this.selectedRecipeIds,
                 });
               if (!response) return;
+              for (const id of this.selectedRecipeIds) {
+                this.cookingToolbarService.unpinRecipe(id);
+              }
               this.clearSelectedRecipes();
               await this.resetAndLoadAll();
             } finally {

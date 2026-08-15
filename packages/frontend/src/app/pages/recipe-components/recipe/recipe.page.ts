@@ -618,6 +618,8 @@ export class RecipePage {
     loading.dismiss();
     if (!response) return;
 
+    this.cookingToolbarService.unpinRecipe(this.recipe.id);
+
     this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
   }
 
