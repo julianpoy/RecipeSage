@@ -92,7 +92,6 @@
     "pages.home.errors.noRecipes.message3": "Cliquez sur le bouton + en bas à droite pour en ajouter une !",
     "pages.home.errors.noRecipes.message6": "Vous pouvez installer l'extension d'outil de découpe sur les navigateurs de bureau :",
     "pages.welcome.description.cta": "Pourquoi RecipeSage ?",
-    "pages.welcome.description.cta.aiAssistant": "Suivi des informations nutritionnelles, ajustement des proportions de recettes et assistant de cuisine basé sur l'IA",
     "pages.auth.selfhostWarning": "Remarque : Il s'agit d'une version auto-hébergée de RecipeSage et n'est donc pas associée à RecipeSage.com ni à aucun compte situé sur le site principal.",
     "pages.auth.error.passwordLength": "Veuillez entrer un mot de passe d'au moins 6 caractères.",
     "pages.home.errors.emptyCollection.message": "Cette collection partagée ne contient aucune recette.",

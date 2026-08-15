@@ -137,7 +137,6 @@
     "pages.editRecipe.input.nutritionVitaminD": "Vitamina D (mcg)",
     "pages.editRecipe.input.nutritionCalcium": "Cálcio (mg)",
     "pages.welcome.description.cta.autoImport": "Importação automática de qualquer URL, foto, PDF ou arquivo de texto",
-    "pages.welcome.description.cta.aiAssistant": "Acompanhamento nutricional, ajuste de porções de receitas e um assistente de cozinha com IA",
     "pages.welcome.description.cta.collaboration": "Colabore com familiares e amigos em refeições e compras",
     "pages.auth.title.register": "Criar uma conta",
     "pages.auth.selfhostWarning": "Observação: esta é uma versão auto-hospedada do RecipeSage e, portanto, não está associada ao RecipeSage.com nem a nenhuma das contas localizadas no site principal.",

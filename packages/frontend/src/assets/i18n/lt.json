@@ -1194,7 +1194,6 @@
     "pages.welcome.description.cta.noAds": "Nemokama ir atvirojo kodo (remiama aukomis)",
     "pages.welcome.description.cta.crossPlatform": "Veikia staliniuose kompiuteriuose, iOS ir Android, prisijungus prie interneto arba neprisijungus",
     "pages.welcome.description.cta.autoImport": "Automatinis importavimas iš bet kurio URL, nuotraukos, PDF arba tekstinio failo",
-    "pages.welcome.description.cta.aiAssistant": "Mitybos stebėjimas, receptų mastelio keitimas ir DI maisto gaminimo asistentas",
     "pages.welcome.description.cta.collaboration": "Bendradarbiaukite su šeima ir draugais planuodami valgius ir apsipirkimą",
     "pages.labels.title": "Tvarkyti etiketes ir kategorijas",
     "pages.labels.selectionModeTitle": "{{count}} pasirinkta",

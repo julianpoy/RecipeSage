@@ -113,7 +113,6 @@
     "components.mealCalendar.recipes": "الوصفات المجدولة في هذا اليوم",
     "pages.shoppingLists.nullState.2": "لإنشاء قائمة تسوق، اضغط على زر علامة الجمع في الزاوية السفلية.",
     "pages.homepopover.warning.optionsHidden": "ملاحظة: بعض الخيارات مخفية، لأن هذه مجموعة مشتركة",
-    "pages.welcome.description.cta.aiAssistant": "تتبّع التغذية، وتعديل مقادير الوصفات، ومساعد طهي بالذكاء الاصطناعي",
     "pages.importPDFs.tabTitle": "الاستيراد من ملفات PDF - RecipeSage",
     "pages.newLabelItemModal.labelTitleInputHint": "يبدأ كثير من الأشخاص بوسوم بسيطة مثل \"الفطور\" أو \"الحلوى\" أو \"نباتي\"",
     "pages.welcome.description.welcome": "مرحبًا بك في RecipeSage!",

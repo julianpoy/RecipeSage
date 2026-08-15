@@ -176,7 +176,6 @@
     "pages.welcome.description.cta.noAds": "無料かつオープンソース（寄付によりサポート）",
     "pages.welcome.description.cta.crossPlatform": "デスクトップ、iOS、Android で、オンラインでもオフラインでも利用可能",
     "pages.welcome.description.cta.collaboration": "家族や友人と食事や買い物について共同で管理",
-    "pages.welcome.description.cta.aiAssistant": "栄養管理、レシピの分量調整、そしてAI料理アシスタント",
     "pages.recipeDetails.yield": "出来上がり量",
     "pages.recipeDetails.sentBy": "このレシピは{{name}}から送られてきました",
     "pages.labels.label.sectionTitle": "あなたのラベル",

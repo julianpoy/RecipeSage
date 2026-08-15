@@ -747,7 +747,6 @@
     "components.selfhostWarning.1": "Poznámka: Toto je samostatně hostovaná verze RecipeSage, a proto není spojena s",
     "components.selfhostWarning.2": "ani s žádnými účty umístěnými na hlavním webu.",
     "components.shoppingListItem.recipe": "Pro recept:",
-    "pages.welcome.description.cta.aiAssistant": "Sledování výživových hodnot, škálování receptů a kuchařský asistent s umělou inteligencí",
     "pages.welcome.languages.title": "Ve vašem jazyce",
     "pages.welcome.languages.description": "RecipeSage je překládán komunitou. Rozhraní, zpracování ingrediencí a kategorizace nákupních seznamů fungují ve vašem jazyce.",
     "pages.auth.selfhostWarning": "Poznámka: Toto je samostatně hostovaná verze RecipeSage, a proto není spojena s RecipeSage.com ani s žádnými účty umístěnými na hlavním webu.",

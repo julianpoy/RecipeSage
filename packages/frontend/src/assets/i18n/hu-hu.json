@@ -751,7 +751,6 @@
     "pages.mealPlanItemDetailsModal.delete.message": "Ezzel eltávolítja a(z) „{{title}}” elemet ebből az étkezési tervből.",
     "pages.mealPlanPopover.dangerZone.delete": "Étkezési terv törlése",
     "pages.mealPlans.metadata.youOwn": "Öné ez az étkezési terv",
-    "pages.welcome.description.cta.aiAssistant": "Tápanyagkövetés, receptméretezés és MI-alapú főzési asszisztens",
     "pages.welcome.description.cta.collaboration": "Működjön együtt családtagjaival és barátaival az étkezések és a bevásárlás terén",
     "pages.auth.button.registerInstead": "Hozzon létre fiókot helyette",
     "pages.auth.error.passwordLength": "Kérem, adjon meg egy legalább 6 karakter hosszú jelszót.",
