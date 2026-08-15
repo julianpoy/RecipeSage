@@ -2427,5 +2427,6 @@
     "pages.import.cookbookManagerCom": "Aus CookBookManager.com-Datei importieren",
     "pages.importCookbookManagerCom.tabTitle": "Import aus CookBookManager.com – RecipeSage",
     "pages.importCookbookManagerCom.title": "Rezepte aus CookBookManager.com-Datei importieren",
-    "webextension.pageTooLarge": "Diese Seite ist zu groß für einen automatischen Import. Versuchen Sie stattdessen, sie über ihre Webadresse von der RecipeSage-Website zu importieren."
+    "webextension.pageTooLarge": "Diese Seite ist zu groß für einen automatischen Import. Versuchen Sie stattdessen, sie über ihre Webadresse von der RecipeSage-Website zu importieren.",
+    "pages.importCookbookManagerCom.description": "Dadurch wird eine Crouton-Exportdatei (eine ZIP-Datei mit Dateien mit der Endung .crumb) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende."
 }
