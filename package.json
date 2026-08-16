@@ -223,7 +223,7 @@
     "copy-webpack-plugin": "^14.0.0",
     "electron": "^42.4.1",
     "electron-squirrel-startup": "^1.0.1",
-    "esbuild": "^0.28.1",
+    "esbuild": "^0.28.2",
     "eslint": "9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
