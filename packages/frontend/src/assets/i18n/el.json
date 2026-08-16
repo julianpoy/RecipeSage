@@ -1216,7 +1216,7 @@
     "pages.welcome.description.features.sharing.title": "Κοινοποίηση και συνεργασία:",
     "pages.welcome.description.features.sharing.description": "Κοινοποιήστε συνταγές δημόσια ή με φίλους και συνεργαστείτε σε προγράμματα γευμάτων και λίστες αγορών",
     "pages.welcome.description.features.migration.title": "Μαζική εισαγωγή από μεγάλη ποικιλία πηγών",
-    "pages.welcome.description.features.migration.description": "Εισαγωγές από: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox ή οποιαδήποτε εξαγωγή JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Εισαγωγές από: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox ή οποιαδήποτε εξαγωγή JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Εξαγωγή και φορητότητα δεδομένων:",
     "pages.welcome.description.features.export.description": "Τα δεδομένα σας είναι δικά σας. Το RecipeSage δεν τα κρατά όμηρα. Εξαγάγετε τα δεδομένα σας σε PDF, JSON-LD ή απλό κείμενο οποιαδήποτε στιγμή",
     "pages.welcome.languages.title": "Στη γλώσσα σας",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Εγγενείς εφαρμογές υπολογιστή για Windows, macOS και Linux, εγγενείς εφαρμογές για iOS και Android και μια διαδικτυακή εφαρμογή που εγκαθίσταται στην αρχική οθόνη σας. Όλα παραμένουν συγχρονισμένα.",
     "pages.welcome.description.features.editor.title": "Πλούσιος επεξεργαστής συνταγών",
     "pages.welcome.description.features.editor.description": "Μια γραμμή εργαλείων μορφοποίησης για υλικά, οδηγίες και σημειώσεις, με κεφαλίδες ενοτήτων, έντονα, πλάγια, υπογράμμιση και πίνακες",
-    "pages.welcome.description.cta.api": "Δημόσιο, τεκμηριωμένο API που μπορείτε να χρησιμοποιήσετε εάν έχετε τεχνικές γνώσεις"
+    "pages.welcome.description.cta.api": "Δημόσιο, τεκμηριωμένο API που μπορείτε να χρησιμοποιήσετε εάν έχετε τεχνικές γνώσεις",
+    "pages.import.flavorish": "Εισαγωγή από αρχείο Flavorish",
+    "pages.importFlavorish.tabTitle": "Εισαγωγή από Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Εισαγωγή συνταγών από αρχείο Flavorish",
+    "pages.importFlavorish.description": "Με αυτόν τον τρόπο θα εισαχθεί μια εξαγωγή Flavorish (ένα αρχείο .zip που περιέχει ένα manifest, αρχεία συνταγών JSON και έναν φάκελο εικόνων) στον λογαριασμό σας στο RecipeSage. Παρακαλούμε να εξετάσετε το ενδεχόμενο συνεισφοράς, εάν το αρχείο σας περιέχει μεγάλο αριθμό συνταγών ή εικόνων."
 }
