@@ -59,7 +59,7 @@
     "pages.welcome.description.features.sharing.title": "分享與協作：",
     "pages.welcome.description.features.sharing.description": "公開分享食譜或與朋友分享，並在餐點計畫與購物清單上協作",
     "pages.welcome.description.features.migration.title": "從多種來源大量匯入",
-    "pages.welcome.description.features.migration.description": "可從以下來源匯入：Pepperplate、Living Cookbook、Paprika、Mela、Crouton、Cookmate、Recipe Keeper、CopyMeThat、CookBookManager、Evernote、Plan to Eat、MyRecipeBox，或任何 JSON-LD / CSV 匯出檔",
+    "pages.welcome.description.features.migration.description": "可從以下來源匯入：Pepperplate、Living Cookbook、Paprika、Mela、Crouton、Cookmate、Recipe Keeper、CopyMeThat、CookBookManager、Flavorish、Evernote、Plan to Eat、MyRecipeBox，或任何 JSON-LD／CSV 匯出檔",
     "pages.welcome.description.features.export.title": "匯出與資料可攜性：",
     "pages.welcome.description.features.export.description": "您的資料屬於您自己。RecipeSage 不會挾持您的資料。您可隨時將資料匯出為 PDF、JSON-LD 或純文字",
     "pages.welcome.description.cta": "為什麼選擇 RecipeSage？",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "適用於 Windows、macOS 與 Linux 的原生桌面應用程式、原生 iOS 與 Android 應用程式，以及可安裝至主畫面的網頁應用程式。一切都會保持同步。",
     "pages.welcome.description.features.editor.title": "功能豐富的食譜編輯器",
     "pages.welcome.description.features.editor.description": "提供食材、步驟與備註的格式工具列，支援段落標題、粗體、斜體、底線及表格",
-    "pages.welcome.description.cta.api": "公開且有文件說明的 API，具備技術能力者可使用"
+    "pages.welcome.description.cta.api": "公開且有文件說明的 API，具備技術能力者可使用",
+    "pages.import.flavorish": "從 Flavorish 檔案匯入",
+    "pages.importFlavorish.tabTitle": "從 Flavorish 匯入 - RecipeSage",
+    "pages.importFlavorish.title": "從 Flavorish 檔案匯入食譜",
+    "pages.importFlavorish.description": "這將把 Flavorish 匯出檔（包含資訊清單、JSON 食譜檔案和圖片資料夾的 .zip 壓縮檔）匯入您的 RecipeSage 帳戶。若您的檔案包含大量食譜或圖片，請考慮貢獻。"
 }
