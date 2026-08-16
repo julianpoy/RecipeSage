@@ -1120,7 +1120,7 @@
     "pages.welcome.description.features.sharing.title": "Megosztás és együttműködés",
     "pages.welcome.description.features.sharing.description": "Ossza meg a recepteket nyilvánosan vagy barátokkal, és működjön együtt az étkezési tervek és bevásárlólisták készítésében",
     "pages.welcome.description.features.migration.title": "Tömeges importálás számos különböző forrásból",
-    "pages.welcome.description.features.migration.description": "Importálás innen: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox vagy bármely JSON-LD / CSV-export",
+    "pages.welcome.description.features.migration.description": "Importálás innen: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox vagy bármely JSON-LD- / CSV-export",
     "pages.welcome.description.features.export.title": "Exportálás és adathordozhatóság",
     "pages.welcome.description.features.export.description": "Az Ön adatai az Ön tulajdonában maradnak. A RecipeSage nem tartja őket fogva. Adatait bármikor exportálhatja PDF-, JSON-LD- vagy egyszerű szöveges formátumba",
     "pages.welcome.languages.title": "Az Ön nyelvén",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Natív asztali alkalmazások Windowsra, macOS-re és Linuxra, natív iOS- és Android-alkalmazások, valamint egy webalkalmazás, amely telepíthető a kezdőképernyőre. Minden szinkronban marad.",
     "pages.welcome.description.features.editor.title": "Sokoldalú receptszerkesztő",
     "pages.welcome.description.features.editor.description": "Formázási eszköztár a hozzávalókhoz, az elkészítési lépésekhez és a megjegyzésekhez szakaszcímekkel, félkövér, dőlt és aláhúzott formázással, valamint táblázatokkal",
-    "pages.welcome.description.cta.api": "Nyilvános, dokumentált API, amelyet használhat, ha rendelkezik megfelelő műszaki ismeretekkel"
+    "pages.welcome.description.cta.api": "Nyilvános, dokumentált API, amelyet használhat, ha rendelkezik megfelelő műszaki ismeretekkel",
+    "pages.import.flavorish": "Importálás Flavorish-fájlból",
+    "pages.importFlavorish.tabTitle": "Importálás Flavorish-ból – RecipeSage",
+    "pages.importFlavorish.title": "Receptek importálása Flavorish-fájlból",
+    "pages.importFlavorish.description": "Ezzel egy Flavorish-exportot (egy jegyzékfájlt, JSON-receptfájlokat és egy képmappát tartalmazó .zip-archívumot) importál a RecipeSage-fiókjába. Kérjük, fontolja meg a támogatást, ha a fájlja nagyszámú receptet vagy képet tartalmaz."
 }
