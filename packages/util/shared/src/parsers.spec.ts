@@ -1244,6 +1244,55 @@ describe("parsers", () => {
         expect(result).not.toMatch(/\boz\b/);
       });
 
+      it("converts large weights to kg rather than mg and marks rounding", () => {
+        const result = parseIngredientsAuto("42 oz apple pie filling", "1", {
+          targetSystem: System.METRIC,
+        })[0].content;
+        expect(result).toMatch(/\bkg\b/);
+        expect(result).not.toMatch(/\bmg\b/);
+        expect(result).toContain("~");
+        expect(result).toContain("apple pie filling");
+      });
+
+      it("converts large metric weights to lb rather than ton", () => {
+        const result = parseIngredientsAuto("1190 g flour", "1", {
+          targetSystem: System.US,
+        })[0].content;
+        expect(result).toMatch(/\blb\b/);
+        expect(result).not.toMatch(/\bton\b/);
+      });
+
+      it("converts sub-cup volumes to cups rather than tablespoons", () => {
+        const result = parseIngredientsAuto("118 ml cream", "1", {
+          targetSystem: System.US,
+        })[0].content;
+        expect(result).toMatch(/\bc\b/);
+        expect(result).not.toMatch(/\btbsp\b/);
+      });
+
+      it("converts large volumes to quarts rather than cups", () => {
+        const result = parseIngredientsAuto("946 ml stock", "1", {
+          targetSystem: System.US,
+        })[0].content;
+        expect(result).toMatch(/\bqt\b/);
+        expect(result).not.toMatch(/\bc\b/);
+      });
+
+      it("converts small volumes to teaspoons", () => {
+        const result = parseIngredientsAuto("5 ml vanilla", "1", {
+          targetSystem: System.US,
+        })[0].content;
+        expect(result).toMatch(/\btsp\b/);
+      });
+
+      it("converts length (not weight/volume) via the fallback path", () => {
+        const result = parseIngredientsAuto("9 in springform pan", "1", {
+          targetSystem: System.METRIC,
+        })[0].content;
+        expect(result).toMatch(/\b(cm|mm|m)\b/);
+        expect(result).not.toMatch(/\bin\b/);
+      });
+
       it("converts small volumes (tbsp) to metric", () => {
         const result = parseIngredientsAuto("1 tbsp oil", "1", {
           targetSystem: System.METRIC,
@@ -2563,7 +2612,7 @@ describe("parsers", () => {
         const result = parseIngredientsAuto("1,5 cups milk", "1", {
           targetSystem: System.METRIC,
         })[0].content;
-        expect(result).toBe("0,355 l milk");
+        expect(result).toBe("~354,88 ml milk");
       });
 
       it("renders converted decimals in the reader's separator", () => {
@@ -2571,8 +2620,8 @@ describe("parsers", () => {
           targetSystem: System.METRIC,
           locale: "de-de",
         })[0].content;
-        expect(result).toContain("0,473");
-        expect(result).not.toContain("0.473");
+        expect(result).toContain("473,18");
+        expect(result).not.toContain("473.18");
       });
     });
 
