@@ -327,6 +327,12 @@ export const RouteMap = {
     },
     path: "settings/import/cookbookmanagercom",
   },
+  ImportFlavorishPage: {
+    getPath() {
+      return `/settings/import/flavorish`;
+    },
+    path: "settings/import/flavorish",
+  },
   ImportJSONLDPage: {
     getPath() {
       return `/settings/import/json-ld`;

@@ -35,6 +35,7 @@ export const importJobMetaSchema = z.object({
       "mela",
       "crouton",
       "cookbookmanagercom",
+      "flavorish",
     ])
     .optional(),
   importLabels: z.array(z.string()).optional(),

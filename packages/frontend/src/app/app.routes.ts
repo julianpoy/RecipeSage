@@ -431,6 +431,15 @@ export const appRoutes: Routes = [
     title: "pages.importCookbookManagerCom.tabTitle",
   },
   {
+    path: RouteMap.ImportFlavorishPage.path,
+    loadComponent: () =>
+      import("./pages/settings-components/import-flavorish/import-flavorish.page").then(
+        (m) => m.ImportFlavorishPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.importFlavorish.tabTitle",
+  },
+  {
     path: RouteMap.ImportJSONLDPage.path,
     loadComponent: () =>
       import("./pages/settings-components/import-json-ld/import-json-ld.page").then(
