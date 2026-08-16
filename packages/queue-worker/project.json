@@ -22,7 +22,8 @@
           "@sentry/profiling-node",
           "pdfmake",
           "bullmq",
-          "yauzl-promise"
+          "yauzl-promise",
+          "sharp"
         ],
         "generatePackageJson": true,
         "esbuildConfig": "packages/queue-worker/esbuild.config.js"

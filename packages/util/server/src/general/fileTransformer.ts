@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import { buffer as streamToBuffer } from "stream/consumers";
-import sharp from "sharp";
+import sharp, { type FitEnum } from "sharp";
 import decodeHeic from "heic-decode";
 import pLimit from "p-limit";
 
@@ -66,7 +66,7 @@ export const transformImageStream = (
   width: number,
   height: number,
   quality: number,
-  fit: keyof sharp.FitEnum,
+  fit: keyof FitEnum,
 ) => {
   return sharp()
     .rotate() // Rotates based on EXIF data
@@ -85,7 +85,7 @@ export const transformImageStreamToBuffer = async (
   width: number,
   height: number,
   quality: number,
-  fit: keyof sharp.FitEnum,
+  fit: keyof FitEnum,
 ) => {
   const input = await streamToBuffer(inputStream);
   return transformImageBuffer(input, width, height, quality, fit);
@@ -96,7 +96,7 @@ export const transformImageBuffer = async (
   width: number,
   height: number,
   quality: number,
-  fit: keyof sharp.FitEnum,
+  fit: keyof FitEnum,
 ) =>
   sharpConcurrencyLimit(async () => {
     try {
