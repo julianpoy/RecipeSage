@@ -5,6 +5,7 @@ import { cookmate } from "./cookmate";
 import { copymethat } from "./copymethat";
 import { crouton } from "./crouton";
 import { evernote } from "./evernote";
+import { flavorish } from "./flavorish";
 import { mela } from "./mela";
 import { paprika } from "./paprika";
 import { pepperplate } from "./pepperplate";
@@ -26,6 +27,7 @@ export const competitors: Record<string, CompetitorData> = {
   [recipeKeeper.slug]: recipeKeeper,
   [cookmate.slug]: cookmate,
   [cookbookmanager.slug]: cookbookmanager,
+  [flavorish.slug]: flavorish,
   [evernote.slug]: evernote,
 };
 
