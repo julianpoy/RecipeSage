@@ -1,6 +1,6 @@
 import _FractionJS from "fraction.js";
 import FractionJSModule from "fraction.js";
-import { System } from "unitz-ts";
+import { System, Core, Value } from "unitz-ts";
 import { unitNames, parseUnit } from "./units";
 import {
   type DecimalNotation,
@@ -9,6 +9,7 @@ import {
   localeToPlainMeasurement,
   localeToPlainNumber,
   applyDecimalNotation,
+  formatQuantity,
 } from "./decimalNotation";
 
 // Fix for https://github.com/rawify/Fraction.js/issues/72
@@ -481,19 +482,70 @@ const tryUnitzSwitch = (
   }
 };
 
+const PREFERRED_TARGET_UNITS: Record<
+  string,
+  Partial<Record<System, string[]>>
+> = {
+  Weight: {
+    [System.METRIC]: ["mg", "g", "kg"],
+    [System.US]: ["oz", "lb"],
+  },
+  Volume: {
+    [System.METRIC]: ["ml", "l"],
+    [System.US]: ["tsp", "tbsp", "c", "qt", "gal"],
+  },
+};
+
+const DEFAULT_MIN_MAGNITUDE = 1;
+const MIN_MAGNITUDE_OVERRIDES: Record<string, number> = { c: 0.25 };
+
 /**
- * Convert a measurement into a specific unit system (metric or US customary).
- * Scales first, then uses unitz-ts' normalize with a system filter to pick the
- * best-fitting unit available in the target system.
- *
- * Returns the full "value unit" string, or null when:
- *  - unitz-ts cannot parse the measurement (e.g. "3 eggs", "1 can")
- *  - the original unit's group has no system (System.ANY / System.NONE, like
- *    cans, pinches, time, digital, angle), so there is nothing to convert to
- *  - the original is already in the target system (caller preserves the user's
- *    exact notation via the normal scale-only pipeline)
- *  - unitz-ts cannot produce a valid output in the target system
+ * We want to choose a number that's in a comfortable range for what people have on-hand
  */
+const minMagnitudeFor = (unit: string): number =>
+  MIN_MAGNITUDE_OVERRIDES[unit] ?? DEFAULT_MIN_MAGNITUDE;
+
+const roundToDisplay = (value: number): number => Math.round(value * 100) / 100;
+
+const pickTargetUnit = (
+  scaledValue: Value,
+  targetSystem: System,
+  preferred: string[],
+): { unit: string; value: number } | null => {
+  const candidates: { unit: string; value: number }[] = [];
+  scaledValue.conversions(
+    Core.globalTransform.extend({ system: targetSystem }),
+    false,
+    (converted) => {
+      const group = converted.group;
+      if (!group || group.system !== targetSystem) return;
+      if (!preferred.includes(converted.unit)) return;
+      candidates.push({ unit: converted.unit, value: converted.value });
+    },
+  );
+  if (candidates.length === 0) return null;
+
+  const byLargestUnit = candidates.sort(
+    (a, b) => Math.abs(a.value) - Math.abs(b.value),
+  );
+  const wholeEnough = byLargestUnit.filter(
+    (candidate) =>
+      roundToDisplay(Math.abs(candidate.value)) >=
+      minMagnitudeFor(candidate.unit),
+  );
+
+  return wholeEnough[0] ?? byLargestUnit[byLargestUnit.length - 1];
+};
+
+const formatConvertedMeasurement = (
+  value: number,
+  unit: string,
+  decimalNotationMode: DecimalNotation,
+): string => {
+  const marker = Math.abs(value - roundToDisplay(value)) > 1e-9 ? "~" : "";
+  return `${marker}${formatQuantity(value, decimalNotationMode, 2)} ${unit}`;
+};
+
 const tryUnitzSystemConvert = (
   fullMeasurement: string,
   scale: Fraction,
@@ -510,18 +562,33 @@ const tryUnitzSystemConvert = (
     if (baseSystem === System.ANY || baseSystem === System.NONE) return null;
     if (baseSystem === targetSystem) return null;
 
-    const scaled = base.scale(scale.valueOf()).fractions().normalize({
-      system: targetSystem,
-    });
-    if (!scaled.isValid || scaled.ranges.length === 0) return null;
+    const scaled = base.scale(scale.valueOf());
     const scaledValue = scaled.ranges[0].min;
     if (!scaledValue.group) return null;
+    if (scaledValue.value === 0) return null;
 
-    const scaledSystem = scaledValue.group.system;
-    if (scaledSystem !== targetSystem) return null;
+    const preferred =
+      PREFERRED_TARGET_UNITS[baseGroup.parent.name]?.[targetSystem];
+    if (preferred) {
+      const chosen = pickTargetUnit(scaledValue, targetSystem, preferred);
+      if (chosen && Number.isFinite(chosen.value)) {
+        return formatConvertedMeasurement(
+          chosen.value,
+          chosen.unit,
+          decimalNotationMode,
+        );
+      }
+    }
+
+    // Classes without a preferred set (e.g. length): let unitz pick.
+    const normalized = scaled.fractions().normalize({ system: targetSystem });
+    if (!normalized.isValid || normalized.ranges.length === 0) return null;
+    const normalizedValue = normalized.ranges[0].min;
+    if (!normalizedValue.group) return null;
+    if (normalizedValue.group.system !== targetSystem) return null;
 
     return applyDecimalNotation(
-      scaled.output({ unitSpacer: " ", significant: 3 }),
+      normalized.output({ unitSpacer: " ", significant: 3 }),
       decimalNotationMode,
     );
   } catch {
