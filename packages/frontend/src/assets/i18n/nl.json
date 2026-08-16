@@ -1089,7 +1089,7 @@
     "pages.welcome.description.features.sharing.title": "Delen en samenwerken",
     "pages.welcome.description.features.sharing.description": "Deel recepten openbaar of met vrienden, en werk samen aan maaltijdplannen en boodschappenlijsten",
     "pages.welcome.description.features.migration.title": "In bulk importeren uit een grote verscheidenheid aan bronnen",
-    "pages.welcome.description.features.migration.description": "Importeert uit: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox of een willekeurige JSON-LD- / CSV-export",
+    "pages.welcome.description.features.migration.description": "Importen uit: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox of een willekeurige JSON-LD- / CSV-export",
     "pages.welcome.description.features.export.title": "Exporteren en gegevensportabiliteit",
     "pages.welcome.description.features.export.description": "Uw gegevens zijn van u. RecipeSage houdt ze niet gegijzeld. Exporteer uw gegevens op elk moment naar PDF, JSON-LD of platte tekst",
     "pages.welcome.languages.title": "In uw taal",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Native desktopapps voor Windows, macOS en Linux, native apps voor iOS en Android, en een webapp die u op uw beginscherm kunt installeren. Alles blijft gesynchroniseerd.",
     "pages.welcome.description.features.editor.title": "Uitgebreide recepteditor",
     "pages.welcome.description.features.editor.description": "Een opmaakwerkbalk voor ingrediënten, instructies en notities met sectiekoppen, vetgedrukte, cursieve en onderstreepte tekst, en tabellen",
-    "pages.welcome.description.cta.api": "Openbare, gedocumenteerde API die u kunt gebruiken als u technisch onderlegd bent"
+    "pages.welcome.description.cta.api": "Openbare, gedocumenteerde API die u kunt gebruiken als u technisch onderlegd bent",
+    "pages.import.flavorish": "Importeren uit Flavorish-bestand",
+    "pages.importFlavorish.tabTitle": "Importeren uit Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Recepten importeren uit Flavorish-bestand",
+    "pages.importFlavorish.description": "Hiermee wordt een Flavorish-export (een .zip-archief met een manifest, JSON-receptbestanden en een afbeeldingenmap) in uw RecipeSage-account geïmporteerd. Overweeg alstublieft een bijdrage te leveren als uw bestand een groot aantal recepten of afbeeldingen bevat."
 }
