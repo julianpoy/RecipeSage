@@ -2,7 +2,7 @@ import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import type { LanguageModel } from "ai";
+import type { LanguageModel, Tool } from "ai";
 import { config } from "../general/config";
 
 export const aiProvider: (
@@ -44,7 +44,7 @@ export const aiProvider: (
   }
 })();
 
-export const aiProviderNativeTools = (() => {
+export const aiProviderNativeTools: { web_search: Tool | undefined } = (() => {
   switch (config.ai.provider) {
     case "openrouter": {
       return {
