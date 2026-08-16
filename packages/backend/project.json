@@ -19,7 +19,8 @@
           "@sentry/profiling-node",
           "pdfmake",
           "yauzl-promise",
-          "bullmq"
+          "bullmq",
+          "sharp"
         ],
         "main": "packages/backend/src/main.ts",
         "tsConfig": "packages/backend/tsconfig.json",
