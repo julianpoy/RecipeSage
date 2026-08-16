@@ -26,7 +26,7 @@ import {
   ScaleRecipeComponent,
   type UnitSystem,
 } from "../../../modals/scale-recipe/scale-recipe.component";
-import { System } from "unitz-ts";
+import { System } from "@recipesage/unitz-ts";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

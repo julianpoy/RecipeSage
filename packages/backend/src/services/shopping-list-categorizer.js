@@ -1,4 +1,4 @@
-import { OutputUnit } from "unitz-ts";
+import { OutputUnit } from "@recipesage/unitz-ts";
 
 import * as UtilService from "./util";
 import {

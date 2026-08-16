@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { System } from "unitz-ts";
+import { System } from "@recipesage/unitz-ts";
 import {
   getMeasurementsForIngredient,
   getPlainMeasurementsForLocaleIngredient,

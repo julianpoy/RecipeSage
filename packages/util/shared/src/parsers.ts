@@ -1,6 +1,6 @@
 import _FractionJS from "fraction.js";
 import FractionJSModule from "fraction.js";
-import { System, Core, Value } from "unitz-ts";
+import { System, Core, Value } from "@recipesage/unitz-ts";
 import { unitNames, parseUnit } from "./units";
 import {
   type DecimalNotation,
