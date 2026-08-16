@@ -18,6 +18,7 @@ import { lcbImportJobHandler } from "./handlers/lcbImportJobHandler";
 import { melaImportJobHandler } from "./handlers/melaImportJobHandler";
 import { croutonImportJobHandler } from "./handlers/croutonImportJobHandler";
 import { cookbookManagerComImportJobHandler } from "./handlers/cookbookManagerComImportJobHandler";
+import { flavorishImportJobHandler } from "./handlers/flavorishImportJobHandler";
 
 export const IMPORT_JOB_STEP_COUNT = 3;
 
@@ -80,6 +81,9 @@ export const processImportJob = async (
       break;
     case "cookbookmanagercom":
       await cookbookManagerComImportJobHandler(job, jobQueueItem);
+      break;
+    case "flavorish":
+      await flavorishImportJobHandler(job, jobQueueItem);
       break;
     default:
       throw new Error(`Unsupported import type: ${job.meta.importType}`);

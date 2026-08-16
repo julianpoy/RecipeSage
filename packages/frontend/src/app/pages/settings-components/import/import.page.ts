@@ -54,6 +54,7 @@ type ImportFormat =
   | "mela"
   | "crouton"
   | "cookbookmanagercom"
+  | "flavorish"
   | "cookmate"
   | "recipekeeper"
   | "textfiles"
@@ -191,6 +192,10 @@ export class ImportPage {
         );
         break;
       }
+      case "flavorish": {
+        this.navCtrl.navigateForward(RouteMap.ImportFlavorishPage.getPath());
+        break;
+      }
       case "cookmate": {
         this.navCtrl.navigateForward(RouteMap.ImportCookmatePage.getPath());
         break;
@@ -273,6 +278,9 @@ export class ImportPage {
       }
       case "cookbookmanagercom": {
         return "pages.import.cookbookManagerCom";
+      }
+      case "flavorish": {
+        return "pages.import.flavorish";
       }
       case "jsonld": {
         return "pages.import.jsonld";
