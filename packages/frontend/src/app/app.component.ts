@@ -196,7 +196,7 @@ export class AppComponent {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
     const language = languagePref || this.utilService.getAppBrowserLang();
-    this.translate.setDefaultLang(SupportedLanguages.EN_US);
+    this.translate.setFallbackLang(SupportedLanguages.EN_US);
     this.translate.use(language);
     this.utilService.setHtmlBrowserLang(language);
 

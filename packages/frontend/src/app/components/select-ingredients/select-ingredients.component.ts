@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { ScaleRecipeComponent } from "../../modals/scale-recipe/scale-recipe.component";
 import { PreferencesService } from "../../services/preferences.service";
+import { UtilService } from "../../services/util.service";
 import {
   ShoppingListPreferenceKey,
   ParsedIngredient,
@@ -26,6 +27,7 @@ export class SelectIngredientsComponent {
   private modalCtrl = inject(ModalController);
   private preferencesService = inject(PreferencesService);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
 
   allSelected = true;
   ingredientBinders: { [index: number]: boolean } = {};
@@ -105,7 +107,7 @@ export class SelectIngredientsComponent {
   applyScale(init?: boolean) {
     this.decimalNotationMode = inferIngredientsNotation(
       this._ingredients,
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
     this.scaledIngredients = parseIngredients(this._ingredients, this.scale, {
       decimalNotationMode: this.decimalNotationMode,

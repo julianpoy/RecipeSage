@@ -8,7 +8,7 @@ import {
   GlobalPreferenceKey,
 } from "@recipesage/util/shared";
 
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -73,6 +73,7 @@ export class DiscoverPage {
   private navCtrl = inject(NavController);
   private popoverCtrl = inject(PopoverController);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
@@ -135,10 +136,10 @@ export class DiscoverPage {
   constructor() {
     addIcons({ searchOutline, optionsOutline });
     this.languageOptions = getDiscoverLanguageOptions(
-      this.translate.currentLang,
+      this.utilService.getCurrentLocale(),
     );
     this.selectedLanguages = getDefaultDiscoverLanguages(
-      this.translate.currentLang,
+      this.utilService.getCurrentLocale(),
     );
   }
 

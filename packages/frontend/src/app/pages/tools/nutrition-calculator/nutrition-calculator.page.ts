@@ -428,7 +428,7 @@ export class NutritionCalculatorPage implements OnInit, OnDestroy {
   }
 
   private toServingsNumber(value: string | number): number | null {
-    return parseQuantity(String(value), this.translate.getCurrentLang());
+    return parseQuantity(String(value), this.utilService.getCurrentLocale());
   }
 
   private clampServingsValue(value: number, min: number): number {

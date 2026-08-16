@@ -8,7 +8,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
 import { AddRecipeToShoppingListModalPage } from "../../recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
@@ -82,6 +82,7 @@ export class MealPlanItemDetailsModalPage {
 
   private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
   private modalCtrl = inject(ModalController);
   private alertCtrl = inject(AlertController);
   private serverActionsService = inject(ServerActionsService);
@@ -105,7 +106,7 @@ export class MealPlanItemDetailsModalPage {
       this.parsedNotes = parseNotes(this.mealItem.notes, "1", {
         decimalNotationMode: inferRecipeNotation(
           { notes: this.mealItem.notes },
-          this.translate.getCurrentLang(),
+          this.utilService.getCurrentLocale(),
         ),
       }).map((note) => ({
         ...note,
