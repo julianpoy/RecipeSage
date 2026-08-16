@@ -364,7 +364,7 @@
     "pages.welcome.description.features.sharing.title": "Paylaşım ve iş birliği:",
     "pages.welcome.description.features.sharing.description": "Tarifleri herkese açık olarak veya arkadaşlarınızla paylaşın ve yemek planları ile alışveriş listeleri üzerinde iş birliği yapın",
     "pages.welcome.description.features.migration.title": "Çok çeşitli kaynaklardan toplu içe aktarma",
-    "pages.welcome.description.features.migration.description": "Şunlardan içe aktarır: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox veya herhangi bir JSON-LD / CSV dışa aktarımı",
+    "pages.welcome.description.features.migration.description": "Şunlardan içe aktarma: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox veya herhangi bir JSON-LD / CSV dışa aktarımı",
     "pages.welcome.description.features.export.title": "Dışa aktarma ve veri taşınabilirliği:",
     "pages.welcome.description.features.export.description": "Verileriniz size aittir. RecipeSage bunları rehin tutmaz. Verilerinizi istediğiniz zaman PDF, JSON-LD veya düz metin olarak dışa aktarın",
     "pages.welcome.description.cta": "Neden RecipeSage?",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Windows, macOS ve Linux için yerel masaüstü uygulamaları, yerel iOS ve Android uygulamaları ve ana ekranınıza yüklenen bir web uygulaması. Her şey eşitlenmiş kalır.",
     "pages.welcome.description.features.editor.title": "Gelişmiş tarif düzenleyicisi",
     "pages.welcome.description.features.editor.description": "Malzemeler, talimatlar ve notlar için bölüm başlıkları, kalın, italik, altı çizili metin ve tablolar içeren bir biçimlendirme araç çubuğu",
-    "pages.welcome.description.cta.api": "Teknik bilgiye sahipseniz kullanabileceğiniz herkese açık, belgelenmiş API"
+    "pages.welcome.description.cta.api": "Teknik bilgiye sahipseniz kullanabileceğiniz herkese açık, belgelenmiş API",
+    "pages.import.flavorish": "Flavorish dosyasından içe aktar",
+    "pages.importFlavorish.tabTitle": "Flavorish'ten içe aktar - RecipeSage",
+    "pages.importFlavorish.title": "Flavorish Dosyasından Tarifleri İçe Aktar",
+    "pages.importFlavorish.description": "Bu işlem, bir manifest, JSON tarif dosyaları ve bir görseller klasörü içeren bir .zip arşivi olan Flavorish dışa aktarımını RecipeSage hesabınıza içe aktaracaktır. Dosyanız çok sayıda tarif veya görsel içeriyorsa lütfen katkıda bulunmayı değerlendirin."
 }
