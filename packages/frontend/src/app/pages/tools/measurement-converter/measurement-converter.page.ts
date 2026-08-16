@@ -37,7 +37,7 @@ import {
   bulbOutline,
 } from "ionicons/icons";
 
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { InfoBlockComponent } from "../../../components/info-block/info-block.component";
@@ -128,6 +128,7 @@ const SHORT_UNIT_KEYS: Record<string, string> = {
 export class MeasurementConverterPage implements OnInit {
   private navCtrl = inject(NavController);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
   private preferencesService = inject(PreferencesService);
   private modalCtrl = inject(ModalController);
   private popoverCtrl = inject(PopoverController);
@@ -245,7 +246,7 @@ export class MeasurementConverterPage implements OnInit {
     if (gramsPerMl === null) return "";
     return formatDecimal(
       volumeToWeight(1, "cup", "gram", gramsPerMl),
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
   }
 
@@ -305,7 +306,7 @@ export class MeasurementConverterPage implements OnInit {
     const raw = isVolumeUnit(unit)
       ? this.volumeValues[unit]
       : this.weightValues[unit];
-    const value = parseQuantity(raw, this.translate.getCurrentLang());
+    const value = parseQuantity(raw, this.utilService.getCurrentLocale());
     if (value === null && raw.trim().length > 0) return;
 
     const panel =
@@ -325,7 +326,7 @@ export class MeasurementConverterPage implements OnInit {
       this.weightValues[weightUnit] = panel?.weights
         ? formatDecimal(
             panel.weights[weightUnit],
-            this.translate.getCurrentLang(),
+            this.utilService.getCurrentLocale(),
           )
         : "";
     }
@@ -333,9 +334,9 @@ export class MeasurementConverterPage implements OnInit {
 
   private formatVolume(unit: VolumeUnit, value: number): string {
     if (FRACTION_VOLUME_UNITS.includes(unit)) {
-      return formatFraction(value, this.translate.getCurrentLang());
+      return formatFraction(value, this.utilService.getCurrentLocale());
     }
-    return formatDecimal(value, this.translate.getCurrentLang());
+    return formatDecimal(value, this.utilService.getCurrentLocale());
   }
 
   get countItemVaries(): boolean {
@@ -351,7 +352,7 @@ export class MeasurementConverterPage implements OnInit {
 
   onCountWeightInput(unit: WeightUnit) {
     const raw = this.countWeightValues[unit];
-    const value = parseQuantity(raw, this.translate.getCurrentLang());
+    const value = parseQuantity(raw, this.utilService.getCurrentLocale());
     if (value === null && raw.trim().length > 0) return;
 
     const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
@@ -365,7 +366,7 @@ export class MeasurementConverterPage implements OnInit {
         ? ""
         : formatDecimal(
             grams / item.gramsPerUnit,
-            this.translate.getCurrentLang(),
+            this.utilService.getCurrentLocale(),
           );
 
     for (const weightUnit of WEIGHT_UNITS) {
@@ -375,14 +376,14 @@ export class MeasurementConverterPage implements OnInit {
           ? ""
           : formatDecimal(
               convertWeight(grams, "gram", weightUnit),
-              this.translate.getCurrentLang(),
+              this.utilService.getCurrentLocale(),
             );
     }
   }
 
   private recomputeCount() {
     const raw = this.countQuantity;
-    const quantity = parseQuantity(raw, this.translate.getCurrentLang());
+    const quantity = parseQuantity(raw, this.utilService.getCurrentLocale());
     if (quantity === null && raw.trim().length > 0) return;
 
     const item = COUNT_ITEMS.find((entry) => entry.key === this.countItemKey);
@@ -397,14 +398,14 @@ export class MeasurementConverterPage implements OnInit {
           ? ""
           : formatDecimal(
               convertWeight(grams, "gram", weightUnit),
-              this.translate.getCurrentLang(),
+              this.utilService.getCurrentLocale(),
             );
     }
   }
 
   onTemperatureInput(field: "celsius" | "fahrenheit" | "gasMark") {
     const formatInt = (n: number) =>
-      Math.round(n).toLocaleString(this.translate.getCurrentLang(), {
+      Math.round(n).toLocaleString(this.utilService.getCurrentLocale(), {
         useGrouping: false,
       });
     const formatGasMark = (fahrenheit: number) => {
@@ -414,7 +415,7 @@ export class MeasurementConverterPage implements OnInit {
     if (field === "celsius") {
       const celsius = parseQuantity(
         this.tempCelsius,
-        this.translate.getCurrentLang(),
+        this.utilService.getCurrentLocale(),
       );
       if (celsius === null) return;
       const fahrenheit = celsiusToFahrenheit(celsius);
@@ -423,7 +424,7 @@ export class MeasurementConverterPage implements OnInit {
     } else if (field === "fahrenheit") {
       const fahrenheit = parseQuantity(
         this.tempFahrenheit,
-        this.translate.getCurrentLang(),
+        this.utilService.getCurrentLocale(),
       );
       if (fahrenheit === null) return;
       this.tempCelsius = formatInt(fahrenheitToCelsius(fahrenheit));
@@ -431,7 +432,7 @@ export class MeasurementConverterPage implements OnInit {
     } else {
       const mark = parseQuantity(
         this.tempGasMark,
-        this.translate.getCurrentLang(),
+        this.utilService.getCurrentLocale(),
       );
       if (mark === null) return;
       const fahrenheit = gasMarkToFahrenheit(mark);

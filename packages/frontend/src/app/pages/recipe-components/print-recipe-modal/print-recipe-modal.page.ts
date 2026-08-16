@@ -145,7 +145,8 @@ export class PrintRecipeModalPage {
     const token = this.utilService.getToken();
     for (const template of this.templates) {
       template.modifiers.scale = this.scale;
-      template.modifiers.preferredLanguage = this.translate.getCurrentLang();
+      template.modifiers.preferredLanguage =
+        this.utilService.getCurrentLocale();
       template.modifiers.today = dayjs().format("YYYY-MM-DD");
       template.url = this.utilService.generateRecipeTemplateURL(
         this.recipe.id,
