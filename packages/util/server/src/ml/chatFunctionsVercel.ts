@@ -1,4 +1,4 @@
-import { tool } from "ai";
+import { tool, type Tool } from "ai";
 import { z } from "zod";
 import {
   StandardizedRecipeImportEntry,
@@ -10,37 +10,42 @@ import { aiStructuredModel } from "./aiStructuredModel";
 export type CreateAssistantRecipeToolResult = {
   storedRecipeInfo: RecipeSummary;
 };
-export const initCreateAssistantRecipeTool = () =>
+const createAssistantRecipeSchema = z.object({
+  title: z.string().describe("The title of the recipe"),
+  source: z
+    .string()
+    .describe(
+      "The source site of the recipe, if it was pulled from a web search",
+    )
+    .nullable(),
+  yield: z
+    .string()
+    .describe('The yield of the recipe. E.g. "2 servings" or "6 cupcakes"'),
+  activeTime: z
+    .string()
+    .describe("The amount of time spent actively preparing the recipe"),
+  totalTime: z
+    .string()
+    .describe(
+      "The total amount of time it will take to cook the recipe including prep",
+    ),
+  ingredients: z
+    .array(z.string().describe("An ingredient required for the recipe"))
+    .describe("List of ingredients"),
+  instructions: z
+    .array(z.string().describe("An instruction for the recipe"))
+    .describe("List of instructions"),
+});
+
+export const initCreateAssistantRecipeTool = (): Tool<
+  z.infer<typeof createAssistantRecipeSchema>,
+  CreateAssistantRecipeToolResult
+> =>
   tool({
     strict: true,
     description:
       "Creates and displays a well-formatted embedded recipe to the user in the UI",
-    inputSchema: z.object({
-      title: z.string().describe("The title of the recipe"),
-      source: z
-        .string()
-        .describe(
-          "The source site of the recipe, if it was pulled from a web search",
-        )
-        .nullable(),
-      yield: z
-        .string()
-        .describe('The yield of the recipe. E.g. "2 servings" or "6 cupcakes"'),
-      activeTime: z
-        .string()
-        .describe("The amount of time spent actively preparing the recipe"),
-      totalTime: z
-        .string()
-        .describe(
-          "The total amount of time it will take to cook the recipe including prep",
-        ),
-      ingredients: z
-        .array(z.string().describe("An ingredient required for the recipe"))
-        .describe("List of ingredients"),
-      instructions: z
-        .array(z.string().describe("An instruction for the recipe"))
-        .describe("List of instructions"),
-    }),
+    inputSchema: createAssistantRecipeSchema,
     execute: async ({
       title,
       source,
@@ -148,7 +153,10 @@ export const ocrFormatRecipeModelSchema = aiStructuredModel(
 
 export const initOCRFormatRecipeTool = (
   result: StandardizedRecipeImportEntry[],
-) =>
+): Tool<
+  z.infer<typeof ocrFormatRecipeSchema>,
+  Omit<z.infer<typeof ocrFormatRecipeSchema>, "nutritionInfo">
+> =>
   tool({
     strict: true,
     inputSchema: ocrFormatRecipeSchema,
