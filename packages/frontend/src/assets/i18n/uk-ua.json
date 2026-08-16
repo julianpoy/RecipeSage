@@ -1082,7 +1082,7 @@
     "pages.welcome.description.features.sharing.title": "Спільний доступ і співпраця:",
     "pages.welcome.description.features.sharing.description": "Діліться рецептами публічно або з друзями та співпрацюйте над планами харчування і списками покупок",
     "pages.welcome.description.features.migration.title": "Масовий імпорт із широкого спектра джерел",
-    "pages.welcome.description.features.migration.description": "Імпорт із: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox або будь-якого експорту JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Імпорт із: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox або будь-якого експорту JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Експорт і переносимість даних:",
     "pages.welcome.description.features.export.description": "Ваші дані належать вам. RecipeSage не утримує їх у заручниках. Експортуйте свої дані у PDF, JSON-LD або звичайний текст у будь-який час",
     "pages.welcome.languages.title": "Вашою мовою",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Нативні настільні застосунки для Windows, macOS та Linux, нативні застосунки для iOS і Android, а також вебзастосунок, який можна встановити на головний екран. Усе залишається синхронізованим.",
     "pages.welcome.description.features.editor.title": "Розширений редактор рецептів",
     "pages.welcome.description.features.editor.description": "Панель форматування для інгредієнтів, інструкцій і приміток із заголовками розділів, жирним, курсивним, підкресленим текстом і таблицями",
-    "pages.welcome.description.cta.api": "Відкритий документований API, яким ви можете скористатися, якщо маєте технічні знання"
+    "pages.welcome.description.cta.api": "Відкритий документований API, яким ви можете скористатися, якщо маєте технічні знання",
+    "pages.import.flavorish": "Імпорт із файлу Flavorish",
+    "pages.importFlavorish.tabTitle": "Імпорт із Flavorish — RecipeSage",
+    "pages.importFlavorish.title": "Імпорт рецептів із файлу Flavorish",
+    "pages.importFlavorish.description": "Буде імпортовано експорт Flavorish (архів .zip, що містить маніфест, JSON-файли рецептів і папку зображень) до вашого облікового запису RecipeSage. Будь ласка, розгляньте можливість зробити внесок, якщо ваш файл містить велику кількість рецептів або зображень."
 }
