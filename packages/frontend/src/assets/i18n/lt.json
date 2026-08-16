@@ -1044,7 +1044,7 @@
     "pages.welcome.description.features.scaling.description": "Keiskite recepto kiekį pagal daugiklį, tikslinę išeigą arba vieno ingrediento kiekį ir konvertuokite metrinius bei imperinius vienetus",
     "pages.welcome.description.features.sharing.description": "Bendrinkite receptus viešai arba su draugais ir bendradarbiaukite kurdami maitinimo planus bei pirkinių sąrašus",
     "pages.welcome.description.features.migration.title": "Masinis importavimas iš įvairių šaltinių",
-    "pages.welcome.description.features.migration.description": "Importuojama iš: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox arba bet kokio JSON-LD / CSV eksporto",
+    "pages.welcome.description.features.migration.description": "Importavimas iš: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox arba bet kokio JSON-LD / CSV eksporto",
     "pages.welcome.description.features.export.title": "Eksportas ir duomenų perkeliamumas:",
     "pages.welcome.description.features.export.description": "Jūsų duomenys priklauso jums. RecipeSage nelaiko jų įkaitais. Bet kuriuo metu eksportuokite savo duomenis į PDF, JSON-LD arba paprastąjį tekstą",
     "pages.welcome.languages.title": "Jūsų kalba",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Vietinės kompiuterio programėlės, skirtos Windows, macOS ir Linux, vietinės iOS ir Android programėlės bei žiniatinklio programėlė, kuri įdiegiama jūsų pagrindiniame ekrane. Viskas išlieka sinchronizuota.",
     "pages.welcome.description.features.editor.title": "Išsamus receptų redaktorius",
     "pages.welcome.description.features.editor.description": "Ingredientų, instrukcijų ir pastabų formatavimo įrankių juosta su skyrių antraštėmis, pusjuodžiu, kursyvu, pabraukimu ir lentelėmis",
-    "pages.welcome.description.cta.api": "Vieša, dokumentuota API, kurią galite naudoti, jei turite techninių žinių"
+    "pages.welcome.description.cta.api": "Vieša, dokumentuota API, kurią galite naudoti, jei turite techninių žinių",
+    "pages.import.flavorish": "Importuoti iš „Flavorish“ failo",
+    "pages.importFlavorish.tabTitle": "Importuoti iš „Flavorish“ – RecipeSage",
+    "pages.importFlavorish.title": "Importuoti receptus iš „Flavorish“ failo",
+    "pages.importFlavorish.description": "Bus importuotas „Flavorish“ eksportas (.zip archyvas, kuriame yra manifestas, JSON receptų failai ir vaizdų aplankas) į jūsų „RecipeSage“ paskyrą. Apsvarstykite galimybę prisidėti, jei jūsų faile yra daug receptų ar vaizdų."
 }
