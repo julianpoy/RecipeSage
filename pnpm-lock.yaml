@@ -29,9 +29,6 @@ importers:
       '@angular/platform-browser':
         specifier: 21.2.1
         version: 21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))
-      '@angular/platform-browser-dynamic':
-        specifier: 21.2.1
-        version: 21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/compiler@21.2.19)(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1)))
       '@angular/router':
         specifier: 21.2.1
         version: 21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
@@ -960,16 +957,6 @@ packages:
   '@angular/language-service@21.2.1':
     resolution: {integrity: sha512-L8EaNhWDKMny18RURg/Ju2Dix2e7qLL/s2yDQrawgjQRmXAMnjimz10w/EiiG7FMK/Hj5fLycS5X8VITq1f2rg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
-
-  '@angular/platform-browser-dynamic@21.2.1':
-    resolution: {integrity: sha512-J4KnrXjgSuk7KjEm79/RK1yyzR867sIyT5mcG6jx2KmkjspFJd4OeOux7Oj7lSBM7+nDEsKC9F6s0x3dC0hCPQ==}
-    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
-    deprecated: '@angular/platform-browser-dynamic is deprecated. Use `@angular/platform-browser` instead.'
-    peerDependencies:
-      '@angular/common': 21.2.1
-      '@angular/compiler': 21.2.1
-      '@angular/core': 21.2.1
-      '@angular/platform-browser': 21.2.1
 
   '@angular/platform-browser@21.2.1':
     resolution: {integrity: sha512-k4SJLxIaLT26vLjLuFL+ho0BiG5PrdxEsjsXFC7w5iUhomeouzkHVTZ4t7gaLNKrdRD7QNtU4Faw0nL0yx0ZPQ==}
@@ -14344,14 +14331,6 @@ snapshots:
       tslib: 2.8.1
 
   '@angular/language-service@21.2.1': {}
-
-  '@angular/platform-browser-dynamic@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/compiler@21.2.19)(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1)))':
-    dependencies:
-      '@angular/common': 21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2)
-      '@angular/compiler': 21.2.19
-      '@angular/core': 21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1)
-      '@angular/platform-browser': 21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))
-      tslib: 2.8.1
 
   '@angular/platform-browser@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))':
     dependencies:
