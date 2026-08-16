@@ -1076,7 +1076,7 @@
     "pages.welcome.description.features.sharing.title": "Partekatzea eta lankidetza:",
     "pages.welcome.description.features.sharing.description": "Partekatu errezetak publikoki edo lagunekin, eta kolaboratu otordu-planetan eta erosketa-zerrendetan",
     "pages.welcome.description.features.migration.title": "Inportatu masiboki iturri askotarikoetatik",
-    "pages.welcome.description.features.migration.description": "Hauetatik inportatzen du: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox edo edozein JSON-LD / CSV esportaziotatik",
+    "pages.welcome.description.features.migration.description": "Hemendik inportatu: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox edo edozein JSON-LD / CSV esportazio",
     "pages.welcome.description.features.export.title": "Esportazioa eta datuen eramangarritasuna:",
     "pages.welcome.description.features.export.description": "Zure datuak zureak dira. RecipeSage-k ez ditu bahituta gordetzen. Esportatu zure datuak PDF, JSON-LD edo testu arrunt gisa nahi duzunean",
     "pages.welcome.languages.title": "Zure hizkuntzan",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.tools.title": "Sukaldeko tresnak (asko!)",
     "pages.welcome.description.features.tools.description": "Labeko ontzien neurriak bihurtzeko tresna integratua, neurri-bihurgailua, egosteko tenperaturak bilatzeko tresna, nutrizio-kalkulagailua eta eskura dituzun osagaien arabera errezetak bilatzeko tresna",
     "pages.welcome.description.features.apps.title": "Gailu guztietarako aplikazioak",
-    "pages.welcome.description.features.apps.description": "Windows, macOS eta Linux-erako mahaigaineko jatorrizko aplikazioak, iOS eta Android-erako jatorrizko aplikazioak eta hasierako pantailan instalatzen den web-aplikazio bat. Dena sinkronizatuta mantentzen da."
+    "pages.welcome.description.features.apps.description": "Windows, macOS eta Linux-erako mahaigaineko jatorrizko aplikazioak, iOS eta Android-erako jatorrizko aplikazioak eta hasierako pantailan instalatzen den web-aplikazio bat. Dena sinkronizatuta mantentzen da.",
+    "pages.import.flavorish": "Inportatu Flavorish fitxategitik",
+    "pages.importFlavorish.tabTitle": "Inportatu Flavorish-etik - RecipeSage",
+    "pages.importFlavorish.title": "Inportatu errezetak Flavorish fitxategitik",
+    "pages.importFlavorish.description": "Honek Flavorish esportazio bat (manifestu bat, JSON errezeta-fitxategiak eta irudien karpeta bat dituen .zip artxibo bat) inportatuko du zure RecipeSage kontura. Mesedez, kontuan hartu ekarpen bat egitea zure fitxategiak errezeta edo irudi ugari baditu."
 }
