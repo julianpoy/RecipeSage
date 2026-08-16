@@ -504,7 +504,7 @@ export class RecipePage {
 
     const decimalNotationMode = inferRecipeNotation(
       this.recipe,
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
     this.decimalNotationMode = decimalNotationMode;
 

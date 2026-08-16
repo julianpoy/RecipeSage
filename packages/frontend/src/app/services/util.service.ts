@@ -458,16 +458,16 @@ export class UtilService {
     }, 1000 * 60);
   }
 
-  getDisplayLocale(): string {
-    return this.translate.getCurrentLang() || window.navigator.language;
+  getCurrentLocale(): string {
+    return this.translate.getCurrentLang() ?? SupportedLanguages.EN_US;
   }
 
   formatMonthName(date: Date): string {
-    return date.toLocaleString(this.getDisplayLocale(), { month: "long" });
+    return date.toLocaleString(this.getCurrentLocale(), { month: "long" });
   }
 
   formatMonthYear(date: Date): string {
-    return date.toLocaleDateString(this.getDisplayLocale(), {
+    return date.toLocaleDateString(this.getCurrentLocale(), {
       month: "long",
       year: "numeric",
     });
@@ -608,7 +608,7 @@ export class UtilService {
     options: { now?: boolean; times?: boolean } = {},
   ): string {
     const memoKey =
-      this.getDisplayLocale() + date.toString() + options.now + options.times;
+      this.getCurrentLocale() + date.toString() + options.now + options.times;
     const memoizedValue = this.memoizedFormattedDates.get(memoKey);
     if (memoizedValue) return memoizedValue;
 
@@ -654,14 +654,14 @@ export class UtilService {
     }
 
     if (options.times && isToday) {
-      return toFormat.toLocaleString(this.getDisplayLocale(), {
+      return toFormat.toLocaleString(this.getCurrentLocale(), {
         hour: "numeric",
         minute: "numeric",
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.getDisplayLocale(), {
+      return toFormat.toLocaleString(this.getCurrentLocale(), {
         weekday: "long",
         hour: "numeric",
         minute: "numeric",
@@ -669,19 +669,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.getDisplayLocale(), {
+      return toFormat.toLocaleString(this.getCurrentLocale(), {
         weekday: "long",
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(this.getDisplayLocale(), {
+      return toFormat.toLocaleString(this.getCurrentLocale(), {
         month: "numeric",
         day: "numeric",
         year: "numeric",
       });
     } else {
-      return toFormat.toLocaleString(this.getDisplayLocale(), {
+      return toFormat.toLocaleString(this.getCurrentLocale(), {
         hour: "numeric",
         minute: "numeric",
         month: "numeric",

@@ -379,7 +379,7 @@ export class PanBakewareConverterPage implements OnInit {
 
   private formatDim(value: number | undefined): string {
     if (value === undefined) return "";
-    return value.toLocaleString(this.translate.getCurrentLang(), {
+    return value.toLocaleString(this.utilService.getCurrentLocale(), {
       maximumFractionDigits: 3,
       useGrouping: false,
     });
@@ -545,7 +545,7 @@ export class PanBakewareConverterPage implements OnInit {
     if (fromUnit === toUnit) return;
     const v = parseQuantity(
       this.originalBakeTemp,
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
     if (v === null) return;
     const newV =
@@ -559,7 +559,7 @@ export class PanBakewareConverterPage implements OnInit {
     toUnit: UnitSystem,
   ) {
     if (fromUnit === toUnit) return;
-    const lang = this.translate.getCurrentLang();
+    const lang = this.utilService.getCurrentLocale();
     const linear = (raw: string): string => {
       const v = parseQuantity(raw, lang);
       if (v === null) return raw;
@@ -603,7 +603,7 @@ export class PanBakewareConverterPage implements OnInit {
 
   private dimensionsFor(slot: PanSlot): PanDimensions | null {
     const state = this.slotState(slot);
-    const lang = this.translate.getCurrentLang();
+    const lang = this.utilService.getCurrentLocale();
     const cmFrom = (raw: string): number | null => {
       const v = parseQuantity(raw, lang);
       if (v === null || v <= 0) return null;
@@ -904,7 +904,7 @@ export class PanBakewareConverterPage implements OnInit {
     const parsed = parseIngredients(text, scaleStr, {
       decimalNotationMode: inferIngredientsNotation(
         text,
-        this.translate.getCurrentLang(),
+        this.utilService.getCurrentLocale(),
       ),
     });
     this.recipeScaledLines = parsed.map((line) => line.plaintextContent);
@@ -925,7 +925,7 @@ export class PanBakewareConverterPage implements OnInit {
     }
     const time = parseQuantity(
       this.originalBakeTime,
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
     if (time !== null && time > 0) {
       const low = Math.max(1, Math.round(time * advice.timeMultiplierLow));
@@ -938,7 +938,7 @@ export class PanBakewareConverterPage implements OnInit {
     }
     const tempIn = parseQuantity(
       this.originalBakeTemp,
-      this.translate.getCurrentLang(),
+      this.utilService.getCurrentLocale(),
     );
     if (tempIn !== null && tempIn > 0) {
       if (this.unit === "metric") {

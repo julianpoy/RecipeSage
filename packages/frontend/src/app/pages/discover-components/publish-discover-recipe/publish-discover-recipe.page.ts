@@ -9,7 +9,7 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 import type { ImageSummary } from "@recipesage/prisma";
 
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -194,6 +194,7 @@ export class PublishDiscoverRecipePage {
   private alertCtrl = inject(AlertController);
   private toastCtrl = inject(ToastController);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
   private loadingService = inject(LoadingService);
   private unsavedChangesService = inject(UnsavedChangesService);
   private serverActionsService = inject(ServerActionsService);
@@ -218,7 +219,7 @@ export class PublishDiscoverRecipePage {
   constructor() {
     addIcons({ closeCircleOutline });
     this.languageOptions = getDiscoverLanguageOptions(
-      this.translate.currentLang,
+      this.utilService.getCurrentLocale(),
     );
     this.applyRouteParams();
     this.load();
@@ -274,7 +275,9 @@ export class PublishDiscoverRecipePage {
       throw new Error("No recipeId or discoverRecipeId was provided");
     }
 
-    this.language = localeToDiscoverLanguage(this.translate.currentLang);
+    this.language = localeToDiscoverLanguage(
+      this.utilService.getCurrentLocale(),
+    );
   }
 
   async load() {
