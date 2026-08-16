@@ -43,7 +43,7 @@ import {
   DISCOVER_CATEGORY_LABEL_KEYS,
   RecipeDetailsPreferenceKey,
 } from "@recipesage/util/shared";
-import { System } from "unitz-ts";
+import { System } from "@recipesage/unitz-ts";
 import { linkifyHtml } from "../../../utils/linkify";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";

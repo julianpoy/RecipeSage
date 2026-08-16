@@ -45,7 +45,7 @@ import {
   ScaleRecipeComponent,
   type UnitSystem,
 } from "../../../modals/scale-recipe/scale-recipe.component";
-import { System } from "unitz-ts";
+import { System } from "@recipesage/unitz-ts";
 import type { RecipeSummary, RecipeSummaryLite } from "@recipesage/prisma";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";

@@ -1,4 +1,11 @@
-import { uz, Classes, Class, Core, System, Plurality } from "unitz-ts";
+import {
+  uz,
+  Classes,
+  Class,
+  Core,
+  System,
+  Plurality,
+} from "@recipesage/unitz-ts";
 
 Classes.addDefaults();
 

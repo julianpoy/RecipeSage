@@ -1,4 +1,4 @@
-import { Base, OutputUnit } from "unitz-ts";
+import { Base, OutputUnit } from "@recipesage/unitz-ts";
 import {
   parseUnit,
   getPlainMeasurementsForLocaleIngredient,

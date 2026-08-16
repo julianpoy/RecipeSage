@@ -14,7 +14,7 @@ import {
   IonFooter,
 } from "@ionic/angular/standalone";
 import fractionjs from "fraction.js";
-import { System } from "unitz-ts";
+import { System } from "@recipesage/unitz-ts";
 import {
   getAnchorMeasurement,
   parseIngredients,
