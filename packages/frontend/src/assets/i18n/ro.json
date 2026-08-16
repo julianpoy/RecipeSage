@@ -1176,7 +1176,7 @@
     "pages.welcome.description.features.sharing.title": "Partajare și colaborare:",
     "pages.welcome.description.features.sharing.description": "Partajați rețete public sau cu prietenii și colaborați la planuri de mese și liste de cumpărături",
     "pages.welcome.description.features.migration.title": "Import în masă dintr-o mare varietate de surse",
-    "pages.welcome.description.features.migration.description": "Importuri din: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox sau orice export JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Importuri din: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox sau orice export JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Export și portabilitatea datelor:",
     "pages.welcome.description.features.export.description": "Datele vă aparțin. RecipeSage nu le ține ostatice. Exportați-vă datele în PDF, JSON-LD sau text simplu oricând",
     "pages.welcome.languages.title": "În limba dumneavoastră",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Aplicații native pentru desktop pentru Windows, macOS și Linux, aplicații native pentru iOS și Android și o aplicație web care se instalează pe ecranul principal. Totul rămâne sincronizat.",
     "pages.welcome.description.features.editor.title": "Editor avansat de rețete",
     "pages.welcome.description.features.editor.description": "O bară de instrumente de formatare pentru ingrediente, instrucțiuni și note, cu antete de secțiune, text îngroșat, cursiv, subliniat și tabele",
-    "pages.welcome.description.cta.api": "API public și documentat, pe care îl puteți utiliza dacă aveți cunoștințe tehnice"
+    "pages.welcome.description.cta.api": "API public și documentat, pe care îl puteți utiliza dacă aveți cunoștințe tehnice",
+    "pages.import.flavorish": "Importă din fișier Flavorish",
+    "pages.importFlavorish.tabTitle": "Importă din Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Importă rețete din fișier Flavorish",
+    "pages.importFlavorish.description": "Aceasta va importa un export Flavorish (o arhivă .zip care conține un manifest, fișiere JSON cu rețete și un dosar cu imagini) în contul dumneavoastră RecipeSage. Vă rugăm să luați în considerare să contribuiți dacă fișierul conține un număr mare de rețete sau imagini."
 }
