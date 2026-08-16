@@ -1218,7 +1218,7 @@
     "pages.welcome.description.features.sharing.title": "Teilen und gemeinsam nutzen",
     "pages.welcome.description.features.sharing.description": "Teile Rezepte öffentlich oder mit Freunden und nutze Essenspläne und Einkaufslisten gemeinsam.",
     "pages.welcome.description.features.migration.title": "Massenimport aus einer Vielzahl von Quellen",
-    "pages.welcome.description.features.migration.description": "Importe von: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox oder jedem JSON-LD-/CSV-Export",
+    "pages.welcome.description.features.migration.description": "Importe von: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox oder jedem JSON-LD-/CSV-Export",
     "pages.welcome.description.features.export.title": "Export und Datenportabilität",
     "pages.welcome.description.features.export.description": "Ihre Daten gehören Ihnen. RecipeSage hält sie nicht als Geisel. Exportieren Sie Ihre Daten jederzeit als PDF, JSON-LD oder Klartext",
     "pages.welcome.languages.title": "In deiner Sprache",
@@ -2428,5 +2428,9 @@
     "pages.importCookbookManagerCom.tabTitle": "Import aus CookBookManager.com – RecipeSage",
     "pages.importCookbookManagerCom.title": "Rezepte aus CookBookManager.com-Datei importieren",
     "webextension.pageTooLarge": "Diese Seite ist zu groß für einen automatischen Import. Versuchen Sie stattdessen, sie über ihre Webadresse von der RecipeSage-Website zu importieren.",
-    "pages.importCookbookManagerCom.description": "Dadurch wird eine Crouton-Exportdatei (eine ZIP-Datei mit Dateien mit der Endung .crumb) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende."
+    "pages.importCookbookManagerCom.description": "Dadurch wird eine Crouton-Exportdatei (eine ZIP-Datei mit Dateien mit der Endung .crumb) in dein RecipeSage-Konto importiert. Falls deine Datei eine große Anzahl von Rezepten oder Bildern enthält, freue ich mich über eine Spende.",
+    "pages.import.flavorish": "Aus Flavorish-Datei importieren",
+    "pages.importFlavorish.tabTitle": "Aus Flavorish importieren – RecipeSage",
+    "pages.importFlavorish.title": "Rezepte aus Flavorish-Datei importieren",
+    "pages.importFlavorish.description": "Dadurch wird ein Flavorish-Export (ein .zip-Archiv mit einem Manifest, JSON-Rezeptdateien und einem Bilderordner) in Ihr RecipeSage-Konto importiert. Bitte erwägen Sie, einen Beitrag zu leisten, wenn Ihre Datei eine große Anzahl an Rezepten oder Bildern enthält."
 }
