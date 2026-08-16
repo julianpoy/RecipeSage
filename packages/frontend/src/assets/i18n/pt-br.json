@@ -397,7 +397,7 @@
     "pages.welcome.description.features.sharing.title": "Compartilhamento e colaboração:",
     "pages.welcome.description.features.sharing.description": "Compartilhe receitas publicamente ou com amigos, e colabore em planos de refeições e listas de compras",
     "pages.welcome.description.features.migration.title": "Importação em massa de uma grande variedade de fontes",
-    "pages.welcome.description.features.migration.description": "Importações de: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox ou qualquer exportação JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Importações de: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox ou qualquer exportação JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Exportação e portabilidade de dados:",
     "pages.welcome.description.features.export.description": "Seus dados são seus. O RecipeSage não os mantém reféns. Exporte seus dados para PDF, JSON-LD ou texto simples a qualquer momento",
     "pages.welcome.languages.title": "No seu idioma",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Aplicativos nativos para desktop no Windows, macOS e Linux, aplicativos nativos para iOS e Android e um aplicativo web que é instalado na sua tela inicial. Tudo permanece sincronizado.",
     "pages.welcome.description.features.editor.title": "Editor avançado de receitas",
     "pages.welcome.description.features.editor.description": "Uma barra de ferramentas de formatação para ingredientes, instruções e notas, com cabeçalhos de seção, negrito, itálico, sublinhado e tabelas",
-    "pages.welcome.description.cta.api": "API pública e documentada que você pode usar se tiver conhecimentos técnicos"
+    "pages.welcome.description.cta.api": "API pública e documentada que você pode usar se tiver conhecimentos técnicos",
+    "pages.import.flavorish": "Importar de arquivo do Flavorish",
+    "pages.importFlavorish.tabTitle": "Importar do Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Importar receitas de arquivo do Flavorish",
+    "pages.importFlavorish.description": "Isso importará uma exportação do Flavorish (um arquivo .zip contendo um manifesto, arquivos JSON de receitas e uma pasta de imagens) para sua conta do RecipeSage. Considere contribuir caso seu arquivo contenha um grande número de receitas ou imagens."
 }
