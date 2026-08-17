@@ -732,7 +732,7 @@
     "pages.welcome.description.features.sharing.title": "Sdílení a spolupráce:",
     "pages.welcome.description.features.sharing.description": "Sdílejte recepty veřejně nebo s přáteli a spolupracujte na jídelních plánech a nákupních seznamech",
     "pages.welcome.description.features.migration.title": "Hromadný import z široké škály zdrojů",
-    "pages.welcome.description.features.migration.description": "Importy z: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox nebo z libovolného exportu JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Import z: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox nebo libovolného exportu JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Export a přenositelnost dat:",
     "pages.welcome.description.features.export.description": "Vaše data jsou vaše. RecipeSage je nedrží jako rukojmí. Data můžete kdykoli exportovat do formátu PDF, JSON-LD nebo prostého textu",
     "pages.welcome.description.cta.noAds": "Zdarma a s otevřeným zdrojovým kódem: bez reklam, bez placeného přístupu, bez sledování",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Nativní desktopové aplikace pro Windows, macOS a Linux, nativní aplikace pro iOS a Android a webová aplikace, kterou lze nainstalovat na domovskou obrazovku. Vše zůstává synchronizované.",
     "pages.welcome.description.features.editor.title": "Pokročilý editor receptů",
     "pages.welcome.description.features.editor.description": "Panel nástrojů pro formátování ingrediencí, postupu a poznámek s nadpisy oddílů, tučným písmem, kurzívou, podtržením a tabulkami",
-    "pages.welcome.description.cta.api": "Veřejné, zdokumentované API, které můžete používat, pokud jste technicky zdatní"
+    "pages.welcome.description.cta.api": "Veřejné, zdokumentované API, které můžete používat, pokud jste technicky zdatní",
+    "pages.import.flavorish": "Importovat ze souboru Flavorish",
+    "pages.importFlavorish.tabTitle": "Import z Flavorish – RecipeSage",
+    "pages.importFlavorish.title": "Importovat recepty ze souboru Flavorish",
+    "pages.importFlavorish.description": "Tímto se do vašeho účtu RecipeSage importuje export z Flavorish (archiv .zip obsahující manifest, soubory receptů JSON a složku s obrázky). Pokud váš soubor obsahuje velké množství receptů nebo obrázků, zvažte prosím finanční příspěvek."
 }

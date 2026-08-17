@@ -1124,7 +1124,7 @@
     "pages.welcome.description.features.sharing.title": "共有とコラボレーション:",
     "pages.welcome.description.features.sharing.description": "レシピを公開したり友人と共有したりして、献立や買い物リストで共同作業できます",
     "pages.welcome.description.features.migration.title": "多様なソースから一括インポート",
-    "pages.welcome.description.features.migration.description": "インポート元: Pepperplate、Living Cookbook、Paprika、Mela、Crouton、Cookmate、Recipe Keeper、CopyMeThat、CookBookManager、Evernote、Plan to Eat、MyRecipeBox、または任意の JSON-LD / CSV エクスポート",
+    "pages.welcome.description.features.migration.description": "Pepperplate、Living Cookbook、Paprika、Mela、Crouton、Cookmate、Recipe Keeper、CopyMeThat、CookBookManager、Flavorish、Evernote、Plan to Eat、MyRecipeBox、または任意の JSON-LD / CSV エクスポートからインポート",
     "pages.welcome.description.features.export.title": "エクスポートとデータの可搬性:",
     "pages.welcome.description.features.export.description": "データはあなた自身のものです。RecipeSageがデータを人質に取ることはありません。いつでもデータをPDF、JSON-LD、またはプレーンテキストにエクスポートできます",
     "pages.welcome.languages.title": "あなたの言語で",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Windows、macOS、Linux向けのネイティブデスクトップアプリ、iOSおよびAndroid向けのネイティブアプリ、ホーム画面にインストールできるウェブアプリを提供しています。すべてが同期されます。",
     "pages.welcome.description.features.editor.title": "高機能なレシピエディター",
     "pages.welcome.description.features.editor.description": "セクション見出し、太字、斜体、下線、表を使用して、材料、手順、メモを整形できるツールバー",
-    "pages.welcome.description.cta.api": "技術的な知識があれば利用できる、公開され文書化されたAPI"
+    "pages.welcome.description.cta.api": "技術的な知識があれば利用できる、公開され文書化されたAPI",
+    "pages.import.flavorish": "Flavorish ファイルからインポート",
+    "pages.importFlavorish.tabTitle": "Flavorish からインポート - RecipeSage",
+    "pages.importFlavorish.title": "Flavorish ファイルからレシピをインポート",
+    "pages.importFlavorish.description": "Flavorish のエクスポートファイル（マニフェスト、JSON レシピファイル、画像フォルダーを含む .zip アーカイブ）を RecipeSage アカウントにインポートします。ファイルに多数のレシピまたは画像が含まれている場合は、寄付をご検討ください。"
 }

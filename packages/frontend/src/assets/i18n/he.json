@@ -1140,7 +1140,7 @@
     "pages.pricing.support.body": "אם תרצו לתמוך בפרויקט, תוכלו לתרום תרומה חד-פעמית או חוזרת.",
     "pages.pricing.support.hosting": "התרומות הן אופציונליות לחלוטין ומיועדות לכיסוי עלויות שרתים ואירוח תמונות.",
     "pages.pricing.support.link": "מעבר לעמוד התרומה",
-    "pages.welcome.description.features.migration.description": "ייבוא מ: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox, או מכל ייצוא JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "ייבוא מ־Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, או מכל ייצוא JSON-LD / CSV",
     "pages.welcome.description.features.sharing.title": "שיתוף ושיתוף פעולה:",
     "pages.welcome.description.features.sharing.description": "שתפו מתכונים באופן ציבורי או עם חברים, ושתפו פעולה בתוכניות ארוחות וברשימות קניות",
     "pages.welcome.description.features.migration.title": "ייבוא בכמות גדולה ממגוון רחב של מקורות",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "אפליקציות שולחניות מקוריות עבור Windows, macOS ו-Linux, אפליקציות מקוריות ל-iOS ול-Android, ואפליקציית אינטרנט המותקנת במסך הבית שלכם. הכול נשאר מסונכרן.",
     "pages.welcome.description.features.editor.title": "עורך מתכונים עשיר",
     "pages.welcome.description.features.editor.description": "סרגל כלים לעיצוב מרכיבים, הוראות והערות, עם כותרות מקטעים, טקסט מודגש, נטוי, קו תחתון וטבלאות",
-    "pages.welcome.description.cta.api": "API ציבורי ומתועד שבו תוכלו להשתמש אם יש לכם ידע טכני"
+    "pages.welcome.description.cta.api": "API ציבורי ומתועד שבו תוכלו להשתמש אם יש לכם ידע טכני",
+    "pages.import.flavorish": "ייבוא מקובץ Flavorish",
+    "pages.importFlavorish.tabTitle": "ייבוא מ־Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "ייבוא מתכונים מקובץ Flavorish",
+    "pages.importFlavorish.description": "פעולה זו תייבא ייצוא מ־Flavorish (ארכיון ‎.zip המכיל מניפסט, קובצי מתכונים מסוג JSON ותיקיית תמונות) לחשבון RecipeSage שלך. נא לשקול לתרום אם הקובץ שלך מכיל מספר רב של מתכונים או תמונות."
 }

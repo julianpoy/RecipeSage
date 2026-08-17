@@ -1218,7 +1218,7 @@
     "pages.welcome.description.features.sharing.title": "Deling og samarbejde",
     "pages.welcome.description.features.sharing.description": "Del opskrifter offentligt eller med venner, og samarbejd om madplaner og indkøbslister",
     "pages.welcome.description.features.migration.title": "Masseimport fra en lang række kilder",
-    "pages.welcome.description.features.migration.description": "Importerer fra: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox eller enhver JSON-LD- / CSV-eksport",
+    "pages.welcome.description.features.migration.description": "Importer fra: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox eller enhver JSON-LD-/CSV-eksport",
     "pages.welcome.description.features.export.title": "Eksport og dataportabilitet",
     "pages.welcome.description.features.export.description": "Dine data er dine egne. RecipeSage holder dem ikke som gidsler. Eksportér dine data til PDF, JSON-LD eller ren tekst når som helst",
     "pages.welcome.languages.title": "På dit sprog",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Indbyggede skrivebordsapps til Windows, macOS og Linux, indbyggede apps til iOS og Android samt en webapp, der kan installeres på din startskærm. Alt forbliver synkroniseret.",
     "pages.welcome.description.features.editor.title": "Avanceret opskriftseditor",
     "pages.welcome.description.features.editor.description": "En formateringsværktøjslinje til ingredienser, instruktioner og noter med sektionsoverskrifter, fed, kursiv, understregning og tabeller",
-    "pages.welcome.description.cta.api": "Offentligt, dokumenteret API, som du kan bruge, hvis du er teknisk kyndig"
+    "pages.welcome.description.cta.api": "Offentligt, dokumenteret API, som du kan bruge, hvis du er teknisk kyndig",
+    "pages.import.flavorish": "Importér fra Flavorish-fil",
+    "pages.importFlavorish.tabTitle": "Importér fra Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Importér opskrifter fra Flavorish-fil",
+    "pages.importFlavorish.description": "Dette importerer en Flavorish-eksport (et .zip-arkiv med et manifest, JSON-opskriftsfiler og en billedmappe) til din RecipeSage-konto. Overvej venligst at bidrage, hvis din fil indeholder et stort antal opskrifter eller billeder."
 }

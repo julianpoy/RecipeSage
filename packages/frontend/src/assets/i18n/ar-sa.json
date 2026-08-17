@@ -606,7 +606,7 @@
     "pages.import.jobs.status.fail.badCredentials": "بيانات الاعتماد المقدّمة غير صحيحة.",
     "pages.settings.fontSize": "حجم الخط",
     "pages.homeSearchFilterPopover.filterByLabel": "التصفية حسب التصنيف",
-    "pages.welcome.description.features.migration.description": "يستورد من: Pepperplate وLiving Cookbook وPaprika وMela وCrouton وCookmate وRecipe Keeper وCopyMeThat وCookBookManager وEvernote وPlan to Eat وMyRecipeBox، أو أي تصدير بصيغة JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "استيراد من: Pepperplate وLiving Cookbook وPaprika وMela وCrouton وCookmate وRecipe Keeper وCopyMeThat وCookBookManager وFlavorish وEvernote وPlan to Eat وMyRecipeBox، أو أي تصدير بتنسيق JSON-LD / CSV",
     "pages.export.description1": "يرجى تحديد صيغة تصدير لبدء مهمة تصدير.",
     "pages.export.jobs.job.jsonld": "تصدير JSON-LD",
     "pages.settings.export": "تصدير بيانات الوصفات",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "تطبيقات سطح مكتب أصلية لأنظمة Windows وmacOS وLinux، وتطبيقات أصلية لأنظمة iOS وAndroid، وتطبيق ويب يُثبَّت على الشاشة الرئيسية. يبقى كل شيء متزامنًا.",
     "pages.welcome.description.features.editor.title": "محرر وصفات غني",
     "pages.welcome.description.features.editor.description": "شريط أدوات للتنسيق للمكوّنات والتعليمات والملاحظات، يتضمن عناوين الأقسام والنص العريض والمائل والتسطير والجداول",
-    "pages.welcome.description.cta.api": "واجهة برمجة تطبيقات عامة وموثقة يمكنك استخدامها إذا كانت لديك خبرة تقنية"
+    "pages.welcome.description.cta.api": "واجهة برمجة تطبيقات عامة وموثقة يمكنك استخدامها إذا كانت لديك خبرة تقنية",
+    "pages.import.flavorish": "استيراد من ملف Flavorish",
+    "pages.importFlavorish.tabTitle": "استيراد من Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "استيراد الوصفات من ملف Flavorish",
+    "pages.importFlavorish.description": "سيؤدي هذا إلى استيراد ملف تصدير من Flavorish (أرشيف ‎.zip يحتوي على ملف بيان وملفات وصفات JSON ومجلد للصور) إلى حسابك في RecipeSage. يُرجى التفكير في المساهمة إذا كان ملفك يحتوي على عدد كبير من الوصفات أو الصور."
 }

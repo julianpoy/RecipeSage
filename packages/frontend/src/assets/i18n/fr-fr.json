@@ -1196,7 +1196,7 @@
     "pages.welcome.description.features.sharing.title": "Partage et collaboration",
     "pages.welcome.description.features.sharing.description": "Partagez des recettes publiquement ou avec des amis, et collaborez sur des plans de repas et des listes de courses",
     "pages.welcome.description.features.migration.title": "Importation groupée depuis une grande variété de sources",
-    "pages.welcome.description.features.migration.description": "Importations depuis : Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox ou toute exportation JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Importations depuis : Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox ou toute exportation JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Exportation et portabilité des données",
     "pages.welcome.description.features.export.description": "Vos données vous appartiennent. RecipeSage ne les retient pas en otage. Exportez vos données au format PDF, JSON-LD ou texte brut à tout moment",
     "pages.welcome.languages.title": "Dans votre langue",
@@ -2428,5 +2428,9 @@
     "webextension.inject.nutrition.polyunsaturatedFat": "Acides gras polyinsaturés (g)",
     "webextension.inject.nutrition.monounsaturatedFat": "Acides gras monoinsaturés (g)",
     "webextension.inject.nutrition.cholesterol": "Cholestérol (mg)",
-    "webextension.inject.nutrition.sodium": "Sodium (mg)"
+    "webextension.inject.nutrition.sodium": "Sodium (mg)",
+    "pages.import.flavorish": "Importer depuis un fichier Flavorish",
+    "pages.importFlavorish.tabTitle": "Importer depuis Flavorish - RecipeSage",
+    "pages.importFlavorish.title": "Importer des recettes depuis un fichier Flavorish",
+    "pages.importFlavorish.description": "Cette opération importera une exportation Flavorish (une archive .zip contenant un manifeste, des fichiers de recettes JSON et un dossier d’images) dans votre compte RecipeSage. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d’images."
 }

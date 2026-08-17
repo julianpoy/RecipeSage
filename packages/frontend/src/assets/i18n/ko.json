@@ -59,7 +59,7 @@
     "pages.welcome.description.features.sharing.title": "공유 및 협업:",
     "pages.welcome.description.features.sharing.description": "레시피를 공개적으로 또는 친구와 공유하고, 식단 계획 및 쇼핑 목록에서 협업하십시오.",
     "pages.welcome.description.features.migration.title": "다양한 출처에서 일괄 가져오기",
-    "pages.welcome.description.features.migration.description": "가져오기 지원: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox 또는 모든 JSON-LD / CSV 내보내기 파일",
+    "pages.welcome.description.features.migration.description": "다음에서 가져오기: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox 또는 모든 JSON-LD / CSV 내보내기 파일",
     "pages.welcome.description.features.export.title": "내보내기 및 데이터 이동성:",
     "pages.welcome.description.features.export.description": "데이터는 귀하의 것입니다. RecipeSage는 이를 붙잡아 두지 않습니다. 언제든지 데이터를 PDF, JSON-LD 또는 일반 텍스트로 내보낼 수 있습니다",
     "pages.welcome.description.cta": "왜 RecipeSage인가요?",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Windows, macOS 및 Linux용 네이티브 데스크톱 앱, 네이티브 iOS 및 Android 앱, 그리고 홈 화면에 설치할 수 있는 웹 앱을 제공합니다. 모든 항목이 동기화된 상태로 유지됩니다.",
     "pages.welcome.description.features.editor.title": "풍부한 기능의 레시피 편집기",
     "pages.welcome.description.features.editor.description": "섹션 제목, 굵게, 기울임꼴, 밑줄 및 표 기능을 갖춘 재료, 조리법 및 메모용 서식 도구 모음",
-    "pages.welcome.description.cta.api": "기술적 지식이 있는 경우 사용할 수 있는 공개 문서화된 API"
+    "pages.welcome.description.cta.api": "기술적 지식이 있는 경우 사용할 수 있는 공개 문서화된 API",
+    "pages.import.flavorish": "Flavorish 파일에서 가져오기",
+    "pages.importFlavorish.tabTitle": "Flavorish에서 가져오기 - RecipeSage",
+    "pages.importFlavorish.title": "Flavorish 파일에서 레시피 가져오기",
+    "pages.importFlavorish.description": "Flavorish 내보내기 파일(매니페스트, JSON 레시피 파일 및 이미지 폴더가 포함된 .zip 압축 파일)을 RecipeSage 계정으로 가져옵니다. 파일에 많은 수의 레시피 또는 이미지가 포함되어 있다면 기부를 고려해 주세요."
 }

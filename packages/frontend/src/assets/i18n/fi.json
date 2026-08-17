@@ -1189,7 +1189,7 @@
     "pages.welcome.description.features.sharing.title": "Jakaminen ja yhteistyö",
     "pages.welcome.description.features.sharing.description": "Jaa reseptejä julkisesti tai ystävien kanssa sekä tee yhteistyötä ateriasuunnitelmien ja ostoslistojen parissa",
     "pages.welcome.description.features.migration.title": "Tuo kerralla useista eri lähteistä",
-    "pages.welcome.description.features.migration.description": "Tuonti seuraavista: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox tai mikä tahansa JSON-LD- / CSV-vienti",
+    "pages.welcome.description.features.migration.description": "Tuonnit kohteista: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox tai mikä tahansa JSON-LD- tai CSV-vienti",
     "pages.welcome.description.features.export.title": "Vienti ja tietojen siirrettävyys",
     "pages.welcome.description.features.export.description": "Tietosi ovat omiasi. RecipeSage ei pidä niitä panttivankeina. Voit viedä tietosi milloin tahansa PDF-, JSON-LD- tai pelkkänä tekstinä",
     "pages.editRecipe.nutritionAutofill.invalid": "Anna vähintään 10 merkkiä tekstiä.",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Alkuperäiset työpöytäsovellukset Windowsille, macOS:lle ja Linuxille, alkuperäiset iOS- ja Android-sovellukset sekä verkkosovellus, jonka voi asentaa aloitusnäyttöön. Kaikki pysyy synkronoituna.",
     "pages.welcome.description.features.editor.title": "Monipuolinen reseptieditori",
     "pages.welcome.description.features.editor.description": "Ainesosien, ohjeiden ja muistiinpanojen muotoilutyökalurivi, jossa on osio-otsikot, lihavointi, kursivointi, alleviivaus ja taulukot",
-    "pages.welcome.description.cta.api": "Julkinen, dokumentoitu ohjelmointirajapinta, jota voit käyttää, jos sinulla on teknistä osaamista"
+    "pages.welcome.description.cta.api": "Julkinen, dokumentoitu ohjelmointirajapinta, jota voit käyttää, jos sinulla on teknistä osaamista",
+    "pages.import.flavorish": "Tuo Flavorish-tiedostosta",
+    "pages.importFlavorish.tabTitle": "Tuo Flavorishista - RecipeSage",
+    "pages.importFlavorish.title": "Tuo reseptejä Flavorish-tiedostosta",
+    "pages.importFlavorish.description": "Tämä tuo Flavorish-viennin (manifestin, JSON-reseptitiedostoja ja kuvakansion sisältävän .zip-arkiston) RecipeSage-tilillesi. Harkitse tukemista, jos tiedostosi sisältää suuren määrän reseptejä tai kuvia."
 }

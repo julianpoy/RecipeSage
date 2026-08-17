@@ -59,7 +59,7 @@
     "pages.welcome.description.features.sharing.title": "साझाकरण और सहयोग:",
     "pages.welcome.description.features.sharing.description": "रेसिपी को सार्वजनिक रूप से या मित्रों के साथ साझा करें, और भोजन योजनाओं तथा खरीदारी सूचियों पर सहयोग करें",
     "pages.welcome.description.features.migration.title": "विभिन्न प्रकार के स्रोतों से एक साथ आयात करें",
-    "pages.welcome.description.features.migration.description": "इनसे आयात: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Evernote, Plan to Eat, MyRecipeBox, या कोई भी JSON-LD / CSV निर्यात",
+    "pages.welcome.description.features.migration.description": "इनसे आयात: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, या कोई भी JSON-LD / CSV निर्यात",
     "pages.welcome.description.features.export.title": "निर्यात और डेटा पोर्टेबिलिटी:",
     "pages.welcome.description.features.export.description": "आपका डेटा आपका अपना है। RecipeSage उसे बंधक नहीं रखता। अपने डेटा को कभी भी PDF, JSON-LD या सादे पाठ में निर्यात करें",
     "pages.welcome.description.cta": "RecipeSage क्यों?",
@@ -2428,5 +2428,9 @@
     "pages.welcome.description.features.apps.description": "Windows, macOS और Linux के लिए मूल डेस्कटॉप ऐप्स, मूल iOS और Android ऐप्स, तथा एक वेब ऐप जो आपकी होम स्क्रीन पर इंस्टॉल होता है। सब कुछ सिंक में रहता है।",
     "pages.welcome.description.features.editor.title": "उन्नत रेसिपी संपादक",
     "pages.welcome.description.features.editor.description": "अनुभाग शीर्षकों, बोल्ड, इटैलिक, रेखांकन और तालिकाओं सहित सामग्री, निर्देशों और नोट्स के लिए एक स्वरूपण टूलबार",
-    "pages.welcome.description.cta.api": "सार्वजनिक, प्रलेखित API जिसका उपयोग आप तकनीकी ज्ञान होने पर कर सकते हैं"
+    "pages.welcome.description.cta.api": "सार्वजनिक, प्रलेखित API जिसका उपयोग आप तकनीकी ज्ञान होने पर कर सकते हैं",
+    "pages.import.flavorish": "Flavorish फ़ाइल से आयात करें",
+    "pages.importFlavorish.tabTitle": "Flavorish से आयात करें - RecipeSage",
+    "pages.importFlavorish.title": "Flavorish फ़ाइल से रेसिपी आयात करें",
+    "pages.importFlavorish.description": "यह आपके RecipeSage खाते में एक Flavorish निर्यात (manifest, JSON रेसिपी फ़ाइलों और छवियों के फ़ोल्डर वाला एक .zip संग्रह) आयात करेगा। यदि आपकी फ़ाइल में बड़ी संख्या में रेसिपी या छवियाँ हैं, तो कृपया योगदान करने पर विचार करें।"
 }
