@@ -33,17 +33,17 @@ importers:
         specifier: 21.2.1
         version: 21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
       '@aws-sdk/client-s3':
-        specifier: ^3.1108.0
-        version: 3.1108.0
+        specifier: ^3.1109.0
+        version: 3.1109.0
       '@aws-sdk/client-ses':
-        specifier: ^3.1108.0
-        version: 3.1108.0
+        specifier: ^3.1109.0
+        version: 3.1109.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.1108.0
-        version: 3.1108.0(@aws-sdk/client-s3@3.1108.0)
+        specifier: ^3.1109.0
+        version: 3.1109.0(@aws-sdk/client-s3@3.1109.0)
       '@aws-sdk/s3-request-presigner':
-        specifier: ^3.1108.0
-        version: 3.1108.0
+        specifier: ^3.1109.0
+        version: 3.1109.0
       '@capacitor/camera':
         specifier: ^8.2.2
         version: 8.2.2(@capacitor/core@8.5.0)
@@ -1136,12 +1136,12 @@ packages:
     resolution: {integrity: sha512-7kPy33qNGq3NfwHC0412T6LDK1bp4+eiPzetX0sVd9cpTSXuQDKpoOFnB0Njj6uZjJDcLS3n2OeyarwwgkQ0Ow==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-s3@3.1108.0':
-    resolution: {integrity: sha512-prdothEAFE1G8H0s0+zFGuNZdSj+Acg/siB1dFxPS181op9+hJ1GLr+b2anJch4B9a/xbWy7k8eG/enH3cNSjQ==}
+  '@aws-sdk/client-s3@3.1109.0':
+    resolution: {integrity: sha512-iPWzBeGkAe5H5+dBBGCOdIT4uMhpu12OK+nFnDzjvOChVnHIws4LeoG7Yl0kJHSRWZnNEkVcF4vQYTJny0e5xA==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-ses@3.1108.0':
-    resolution: {integrity: sha512-y3lHmjZ2FtbhKdN8k9gbx1WfpSE1QvihWCOMEbyUrTnESB2r6UOxvkyZfol/dMnwyEaVE9Dcoft2fU2JL4UR9g==}
+  '@aws-sdk/client-ses@3.1109.0':
+    resolution: {integrity: sha512-fwoxPzGc7h5pTKXYIJrYxaz6FFvgM4OBqMD0owdbcR40OuLpxXP2CwCDOiTsXW3uUUgAw0VxEjyrBOC0FS/Vjw==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/core@3.977.8':
@@ -1222,11 +1222,11 @@ packages:
     peerDependencies:
       '@aws-sdk/client-s3': ^3.1000.0
 
-  '@aws-sdk/lib-storage@3.1108.0':
-    resolution: {integrity: sha512-2hq5FL7oXIHW/m9VASuEL9f7Z67jzXy1g5lEfxGs5sWnAB9GtueY/Bn26lcsSWun/p5T5phXRrLZN9uBvcuP5w==}
+  '@aws-sdk/lib-storage@3.1109.0':
+    resolution: {integrity: sha512-l05ablXGuiLHmuhQZhisBQcK1ZgwP1CsTeb+7x9X942qP9ba6RAMqSfh8R7QGTkN5c9PowWfDVLNbouQDTrQiw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
-      '@aws-sdk/client-s3': ^3.1108.0
+      '@aws-sdk/client-s3': ^3.1109.0
 
   '@aws-sdk/middleware-bucket-endpoint@3.972.10':
     resolution: {integrity: sha512-Vbc2frZH7wXlMNd+ZZSXUEs/l1Sv8Jj4zUnIfwrYF5lwaLdXHZ9xx4U3rjUcaye3HRhFVc+E5DbBxpRAbB16BA==}
@@ -1280,8 +1280,8 @@ packages:
     resolution: {integrity: sha512-CvJ2ZIjK/jVD/lbOpowBVElJyC1YxLTIJ13yM0AEo0t2v7swOzGjSA6lJGH+DwZXQhcjUjoYwc8bVYCX5MDr1A==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/s3-request-presigner@3.1108.0':
-    resolution: {integrity: sha512-X0lX/rlyhlpQY97cwM2Rebuuj4HRMkp1wVYjJx1DHMTUI6Fehsh3/mZOd9U2HIbp1/nSciBmoD0dkpc3uXlUfA==}
+  '@aws-sdk/s3-request-presigner@3.1109.0':
+    resolution: {integrity: sha512-tVoeEJ1sERyMrzmFnE1blsKrwg40xzAPgrlk4dlqAUN317GeJAD1hUcY3kciqTH7T/QvxVr6PE5iQAaASnPWRg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/signature-v4-multi-region@3.996.45':
@@ -14996,7 +14996,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-s3@3.1108.0':
+  '@aws-sdk/client-s3@3.1109.0':
     dependencies:
       '@aws-sdk/checksums': 3.1000.28
       '@aws-sdk/core': 3.977.8
@@ -15010,7 +15010,7 @@ snapshots:
       '@smithy/types': 4.17.2
       tslib: 2.8.1
 
-  '@aws-sdk/client-ses@3.1108.0':
+  '@aws-sdk/client-ses@3.1109.0':
     dependencies:
       '@aws-sdk/core': 3.977.8
       '@aws-sdk/credential-provider-node': 3.972.80
@@ -15249,9 +15249,9 @@ snapshots:
       stream-browserify: 3.0.0
       tslib: 2.8.1
 
-  '@aws-sdk/lib-storage@3.1108.0(@aws-sdk/client-s3@3.1108.0)':
+  '@aws-sdk/lib-storage@3.1109.0(@aws-sdk/client-s3@3.1109.0)':
     dependencies:
-      '@aws-sdk/client-s3': 3.1108.0
+      '@aws-sdk/client-s3': 3.1109.0
       '@smithy/core': 3.33.2
       '@smithy/types': 4.17.2
       buffer: 5.6.0
@@ -15397,7 +15397,7 @@ snapshots:
       '@smithy/types': 4.17.2
       tslib: 2.8.1
 
-  '@aws-sdk/s3-request-presigner@3.1108.0':
+  '@aws-sdk/s3-request-presigner@3.1109.0':
     dependencies:
       '@aws-sdk/core': 3.977.8
       '@aws-sdk/signature-v4-multi-region': 3.996.45
