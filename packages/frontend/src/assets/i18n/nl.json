@@ -3,7 +3,7 @@
     "pages.app.nav.download": "Download en Installeer",
     "pages.app.nav.newrecipe": "Nieuw Recept",
     "pages.welcome.selfhostSubtitle": "Een onofficiële zelfgehoste versie van RecipeSage.com, een gratis receptenbeheerder, maaltijdplanner en boodschappenlijstbeheerder voor web, desktop, iOS en Android",
-    "pages.welcome.subtitle": "Een gratis, opensource-receptenbeheerder, maaltijdplanner en boodschappenlijstbeheerder voor web, desktop, iOS en Android. Werkt online en offline.",
+    "pages.welcome.subtitle": "Een gratis, open-source receptenbeheerder, maaltijdplanner en boodschappenlijstbeheerder voor web, desktop, iOS en Android.",
     "pages.welcome.description.features.import.description": "Maak automatisch recepten van een web-URL, een foto van een kookboekpagina of handgeschreven receptkaart, of een willekeurig document.",
     "pages.app.oldBrowserAlert.message": "Het lijkt er op dat je een oude browser gebruikt die niet wordt ondersteund. Sommige functies kunnen niet of onvolledig werken. Stap alsjeblieft over naar een moderne browser zoals Firefox voor volledige functionaliteit.",
     "pages.app.nav.about": "Over ons & Ondersteuning",
