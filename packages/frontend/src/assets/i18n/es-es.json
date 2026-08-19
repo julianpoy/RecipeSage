@@ -2168,7 +2168,7 @@
     "pages.cook.backToRecipes": "Volver a mis recetas",
     "pages.panBakewareConverter.presets.format.bakingTray": "Bandeja de horno ({{w}} × {{l}} {{u}})",
     "pages.contribute.selfhostRedirect": "Abriendo el sitio de RecipeSage, ya que las versiones autoalojadas no están vinculadas a Stripe",
-    "pages.downloadAndInstall.desktop.description": "La aplicación de escritorio de RecipeSage se ejecuta de forma nativa en su ordenador, funciona sin conexión y se mantiene actualizada automáticamente.",
+    "pages.downloadAndInstall.desktop.description": "La aplicación de escritorio de RecipeSage es igual que la versión web (y depende de la nube, con una alternativa sin conexión). Es una forma práctica de tener RecipeSage siempre presente en su ordenador, con una experiencia más propia de una aplicación de escritorio. Si prefiere utilizar la versión web mediante su navegador, funciona exactamente igual.",
     "pages.downloadAndInstall.desktop.allDownloads": "Todas las descargas",
     "pages.downloadAndInstall.desktop.button.windows": "Descargar para Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Descargar para macOS, Apple Silicon",
