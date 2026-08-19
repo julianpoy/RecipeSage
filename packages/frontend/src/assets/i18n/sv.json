@@ -2159,7 +2159,7 @@
     "pages.cook.notFound": "Det här receptet är inte längre tillgängligt. Det kan ha tagits bort eller delas inte längre med dig.",
     "pages.cook.backToRecipes": "Tillbaka till mina recept",
     "pages.contribute.selfhostRedirect": "RecipeSage-webbplatsen öppnas eftersom självhostade versioner inte är kopplade till Stripe",
-    "pages.downloadAndInstall.desktop.description": "RecipeSages skrivbordsapp körs direkt på din dator, fungerar offline och håller sig automatiskt uppdaterad.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSages skrivbordsapp är densamma som webbversionen (och är beroende av molnet, med stöd för användning offline). Det är ett praktiskt sätt att alltid ha RecipeSage tillgängligt på din dator för en mer skrivbordsanpassad app. Om du föredrar att använda webbversionen via din webbläsare fungerar den på exakt samma sätt.",
     "pages.downloadAndInstall.desktop.allDownloads": "Alla nedladdningar",
     "pages.downloadAndInstall.desktop.button.windows": "Ladda ner för Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Ladda ner för macOS, Apple Silicon",
