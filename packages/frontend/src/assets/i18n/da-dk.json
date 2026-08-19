@@ -2353,7 +2353,7 @@
     "pages.cook.notFound": "Denne opskrift er ikke længere tilgængelig. Den kan være blevet slettet eller deles ikke længere med dig.",
     "pages.cook.backToRecipes": "Tilbage til mine opskrifter",
     "pages.contribute.selfhostRedirect": "Åbner RecipeSage-webstedet, da selvhostede versioner ikke er knyttet til Stripe",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage-skrivebordsappen kører direkte på din computer, fungerer offline og holder sig automatisk opdateret.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSages skrivebordsapp er den samme som webversionen (og afhænger af skyen med en offline резервeløsning). Det er en praktisk måde altid at have RecipeSage tilgængelig på din computer som en mere skrivebordsorienteret app. Hvis du foretrækker at bruge webversionen via din browser, fungerer den på nøjagtig samme måde.",
     "pages.downloadAndInstall.desktop.allDownloads": "Alle downloads",
     "pages.downloadAndInstall.desktop.button.windows": "Download til Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Download til macOS, Apple Silicon",
