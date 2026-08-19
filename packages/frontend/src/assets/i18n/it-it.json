@@ -2370,7 +2370,7 @@
     "pages.cook.notFound": "Questa ricetta non è più disponibile. Potrebbe essere stata eliminata o non essere più condivisa con te.",
     "pages.cook.backToRecipes": "Torna alle mie ricette",
     "pages.contribute.selfhostRedirect": "Apertura del sito RecipeSage, poiché le versioni self-hosted non sono collegate a Stripe.",
-    "pages.downloadAndInstall.desktop.description": "L'app desktop di RecipeSage viene eseguita in modo nativo sul tuo computer, funziona offline e si mantiene aggiornata automaticamente.",
+    "pages.downloadAndInstall.desktop.description": "L'app desktop di RecipeSage è identica alla versione web (e dipende dal cloud, con una modalità di riserva offline). È un modo pratico per avere sempre RecipeSage sul computer, con un'esperienza più nativa per desktop. Se preferisce utilizzare la versione web tramite il browser, funziona esattamente allo stesso modo.",
     "pages.downloadAndInstall.desktop.allDownloads": "Tutti i download",
     "pages.downloadAndInstall.desktop.button.windows": "Scarica per Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Scarica per macOS, Apple Silicon",
