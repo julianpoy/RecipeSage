@@ -2129,7 +2129,7 @@
     "pages.cook.notFound": "Tento recept již není k dispozici. Možná byl odstraněn nebo s vámi již není sdílen.",
     "pages.cook.backToRecipes": "Zpět na moje recepty",
     "pages.contribute.selfhostRedirect": "Otevírá se web RecipeSage, protože verze hostované vlastními silami nejsou propojeny se Stripe.",
-    "pages.downloadAndInstall.desktop.description": "Desktopová aplikace RecipeSage běží přímo na vašem počítači, funguje offline a automaticky se udržuje aktuální.",
+    "pages.downloadAndInstall.desktop.description": "Desktopová aplikace RecipeSage je stejná jako webová verze (a závisí na cloudu s možností použití offline). Je to praktický způsob, jak mít RecipeSage vždy k dispozici na počítači v podobě aplikace lépe přizpůsobené desktopovému prostředí. Pokud dáváte přednost používání webové verze v prohlížeči, funguje úplně stejně.",
     "pages.downloadAndInstall.desktop.allDownloads": "Všechna stažení",
     "pages.downloadAndInstall.desktop.button.windows": "Stáhnout pro Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Stáhnout pro macOS, Apple Silicon",
