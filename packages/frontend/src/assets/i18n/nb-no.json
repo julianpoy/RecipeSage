@@ -2249,7 +2249,7 @@
     "pages.cook.notFound": "Denne oppskriften er ikke lenger tilgjengelig. Den kan ha blitt slettet eller ikke lenger delt med deg.",
     "pages.cook.backToRecipes": "Tilbake til mine oppskrifter",
     "pages.contribute.selfhostRedirect": "Åpner RecipeSage-nettstedet, siden egenhostede versjoner ikke er koblet til Stripe",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage-skrivebordsappen kjører direkte på datamaskinen din, fungerer uten nett og holder seg automatisk oppdatert.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage-skrivebordsappen er den samme som nettversjonen (og er avhengig av skyen, med en frakoblet reservefunksjon). Den er en praktisk måte å alltid ha RecipeSage tilgjengelig på datamaskinen din, som en mer skrivebordsintegrert app. Hvis du foretrekker å bruke nettversjonen i nettleseren din, fungerer den på nøyaktig samme måte.",
     "pages.downloadAndInstall.desktop.allDownloads": "Alle nedlastinger",
     "pages.downloadAndInstall.desktop.button.windows": "Last ned for Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Last ned for macOS, Apple Silicon",
