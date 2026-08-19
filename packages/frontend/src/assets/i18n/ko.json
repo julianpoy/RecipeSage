@@ -2170,7 +2170,7 @@
     "pages.app.localDbUpgrade.notRefreshed": "새로고침하기 전까지 앱이 올바르게 작동하지 않습니다.",
     "pages.cook.notFound": "이 레시피는 더 이상 사용할 수 없습니다. 삭제되었거나 더 이상 회원님과 공유되지 않을 수 있습니다.",
     "pages.cook.backToRecipes": "내 레시피로 돌아가기",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage 데스크톱 앱은 컴퓨터에서 기본적으로 실행되며, 오프라인에서도 작동하고 자동으로 최신 상태를 유지합니다.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage 데스크톱 앱은 웹 버전과 동일하며(클라우드에 의존하지만 오프라인 대체 기능도 제공합니다). 더욱 데스크톱 앱다운 환경에서 컴퓨터에 RecipeSage를 항상 사용할 수 있도록 해 주는 편리한 방법입니다. 브라우저를 통해 웹 버전을 사용하는 것을 선호하신다면, 정확히 동일하게 작동합니다.",
     "pages.downloadAndInstall.desktop.allDownloads": "모든 다운로드",
     "pages.downloadAndInstall.desktop.button.windows": "Windows용 다운로드",
     "pages.downloadAndInstall.desktop.button.macos": "macOS, Apple Silicon용 다운로드",
