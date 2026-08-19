@@ -2116,7 +2116,7 @@
     "pages.cook.notFound": "Ez a recept már nem érhető el. Lehet, hogy törölték, vagy már nem osztották meg Önnel.",
     "pages.cook.backToRecipes": "Vissza a receptjeimhez",
     "pages.contribute.selfhostRedirect": "A RecipeSage webhely megnyitása, mivel az önállóan üzemeltetett verziók nem kapcsolódnak a Stripe-hoz",
-    "pages.downloadAndInstall.desktop.description": "A RecipeSage asztali alkalmazás natívan fut a számítógépén, offline is működik, és automatikusan naprakészen tartja magát.",
+    "pages.downloadAndInstall.desktop.description": "A RecipeSage asztali alkalmazás megegyezik a webes verzióval (és a felhőre támaszkodik, offline tartalékmegoldással). Praktikus módja annak, hogy a RecipeSage mindig elérhető legyen a számítógépén, asztali alkalmazásszerűbb élményt nyújtva. Ha inkább a böngészőjén keresztül használná a webes verziót, az pontosan ugyanúgy működik.",
     "pages.downloadAndInstall.desktop.allDownloads": "Összes letöltés",
     "pages.downloadAndInstall.desktop.button.windows": "Letöltés Windowsra",
     "pages.downloadAndInstall.desktop.button.macos": "Letöltés macOS-re, Apple Siliconhoz",
