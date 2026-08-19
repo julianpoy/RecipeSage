@@ -124,6 +124,8 @@ export class AccountPage {
         this.name = me.name;
         this.email = me.email;
       })();
+
+      this.buildCapabilitySubscriptions();
     });
 
     Promise.all([
@@ -132,22 +134,25 @@ export class AccountPage {
       this.capabilitiesService.updateCapabilities(),
     ])
       .then(([myStats, myCreditUsage]) => {
-        if (!myStats || !myCreditUsage) return;
+        if (myStats) this.myStats = myStats;
+        if (myCreditUsage) this.myCreditUsage = myCreditUsage;
 
-        this.myStats = myStats;
-        this.myCreditUsage = myCreditUsage;
-
-        Object.entries(this.capabilitiesService.capabilities).map(
-          ([name, enabled]) => {
-            this.capabilitySubscriptions[name] = {
-              enabled,
-              expired: this.getExpiryForCapability(name).expired,
-              expires: this.getExpiryForCapability(name).expires,
-            };
-          },
-        );
+        this.buildCapabilitySubscriptions();
       })
       .finally(() => loading.dismiss());
+  }
+
+  buildCapabilitySubscriptions() {
+    Object.entries(this.capabilitiesService.capabilities).forEach(
+      ([name, enabled]) => {
+        const expiry = this.getExpiryForCapability(name);
+        this.capabilitySubscriptions[name] = {
+          enabled,
+          expired: expiry.expired,
+          expires: expiry.expires,
+        };
+      },
+    );
   }
 
   getSubscriptionForCapability(capabilityName: string) {
@@ -164,7 +169,7 @@ export class AccountPage {
         .sort((a, b) => {
           if (a.expires == null) return -1;
           if (b.expires == null) return 1;
-          return new Date(a.expires).getTime() - new Date(b.expires).getTime();
+          return new Date(b.expires).getTime() - new Date(a.expires).getTime();
         });
       if (matchingSubscriptions) return matchingSubscriptions[0];
     } catch (e) {

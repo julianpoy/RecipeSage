@@ -93,7 +93,6 @@ export const webhookHandler = defineHandler(
 
         assert(typeof session.amount_total === "number");
         assert(typeof session.customer === "string");
-        assert(typeof session.payment_intent === "string");
 
         await tx.stripePayment.create({
           data: {
@@ -101,7 +100,10 @@ export const webhookHandler = defineHandler(
             amountPaid: session.amount_total,
             customerId: session.customer,
             customerEmail: stripeEmail || (user || {}).email || null,
-            paymentIntentId: session.payment_intent,
+            paymentIntentId:
+              typeof session.payment_intent === "string"
+                ? session.payment_intent
+                : null,
             invoiceBlob: session as unknown as InputJsonValue,
           },
         });
@@ -168,6 +170,7 @@ export const webhookHandler = defineHandler(
             paidProducts,
           },
         });
+        throw new InternalServerError("Invoice paid with unknown product");
       }
 
       await prisma.$transaction(async (tx) => {

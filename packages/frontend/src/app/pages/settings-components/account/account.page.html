@@ -165,7 +165,10 @@
           @if (!capabilitySubscriptions["highResImages"]?.enabled) {
             <p>{{ "pages.account.bonus.notEnabled" | translate }}</p>
           }
-          @if (capabilitySubscriptions["highResImages"]) {
+          @if (
+            capabilitySubscriptions["highResImages"] &&
+            capabilitySubscriptions["highResImages"].expired !== null
+          ) {
             <p>
               @if (
                 capabilitySubscriptions["highResImages"].expires &&
@@ -334,7 +337,7 @@
               }
               @if (
                 capabilitySubscriptions["assistantMoreMessages"].expires &&
-                capabilitySubscriptions["multipleImages"].enabled
+                capabilitySubscriptions["assistantMoreMessages"].enabled
               ) {
                 <span>
                   {{ "pages.account.bonus.automaticRenewal" | translate }}

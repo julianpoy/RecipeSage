@@ -215,7 +215,7 @@ export const bigoven: CompetitorData = {
     },
     {
       q: "Will RecipeSage scan photos of recipes the way BigOven RecipeScan does?",
-      a: "Yes, and it's instant and unlimited rather than a 2-5 day turnaround. Our import handles photos, PDFs, and Word documents directly.",
+      a: "Yes, and it's instant rather than a 2-5 day turnaround. Our import handles photos, PDFs, and Word documents directly.",
     },
     {
       q: "Will my BigOven meal plan come across?",
