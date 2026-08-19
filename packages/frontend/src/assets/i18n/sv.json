@@ -14,7 +14,7 @@
     "pages.app.nav.meals": "Måltidsplaner",
     "pages.app.nav.settings": "Inställningar",
     "pages.welcome.title": "Alla dina recept på ett och samma ställe",
-    "pages.welcome.subtitle": "En kostnadsfri receptsamling, måltidsplanerare och inköpslistehanterare med öppen källkod för webb, dator, iOS och Android. Fungerar online och offline.",
+    "pages.welcome.subtitle": "En kostnadsfri receptapp med öppen källkod, måltidsplanerare och hanterare för inköpslistor för webben, datorer, iOS och Android.",
     "pages.welcome.description.cta.crossPlatform": "Inbyggda appar för Windows, macOS, Linux, iOS och Android, samt valfri webbläsare, online eller offline",
     "pages.welcome.description.cta.collaboration": "Samarbeta med familj och vänner kring måltider och inköp",
     "pages.auth.title.login": "Logga in",
