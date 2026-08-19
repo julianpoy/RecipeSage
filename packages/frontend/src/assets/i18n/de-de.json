@@ -2369,7 +2369,7 @@
     "pages.cook.notFound": "Dieses Rezept ist nicht mehr verfügbar. Möglicherweise wurde es gelöscht oder wird nicht mehr mit dir geteilt.",
     "pages.cook.backToRecipes": "Zurück zu meinen Rezepten",
     "pages.contribute.selfhostRedirect": "RecipeSage-Website wird geöffnet, da selbst gehostete Versionen nicht mit Stripe verlinkt sind",
-    "pages.downloadAndInstall.desktop.description": "Die RecipeSage-Desktop-App wird nativ auf deinem Computer ausgeführt, funktioniert offline und aktualisiert sich automatisch.",
+    "pages.downloadAndInstall.desktop.description": "Die RecipeSage-Desktop-App entspricht der Webversion (und ist von der Cloud abhängig, mit einer Offline-Ausweichmöglichkeit). Sie ist eine praktische Möglichkeit, RecipeSage stets auf Ihrem Computer verfügbar zu haben und eine stärker auf den Desktop zugeschnittene Anwendung zu nutzen. Wenn Sie die Webversion lieber über Ihren Browser verwenden möchten, funktioniert sie genau gleich.",
     "pages.downloadAndInstall.desktop.allDownloads": "Alle Downloads",
     "pages.downloadAndInstall.desktop.button.windows": "Für Windows herunterladen",
     "pages.downloadAndInstall.desktop.button.macos": "Für macOS herunterladen, Apple Silicon",
