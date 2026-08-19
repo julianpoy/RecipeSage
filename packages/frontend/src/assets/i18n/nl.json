@@ -2268,7 +2268,7 @@
     "pages.cook.notFound": "Dit recept is niet langer beschikbaar. Het is mogelijk verwijderd of wordt niet langer met u gedeeld.",
     "pages.cook.backToRecipes": "Terug naar mijn recepten",
     "pages.contribute.selfhostRedirect": "De RecipeSage-site wordt geopend, omdat zelfgehoste versies niet aan Stripe zijn gekoppeld",
-    "pages.downloadAndInstall.desktop.description": "De RecipeSage-desktopapp werkt rechtstreeks op uw computer, werkt offline en wordt automatisch bijgewerkt.",
+    "pages.downloadAndInstall.desktop.description": "De RecipeSage-desktopapp is hetzelfde als de webversie (en is afhankelijk van de cloud, met een terugvaloptie voor offline gebruik). Het is een handige manier om RecipeSage altijd op uw computer beschikbaar te hebben als een app die meer op een desktopapp lijkt. Als u de webversie liever via uw browser gebruikt, werkt deze precies hetzelfde.",
     "pages.downloadAndInstall.desktop.allDownloads": "Alle downloads",
     "pages.downloadAndInstall.desktop.button.windows": "Downloaden voor Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Downloaden voor macOS, Apple Silicon",
