@@ -2099,7 +2099,7 @@
     "pages.cook.notFound": "यह रेसिपी अब उपलब्ध नहीं है। हो सकता है कि इसे हटा दिया गया हो या यह अब आपके साथ साझा न की गई हो।",
     "pages.cook.backToRecipes": "मेरी रेसिपियों पर वापस जाएँ",
     "pages.contribute.selfhostRedirect": "RecipeSage साइट खोली जा रही है, क्योंकि स्व-होस्ट किए गए संस्करण Stripe से लिंक नहीं होते हैं",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage डेस्कटॉप ऐप आपके कंप्यूटर पर मूल रूप से चलता है, ऑफ़लाइन काम करता है और स्वयं को स्वचालित रूप से अद्यतित रखता है।",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage डेस्कटॉप ऐप वेब संस्करण के समान ही है (और ऑफ़लाइन विकल्प के साथ क्लाउड पर निर्भर करता है)। अधिक डेस्कटॉप-अनुकूल ऐप अनुभव के लिए RecipeSage को अपने कंप्यूटर पर हमेशा उपलब्ध रखने का यह एक सुविधाजनक तरीका है। यदि आप अपने ब्राउज़र के माध्यम से वेब संस्करण का उपयोग करना पसंद करते हैं, तो वह भी बिल्कुल उसी तरह काम करता है।",
     "pages.downloadAndInstall.desktop.allDownloads": "सभी डाउनलोड",
     "pages.downloadAndInstall.desktop.button.windows": "Windows के लिए डाउनलोड करें",
     "pages.downloadAndInstall.desktop.button.macos": "macOS, Apple Silicon के लिए डाउनलोड करें",
