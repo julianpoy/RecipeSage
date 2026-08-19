@@ -2119,7 +2119,7 @@
     "pages.cook.notFound": "מתכון זה אינו זמין עוד. ייתכן שהוא נמחק או שאינו משותף איתך עוד.",
     "pages.cook.backToRecipes": "חזרה למתכונים שלי",
     "pages.contribute.selfhostRedirect": "פתיחת אתר RecipeSage, מאחר שגרסאות באירוח עצמי אינן מקושרות ל-Stripe",
-    "pages.downloadAndInstall.desktop.description": "יישום שולחן העבודה של RecipeSage פועל באופן מקורי במחשב שלך, עובד גם ללא חיבור לאינטרנט ומתעדכן באופן אוטומטי.",
+    "pages.downloadAndInstall.desktop.description": "יישום שולחן העבודה של RecipeSage זהה לגרסת האינטרנט (ותלוי בענן, עם אפשרות גיבוי לשימוש לא מקוון). זוהי דרך נוחה להשאיר את RecipeSage זמין תמיד במחשב שלך, כחוויה טבעית יותר ליישום שולחן עבודה. אם תעדיף להשתמש בגרסת האינטרנט דרך הדפדפן שלך, היא פועלת בדיוק באותו אופן.",
     "pages.downloadAndInstall.desktop.allDownloads": "כל ההורדות",
     "pages.downloadAndInstall.desktop.button.windows": "הורדה עבור Windows",
     "pages.downloadAndInstall.desktop.button.macos": "הורדה עבור macOS, Apple Silicon",
