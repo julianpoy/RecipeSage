@@ -151,7 +151,7 @@ export const mela: CompetitorData = {
     },
     {
       title: "Works on Android, Windows, and Linux",
-      body: "RecipeSage runs natively on every device, not just Apple. Mela is Apple-only, so a household with even one non-Apple device can't share a library.",
+      body: "RecipeSage on any device, not just Apple. Mela is Apple-only, so a household with even one non-Apple device can't share a library.",
     },
     {
       title: "Use it from any browser",

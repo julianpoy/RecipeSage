@@ -8,12 +8,12 @@ export const anylist: CompetitorData = {
   subtitle:
     "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. It runs in any browser, on iOS, on Android, and as native desktop apps for Windows, macOS, and Linux, with no paywall on web access and no Apple-only assumptions.",
   seoDescription:
-    "An AnyList alternative with free web access and unlimited imports. RecipeSage is free and open source, with meal planning and nutrition built in. Always free.",
+    "An AnyList alternative with free web access and free recipe imports. RecipeSage is free and open source, with meal planning and nutrition built in.",
   cardSummary:
     "Free for shared shopping lists, but web access, meal planning, and more than 5 recipe imports require the AnyList Complete subscription.",
   intro: [
     "AnyList is a shopping list and recipe app. Their free tier covers shared shopping lists and basic recipe collection, but web access, the meal planner, the Apple Watch app, location reminders, item photos, and recipe imports (more than 5) all require AnyList Complete which costs $9.99 per year for an individual or $14.99 per year for a household.",
-    "My wife and I made RecipeSage as a free, open source alternative. The web app, meal planner, unlimited recipe imports, nutrition tracking, and photo, PDF, and Word document import are all free, with no paywall and no per-feature gating.",
+    "My wife and I made RecipeSage as a free, open source alternative. The web app, meal planner, recipe imports, nutrition tracking, and photo, PDF, and Word document import are all free, with no paywall.",
   ],
   pricingSummary: {
     recipesage:

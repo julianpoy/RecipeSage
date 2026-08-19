@@ -27,11 +27,6 @@ export const flavorish: CompetitorData = {
       recipesage: "Free, open source",
       competitor: "$4.99/month or $49.99/year",
     },
-    {
-      feature: "Unlimited recipes and website imports on the free tier",
-      recipesage: true,
-      competitor: true,
-    },
     { feature: "Ad-free", recipesage: true, competitor: true },
     { feature: "Web app", recipesage: true, competitor: true },
     { feature: "iOS app", recipesage: true, competitor: true },
