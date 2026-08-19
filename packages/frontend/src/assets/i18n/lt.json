@@ -1944,7 +1944,7 @@
     "components.recurrenceEditor.monthlyOnDay": "Kas mėnesį {{day}} dieną",
     "components.searchableSelectModal.search": "Ieškoti...",
     "components.searchableSelectModal.noResults": "Rezultatų nerasta",
-    "pages.downloadAndInstall.desktop.description": "„RecipeSage“ darbalaukio programėlė veikia tiesiogiai jūsų kompiuteryje, veikia neprisijungus ir automatiškai atsinaujina.",
+    "pages.downloadAndInstall.desktop.description": "„RecipeSage“ darbalaukio programa yra tokia pati kaip žiniatinklio versija (ji priklauso nuo debesijos, tačiau turi atsarginį veikimo neprisijungus režimą). Tai patogus būdas visuomet turėti „RecipeSage“ savo kompiuteryje ir naudotis labiau darbalaukiui pritaikyta programa. Jei pageidaujate naudoti žiniatinklio versiją per naršyklę, ji veikia lygiai taip pat.",
     "pages.downloadAndInstall.desktop.allDownloads": "Visi atsisiuntimai",
     "pages.downloadAndInstall.desktop.button.windows": "Atsisiųsti, skirtą „Windows“",
     "pages.downloadAndInstall.desktop.button.macos": "Atsisiųsti, skirtą „macOS“, „Apple Silicon“",
