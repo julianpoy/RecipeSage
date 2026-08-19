@@ -2049,7 +2049,7 @@
     "pages.cook.notFound": "Cette recette n'est plus disponible. Elle a peut-être été supprimée ou n'est plus partagée avec vous.",
     "pages.cook.backToRecipes": "Mes recettes",
     "pages.contribute.selfhostRedirect": "Ouverture du site RecipeSage, car les versions auto-hébergées ne sont pas intégrées à Stripe",
-    "pages.downloadAndInstall.desktop.description": "L’application de bureau RecipeSage fonctionne en natif sur votre ordinateur, fonctionne hors ligne et se met à jour automatiquement.",
+    "pages.downloadAndInstall.desktop.description": "L’application de bureau RecipeSage est identique à la version Web (et dépend du cloud, avec une solution de secours hors ligne). C’est un moyen pratique d’avoir RecipeSage toujours disponible sur votre ordinateur, sous la forme d’une application davantage native pour ordinateur de bureau. Si vous préférez utiliser la version Web via votre navigateur, elle fonctionne exactement de la même manière.",
     "pages.downloadAndInstall.desktop.allDownloads": "Tous les téléchargements",
     "pages.downloadAndInstall.desktop.button.windows": "Télécharger pour Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Télécharger pour macOS, Apple Silicon",
