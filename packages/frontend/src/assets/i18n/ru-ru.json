@@ -1424,7 +1424,7 @@
     "pages.cook.notFound": "Этот рецепт больше недоступен. Возможно, он был удалён или к нему больше не предоставлен общий доступ.",
     "pages.cook.backToRecipes": "Назад к моим рецептам",
     "pages.contribute.selfhostRedirect": "Открывается сайт RecipeSage, так как самостоятельные версии не связаны со Stripe",
-    "pages.downloadAndInstall.desktop.description": "Настольное приложение RecipeSage работает непосредственно на вашем компьютере, поддерживает работу без подключения к интернету и автоматически обновляется.",
+    "pages.downloadAndInstall.desktop.description": "Настольное приложение RecipeSage аналогично веб-версии (оно зависит от облака, но поддерживает автономный режим). Это удобный способ всегда иметь RecipeSage на компьютере в виде более нативного настольного приложения. Если вы предпочитаете использовать веб-версию в браузере, она работает точно так же.",
     "pages.downloadAndInstall.desktop.allDownloads": "Все загрузки",
     "pages.downloadAndInstall.desktop.button.windows": "Скачать для Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Скачать для macOS, Apple Silicon",
