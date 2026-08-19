@@ -1,8 +1,6 @@
 import { BadRequestError } from "../../../errors";
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import multer from "multer";
 import { createReadStream } from "fs";
 import { z } from "zod";
@@ -35,6 +33,7 @@ export const fdxzHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importFdxz",
       method: "post",
       path: "/import/job/fdxz",
       tags: ["import"],

@@ -1,7 +1,34 @@
 import { describe, it, expect } from "vitest";
+import { z } from "zod";
 import { oas31 } from "zod-openapi";
 import "../routes";
 import { generateExpressOpenApiParts } from "./generateExpressOpenApi";
+import { registerOpenApiRoute } from "./registry";
+import { AuthenticationEnforcement } from "../authenticationEnforcement";
+
+registerOpenApiRoute({
+  openapi: {
+    operationId: "test-optionalNoInput",
+    method: "get",
+    path: "/__test/optional",
+    tags: ["test"],
+    summary: "Optional auth, no input",
+  },
+  authentication: AuthenticationEnforcement.Optional,
+  schema: {},
+});
+
+registerOpenApiRoute({
+  openapi: {
+    operationId: "test-noneWithInput",
+    method: "get",
+    path: "/__test/none",
+    tags: ["test"],
+    summary: "No auth, with input",
+  },
+  authentication: AuthenticationEnforcement.None,
+  schema: { query: z.object({ q: z.string() }) },
+});
 
 const parts = generateExpressOpenApiParts();
 
@@ -25,6 +52,37 @@ describe("generateExpressOpenApiParts", () => {
     expect(post?.security).toEqual([{ Authorization: [] }]);
     expect(get?.parameters).toBeDefined();
     expect(get?.responses?.["200"]).toBeDefined();
+  });
+
+  it("documents the standard error responses for a required, input-taking route", () => {
+    const get = parts.paths["/clip"]?.get;
+
+    expect(get?.operationId).toBe("clip-clipFromUrl");
+    expect(Object.keys(get?.responses ?? {}).sort()).toEqual([
+      "200",
+      "400",
+      "401",
+      "403",
+      "500",
+    ]);
+  });
+
+  it("marks optional-auth routes as anonymous-or-bearer and omits auth error responses", () => {
+    const get = parts.paths["/__test/optional"]?.get;
+
+    expect(get?.security).toEqual([{}, { Authorization: [] }]);
+    expect(Object.keys(get?.responses ?? {}).sort()).toEqual(["200", "500"]);
+  });
+
+  it("omits security and auth error responses for unauthenticated routes but keeps 400 when input is taken", () => {
+    const get = parts.paths["/__test/none"]?.get;
+
+    expect(get?.security).toEqual([]);
+    expect(Object.keys(get?.responses ?? {}).sort()).toEqual([
+      "200",
+      "400",
+      "500",
+    ]);
   });
 
   it("documents a file-upload import as multipart with a binary file", () => {

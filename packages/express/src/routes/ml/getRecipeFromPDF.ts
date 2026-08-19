@@ -1,5 +1,6 @@
 import { BadRequestError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import multer from "multer";
 import { multerAutoCleanup } from "@recipesage/util/server/general";
 import { tmpdir } from "os";
@@ -23,6 +24,7 @@ export const getRecipeFromPDFHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "ml-getRecipeFromPDFUpload",
       method: "post",
       path: "/ml/getRecipeFromPDF",
       tags: ["ml"],

@@ -1,7 +1,5 @@
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import { z } from "zod";
 import { importJobSetupCommon } from "@recipesage/util/server/general";
 import { enqueueJob } from "@recipesage/util/server/general";
@@ -25,6 +23,7 @@ export const pepperplateHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importPepperplate",
       method: "post",
       path: "/import/job/pepperplate",
       tags: ["import"],

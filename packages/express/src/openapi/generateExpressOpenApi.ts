@@ -11,6 +11,7 @@ import {
   OpenApiRouteMeta,
   OpenApiRouteSchema,
 } from "./registry";
+import { AuthenticationEnforcement } from "../authenticationEnforcement";
 
 const SECURITY_SCHEME_NAME = "Authorization";
 
@@ -56,28 +57,81 @@ const buildRequestBody = (
   return undefined;
 };
 
+const errorResponse = (
+  description: string,
+  schemaName: string,
+): oas31.ResponseObject => ({
+  description,
+  content: {
+    "application/json": {
+      schema: { $ref: `#/components/schemas/${schemaName}` },
+    },
+  },
+});
+
+const buildSecurity = (
+  authentication: AuthenticationEnforcement,
+): oas31.SecurityRequirementObject[] => {
+  switch (authentication) {
+    case AuthenticationEnforcement.Required:
+      return [{ [SECURITY_SCHEME_NAME]: [] }];
+    case AuthenticationEnforcement.Optional:
+      return [{}, { [SECURITY_SCHEME_NAME]: [] }];
+    case AuthenticationEnforcement.None:
+      return [];
+  }
+};
+
+const buildResponses = (
+  meta: OpenApiRouteMeta,
+  schema: OpenApiRouteSchema,
+  authentication: AuthenticationEnforcement,
+): NonNullable<ZodOpenApiOperationObject["responses"]> => {
+  const hasInput = Boolean(
+    schema.body || schema.query || schema.params || meta.upload,
+  );
+  const requiresAuth = authentication === AuthenticationEnforcement.Required;
+
+  return {
+    [meta.successStatus ?? 200]: {
+      description: "Success",
+      ...(schema.response
+        ? {
+            content: {
+              "application/json": {
+                schema: schema.response,
+              },
+            },
+          }
+        : {}),
+    },
+    ...(hasInput
+      ? { 400: errorResponse("Invalid input data", "error.BAD_REQUEST") }
+      : {}),
+    ...(requiresAuth
+      ? {
+          401: errorResponse(
+            "Authorization not provided",
+            "error.UNAUTHORIZED",
+          ),
+          403: errorResponse("Insufficient access", "error.FORBIDDEN"),
+        }
+      : {}),
+    500: errorResponse("Internal server error", "error.INTERNAL_SERVER_ERROR"),
+  };
+};
+
 const buildOperation = (
   meta: OpenApiRouteMeta,
   schema: OpenApiRouteSchema,
+  authentication: AuthenticationEnforcement,
 ): ZodOpenApiOperationObject => {
   const operation: ZodOpenApiOperationObject = {
+    operationId: meta.operationId,
     summary: meta.summary,
     tags: meta.tags,
-    security: [{ [SECURITY_SCHEME_NAME]: [] }],
-    responses: {
-      [meta.successStatus ?? 200]: {
-        description: "Success",
-        ...(schema.response
-          ? {
-              content: {
-                "application/json": {
-                  schema: schema.response,
-                },
-              },
-            }
-          : {}),
-      },
-    },
+    security: buildSecurity(authentication),
+    responses: buildResponses(meta, schema, authentication),
   };
 
   if (meta.description) {
@@ -113,10 +167,14 @@ export interface ExpressOpenApiParts {
 export const generateExpressOpenApiParts = (): ExpressOpenApiParts => {
   const paths: ZodOpenApiPathsObject = {};
 
-  for (const { openapi, schema } of getRegisteredOpenApiRoutes()) {
+  for (const {
+    openapi,
+    authentication,
+    schema,
+  } of getRegisteredOpenApiRoutes()) {
     paths[openapi.path] = {
       ...paths[openapi.path],
-      [openapi.method]: buildOperation(openapi, schema),
+      [openapi.method]: buildOperation(openapi, schema, authentication),
     };
   }
 

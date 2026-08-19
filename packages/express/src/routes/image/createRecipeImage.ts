@@ -1,5 +1,6 @@
 import { BadRequestError, UnsupportedMediaTypeError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import * as Sentry from "@sentry/node";
 import multer from "multer";
 import {

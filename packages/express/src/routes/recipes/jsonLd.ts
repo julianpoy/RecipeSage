@@ -2,7 +2,8 @@ import cors from "cors";
 import { z } from "zod";
 import { prisma, recipeSummary } from "@recipesage/prisma";
 import { NotFoundError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import {
   recipeToJSONLD,
   sortRecipeImages,

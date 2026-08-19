@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/node";
 import { z } from "zod";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import { BadRequestError, InternalServerError } from "../../errors";
 import {
   extendSubscription,

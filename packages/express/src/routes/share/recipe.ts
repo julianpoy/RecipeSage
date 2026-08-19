@@ -1,7 +1,8 @@
 import { prisma, recipeSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { NotFoundError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import {
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,

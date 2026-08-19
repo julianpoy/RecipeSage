@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import { BadRequestError } from "../../errors";
 import {
   ClipFetchError,
@@ -28,6 +29,7 @@ export const clipGetHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "clip-clipFromUrl",
       method: "get",
       path: "/clip",
       tags: ["clip"],

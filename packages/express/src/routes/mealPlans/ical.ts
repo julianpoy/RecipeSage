@@ -3,7 +3,8 @@ import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { convertPrismaDateToDatestamp } from "@recipesage/util/server/db";
 import { NotFoundError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import {
   getSignedDownloadUrl,
   ObjectTypes,

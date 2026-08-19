@@ -193,6 +193,32 @@ const mergedOpenApiDocument = {
     ),
   },
 };
+const assertUniqueOperationIds = (
+  paths: typeof mergedOpenApiDocument.paths,
+) => {
+  const seen = new Set<string>();
+  for (const pathItem of Object.values(paths)) {
+    const operations = [
+      pathItem.get,
+      pathItem.post,
+      pathItem.put,
+      pathItem.patch,
+      pathItem.delete,
+    ];
+    for (const operation of operations) {
+      const operationId = operation?.operationId;
+      if (!operationId) continue;
+      if (seen.has(operationId)) {
+        throw new Error(
+          `OpenAPI operationId collision: "${operationId}" is defined by more than one operation`,
+        );
+      }
+      seen.add(operationId);
+    }
+  }
+};
+assertUniqueOperationIds(mergedOpenApiDocument.paths);
+
 const serveOpenApiDocument = (_req: express.Request, res: express.Response) => {
   res.json(mergedOpenApiDocument);
 };

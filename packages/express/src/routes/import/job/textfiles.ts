@@ -1,7 +1,5 @@
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import multer from "multer";
 import { createReadStream } from "fs";
 import {
@@ -35,6 +33,7 @@ export const textfilesHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importTextfiles",
       method: "post",
       path: "/import/job/textfiles",
       tags: ["import"],

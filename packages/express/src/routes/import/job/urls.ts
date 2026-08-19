@@ -1,7 +1,5 @@
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import { z } from "zod";
 import { importJobSetupCommon } from "@recipesage/util/server/general";
 import { ObjectTypes, writeBuffer } from "@recipesage/util/server/storage";
@@ -26,6 +24,7 @@ export const urlsHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importUrls",
       method: "post",
       path: "/import/job/urls",
       tags: ["import"],

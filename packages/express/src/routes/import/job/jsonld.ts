@@ -1,8 +1,6 @@
 import { BadRequestError } from "../../../errors";
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import multer from "multer";
 import { z } from "zod";
 import {
@@ -36,6 +34,7 @@ export const jsonldHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importJsonld",
       method: "post",
       path: "/import/job/jsonld",
       tags: ["import"],

@@ -1,7 +1,8 @@
 import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { BadRequestError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import multer from "multer";
 import {
   multerAutoCleanup,
@@ -27,6 +28,7 @@ export const getRecipeFromDocumentHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "ml-getRecipeFromDocumentUpload",
       method: "post",
       path: "/ml/getRecipeFromDocument",
       tags: ["ml"],

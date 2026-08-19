@@ -1,7 +1,8 @@
 import crypto from "node:crypto";
 import { z } from "zod";
 import { OAuth2Client } from "google-auth-library";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import { BadRequestError, InternalServerError } from "../../errors";
 import { config } from "@recipesage/util/server/general";
 

@@ -1,8 +1,6 @@
 import { BadRequestError } from "../../../errors";
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import multer from "multer";
 import { createReadStream } from "fs";
 import {
@@ -35,6 +33,7 @@ export const pdfsHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importPdfs",
       method: "post",
       path: "/import/job/pdfs",
       tags: ["import"],

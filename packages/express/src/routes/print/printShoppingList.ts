@@ -9,7 +9,8 @@ import {
   ShoppingListAccessLevel,
 } from "@recipesage/util/server/db";
 import { NotFoundError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import {
   formatDateUTC,
   formatDateUTCLocalized,

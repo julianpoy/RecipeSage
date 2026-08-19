@@ -1,5 +1,6 @@
 import { BadRequestError } from "../../errors";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 import multer from "multer";
 import { multerAutoCleanup } from "@recipesage/util/server/general";
 import { tmpdir } from "os";
@@ -25,6 +26,7 @@ export const getRecipeFromOCRHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "ml-getRecipeFromOCRUpload",
       method: "post",
       path: "/ml/getRecipeFromOCR",
       tags: ["ml"],

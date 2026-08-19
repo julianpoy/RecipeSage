@@ -1,5 +1,6 @@
 import { prisma } from "@recipesage/prisma";
-import { AuthenticationEnforcement, defineHandler } from "../../defineHandler";
+import { AuthenticationEnforcement } from "../../authenticationEnforcement";
+import { defineHandler } from "../../defineHandler";
 
 export const healthzHandler = defineHandler(
   {

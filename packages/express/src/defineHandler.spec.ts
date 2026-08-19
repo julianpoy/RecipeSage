@@ -20,7 +20,8 @@ vi.mock("@sentry/node", async (importOriginal) => {
   };
 });
 
-import { AuthenticationEnforcement, defineHandler } from "./defineHandler";
+import { AuthenticationEnforcement } from "./authenticationEnforcement";
+import { defineHandler } from "./defineHandler";
 
 const buildApp = (
   handler: ReturnType<typeof defineHandler>,
@@ -46,6 +47,7 @@ describe("defineHandler response validation", () => {
         },
         authentication: AuthenticationEnforcement.None,
         openapi: {
+          operationId: "import-importPaprika",
           method: "post",
           path: "/import/job/paprika",
           tags: ["import"],

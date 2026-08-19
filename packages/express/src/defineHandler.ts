@@ -15,6 +15,7 @@ import {
 import { Session } from "@recipesage/prisma";
 import { rateLimitHandler } from "./rateLimitHandler";
 import { OpenApiRouteMeta, registerOpenApiRoute } from "./openapi/registry";
+import { AuthenticationEnforcement } from "./authenticationEnforcement";
 
 const handleServerError = (e: unknown, res: Response) => {
   if (e instanceof ServerError) {
@@ -36,11 +37,6 @@ const handleServerError = (e: unknown, res: Response) => {
   }
 };
 
-export enum AuthenticationEnforcement {
-  Required = "required",
-  Optional = "optional",
-  None = "none",
-}
 type SessionPresent = {
   [AuthenticationEnforcement.Required]: Session;
   [AuthenticationEnforcement.Optional]: Session | undefined;
@@ -88,6 +84,7 @@ export const defineHandler = <
   if (opts.openapi) {
     registerOpenApiRoute({
       openapi: opts.openapi,
+      authentication: opts.authentication,
       schema: opts.schema,
     });
   }

@@ -1,8 +1,6 @@
 import { BadRequestError } from "../../../errors";
-import {
-  AuthenticationEnforcement,
-  defineHandler,
-} from "../../../defineHandler";
+import { AuthenticationEnforcement } from "../../../authenticationEnforcement";
+import { defineHandler } from "../../../defineHandler";
 import multer from "multer";
 import { createReadStream } from "fs";
 import {
@@ -34,6 +32,7 @@ export const cookbookmanagercomHandler = defineHandler(
     schema,
     authentication: AuthenticationEnforcement.Required,
     openapi: {
+      operationId: "import-importCookbookmanagercom",
       method: "post",
       path: "/import/job/cookbookmanagercom",
       tags: ["import"],

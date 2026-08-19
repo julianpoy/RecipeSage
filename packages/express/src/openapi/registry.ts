@@ -1,4 +1,5 @@
 import { ZodType } from "zod";
+import { AuthenticationEnforcement } from "../authenticationEnforcement";
 
 export type OpenApiRouteMethod = "get" | "post" | "put" | "patch" | "delete";
 
@@ -8,6 +9,7 @@ export interface OpenApiRouteUpload {
 }
 
 export interface OpenApiRouteMeta {
+  operationId: string;
   method: OpenApiRouteMethod;
   path: string;
   tags: string[];
@@ -26,6 +28,7 @@ export interface OpenApiRouteSchema {
 
 export interface RegisteredOpenApiRoute {
   openapi: OpenApiRouteMeta;
+  authentication: AuthenticationEnforcement;
   schema: OpenApiRouteSchema;
 }
 
