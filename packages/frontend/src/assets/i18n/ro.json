@@ -2085,7 +2085,7 @@
     "pages.cook.notFound": "Această rețetă nu mai este disponibilă. Este posibil să fi fost ștearsă sau să nu mai fie partajată cu dumneavoastră.",
     "pages.cook.backToRecipes": "Înapoi la rețetele mele",
     "pages.contribute.selfhostRedirect": "Se deschide site-ul RecipeSage, deoarece versiunile auto-găzduite nu sunt conectate la Stripe",
-    "pages.downloadAndInstall.desktop.description": "Aplicația desktop RecipeSage rulează nativ pe computerul dumneavoastră, funcționează offline și se menține actualizată automat.",
+    "pages.downloadAndInstall.desktop.description": "Aplicația desktop RecipeSage este identică cu versiunea web (și depinde de cloud, având o opțiune de rezervă pentru utilizare offline). Este o modalitate convenabilă de a avea RecipeSage mereu disponibil pe computerul dumneavoastră, într-o aplicație mai apropiată de experiența nativă desktop. Dacă preferați să utilizați versiunea web prin intermediul browserului, aceasta funcționează exact la fel.",
     "pages.downloadAndInstall.desktop.allDownloads": "Toate descărcările",
     "pages.downloadAndInstall.desktop.button.windows": "Descărcați pentru Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Descărcați pentru macOS, Apple Silicon",
