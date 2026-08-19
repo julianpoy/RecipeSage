@@ -2190,7 +2190,7 @@
     "pages.cook.notFound": "此食譜已無法取得。它可能已被刪除，或不再與您分享。",
     "pages.cook.backToRecipes": "返回我的食譜",
     "pages.contribute.selfhostRedirect": "由於自架版本未連結至 Stripe，正在開啟 RecipeSage 網站",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage 桌面應用程式可在您的電腦上原生執行、支援離線使用，並會自動保持最新版本。",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage 桌面應用程式與網頁版相同（依賴雲端服務，並提供離線備援）。它能讓 RecipeSage 隨時在您的電腦上使用，帶來更貼近原生桌面應用程式的體驗。若您偏好透過瀏覽器使用網頁版，其功能完全相同。",
     "pages.downloadAndInstall.desktop.allDownloads": "所有下載項目",
     "pages.downloadAndInstall.desktop.button.windows": "下載 Windows 版",
     "pages.downloadAndInstall.desktop.button.macos": "下載 macOS Apple Silicon 版",
