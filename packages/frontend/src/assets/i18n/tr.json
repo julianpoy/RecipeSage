@@ -2142,7 +2142,7 @@
     "pages.cook.notFound": "Bu tarif artık mevcut değil. Silinmiş veya artık sizinle paylaşılmıyor olabilir.",
     "pages.cook.backToRecipes": "Tariflerime dön",
     "pages.contribute.selfhostRedirect": "Kendi kendine barındırılan sürümler Stripe'a bağlı olmadığından RecipeSage sitesi açılıyor",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage masaüstü uygulaması bilgisayarınızda yerel olarak çalışır, çevrim dışı çalışır ve kendini otomatik olarak güncel tutar.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage masaüstü uygulaması web sürümüyle aynıdır (çevrim dışı bir yedek seçeneğiyle buluta bağlıdır). Daha yerel bir masaüstü uygulaması deneyimi için RecipeSage'in bilgisayarınızda her zaman hazır bulunmasını sağlayan kullanışlı bir yoldur. Web sürümünü tarayıcınız üzerinden kullanmayı tercih ederseniz, tamamen aynı şekilde çalışır.",
     "pages.downloadAndInstall.desktop.allDownloads": "Tüm indirmeler",
     "pages.downloadAndInstall.desktop.button.windows": "Windows için indir",
     "pages.downloadAndInstall.desktop.button.macos": "macOS, Apple Silicon için indir",
