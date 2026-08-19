@@ -17,7 +17,7 @@
     "pages.app.nav.settings": "Indstillinger",
     "pages.welcome.selfhostTitle": "RecipeSage selv-hostet!",
     "pages.welcome.title": "Alle dine opskrifter samlet på ét sted",
-    "pages.welcome.subtitle": "En gratis opskriftsadministrator, madplanlægger og indkøbslisteadministrator med åben kildekode til web, computer, iOS og Android. Fungerer online eller offline.",
+    "pages.welcome.subtitle": "En gratis opskriftsamling, madplanlægger og indkøbslisteadministrator med åben kildekode til web, skrivebord, iOS og Android.",
     "pages.welcome.registerButton": "Opret en konto",
     "pages.welcome.loginButton": "Log ind",
     "pages.welcome.description.welcome": "Velkommen til RecipeSage!",
