@@ -2371,7 +2371,7 @@
     "pages.cook.notFound": "Αυτή η συνταγή δεν είναι πλέον διαθέσιμη. Ενδέχεται να έχει διαγραφεί ή να μην κοινοποιείται πλέον σε εσάς.",
     "pages.cook.backToRecipes": "Επιστροφή στις συνταγές μου",
     "pages.contribute.selfhostRedirect": "Άνοιγμα του ιστότοπου RecipeSage, καθώς οι αυτοφιλοξενούμενες εκδόσεις δεν συνδέονται με το Stripe",
-    "pages.downloadAndInstall.desktop.description": "Η εφαρμογή υπολογιστή RecipeSage εκτελείται εγγενώς στον υπολογιστή σας, λειτουργεί χωρίς σύνδεση στο διαδίκτυο και ενημερώνεται αυτόματα.",
+    "pages.downloadAndInstall.desktop.description": "Η εφαρμογή υπολογιστή RecipeSage είναι ίδια με την έκδοση για τον ιστό (και βασίζεται στο cloud, με δυνατότητα λειτουργίας εκτός σύνδεσης). Είναι ένας εύχρηστος τρόπος να έχετε το RecipeSage πάντα διαθέσιμο στον υπολογιστή σας, ως μια εφαρμογή που μοιάζει περισσότερο με εγγενή εφαρμογή υπολογιστή. Αν προτιμάτε να χρησιμοποιείτε την έκδοση για τον ιστό μέσω του προγράμματος περιήγησής σας, λειτουργεί ακριβώς με τον ίδιο τρόπο.",
     "pages.downloadAndInstall.desktop.allDownloads": "Όλες οι λήψεις",
     "pages.downloadAndInstall.desktop.button.windows": "Λήψη για Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Λήψη για macOS, Apple Silicon",
