@@ -28,8 +28,8 @@ export const CREDIT_COSTS: Record<CreditOperation, number> = {
   clipHtml: 1,
   clipUrl: 2,
   importUrls: 5,
-  importTextfiles: 5,
-  importPdfs: 5,
-  importImages: 5,
+  importTextfiles: 2,
+  importPdfs: 3,
+  importImages: 3,
   assistantMessage: 1,
 };
