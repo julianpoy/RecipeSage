@@ -13,7 +13,7 @@
     "pages.app.nav.shopping": "Λίστα Αγορών",
     "pages.app.nav.settings": "Ρυθμίσεις",
     "pages.welcome.title": "Όλες οι συνταγές σου σε ένα μέρος",
-    "pages.welcome.subtitle": "Ένα δωρεάν εργαλείο ανοικτού κώδικα για διατήρηση συνταγών, προγραμματισμό γευμάτων και διαχείριση λιστών αγορών για Web, Desktop, iOS και Android. Λειτουργεί online ή offline.",
+    "pages.welcome.subtitle": "Ένας δωρεάν, ανοιχτού κώδικα διαχειριστής συνταγών, προγραμματιστής γευμάτων και διαχειριστής λιστών αγορών για Web, Desktop, iOS και Android.",
     "pages.welcome.registerButton": "Δημιουργία λογαριασμού",
     "pages.welcome.description.features": "Τι μπορεί να κάνει το RecipeSage;",
     "pages.welcome.description.features.import.title": "Εισαγωγή από οποιοδήποτε URL, φωτογραφία, PDF ή κείμενο:",
