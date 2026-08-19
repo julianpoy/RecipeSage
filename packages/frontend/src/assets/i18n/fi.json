@@ -2068,7 +2068,7 @@
     "pages.cook.notFound": "Tämä resepti ei ole enää saatavilla. Se on ehkä poistettu tai sitä ei enää jaeta kanssasi.",
     "pages.cook.backToRecipes": "Takaisin omiin resepteihini",
     "pages.contribute.selfhostRedirect": "Avataan RecipeSage-sivusto, koska itse ylläpidetyt versiot eivät ole yhteydessä Stripeen",
-    "pages.downloadAndInstall.desktop.description": "RecipeSagen työpöytäsovellus toimii tietokoneellasi natiivisti, toimii ilman verkkoyhteyttä ja pitää itsensä automaattisesti ajan tasalla.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSagen työpöytäsovellus on sama kuin verkkoversio (ja se on riippuvainen pilvipalvelusta, mutta toimii myös offline-tilassa). Sen avulla RecipeSage on aina helposti käytettävissä tietokoneellasi työpöytäsovellukselle luontevammalla tavalla. Jos käytät mieluummin verkkoversiota selaimellasi, se toimii täsmälleen samalla tavalla.",
     "pages.downloadAndInstall.desktop.allDownloads": "Kaikki lataukset",
     "pages.downloadAndInstall.desktop.button.windows": "Lataa Windowsille",
     "pages.downloadAndInstall.desktop.button.macos": "Lataa macOS:lle, Apple Silicon",
