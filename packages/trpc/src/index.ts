@@ -46,7 +46,7 @@ const generatedOpenApiDocument = generateOpenApiDocument(appRouter, {
   title: "RecipeSage API",
   description:
     "Public REST surface generated from RecipeSage's tRPC router. Procedures are grouped by tRPC sub-router (tag).",
-  version: "1.0.0",
+  version: process.env.VERSION ?? "development",
   baseUrl: TRPC_OPENAPI_BASE_PATH,
 });
 

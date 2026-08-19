@@ -131,7 +131,7 @@ export const generateExpressOpenApiParts = (): ExpressOpenApiParts => {
     openapi: "3.1.0",
     info: {
       title: "RecipeSage Express API",
-      version: "1.0.0",
+      version: process.env.VERSION ?? "development",
     },
     paths,
     components: {
