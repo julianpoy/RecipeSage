@@ -2360,7 +2360,7 @@
     "pages.cook.notFound": "Esta receta ya no está disponible. Es posible que se haya eliminado o que ya no se comparta con usted.",
     "pages.cook.backToRecipes": "Volver a mis recetas",
     "pages.contribute.selfhostRedirect": "Abriendo el sitio de RecipeSage, ya que las versiones autoalojadas no están vinculadas a Stripe",
-    "pages.downloadAndInstall.desktop.description": "La aplicación de escritorio de RecipeSage se ejecuta de forma nativa en su computadora, funciona sin conexión y se mantiene actualizada automáticamente.",
+    "pages.downloadAndInstall.desktop.description": "La aplicación de escritorio de RecipeSage es igual que la versión web (y depende de la nube, con una alternativa sin conexión). Es una forma práctica de tener RecipeSage siempre disponible en su computadora como una aplicación más propia de escritorio. Si prefiere usar la versión web mediante su navegador, funciona exactamente igual.",
     "pages.downloadAndInstall.desktop.allDownloads": "Todas las descargas",
     "pages.downloadAndInstall.desktop.button.windows": "Descargar para Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Descargar para macOS, Apple Silicon",
