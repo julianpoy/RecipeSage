@@ -23,7 +23,7 @@
     "pages.welcome.selfhostTitle": "本地部署RecipeSage !",
     "pages.welcome.selfhostSubtitle": "RecipeSage.com 的非官方自托管版本：一款适用于 Web、桌面端、iOS 和 Android 的免费食谱管理、膳食计划和购物清单整理工具",
     "pages.welcome.title": "集中管理您的所有食谱",
-    "pages.welcome.subtitle": "一款适用于 Web、桌面端、iOS 和 Android 的免费开源食谱管理、膳食计划和购物清单管理工具。可在线或离线使用。",
+    "pages.welcome.subtitle": "一款适用于 Web、桌面端、iOS 和 Android 的免费开源食谱管理、膳食计划和购物清单管理应用。",
     "pages.welcome.registerButton": "创建账号",
     "pages.welcome.loginButton": "登录",
     "pages.welcome.description.welcome": "欢迎进入RecipeSage!",
