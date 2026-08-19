@@ -2369,7 +2369,7 @@
     "pages.downloadAndInstall.desktop.button.linux": "Transferir para Linux, AppImage",
     "pages.downloadAndInstall.desktop.platform.windows": "Windows",
     "pages.contribute.selfhostRedirect": "A abrir o site do RecipeSage, uma vez que as versões alojadas pelo próprio não estão associadas ao Stripe",
-    "pages.downloadAndInstall.desktop.description": "A aplicação de ambiente de trabalho RecipeSage é executada nativamente no seu computador, funciona offline e mantém-se atualizada automaticamente.",
+    "pages.downloadAndInstall.desktop.description": "A aplicação de computador do RecipeSage é igual à versão Web (e depende da cloud, com uma alternativa offline). É uma forma prática de ter o RecipeSage sempre disponível no seu computador, com uma experiência mais nativa de aplicação de computador. Se preferir utilizar a versão Web através do seu navegador, funciona exatamente da mesma forma.",
     "pages.downloadAndInstall.desktop.allDownloads": "Todas as transferências",
     "pages.downloadAndInstall.desktop.button.windows": "Transferir para Windows",
     "pages.downloadAndInstall.desktop.button.macos": "Transferir para macOS, Apple Silicon",
