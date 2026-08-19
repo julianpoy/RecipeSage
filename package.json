@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.38",
-    "@ai-sdk/google": "^4.0.43",
+    "@ai-sdk/google": "^4.0.44",
     "@ai-sdk/openai": "^4.0.41",
     "@angular/common": "21.2.19",
     "@angular/core": "21.2.19",
@@ -69,7 +69,7 @@
     "@trpc/client": "^11.18.0",
     "@trpc/server": "^11.18.0",
     "accept-language": "^3.0.20",
-    "ai": "^7.0.64",
+    "ai": "^7.0.65",
     "axios": "^1.19.0",
     "body-parser": "~2.3.0",
     "bullmq": "^5.78.1",
