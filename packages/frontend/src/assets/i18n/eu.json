@@ -2229,7 +2229,7 @@
     "pages.cook.notFound": "Errezeta hau ez dago jada erabilgarri. Baliteke ezabatu izana edo zurekin partekatuta ez egotea.",
     "pages.cook.backToRecipes": "Itzuli nire errezetetara",
     "pages.contribute.selfhostRedirect": "RecipeSage gunea irekitzen, autoostatatutako bertsioak ez daudelako Striperekin lotuta",
-    "pages.downloadAndInstall.desktop.description": "RecipeSage mahaigaineko aplikazioa modu natiboan exekutatzen da zure ordenagailuan, lineaz kanpo funtzionatzen du eta automatikoki eguneratuta mantentzen da.",
+    "pages.downloadAndInstall.desktop.description": "RecipeSage mahaigaineko aplikazioa web bertsioaren bera da (eta hodeiaren mende dago, lineaz kanpoko ordezko aukera batekin). Modu erosoa da RecipeSage zure ordenagailuan beti eskura izateko, mahaigaineko aplikazio natiboago baten moduan. Nahiago baduzu web bertsioa zure nabigatzailearen bidez erabili, berdin-berdin funtzionatzen du.",
     "pages.downloadAndInstall.desktop.allDownloads": "Deskarga guztiak",
     "pages.downloadAndInstall.desktop.button.windows": "Deskargatu Windows-erako",
     "pages.downloadAndInstall.desktop.button.macos": "Deskargatu macOSerako, Apple Silicon",
