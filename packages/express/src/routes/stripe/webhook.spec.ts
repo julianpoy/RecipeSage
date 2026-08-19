@@ -124,15 +124,15 @@ describe("POST /stripe/webhook", () => {
     );
   });
 
-  it("records the payment but grants nothing for an unknown product", async () => {
+  it("rejects the invoice and records nothing for an unknown product", async () => {
     validateStripeEventMock.mockReturnValue(invoiceEvent("some-other-product"));
 
     const app = await buildApp();
     const response = await request(app).post("/stripe/webhook").send({});
 
-    expect(response.status).toBe(200);
-    expect(stripeEventCreateMock).toHaveBeenCalledTimes(1);
-    expect(stripePaymentCreateMock).toHaveBeenCalledTimes(1);
+    expect(response.status).toBe(500);
+    expect(stripeEventCreateMock).not.toHaveBeenCalled();
+    expect(stripePaymentCreateMock).not.toHaveBeenCalled();
     expect(extendSubscriptionMock).not.toHaveBeenCalled();
     expect(captureMessageMock).toHaveBeenCalledWith(
       "Invoice paid with unknown product",
@@ -140,14 +140,14 @@ describe("POST /stripe/webhook", () => {
     );
   });
 
-  it("records the payment but grants nothing when the line item has no product", async () => {
+  it("rejects the invoice and records nothing when the line item has no product", async () => {
     validateStripeEventMock.mockReturnValue(invoiceEvent(undefined));
 
     const app = await buildApp();
     const response = await request(app).post("/stripe/webhook").send({});
 
-    expect(response.status).toBe(200);
-    expect(stripePaymentCreateMock).toHaveBeenCalledTimes(1);
+    expect(response.status).toBe(500);
+    expect(stripePaymentCreateMock).not.toHaveBeenCalled();
     expect(extendSubscriptionMock).not.toHaveBeenCalled();
   });
 
