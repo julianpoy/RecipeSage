@@ -1,4 +1,4 @@
-import { Worker, Queue } from "bullmq";
+import { Worker, Queue, type JobsOptions } from "bullmq";
 import * as Sentry from "@sentry/node";
 import type { JobQueueItem } from "./JobQueueItem";
 import { prisma } from "@recipesage/prisma";
@@ -35,8 +35,8 @@ export const getJobQueue = () => {
   return jobQueue;
 };
 
-export const enqueueJob = (item: JobQueueItem) => {
-  return getJobQueue().add(`${Date.now()}-${Math.random()}`, item);
+export const enqueueJob = (item: JobQueueItem, options?: JobsOptions) => {
+  return getJobQueue().add(`${Date.now()}-${Math.random()}`, item, options);
 };
 
 let jobQueueWorker: Worker<JobQueueItem, void> | undefined;
