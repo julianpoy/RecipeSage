@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^4.0.38
-        version: 4.0.38(zod@4.4.3)
+        specifier: ^4.0.39
+        version: 4.0.39(zod@4.4.3)
       '@ai-sdk/google':
         specifier: ^4.0.44
         version: 4.0.44(zod@4.4.3)
       '@ai-sdk/openai':
-        specifier: ^4.0.41
-        version: 4.0.41(zod@4.4.3)
+        specifier: ^4.0.42
+        version: 4.0.42(zod@4.4.3)
       '@angular/common':
         specifier: 21.2.19
         version: 21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2)
@@ -79,7 +79,7 @@ importers:
         version: 18.0.0(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(@ngx-translate/core@18.0.0(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))
       '@openrouter/ai-sdk-provider':
         specifier: ^3.0.0
-        version: 3.0.0(ai@7.0.65(zod@4.4.3))(zod@4.4.3)
+        version: 3.0.0(ai@7.0.66(zod@4.4.3))(zod@4.4.3)
       '@opentelemetry/api':
         specifier: ^1.9.1
         version: 1.9.1
@@ -117,8 +117,8 @@ importers:
         specifier: ^3.0.20
         version: 3.0.20
       ai:
-        specifier: ^7.0.65
-        version: 7.0.65(zod@4.4.3)
+        specifier: ^7.0.66
+        version: 7.0.66(zod@4.4.3)
       axios:
         specifier: ^1.19.0
         version: 1.19.0(debug@4.4.3)
@@ -633,8 +633,8 @@ importers:
 
 packages:
 
-  '@ai-sdk/anthropic@4.0.38':
-    resolution: {integrity: sha512-esbTb5jq/37dloBJzld3CpYCZskiDWGcI4O8kzst9J/0Km4by7cgQXLTB/gGdjXxBsyjPQUeotVqqRRIrx2zew==}
+  '@ai-sdk/anthropic@4.0.39':
+    resolution: {integrity: sha512-JAMGtYeEuaBzqbsPO4fkho6vQyNoVhsHASM4o59wmJRU6Vh7prjOp490Kmc7YQTY+ioU1/xYzXvWOtxZBup0Xw==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -651,8 +651,8 @@ packages:
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/openai@4.0.41':
-    resolution: {integrity: sha512-+WoY0JyF/uV2z+rye7I+hYaVg+hTanG4rYIgsWKvJFDXaAdu9yg07x+BRa2vTgUqzLIBXEBp5d1T7DwMI9ZGlw==}
+  '@ai-sdk/openai@4.0.42':
+    resolution: {integrity: sha512-ZxDca6jJalYuXrIGVrw6dnkpz1Io9AWy+/b/wVWIbjigHCbd+zWLpPi8NnK0OFU+U3YCpP+KWfUvEnG5pFhltA==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -7115,8 +7115,8 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  ai@7.0.65:
-    resolution: {integrity: sha512-Uzom971mOHETL9tbeCWDEgbAA/Banj0KnR2obNEWPEUlGnAv2NJjFIxrUZ6F0XxHFDgGVVpnz86BB2CPOZZ83g==}
+  ai@7.0.66:
+    resolution: {integrity: sha512-wBUyoCYF3GVr+62nelBgR8YbpTSsMZrzFyOOjiwijylNSM2TFCW35C+Pml2vc59/WLMpyhS/LWZ55M+B9DAcSg==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -14267,7 +14267,7 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/anthropic@4.0.38(zod@4.4.3)':
+  '@ai-sdk/anthropic@4.0.39(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 4.0.7
       '@ai-sdk/provider-utils': 5.0.27(zod@4.4.3)
@@ -14286,7 +14286,7 @@ snapshots:
       '@ai-sdk/provider-utils': 5.0.27(zod@4.4.3)
       zod: 4.4.3
 
-  '@ai-sdk/openai@4.0.41(zod@4.4.3)':
+  '@ai-sdk/openai@4.0.42(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 4.0.7
       '@ai-sdk/provider-utils': 5.0.27(zod@4.4.3)
@@ -19901,9 +19901,9 @@ snapshots:
       - debug
       - supports-color
 
-  '@openrouter/ai-sdk-provider@3.0.0(ai@7.0.65(zod@4.4.3))(zod@4.4.3)':
+  '@openrouter/ai-sdk-provider@3.0.0(ai@7.0.66(zod@4.4.3))(zod@4.4.3)':
     dependencies:
-      ai: 7.0.65(zod@4.4.3)
+      ai: 7.0.66(zod@4.4.3)
       zod: 4.4.3
 
   '@opentelemetry/api-logs@0.207.0':
@@ -22530,7 +22530,7 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ai@7.0.65(zod@4.4.3):
+  ai@7.0.66(zod@4.4.3):
     dependencies:
       '@ai-sdk/gateway': 4.0.52(zod@4.4.3)
       '@ai-sdk/provider': 4.0.7
