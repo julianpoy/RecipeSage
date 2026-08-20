@@ -1,5 +1,4 @@
 import { prisma } from "@recipesage/prisma";
-import moment from "moment";
 import { CAPABILITY_GRACE_PERIOD } from "./constants";
 
 export const subscriptionsForUser = async (
@@ -8,8 +7,8 @@ export const subscriptionsForUser = async (
 ) => {
   // Allow users to continue to access expired features for grace period
   const mustBeValidUntil = includeExpired
-    ? moment(new Date("1980"))
-    : moment().subtract(CAPABILITY_GRACE_PERIOD, "days");
+    ? new Date("1980")
+    : new Date(Date.now() - CAPABILITY_GRACE_PERIOD * 24 * 60 * 60 * 1000);
 
   const subscriptions = prisma.userSubscription.findMany({
     where: {
@@ -17,7 +16,7 @@ export const subscriptionsForUser = async (
       OR: [
         {
           expires: {
-            gte: mustBeValidUntil.toDate(),
+            gte: mustBeValidUntil,
           },
         },
         {

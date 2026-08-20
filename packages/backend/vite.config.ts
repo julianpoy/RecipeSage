@@ -32,6 +32,7 @@ export default defineConfig(() => ({
   },
   test: {
     watch: false,
+    passWithNoTests: true,
     globals: true,
     hookTimeout: 30000,
     environment: "node",
