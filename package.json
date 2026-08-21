@@ -226,7 +226,7 @@
     "eslint": "9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
-    "globals": "^17.6.0",
+    "globals": "^17.11.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
     "nx": "22.3.3",
