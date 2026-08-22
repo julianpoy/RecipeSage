@@ -49,9 +49,18 @@ describe("updateDiscoverRecipe", () => {
       expect(updated?.language).toEqual("fr");
       expect(updated?.approvalState).toEqual(DiscoverApprovalState.PENDING);
       expect(updated?.modifiedAt).not.toBeNull();
-      expect(enqueueJobMock).toHaveBeenCalledWith({
-        discoverModeration: { discoverRecipeId: recipe.id },
-      });
+      expect(enqueueJobMock).toHaveBeenCalledWith(
+        {
+          discoverModeration: { discoverRecipeId: recipe.id },
+        },
+        {
+          attempts: 3,
+          backoff: {
+            type: "exponential",
+            delay: 5000,
+          },
+        },
+      );
     });
 
     test("adds and removes links across edits", async ({ trpc, user }) => {

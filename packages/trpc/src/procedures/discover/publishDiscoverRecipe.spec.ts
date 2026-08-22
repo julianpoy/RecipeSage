@@ -62,9 +62,18 @@ describe("publishDiscoverRecipe", () => {
       expect(discoverRecipe?.approvalState).toEqual(
         DiscoverApprovalState.PENDING,
       );
-      expect(enqueueJobMock).toHaveBeenCalledWith({
-        discoverModeration: { discoverRecipeId: response.id },
-      });
+      expect(enqueueJobMock).toHaveBeenCalledWith(
+        {
+          discoverModeration: { discoverRecipeId: response.id },
+        },
+        {
+          attempts: 3,
+          backoff: {
+            type: "exponential",
+            delay: 5000,
+          },
+        },
+      );
     });
 
     test("persists linked recipes", async ({ trpc, user }) => {

@@ -129,11 +129,20 @@ export const updateDiscoverRecipe = authenticatedProcedure
       }
     });
 
-    await enqueueJob({
-      discoverModeration: {
-        discoverRecipeId: existing.id,
+    await enqueueJob(
+      {
+        discoverModeration: {
+          discoverRecipeId: existing.id,
+        },
       },
-    });
+      {
+        attempts: 3,
+        backoff: {
+          type: "exponential",
+          delay: 5000,
+        },
+      },
+    );
 
     return {
       id: existing.id,

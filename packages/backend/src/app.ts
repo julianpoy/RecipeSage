@@ -27,11 +27,7 @@ import { metrics, config } from "@recipesage/util/server/general";
 
 // Routes
 import index from "./routes/index.js";
-import users from "./routes/users.js";
-import recipes from "./routes/recipes.js";
-import messages from "./routes/messages.js";
 import images from "./routes/images.js";
-import proxy from "./routes/proxy.js";
 
 import { ErrorRequestHandler } from "express";
 
@@ -225,11 +221,7 @@ const serveOpenApiDocument = (_req: express.Request, res: express.Response) => {
 app.get("/openapi.json", serveOpenApiDocument);
 app.get("/compat/openapi.json", serveOpenApiDocument);
 app.use("/compat/v2", openApiExpressMiddleware);
-app.use("/users", users);
-app.use("/recipes", recipes);
-app.use("/messages", messages);
 app.use("/images", images);
-app.use("/proxy", proxy);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

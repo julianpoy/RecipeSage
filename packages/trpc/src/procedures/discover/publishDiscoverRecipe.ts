@@ -123,11 +123,20 @@ export const publishDiscoverRecipe = authenticatedProcedure
       return created;
     });
 
-    await enqueueJob({
-      discoverModeration: {
-        discoverRecipeId: discoverRecipe.id,
+    await enqueueJob(
+      {
+        discoverModeration: {
+          discoverRecipeId: discoverRecipe.id,
+        },
       },
-    });
+      {
+        attempts: 3,
+        backoff: {
+          type: "exponential",
+          delay: 5000,
+        },
+      },
+    );
 
     return {
       id: discoverRecipe.id,
