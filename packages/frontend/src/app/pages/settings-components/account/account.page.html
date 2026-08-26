@@ -357,13 +357,19 @@
             <p>{{ "pages.account.bonus.notEnabled" | translate }}</p>
           }
           @if (myCreditUsage) {
-            <p>
-              {{
-                "pages.account.credits.usageValue"
-                  | translate
-                    : { used: myCreditUsage.used, limit: myCreditUsage.limit }
-              }}
-            </p>
+            @if (myCreditUsage.unlimited) {
+              <p>
+                {{ "pages.account.credits.selfhostNotApplicable" | translate }}
+              </p>
+            } @else {
+              <p>
+                {{
+                  "pages.account.credits.usageValue"
+                    | translate
+                      : { used: myCreditUsage.used, limit: myCreditUsage.limit }
+                }}
+              </p>
+            }
           }
           @if (
             capabilitySubscriptions["moreUsageCredits"] &&

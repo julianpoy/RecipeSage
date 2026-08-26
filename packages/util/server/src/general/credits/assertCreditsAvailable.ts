@@ -6,7 +6,10 @@ export const assertCreditsAvailable = async (
   userId: string,
   operation: CreditOperation,
 ): Promise<void> => {
-  const { used, limit } = await getDailyCreditUsage(userId);
+  const { used, limit, unlimited } = await getDailyCreditUsage(userId);
+  if (unlimited) {
+    return;
+  }
   const cost = CREDIT_COSTS[operation];
   if (used + cost > limit) {
     throw new CreditLimitExceededError();

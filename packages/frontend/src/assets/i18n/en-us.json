@@ -860,6 +860,7 @@
   "pages.account.stats.createdAt": "Account Created",
   "pages.account.stats.lastLogin": "Last Login",
   "pages.account.credits.usageValue": "{{used}} / {{limit}} cooking credits used today",
+  "pages.account.credits.selfhostNotApplicable": "Not applicable for self-hosted users",
   "pages.account.bonus.title": "Contributor Status",
   "pages.account.bonus.description": "As a thank you for helping cover the parts that cost the most to host, contributors get:",
   "pages.account.bonus.highResImages": "High Resolution Images",
