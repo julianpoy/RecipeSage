@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "从 Flavorish 文件导入",
     "pages.importFlavorish.tabTitle": "从 Flavorish 导入 - RecipeSage",
     "pages.importFlavorish.title": "从 Flavorish 文件导入食谱",
-    "pages.importFlavorish.description": "这将把 Flavorish 导出文件（包含清单、JSON 食谱文件和图片文件夹的 .zip 压缩包）导入您的 RecipeSage 账户。如果您的文件包含大量食谱或图片，请考虑进行贡献。"
+    "pages.importFlavorish.description": "这将把 Flavorish 导出文件（包含清单、JSON 食谱文件和图片文件夹的 .zip 压缩包）导入您的 RecipeSage 账户。如果您的文件包含大量食谱或图片，请考虑进行贡献。",
+    "pages.account.credits.selfhostNotApplicable": "不适用于自行托管用户"
 }
