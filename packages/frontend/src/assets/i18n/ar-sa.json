@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "استيراد من ملف Flavorish",
     "pages.importFlavorish.tabTitle": "استيراد من Flavorish - RecipeSage",
     "pages.importFlavorish.title": "استيراد الوصفات من ملف Flavorish",
-    "pages.importFlavorish.description": "سيؤدي هذا إلى استيراد ملف تصدير من Flavorish (أرشيف ‎.zip يحتوي على ملف بيان وملفات وصفات JSON ومجلد للصور) إلى حسابك في RecipeSage. يُرجى التفكير في المساهمة إذا كان ملفك يحتوي على عدد كبير من الوصفات أو الصور."
+    "pages.importFlavorish.description": "سيؤدي هذا إلى استيراد ملف تصدير من Flavorish (أرشيف ‎.zip يحتوي على ملف بيان وملفات وصفات JSON ومجلد للصور) إلى حسابك في RecipeSage. يُرجى التفكير في المساهمة إذا كان ملفك يحتوي على عدد كبير من الوصفات أو الصور.",
+    "pages.account.credits.selfhostNotApplicable": "لا ينطبق على المستخدمين الذين يستضيفون الخدمة ذاتيًا"
 }
