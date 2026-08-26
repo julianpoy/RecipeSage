@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Importálás Flavorish-fájlból",
     "pages.importFlavorish.tabTitle": "Importálás Flavorish-ból – RecipeSage",
     "pages.importFlavorish.title": "Receptek importálása Flavorish-fájlból",
-    "pages.importFlavorish.description": "Ezzel egy Flavorish-exportot (egy jegyzékfájlt, JSON-receptfájlokat és egy képmappát tartalmazó .zip-archívumot) importál a RecipeSage-fiókjába. Kérjük, fontolja meg a támogatást, ha a fájlja nagyszámú receptet vagy képet tartalmaz."
+    "pages.importFlavorish.description": "Ezzel egy Flavorish-exportot (egy jegyzékfájlt, JSON-receptfájlokat és egy képmappát tartalmazó .zip-archívumot) importál a RecipeSage-fiókjába. Kérjük, fontolja meg a támogatást, ha a fájlja nagyszámú receptet vagy képet tartalmaz.",
+    "pages.account.credits.selfhostNotApplicable": "Önállóan üzemeltetett telepítést használó felhasználók esetében nem alkalmazható"
 }
