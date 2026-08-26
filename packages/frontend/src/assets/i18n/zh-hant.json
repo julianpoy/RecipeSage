@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "從 Flavorish 檔案匯入",
     "pages.importFlavorish.tabTitle": "從 Flavorish 匯入 - RecipeSage",
     "pages.importFlavorish.title": "從 Flavorish 檔案匯入食譜",
-    "pages.importFlavorish.description": "這將把 Flavorish 匯出檔（包含資訊清單、JSON 食譜檔案和圖片資料夾的 .zip 壓縮檔）匯入您的 RecipeSage 帳戶。若您的檔案包含大量食譜或圖片，請考慮貢獻。"
+    "pages.importFlavorish.description": "這將把 Flavorish 匯出檔（包含資訊清單、JSON 食譜檔案和圖片資料夾的 .zip 壓縮檔）匯入您的 RecipeSage 帳戶。若您的檔案包含大量食譜或圖片，請考慮貢獻。",
+    "pages.account.credits.selfhostNotApplicable": "不適用於自行架設的使用者"
 }
