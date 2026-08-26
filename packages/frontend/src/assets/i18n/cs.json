@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Importovat ze souboru Flavorish",
     "pages.importFlavorish.tabTitle": "Import z Flavorish – RecipeSage",
     "pages.importFlavorish.title": "Importovat recepty ze souboru Flavorish",
-    "pages.importFlavorish.description": "Tímto se do vašeho účtu RecipeSage importuje export z Flavorish (archiv .zip obsahující manifest, soubory receptů JSON a složku s obrázky). Pokud váš soubor obsahuje velké množství receptů nebo obrázků, zvažte prosím finanční příspěvek."
+    "pages.importFlavorish.description": "Tímto se do vašeho účtu RecipeSage importuje export z Flavorish (archiv .zip obsahující manifest, soubory receptů JSON a složku s obrázky). Pokud váš soubor obsahuje velké množství receptů nebo obrázků, zvažte prosím finanční příspěvek.",
+    "pages.account.credits.selfhostNotApplicable": "Nevztahuje se na uživatele s vlastním hostingem"
 }
