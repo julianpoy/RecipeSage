@@ -34,9 +34,9 @@
     ]
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^4.0.39",
-    "@ai-sdk/google": "^4.0.45",
-    "@ai-sdk/openai": "^4.0.43",
+    "@ai-sdk/anthropic": "^4.0.40",
+    "@ai-sdk/google": "^4.0.49",
+    "@ai-sdk/openai": "^4.0.45",
     "@angular/common": "21.2.19",
     "@angular/core": "21.2.19",
     "@angular/forms": "21.2.1",
@@ -69,7 +69,7 @@
     "@trpc/client": "^11.18.0",
     "@trpc/server": "^11.18.0",
     "accept-language": "^3.0.20",
-    "ai": "^7.0.68",
+    "ai": "^7.0.74",
     "axios": "^1.19.0",
     "body-parser": "~2.3.0",
     "bullmq": "^5.78.1",
