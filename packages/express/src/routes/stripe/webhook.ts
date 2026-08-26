@@ -162,6 +162,13 @@ export const webhookHandler = defineHandler(
       if (paidProducts.includes(config.stripe.productId.yearly)) {
         subscriptionModelName = SubscriptionModelName.PyoYearly;
       }
+      if (paidProducts.includes(config.stripe.productId.onetime)) {
+        // This is handled in the one-time block above
+        return {
+          statusCode: 200,
+          data: "Ok",
+        };
+      }
 
       if (!subscriptionModelName) {
         Sentry.captureMessage("Invoice paid with unknown product", {
