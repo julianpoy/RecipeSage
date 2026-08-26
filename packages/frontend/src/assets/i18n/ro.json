@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Importă din fișier Flavorish",
     "pages.importFlavorish.tabTitle": "Importă din Flavorish - RecipeSage",
     "pages.importFlavorish.title": "Importă rețete din fișier Flavorish",
-    "pages.importFlavorish.description": "Aceasta va importa un export Flavorish (o arhivă .zip care conține un manifest, fișiere JSON cu rețete și un dosar cu imagini) în contul dumneavoastră RecipeSage. Vă rugăm să luați în considerare să contribuiți dacă fișierul conține un număr mare de rețete sau imagini."
+    "pages.importFlavorish.description": "Aceasta va importa un export Flavorish (o arhivă .zip care conține un manifest, fișiere JSON cu rețete și un dosar cu imagini) în contul dumneavoastră RecipeSage. Vă rugăm să luați în considerare să contribuiți dacă fișierul conține un număr mare de rețete sau imagini.",
+    "pages.account.credits.selfhostNotApplicable": "Nu se aplică utilizatorilor care își găzduiesc singuri aplicația"
 }
