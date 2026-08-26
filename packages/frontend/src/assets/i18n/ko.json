@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Flavorish 파일에서 가져오기",
     "pages.importFlavorish.tabTitle": "Flavorish에서 가져오기 - RecipeSage",
     "pages.importFlavorish.title": "Flavorish 파일에서 레시피 가져오기",
-    "pages.importFlavorish.description": "Flavorish 내보내기 파일(매니페스트, JSON 레시피 파일 및 이미지 폴더가 포함된 .zip 압축 파일)을 RecipeSage 계정으로 가져옵니다. 파일에 많은 수의 레시피 또는 이미지가 포함되어 있다면 기부를 고려해 주세요."
+    "pages.importFlavorish.description": "Flavorish 내보내기 파일(매니페스트, JSON 레시피 파일 및 이미지 폴더가 포함된 .zip 압축 파일)을 RecipeSage 계정으로 가져옵니다. 파일에 많은 수의 레시피 또는 이미지가 포함되어 있다면 기부를 고려해 주세요.",
+    "pages.account.credits.selfhostNotApplicable": "자체 호스팅 사용자에게는 적용되지 않습니다"
 }
