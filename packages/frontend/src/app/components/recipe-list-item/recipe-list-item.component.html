@@ -14,7 +14,7 @@
       loading="lazy"
       decoding="async"
       alt=""
-      [src]="recipe.recipeImages[0].image.location"
+      [cachedSrc]="recipe.recipeImages[0].image.location"
     />
   }
   @if ((!recipe.recipeImages || !recipe.recipeImages.length) && showImage) {

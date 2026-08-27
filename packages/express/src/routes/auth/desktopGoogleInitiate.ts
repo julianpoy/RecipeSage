@@ -41,6 +41,7 @@ export const desktopGoogleInitiateHandler = defineHandler(
       scope: ["email", "profile", "openid"],
       state,
       access_type: "online",
+      prompt: "select_account",
     });
 
     res.redirect(authUrl);

@@ -4,5 +4,6 @@
   "bundledWebRuntime": false,
   "npmClient": "pnpm",
   "webDir": "www",
-  "cordova": {}
+  "cordova": {},
+  "packageClassList": ["CAPCameraPlugin", "FilePickerPlugin"]
 }

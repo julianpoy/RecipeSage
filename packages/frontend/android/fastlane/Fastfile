@@ -1,0 +1,60 @@
+default_platform(:android)
+
+def build_version_name
+  tag = ENV["CIRCLE_TAG"]
+  return tag.sub(/^v/, "") if tag && !tag.strip.empty?
+  "0.0.0-dev"
+end
+
+def release_version_name
+  tag = ENV["CIRCLE_TAG"]
+  UI.user_error!("CIRCLE_TAG is required for a release upload") if tag.nil? || tag.strip.empty?
+  tag.sub(/^v/, "")
+end
+
+def resolved_version_code
+  base = 1_000_000
+  build_num = ENV["CIRCLE_BUILD_NUM"]
+  return base + build_num.to_i if build_num && !build_num.strip.empty?
+  base + 1
+end
+
+platform :android do
+  private_lane :assemble do |options|
+    ENV["ANDROID_VERSION_NAME"] = options[:version_name]
+    ENV["ANDROID_VERSION_CODE"] = resolved_version_code.to_s
+
+    gradle(task: "bundle", build_type: "Release", project_dir: ".")
+    lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+  end
+
+  desc "Build the signed release AAB without uploading"
+  lane :build do
+    aab = assemble(version_name: build_version_name)
+    UI.success("Built #{aab}")
+  end
+
+  desc "Build and upload to the Play internal track"
+  lane :internal do
+    %w[ANDROID_KEYSTORE_PATH ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD SUPPLY_JSON_KEY_DATA].each do |key|
+      value = ENV[key]
+      UI.user_error!("#{key} is required for the internal upload") if value.nil? || value.strip.empty?
+    end
+
+    code = resolved_version_code
+    UI.user_error!("versionCode #{code} must be greater than the current Play value (900001)") if code <= 900001
+
+    aab = assemble(version_name: release_version_name)
+    upload_to_play_store(
+      track: "internal",
+      aab: aab,
+      json_key_data: ENV["SUPPLY_JSON_KEY_DATA"],
+      release_status: "draft",
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true,
+    )
+  end
+end

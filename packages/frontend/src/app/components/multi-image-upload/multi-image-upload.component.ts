@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { AlertController, ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
+import { Capacitor } from "@capacitor/core";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 import { ImageService } from "../../services/image.service";
 import { LoadingService } from "../../services/loading.service";
@@ -52,7 +54,36 @@ export class MultiImageUploadComponent {
   }
 
   filePicker() {
+    if (Capacitor.isNativePlatform()) {
+      void this.captureImage();
+      return;
+    }
     document.getElementById("filePicker")?.click();
+  }
+
+  private async captureImage() {
+    let photo;
+    try {
+      photo = await Camera.getPhoto({
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Prompt,
+        quality: 85,
+        width: 2160,
+      });
+    } catch {
+      return;
+    }
+
+    if (!photo.webPath) return;
+
+    const response = await fetch(photo.webPath);
+    const blob = await response.blob();
+    const format = photo.format || "jpeg";
+    const file = new File([blob], `photo.${format}`, {
+      type: blob.type || `image/${format}`,
+    });
+
+    await this.uploadFiles([file]);
   }
 
   async addImage(event: any) {
@@ -60,6 +91,12 @@ export class MultiImageUploadComponent {
     if (!files || !files[0]) {
       return;
     }
+
+    await this.uploadFiles(Array.from(files));
+  }
+
+  private async uploadFiles(files: File[]) {
+    if (!files.length) return;
 
     if (this.images.length + files.length > 10) {
       const message = await this.translate

@@ -19,6 +19,9 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonButton } from "@ionic/angular/standalone";
 import { getElectronAPI, getIsElectron } from "../../utils/electron";
 import { serverConfig } from "../../utils/serverConfig";
+import { Capacitor, type PluginListenerHandle } from "@capacitor/core";
+import { App } from "@capacitor/app";
+import { Browser } from "@capacitor/browser";
 
 const getGoogleRef = () => {
   return (window as any).google;
@@ -46,9 +49,11 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   googleButtonContainer!: ElementRef<HTMLDivElement>;
 
   isElectron = getIsElectron();
+  isNative = Capacitor.isNativePlatform();
 
   private removeAuthCodeListener?: () => void;
   private removeGoogleScriptLoadListener?: () => void;
+  private nativeAuthListener?: PluginListenerHandle;
 
   ngAfterViewInit() {
     if (IS_SELFHOST) return;
@@ -57,6 +62,11 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
       this.removeAuthCodeListener = getElectronAPI()?.onAuthCode((code) =>
         this.afterDesktopSignInComplete(code),
       );
+      return;
+    }
+
+    if (this.isNative) {
+      void this.registerNativeAuthListener();
       return;
     }
 
@@ -93,12 +103,32 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.removeAuthCodeListener?.();
     this.removeGoogleScriptLoadListener?.();
+    void this.nativeAuthListener?.remove();
   }
 
-  startDesktopGoogleSignIn() {
-    window.open(
-      `${serverConfig.apiBase}auth/desktop-google?allowRegistration=${this.allowRegistration}`,
-    );
+  private async registerNativeAuthListener() {
+    this.nativeAuthListener = await App.addListener("appUrlOpen", (event) => {
+      let url: URL;
+      try {
+        url = new URL(event.url);
+      } catch {
+        return;
+      }
+      if (url.protocol !== "recipesage:") return;
+
+      const code = url.searchParams.get("code");
+      void Browser.close();
+      if (code) void this.afterDesktopSignInComplete(code);
+    });
+  }
+
+  startExternalGoogleSignIn() {
+    const url = `${serverConfig.apiBase}auth/desktop-google?allowRegistration=${this.allowRegistration}`;
+    if (this.isNative) {
+      void Browser.open({ url });
+      return;
+    }
+    window.open(url);
   }
 
   async afterDesktopSignInComplete(code: string) {

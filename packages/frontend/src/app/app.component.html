@@ -11,6 +11,7 @@
     <ion-menu
       (ionWillOpen)="updateNavList()"
       [disabled]="inCookMode"
+      [swipeGesture]="menuSwipeEnabled"
       contentId="main-content"
       type="overlay"
       [class]="{
@@ -65,6 +66,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
+      (stackDidChange)="updateMenuSwipe()"
       [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0,

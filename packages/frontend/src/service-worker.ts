@@ -60,14 +60,11 @@ import { ExpirationPlugin } from "workbox-expiration";
 import { initializeApp } from "firebase/app";
 import {
   getMessaging,
-  onBackgroundMessage,
   isSupported as isMessagingSupported,
 } from "firebase/messaging/sw";
 import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
 import { DebugStoreService } from "./app/services/debugStore.service";
 import { BASE_CACHE_NAME, LANG_CACHE_NAME } from "./app/utils/swCacheNames";
-
-const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
 const IS_DESKTOP = process.env.IS_DESKTOP === "true";
 
@@ -273,62 +270,7 @@ const initializeFirebase = async () => {
     return;
   }
 
-  const messaging = getMessaging(firebaseApp);
-
-  onBackgroundMessage(messaging, (message) => {
-    console.log("Received background message ", message);
-
-    switch (message.data?.type) {
-      case "update:available": {
-        return self.registration.update();
-      }
-      case "messages:new": {
-        const messageObj = JSON.parse(message.data.message);
-
-        return self.registration.showNotification(messageObj.otherUser.name, {
-          tag: message.data.type + "-" + messageObj.otherUser.id,
-          icon: messageObj.recipe?.images.at(0)?.location || RS_LOGO_URL,
-          body: messageObj.recipe ? messageObj.recipe.title : messageObj.body,
-          data: {
-            type: message.data.type,
-            otherUserId: messageObj.otherUser.id,
-          },
-        });
-      }
-    }
-  });
-
-  self.addEventListener("notificationclick", (event: any) => {
-    // Android doesn't close the notification when you click on it
-    // See: http://crbug.com/463146
-    event.notification.close();
-
-    event.waitUntil(
-      self.clients
-        .matchAll({
-          type: "window",
-        })
-        .then((clientList) => {
-          for (const client of clientList) {
-            // This looks to see if the app is already open at the root page and focuses if it is
-            if (client.url == "/") {
-              return client.focus();
-            }
-          }
-          if (event.notification.data?.recipeId) {
-            return self.clients.openWindow(
-              `${self.registration.scope}app/recipe/${event.notification.data.recipeId}`,
-            );
-          } else if (event.notification.data?.otherUserId) {
-            return self.clients.openWindow(
-              `${self.registration.scope}app/messages/${event.notification.data.otherUserId}`,
-            );
-          } else {
-            return self.clients.openWindow(`${self.registration.scope}app/`);
-          }
-        }),
-    );
-  });
+  getMessaging(firebaseApp);
 };
 
 initializeFirebase().catch((e) => {

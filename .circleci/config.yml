@@ -346,8 +346,8 @@ jobs:
             - packages/desktop/package.json
   desktop_macos:
     macos:
-      xcode: "15.4.0"
-    resource_class: macos.m1.medium.gen1
+      xcode: "26.5.0"
+    resource_class: m4pro.medium
     steps:
       - checkout
       - node/install:
@@ -512,6 +512,92 @@ jobs:
       - store_artifacts:
           path: desktop-artifacts
           destination: desktop-windows
+  android_build:
+    resource_class: large
+    docker:
+      - image: cimg/android:2026.08.1-node
+    steps:
+      - checkout
+      - install-dependencies
+      - run:
+          name: build-frontend-for-android
+          command: ./scripts/prepare-for-capacitor-build.sh android
+          environment:
+            ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=4096
+      - run:
+          name: decode-keystore
+          command: echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > /tmp/recipesage-upload.jks
+      - run:
+          name: fastlane-android
+          command: |
+            if [ -n "$CIRCLE_TAG" ]; then LANE=internal; else LANE=build; fi
+            cd packages/frontend/android
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+            bundle exec fastlane android $LANE
+          environment:
+            ANDROID_KEYSTORE_PATH: /tmp/recipesage-upload.jks
+      - store_artifacts:
+          path: packages/frontend/android/app/build/outputs/bundle/release
+          destination: android-aab
+  ios_build:
+    macos:
+      xcode: "26.5.0"
+    resource_class: m4pro.medium
+    steps:
+      - checkout
+      - node/install:
+          node-version: "24.13"
+      - run:
+          name: enable-corepack
+          command: sudo corepack enable
+      - run:
+          name: install-packages
+          command: pnpm install --frozen-lockfile
+      - run:
+          name: build-frontend-for-ios
+          command: ./scripts/prepare-for-capacitor-build.sh ios
+          environment:
+            ENVIRONMENT: production
+            NODE_OPTIONS: --max-old-space-size=8192
+      - run:
+          name: setup-keychain
+          command: |
+            echo "$IOS_DIST_CERT_BASE64" | base64 -d > /tmp/dist.p12
+            security create-keychain -p "" build.keychain
+            security default-keychain -s build.keychain
+            security set-keychain-settings -lut 7200 build.keychain
+            security unlock-keychain -p "" build.keychain
+            security list-keychains -d user -s build.keychain $(security list-keychains -d user | tr -d '"')
+            curl -sfo /tmp/AppleWWDRCAG3.cer https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer
+            security import /tmp/AppleWWDRCAG3.cer -k build.keychain -T /usr/bin/codesign
+            rm /tmp/AppleWWDRCAG3.cer
+            security import /tmp/dist.p12 -k build.keychain -P "$IOS_DIST_CERT_PASSWORD" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+            rm /tmp/dist.p12
+      - run:
+          name: install-provisioning-profile
+          command: |
+            mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+            echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 -d > "$HOME/Library/MobileDevice/Provisioning Profiles/recipesage_appstore.mobileprovision"
+      - run:
+          name: setup-api-key
+          command: |
+            mkdir -p ~/private_keys
+            echo "$APPLE_API_KEY_BASE64" | base64 -d > ~/private_keys/AuthKey.p8
+            echo 'export APPLE_API_KEY_PATH=$HOME/private_keys/AuthKey.p8' >> "$BASH_ENV"
+      - run:
+          name: fastlane-ios
+          command: |
+            if [ -n "$CIRCLE_TAG" ]; then LANE=beta; else LANE=build; fi
+            cd packages/frontend/ios
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+            bundle exec fastlane ios $LANE
+      - store_artifacts:
+          path: packages/frontend/ios/build
+          destination: ios-ipa
 
 workflows:
   version: 2
@@ -641,6 +727,27 @@ workflows:
       - desktop_windows:
           requires:
             - build_desktop_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - android_build:
+          context:
+            - google-play-signing
+          requires:
+            - build_and_test
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - ios_build:
+          context:
+            - apple-desktop-signing
+            - apple-app-store-signing
+          requires:
+            - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
