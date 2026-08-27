@@ -45,8 +45,8 @@ importers:
         specifier: ^3.1116.0
         version: 3.1116.0
       '@capacitor/camera':
-        specifier: ^8.2.2
-        version: 8.2.2(@capacitor/core@8.5.0)
+        specifier: ^8.2.3
+        version: 8.2.3(@capacitor/core@8.5.0)
       '@capacitor/core':
         specifier: 8.5.0
         version: 8.5.0
@@ -2031,8 +2031,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@capacitor/camera@8.2.2':
-    resolution: {integrity: sha512-WfaOsqrjPzvXGvrIBFqFtOZHBrc3hwGKssZje4ioJDNfTjIq2zrUNDXP+q6XmLyzifCYOu2YFC6k1+leb/BqSg==}
+  '@capacitor/camera@8.2.3':
+    resolution: {integrity: sha512-x9Pl5UgvrZyU5Hl53Fly9f6u019hhgN+gSdDgi+WygxK9DUVuYKjigplOXz3VJQ9m8ttUSjqN/rAC3JVnyEzcA==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -16995,7 +16995,7 @@ snapshots:
   '@bruits/satteri-win32-x64-msvc@0.9.5':
     optional: true
 
-  '@capacitor/camera@8.2.2(@capacitor/core@8.5.0)':
+  '@capacitor/camera@8.2.3(@capacitor/core@8.5.0)':
     dependencies:
       '@capacitor/core': 8.5.0
 
