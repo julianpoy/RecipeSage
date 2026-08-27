@@ -7,7 +7,7 @@
     >
       @if (selectedRecipe.recipeImages.length) {
         <ion-avatar slot="start">
-          <img src="{{ selectedRecipe.recipeImages[0].image.location }}" />
+          <img [cachedSrc]="selectedRecipe.recipeImages[0].image.location" />
         </ion-avatar>
       }
       @if (!selectedRecipe.recipeImages.length) {
@@ -40,7 +40,9 @@
                 <ion-item (click)="selectRecipe(recipe)" button>
                   @if (recipe.recipeImages.length) {
                     <ion-avatar slot="start">
-                      <img src="{{ recipe.recipeImages[0].image.location }}" />
+                      <img
+                        [cachedSrc]="recipe.recipeImages[0].image.location"
+                      />
                     </ion-avatar>
                   }
                   @if (!recipe.recipeImages.length) {

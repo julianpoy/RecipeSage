@@ -6,13 +6,17 @@ import {
   Messaging,
   onMessage,
 } from "firebase/messaging";
+import { Capacitor } from "@capacitor/core";
+import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 
-import { Injectable, inject } from "@angular/core";
+import { Injectable, NgZone, inject } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { AlertController } from "@ionic/angular/standalone";
 
 import { ServerActionsService } from "./server-actions.service";
 import { EventName, EventService } from "./event.service";
+import { RouteMap } from "./util.service";
 import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
@@ -23,15 +27,25 @@ export class MessagingService {
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
   private alertCtrl = inject(AlertController);
+  private router = inject(Router);
+  private ngZone = inject(NgZone);
 
   private messaging: Messaging | null = null;
   private fcmToken?: string;
+
+  private isNative = Capacitor.isNativePlatform();
+  private nativePermissionGranted = false;
 
   private _isFCMSupported: boolean = false;
   private isFCMSupportedPromise: Promise<boolean> | undefined;
 
   constructor() {
     this.updateFCMSupported();
+
+    if (this.isNative) {
+      void this.initNative();
+      return;
+    }
 
     const onSWRegsitration = async () => {
       const isFCMSupported = await this.isFCMSupportedPromise;
@@ -51,29 +65,94 @@ export class MessagingService {
       onMessage(this.messaging, (message) => {
         console.log("received foreground FCM: ", message);
         // TODO: REPLACE WITH GRIP (WS)
-        switch (message.data?.type) {
-          case EventName.ImportPepperplateComplete:
-            return this.events.publish(EventName.ImportPepperplateComplete);
-          case EventName.ImportPepperplateFailed:
-            return this.events.publish(
-              EventName.ImportPepperplateFailed,
-              message.data.reason,
-            );
-          case EventName.ImportPepperplateWorking:
-            return this.events.publish(EventName.ImportPepperplateWorking);
-        }
+        this.handleForegroundData(message.data);
       });
     };
     if ((window as any).swRegistration) onSWRegsitration.call(null);
     else (window as any).onSWRegistration = onSWRegsitration;
   }
 
+  private async initNative() {
+    const isFCMSupported = await this.isFCMSupportedPromise;
+    if (!isFCMSupported) return;
+
+    const { receive } = await FirebaseMessaging.checkPermissions();
+    this.nativePermissionGranted = receive === "granted";
+
+    await FirebaseMessaging.addListener("notificationReceived", (event) => {
+      // TODO: REPLACE WITH GRIP (WS)
+      this.handleForegroundData(event.notification.data);
+    });
+
+    await FirebaseMessaging.addListener("tokenReceived", (event) => {
+      void this.onNativeTokenReceived(event.token);
+    });
+
+    await FirebaseMessaging.addListener(
+      "notificationActionPerformed",
+      (event) => {
+        this.handleNotificationTap(event.notification.data);
+      },
+    );
+  }
+
+  private handleNotificationTap(data: unknown) {
+    if (typeof data !== "object" || data === null || !("otherUserId" in data)) {
+      return;
+    }
+
+    const otherUserId = data.otherUserId;
+    if (typeof otherUserId !== "string" || !otherUserId) return;
+
+    void this.ngZone.run(() =>
+      this.router.navigateByUrl(
+        RouteMap.MessageThreadPage.getPath(otherUserId),
+      ),
+    );
+  }
+
+  private handleForegroundData(data: unknown) {
+    if (typeof data !== "object" || data === null || !("type" in data)) return;
+
+    const type = data.type;
+    const reason = "reason" in data ? data.reason : undefined;
+
+    switch (type) {
+      case EventName.ImportPepperplateComplete:
+        return this.events.publish(EventName.ImportPepperplateComplete);
+      case EventName.ImportPepperplateFailed:
+        return this.events.publish(EventName.ImportPepperplateFailed, reason);
+      case EventName.ImportPepperplateWorking:
+        return this.events.publish(EventName.ImportPepperplateWorking);
+    }
+  }
+
+  private async onNativeTokenReceived(token: string) {
+    if (!token) return;
+    this.fcmToken = token;
+    try {
+      await this.serverActionsService.users.saveFCMToken({ fcmToken: token });
+    } catch (err) {
+      console.log("Unable to save refreshed notification token. ", err);
+    }
+  }
+
   async updateFCMSupported() {
+    if (this.isNative) {
+      this._isFCMSupported = true;
+      this.isFCMSupportedPromise = Promise.resolve(true);
+      return;
+    }
+
     this.isFCMSupportedPromise = isSupported();
     this._isFCMSupported = await this.isFCMSupportedPromise;
   }
 
   isNotificationsEnabled() {
+    if (this.isNative) {
+      return this._isFCMSupported && this.nativePermissionGranted;
+    }
+
     return (
       this._isFCMSupported &&
       "Notification" in window &&
@@ -88,14 +167,17 @@ export class MessagingService {
   async requestNotifications() {
     const isFCMSupported = await this.isFCMSupportedPromise;
     if (!isFCMSupported) return;
-    if (!("Notification" in window)) return;
-    if (!this.messaging || (Notification as any).permission === "denied")
-      return;
 
-    // Skip the prompt if permissions are already granted
-    if ((Notification as any).permission === "granted") {
-      this.enableNotifications();
-      return;
+    if (!this.isNative) {
+      if (!("Notification" in window)) return;
+      if (!this.messaging || (Notification as any).permission === "denied")
+        return;
+
+      // Skip the prompt if permissions are already granted
+      if ((Notification as any).permission === "granted") {
+        this.enableNotifications();
+        return;
+      }
     }
 
     if (!localStorage.getItem("notificationExplainationShown")) {
@@ -134,19 +216,45 @@ export class MessagingService {
   // Grab token and setup FCM
   private async enableNotifications() {
     const isFCMSupported = await this.isFCMSupportedPromise;
-    if (!this.messaging || !isFCMSupported) return;
+    if (!isFCMSupported) return;
+
+    if (this.isNative) {
+      const { receive } = await FirebaseMessaging.requestPermissions();
+      this.nativePermissionGranted = receive === "granted";
+      if (receive !== "granted") return;
+      return this.updateToken();
+    }
+
+    if (!this.messaging) return;
 
     console.log("Requesting permission...");
-    const result = await Notification.requestPermission();
+    await Notification.requestPermission();
 
     return this.updateToken();
   }
 
   public async disableNotifications() {
     const isFCMSupported = await this.isFCMSupportedPromise;
-    if (!this.messaging || !isFCMSupported) return;
+    if (!isFCMSupported) return;
 
     const token = this.fcmToken;
+
+    if (this.isNative) {
+      this.nativePermissionGranted = false;
+      try {
+        await FirebaseMessaging.deleteToken();
+      } catch (err) {
+        console.log("Unable to delete notification token. ", err);
+      }
+      if (token) {
+        await this.serverActionsService.users.removeFCMToken({
+          fcmToken: token,
+        });
+      }
+      return;
+    }
+
+    if (!this.messaging) return;
     if (!token) return;
 
     await this.serverActionsService.users.removeFCMToken({ fcmToken: token });
@@ -154,12 +262,20 @@ export class MessagingService {
 
   private async updateToken() {
     const isFCMSupported = await this.isFCMSupportedPromise;
-    if (!this.messaging || !isFCMSupported) return;
+    if (!isFCMSupported) return;
 
     try {
-      const currentToken = await getToken(this.messaging, {
-        serviceWorkerRegistration: (window as any).swRegistration,
-      });
+      let currentToken: string;
+      if (this.isNative) {
+        const { token } = await FirebaseMessaging.getToken();
+        currentToken = token;
+      } else {
+        if (!this.messaging) return;
+        currentToken = await getToken(this.messaging, {
+          serviceWorkerRegistration: (window as any).swRegistration,
+        });
+      }
+
       if (!currentToken) return;
 
       this.fcmToken = currentToken;

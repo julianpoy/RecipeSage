@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import {
   DEFAULT_API_BASE_URL,
   DEFAULT_GRIP_WS_URL,
@@ -14,6 +15,8 @@ export interface ServerConfig {
   gripWsBase: string;
 }
 
+export const PUBLIC_WEB_ORIGIN = "https://recipesage.com";
+
 export const PROD_API_BASE_URL = "https://api.recipesage.com/";
 export const PROD_GRIP_WS_BASE = "wss://grip.recipesage.com/ws";
 export const BETA_API_BASE_URL = "https://api.beta.recipesage.com/";
@@ -27,6 +30,7 @@ export const canCustomizeServerUrls =
   !environment.production ||
   IS_DESKTOP ||
   IS_SELFHOST ||
+  Capacitor.isNativePlatform() ||
   self.location.hostname === "android.recipesage.com" ||
   self.location.hostname === "ios.recipesage.com" ||
   self.location.hostname === "windows.recipesage.com" ||

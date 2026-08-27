@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1064631313987-sfte67vdukpmbubfp5vl390lb0k7gtlg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1064631313987-sfte67vdukpmbubfp5vl390lb0k7gtlg</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDIXCAPzbRF-U29xjN0s-3YVve1HWTcPNg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1064631313987</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.recipesage.ios</string>
+	<key>PROJECT_ID</key>
+	<string>chef-book</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chef-book.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1064631313987:ios:3556fe8cb2fdfa82e696f6</string>
+	<key>DATABASE_URL</key>
+	<string>https://chef-book.firebaseio.com</string>
+</dict>
+</plist>

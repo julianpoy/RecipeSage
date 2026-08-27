@@ -5,6 +5,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { IS_SELFHOST } from "../../../../environments/environment";
 
 import { UtilService, RouteMap } from "../../../services/util.service";
+import { serverConfig } from "../../../utils/serverConfig";
 import { CapabilitiesService } from "../../../services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { TosClickwrapAgreementComponent } from "../../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
@@ -66,7 +67,10 @@ export class ContributePage {
 
   constructor() {
     addIcons({ arrowForwardOutline });
-    if (IS_SELFHOST) {
+    // Donations are hosted-only. A custom server preset means the user is
+    // pointed at a non-hosted backend (self-hosting), so redirect them to
+    // recipesage.com to donate, same as the self-host build.
+    if (IS_SELFHOST || serverConfig.preset === "custom") {
       void this.redirectSelfhost();
       return;
     }

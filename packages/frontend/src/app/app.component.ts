@@ -1,4 +1,4 @@
-import { Component, inject, NgZone } from "@angular/core";
+import { Component, inject, NgZone, ViewChild } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
@@ -48,6 +48,7 @@ import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
 import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
+import { DeepLinkService } from "./services/deep-link.service";
 import { DebugStoreService } from "./services/debugStore.service";
 import { setLocalDbUpgradeMessages } from "./utils/localDb/localDbUpgradeMessages";
 import {
@@ -140,11 +141,15 @@ export class AppComponent {
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
   private nativePrintTutorialService = inject(NativePrintTutorialService);
+  private deepLinkService = inject(DeepLinkService);
   debugStoreService = inject(DebugStoreService);
+
+  @ViewChild(IonRouterOutlet) private routerOutlet?: IonRouterOutlet;
 
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
   inCookMode = false;
+  menuSwipeEnabled = true;
 
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
   enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
@@ -617,10 +622,16 @@ export class AppComponent {
     this.friendRequestCount = response.incomingRequests?.length || undefined;
   }
 
+  updateMenuSwipe() {
+    this.menuSwipeEnabled = !this.routerOutlet?.canGoBack();
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.menuCtrl.close();
     });
+
+    this.deepLinkService.init();
 
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "visible") return;
