@@ -2425,6 +2425,7 @@
 
   "components.signInWithApple.button": "Continue with Apple",
   "components.signInWithApple.interrupted": "Apple sign in was interrupted. Please try again.",
+  "components.signInWithApple.failed": "Apple sign in failed. Please try again.",
 
   "components.signInWithGoogle.button": "Sign in with Google",
   "components.signInWithGoogle.interrupted": "Google sign in was interrupted. Please try again.",

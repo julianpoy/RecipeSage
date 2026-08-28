@@ -189,8 +189,9 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
         .filter((part): part is string => !!part)
         .join(" ");
       await this.afterIdentityToken(identityToken, nonce, name || undefined);
-    } catch {
-      // User cancelled or the native flow failed; nothing to do
+    } catch (error) {
+      if (this.isUserCancellation(error)) return;
+      await this.presentSignInFailed();
     }
   }
 
@@ -204,9 +205,15 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
         undefined,
         this.extractName(data?.user),
       );
-    } catch {
-      // User cancelled or the popup failed; nothing to do
+    } catch (error) {
+      if (this.isUserCancellation(error)) return;
+      await this.presentSignInFailed();
     }
+  }
+
+  private isUserCancellation(error: unknown): boolean {
+    if (!error || typeof error !== "object") return false;
+    return "code" in error && error.code === "SIGN_IN_CANCELED";
   }
 
   async startExternalAppleSignIn() {
@@ -281,6 +288,17 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
   private async presentSignInInterrupted() {
     const message = await this.translate
       .get("components.signInWithApple.interrupted")
+      .toPromise();
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    await toast.present();
+  }
+
+  private async presentSignInFailed() {
+    const message = await this.translate
+      .get("components.signInWithApple.failed")
       .toPromise();
     const toast = await this.toastCtrl.create({
       message,
