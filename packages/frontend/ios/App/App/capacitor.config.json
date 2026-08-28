@@ -5,5 +5,12 @@
   "npmClient": "pnpm",
   "webDir": "www",
   "cordova": {},
-  "packageClassList": ["CAPCameraPlugin", "FilePickerPlugin"]
+  "packageClassList": [
+    "AppPlugin",
+    "CAPBrowserPlugin",
+    "CAPCameraPlugin",
+    "FilesystemPlugin",
+    "FirebaseMessagingPlugin",
+    "FilePickerPlugin"
+  ]
 }

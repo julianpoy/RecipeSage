@@ -73,7 +73,7 @@ export class ImageCacheService {
 
       const blob = await response.blob();
       const base64 = await this.blobToBase64(blob);
-      const path = `${CACHE_SUBDIR}/${this.fileNameFor(remoteUrl)}`;
+      const path = `${CACHE_SUBDIR}/${await this.fileNameFor(remoteUrl)}`;
 
       await Filesystem.writeFile({
         path,
@@ -117,12 +117,15 @@ export class ImageCacheService {
     }
   }
 
-  private fileNameFor(url: string): string {
-    let hash = 5381;
-    for (let i = 0; i < url.length; i++) {
-      hash = (hash * 33) ^ url.charCodeAt(i);
+  private async fileNameFor(url: string): Promise<string> {
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(url),
+    );
+    let name = "";
+    for (const byte of new Uint8Array(digest)) {
+      name += byte.toString(16).padStart(2, "0");
     }
-    const name = (hash >>> 0).toString(16);
 
     const match = /\.(jpe?g|png|webp|gif|avif)(?:$|\?)/i.exec(url);
     const ext = match ? `.${match[1].toLowerCase()}` : "";

@@ -122,6 +122,16 @@ export class UsersActionsService extends ActionsBase {
     );
   }
 
+  signInWithRedirectGoogle(
+    input: RouterInputs["users"]["signInWithRedirectGoogle"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["signInWithRedirectGoogle"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.signInWithRedirectGoogle.mutate(input),
+      errorHandlers,
+    );
+  }
+
   updateUser(
     input: RouterInputs["users"]["updateUser"],
     errorHandlers?: ErrorHandlers,

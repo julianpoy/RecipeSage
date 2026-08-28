@@ -9,10 +9,11 @@ import { config } from "@recipesage/util/server/general";
 const schema = {
   query: z.object({
     allowRegistration: z.enum(["true", "false"]).optional(),
+    codeChallenge: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
   }),
 };
 
-export const desktopGoogleInitiateHandler = defineHandler(
+export const redirectGoogleInitiateHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.None,
@@ -25,11 +26,15 @@ export const desktopGoogleInitiateHandler = defineHandler(
 
     const allowRegistration = req.query.allowRegistration === "true";
 
-    const redirectUri = `${config.api.publicUrl}/auth/desktop-google/callback`;
+    const redirectUri = `${config.api.publicUrl}/auth/redirect-google/callback`;
     const client = new OAuth2Client(clientId, clientSecret, redirectUri);
 
     const statePayload = Buffer.from(
-      JSON.stringify({ ts: Date.now(), allowRegistration }),
+      JSON.stringify({
+        ts: Date.now(),
+        allowRegistration,
+        codeChallenge: req.query.codeChallenge,
+      }),
     ).toString("base64url");
     const stateHmac = crypto
       .createHmac("sha256", clientSecret)
@@ -41,6 +46,7 @@ export const desktopGoogleInitiateHandler = defineHandler(
       scope: ["email", "profile", "openid"],
       state,
       access_type: "online",
+      prompt: "select_account",
     });
 
     res.redirect(authUrl);

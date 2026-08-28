@@ -20,6 +20,10 @@ export class DeepLinkService {
   init() {
     if (!Capacitor.isNativePlatform()) return;
 
+    void App.getLaunchUrl().then((launch) => {
+      if (launch?.url) this.handleUrl(launch.url);
+    });
+
     void App.addListener("appUrlOpen", (event) => {
       this.handleUrl(event.url);
     });
