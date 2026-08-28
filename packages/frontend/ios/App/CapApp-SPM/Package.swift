@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "CapacitorCamera", path: "../../../../../node_modules/.pnpm/@capacitor+camera@8.2.2_@capacitor+core@8.5.0/node_modules/@capacitor/camera"),
         .package(name: "CapacitorFilesystem", path: "../../../../../node_modules/.pnpm/@capacitor+filesystem@8.1.3_@capacitor+core@8.5.0/node_modules/@capacitor/filesystem"),
         .package(name: "CapacitorFirebaseMessaging", path: "../../../../../node_modules/.pnpm/@capacitor-firebase+messaging@8.4.0_@capacitor+core@8.5.0_firebase@12.14.0/node_modules/@capacitor-firebase/messaging"),
+        .package(name: "CapawesomeCapacitorAppleSignIn", path: "../../../../../node_modules/.pnpm/@capawesome+capacitor-apple-sign-in@0.1.3_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-apple-sign-in"),
         .package(name: "CapawesomeCapacitorFilePicker", path: "../../../../../node_modules/.pnpm/@capawesome+capacitor-file-picker@8.0.4_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-file-picker")
     ],
     targets: [
@@ -30,6 +31,7 @@ let package = Package(
                 .product(name: "CapacitorCamera", package: "CapacitorCamera"),
                 .product(name: "CapacitorFilesystem", package: "CapacitorFilesystem"),
                 .product(name: "CapacitorFirebaseMessaging", package: "CapacitorFirebaseMessaging"),
+                .product(name: "CapawesomeCapacitorAppleSignIn", package: "CapawesomeCapacitorAppleSignIn"),
                 .product(name: "CapawesomeCapacitorFilePicker", package: "CapawesomeCapacitorFilePicker")
             ]
         )

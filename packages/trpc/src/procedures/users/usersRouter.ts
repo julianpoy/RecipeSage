@@ -22,6 +22,8 @@ import { saveFCMToken } from "./saveFCMToken";
 import { signInWithGoogle } from "./signInWithGoogle";
 import { signInWithDesktopGoogle } from "./signInWithDesktopGoogle";
 import { signInWithRedirectGoogle } from "./signInWithRedirectGoogle";
+import { signInWithApple } from "./signInWithApple";
+import { signInWithRedirectApple } from "./signInWithRedirectApple";
 import { updateMyProfile } from "./updateMyProfile";
 import { updatePreferences } from "./updatePreferences";
 import { updateUser } from "./updateUser";
@@ -46,6 +48,8 @@ export const usersRouter = router({
   signInWithGoogle,
   signInWithDesktopGoogle,
   signInWithRedirectGoogle,
+  signInWithApple,
+  signInWithRedirectApple,
   login,
   logout,
   register,

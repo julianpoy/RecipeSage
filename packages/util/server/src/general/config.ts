@@ -77,6 +77,16 @@ export const config = {
       ]),
     },
   },
+  apple: {
+    signIn: {
+      servicesId: getEnvString("APPLE_SIGN_IN_SERVICES_ID", [Environment.Prod]),
+      bundleId:
+        getEnvString("APPLE_SIGN_IN_BUNDLE_ID", []) || "com.recipesage.ios",
+      teamId: getEnvString("APPLE_SIGN_IN_TEAM_ID", [Environment.Prod]),
+      keyId: getEnvString("APPLE_SIGN_IN_KEY_ID", [Environment.Prod]),
+      privateKey: getEnvString("APPLE_SIGN_IN_PRIVATE_KEY", [Environment.Prod]),
+    },
+  },
   grip: {
     url: getEnvString("GRIP_URL", Environment.All),
     key: getEnvString("GRIP_KEY", Environment.All),

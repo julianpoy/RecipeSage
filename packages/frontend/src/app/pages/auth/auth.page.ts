@@ -19,6 +19,7 @@ import type { SessionDTO } from "@recipesage/prisma";
 import { SwCommunicationService } from "../../services/sw-communication.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SignInWithGoogleComponent } from "../../components/sign-in-with-google/sign-in-with-google.component";
+import { SignInWithAppleComponent } from "../../components/sign-in-with-apple/sign-in-with-apple.component";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
 import { WebsocketService } from "../../services/websocket.service";
@@ -45,6 +46,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     SignInWithGoogleComponent,
+    SignInWithAppleComponent,
     LogoIconComponent,
     TosClickwrapAgreementComponent,
     TextInputComponent,
@@ -231,11 +233,19 @@ export class AuthPage {
     this.close();
   }
 
-  onGoogleAccountNotFound() {
+  onSsoAccountNotFound() {
     this.presentAlert("generic.error", "pages.auth.error.incorrectEmail");
   }
 
-  async signInWithGoogleComplete(session: SessionDTO) {
+  signInWithGoogleComplete(session: SessionDTO) {
+    return this.completeSsoSignIn(session);
+  }
+
+  signInWithAppleComplete(session: SessionDTO) {
+    return this.completeSsoSignIn(session);
+  }
+
+  private async completeSsoSignIn(session: SessionDTO) {
     localStorage.setItem("token", session.token);
     const lastUserId = await appIdbStorageManager.getLastSessionUserId();
     if (lastUserId !== session.userId) {
