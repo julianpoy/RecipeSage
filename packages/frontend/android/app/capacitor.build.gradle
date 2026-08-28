@@ -14,6 +14,7 @@ dependencies {
     implementation project(':capacitor-camera')
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-firebase-messaging')
+    implementation project(':capawesome-capacitor-apple-sign-in')
     implementation project(':capawesome-capacitor-file-picker')
 
 }

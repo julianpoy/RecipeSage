@@ -16,3 +16,5 @@ export const DEFAULT_GRIP_WS_URL = `${wsProto}//${self.location.host}/grip/ws`;
 export const SENTRY_SAMPLE_RATE = 0;
 
 export const GOOGLE_GSI_CLIENT_ID = null;
+
+export const APPLE_SIGN_IN_SERVICES_ID = null;

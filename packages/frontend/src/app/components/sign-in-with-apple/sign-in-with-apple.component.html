@@ -1,0 +1,11 @@
+@if (!isSelfHost) {
+  <ion-button
+    expand="block"
+    fill="solid"
+    class="apple-sign-in-button"
+    (click)="onAppleButtonClick()"
+  >
+    <ion-icon slot="start" name="logo-apple" aria-hidden="true"></ion-icon>
+    {{ "components.signInWithApple.button" | translate }}
+  </ion-button>
+}

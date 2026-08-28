@@ -150,9 +150,14 @@
         <div class="ion-padding-start ion-padding-end ion-padding-bottom">
           <sign-in-with-google
             [allowRegistration]="!showLogin"
-            (accountNotFound)="onGoogleAccountNotFound()"
+            (accountNotFound)="onSsoAccountNotFound()"
             (signInComplete)="signInWithGoogleComplete($event)"
           ></sign-in-with-google>
+          <sign-in-with-apple
+            [allowRegistration]="!showLogin"
+            (accountNotFound)="onSsoAccountNotFound()"
+            (signInComplete)="signInWithAppleComplete($event)"
+          ></sign-in-with-apple>
         </div>
       }
 

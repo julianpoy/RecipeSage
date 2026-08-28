@@ -55,6 +55,11 @@ export default defineConfig(() => ({
     env: {
       GOOGLE_GSI_CLIENT_ID: "test-client-id",
       GOOGLE_GSI_CLIENT_SECRET: "test-client-secret",
+      APPLE_SIGN_IN_SERVICES_ID: "com.recipesage.service",
+      APPLE_SIGN_IN_BUNDLE_ID: "com.recipesage.ios",
+      APPLE_SIGN_IN_TEAM_ID: "TESTTEAMID",
+      APPLE_SIGN_IN_KEY_ID: "TESTKEYID",
+      APPLE_SIGN_IN_PRIVATE_KEY: "test-apple-private-key",
     },
     projects: [
       {

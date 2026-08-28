@@ -17,5 +17,8 @@ project(':capacitor-filesystem').projectDir = new File('../../../node_modules/.p
 include ':capacitor-firebase-messaging'
 project(':capacitor-firebase-messaging').projectDir = new File('../../../node_modules/.pnpm/@capacitor-firebase+messaging@8.4.0_@capacitor+core@8.5.0_firebase@12.14.0/node_modules/@capacitor-firebase/messaging/android')
 
+include ':capawesome-capacitor-apple-sign-in'
+project(':capawesome-capacitor-apple-sign-in').projectDir = new File('../../../node_modules/.pnpm/@capawesome+capacitor-apple-sign-in@0.1.3_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-apple-sign-in/android')
+
 include ':capawesome-capacitor-file-picker'
 project(':capawesome-capacitor-file-picker').projectDir = new File('../../../node_modules/.pnpm/@capawesome+capacitor-file-picker@8.0.4_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-file-picker/android')

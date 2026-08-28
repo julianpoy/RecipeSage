@@ -20,6 +20,7 @@ import { IonButton, ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { getElectronAPI, getIsElectron } from "../../utils/electron";
 import { serverConfig } from "../../utils/serverConfig";
+import { SSO_PENDING_PROVIDER_KEY } from "../../utils/ssoRedirect";
 import { Capacitor, type PluginListenerHandle } from "@capacitor/core";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
@@ -156,6 +157,7 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
 
   async startExternalGoogleSignIn() {
     const codeChallenge = await this.generatePkceChallenge();
+    localStorage.setItem(SSO_PENDING_PROVIDER_KEY, "google");
     const url = `${serverConfig.apiBase}auth/redirect-google?allowRegistration=${this.allowRegistration}&codeChallenge=${encodeURIComponent(codeChallenge)}`;
     if (this.isNative) {
       void Browser.open({ url });
@@ -165,6 +167,9 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   }
 
   async afterDesktopSignInComplete(code: string) {
+    if (localStorage.getItem(SSO_PENDING_PROVIDER_KEY) !== "google") return;
+    localStorage.removeItem(SSO_PENDING_PROVIDER_KEY);
+
     const codeVerifier = localStorage.getItem(PKCE_VERIFIER_STORAGE_KEY);
     localStorage.removeItem(PKCE_VERIFIER_STORAGE_KEY);
     if (!codeVerifier) {
