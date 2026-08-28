@@ -4,6 +4,7 @@ export * from "./auth/extendSession";
 export * from "./auth/generatePasswordHash";
 export * from "./auth/validatePasswordHash";
 export * from "./auth/sanitizeUserEmail";
+export * from "./auth/redirectGoogleAuthCode";
 
 export * from "./categorize/getShoppingListItemCategories";
 export * from "./categorize/getShoppingListItemGroupTitles";

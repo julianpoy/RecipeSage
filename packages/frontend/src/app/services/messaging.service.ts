@@ -94,6 +94,10 @@ export class MessagingService {
         this.handleNotificationTap(event.notification.data);
       },
     );
+
+    if (this.nativePermissionGranted) {
+      void this.updateToken();
+    }
   }
 
   private handleNotificationTap(data: unknown) {
@@ -106,7 +110,7 @@ export class MessagingService {
 
     void this.ngZone.run(() =>
       this.router.navigateByUrl(
-        RouteMap.MessageThreadPage.getPath(otherUserId),
+        RouteMap.MessageThreadPage.getPath(encodeURIComponent(otherUserId)),
       ),
     );
   }
@@ -251,6 +255,7 @@ export class MessagingService {
           fcmToken: token,
         });
       }
+      this.fcmToken = undefined;
       return;
     }
 
@@ -258,6 +263,7 @@ export class MessagingService {
     if (!token) return;
 
     await this.serverActionsService.users.removeFCMToken({ fcmToken: token });
+    this.fcmToken = undefined;
   }
 
   private async updateToken() {
