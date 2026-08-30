@@ -49,6 +49,7 @@ import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-to
 import { VersionCheckService } from "./services/versioncheck.service";
 import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DeepLinkService } from "./services/deep-link.service";
+import { ShareReceiverService } from "./services/share-receiver.service";
 import { DebugStoreService } from "./services/debugStore.service";
 import { setLocalDbUpgradeMessages } from "./utils/localDb/localDbUpgradeMessages";
 import {
@@ -142,6 +143,7 @@ export class AppComponent {
   private versionCheckService = inject(VersionCheckService);
   private nativePrintTutorialService = inject(NativePrintTutorialService);
   private deepLinkService = inject(DeepLinkService);
+  private shareReceiverService = inject(ShareReceiverService);
   debugStoreService = inject(DebugStoreService);
 
   @ViewChild(IonRouterOutlet) private routerOutlet?: IonRouterOutlet;
@@ -632,6 +634,7 @@ export class AppComponent {
     });
 
     this.deepLinkService.init();
+    this.shareReceiverService.init();
 
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "visible") return;

@@ -6,12 +6,13 @@
   "webDir": "www",
   "cordova": {},
   "packageClassList": [
+    "FirebaseMessagingPlugin",
     "AppPlugin",
     "CAPBrowserPlugin",
     "CAPCameraPlugin",
     "FilesystemPlugin",
-    "FirebaseMessagingPlugin",
     "AppleSignInPlugin",
-    "FilePickerPlugin"
+    "FilePickerPlugin",
+    "SendIntentPlugin"
   ]
 }

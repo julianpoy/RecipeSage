@@ -86,6 +86,9 @@ importers:
       '@ionic/angular':
         specifier: ^8.8.18
         version: 8.8.18(f8088b41d78015c9739676d4fdd5e0e6)
+      '@mindlib-capacitor/send-intent':
+        specifier: ^8.0.6
+        version: 8.0.6(@capacitor/core@8.5.0)
       '@ngx-loading-bar/core':
         specifier: ^7.0.1
         version: 7.0.1(@angular/common@21.2.19(@angular/core@21.2.19(@angular/compiler@21.2.19)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(rxjs@7.8.2)
@@ -3999,6 +4002,11 @@ packages:
 
   '@microsoft/tsdoc@0.16.0':
     resolution: {integrity: sha512-xgAyonlVVS+q7Vc7qLW0UrJU7rSFcETRWsqdXZtjzRU8dF+6CkozTK4V4y1LwOX7j8r/vHphjDeMeGI4tNGeGA==}
+
+  '@mindlib-capacitor/send-intent@8.0.6':
+    resolution: {integrity: sha512-JHU/gD90vd9WeYIq2oBctPiakJoWRhrVJCjVY9sYVUIh7T7unVn+6JrIf6svcftjaq+tYU5Qlj//inztBii8qA==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@modelcontextprotocol/sdk@1.26.0':
     resolution: {integrity: sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==}
@@ -19215,6 +19223,13 @@ snapshots:
 
   '@microsoft/tsdoc@0.16.0':
     optional: true
+
+  '@mindlib-capacitor/send-intent@8.0.6(@capacitor/core@8.5.0)':
+    dependencies:
+      '@capacitor/cli': 8.5.0
+      '@capacitor/core': 8.5.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@modelcontextprotocol/sdk@1.26.0(zod@4.3.6)':
     dependencies:

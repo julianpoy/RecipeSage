@@ -54,6 +54,11 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 import { MlService } from "../../../services/ml.service";
+import {
+  PendingShareService,
+  type PendingShare,
+} from "../../../services/pending-share.service";
+import { EventName, EventService } from "../../../services/event.service";
 import { Capacitor } from "@capacitor/core";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 import { RecipeFormatToolbarComponent } from "../../../components/recipe-format-toolbar/recipe-format-toolbar.component";
@@ -129,7 +134,9 @@ export class EditRecipePage {
   private popoverCtrl = inject(PopoverController);
   private serverActionsService = inject(ServerActionsService);
   private mlService = inject(MlService);
+  private pendingShareService = inject(PendingShareService);
   private unsavedChangesService = inject(UnsavedChangesService);
+  private events = inject(EventService);
   private loadingCtrl = inject(LoadingController);
   private loadingService = inject(LoadingService);
   private imageService = inject(ImageService);
@@ -189,12 +196,17 @@ export class EditRecipePage {
     this.load();
   }
 
+  private shareReceivedHandler = () => {
+    void this.handleIncomingShare();
+  };
+
   private applyRouteParams() {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
     if (recipeId === "new") {
       this.recipeId = undefined;
       this.checkAutoClip();
+      void this.handleIncomingShare();
     } else {
       this.recipeId = recipeId;
     }
@@ -205,6 +217,9 @@ export class EditRecipePage {
   }
 
   ionViewWillEnter() {
+    this.events.unsubscribe(EventName.ShareReceived, this.shareReceivedHandler);
+    this.events.subscribe(EventName.ShareReceived, this.shareReceivedHandler);
+
     const snapshotRecipeId =
       this.route.snapshot.paramMap.get("recipeId") || "new";
     const currentRecipeId = this.recipeId || "new";
@@ -212,6 +227,10 @@ export class EditRecipePage {
       this.applyRouteParams();
       this.load();
     }
+  }
+
+  ionViewWillLeave() {
+    this.events.unsubscribe(EventName.ShareReceived, this.shareReceivedHandler);
   }
 
   async load() {
@@ -356,6 +375,191 @@ export class EditRecipePage {
       /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»""'']))?/gi,
     );
     if (matchedUrl) return matchedUrl.pop();
+  }
+
+  private async handleIncomingShare() {
+    const pending = this.pendingShareService.consume();
+    if (!pending) return;
+
+    if (
+      this.hasRecipeContent() ||
+      this.unsavedChangesService.hasPendingChanges()
+    ) {
+      const confirmed = await this.confirmReplaceForShare();
+      if (!confirmed) return;
+    }
+
+    this.resetRecipe();
+    await this.applyPendingShare(pending);
+  }
+
+  private hasRecipeContent(): boolean {
+    const r = this.recipe;
+    return !!(
+      r.title?.trim() ||
+      r.description?.trim() ||
+      r.ingredients?.trim() ||
+      r.instructions?.trim() ||
+      r.notes?.trim() ||
+      this.images.length
+    );
+  }
+
+  private async applyPendingShare(pending: PendingShare) {
+    if (pending.kind === "url") {
+      this.autoClip(pending.url);
+    } else if (pending.kind === "document") {
+      await this.autofillFromSharedDocument(pending.file);
+    } else if (pending.kind === "images") {
+      await this.autofillFromSharedImages(pending.files);
+    }
+  }
+
+  private resetRecipe() {
+    this.recipe = {
+      title: "",
+      description: "",
+      yield: "",
+      activeTime: "",
+      totalTime: "",
+      source: "",
+      url: "",
+      notes: "",
+      ingredients: "",
+      instructions: "",
+    };
+    this.images = [];
+    this.selectedLabels = [];
+    this.selectedLinkedRecipes = [];
+  }
+
+  private async confirmReplaceForShare(): Promise<boolean> {
+    const [header, message, cancel, replace] = await Promise.all([
+      this.translate.get("pages.editRecipe.shareReplace.header").toPromise(),
+      this.translate.get("pages.editRecipe.shareReplace.message").toPromise(),
+      this.translate.get("generic.cancel").toPromise(),
+      this.translate.get("pages.editRecipe.shareReplace.confirm").toPromise(),
+    ]);
+
+    return new Promise((resolve) => {
+      this.alertCtrl
+        .create({
+          header,
+          message,
+          buttons: [
+            { text: cancel, role: "cancel", handler: () => resolve(false) },
+            { text: replace, handler: () => resolve(true) },
+          ],
+        })
+        .then((alert) => alert.present());
+    });
+  }
+
+  private async autofillFromSharedDocument(file: File) {
+    const extension = this.getDocumentExtension(file.name);
+
+    const pleaseWait = await this.translate
+      .get("pages.editRecipe.clip.loading")
+      .toPromise();
+    const failedHeader = await this.translate.get("generic.error").toPromise();
+    const failedMessage = await this.translate
+      .get("pages.editRecipe.clip.failed")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const loading = await this.loadingCtrl.create({ message: pleaseWait });
+    await loading.present();
+
+    const errorHandlers = {
+      ...this.getSelfhostErrorHandlers(),
+      ...this.getFileTooLargeErrorHandlers(),
+      400: async () => {
+        (
+          await this.alertCtrl.create({
+            header: failedHeader,
+            message: failedMessage,
+            buttons: [{ text: okay }],
+          })
+        ).present();
+      },
+    };
+
+    try {
+      const response =
+        extension === ".pdf"
+          ? await this.mlService.getRecipeFromPDF(file, errorHandlers)
+          : await this.mlService.getRecipeFromDocument(file, errorHandlers);
+
+      if (!response.success) return;
+
+      this.recipe.title = response.data.recipe.title || "";
+      this.recipe.description = response.data.recipe.description || "";
+      this.recipe.source = response.data.recipe.source || "";
+      this.recipe.yield = response.data.recipe.yield || "";
+      this.recipe.activeTime = response.data.recipe.activeTime || "";
+      this.recipe.totalTime = response.data.recipe.totalTime || "";
+      this.recipe.ingredients = response.data.recipe.ingredients || "";
+      this.recipe.instructions = response.data.recipe.instructions || "";
+      this.recipe.notes = response.data.recipe.notes || "";
+      this.markAsDirty();
+    } finally {
+      loading.dismiss();
+    }
+  }
+
+  private async autofillFromSharedImages(files: File[]) {
+    if (!files.length) return;
+
+    const pleaseWait = await this.translate
+      .get("pages.editRecipe.clip.loading")
+      .toPromise();
+    const failedHeader = await this.translate.get("generic.error").toPromise();
+    const failedMessage = await this.translate
+      .get("pages.editRecipe.clip.failed")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const loading = await this.loadingCtrl.create({ message: pleaseWait });
+    await loading.present();
+
+    try {
+      const response = await this.mlService.getRecipeFromOCR(files, {
+        ...this.getSelfhostErrorHandlers(),
+        ...this.getFileTooLargeErrorHandlers(),
+        400: async () => {
+          (
+            await this.alertCtrl.create({
+              header: failedHeader,
+              message: failedMessage,
+              buttons: [{ text: okay }],
+            })
+          ).present();
+        },
+      });
+
+      if (!response.success) return;
+
+      this.recipe.title = response.data.recipe.title || "";
+      this.recipe.description = response.data.recipe.description || "";
+      this.recipe.source = response.data.recipe.source || "";
+      this.recipe.yield = response.data.recipe.yield || "";
+      this.recipe.activeTime = response.data.recipe.activeTime || "";
+      this.recipe.totalTime = response.data.recipe.totalTime || "";
+      this.recipe.ingredients = response.data.recipe.ingredients || "";
+      this.recipe.instructions = response.data.recipe.instructions || "";
+      this.recipe.notes = response.data.recipe.notes || "";
+      this.markAsDirty();
+    } finally {
+      loading.dismiss();
+    }
+
+    const imageResponse = await this.imageService.create(files[0], {
+      "*": () => {},
+    });
+
+    if (imageResponse.success) {
+      this.images.push(imageResponse.data);
+    }
   }
 
   lastMadeAtDateChange(event: any) {

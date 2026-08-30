@@ -16,6 +16,7 @@ export enum EventName {
   ApplicationOfflineModeChanged = "application:offlinemode:changed",
   Auth = "auth",
   CapabilitiesUpdated = "capabilities:updated",
+  ShareReceived = "share:received",
 }
 
 @Injectable({
