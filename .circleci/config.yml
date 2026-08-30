@@ -581,6 +581,7 @@ jobs:
           command: |
             mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
             echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 -d > "$HOME/Library/MobileDevice/Provisioning Profiles/recipesage_appstore.mobileprovision"
+            echo "$IOS_SHARE_EXT_PROVISIONING_PROFILE_BASE64" | base64 -d > "$HOME/Library/MobileDevice/Provisioning Profiles/recipesage_shareext_appstore.mobileprovision"
       - run:
           name: setup-api-key
           command: |

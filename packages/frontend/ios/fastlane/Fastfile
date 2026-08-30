@@ -37,6 +37,7 @@ platform :ios do
         teamID: ENV["IOS_TEAM_ID"],
         provisioningProfiles: {
           "com.recipesage.ios" => ENV["IOS_PROVISIONING_PROFILE_NAME"],
+          "com.recipesage.ios.ShareExtension" => ENV["IOS_SHARE_EXT_PROVISIONING_PROFILE_NAME"],
         },
       },
     )
@@ -51,7 +52,7 @@ platform :ios do
 
   desc "Build and upload to TestFlight"
   lane :beta do
-    %w[APPLE_API_KEY_ID APPLE_API_ISSUER APPLE_API_KEY_PATH IOS_TEAM_ID IOS_PROVISIONING_PROFILE_NAME].each do |key|
+    %w[APPLE_API_KEY_ID APPLE_API_ISSUER APPLE_API_KEY_PATH IOS_TEAM_ID IOS_PROVISIONING_PROFILE_NAME IOS_SHARE_EXT_PROVISIONING_PROFILE_NAME].each do |key|
       value = ENV[key]
       UI.user_error!("#{key} is required for the TestFlight upload") if value.nil? || value.strip.empty?
     end

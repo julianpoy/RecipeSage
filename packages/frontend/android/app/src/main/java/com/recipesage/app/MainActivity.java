@@ -13,4 +13,34 @@ public class MainActivity extends BridgeActivity {
             onNewIntent(intent);
         }
     }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (isSendIntent(intent)) {
+            setIntent(intent);
+            notifySendIntentReceived();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (isSendIntent(getIntent())) {
+            setIntent(new Intent(Intent.ACTION_MAIN));
+        }
+    }
+
+    private boolean isSendIntent(Intent intent) {
+        if (intent == null) return false;
+        String action = intent.getAction();
+        return Intent.ACTION_SEND.equals(action) || Intent.ACTION_SEND_MULTIPLE.equals(action);
+    }
+
+    private void notifySendIntentReceived() {
+        if (getBridge() == null || getBridge().getWebView() == null) return;
+        getBridge().getWebView().post(() ->
+            getBridge().getWebView().evaluateJavascript(
+                "window.dispatchEvent(new Event('sendIntentReceived'))", null));
+    }
 }
