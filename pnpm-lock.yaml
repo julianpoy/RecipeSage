@@ -44,6 +44,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.1115.0
         version: 3.1115.0
+      '@capacitor-community/keep-awake':
+        specifier: 8.0.1
+        version: 8.0.1(@capacitor/core@8.5.0)
       '@capacitor-firebase/messaging':
         specifier: 8.4.0
         version: 8.4.0(@capacitor/core@8.5.0)(firebase@12.14.0)
@@ -2054,6 +2057,11 @@ packages:
     resolution: {integrity: sha512-5Kw9ZAtTGS8WHizyn+CJhjjfIQrw+7jcZodpmpXJjefnO15M8UexIi6JR2E5thyvsmHyhL6ZDDMUNR4bKJPd4g==}
     cpu: [x64]
     os: [win32]
+
+  '@capacitor-community/keep-awake@8.0.1':
+    resolution: {integrity: sha512-wTI5A6FWl5gWoMduzJ5euuJ1P73SO+rea0jV6vNdmz5TLbwIDhufelFe/GowNvU9gog6kDYbFhJ2pOp9ua1f3w==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@capacitor-firebase/messaging@8.4.0':
     resolution: {integrity: sha512-wpVaiM6GGBp++4KSiJ2Bw4AZKmO09pbTnJ6PNNg6UMkYehbokvisG83D/7P4u7Lt+5HcrlSwCtXKwWCfIGb2qQ==}
@@ -17064,6 +17072,10 @@ snapshots:
 
   '@bruits/satteri-win32-x64-msvc@0.9.5':
     optional: true
+
+  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.5.0)':
+    dependencies:
+      '@capacitor/core': 8.5.0
 
   '@capacitor-firebase/messaging@8.4.0(@capacitor/core@8.5.0)(firebase@12.14.0)':
     dependencies:

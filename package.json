@@ -46,6 +46,7 @@
     "@aws-sdk/client-ses": "^3.1115.0",
     "@aws-sdk/lib-storage": "^3.1115.0",
     "@aws-sdk/s3-request-presigner": "^3.1115.0",
+    "@capacitor-community/keep-awake": "8.0.1",
     "@capacitor-firebase/messaging": "8.4.0",
     "@capacitor/android": "8.5.0",
     "@capacitor/app": "^8.1.1",
