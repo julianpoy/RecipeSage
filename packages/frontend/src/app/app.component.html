@@ -39,7 +39,11 @@
         <ion-list>
           @for (p of navList; track p) {
             <ion-menu-toggle auto-hide="false">
-              <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+              <ion-item
+                [routerDirection]="'root'"
+                [routerLink]="[p.url]"
+                [replaceUrl]="true"
+              >
                 <ion-icon slot="start" [name]="p.icon"></ion-icon>
                 <ion-label class="ion-text-wrap">
                   {{ p.title }}
