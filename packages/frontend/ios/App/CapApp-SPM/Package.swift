@@ -17,7 +17,10 @@ let package = Package(
         .package(name: "CapacitorApp", path: "../../../../../node_modules/.pnpm/@capacitor+app@8.1.1_@capacitor+core@8.5.0/node_modules/@capacitor/app"),
         .package(name: "CapacitorBrowser", path: "../../../../../node_modules/.pnpm/@capacitor+browser@8.0.4_@capacitor+core@8.5.0/node_modules/@capacitor/browser"),
         .package(name: "CapacitorCamera", path: "../../../../../node_modules/.pnpm/@capacitor+camera@8.2.2_@capacitor+core@8.5.0/node_modules/@capacitor/camera"),
+        .package(name: "CapacitorClipboard", path: "../../../../../node_modules/.pnpm/@capacitor+clipboard@8.0.1_@capacitor+core@8.5.0/node_modules/@capacitor/clipboard"),
         .package(name: "CapacitorFilesystem", path: "../../../../../node_modules/.pnpm/@capacitor+filesystem@8.1.3_@capacitor+core@8.5.0/node_modules/@capacitor/filesystem"),
+        .package(name: "CapacitorShare", path: "../../../../../node_modules/.pnpm/@capacitor+share@8.0.1_@capacitor+core@8.5.0/node_modules/@capacitor/share"),
+        .package(name: "CapacitorSplashScreen", path: "../../../../../node_modules/.pnpm/@capacitor+splash-screen@8.0.2_@capacitor+core@8.5.0/node_modules/@capacitor/splash-screen"),
         .package(name: "CapawesomeCapacitorAppleSignIn", path: "../../../../../node_modules/.pnpm/@capawesome+capacitor-apple-sign-in@0.1.3_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-apple-sign-in"),
         .package(name: "CapawesomeCapacitorFilePicker", path: "../../../../../node_modules/.pnpm/@capawesome+capacitor-file-picker@8.0.4_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-file-picker"),
         .package(name: "MindlibCapacitorSendIntent", path: "../../../../../node_modules/.pnpm/@mindlib-capacitor+send-intent@8.0.6_@capacitor+core@8.5.0/node_modules/@mindlib-capacitor/send-intent")
@@ -33,7 +36,10 @@ let package = Package(
                 .product(name: "CapacitorApp", package: "CapacitorApp"),
                 .product(name: "CapacitorBrowser", package: "CapacitorBrowser"),
                 .product(name: "CapacitorCamera", package: "CapacitorCamera"),
+                .product(name: "CapacitorClipboard", package: "CapacitorClipboard"),
                 .product(name: "CapacitorFilesystem", package: "CapacitorFilesystem"),
+                .product(name: "CapacitorShare", package: "CapacitorShare"),
+                .product(name: "CapacitorSplashScreen", package: "CapacitorSplashScreen"),
                 .product(name: "CapawesomeCapacitorAppleSignIn", package: "CapawesomeCapacitorAppleSignIn"),
                 .product(name: "CapawesomeCapacitorFilePicker", package: "CapawesomeCapacitorFilePicker"),
                 .product(name: "MindlibCapacitorSendIntent", package: "MindlibCapacitorSendIntent")

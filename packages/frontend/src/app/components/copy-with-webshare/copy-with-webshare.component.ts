@@ -1,4 +1,7 @@
 import { AfterViewInit, Component, Input } from "@angular/core";
+import { Capacitor } from "@capacitor/core";
+import { Share } from "@capacitor/share";
+import { Clipboard } from "@capacitor/clipboard";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonItem,
@@ -27,8 +30,9 @@ export class CopyWithWebshareComponent implements AfterViewInit {
 
   @Input() disableWebshare: boolean = false;
 
-  hasCopyAPI: boolean = !!document.execCommand;
-  hasWebShareAPI: boolean = !!(navigator as any).share;
+  private isNative = Capacitor.isNativePlatform();
+  hasCopyAPI: boolean = this.isNative || !!document.execCommand;
+  hasWebShareAPI: boolean = this.isNative || !!navigator.share;
 
   constructor() {
     addIcons({ copyOutline, shareOutline });
@@ -39,23 +43,37 @@ export class CopyWithWebshareComponent implements AfterViewInit {
   }
 
   async webShare() {
-    if (this.hasWebShareAPI) {
-      try {
-        await navigator.share({
+    if (!this.hasWebShareAPI) return;
+
+    try {
+      if (this.isNative) {
+        await Share.share({
           title: this.webshareTitle,
           text: this.webshareText,
           url: this.webshareURL,
         });
-      } catch (e) {
-        // Ignore webshare errors
+        return;
       }
+
+      await navigator.share({
+        title: this.webshareTitle,
+        text: this.webshareText,
+        url: this.webshareURL,
+      });
+    } catch (e) {
+      // Ignore webshare errors
     }
   }
 
-  clipboard() {
+  async clipboard() {
     const copyText = document.getElementById(
       "codeBlockCopy",
     ) as HTMLTextAreaElement;
+
+    if (this.isNative) {
+      await Clipboard.write({ string: copyText.value });
+      return;
+    }
 
     copyText.select();
 

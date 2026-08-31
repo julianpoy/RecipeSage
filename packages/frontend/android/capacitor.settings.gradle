@@ -17,8 +17,17 @@ project(':capacitor-browser').projectDir = new File('../../../node_modules/.pnpm
 include ':capacitor-camera'
 project(':capacitor-camera').projectDir = new File('../../../node_modules/.pnpm/@capacitor+camera@8.2.2_@capacitor+core@8.5.0/node_modules/@capacitor/camera/android')
 
+include ':capacitor-clipboard'
+project(':capacitor-clipboard').projectDir = new File('../../../node_modules/.pnpm/@capacitor+clipboard@8.0.1_@capacitor+core@8.5.0/node_modules/@capacitor/clipboard/android')
+
 include ':capacitor-filesystem'
 project(':capacitor-filesystem').projectDir = new File('../../../node_modules/.pnpm/@capacitor+filesystem@8.1.3_@capacitor+core@8.5.0/node_modules/@capacitor/filesystem/android')
+
+include ':capacitor-share'
+project(':capacitor-share').projectDir = new File('../../../node_modules/.pnpm/@capacitor+share@8.0.1_@capacitor+core@8.5.0/node_modules/@capacitor/share/android')
+
+include ':capacitor-splash-screen'
+project(':capacitor-splash-screen').projectDir = new File('../../../node_modules/.pnpm/@capacitor+splash-screen@8.0.2_@capacitor+core@8.5.0/node_modules/@capacitor/splash-screen/android')
 
 include ':capawesome-capacitor-apple-sign-in'
 project(':capawesome-capacitor-apple-sign-in').projectDir = new File('../../../node_modules/.pnpm/@capawesome+capacitor-apple-sign-in@0.1.3_@capacitor+core@8.5.0/node_modules/@capawesome/capacitor-apple-sign-in/android')
