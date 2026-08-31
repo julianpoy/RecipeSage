@@ -6,6 +6,7 @@
   "webDir": "www",
   "cordova": {},
   "packageClassList": [
+    "KeepAwakePlugin",
     "FirebaseMessagingPlugin",
     "AppPlugin",
     "CAPBrowserPlugin",
