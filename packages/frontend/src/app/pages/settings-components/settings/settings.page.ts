@@ -261,7 +261,7 @@ export class SettingsPage implements OnDestroy {
       DEBUG_DUMP_PUBLIC_KEY,
     );
 
-    downloadBlobpartsAsFile({
+    await downloadBlobpartsAsFile({
       data: [JSON.stringify(encryptedDump)],
       mimetype: "application/json",
       filename: `recipesage-debugDump-${Date.now()}.json`,

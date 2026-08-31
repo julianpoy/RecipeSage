@@ -36,6 +36,7 @@
   "pages.app.nav.legal": "Legal",
   "pages.app.newMessageToast.message": "New message from {{name}}",
   "pages.app.newMessageToast.view": "View",
+  "pages.app.pressBackToExit": "Press back again to exit",
 
   "pages.pricing.tabTitle": "Pricing - RecipeSage",
   "pages.pricing.title": "Pricing",

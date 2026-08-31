@@ -1,5 +1,7 @@
 import { Component, inject, ViewChild, type OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { Capacitor } from "@capacitor/core";
+import { Clipboard } from "@capacitor/clipboard";
 import {
   ModalController,
   NavController,
@@ -1025,7 +1027,12 @@ export class PanBakewareConverterPage implements OnInit {
     const sc = this.scaling;
     if (!sc) return;
     try {
-      await navigator.clipboard.writeText(formatMultiplier(sc.multiplier));
+      const value = formatMultiplier(sc.multiplier);
+      if (Capacitor.isNativePlatform()) {
+        await Clipboard.write({ string: value });
+      } else {
+        await navigator.clipboard.writeText(value);
+      }
       const toast = await this.toastCtrl.create({
         message: this.translate.instant(
           "pages.panBakewareConverter.multiplier.copied",

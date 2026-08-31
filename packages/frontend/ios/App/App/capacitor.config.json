@@ -5,13 +5,22 @@
   "npmClient": "pnpm",
   "webDir": "www",
   "cordova": {},
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "fadeOutDuration": 200
+    }
+  },
   "packageClassList": [
     "KeepAwakePlugin",
     "FirebaseMessagingPlugin",
     "AppPlugin",
     "CAPBrowserPlugin",
     "CAPCameraPlugin",
+    "ClipboardPlugin",
     "FilesystemPlugin",
+    "SharePlugin",
+    "SplashScreenPlugin",
     "AppleSignInPlugin",
     "FilePickerPlugin",
     "SendIntentPlugin"

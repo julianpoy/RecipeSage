@@ -3,6 +3,9 @@ import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
 import { NgxLoadingBar } from "@ngx-loading-bar/core";
+import { Capacitor } from "@capacitor/core";
+import { App } from "@capacitor/app";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 import {
   Platform,
@@ -628,9 +631,39 @@ export class AppComponent {
     this.menuSwipeEnabled = !this.routerOutlet?.canGoBack();
   }
 
+  private lastBackPressAt = 0;
+
+  initNativeShell() {
+    if (!Capacitor.isNativePlatform()) return;
+
+    void SplashScreen.hide();
+
+    this.platform.backButton.subscribeWithPriority(-1, () => {
+      if (this.routerOutlet?.canGoBack()) return;
+
+      const now = Date.now();
+      if (now - this.lastBackPressAt < 2000) {
+        void App.exitApp();
+        return;
+      }
+
+      this.lastBackPressAt = now;
+      void this.presentExitToast();
+    });
+  }
+
+  private async presentExitToast() {
+    const toast = await this.toastCtrl.create({
+      message: this.translate.instant("pages.app.pressBackToExit"),
+      duration: 2000,
+    });
+    toast.present();
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.menuCtrl.close();
+      this.initNativeShell();
     });
 
     this.deepLinkService.init();
