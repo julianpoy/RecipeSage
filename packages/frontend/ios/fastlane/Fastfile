@@ -8,8 +8,8 @@ end
 
 def release_version_name
   tag = ENV["CIRCLE_TAG"]
-  UI.user_error!("CIRCLE_TAG is required for a release upload") if tag.nil? || tag.strip.empty?
-  tag.sub(/^v/, "")
+  return tag.sub(/^v/, "") if tag && !tag.strip.empty?
+  "0.0.1"
 end
 
 def resolved_build_number

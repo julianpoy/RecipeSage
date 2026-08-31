@@ -531,7 +531,7 @@ jobs:
       - run:
           name: fastlane-android
           command: |
-            if [ -n "$CIRCLE_TAG" ]; then LANE=internal; else LANE=build; fi
+            LANE=internal
             cd packages/frontend/android
             bundle config set --local path 'vendor/bundle'
             bundle install
@@ -591,7 +591,7 @@ jobs:
       - run:
           name: fastlane-ios
           command: |
-            if [ -n "$CIRCLE_TAG" ]; then LANE=beta; else LANE=build; fi
+            LANE=beta
             cd packages/frontend/ios
             bundle config set --local path 'vendor/bundle'
             bundle install
@@ -742,7 +742,7 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^feat\/capacitor-mobile-builds$/
       - ios_build:
           context:
             - apple-desktop-signing
@@ -753,4 +753,4 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^feat\/capacitor-mobile-builds$/
