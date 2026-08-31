@@ -625,10 +625,6 @@ export class AppComponent {
   }
 
   updateMenuSwipe() {
-    if (this.platform.is("android")) {
-      this.menuSwipeEnabled = true;
-      return;
-    }
     this.menuSwipeEnabled = !this.routerOutlet?.canGoBack();
   }
 
