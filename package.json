@@ -70,7 +70,7 @@
     "@trpc/server": "^11.18.0",
     "accept-language": "^3.0.20",
     "ai": "^7.0.77",
-    "axios": "^1.19.0",
+    "axios": "^1.20.0",
     "body-parser": "~2.3.0",
     "bullmq": "^5.78.1",
     "cheerio": "^1.1.2",
