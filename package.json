@@ -129,7 +129,7 @@
     "tslib": "^2.6.2",
     "tsx": "^4.21.0",
     "@recipesage/unitz-ts": "^1.0.2",
-    "uuid": "^14.0.1",
+    "uuid": "^14.0.2",
     "workbox-core": "^7.4.1",
     "workbox-expiration": "^7.4.1",
     "workbox-precaching": "^7.4.1",
