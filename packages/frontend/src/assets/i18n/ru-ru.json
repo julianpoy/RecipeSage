@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Импорт из файла Flavorish",
     "pages.importFlavorish.tabTitle": "Импорт из Flavorish — RecipeSage",
     "pages.importFlavorish.title": "Импорт рецептов из файла Flavorish",
-    "pages.importFlavorish.description": "Будет выполнен импорт экспорта Flavorish (ZIP-архива, содержащего манифест, JSON-файлы рецептов и папку с изображениями) в вашу учётную запись RecipeSage. Пожалуйста, рассмотрите возможность пожертвования, если ваш файл содержит большое количество рецептов или изображений."
+    "pages.importFlavorish.description": "Будет выполнен импорт экспорта Flavorish (ZIP-архива, содержащего манифест, JSON-файлы рецептов и папку с изображениями) в вашу учётную запись RecipeSage. Пожалуйста, рассмотрите возможность пожертвования, если ваш файл содержит большое количество рецептов или изображений.",
+    "pages.account.credits.selfhostNotApplicable": "Не применяется к пользователям с самостоятельным размещением"
 }

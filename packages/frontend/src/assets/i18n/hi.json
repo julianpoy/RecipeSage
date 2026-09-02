@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Flavorish फ़ाइल से आयात करें",
     "pages.importFlavorish.tabTitle": "Flavorish से आयात करें - RecipeSage",
     "pages.importFlavorish.title": "Flavorish फ़ाइल से रेसिपी आयात करें",
-    "pages.importFlavorish.description": "यह आपके RecipeSage खाते में एक Flavorish निर्यात (manifest, JSON रेसिपी फ़ाइलों और छवियों के फ़ोल्डर वाला एक .zip संग्रह) आयात करेगा। यदि आपकी फ़ाइल में बड़ी संख्या में रेसिपी या छवियाँ हैं, तो कृपया योगदान करने पर विचार करें।"
+    "pages.importFlavorish.description": "यह आपके RecipeSage खाते में एक Flavorish निर्यात (manifest, JSON रेसिपी फ़ाइलों और छवियों के फ़ोल्डर वाला एक .zip संग्रह) आयात करेगा। यदि आपकी फ़ाइल में बड़ी संख्या में रेसिपी या छवियाँ हैं, तो कृपया योगदान करने पर विचार करें।",
+    "pages.account.credits.selfhostNotApplicable": "स्वयं-होस्ट किए गए उपयोगकर्ताओं के लिए लागू नहीं है"
 }

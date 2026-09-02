@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Tuo Flavorish-tiedostosta",
     "pages.importFlavorish.tabTitle": "Tuo Flavorishista - RecipeSage",
     "pages.importFlavorish.title": "Tuo reseptejä Flavorish-tiedostosta",
-    "pages.importFlavorish.description": "Tämä tuo Flavorish-viennin (manifestin, JSON-reseptitiedostoja ja kuvakansion sisältävän .zip-arkiston) RecipeSage-tilillesi. Harkitse tukemista, jos tiedostosi sisältää suuren määrän reseptejä tai kuvia."
+    "pages.importFlavorish.description": "Tämä tuo Flavorish-viennin (manifestin, JSON-reseptitiedostoja ja kuvakansion sisältävän .zip-arkiston) RecipeSage-tilillesi. Harkitse tukemista, jos tiedostosi sisältää suuren määrän reseptejä tai kuvia.",
+    "pages.account.credits.selfhostNotApplicable": "Ei koske itse ylläpidettyjä käyttäjiä"
 }

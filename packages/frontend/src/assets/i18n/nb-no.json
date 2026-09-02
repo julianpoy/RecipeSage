@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Importer fra Flavorish-fil",
     "pages.importFlavorish.tabTitle": "Importer fra Flavorish – RecipeSage",
     "pages.importFlavorish.title": "Importer oppskrifter fra Flavorish-fil",
-    "pages.importFlavorish.description": "Dette importerer en Flavorish-eksport (et .zip-arkiv som inneholder et manifest, JSON-oppskriftsfiler og en bildemappe) til RecipeSage-kontoen din. Vurder gjerne å bidra dersom filen inneholder et stort antall oppskrifter eller bilder."
+    "pages.importFlavorish.description": "Dette importerer en Flavorish-eksport (et .zip-arkiv som inneholder et manifest, JSON-oppskriftsfiler og en bildemappe) til RecipeSage-kontoen din. Vurder gjerne å bidra dersom filen inneholder et stort antall oppskrifter eller bilder.",
+    "pages.account.credits.selfhostNotApplicable": "Ikke relevant for brukere med selvhostet løsning"
 }

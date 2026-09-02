@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Εισαγωγή από αρχείο Flavorish",
     "pages.importFlavorish.tabTitle": "Εισαγωγή από Flavorish - RecipeSage",
     "pages.importFlavorish.title": "Εισαγωγή συνταγών από αρχείο Flavorish",
-    "pages.importFlavorish.description": "Με αυτόν τον τρόπο θα εισαχθεί μια εξαγωγή Flavorish (ένα αρχείο .zip που περιέχει ένα manifest, αρχεία συνταγών JSON και έναν φάκελο εικόνων) στον λογαριασμό σας στο RecipeSage. Παρακαλούμε να εξετάσετε το ενδεχόμενο συνεισφοράς, εάν το αρχείο σας περιέχει μεγάλο αριθμό συνταγών ή εικόνων."
+    "pages.importFlavorish.description": "Με αυτόν τον τρόπο θα εισαχθεί μια εξαγωγή Flavorish (ένα αρχείο .zip που περιέχει ένα manifest, αρχεία συνταγών JSON και έναν φάκελο εικόνων) στον λογαριασμό σας στο RecipeSage. Παρακαλούμε να εξετάσετε το ενδεχόμενο συνεισφοράς, εάν το αρχείο σας περιέχει μεγάλο αριθμό συνταγών ή εικόνων.",
+    "pages.account.credits.selfhostNotApplicable": "Δεν ισχύει για χρήστες με αυτοφιλοξενία"
 }

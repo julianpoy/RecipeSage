@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Flavorish ファイルからインポート",
     "pages.importFlavorish.tabTitle": "Flavorish からインポート - RecipeSage",
     "pages.importFlavorish.title": "Flavorish ファイルからレシピをインポート",
-    "pages.importFlavorish.description": "Flavorish のエクスポートファイル（マニフェスト、JSON レシピファイル、画像フォルダーを含む .zip アーカイブ）を RecipeSage アカウントにインポートします。ファイルに多数のレシピまたは画像が含まれている場合は、寄付をご検討ください。"
+    "pages.importFlavorish.description": "Flavorish のエクスポートファイル（マニフェスト、JSON レシピファイル、画像フォルダーを含む .zip アーカイブ）を RecipeSage アカウントにインポートします。ファイルに多数のレシピまたは画像が含まれている場合は、寄付をご検討ください。",
+    "pages.account.credits.selfhostNotApplicable": "セルフホスト版のユーザーには適用されません"
 }

@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Importuoti iš „Flavorish“ failo",
     "pages.importFlavorish.tabTitle": "Importuoti iš „Flavorish“ – RecipeSage",
     "pages.importFlavorish.title": "Importuoti receptus iš „Flavorish“ failo",
-    "pages.importFlavorish.description": "Bus importuotas „Flavorish“ eksportas (.zip archyvas, kuriame yra manifestas, JSON receptų failai ir vaizdų aplankas) į jūsų „RecipeSage“ paskyrą. Apsvarstykite galimybę prisidėti, jei jūsų faile yra daug receptų ar vaizdų."
+    "pages.importFlavorish.description": "Bus importuotas „Flavorish“ eksportas (.zip archyvas, kuriame yra manifestas, JSON receptų failai ir vaizdų aplankas) į jūsų „RecipeSage“ paskyrą. Apsvarstykite galimybę prisidėti, jei jūsų faile yra daug receptų ar vaizdų.",
+    "pages.account.credits.selfhostNotApplicable": "Netaikoma savarankiškai prieglobą teikiantiems naudotojams"
 }

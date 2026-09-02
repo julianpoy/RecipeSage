@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "ייבוא מקובץ Flavorish",
     "pages.importFlavorish.tabTitle": "ייבוא מ־Flavorish - RecipeSage",
     "pages.importFlavorish.title": "ייבוא מתכונים מקובץ Flavorish",
-    "pages.importFlavorish.description": "פעולה זו תייבא ייצוא מ־Flavorish (ארכיון ‎.zip המכיל מניפסט, קובצי מתכונים מסוג JSON ותיקיית תמונות) לחשבון RecipeSage שלך. נא לשקול לתרום אם הקובץ שלך מכיל מספר רב של מתכונים או תמונות."
+    "pages.importFlavorish.description": "פעולה זו תייבא ייצוא מ־Flavorish (ארכיון ‎.zip המכיל מניפסט, קובצי מתכונים מסוג JSON ותיקיית תמונות) לחשבון RecipeSage שלך. נא לשקול לתרום אם הקובץ שלך מכיל מספר רב של מתכונים או תמונות.",
+    "pages.account.credits.selfhostNotApplicable": "אינו חל על משתמשים באירוח עצמי"
 }

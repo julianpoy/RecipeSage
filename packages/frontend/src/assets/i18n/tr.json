@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Flavorish dosyasından içe aktar",
     "pages.importFlavorish.tabTitle": "Flavorish'ten içe aktar - RecipeSage",
     "pages.importFlavorish.title": "Flavorish Dosyasından Tarifleri İçe Aktar",
-    "pages.importFlavorish.description": "Bu işlem, bir manifest, JSON tarif dosyaları ve bir görseller klasörü içeren bir .zip arşivi olan Flavorish dışa aktarımını RecipeSage hesabınıza içe aktaracaktır. Dosyanız çok sayıda tarif veya görsel içeriyorsa lütfen katkıda bulunmayı değerlendirin."
+    "pages.importFlavorish.description": "Bu işlem, bir manifest, JSON tarif dosyaları ve bir görseller klasörü içeren bir .zip arşivi olan Flavorish dışa aktarımını RecipeSage hesabınıza içe aktaracaktır. Dosyanız çok sayıda tarif veya görsel içeriyorsa lütfen katkıda bulunmayı değerlendirin.",
+    "pages.account.credits.selfhostNotApplicable": "Kendi sunucusunda barındıran kullanıcılar için geçerli değildir"
 }

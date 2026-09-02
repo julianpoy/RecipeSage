@@ -2432,5 +2432,6 @@
     "pages.import.flavorish": "Inportatu Flavorish fitxategitik",
     "pages.importFlavorish.tabTitle": "Inportatu Flavorish-etik - RecipeSage",
     "pages.importFlavorish.title": "Inportatu errezetak Flavorish fitxategitik",
-    "pages.importFlavorish.description": "Honek Flavorish esportazio bat (manifestu bat, JSON errezeta-fitxategiak eta irudien karpeta bat dituen .zip artxibo bat) inportatuko du zure RecipeSage kontura. Mesedez, kontuan hartu ekarpen bat egitea zure fitxategiak errezeta edo irudi ugari baditu."
+    "pages.importFlavorish.description": "Honek Flavorish esportazio bat (manifestu bat, JSON errezeta-fitxategiak eta irudien karpeta bat dituen .zip artxibo bat) inportatuko du zure RecipeSage kontura. Mesedez, kontuan hartu ekarpen bat egitea zure fitxategiak errezeta edo irudi ugari baditu.",
+    "pages.account.credits.selfhostNotApplicable": "Ez da aplikagarria norberak ostatatutako erabiltzaileentzat"
 }
