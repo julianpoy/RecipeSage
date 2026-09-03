@@ -171,7 +171,7 @@
     "@electron-forge/shared-types": "^7.11.2",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.5",
-    "@faker-js/faker": "^10.3.0",
+    "@faker-js/faker": "^10.5.0",
     "@ionic/angular-toolkit": "12.3.0",
     "@nx/devkit": "22.3.3",
     "@nx/esbuild": "22.3.3",
