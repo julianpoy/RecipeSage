@@ -35,6 +35,8 @@ export * from "./firebase";
 export * from "./dispatchMessageNotification";
 export * from "./fetch";
 export * from "./fetchURLError";
+export * from "./fetchBufferViaScrapfly";
+export * from "./ScrapflyError";
 export * from "./jsonLD";
 export * from "./collectRecipeNodes";
 export * from "./multerAutoCleanup";
