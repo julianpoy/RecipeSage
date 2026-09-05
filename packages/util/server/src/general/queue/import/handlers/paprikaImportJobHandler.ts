@@ -98,10 +98,23 @@ export async function paprikaImportJobHandler(
         .map((e: string) => cleanLabelTitle(e))
         .filter((e: string) => e);
 
-      // Supports only the first image at the moment
-      const images = recipeData.photo_data
-        ? [Buffer.from(recipeData.photo_data, "base64")]
+      const photos: { data?: string }[] = Array.isArray(recipeData.photos)
+        ? recipeData.photos
         : [];
+
+      const photoData = photos
+        .filter(
+          (photo): photo is { data: string } =>
+            !!photo && typeof photo.data === "string" && photo.data.length > 0,
+        )
+        .map((photo) => Buffer.from(photo.data, "base64"));
+
+      const images =
+        photoData.length > 0
+          ? photoData
+          : recipeData.photo_data
+            ? [Buffer.from(recipeData.photo_data, "base64")]
+            : [];
 
       standardizedRecipeImportInput.push({
         recipe: {

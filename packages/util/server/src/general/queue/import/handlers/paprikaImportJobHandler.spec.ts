@@ -113,6 +113,85 @@ describe("paprikaImportJobHandler", () => {
     expect(entries[0].recipe.rating).toEqual(4);
   });
 
+  it("imports every photo in the photos array, in array order", async () => {
+    archivePath = await buildArchive(workDir, [
+      {
+        name: "Duck.paprikarecipe",
+        content: paprikaRecipe({
+          name: "Duck",
+          photo_data: Buffer.from("thumbnail").toString("base64"),
+          photos: [
+            { name: "1", data: Buffer.from("first").toString("base64") },
+            { name: "2", data: Buffer.from("second").toString("base64") },
+            { name: "3", data: Buffer.from("third").toString("base64") },
+          ],
+        }),
+      },
+    ]);
+
+    await paprikaImportJobHandler(makeJob(), queueItem);
+
+    const entries = finishArgs().standardizedRecipeImportInput;
+    expect(entries[0].images.map((image: Buffer) => image.toString())).toEqual([
+      "first",
+      "second",
+      "third",
+    ]);
+  });
+
+  it("falls back to photo_data when there is no photos array", async () => {
+    archivePath = await buildArchive(workDir, [
+      {
+        name: "Soup.paprikarecipe",
+        content: paprikaRecipe({
+          name: "Soup",
+          photo_data: Buffer.from("thumbnail").toString("base64"),
+        }),
+      },
+    ]);
+
+    await paprikaImportJobHandler(makeJob(), queueItem);
+
+    const entries = finishArgs().standardizedRecipeImportInput;
+    expect(entries[0].images.map((image: Buffer) => image.toString())).toEqual([
+      "thumbnail",
+    ]);
+  });
+
+  it("ignores empty photo data and falls back to photo_data", async () => {
+    archivePath = await buildArchive(workDir, [
+      {
+        name: "Duck.paprikarecipe",
+        content: paprikaRecipe({
+          name: "Duck",
+          photo_data: Buffer.from("thumbnail").toString("base64"),
+          photos: [{ name: "1", data: "" }],
+        }),
+      },
+    ]);
+
+    await paprikaImportJobHandler(makeJob(), queueItem);
+
+    const entries = finishArgs().standardizedRecipeImportInput;
+    expect(entries[0].images.map((image: Buffer) => image.toString())).toEqual([
+      "thumbnail",
+    ]);
+  });
+
+  it("imports no images when a recipe has none", async () => {
+    archivePath = await buildArchive(workDir, [
+      {
+        name: "Plain.paprikarecipe",
+        content: paprikaRecipe({ name: "Plain" }),
+      },
+    ]);
+
+    await paprikaImportJobHandler(makeJob(), queueItem);
+
+    const entries = finishArgs().standardizedRecipeImportInput;
+    expect(entries[0].images).toEqual([]);
+  });
+
   it("does not count unrelated files in the archive as failed recipes", async () => {
     archivePath = await buildArchive(workDir, [
       {
