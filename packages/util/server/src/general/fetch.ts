@@ -1,25 +1,15 @@
 import fetch, { RequestInit } from "node-fetch";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { useAgent } from "request-filtering-agent";
 import { FetchURLError } from "./fetchURLError";
-
-const { CLIP_PROXY_URL, CLIP_PROXY_USERNAME, CLIP_PROXY_PASSWORD } =
-  process.env;
-
-// All domains must be whitelisted for security reasons
-const FETCH_DOMAIN_ALLOWLIST = [
-  "chefbook-dev.s3.amazonaws.com", // Dev S3
-  "chefbook-dev.s3.us-west-2.amazonaws.com", // Dev S3
-  "chefbook-prod.s3.amazonaws.com", // Prod S3
-  "chefbook-prod.s3.us-west-2.amazonaws.com", // Prod S3
-  "cdn2.pepperplate.com", // Pepperplate import
-  "api.scrapfly.io", // A supported scraping proxy option
-];
-if (process.env.FETCH_DOMAIN_ALLOWLIST) {
-  FETCH_DOMAIN_ALLOWLIST.push(...process.env.FETCH_DOMAIN_ALLOWLIST.split(","));
-}
 
 const normalizeFetchURL = (url: string): string =>
   url.startsWith("//") ? `https:${url}` : url;
+
+const BLOCKED_ADDRESS_ERROR_FRAGMENT = "is not allowed";
+
+const isBlockedAddressError = (error: unknown): boolean =>
+  error instanceof Error &&
+  error.message.includes(BLOCKED_ADDRESS_ERROR_FRAGMENT);
 
 export const fetchURL = (
   destURL: string,
@@ -60,24 +50,14 @@ export const fetchURL = (
     },
   };
 
-  const isAllowlisted = FETCH_DOMAIN_ALLOWLIST.includes(parsedURL.hostname);
-
-  if (isAllowlisted || process.env.NODE_ENV === "selfhost") {
-    return fetch(normalizedURL, fetchOpts);
+  if (process.env.NODE_ENV !== "selfhost") {
+    fetchOpts.agent = (parsedUrl) => useAgent(parsedUrl.href);
   }
 
-  const isProxyEnabled = !!CLIP_PROXY_URL;
-  if (!isProxyEnabled) {
-    throw new Error("Domain not allowlisted and proxy not enabled");
-  }
-
-  const proxyUrl = new URL(CLIP_PROXY_URL);
-  if (CLIP_PROXY_USERNAME && CLIP_PROXY_PASSWORD) {
-    proxyUrl.username = CLIP_PROXY_USERNAME;
-    proxyUrl.password = CLIP_PROXY_PASSWORD;
-  }
-
-  fetchOpts.agent = new HttpsProxyAgent(proxyUrl);
-
-  return fetch(normalizedURL, fetchOpts);
+  return fetch(normalizedURL, fetchOpts).catch((error) => {
+    if (isBlockedAddressError(error)) {
+      throw new FetchURLError(destURL);
+    }
+    throw error;
+  });
 };

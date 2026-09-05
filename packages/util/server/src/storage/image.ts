@@ -1,11 +1,15 @@
 import { StorageObjectRecord, writeBuffer } from "./index";
 import { ObjectTypes } from "./shared";
-import { fetchURL, transformImageBuffer } from "../general";
+import {
+  fetchURL,
+  transformImageBuffer,
+  fetchBufferViaScrapfly,
+} from "../general";
 import { sanitizeFilePath } from "./sanitizeFilePath";
 import { ImageFetchError } from "./imageFetchError";
 import { createReadStream } from "fs";
 import { buffer as streamToBuffer } from "stream/consumers";
-import type { Readable } from "stream";
+import { Readable } from "stream";
 import type { ReadableStream } from "stream/web";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
@@ -17,6 +21,8 @@ const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
 const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 const WRITE_IMAGE_URL_TIMEOUT_SECONDS = 15;
+const SCRAPFLY_FALLBACK_STATUSES = new Set([403, 429, 503]);
+
 export const writeImageURL = async (
   objectType: ObjectTypes,
   url: string,
@@ -25,10 +31,24 @@ export const writeImageURL = async (
   const response = await fetchURL(url, {
     timeout: WRITE_IMAGE_URL_TIMEOUT_SECONDS * 1000,
   });
-  if (response.status !== 200 || !response.body)
-    throw new ImageFetchError(response.status);
 
-  return writeImageStream(objectType, response.body, highResConversion);
+  if (response.status === 200 && response.body) {
+    return writeImageStream(objectType, response.body, highResConversion);
+  }
+
+  if (
+    SCRAPFLY_FALLBACK_STATUSES.has(response.status) &&
+    process.env.SCRAPFLY_API_KEY
+  ) {
+    const buffer = await fetchBufferViaScrapfly(url);
+    return writeImageStream(
+      objectType,
+      Readable.from(buffer),
+      highResConversion,
+    );
+  }
+
+  throw new ImageFetchError(response.status);
 };
 
 export const writeImageFile = async (
