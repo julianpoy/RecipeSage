@@ -77,6 +77,33 @@
                     </ion-text>
                   }
                 }
+                @if (getImportFailedUrls(job).length) {
+                  <br />
+                  <ion-button
+                    size="small"
+                    fill="clear"
+                    (click)="toggleFailedUrls(job.id); $event.stopPropagation()"
+                  >
+                    {{
+                      (isFailedUrlsExpanded(job.id)
+                        ? "pages.jobs.import.failedUrls.hide"
+                        : "pages.jobs.import.failedUrls.show"
+                      ) | translate
+                    }}
+                  </ion-button>
+                  @if (isFailedUrlsExpanded(job.id)) {
+                    @for (url of getImportFailedUrls(job); track $index) {
+                      <br />
+                      <a
+                        [href]="url"
+                        target="_blank"
+                        rel="noopener"
+                        (click)="$event.stopPropagation()"
+                        >{{ url }}</a
+                      >
+                    }
+                  }
+                }
                 @if (job.status === "RUN") {
                   <ion-progress-bar
                     type="determinate"

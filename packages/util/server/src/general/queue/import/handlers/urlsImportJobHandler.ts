@@ -1,7 +1,11 @@
 import type { ImportJobSummary } from "@recipesage/prisma";
 
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
-import { clipUrl, importJobFinishCommon } from "../../../index";
+import {
+  clipUrl,
+  importJobFinishCommon,
+  isRecipeRecognitionSuccess,
+} from "../../../index";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile } from "fs/promises";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
@@ -48,16 +52,30 @@ export async function urlsImportJobHandler(
 
   let processedCount = 0;
   let failedCount = 0;
+  let recognizedCount = 0;
+  const failedUrls: string[] = [];
   for (const url of urls) {
     try {
       const clipResults = await clipUrl(url);
-      standardizedRecipeImportInput.push({
-        ...clipResults,
-        labels: [...importLabels],
-      });
+      const { ingredients, instructions } = clipResults.recipe;
+
+      if (!ingredients && !instructions) {
+        failedCount++;
+        failedUrls.push(url);
+      } else {
+        standardizedRecipeImportInput.push({
+          ...clipResults,
+          labels: [...importLabels],
+        });
+
+        if (isRecipeRecognitionSuccess(clipResults.recipe)) {
+          recognizedCount++;
+        }
+      }
     } catch (e) {
       Sentry.captureException(e, { extra: { jobId: job.id } });
       failedCount++;
+      failedUrls.push(url);
     }
 
     processedCount++;
@@ -69,12 +87,15 @@ export async function urlsImportJobHandler(
     });
   }
 
+  const shouldChargeCredits = recognizedCount > totalCount * 0.25;
+
   await importJobFinishCommon({
     job,
     userId: job.userId,
     standardizedRecipeImportInput,
     importTempDirectory: undefined,
-    creditOperation: "importUrls",
+    creditOperation: shouldChargeCredits ? "importUrls" : undefined,
     failedCount,
+    failedUrls,
   });
 }

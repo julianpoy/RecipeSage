@@ -78,6 +78,7 @@ export class JobsPage {
 
   showJobs = 10;
   jobs: JobSummary[] = [];
+  expandedFailedUrlsJobIds = new Set<string>();
   jobPollInterval?: NodeJS.Timeout;
   consecutiveJobPollFailures = 0;
 
@@ -193,6 +194,22 @@ export class JobsPage {
 
   getImportFailedCount(job: JobSummary): number {
     return job.type === "IMPORT" ? job.meta.failedCount || 0 : 0;
+  }
+
+  getImportFailedUrls(job: JobSummary): string[] {
+    return job.type === "IMPORT" ? job.meta.failedUrls || [] : [];
+  }
+
+  isFailedUrlsExpanded(jobId: string): boolean {
+    return this.expandedFailedUrlsJobIds.has(jobId);
+  }
+
+  toggleFailedUrls(jobId: string): void {
+    if (this.expandedFailedUrlsJobIds.has(jobId)) {
+      this.expandedFailedUrlsJobIds.delete(jobId);
+    } else {
+      this.expandedFailedUrlsJobIds.add(jobId);
+    }
   }
 
   getJobFailureI18n(job: JobSummary): string {

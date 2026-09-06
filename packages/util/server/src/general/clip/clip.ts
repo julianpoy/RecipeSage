@@ -30,7 +30,8 @@ const isBotChallengePage = (html: string): boolean => {
   return (
     lower.includes("<title>just a moment...</title>") ||
     lower.includes("<title>attention required!</title>") ||
-    lower.includes("<title>access denied</title>")
+    lower.includes("<title>access denied</title>") ||
+    lower.includes("<title>client challenge</title>")
   );
 };
 
@@ -143,6 +144,7 @@ export const clipUrl = async (
         key: process.env.SCRAPFLY_API_KEY,
         url: normalizedUrl,
         proxified_response: "true",
+        lang: "en",
       });
 
       _url = `https://api.scrapfly.io/scrape?${params}`;

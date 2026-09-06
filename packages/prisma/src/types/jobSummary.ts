@@ -43,6 +43,7 @@ export const importJobMetaSchema = z.object({
   importStorageBucket: z.string().optional(),
   partialCount: z.number().int().optional(),
   failedCount: z.number().int().optional(),
+  failedUrls: z.array(z.string()).optional(),
   options: z
     .object({
       excludeImages: z.boolean().optional(),

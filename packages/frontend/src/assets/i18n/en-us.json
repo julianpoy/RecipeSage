@@ -1670,6 +1670,8 @@
   "pages.jobs.status.fail": "Failed.",
   "pages.jobs.status.import.partial": "{{count}} recipe(s) could not be read automatically and were imported as plain notes.",
   "pages.jobs.status.import.failed": "{{count}} recipe(s) were skipped due to a failure.",
+  "pages.jobs.import.failedUrls.show": "Show skipped URLs",
+  "pages.jobs.import.failedUrls.hide": "Hide skipped URLs",
 
   "pages.import.tabTitle": "Import - RecipeSage",
   "pages.import.title": "Import",
