@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import {
-  extendSubscription,
+  extendStripeSubscription,
   SubscriptionModelName,
 } from "@recipesage/util/server/capabilities";
 
@@ -30,7 +30,7 @@ export const activateBonusFeatures = async (args: {
     return;
   }
 
-  await extendSubscription(user.id, subscriptionName);
+  await extendStripeSubscription(user.id, subscriptionName);
 
   console.log("");
   console.log("Thanks for activating RecipeSage's bonus features");

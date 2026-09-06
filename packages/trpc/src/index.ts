@@ -15,6 +15,7 @@ import { jobsRouter } from "./procedures/jobs/jobsRouter";
 import { mlRouter } from "./procedures/ml/mlRouter";
 import { assistantRouter } from "./procedures/assistant/assistantRouter";
 import { paymentsRouter } from "./procedures/payments/paymentsRouter";
+import { iapRouter } from "./procedures/iap/iapRouter";
 import { imagesRouter } from "./procedures/images/imagesRouter";
 import { messagesRouter } from "./procedures/messages/messagesRouter";
 import { discoverRouter } from "./procedures/discover/discoverRouter";
@@ -24,6 +25,7 @@ export const appRouter = router({
   labelGroups: labelGroupsRouter,
   labels: labelsRouter,
   payments: paymentsRouter,
+  iap: iapRouter,
   recipes: recipesRouter,
   mealPlans: mealPlansRouter,
   shoppingLists: shoppingListsRouter,

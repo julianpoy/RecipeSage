@@ -3,6 +3,7 @@ export * from "./apiConstants";
 export * from "./apiSchemas";
 export * from "./capitalizeEachWord";
 export * from "./Capabilities";
+export * from "./SubscriptionPlatform";
 export * from "./parsers";
 export * from "./decimalNotation";
 export * from "./handles";

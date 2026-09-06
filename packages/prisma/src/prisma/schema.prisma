@@ -557,16 +557,51 @@ model StripePayment {
 }
 
 model UserSubscription {
-  id        String    @id @default(uuid()) @db.Uuid
-  userId    String    @db.Uuid
-  name      String    @db.VarChar(255)
-  expires   DateTime? @db.Timestamptz(6)
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                        String            @id @default(uuid()) @db.Uuid
+  userId                    String            @db.Uuid
+  name                      String            @db.VarChar(255)
+  platform                  String            @default("STRIPE") @db.VarChar(255)
+  expires                   DateTime?         @db.Timestamptz(6)
+  currentStoreTransactionId String?           @db.Uuid
+  createdAt                 DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt                 DateTime          @updatedAt @db.Timestamptz(6)
+  user                      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStoreTransaction   StoreTransaction? @relation(fields: [currentStoreTransactionId], references: [id], onDelete: SetNull)
 
+  @@unique([userId, name, platform])
   @@index([userId])
+  @@index([currentStoreTransactionId])
   @@map("UserSubscriptions")
+}
+
+model StoreTransaction {
+  id            String             @id @default(uuid()) @db.Uuid
+  userId        String?            @db.Uuid
+  platform      String             @db.VarChar(255)
+  externalId    String             @db.Text
+  revokedAt     DateTime?          @db.Timestamptz(6)
+  createdAt     DateTime           @default(now()) @db.Timestamptz(6)
+  user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  subscriptions UserSubscription[]
+
+  @@unique([platform, externalId])
+  @@index([userId])
+  @@map("StoreTransactions")
+}
+
+model StoreNotificationEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  platform   String   @db.VarChar(255)
+  externalId String   @db.VarChar(255)
+  userId     String?  @db.Uuid
+  blob       Json
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([platform, externalId])
+  @@index([userId])
+  @@map("StoreNotificationEvents")
 }
 
 model UserProfileImage {
@@ -620,6 +655,8 @@ model User {
   shoppingLists             ShoppingList[]
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
+  storeTransactions         StoreTransaction[]
+  storeNotificationEvents   StoreNotificationEvent[]
   profileImages             UserProfileImage[]
   jobs                      Job[]
   stripeEvents              StripeEvent[]

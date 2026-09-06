@@ -1,4 +1,6 @@
-import { Capabilities } from "@recipesage/util/shared";
+import { Capabilities, SubscriptionPlatform } from "@recipesage/util/shared";
+
+export { SubscriptionPlatform };
 
 export const CAPABILITY_GRACE_PERIOD = 7;
 export const MULTIPLE_IMAGES_UNLOCKED_LIMIT = 10;

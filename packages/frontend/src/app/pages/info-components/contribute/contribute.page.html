@@ -21,116 +21,190 @@
     <p>{{ "pages.contribute.purpose" | translate }}</p>
     <br />
 
-    <div class="frequency-row">
-      <ion-button
-        [fill]="frequency === 'monthly' ? 'solid' : 'outline'"
-        (click)="setFrequency('monthly')"
-      >
-        <span> {{ "pages.contribute.monthly" | translate }} </span>
-      </ion-button>
-      <ion-button
-        [fill]="frequency === 'yearly' ? 'solid' : 'outline'"
-        (click)="setFrequency('yearly')"
-      >
-        <span> {{ "pages.contribute.yearly" | translate }} </span>
-      </ion-button>
-      <ion-button
-        [fill]="frequency === 'single' ? 'solid' : 'outline'"
-        (click)="setFrequency('single')"
-      >
-        <span> {{ "pages.contribute.oneTime" | translate }} </span>
-      </ion-button>
-    </div>
+    @if (subscriptionInfoLoaded()) {
+      @if (!isNative && hasStoreSubscription()) {
+        <p class="ion-text-center">
+          {{ "pages.contribute.native.storeManaged" | translate }}
+        </p>
+      }
 
-    @if (frequency === "monthly") {
-      <div class="amount-row">
-        <ion-button
-          [fill]="amount === 1 ? 'solid' : 'outline'"
-          (click)="setAmount(1)"
-        >
-          $1.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 5 ? 'solid' : 'outline'"
-          (click)="setAmount(5)"
-        >
-          $5.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 10 ? 'solid' : 'outline'"
-          (click)="setAmount(10)"
-        >
-          $10.00
-        </ion-button>
-        <input
-          [placeholder]="'pages.contribute.custom' | translate"
-          (focus)="focusCustom()"
-          [(ngModel)]="customAmount"
-        />
-      </div>
-    }
-    @if (frequency === "yearly") {
-      <div class="amount-row">
-        <ion-button
-          [fill]="amount === 12 ? 'solid' : 'outline'"
-          (click)="setAmount(12)"
-        >
-          $12.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 50 ? 'solid' : 'outline'"
-          (click)="setAmount(50)"
-        >
-          $50.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 100 ? 'solid' : 'outline'"
-          (click)="setAmount(100)"
-        >
-          $100.00
-        </ion-button>
-        <input
-          [placeholder]="'pages.contribute.custom' | translate"
-          (focus)="focusCustom()"
-          [(ngModel)]="customAmount"
-        />
-      </div>
-    }
-    @if (frequency === "single") {
-      <div class="amount-row">
-        <ion-button
-          [fill]="amount === 15 ? 'solid' : 'outline'"
-          (click)="setAmount(15)"
-        >
-          $15.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 50 ? 'solid' : 'outline'"
-          (click)="setAmount(50)"
-        >
-          $50.00
-        </ion-button>
-        <ion-button
-          [fill]="amount === 100 ? 'solid' : 'outline'"
-          (click)="setAmount(100)"
-        >
-          $100.00
-        </ion-button>
-        <input
-          [placeholder]="'pages.contribute.custom' | translate"
-          (focus)="focusCustom()"
-          [(ngModel)]="customAmount"
-        />
-      </div>
-    }
-    @if (frequency) {
-      <div class="submit-row ion-text-center">
-        <ion-button [disabled]="!validAmount()" (click)="contribute()">
-          <span> {{ "pages.contribute.action" | translate }} </span>
-          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
-        </ion-button>
-        <br /><br />
-        <tos-clickwrap-agreement></tos-clickwrap-agreement>
+      @if (!isNative && !hasStoreSubscription()) {
+        <div class="frequency-row">
+          <ion-button
+            [fill]="frequency === 'monthly' ? 'solid' : 'outline'"
+            (click)="setFrequency('monthly')"
+          >
+            <span> {{ "pages.contribute.monthly" | translate }} </span>
+          </ion-button>
+          <ion-button
+            [fill]="frequency === 'yearly' ? 'solid' : 'outline'"
+            (click)="setFrequency('yearly')"
+          >
+            <span> {{ "pages.contribute.yearly" | translate }} </span>
+          </ion-button>
+          <ion-button
+            [fill]="frequency === 'single' ? 'solid' : 'outline'"
+            (click)="setFrequency('single')"
+          >
+            <span> {{ "pages.contribute.oneTime" | translate }} </span>
+          </ion-button>
+        </div>
+
+        @if (frequency === "monthly") {
+          <div class="amount-row">
+            <ion-button
+              [fill]="amount === 1 ? 'solid' : 'outline'"
+              (click)="setAmount(1)"
+            >
+              $1.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 5 ? 'solid' : 'outline'"
+              (click)="setAmount(5)"
+            >
+              $5.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 10 ? 'solid' : 'outline'"
+              (click)="setAmount(10)"
+            >
+              $10.00
+            </ion-button>
+            <input
+              [placeholder]="'pages.contribute.custom' | translate"
+              (focus)="focusCustom()"
+              [(ngModel)]="customAmount"
+            />
+          </div>
+        }
+        @if (frequency === "yearly") {
+          <div class="amount-row">
+            <ion-button
+              [fill]="amount === 12 ? 'solid' : 'outline'"
+              (click)="setAmount(12)"
+            >
+              $12.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 50 ? 'solid' : 'outline'"
+              (click)="setAmount(50)"
+            >
+              $50.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 100 ? 'solid' : 'outline'"
+              (click)="setAmount(100)"
+            >
+              $100.00
+            </ion-button>
+            <input
+              [placeholder]="'pages.contribute.custom' | translate"
+              (focus)="focusCustom()"
+              [(ngModel)]="customAmount"
+            />
+          </div>
+        }
+        @if (frequency === "single") {
+          <div class="amount-row">
+            <ion-button
+              [fill]="amount === 15 ? 'solid' : 'outline'"
+              (click)="setAmount(15)"
+            >
+              $15.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 50 ? 'solid' : 'outline'"
+              (click)="setAmount(50)"
+            >
+              $50.00
+            </ion-button>
+            <ion-button
+              [fill]="amount === 100 ? 'solid' : 'outline'"
+              (click)="setAmount(100)"
+            >
+              $100.00
+            </ion-button>
+            <input
+              [placeholder]="'pages.contribute.custom' | translate"
+              (focus)="focusCustom()"
+              [(ngModel)]="customAmount"
+            />
+          </div>
+        }
+        @if (frequency) {
+          <div class="submit-row ion-text-center">
+            <ion-button [disabled]="!validAmount()" (click)="contribute()">
+              <span> {{ "pages.contribute.action" | translate }} </span>
+              <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+            <br /><br />
+            <tos-clickwrap-agreement></tos-clickwrap-agreement>
+          </div>
+        }
+      }
+
+      @if (isNative && hasActiveSubscription()) {
+        <p class="ion-text-center">
+          {{ "pages.contribute.native.alreadySubscribed" | translate }}
+        </p>
+      }
+
+      @if (isNative && !hasActiveSubscription()) {
+        <div class="frequency-row">
+          <ion-button
+            [fill]="nativeFrequency === 'monthly' ? 'solid' : 'outline'"
+            (click)="selectNativeFrequency('monthly')"
+          >
+            <span> {{ "pages.contribute.monthly" | translate }} </span>
+          </ion-button>
+          <ion-button
+            [fill]="nativeFrequency === 'yearly' ? 'solid' : 'outline'"
+            (click)="selectNativeFrequency('yearly')"
+          >
+            <span> {{ "pages.contribute.yearly" | translate }} </span>
+          </ion-button>
+        </div>
+
+        @if (loadingProducts) {
+          <div class="ion-text-center">
+            <ion-spinner></ion-spinner>
+          </div>
+        } @else if (nativeProducts.length === 0) {
+          <p class="ion-text-center">
+            {{ "pages.contribute.native.unavailable" | translate }}
+          </p>
+        } @else {
+          <div class="amount-row">
+            @for (
+              product of nativeProducts;
+              track product.offerToken ?? product.identifier
+            ) {
+              <ion-button
+                [disabled]="purchasing"
+                (click)="purchaseNative(product)"
+              >
+                <span>{{ product.title }}</span>
+                <span>{{ product.priceString }}</span>
+              </ion-button>
+            }
+          </div>
+        }
+
+        <div class="submit-row ion-text-center">
+          <ion-button
+            fill="clear"
+            [disabled]="purchasing"
+            (click)="restoreNative()"
+          >
+            <span> {{ "pages.contribute.native.restore" | translate }} </span>
+          </ion-button>
+          <br />
+          <tos-clickwrap-agreement></tos-clickwrap-agreement>
+        </div>
+      }
+    } @else {
+      <div class="ion-text-center">
+        <ion-spinner></ion-spinner>
       </div>
     }
 
@@ -190,11 +264,58 @@
     <br />
     <br />
 
-    <p>
-      <a [href]="billingPortalUrl" target="_blank" rel="noopener noreferrer">{{
-        "pages.contribute.manage" | translate
-      }}</a>
-    </p>
+    @if (subscriptionInfoLoaded()) {
+      @if (!isNative) {
+        @if (showStripePortal()) {
+          <p>
+            <a
+              [href]="billingPortalUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ "pages.contribute.manage" | translate }}</a
+            >
+          </p>
+        }
+        @if (hasAppleSubscription()) {
+          <p>
+            <a
+              [href]="appleManageUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ "pages.contribute.native.manageApple" | translate }}</a
+            >
+          </p>
+        }
+        @if (hasGoogleSubscription()) {
+          <p>
+            <a
+              [href]="googleManageUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ "pages.contribute.native.manageGoogle" | translate }}</a
+            >
+          </p>
+        }
+      } @else {
+        @if (hasAppleSubscription() || hasGoogleSubscription()) {
+          <p>
+            <ion-button fill="clear" (click)="manageNative()">
+              {{ "pages.contribute.manage" | translate }}
+            </ion-button>
+          </p>
+        }
+        @if (hasStripeSubscription()) {
+          <p>
+            <a
+              [href]="billingPortalUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ "pages.contribute.manage" | translate }}</a
+            >
+          </p>
+        }
+      }
+    }
 
     <br />
   </div>

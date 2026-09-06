@@ -4,7 +4,10 @@ import { assertCreditsAvailable } from "./assertCreditsAvailable";
 import { FREE_DAILY_CREDITS } from "./creditCosts";
 import { CreditLimitExceededError } from "./errors";
 import { userFactory } from "../factories";
-import { extendSubscription, SubscriptionModelName } from "../../capabilities";
+import {
+  extendStripeSubscription,
+  SubscriptionModelName,
+} from "../../capabilities";
 
 describe("assertCreditsAvailable", () => {
   let user: User;
@@ -38,7 +41,7 @@ describe("assertCreditsAvailable", () => {
     const originalNodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = "selfhost";
     try {
-      await extendSubscription(user.id, SubscriptionModelName.Forever);
+      await extendStripeSubscription(user.id, SubscriptionModelName.Forever);
       await prisma.userCreditLog.create({
         data: {
           userId: user.id,
