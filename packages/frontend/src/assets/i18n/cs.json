@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Pokračovat přes Apple",
     "components.signInWithApple.interrupted": "Přihlášení přes Apple bylo přerušeno. Zkuste to prosím znovu.",
     "components.signInWithApple.failed": "Přihlášení přes Apple se nezdařilo. Zkuste to prosím znovu.",
-    "components.signInWithGoogle.interrupted": "Přihlášení přes Google bylo přerušeno. Zkuste to prosím znovu."
+    "components.signInWithGoogle.interrupted": "Přihlášení přes Google bylo přerušeno. Zkuste to prosím znovu.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Vítejte v RecipeSage!",
+    "pages.getStarted.button.register": "Vytvořit účet",
+    "pages.getStarted.button.login": "Přihlásit se"
 }
