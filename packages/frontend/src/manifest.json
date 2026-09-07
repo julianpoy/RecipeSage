@@ -8,34 +8,28 @@
   "display": "standalone",
   "icons": [
     {
-      "src": "/app/assets/icon/maskable-192x192.png",
-      "sizes": "192x192",
+      "src": "https://static.recipesage.com/assets/icons/android-chrome-192x192-2025-05-03.png",
       "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "https://static.recipesage.com/assets/icons/android-chrome-512x512-2025-05-03.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "https://static.recipesage.com/assets/icons/maskable-192x192-2025-05-03.png",
+      "type": "image/png",
+      "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "/app/assets/icon/maskable-512x512.png",
-      "sizes": "512x512",
+      "src": "https://static.recipesage.com/assets/icons/maskable-512x512-2025-05-03.png",
       "type": "image/png",
+      "sizes": "512x512",
       "purpose": "maskable"
-    },
-    {
-      "src": "/app/assets/icon/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/app/assets/icon/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/app/assets/icon/android-chrome-512x512.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any"
     }
   ],
   "shortcuts": [
@@ -102,7 +96,7 @@
       "url": "autofill-url"
     }
   },
-  "background_color": "#353b48",
+  "background_color": "#ffffff",
   "theme_color": "#353b48",
   "gcm_sender_id": "103953800507",
   "categories": ["books", "food", "productivity", "shopping"],

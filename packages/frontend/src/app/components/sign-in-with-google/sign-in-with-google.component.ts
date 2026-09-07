@@ -16,13 +16,20 @@ import {
 } from "@recipesage/frontend/src/environments/environment";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton } from "@ionic/angular/standalone";
+import { IonButton, ToastController } from "@ionic/angular/standalone";
+import { TranslateService } from "@ngx-translate/core";
 import { getElectronAPI, getIsElectron } from "../../utils/electron";
 import { serverConfig } from "../../utils/serverConfig";
+import { SSO_PENDING_PROVIDER_KEY } from "../../utils/ssoRedirect";
+import { Capacitor, type PluginListenerHandle } from "@capacitor/core";
+import { App } from "@capacitor/app";
+import { Browser } from "@capacitor/browser";
 
 const getGoogleRef = () => {
   return (window as any).google;
 };
+
+const PKCE_VERIFIER_STORAGE_KEY = "googleSignInPkceVerifier";
 
 @Component({
   standalone: true,
@@ -33,6 +40,8 @@ const getGoogleRef = () => {
 })
 export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   private serverActionsService = inject(ServerActionsService);
+  private toastCtrl = inject(ToastController);
+  private translate = inject(TranslateService);
 
   // Can be use to hide the button and only use for prompting
   @Input() showButton = true;
@@ -46,9 +55,11 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   googleButtonContainer!: ElementRef<HTMLDivElement>;
 
   isElectron = getIsElectron();
+  isNative = Capacitor.isNativePlatform();
 
   private removeAuthCodeListener?: () => void;
   private removeGoogleScriptLoadListener?: () => void;
+  private nativeAuthListener?: PluginListenerHandle;
 
   ngAfterViewInit() {
     if (IS_SELFHOST) return;
@@ -57,6 +68,11 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
       this.removeAuthCodeListener = getElectronAPI()?.onAuthCode((code) =>
         this.afterDesktopSignInComplete(code),
       );
+      return;
+    }
+
+    if (this.isNative) {
+      void this.registerNativeAuthListener();
       return;
     }
 
@@ -93,19 +109,79 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.removeAuthCodeListener?.();
     this.removeGoogleScriptLoadListener?.();
+    void this.nativeAuthListener?.remove();
   }
 
-  startDesktopGoogleSignIn() {
-    window.open(
-      `${serverConfig.apiBase}auth/desktop-google?allowRegistration=${this.allowRegistration}`,
+  private async registerNativeAuthListener() {
+    this.nativeAuthListener = await App.addListener("appUrlOpen", (event) => {
+      let url: URL;
+      try {
+        url = new URL(event.url);
+      } catch {
+        return;
+      }
+      if (url.protocol !== "recipesage:") return;
+
+      const code = url.searchParams.get("code");
+      void Browser.close();
+      if (code) void this.afterDesktopSignInComplete(code);
+    });
+  }
+
+  private base64UrlEncode(bytes: Uint8Array): string {
+    let binary = "";
+    for (const byte of bytes) {
+      binary += String.fromCharCode(byte);
+    }
+    return btoa(binary)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  }
+
+  private async generatePkceChallenge(): Promise<string> {
+    let verifier = localStorage.getItem(PKCE_VERIFIER_STORAGE_KEY);
+    if (!verifier) {
+      verifier = this.base64UrlEncode(
+        crypto.getRandomValues(new Uint8Array(32)),
+      );
+      localStorage.setItem(PKCE_VERIFIER_STORAGE_KEY, verifier);
+    }
+
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(verifier),
     );
+    return this.base64UrlEncode(new Uint8Array(digest));
+  }
+
+  async startExternalGoogleSignIn() {
+    const codeChallenge = await this.generatePkceChallenge();
+    localStorage.setItem(SSO_PENDING_PROVIDER_KEY, "google");
+    const url = `${serverConfig.apiBase}auth/redirect-google?allowRegistration=${this.allowRegistration}&codeChallenge=${encodeURIComponent(codeChallenge)}`;
+    if (this.isNative) {
+      void Browser.open({ url });
+      return;
+    }
+    window.open(url);
   }
 
   async afterDesktopSignInComplete(code: string) {
+    if (localStorage.getItem(SSO_PENDING_PROVIDER_KEY) !== "google") return;
+    localStorage.removeItem(SSO_PENDING_PROVIDER_KEY);
+
+    const codeVerifier = localStorage.getItem(PKCE_VERIFIER_STORAGE_KEY);
+    localStorage.removeItem(PKCE_VERIFIER_STORAGE_KEY);
+    if (!codeVerifier) {
+      await this.presentSignInInterrupted();
+      return;
+    }
+
     const session =
-      await this.serverActionsService.users.signInWithDesktopGoogle(
+      await this.serverActionsService.users.signInWithRedirectGoogle(
         {
           code,
+          codeVerifier,
         },
         {
           404: () => this.accountNotFound.emit(),
@@ -115,6 +191,17 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
     if (session) {
       this.signInComplete.emit(session);
     }
+  }
+
+  private async presentSignInInterrupted() {
+    const message = await this.translate
+      .get("components.signInWithGoogle.interrupted")
+      .toPromise();
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    await toast.present();
   }
 
   async afterSignInComplete(args: any) {

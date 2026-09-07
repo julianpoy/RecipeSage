@@ -7,7 +7,8 @@ import {
 } from "@recipesage/util/shared";
 import { NavController } from "@ionic/angular/standalone";
 import dayjs from "dayjs";
-import { serverConfig } from "../utils/serverConfig";
+import { serverConfig, PUBLIC_WEB_ORIGIN } from "../utils/serverConfig";
+import { Capacitor } from "@capacitor/core";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -698,7 +699,12 @@ export class UtilService {
   }
 
   buildPublicRoutePath(routePath: string) {
-    return `${window.location.origin}/app/${routePath}`;
+    // Only the hosted donation flow reaches this (self-host redirects to
+    // recipesage.com to donate), so native always resolves to the hosted origin.
+    const origin = Capacitor.isNativePlatform()
+      ? PUBLIC_WEB_ORIGIN
+      : window.location.origin;
+    return `${origin}/app/${routePath}`;
   }
 
   truncate(str: String, maxLength: number) {

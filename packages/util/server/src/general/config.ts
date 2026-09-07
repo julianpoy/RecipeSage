@@ -39,9 +39,22 @@ const getEnvString = <
 
 const rateLimitRedisHost = getEnvString("RATE_LIMIT_REDIS_HOST", []);
 
+const getEnvStringList = (
+  name: string,
+  requiredEnvironments:
+    | Exclude<Environment, Environment.All | Environment.AllRuntime>[]
+    | Environment.All
+    | Environment.AllRuntime,
+): string[] =>
+  (getEnvString(name, requiredEnvironments) || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+
 export const config = {
   api: {
     publicUrl: getEnvString("API_PUBLIC_BASE_URL", Environment.All),
+    enablePrivateFetch: getEnvString("API_ENABLE_PRIVATE_FETCH", []) === "true",
   },
   rateLimit: {
     enabled:
@@ -73,6 +86,50 @@ export const config = {
     gsi: {
       clientId: getEnvString("GOOGLE_GSI_CLIENT_ID", [Environment.Prod]),
       clientSecret: getEnvString("GOOGLE_GSI_CLIENT_SECRET", [
+        Environment.Prod,
+      ]),
+    },
+    iap: {
+      packageName:
+        getEnvString("GOOGLE_IAP_PACKAGE_NAME", []) || "com.recipesage.app",
+      clientEmail:
+        getEnvString("GOOGLE_IAP_CLIENT_EMAIL", [Environment.Prod]) || "",
+      privateKey:
+        getEnvString("GOOGLE_IAP_PRIVATE_KEY", [Environment.Prod]) || "",
+      pubsubVerificationToken:
+        getEnvString("GOOGLE_IAP_PUBSUB_TOKEN", [Environment.Prod]) || "",
+      productId:
+        getEnvString("GOOGLE_IAP_PRODUCT_ID", [Environment.Prod]) || "",
+      basePlanIdsMonthly: getEnvStringList("GOOGLE_IAP_BASE_PLAN_IDS_MONTHLY", [
+        Environment.Prod,
+      ]),
+      basePlanIdsYearly: getEnvStringList("GOOGLE_IAP_BASE_PLAN_IDS_YEARLY", [
+        Environment.Prod,
+      ]),
+    },
+  },
+  apple: {
+    signIn: {
+      servicesId: getEnvString("APPLE_SIGN_IN_SERVICES_ID", [Environment.Prod]),
+      bundleId:
+        getEnvString("APPLE_SIGN_IN_BUNDLE_ID", []) || "com.recipesage.ios",
+      teamId: getEnvString("APPLE_SIGN_IN_TEAM_ID", [Environment.Prod]),
+      keyId: getEnvString("APPLE_SIGN_IN_KEY_ID", [Environment.Prod]),
+      privateKey: getEnvString("APPLE_SIGN_IN_PRIVATE_KEY", [Environment.Prod]),
+    },
+    iap: {
+      bundleId: getEnvString("APPLE_IAP_BUNDLE_ID", []) || "com.recipesage.ios",
+      appAppleId:
+        getEnvString("APPLE_IAP_APP_APPLE_ID", [Environment.Prod]) || "",
+      issuerId: getEnvString("APPLE_IAP_ISSUER_ID", [Environment.Prod]) || "",
+      keyId: getEnvString("APPLE_IAP_KEY_ID", [Environment.Prod]) || "",
+      privateKey:
+        getEnvString("APPLE_IAP_PRIVATE_KEY", [Environment.Prod]) || "",
+      rootCerts: getEnvStringList("APPLE_IAP_ROOT_CERTS", [Environment.Prod]),
+      productIdsMonthly: getEnvStringList("APPLE_IAP_PRODUCT_IDS_MONTHLY", [
+        Environment.Prod,
+      ]),
+      productIdsYearly: getEnvStringList("APPLE_IAP_PRODUCT_IDS_YEARLY", [
         Environment.Prod,
       ]),
     },

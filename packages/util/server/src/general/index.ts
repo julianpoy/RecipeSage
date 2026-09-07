@@ -4,6 +4,8 @@ export * from "./auth/extendSession";
 export * from "./auth/generatePasswordHash";
 export * from "./auth/validatePasswordHash";
 export * from "./auth/sanitizeUserEmail";
+export * from "./auth/redirectGoogleAuthCode";
+export * from "./auth/redirectAppleAuthCode";
 
 export * from "./categorize/getShoppingListItemCategories";
 export * from "./categorize/getShoppingListItemGroupTitles";
@@ -33,6 +35,8 @@ export * from "./firebase";
 export * from "./dispatchMessageNotification";
 export * from "./fetch";
 export * from "./fetchURLError";
+export * from "./fetchBufferViaScrapfly";
+export * from "./ScrapflyError";
 export * from "./jsonLD";
 export * from "./collectRecipeNodes";
 export * from "./multerAutoCleanup";

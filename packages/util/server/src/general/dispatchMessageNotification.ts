@@ -5,6 +5,8 @@ import { sendFCMMessages } from "./firebase";
 
 const MESSAGE_BODY_NOTIFICATION_LIMIT = 500;
 
+const WEB_ORIGIN = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+
 interface MessageNotificationUser {
   id: string;
   name: string;
@@ -47,10 +49,20 @@ export const dispatchMessageNotification = async (
 
     if (recipient.fcmTokens.length > 0) {
       sendQueue.push(
-        sendFCMMessages(recipient.fcmTokens, {
-          type: WSBroadcastEventType.MessageReceived,
-          message: JSON.stringify(payload),
-        }),
+        sendFCMMessages(
+          recipient.fcmTokens,
+          {
+            type: WSBroadcastEventType.MessageReceived,
+            message: JSON.stringify(payload),
+            otherUserId: sender.id,
+          },
+          {
+            title: sender.name,
+            body: recipe ? recipe.title : payload.body,
+            tag: `${WSBroadcastEventType.MessageReceived}-${sender.id}`,
+            link: `${WEB_ORIGIN}/app/messages/${sender.id}`,
+          },
+        ),
       );
     }
 

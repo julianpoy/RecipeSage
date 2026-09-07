@@ -4,7 +4,7 @@ import { AuthenticationEnforcement } from "../../authenticationEnforcement";
 import { defineHandler } from "../../defineHandler";
 import { BadRequestError, InternalServerError } from "../../errors";
 import {
-  extendSubscription,
+  extendStripeSubscription,
   findCheckoutUser,
   SubscriptionModelName,
   validateStripeEvent,
@@ -110,7 +110,7 @@ export const webhookHandler = defineHandler(
         });
 
         if (user) {
-          await extendSubscription(
+          await extendStripeSubscription(
             user.id,
             SubscriptionModelName.PyoSingle,
             tx,
@@ -205,7 +205,7 @@ export const webhookHandler = defineHandler(
         });
 
         if (user && subscriptionModelName) {
-          await extendSubscription(user.id, subscriptionModelName, tx);
+          await extendStripeSubscription(user.id, subscriptionModelName, tx);
         } else if (!user) {
           console.warn("Payment collected for unknown user");
           Sentry.captureMessage("Payment collected for unknown user", {

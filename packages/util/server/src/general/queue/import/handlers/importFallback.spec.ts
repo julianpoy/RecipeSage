@@ -15,6 +15,14 @@ vi.mock("../../../index", () => ({
   importJobFinishCommon: (...args: unknown[]) => importJobFinishCommon(...args),
   translate: async () => "Automatic Import Unformatted",
   clipUrl: (...args: unknown[]) => clipUrl(...args),
+  isRecipeRecognitionSuccess: (recipe: {
+    title?: string;
+    ingredients?: string;
+    instructions?: string;
+  }) =>
+    !!recipe?.title?.trim() &&
+    !!recipe?.ingredients?.trim() &&
+    !!recipe?.instructions?.trim(),
 }));
 
 vi.mock("../../../../ml/index", () => ({
@@ -187,7 +195,16 @@ describe("urls import failure handling", () => {
 
     clipUrl.mockImplementation(async (url: string) => {
       if (url.endsWith("bad")) throw new Error("clip failed");
-      return { recipe: { title: "Clipped", url }, labels: [], images: [] };
+      return {
+        recipe: {
+          title: "Clipped",
+          url,
+          ingredients: "1 cup flour",
+          instructions: "Mix and bake.",
+        },
+        labels: [],
+        images: [],
+      };
     });
 
     await urlsImportJobHandler(job, queueItem);
@@ -195,6 +212,7 @@ describe("urls import failure handling", () => {
     const args = finishArgs();
     expect(args.standardizedRecipeImportInput).toHaveLength(1);
     expect(args.failedCount).toBe(1);
+    expect(args.failedUrls).toEqual(["https://example.com/bad"]);
     expect(args.standardizedRecipeImportInput[0].recipe.title).toBe("Clipped");
   });
 });

@@ -24,7 +24,7 @@
             slot="start"
             (click)="openImageViewer()"
           >
-            <img src="{{ sortedRecipeImages()[0].image.location }}" />
+            <img [cachedSrc]="sortedRecipeImages()[0].image.location" />
           </ion-thumbnail>
         }
         <ion-label dir="auto">
@@ -629,7 +629,7 @@
               @if (linkedRecipe.recipeImages.length) {
                 <ion-avatar slot="start">
                   <img
-                    src="{{ linkedRecipe.recipeImages[0].image.location }}"
+                    [cachedSrc]="linkedRecipe.recipeImages[0].image.location"
                   />
                 </ion-avatar>
               }
@@ -732,7 +732,7 @@
               @if (similarRecipe.recipeImages.length) {
                 <ion-avatar slot="start">
                   <img
-                    src="{{ similarRecipe.recipeImages[0].image.location }}"
+                    [cachedSrc]="similarRecipe.recipeImages[0].image.location"
                   />
                 </ion-avatar>
               }

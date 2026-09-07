@@ -22,8 +22,30 @@ export async function importJobFinishCommon(args: {
   creditOperation?: CreditOperation;
   partialCount?: number;
   failedCount?: number;
+  failedUrls?: string[];
 }) {
+  const hasMetaUpdates =
+    args.partialCount !== undefined ||
+    args.failedCount !== undefined ||
+    args.failedUrls !== undefined;
+
   if (args.standardizedRecipeImportInput.length === 0) {
+    if (hasMetaUpdates) {
+      await prisma.job.update({
+        where: {
+          id: args.job.id,
+        },
+        data: {
+          meta: {
+            ...args.job.meta,
+            partialCount: args.partialCount,
+            failedCount: args.failedCount,
+            failedUrls: args.failedUrls,
+          } satisfies ImportJobMeta,
+        },
+      });
+    }
+
     throw new ImportNoRecipesError();
   }
 
@@ -54,9 +76,6 @@ export async function importJobFinishCommon(args: {
     }),
   });
 
-  const hasMetaUpdates =
-    args.partialCount !== undefined || args.failedCount !== undefined;
-
   await prisma.job.update({
     where: {
       id: args.job.id,
@@ -70,6 +89,7 @@ export async function importJobFinishCommon(args: {
           ...args.job.meta,
           partialCount: args.partialCount,
           failedCount: args.failedCount,
+          failedUrls: args.failedUrls,
         } satisfies ImportJobMeta,
       }),
     },

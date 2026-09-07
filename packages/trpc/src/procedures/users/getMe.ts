@@ -14,6 +14,8 @@ export interface UserPrivate {
   createdAt: Date;
   updatedAt: Date;
   subscriptions: {
+    name: string;
+    platform: string;
     expires: Date | null;
     capabilities: Capabilities[];
   }[];
@@ -25,6 +27,8 @@ const userMeSchema = userPublicSchema.extend({
   updatedAt: z.date(),
   subscriptions: z.array(
     z.object({
+      name: z.string(),
+      platform: z.string(),
       expires: z.date().nullable(),
       capabilities: z.array(z.enum(Capabilities)),
     }),
@@ -65,6 +69,8 @@ export const getMe = authenticatedProcedure
       await subscriptionsForUser(ctx.session.userId, true)
     ).map((subscription) => {
       return {
+        name: subscription.name,
+        platform: subscription.platform,
         expires: subscription.expires,
         capabilities: capabilitiesForSubscription(
           subscription.name as SubscriptionModelName,

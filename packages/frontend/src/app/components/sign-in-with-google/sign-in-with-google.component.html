@@ -1,10 +1,14 @@
-<div class="gsi-container" #googleButtonContainer [hidden]="isElectron"></div>
-@if (isElectron) {
+<div
+  class="gsi-container"
+  #googleButtonContainer
+  [hidden]="isElectron || isNative"
+></div>
+@if (isElectron || isNative) {
   <ion-button
     expand="block"
     fill="solid"
     color="dark"
-    (click)="startDesktopGoogleSignIn()"
+    (click)="startExternalGoogleSignIn()"
   >
     {{ "components.signInWithGoogle.button" | translate }}
   </ion-button>

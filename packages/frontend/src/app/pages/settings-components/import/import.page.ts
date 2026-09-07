@@ -102,6 +102,7 @@ export class ImportPage {
    */
   showJobs = 5;
   importJobs: ImportJobSummary[] = [];
+  expandedFailedUrlsJobIds = new Set<string>();
   jobPollInterval?: NodeJS.Timeout;
   consecutiveJobPollFailures = 0;
 
@@ -237,6 +238,30 @@ export class ImportPage {
 
   getJobFailureI18n(job: ImportJobSummary) {
     return getJobFailureI18n(job);
+  }
+
+  getImportPartialCount(job: ImportJobSummary): number {
+    return job.meta.partialCount || 0;
+  }
+
+  getImportFailedCount(job: ImportJobSummary): number {
+    return job.meta.failedCount || 0;
+  }
+
+  getImportFailedUrls(job: ImportJobSummary): string[] {
+    return job.meta.failedUrls || [];
+  }
+
+  isFailedUrlsExpanded(jobId: string): boolean {
+    return this.expandedFailedUrlsJobIds.has(jobId);
+  }
+
+  toggleFailedUrls(jobId: string): void {
+    if (this.expandedFailedUrlsJobIds.has(jobId)) {
+      this.expandedFailedUrlsJobIds.delete(jobId);
+    } else {
+      this.expandedFailedUrlsJobIds.add(jobId);
+    }
   }
 
   getImportJobPath(job: ImportJobSummary) {

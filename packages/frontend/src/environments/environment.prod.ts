@@ -16,3 +16,5 @@ export const SENTRY_SAMPLE_RATE = 1;
 
 export const GOOGLE_GSI_CLIENT_ID =
   "1064631313987-elks4csl9vdtes5j9b5l3savje7m3nhf.apps.googleusercontent.com";
+
+export const APPLE_SIGN_IN_SERVICES_ID = "com.recipesage.signin";

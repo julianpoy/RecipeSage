@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { Capacitor } from "@capacitor/core";
+import { KeepAwake } from "@capacitor-community/keep-awake";
 
 interface WakelockRequest {
   release: () => void;
@@ -8,7 +10,8 @@ interface WakelockRequest {
   providedIn: "root",
 })
 export class WakeLockService {
-  isCapable = "wakeLock" in navigator;
+  private isNative = Capacitor.isNativePlatform();
+  isCapable = this.isNative || "wakeLock" in navigator;
   wakeLock: WakeLockSentinel | null = null;
   wakeLockPending: Promise<WakeLockSentinel> | null = null;
   wakeLockRequests: WakelockRequest[] = [];
@@ -41,7 +44,14 @@ export class WakeLockService {
   }
 
   private async requestWakeLock() {
-    if (this.wakeLock || this.wakeLockPending || !this.isCapable) return;
+    if (!this.isCapable) return;
+
+    if (this.isNative) {
+      await KeepAwake.keepAwake().catch(() => {});
+      return;
+    }
+
+    if (this.wakeLock || this.wakeLockPending) return;
 
     let wakeLock: WakeLockSentinel;
     try {
@@ -67,6 +77,11 @@ export class WakeLockService {
   }
 
   private async releaseWakeLock() {
+    if (this.isNative) {
+      await KeepAwake.allowSleep().catch(() => {});
+      return;
+    }
+
     if (!this.wakeLock) return;
 
     const wakeLock = this.wakeLock;

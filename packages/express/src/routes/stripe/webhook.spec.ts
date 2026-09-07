@@ -5,7 +5,7 @@ import request from "supertest";
 
 const validateStripeEventMock = vi.fn();
 const findCheckoutUserMock = vi.fn();
-const extendSubscriptionMock = vi.fn();
+const extendStripeSubscriptionMock = vi.fn();
 const captureMessageMock = vi.fn();
 
 const stripeEventFindUniqueMock = vi.fn();
@@ -20,7 +20,8 @@ vi.mock("@sentry/node", () => ({
 vi.mock("@recipesage/util/server/capabilities", () => ({
   validateStripeEvent: (...args: unknown[]) => validateStripeEventMock(...args),
   findCheckoutUser: (...args: unknown[]) => findCheckoutUserMock(...args),
-  extendSubscription: (...args: unknown[]) => extendSubscriptionMock(...args),
+  extendStripeSubscription: (...args: unknown[]) =>
+    extendStripeSubscriptionMock(...args),
   SubscriptionModelName: {
     PyoMonthly: "pyo-monthly",
     PyoYearly: "pyo-yearly",
@@ -95,7 +96,7 @@ describe("POST /stripe/webhook", () => {
   beforeEach(() => {
     validateStripeEventMock.mockReset();
     findCheckoutUserMock.mockReset();
-    extendSubscriptionMock.mockReset();
+    extendStripeSubscriptionMock.mockReset();
     captureMessageMock.mockReset();
     stripeEventFindUniqueMock.mockReset();
     stripeEventCreateMock.mockReset();
@@ -117,7 +118,7 @@ describe("POST /stripe/webhook", () => {
     expect(response.status).toBe(200);
     expect(stripeEventCreateMock).toHaveBeenCalledTimes(1);
     expect(stripePaymentCreateMock).toHaveBeenCalledTimes(1);
-    expect(extendSubscriptionMock).toHaveBeenCalledWith(
+    expect(extendStripeSubscriptionMock).toHaveBeenCalledWith(
       "user-1",
       "pyo-monthly",
       expect.anything(),
@@ -133,7 +134,7 @@ describe("POST /stripe/webhook", () => {
     expect(response.status).toBe(500);
     expect(stripeEventCreateMock).not.toHaveBeenCalled();
     expect(stripePaymentCreateMock).not.toHaveBeenCalled();
-    expect(extendSubscriptionMock).not.toHaveBeenCalled();
+    expect(extendStripeSubscriptionMock).not.toHaveBeenCalled();
     expect(captureMessageMock).toHaveBeenCalledWith(
       "Invoice paid with unknown product",
       expect.anything(),
@@ -148,7 +149,7 @@ describe("POST /stripe/webhook", () => {
 
     expect(response.status).toBe(500);
     expect(stripePaymentCreateMock).not.toHaveBeenCalled();
-    expect(extendSubscriptionMock).not.toHaveBeenCalled();
+    expect(extendStripeSubscriptionMock).not.toHaveBeenCalled();
   });
 
   it("does not reprocess an event it has already recorded", async () => {

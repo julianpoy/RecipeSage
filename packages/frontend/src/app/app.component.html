@@ -11,6 +11,7 @@
     <ion-menu
       (ionWillOpen)="updateNavList()"
       [disabled]="inCookMode"
+      [swipeGesture]="menuSwipeEnabled"
       contentId="main-content"
       type="overlay"
       [class]="{
@@ -38,7 +39,11 @@
         <ion-list>
           @for (p of navList; track p) {
             <ion-menu-toggle auto-hide="false">
-              <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+              <ion-item
+                [routerDirection]="'root'"
+                [routerLink]="[p.url]"
+                [replaceUrl]="true"
+              >
                 <ion-icon slot="start" [name]="p.icon"></ion-icon>
                 <ion-label class="ion-text-wrap">
                   {{ p.title }}
@@ -65,6 +70,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
+      (stackDidChange)="updateMenuSwipe()"
       [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0,

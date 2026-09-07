@@ -122,6 +122,36 @@ export class UsersActionsService extends ActionsBase {
     );
   }
 
+  signInWithRedirectGoogle(
+    input: RouterInputs["users"]["signInWithRedirectGoogle"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["signInWithRedirectGoogle"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.signInWithRedirectGoogle.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  signInWithApple(
+    input: RouterInputs["users"]["signInWithApple"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["signInWithApple"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.signInWithApple.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  signInWithRedirectApple(
+    input: RouterInputs["users"]["signInWithRedirectApple"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["signInWithRedirectApple"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.signInWithRedirectApple.mutate(input),
+      errorHandlers,
+    );
+  }
+
   updateUser(
     input: RouterInputs["users"]["updateUser"],
     errorHandlers?: ErrorHandlers,

@@ -11,6 +11,7 @@ import { AssistantActionsService } from "./server-actions/assistant-actions.serv
 import { MlActionsService } from "./server-actions/ml-actions.service";
 import { ImagesActionsService } from "./server-actions/images-actions.service";
 import { PaymentsActionsService } from "./server-actions/payments-actions.service";
+import { IapActionsService } from "./server-actions/iap-actions.service";
 import { MessagesActionsService } from "./server-actions/messages-actions.service";
 import { DiscoverActionsService } from "./server-actions/discover-actions.service";
 
@@ -30,5 +31,6 @@ export class ServerActionsService {
   ml = inject(MlActionsService);
   images = inject(ImagesActionsService);
   payments = inject(PaymentsActionsService);
+  iap = inject(IapActionsService);
   messages = inject(MessagesActionsService);
 }
