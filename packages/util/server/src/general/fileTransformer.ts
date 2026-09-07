@@ -1,12 +1,16 @@
 import { Readable } from "stream";
 import { buffer as streamToBuffer } from "stream/consumers";
-import sharp, { type FitEnum } from "sharp";
+import { open, readFile } from "fs/promises";
+import sharp, { type FitEnum, type Sharp } from "sharp";
 import decodeHeic from "heic-decode";
 import pLimit from "p-limit";
 
 sharp.concurrency(1);
+sharp.cache(false);
 
 const sharpConcurrencyLimit = pLimit(1);
+
+const FILE_HEADER_PEEK_BYTES = 4096;
 
 export class FileTransformError extends Error {
   constructor() {
@@ -91,6 +95,41 @@ export const transformImageStreamToBuffer = async (
   return transformImageBuffer(input, width, height, quality, fit);
 };
 
+const resizeToJpegBuffer = (
+  pipeline: Sharp,
+  width: number,
+  height: number,
+  quality: number,
+  fit: keyof FitEnum,
+) =>
+  pipeline
+    .rotate() // Rotates based on EXIF data (no-op when input is raw RGBA from HEIC)
+    .resize(width, height, {
+      fit,
+      withoutEnlargement: true,
+    })
+    .jpeg({
+      quality,
+      // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
+    })
+    .toBuffer();
+
+const readFileHeader = async (filePath: string) => {
+  const handle = await open(filePath, "r");
+  try {
+    const header = Buffer.alloc(FILE_HEADER_PEEK_BYTES);
+    const { bytesRead } = await handle.read(
+      header,
+      0,
+      FILE_HEADER_PEEK_BYTES,
+      0,
+    );
+    return header.subarray(0, bytesRead);
+  } finally {
+    await handle.close();
+  }
+};
+
 export const transformImageBuffer = async (
   buffer: Buffer,
   width: number,
@@ -101,17 +140,26 @@ export const transformImageBuffer = async (
   sharpConcurrencyLimit(async () => {
     try {
       const pipeline = await createSharpFromBuffer(buffer);
-      return await pipeline
-        .rotate() // Rotates based on EXIF data (no-op when input is raw RGBA from HEIC)
-        .resize(width, height, {
-          fit,
-          withoutEnlargement: true,
-        })
-        .jpeg({
-          quality,
-          // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
-        })
-        .toBuffer();
+      return await resizeToJpegBuffer(pipeline, width, height, quality, fit);
+    } catch {
+      throw new FileTransformError();
+    }
+  });
+
+export const transformImageFile = async (
+  filePath: string,
+  width: number,
+  height: number,
+  quality: number,
+  fit: keyof FitEnum,
+) =>
+  sharpConcurrencyLimit(async () => {
+    try {
+      const header = await readFileHeader(filePath);
+      const pipeline = isHeic(header)
+        ? await createSharpFromBuffer(await readFile(filePath))
+        : sharp(filePath);
+      return await resizeToJpegBuffer(pipeline, width, height, quality, fit);
     } catch {
       throw new FileTransformError();
     }

@@ -7,11 +7,13 @@ import {
   FileTransformError,
   isHeic,
   transformImageBuffer,
+  transformImageFile,
   transformImageStreamToBuffer,
 } from "./fileTransformer";
 
-const fixture = (name: string) =>
-  readFile(path.join(__dirname, "fixtures", name));
+const fixturePath = (name: string) => path.join(__dirname, "fixtures", name);
+
+const fixture = (name: string) => readFile(fixturePath(name));
 
 const isJpeg = (buf: Buffer) =>
   buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
@@ -134,5 +136,118 @@ describe("transformImageStreamToBuffer", () => {
     );
 
     expect(isJpeg(output)).toBe(true);
+  });
+});
+
+describe("transformImageFile", () => {
+  it("converts a JPEG file to a resized JPEG buffer", async () => {
+    const output = await transformImageFile(
+      fixturePath("photo-exif-orientation-6.jpg"),
+      300,
+      300,
+      55,
+      "inside",
+    );
+
+    expect(isJpeg(output)).toBe(true);
+    const meta = await sharp(output).metadata();
+    expect(meta.format).toBe("jpeg");
+  });
+
+  it("applies EXIF orientation so the output is displayed upright", async () => {
+    const output = await transformImageFile(
+      fixturePath("photo-exif-orientation-6.jpg"),
+      500,
+      500,
+      80,
+      "inside",
+    );
+
+    const meta = await sharp(output).metadata();
+    expect(meta.width).toBeGreaterThan(meta.height ?? 0);
+    expect(meta.orientation ?? 1).toBe(1);
+  });
+
+  it("routes a HEIC file through heic-decode using only the file header", async () => {
+    const output = await transformImageFile(
+      fixturePath("single.heic"),
+      512,
+      512,
+      55,
+      "inside",
+    );
+
+    expect(isJpeg(output)).toBe(true);
+    const meta = await sharp(output).metadata();
+    expect(meta.width).toBe(512);
+  });
+
+  it("converts a grid (multi-tile) HEIC file", async () => {
+    const output = await transformImageFile(
+      fixturePath("grid.heic"),
+      400,
+      400,
+      55,
+      "inside",
+    );
+
+    expect(isJpeg(output)).toBe(true);
+    const meta = await sharp(output).metadata();
+    expect(meta.width).toBe(400);
+  });
+
+  it("converts an AVIF file via Sharp rather than heic-decode", async () => {
+    const output = await transformImageFile(
+      fixturePath("sample.avif"),
+      200,
+      200,
+      70,
+      "inside",
+    );
+
+    expect(isJpeg(output)).toBe(true);
+  });
+
+  it("produces the same dimensions as the buffer path", async () => {
+    const name = "rgba.png";
+
+    const fromFile = await transformImageFile(
+      fixturePath(name),
+      200,
+      200,
+      70,
+      "cover",
+    );
+    const fromBuffer = await transformImageBuffer(
+      await fixture(name),
+      200,
+      200,
+      70,
+      "cover",
+    );
+
+    const fileMeta = await sharp(fromFile).metadata();
+    const bufferMeta = await sharp(fromBuffer).metadata();
+    expect(fileMeta.width).toBe(bufferMeta.width);
+    expect(fileMeta.height).toBe(bufferMeta.height);
+    expect(fileMeta.channels).toBe(bufferMeta.channels);
+  });
+
+  it("throws FileTransformError when the file is not a valid image", async () => {
+    await expect(
+      transformImageFile(__filename, 100, 100, 55, "inside"),
+    ).rejects.toBeInstanceOf(FileTransformError);
+  });
+
+  it("throws FileTransformError when the file does not exist", async () => {
+    await expect(
+      transformImageFile(
+        fixturePath("does-not-exist.jpg"),
+        100,
+        100,
+        55,
+        "inside",
+      ),
+    ).rejects.toBeInstanceOf(FileTransformError);
   });
 });

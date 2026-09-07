@@ -5,7 +5,6 @@ import multer from "multer";
 import { multerAutoCleanup } from "@recipesage/util/server/general";
 import { tmpdir } from "os";
 import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
-import { createReadStream } from "fs";
 import type { StandardizedRecipeImportEntryForWeb } from "@recipesage/prisma";
 import { standardizedRecipeImportEntryForWebSchema } from "@recipesage/prisma";
 import {
@@ -64,7 +63,7 @@ export const getRecipeFromOCRHandler = defineHandler(
     }
 
     const recognizedRecipe = await ocrImagesToRecipe(
-      files.map((file) => createReadStream(file.path)),
+      files.map((file) => file.path),
     );
     if (!recognizedRecipe) {
       throw new BadRequestError("Could not parse recipe from OCR results");

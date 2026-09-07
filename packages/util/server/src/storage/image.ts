@@ -3,14 +3,15 @@ import { ObjectTypes } from "./shared";
 import {
   fetchURL,
   transformImageBuffer,
+  transformImageFile,
   fetchBufferViaScrapfly,
 } from "../general";
 import { sanitizeFilePath } from "./sanitizeFilePath";
 import { ImageFetchError } from "./imageFetchError";
-import { createReadStream } from "fs";
 import { buffer as streamToBuffer } from "stream/consumers";
 import { Readable } from "stream";
 import type { ReadableStream } from "stream/web";
+import type { FitEnum } from "sharp";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -22,6 +23,28 @@ const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 const WRITE_IMAGE_URL_TIMEOUT_SECONDS = 15;
 const SCRAPFLY_FALLBACK_STATUSES = new Set([403, 429, 503]);
+
+const resolveConversionOptions = (
+  highResConversion: boolean,
+): {
+  width: number;
+  height: number;
+  quality: number;
+  fit: keyof FitEnum;
+} =>
+  highResConversion
+    ? {
+        width: HIGH_RES_IMG_CONVERSION_WIDTH,
+        height: HIGH_RES_IMG_CONVERSION_HEIGHT,
+        quality: HIGH_RES_IMG_CONVERSION_QUALITY,
+        fit: "inside",
+      }
+    : {
+        width: LOW_RES_IMG_CONVERSION_WIDTH,
+        height: LOW_RES_IMG_CONVERSION_HEIGHT,
+        quality: LOW_RES_IMG_CONVERSION_QUALITY,
+        fit: "cover",
+      };
 
 export const writeImageURL = async (
   objectType: ObjectTypes,
@@ -62,13 +85,18 @@ export const writeImageFile = async (
     filePath: filePath,
   });
 
-  const result = await writeImageStream(
-    objectType,
-    createReadStream(normalizedPath),
-    highResConversion,
+  const { width, height, quality, fit } =
+    resolveConversionOptions(highResConversion);
+
+  const converted = await transformImageFile(
+    normalizedPath,
+    width,
+    height,
+    quality,
+    fit,
   );
 
-  return result;
+  return writeBuffer(objectType, converted, "image/jpeg");
 };
 
 export const writeImageStream = async (
@@ -76,15 +104,8 @@ export const writeImageStream = async (
   inputStream: Readable | ReadableStream | NodeJS.ReadableStream,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const height = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_HEIGHT
-    : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_WIDTH
-    : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_QUALITY
-    : LOW_RES_IMG_CONVERSION_QUALITY;
+  const { width, height, quality, fit } =
+    resolveConversionOptions(highResConversion);
 
   // Buffer the full input before transform so HEIC can be detected and
   // pre-decoded via heic-decode (Sharp's prebuilt libvips cannot decode HEVC).
@@ -97,7 +118,7 @@ export const writeImageStream = async (
     width,
     height,
     quality,
-    highResConversion ? "inside" : "cover",
+    fit,
   );
 
   return writeBuffer(objectType, converted, "image/jpeg");
@@ -111,22 +132,15 @@ export const writeImageBuffer = async (
   buffer: Buffer,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const height = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_HEIGHT
-    : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_WIDTH
-    : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion
-    ? HIGH_RES_IMG_CONVERSION_QUALITY
-    : LOW_RES_IMG_CONVERSION_QUALITY;
+  const { width, height, quality, fit } =
+    resolveConversionOptions(highResConversion);
 
   const converted = await transformImageBuffer(
     buffer,
     width,
     height,
     quality,
-    highResConversion ? "inside" : "cover",
+    fit,
   );
 
   const result = await writeBuffer(objectType, converted, "image/jpeg");
