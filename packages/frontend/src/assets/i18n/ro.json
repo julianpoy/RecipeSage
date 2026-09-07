@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Continuați cu Apple",
     "components.signInWithApple.interrupted": "Autentificarea cu Apple a fost întreruptă. Încercați din nou.",
     "components.signInWithApple.failed": "Autentificarea cu Apple a eșuat. Încercați din nou.",
-    "components.signInWithGoogle.interrupted": "Autentificarea cu Google a fost întreruptă. Încercați din nou."
+    "components.signInWithGoogle.interrupted": "Autentificarea cu Google a fost întreruptă. Încercați din nou.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Bun venit la RecipeSage!",
+    "pages.getStarted.button.register": "Creează un cont",
+    "pages.getStarted.button.login": "Conectare"
 }
