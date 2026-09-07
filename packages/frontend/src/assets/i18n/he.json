@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "ברוכים הבאים ל- RecipeSage!",
     "pages.getStarted.button.register": "הרשמה",
-    "pages.getStarted.button.login": "כניסה"
+    "pages.getStarted.button.login": "כניסה",
+    "pages.getStarted.reason": "צרו חשבון כדי שהמתכונים, תוכניות הארוחות ורשימות הקניות שלכם יסונכרנו בכל המכשירים שלכם, וכדי שתוכלו לייבא מתכונים באופן אוטומטי מכל אתר אינטרנט.",
+    "pages.getStarted.crossPlatform": "חשבון אחד פועל בטלפון, בטאבלט, במחשב ובאינטרנט."
 }
