@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "המשך עם Apple",
     "components.signInWithApple.interrupted": "הכניסה באמצעות Apple הופסקה. נא לנסות שוב.",
     "components.signInWithApple.failed": "הכניסה באמצעות Apple נכשלה. נא לנסות שוב.",
-    "components.signInWithGoogle.interrupted": "הכניסה באמצעות Google הופסקה. נא לנסות שוב."
+    "components.signInWithGoogle.interrupted": "הכניסה באמצעות Google הופסקה. נא לנסות שוב.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "ברוכים הבאים ל- RecipeSage!",
+    "pages.getStarted.button.register": "הרשמה",
+    "pages.getStarted.button.login": "כניסה"
 }
