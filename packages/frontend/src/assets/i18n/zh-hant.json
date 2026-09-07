@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "歡迎使用 RecipeSage！",
     "pages.getStarted.button.register": "建立帳戶",
-    "pages.getStarted.button.login": "登入"
+    "pages.getStarted.button.login": "登入",
+    "pages.getStarted.reason": "建立帳戶後，您的食譜、餐點計畫和購物清單將在所有裝置間同步，您也可以從任何網站自動匯入食譜。",
+    "pages.getStarted.crossPlatform": "一個帳戶可在您的手機、平板電腦、電腦和網頁上使用。"
 }
