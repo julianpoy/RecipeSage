@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Vítejte v RecipeSage!",
     "pages.getStarted.button.register": "Vytvořit účet",
-    "pages.getStarted.button.login": "Přihlásit se"
+    "pages.getStarted.button.login": "Přihlásit se",
+    "pages.getStarted.reason": "Vytvořte si účet, aby se vaše recepty, jídelní plány a nákupní seznamy synchronizovaly na všech vašich zařízeních a abyste mohli automaticky importovat recepty z libovolných webových stránek.",
+    "pages.getStarted.crossPlatform": "Jeden účet funguje na telefonu, tabletu, počítači i na webu."
 }
