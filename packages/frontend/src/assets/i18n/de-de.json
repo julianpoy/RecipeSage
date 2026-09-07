@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Mit Apple fortfahren",
     "components.signInWithApple.interrupted": "Die Anmeldung mit Apple wurde unterbrochen. Bitte versuchen Sie es erneut.",
     "components.signInWithApple.failed": "Die Anmeldung mit Apple ist fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "components.signInWithGoogle.interrupted": "Die Anmeldung mit Google wurde unterbrochen. Bitte versuchen Sie es erneut."
+    "components.signInWithGoogle.interrupted": "Die Anmeldung mit Google wurde unterbrochen. Bitte versuchen Sie es erneut.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Willkommen bei RecipeSage!",
+    "pages.getStarted.button.register": "Konto erstellen",
+    "pages.getStarted.button.login": "Anmelden"
 }
