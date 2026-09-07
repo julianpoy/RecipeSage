@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Tervetuloa RecipeSageen!",
     "pages.getStarted.button.register": "Luo tili",
-    "pages.getStarted.button.login": "Kirjaudu sisään"
+    "pages.getStarted.button.login": "Kirjaudu sisään",
+    "pages.getStarted.reason": "Luo tili, jotta reseptisi, ateriasuunnitelmasi ja ostoslistasi synkronoituvat kaikille laitteillesi ja jotta voit tuoda reseptejä automaattisesti miltä tahansa verkkosivustolta.",
+    "pages.getStarted.crossPlatform": "Yksi tili toimii puhelimellasi, tabletillasi, tietokoneellasi ja verkossa."
 }
