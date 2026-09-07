@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Continuer avec Apple",
     "components.signInWithApple.interrupted": "La connexion avec Apple a été interrompue. Veuillez réessayer.",
     "components.signInWithApple.failed": "La connexion avec Apple a échoué. Veuillez réessayer.",
-    "components.signInWithGoogle.interrupted": "La connexion avec Google a été interrompue. Veuillez réessayer."
+    "components.signInWithGoogle.interrupted": "La connexion avec Google a été interrompue. Veuillez réessayer.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Bienvenue sur RecipeSage !",
+    "pages.getStarted.button.register": "Créer un compte",
+    "pages.getStarted.button.login": "Se connecter"
 }
