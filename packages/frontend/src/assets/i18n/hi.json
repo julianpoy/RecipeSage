@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "RecipeSage में आपका स्वागत है!",
     "pages.getStarted.button.register": "खाता बनाएँ",
-    "pages.getStarted.button.login": "लॉग इन करें"
+    "pages.getStarted.button.login": "लॉग इन करें",
+    "pages.getStarted.reason": "खाता बनाएँ ताकि आपकी रेसिपी, भोजन योजनाएँ और खरीदारी सूचियाँ आपके सभी उपकरणों पर सिंक हों और आप किसी भी वेबसाइट से रेसिपी स्वचालित रूप से आयात कर सकें।",
+    "pages.getStarted.crossPlatform": "एक खाता आपके फ़ोन, टैबलेट, कंप्यूटर और वेब पर काम करता है।"
 }
