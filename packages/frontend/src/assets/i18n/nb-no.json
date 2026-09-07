@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Fortsett med Apple",
     "components.signInWithApple.interrupted": "Innlogging med Apple ble avbrutt. Prøv igjen.",
     "components.signInWithApple.failed": "Innlogging med Apple mislyktes. Prøv igjen.",
-    "components.signInWithGoogle.interrupted": "Innlogging med Google ble avbrutt. Prøv igjen."
+    "components.signInWithGoogle.interrupted": "Innlogging med Google ble avbrutt. Prøv igjen.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Velkommen til RecipeSage!",
+    "pages.getStarted.button.register": "Opprett en konto",
+    "pages.getStarted.button.login": "Logg inn"
 }
