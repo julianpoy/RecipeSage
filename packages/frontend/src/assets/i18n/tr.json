@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Apple ile devam et",
     "components.signInWithApple.interrupted": "Apple ile oturum açma işlemi kesintiye uğradı. Lütfen tekrar deneyin.",
     "components.signInWithApple.failed": "Apple ile oturum açılamadı. Lütfen tekrar deneyin.",
-    "components.signInWithGoogle.interrupted": "Google ile oturum açma işlemi kesintiye uğradı. Lütfen tekrar deneyin."
+    "components.signInWithGoogle.interrupted": "Google ile oturum açma işlemi kesintiye uğradı. Lütfen tekrar deneyin.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "RecipeSage'e hoş geldiniz!",
+    "pages.getStarted.button.register": "Hesap oluştur",
+    "pages.getStarted.button.login": "Oturum Aç"
 }
