@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Добро пожаловать в RecipeSage!",
     "pages.getStarted.button.register": "Создать учетную запись",
-    "pages.getStarted.button.login": "Войти"
+    "pages.getStarted.button.login": "Войти",
+    "pages.getStarted.reason": "Создайте учётную запись, чтобы ваши рецепты, планы питания и списки покупок синхронизировались на всех ваших устройствах, а также чтобы вы могли автоматически импортировать рецепты с любого сайта.",
+    "pages.getStarted.crossPlatform": "Одна учётная запись работает на телефоне, планшете, компьютере и в веб-версии."
 }
