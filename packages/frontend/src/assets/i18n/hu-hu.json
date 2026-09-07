@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Üdvözöljük a RecipeSage-ben!",
     "pages.getStarted.button.register": "Fiók létrehozása",
-    "pages.getStarted.button.login": "Bejelentkezés"
+    "pages.getStarted.button.login": "Bejelentkezés",
+    "pages.getStarted.reason": "Hozzon létre fiókot, hogy receptjei, étkezési tervei és bevásárlólistái minden eszközén szinkronizálódjanak, valamint hogy bármely webhelyről automatikusan importálhasson recepteket.",
+    "pages.getStarted.crossPlatform": "Egyetlen fiók használható telefonon, táblagépen, számítógépen és a weben is."
 }
