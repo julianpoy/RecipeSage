@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Jarraitu Apple erabiliz",
     "components.signInWithApple.interrupted": "Apple bidez saioa hastea eten egin da. Saiatu berriro, mesedez.",
     "components.signInWithApple.failed": "Apple bidez saioa hasteak huts egin du. Saiatu berriro, mesedez.",
-    "components.signInWithGoogle.interrupted": "Google bidez saioa hastea eten egin da. Saiatu berriro, mesedez."
+    "components.signInWithGoogle.interrupted": "Google bidez saioa hastea eten egin da. Saiatu berriro, mesedez.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Ongi etorri RecipeSage-ra!",
+    "pages.getStarted.button.register": "Sortu kontua",
+    "pages.getStarted.button.login": "Saioa hasi"
 }
