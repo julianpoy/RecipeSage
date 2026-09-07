@@ -1,5 +1,5 @@
 import { Component, Input, inject } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   NavController,
   AlertController,
@@ -31,6 +31,7 @@ import {
   IonButton,
   IonIcon,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonList,
@@ -56,6 +57,7 @@ import { addIcons } from "ionicons";
     IonButton,
     IonIcon,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonList,
@@ -72,6 +74,7 @@ export class AuthPage {
   private websocketService = inject(WebsocketService);
   private alertCtrl = inject(AlertController);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private serverActionsService = inject(ServerActionsService);
 
   @Input() startWithRegister?: boolean;
@@ -88,11 +91,19 @@ export class AuthPage {
 
   isInModal = false;
 
+  showBack = false;
+  defaultBackHref: string = RouteMap.GetStartedPage.getPath();
+
   revealPassword = false;
   loading = false;
 
   constructor() {
     addIcons({ closeOutline, eyeOutline, eyeOffOutline });
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
+
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
     } else {

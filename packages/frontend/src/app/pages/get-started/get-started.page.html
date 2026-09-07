@@ -1,0 +1,56 @@
+<img
+  class="hero-photo"
+  src="assets/stockphotos/chicken-salad-1280.jpg"
+  srcset="
+    assets/stockphotos/chicken-salad-640.jpg   640w,
+    assets/stockphotos/chicken-salad-1280.jpg 1280w,
+    assets/stockphotos/chicken-salad-1920.jpg 1920w
+  "
+  sizes="100vw"
+  alt=""
+/>
+<div class="scrim"></div>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page">
+    <div class="hero">
+      <img
+        class="wordmark"
+        src="assets/recipesage-white-trimmed-600.png"
+        alt="RecipeSage"
+      />
+
+      <h1>{{ "pages.getStarted.title" | translate }}</h1>
+      <p class="reason">{{ "pages.getStarted.reason" | translate }}</p>
+      <p class="cross-platform">
+        {{ "pages.getStarted.crossPlatform" | translate }}
+      </p>
+    </div>
+
+    <div class="actions">
+      <ion-button
+        expand="block"
+        [routerLink]="registerPath"
+        [state]="{ showBack: true }"
+      >
+        {{ "pages.getStarted.button.register" | translate }}
+      </ion-button>
+      <ion-button
+        expand="block"
+        fill="outline"
+        [routerLink]="loginPath"
+        [state]="{ showBack: true }"
+      >
+        {{ "pages.getStarted.button.login" | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
