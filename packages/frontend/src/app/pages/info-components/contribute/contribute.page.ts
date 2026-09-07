@@ -1,4 +1,5 @@
 import { Component, computed, inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
@@ -26,6 +27,7 @@ import {
   IonHeader,
   IonToolbar,
   IonButtons,
+  IonMenuButton,
   IonBackButton,
   IonTitle,
   IonContent,
@@ -55,6 +57,7 @@ const GOOGLE_MANAGE_URL = "https://play.google.com/store/account/subscriptions";
     IonHeader,
     IonToolbar,
     IonButtons,
+    IonMenuButton,
     IonBackButton,
     IonTitle,
     IonContent,
@@ -72,6 +75,9 @@ export class ContributePage {
   private alertCtrl = inject(AlertController);
   private navCtrl = inject(NavController);
   private iapService = inject(IapService);
+  private router = inject(Router);
+
+  showBack = false;
 
   billingPortalUrl = BILLING_PORTAL_URL;
   appleManageUrl = APPLE_MANAGE_URL;
@@ -97,9 +103,13 @@ export class ContributePage {
 
   constructor() {
     addIcons({ arrowForwardOutline });
-    // Donations are hosted-only. A custom server preset means the user is
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
+    // Contributions are hosted-only. A custom server preset means the user is
     // pointed at a non-hosted backend (self-hosting), so redirect them to
-    // recipesage.com to donate, same as the self-host build.
+    // recipesage.com to donate.
     if (IS_SELFHOST || serverConfig.preset === "custom") {
       void this.redirectSelfhost();
       return;

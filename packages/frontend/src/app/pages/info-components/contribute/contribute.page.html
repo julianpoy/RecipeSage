@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+      @if (!showBack) {
+        <ion-menu-button></ion-menu-button>
+      }
+      @if (showBack) {
+        <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+      }
     </ion-buttons>
 
     <ion-title>{{ "pages.contribute.title" | translate }}</ion-title>

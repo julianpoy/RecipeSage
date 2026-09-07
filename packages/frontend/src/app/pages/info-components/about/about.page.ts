@@ -67,7 +67,9 @@ export class AboutPage {
   }
 
   goToContribute() {
-    this.navCtrl.navigateForward(RouteMap.ContributePage.getPath());
+    this.navCtrl.navigateForward(RouteMap.ContributePage.getPath(), {
+      state: { showBack: true },
+    });
   }
 
   goToReleaseNotes() {
