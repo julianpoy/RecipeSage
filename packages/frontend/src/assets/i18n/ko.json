@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Apple로 계속하기",
     "components.signInWithApple.interrupted": "Apple 로그인이 중단되었습니다. 다시 시도해 주세요.",
     "components.signInWithApple.failed": "Apple 로그인에 실패했습니다. 다시 시도해 주세요.",
-    "components.signInWithGoogle.interrupted": "Google 로그인이 중단되었습니다. 다시 시도해 주세요."
+    "components.signInWithGoogle.interrupted": "Google 로그인이 중단되었습니다. 다시 시도해 주세요.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "RecipeSage에 오신 것을 환영합니다!",
+    "pages.getStarted.button.register": "계정 만들기",
+    "pages.getStarted.button.login": "로그인"
 }
