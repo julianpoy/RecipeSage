@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Velkommen til RecipeSage!",
     "pages.getStarted.button.register": "Opprett en konto",
-    "pages.getStarted.button.login": "Logg inn"
+    "pages.getStarted.button.login": "Logg inn",
+    "pages.getStarted.reason": "Opprett en konto slik at oppskriftene, matplanene og handlelistene dine synkroniseres på tvers av alle enhetene dine, og slik at du kan importere oppskrifter automatisk fra et hvilket som helst nettsted.",
+    "pages.getStarted.crossPlatform": "Én konto fungerer på telefonen, nettbrettet, datamaskinen og nettet."
 }
