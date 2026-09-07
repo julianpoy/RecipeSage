@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "المتابعة باستخدام Apple",
     "components.signInWithApple.interrupted": "تمت مقاطعة تسجيل الدخول باستخدام Apple. يرجى المحاولة مرة أخرى.",
     "components.signInWithApple.failed": "فشل تسجيل الدخول باستخدام Apple. يرجى المحاولة مرة أخرى.",
-    "components.signInWithGoogle.interrupted": "تمت مقاطعة تسجيل الدخول باستخدام Google. يرجى المحاولة مرة أخرى."
+    "components.signInWithGoogle.interrupted": "تمت مقاطعة تسجيل الدخول باستخدام Google. يرجى المحاولة مرة أخرى.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "مرحبًا بك في RecipeSage!",
+    "pages.getStarted.button.register": "إنشاء حساب",
+    "pages.getStarted.button.login": "تسجيل الدخول"
 }
