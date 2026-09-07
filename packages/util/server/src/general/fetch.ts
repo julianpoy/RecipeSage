@@ -1,6 +1,7 @@
 import fetch, { RequestInit } from "node-fetch";
 import { useAgent } from "request-filtering-agent";
 import { FetchURLError } from "./fetchURLError";
+import { config } from "./config";
 
 const normalizeFetchURL = (url: string): string =>
   url.startsWith("//") ? `https:${url}` : url;
@@ -50,7 +51,7 @@ export const fetchURL = (
     },
   };
 
-  if (process.env.NODE_ENV !== "selfhost") {
+  if (!config.api.enablePrivateFetch) {
     fetchOpts.agent = (parsedUrl) => useAgent(parsedUrl.href);
   }
 

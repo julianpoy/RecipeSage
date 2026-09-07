@@ -54,6 +54,7 @@ const getEnvStringList = (
 export const config = {
   api: {
     publicUrl: getEnvString("API_PUBLIC_BASE_URL", Environment.All),
+    enablePrivateFetch: getEnvString("API_ENABLE_PRIVATE_FETCH", []) === "true",
   },
   rateLimit: {
     enabled:
