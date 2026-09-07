@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Продовжити з Apple",
     "components.signInWithApple.interrupted": "Вхід через Apple було перервано. Спробуйте ще раз.",
     "components.signInWithApple.failed": "Не вдалося виконати вхід через Apple. Спробуйте ще раз.",
-    "components.signInWithGoogle.interrupted": "Вхід через Google було перервано. Спробуйте ще раз."
+    "components.signInWithGoogle.interrupted": "Вхід через Google було перервано. Спробуйте ще раз.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Вітамо на RecipeSage!",
+    "pages.getStarted.button.register": "Створити обліквий запис",
+    "pages.getStarted.button.login": "Увійти"
 }
