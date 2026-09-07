@@ -98,10 +98,12 @@ export const config = {
         getEnvString("GOOGLE_IAP_PRIVATE_KEY", [Environment.Prod]) || "",
       pubsubVerificationToken:
         getEnvString("GOOGLE_IAP_PUBSUB_TOKEN", [Environment.Prod]) || "",
-      productIdsMonthly: getEnvStringList("GOOGLE_IAP_PRODUCT_IDS_MONTHLY", [
+      productId:
+        getEnvString("GOOGLE_IAP_PRODUCT_ID", [Environment.Prod]) || "",
+      basePlanIdsMonthly: getEnvStringList("GOOGLE_IAP_BASE_PLAN_IDS_MONTHLY", [
         Environment.Prod,
       ]),
-      productIdsYearly: getEnvStringList("GOOGLE_IAP_PRODUCT_IDS_YEARLY", [
+      basePlanIdsYearly: getEnvStringList("GOOGLE_IAP_BASE_PLAN_IDS_YEARLY", [
         Environment.Prod,
       ]),
     },

@@ -10,20 +10,30 @@ export const getIapProducts = publicProcedure
   )
   .output(
     z.object({
+      productIds: z.array(z.string()),
       monthly: z.array(z.string()),
       yearly: z.array(z.string()),
     }),
   )
   .query(async ({ input }) => {
     if (process.env.NODE_ENV === "selfhost") {
-      return { monthly: [], yearly: [] };
+      return { productIds: [], monthly: [], yearly: [] };
     }
 
-    const iapConfig =
-      input.platform === "apple" ? config.apple.iap : config.google.iap;
+    if (input.platform === "apple") {
+      const { productIdsMonthly, productIdsYearly } = config.apple.iap;
+      return {
+        productIds: [...productIdsMonthly, ...productIdsYearly],
+        monthly: productIdsMonthly,
+        yearly: productIdsYearly,
+      };
+    }
 
+    const { productId, basePlanIdsMonthly, basePlanIdsYearly } =
+      config.google.iap;
     return {
-      monthly: iapConfig.productIdsMonthly,
-      yearly: iapConfig.productIdsYearly,
+      productIds: productId ? [productId] : [],
+      monthly: basePlanIdsMonthly,
+      yearly: basePlanIdsYearly,
     };
   });

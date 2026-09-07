@@ -3,11 +3,11 @@ import { resolveAppleSubscription } from "./resolveAppleSubscription";
 import { resolveGoogleSubscriptions } from "./resolveGoogleSubscriptions";
 
 vi.mock("../resolveStoreSubscriptionModel", () => ({
-  resolveStoreSubscriptionModel: (_platform: string, productId: string) => {
-    if (productId === "monthly") {
+  resolveStoreSubscriptionModel: (_platform: string, identifier: string) => {
+    if (identifier === "monthly") {
       return "pyo-monthly";
     }
-    if (productId === "yearly") {
+    if (identifier === "yearly") {
       return "pyo-yearly";
     }
     return undefined;
@@ -49,12 +49,18 @@ describe("store subscription resolution", () => {
     ).toBeUndefined();
   });
 
-  it("keeps each Google product paired with its own expiry", () => {
+  it("keeps each Google base plan paired with its own expiry", () => {
     const result = resolveGoogleSubscriptions({
       subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
       lineItems: [
-        { productId: "monthly", expiryTime: "2099-01-01T00:00:00.000Z" },
-        { productId: "yearly", expiryTime: "2100-01-01T00:00:00.000Z" },
+        {
+          offerDetails: { basePlanId: "monthly" },
+          expiryTime: "2099-01-01T00:00:00.000Z",
+        },
+        {
+          offerDetails: { basePlanId: "yearly" },
+          expiryTime: "2100-01-01T00:00:00.000Z",
+        },
       ],
     });
 
@@ -75,7 +81,10 @@ describe("store subscription resolution", () => {
         resolveGoogleSubscriptions({
           subscriptionState,
           lineItems: [
-            { productId: "monthly", expiryTime: "2100-01-01T00:00:00.000Z" },
+            {
+              offerDetails: { basePlanId: "monthly" },
+              expiryTime: "2100-01-01T00:00:00.000Z",
+            },
           ],
         }),
       ).toEqual([]);
@@ -96,7 +105,10 @@ describe("store subscription resolution", () => {
         subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
         testPurchase: {},
         lineItems: [
-          { productId: "monthly", expiryTime: "2100-01-01T00:00:00.000Z" },
+          {
+            offerDetails: { basePlanId: "monthly" },
+            expiryTime: "2100-01-01T00:00:00.000Z",
+          },
         ],
       }),
     ).toHaveLength(1);

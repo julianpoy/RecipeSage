@@ -38,14 +38,21 @@ export class IapService {
     const platform = this.getPlatform();
     if (!platform) return undefined;
 
-    const productIds = await this.serverActionsService.iap.getIapProducts({
+    const products = await this.serverActionsService.iap.getIapProducts({
       platform,
     });
-    if (!productIds) return undefined;
+    if (!products) return undefined;
+
+    const fetched = this.dedupeToBaseOffers(
+      await this.getProducts(products.productIds),
+      platform,
+    );
+    const monthlyIds = new Set(products.monthly);
+    const yearlyIds = new Set(products.yearly);
 
     return {
-      monthly: await this.getProducts(productIds.monthly),
-      yearly: await this.getProducts(productIds.yearly),
+      monthly: fetched.filter((product) => monthlyIds.has(product.identifier)),
+      yearly: fetched.filter((product) => yearlyIds.has(product.identifier)),
     };
   }
 
@@ -57,21 +64,23 @@ export class IapService {
       productType: PURCHASE_TYPE.SUBS,
     });
 
-    return this.dedupeToBaseOffers(products);
+    return products;
   }
 
-  private dedupeToBaseOffers(products: Product[]): Product[] {
-    if (this.getPlatform() !== "google") return products;
+  private dedupeToBaseOffers(
+    products: Product[],
+    platform: IapPlatform,
+  ): Product[] {
+    if (platform !== "google") return products;
 
-    const byProduct = new Map<string, Product>();
+    const byBasePlan = new Map<string, Product>();
     for (const product of products) {
-      const key = product.planIdentifier ?? product.identifier;
-      const existing = byProduct.get(key);
+      const existing = byBasePlan.get(product.identifier);
       if (!existing || (!product.offerId && existing.offerId)) {
-        byProduct.set(key, product);
+        byBasePlan.set(product.identifier, product);
       }
     }
-    return [...byProduct.values()];
+    return [...byBasePlan.values()];
   }
 
   async purchase(product: Product): Promise<boolean> {

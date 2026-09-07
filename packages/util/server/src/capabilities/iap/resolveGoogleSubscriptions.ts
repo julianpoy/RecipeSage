@@ -22,13 +22,14 @@ export const resolveGoogleSubscriptions = (
   const expiries = new Map<SubscriptionModelName, Date>();
 
   for (const lineItem of subscription.lineItems ?? []) {
-    if (!lineItem.productId || !lineItem.expiryTime) {
+    const basePlanId = lineItem.offerDetails?.basePlanId;
+    if (!basePlanId || !lineItem.expiryTime) {
       continue;
     }
 
     const name = resolveStoreSubscriptionModel(
       SubscriptionPlatform.Google,
-      lineItem.productId,
+      basePlanId,
     );
     const expires = new Date(lineItem.expiryTime);
 
