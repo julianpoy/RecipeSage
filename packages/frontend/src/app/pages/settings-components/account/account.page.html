@@ -150,7 +150,7 @@
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
           <p>
-            <a [routerLink]="contributePath">
+            <a [routerLink]="contributePath" [state]="{ showBack: true }">
               {{ "pages.account.bonus.description" | translate }}
             </a>
           </p>

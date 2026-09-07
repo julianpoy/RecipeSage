@@ -112,6 +112,12 @@ export const RouteMap = {
     },
     path: "contribute/thankyou",
   },
+  GetStartedPage: {
+    getPath() {
+      return `/get-started`;
+    },
+    path: "get-started",
+  },
   AuthPage: {
     getPath(authType: AuthType) {
       return `/auth/${authType}`;

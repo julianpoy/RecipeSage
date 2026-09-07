@@ -1,7 +1,10 @@
 import { inject } from "@angular/core";
 import { Routes } from "@angular/router";
+import { Capacitor } from "@capacitor/core";
 import { GlobalPreferenceKey, StartPageOptions } from "@recipesage/util/shared";
 
+import { IS_DESKTOP } from "../environments/environment";
+import { getIsElectron } from "./utils/electron";
 import { AuthType, RouteMap, UtilService } from "./services/util.service";
 import { PreferencesService } from "./services/preferences.service";
 import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.service";
@@ -12,6 +15,9 @@ export const appRoutes: Routes = [
     pathMatch: "full",
     redirectTo: () => {
       if (!inject(UtilService).isLoggedIn()) {
+        if (Capacitor.isNativePlatform() || IS_DESKTOP || getIsElectron()) {
+          return RouteMap.GetStartedPage.getPath();
+        }
         return RouteMap.AuthPage.getPath(AuthType.Register);
       }
 
@@ -125,6 +131,14 @@ export const appRoutes: Routes = [
         (m) => m.ExtensionAuthPage,
       ),
     title: "pages.extensionAuth.title",
+  },
+  {
+    path: RouteMap.GetStartedPage.path,
+    loadComponent: () =>
+      import("./pages/get-started/get-started.page").then(
+        (m) => m.GetStartedPage,
+      ),
+    title: "pages.getStarted.tabTitle",
   },
   {
     path: RouteMap.AuthPage.path,

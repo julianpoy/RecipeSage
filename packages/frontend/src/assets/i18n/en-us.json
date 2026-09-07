@@ -104,6 +104,13 @@
 
   "pages.www.nav.language": "Language",
 
+  "pages.getStarted.tabTitle": "RecipeSage",
+  "pages.getStarted.title": "Welcome to RecipeSage",
+  "pages.getStarted.reason": "Create an account so your recipes, meal plans, and shopping lists sync across all of your devices, and so you can import recipes automatically from any website.",
+  "pages.getStarted.crossPlatform": "One account works on your phone, tablet, computer, and the web.",
+  "pages.getStarted.button.register": "Create an account",
+  "pages.getStarted.button.login": "Log In",
+
   "pages.auth.tabTitle": "RecipeSage",
   "pages.auth.title.login": "Log In",
   "pages.auth.title.register": "Create an Account",
