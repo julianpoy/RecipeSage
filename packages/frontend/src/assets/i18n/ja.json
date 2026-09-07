@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Appleで続行",
     "components.signInWithApple.interrupted": "Appleへのサインインが中断されました。もう一度お試しください。",
     "components.signInWithApple.failed": "Appleへのサインインに失敗しました。もう一度お試しください。",
-    "components.signInWithGoogle.interrupted": "Googleへのサインインが中断されました。もう一度お試しください。"
+    "components.signInWithGoogle.interrupted": "Googleへのサインインが中断されました。もう一度お試しください。",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "RecipeSage へようこそ！",
+    "pages.getStarted.button.register": "アカウント作成",
+    "pages.getStarted.button.login": "ログイン"
 }
