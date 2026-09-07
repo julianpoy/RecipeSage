@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Вітамо на RecipeSage!",
     "pages.getStarted.button.register": "Створити обліквий запис",
-    "pages.getStarted.button.login": "Увійти"
+    "pages.getStarted.button.login": "Увійти",
+    "pages.getStarted.reason": "Створіть обліковий запис, щоб ваші рецепти, плани харчування та списки покупок синхронізувалися на всіх ваших пристроях, а також щоб ви могли автоматично імпортувати рецепти з будь-якого вебсайту.",
+    "pages.getStarted.crossPlatform": "Один обліковий запис працює на вашому телефоні, планшеті, комп’ютері та у вебверсії."
 }
