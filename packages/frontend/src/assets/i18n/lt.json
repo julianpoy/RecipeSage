@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Tęsti su „Apple“",
     "components.signInWithApple.interrupted": "Prisijungimas naudojant „Apple“ buvo nutrauktas. Bandykite dar kartą.",
     "components.signInWithApple.failed": "Nepavyko prisijungti naudojant „Apple“. Bandykite dar kartą.",
-    "components.signInWithGoogle.interrupted": "Prisijungimas naudojant „Google“ buvo nutrauktas. Bandykite dar kartą."
+    "components.signInWithGoogle.interrupted": "Prisijungimas naudojant „Google“ buvo nutrauktas. Bandykite dar kartą.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Sveiki atvykę į RecipeSage!",
+    "pages.getStarted.button.register": "Sukurti paskyrą",
+    "pages.getStarted.button.login": "Prisijungti"
 }
