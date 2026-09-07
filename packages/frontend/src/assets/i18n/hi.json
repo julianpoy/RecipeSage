@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Apple के साथ जारी रखें",
     "components.signInWithApple.interrupted": "Apple से साइन इन बाधित हो गया था। कृपया पुनः प्रयास करें।",
     "components.signInWithApple.failed": "Apple से साइन इन विफल हो गया। कृपया पुनः प्रयास करें।",
-    "components.signInWithGoogle.interrupted": "Google से साइन इन बाधित हो गया था। कृपया पुनः प्रयास करें।"
+    "components.signInWithGoogle.interrupted": "Google से साइन इन बाधित हो गया था। कृपया पुनः प्रयास करें।",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "RecipeSage में आपका स्वागत है!",
+    "pages.getStarted.button.register": "खाता बनाएँ",
+    "pages.getStarted.button.login": "लॉग इन करें"
 }
