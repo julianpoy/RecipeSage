@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "مرحبًا بك في RecipeSage!",
     "pages.getStarted.button.register": "إنشاء حساب",
-    "pages.getStarted.button.login": "تسجيل الدخول"
+    "pages.getStarted.button.login": "تسجيل الدخول",
+    "pages.getStarted.reason": "أنشئ حسابًا لكي تتزامن وصفاتك وخطط وجباتك وقوائم التسوق الخاصة بك عبر جميع أجهزتك، ولكي تتمكن من استيراد الوصفات تلقائيًا من أي موقع ويب.",
+    "pages.getStarted.crossPlatform": "يعمل حساب واحد على هاتفك وجهازك اللوحي وحاسوبك وعلى الويب."
 }
