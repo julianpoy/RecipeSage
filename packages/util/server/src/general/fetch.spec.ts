@@ -1,10 +1,15 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { fetchURL } from "./fetch";
 import { FetchURLError } from "./fetchURLError";
+import { config } from "./config";
+
+vi.mock("./config", () => ({
+  config: { api: { enablePrivateFetch: false } },
+}));
 
 describe("fetchURL", () => {
   afterEach(() => {
-    vi.unstubAllEnvs();
+    config.api.enablePrivateFetch = false;
   });
 
   it("rejects non-http(s) protocols", () => {
@@ -30,8 +35,8 @@ describe("fetchURL", () => {
     ).rejects.toThrow(FetchURLError);
   });
 
-  it("allows private addresses when self-hosting", async () => {
-    vi.stubEnv("NODE_ENV", "selfhost");
+  it("allows private addresses when private fetch is enabled", async () => {
+    config.api.enablePrivateFetch = true;
 
     const error = await fetchURL("http://127.0.0.1:1/", {
       timeout: 5000,
