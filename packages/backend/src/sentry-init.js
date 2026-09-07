@@ -21,9 +21,9 @@ Sentry.init({
   ],
 
   sampleRate: parseFloat(process.env.SENTRY_ERROR_SAMPLE_RATE ?? "1.0"),
-  tracesSampleRate: parseFloat(process.env.SENTRY_TRACE_SAMPLE_RATE ?? "1.0"),
-  profilesSampleRate: parseFloat(
-    process.env.SENTRY_PROFILE_SAMPLE_RATE ?? "1.0",
+  tracesSampleRate: parseFloat(process.env.SENTRY_TRACE_SAMPLE_RATE ?? "0.05"),
+  profileSessionSampleRate: parseFloat(
+    process.env.SENTRY_PROFILE_SESSION_SAMPLE_RATE ?? "1.0",
   ),
   profileLifecycle: "trace",
 
