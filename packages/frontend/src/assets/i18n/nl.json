@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Welkom bij RecipeSage!",
     "pages.getStarted.button.register": "Maak een account",
-    "pages.getStarted.button.login": "Log In"
+    "pages.getStarted.button.login": "Log In",
+    "pages.getStarted.reason": "Maak een account aan zodat uw recepten, maaltijdplannen en boodschappenlijsten op al uw apparaten worden gesynchroniseerd en u recepten automatisch van elke website kunt importeren.",
+    "pages.getStarted.crossPlatform": "Eén account werkt op uw telefoon, tablet, computer en op het web."
 }
