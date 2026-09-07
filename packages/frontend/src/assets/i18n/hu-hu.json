@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Folytatás az Apple-lel",
     "components.signInWithApple.interrupted": "Az Apple-lel való bejelentkezés megszakadt. Kérjük, próbálja újra.",
     "components.signInWithApple.failed": "Az Apple-lel való bejelentkezés sikertelen volt. Kérjük, próbálja újra.",
-    "components.signInWithGoogle.interrupted": "A Google-lel való bejelentkezés megszakadt. Kérjük, próbálja újra."
+    "components.signInWithGoogle.interrupted": "A Google-lel való bejelentkezés megszakadt. Kérjük, próbálja újra.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Üdvözöljük a RecipeSage-ben!",
+    "pages.getStarted.button.register": "Fiók létrehozása",
+    "pages.getStarted.button.login": "Bejelentkezés"
 }
