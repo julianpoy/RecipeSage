@@ -2458,5 +2458,9 @@
     "components.signInWithApple.interrupted": "Het aanmelden met Apple is onderbroken. Probeer het opnieuw.",
     "components.signInWithApple.failed": "Het aanmelden met Apple is mislukt. Probeer het opnieuw.",
     "components.signInWithGoogle.interrupted": "Het aanmelden met Google is onderbroken. Probeer het opnieuw.",
-    "pages.app.pressBackToExit": "Druk nogmaals op Terug om af te sluiten"
+    "pages.app.pressBackToExit": "Druk nogmaals op Terug om af te sluiten",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Welkom bij RecipeSage!",
+    "pages.getStarted.button.register": "Maak een account",
+    "pages.getStarted.button.login": "Log In"
 }
