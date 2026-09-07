@@ -6,6 +6,7 @@ import { categorizeShoppingListItems } from "./categorizeShoppingListItems";
 import { decryptDebugStore } from "./decryptDebugStore";
 import { indexRecipes } from "./indexRecipes";
 import { recomputeDiscoverRankScores } from "./recomputeDiscoverRankScores";
+import { remoderateStuckDiscoverRecipes } from "./remoderateStuckDiscoverRecipes";
 
 const runAction =
   <O>(fn: (options: O) => Promise<void>) =>
@@ -56,6 +57,24 @@ program
         batchSize: parseInt(options.batchSize, 10),
       });
     }),
+  );
+
+program
+  .command("remoderateStuckDiscoverRecipes")
+  .description("Re-queue moderation for discover recipes stuck in PENDING.")
+  .option("-a, --min-age-minutes <minutes>", "Minimum age in minutes", "30")
+  .option("-b, --batch-size <size>", "Batch size", "100")
+  .option("--dry-run", "List the recipes without enqueuing anything", false)
+  .action(
+    runAction<{ minAgeMinutes: string; batchSize: string; dryRun: boolean }>(
+      async (options) => {
+        await remoderateStuckDiscoverRecipes({
+          minAgeMinutes: parseInt(options.minAgeMinutes, 10),
+          batchSize: parseInt(options.batchSize, 10),
+          dryRun: options.dryRun,
+        });
+      },
+    ),
   );
 
 program
