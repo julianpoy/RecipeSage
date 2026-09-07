@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Καλώς ήρθατε στο RecipeSage!",
     "pages.getStarted.button.register": "Δημιουργία λογαριασμού",
-    "pages.getStarted.button.login": "Σύνδεση"
+    "pages.getStarted.button.login": "Σύνδεση",
+    "pages.getStarted.reason": "Δημιουργήστε έναν λογαριασμό, ώστε οι συνταγές, τα προγράμματα γευμάτων και οι λίστες αγορών σας να συγχρονίζονται σε όλες τις συσκευές σας και να μπορείτε να εισάγετε συνταγές αυτόματα από οποιονδήποτε ιστότοπο.",
+    "pages.getStarted.crossPlatform": "Ένας λογαριασμός λειτουργεί στο τηλέφωνο, το tablet, τον υπολογιστή και στον ιστό."
 }
