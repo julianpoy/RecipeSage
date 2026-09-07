@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Συνέχεια με την Apple",
     "components.signInWithApple.interrupted": "Η σύνδεση με την Apple διακόπηκε. Παρακαλούμε, δοκιμάστε ξανά.",
     "components.signInWithApple.failed": "Η σύνδεση με την Apple απέτυχε. Παρακαλούμε, δοκιμάστε ξανά.",
-    "components.signInWithGoogle.interrupted": "Η σύνδεση με την Google διακόπηκε. Παρακαλούμε, δοκιμάστε ξανά."
+    "components.signInWithGoogle.interrupted": "Η σύνδεση με την Google διακόπηκε. Παρακαλούμε, δοκιμάστε ξανά.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Καλώς ήρθατε στο RecipeSage!",
+    "pages.getStarted.button.register": "Δημιουργία λογαριασμού",
+    "pages.getStarted.button.login": "Σύνδεση"
 }
