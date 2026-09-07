@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Jatka Applen avulla",
     "components.signInWithApple.interrupted": "Appleen kirjautuminen keskeytettiin. Yritä uudelleen.",
     "components.signInWithApple.failed": "Appleen kirjautuminen epäonnistui. Yritä uudelleen.",
-    "components.signInWithGoogle.interrupted": "Googleen kirjautuminen keskeytettiin. Yritä uudelleen."
+    "components.signInWithGoogle.interrupted": "Googleen kirjautuminen keskeytettiin. Yritä uudelleen.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Tervetuloa RecipeSageen!",
+    "pages.getStarted.button.register": "Luo tili",
+    "pages.getStarted.button.login": "Kirjaudu sisään"
 }
