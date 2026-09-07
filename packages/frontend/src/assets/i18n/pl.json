@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Witaj w RecipeSage!",
     "pages.getStarted.button.register": "Utwórz konto",
-    "pages.getStarted.button.login": "Zaloguj się"
+    "pages.getStarted.button.login": "Zaloguj się",
+    "pages.getStarted.reason": "Utwórz konto, aby Twoje przepisy, plany posiłków i listy zakupów synchronizowały się na wszystkich urządzeniach oraz aby można było automatycznie importować przepisy z dowolnej strony internetowej.",
+    "pages.getStarted.crossPlatform": "Jedno konto działa na telefonie, tablecie, komputerze i w przeglądarce."
 }
