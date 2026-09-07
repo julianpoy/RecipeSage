@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "使用 Apple 继续",
     "components.signInWithApple.interrupted": "Apple 登录已中断。请重试。",
     "components.signInWithApple.failed": "Apple 登录失败。请重试。",
-    "components.signInWithGoogle.interrupted": "Google 登录已中断。请重试。"
+    "components.signInWithGoogle.interrupted": "Google 登录已中断。请重试。",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "欢迎来到RecipeSage!",
+    "pages.getStarted.button.register": "创建账号",
+    "pages.getStarted.button.login": "登录"
 }
