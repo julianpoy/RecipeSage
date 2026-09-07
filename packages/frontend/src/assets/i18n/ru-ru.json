@@ -2458,5 +2458,9 @@
     "components.signInWithApple.button": "Продолжить с Apple",
     "components.signInWithApple.interrupted": "Вход через Apple был прерван. Пожалуйста, попробуйте ещё раз.",
     "components.signInWithApple.failed": "Не удалось выполнить вход через Apple. Пожалуйста, попробуйте ещё раз.",
-    "components.signInWithGoogle.interrupted": "Вход через Google был прерван. Пожалуйста, попробуйте ещё раз."
+    "components.signInWithGoogle.interrupted": "Вход через Google был прерван. Пожалуйста, попробуйте ещё раз.",
+    "pages.getStarted.tabTitle": "RecipeSage",
+    "pages.getStarted.title": "Добро пожаловать в RecipeSage!",
+    "pages.getStarted.button.register": "Создать учетную запись",
+    "pages.getStarted.button.login": "Войти"
 }
