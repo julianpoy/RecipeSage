@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Bun venit la RecipeSage!",
     "pages.getStarted.button.register": "Creează un cont",
-    "pages.getStarted.button.login": "Conectare"
+    "pages.getStarted.button.login": "Conectare",
+    "pages.getStarted.reason": "Creați un cont pentru ca rețetele, planurile de mese și listele de cumpărături să se sincronizeze pe toate dispozitivele dumneavoastră și pentru a putea importa automat rețete de pe orice site web.",
+    "pages.getStarted.crossPlatform": "Un singur cont funcționează pe telefon, tabletă, computer și pe web."
 }
