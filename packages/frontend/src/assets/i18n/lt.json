@@ -2462,5 +2462,7 @@
     "pages.getStarted.tabTitle": "RecipeSage",
     "pages.getStarted.title": "Sveiki atvykę į RecipeSage!",
     "pages.getStarted.button.register": "Sukurti paskyrą",
-    "pages.getStarted.button.login": "Prisijungti"
+    "pages.getStarted.button.login": "Prisijungti",
+    "pages.getStarted.reason": "Susikurkite paskyrą, kad jūsų receptai, valgiaraščiai ir pirkinių sąrašai būtų sinchronizuojami visuose jūsų įrenginiuose ir kad galėtumėte automatiškai importuoti receptus iš bet kurios svetainės.",
+    "pages.getStarted.crossPlatform": "Viena paskyra veikia jūsų telefone, planšetiniame kompiuteryje, kompiuteryje ir žiniatinklyje."
 }
