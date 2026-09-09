@@ -119,7 +119,7 @@
     "linkifyjs": "^4.3.3",
     "minisearch": "^7.2.0",
     "morgan": "^1.11.0",
-    "multer": "v2.2.0",
+    "multer": "v2.3.0",
     "ngx-ui-scroll": "^4.2.0",
     "node-fetch": "^3.3.2",
     "p-debounce": "^5.1.0",
