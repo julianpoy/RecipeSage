@@ -118,7 +118,7 @@
     "linkify-string": "^4.3.2",
     "linkifyjs": "^4.3.3",
     "minisearch": "^7.2.0",
-    "morgan": "^1.11.0",
+    "morgan": "^1.12.0",
     "multer": "v2.3.0",
     "ngx-ui-scroll": "^4.2.0",
     "node-fetch": "^3.3.2",
