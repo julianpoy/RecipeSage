@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nZačněte vařit vodu a nechte ji během přípravy ingrediencí v mixéru dojít k plnému varu.\nDo mixéru přidejte mražené ingredience a poté nemražené ingredience.\nNalijte do mixéru převařenou vodu (nebo mléko dle vlastního výběru). Pokud používáte převařenou vodu, nalijte ji přímo na mražené ingredience, aby se snadno rozmixovaly.\nPokud se smoothie nemixuje snadno, přidejte více horké vody (nebo mléka dle vlastního výběru). Pokračujte v přidávání tekutiny, dokud se směs hladce nerozmixuje.\n[Podávání]\nNalijte smoothie do misky.\nJakmile je smoothie v misce, přidejte požadované volitelné posypy (oblíbenou domácí nebo kupovanou granolu, nakrájené ovoce, čokoládové kousky, strouhaný kokos, semínka nebo ořechy).\nPokud chcete přidat více sladkosti, ozdobte medem nebo sladidlem dle vlastního výběru.",
     "pages.shoppingList.removeRecipe": "Odebrat položky tohoto receptu ze seznamu",
     "components.shoppingListItem.editTitle.header": "Upravit položku",
-    "components.shoppingListItem.editTitle.placeholder": "Název položky..."
+    "components.shoppingListItem.editTitle.placeholder": "Název položky...",
+    "components.shoppingListItem.edit": "Upravit",
+    "components.shoppingListItem.delete": "Odstranit"
 }
