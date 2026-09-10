@@ -121,7 +121,7 @@ export class ShoppingListItemComponent {
 
   builtinCategoryI18n = Object.values(SHOPPING_LIST_CATEGORY_I18N);
   builtinCategories: string[] = [];
-  userKnownCategories = this.getUserKnownCategories();
+  categories: string[] = [];
 
   constructor() {
     addIcons({
@@ -132,19 +132,25 @@ export class ShoppingListItemComponent {
       ellipsisVerticalOutline,
       trashOutline,
     });
+    this.refreshCategories();
     this.generateBuiltinCategories();
   }
 
   async generateBuiltinCategories() {
-    this.builtinCategories = (
-      await Promise.all(
-        this.builtinCategoryI18n.map((el) =>
-          this.translate.get(el).toPromise(),
-        ),
-      )
-    ).sort((a: string, b: string) => a.localeCompare(b));
+    this.builtinCategories = await Promise.all(
+      this.builtinCategoryI18n.map((el) => this.translate.get(el).toPromise()),
+    );
 
-    this.userKnownCategories = this.getUserKnownCategories();
+    this.refreshCategories();
+  }
+
+  refreshCategories() {
+    const collator = new Intl.Collator(this.utilService.getCurrentLocale());
+
+    this.categories = [
+      ...this.builtinCategories,
+      ...this.getUserKnownCategories(),
+    ].sort(collator.compare);
   }
 
   onComplete() {
@@ -155,12 +161,7 @@ export class ShoppingListItemComponent {
     return this.utilService.formatDate(date, { now: true });
   }
 
-  moveToCategoryI18n(i18n: string) {
-    const categoryTitle = this.translate.instant(i18n);
-    this.recategorize.emit(categoryTitle);
-  }
-
-  moveToCategoryCustom(title: string) {
+  moveToCategory(title: string) {
     this.recategorize.emit(title);
   }
 
@@ -175,9 +176,7 @@ export class ShoppingListItemComponent {
       userKnownCategories.delete(builtinCategory);
     }
 
-    return Array.from(userKnownCategories).sort((a: string, b: string) =>
-      a.localeCompare(b),
-    );
+    return Array.from(userKnownCategories);
   }
 
   addUserKnownCategory(category: string) {
@@ -244,6 +243,7 @@ export class ShoppingListItemComponent {
 
     this.isCustomCategoryModalOpen = false;
     this.addUserKnownCategory(category);
-    this.moveToCategoryCustom(category);
+    this.refreshCategories();
+    this.moveToCategory(category);
   }
 }

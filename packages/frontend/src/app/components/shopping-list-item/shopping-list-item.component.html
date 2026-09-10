@@ -116,29 +116,17 @@
                 <ion-list-header>
                   {{ "components.shoppingListItem.moveTo" | translate }}
                 </ion-list-header>
-                @for (i18n of builtinCategories; track i18n) {
-                  <ion-item
-                    fill="clear"
-                    (click)="dismissMoveToPopover(); moveToCategoryI18n(i18n)"
-                    button
-                    detail="true"
-                  >
-                    <ion-label>
-                      {{ i18n | translate }}
-                    </ion-label>
-                  </ion-item>
-                }
-                @for (userCatTitle of userKnownCategories; track userCatTitle) {
+                @for (categoryTitle of categories; track categoryTitle) {
                   <ion-item
                     fill="clear"
                     (click)="
-                      dismissMoveToPopover(); moveToCategoryCustom(userCatTitle)
+                      dismissMoveToPopover(); moveToCategory(categoryTitle)
                     "
                     button
                     detail="true"
                   >
                     <ion-label>
-                      {{ userCatTitle }}
+                      {{ categoryTitle }}
                     </ion-label>
                   </ion-item>
                 }
