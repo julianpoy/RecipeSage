@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nComience a hervir agua y deje que alcance un hervor intenso mientras prepara los ingredientes en una licuadora.\nAgregue los ingredientes congelados a una licuadora, seguidos de los ingredientes no congelados.\nVierta agua hervida (o leche de su preferencia) dentro de la licuadora. Si usa agua hervida, asegúrese de verterla directamente sobre los ingredientes congelados para garantizar que se licúen fácilmente.\nSi su smoothie no se licúa fácilmente, agregue más agua caliente (o leche de su preferencia). Continúe agregando más líquido hasta que se licúe de forma homogénea.\n[Sirva]\nVierta el smoothie en un tazón.\nUna vez que el smoothie esté en el tazón, agregue los ingredientes opcionales para decorar que desee (granola casera o comprada en tienda, fruta picada, chispas de chocolate, coco rallado, semillas o nueces).\nSi desea añadir más dulzor, cubra con miel o cualquier edulcorante de su preferencia.",
     "pages.shoppingList.removeRecipe": "Eliminar los artículos de esta receta de la lista",
     "components.shoppingListItem.editTitle.header": "Editar artículo",
-    "components.shoppingListItem.editTitle.placeholder": "Nombre del artículo..."
+    "components.shoppingListItem.editTitle.placeholder": "Nombre del artículo...",
+    "components.shoppingListItem.edit": "Editar",
+    "components.shoppingListItem.delete": "Eliminar"
 }
