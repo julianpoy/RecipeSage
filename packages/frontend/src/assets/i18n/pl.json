@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nZacznij gotować wodę i doprowadź ją do wrzenia podczas przygotowywania składników w blenderze.\nDodaj mrożone składniki do blendera, a następnie składniki niemrożone.\nWlej przegotowaną wodę (lub wybrane mleko) do blendera. Jeśli używasz przegotowanej wody, pamiętaj, aby wlać ją bezpośrednio na mrożone składniki, co ułatwi blendowanie.\nJeśli smoothie nie blenduje się łatwo, dodaj więcej gorącej wody (lub wybranego mleka). Dodawaj więcej płynu, aż uzyskasz gładką konsystencję.\n[Podawanie]\nPrzelej smoothie do miski.\nGdy smoothie znajdzie się w misce, dodaj wybrane opcjonalne dodatki (ulubioną domową lub kupioną granolę, pokrojone owoce, krople czekoladowe, wiórki kokosowe, nasiona lub orzechy).\nJeśli chcesz dodać więcej słodyczy, polej miodem lub dodaj wybrany słodzik.",
     "pages.shoppingList.removeRecipe": "Usuń pozycje tego przepisu z listy",
     "components.shoppingListItem.editTitle.header": "Edytuj pozycję",
-    "components.shoppingListItem.editTitle.placeholder": "Nazwa pozycji..."
+    "components.shoppingListItem.editTitle.placeholder": "Nazwa pozycji...",
+    "components.shoppingListItem.edit": "Edytuj",
+    "components.shoppingListItem.delete": "Usuń"
 }
