@@ -119,6 +119,43 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+      @if (isLoggedIn) {
+        <ion-item lines="inset">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          <ion-select
+            [(ngModel)]="preferences[myRecipesPreferenceKeys.IncludeFriends]"
+            (ngModelChange)="savePreferences()"
+            label="{{
+              'pages.homeSearchFilterPopover.includeFriends' | translate
+            }}"
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            <ion-select-option [value]="includeFriendsOptions.Yes">
+              {{
+                "pages.homeSearchFilterPopover.includeFriends.yes" | translate
+              }}
+            </ion-select-option>
+            <ion-select-option [value]="includeFriendsOptions.Search">
+              {{
+                "pages.homeSearchFilterPopover.includeFriends.search"
+                  | translate
+              }}
+            </ion-select-option>
+            <ion-select-option [value]="includeFriendsOptions.Browse">
+              {{
+                "pages.homeSearchFilterPopover.includeFriends.browse"
+                  | translate
+              }}
+            </ion-select-option>
+            <ion-select-option [value]="includeFriendsOptions.No">
+              {{
+                "pages.homeSearchFilterPopover.includeFriends.no" | translate
+              }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      }
       <ion-item lines="inset">
         <ion-icon name="brush-outline" slot="start"></ion-icon>
         <ion-select

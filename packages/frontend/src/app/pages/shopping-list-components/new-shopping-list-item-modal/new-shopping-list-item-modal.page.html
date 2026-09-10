@@ -46,7 +46,10 @@
           @if (!selectedRecipe) {
             <br />
           }
-          <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
+          <select-recipe
+            [(selectedRecipe)]="selectedRecipe"
+            [includeAllFriends]="includeAllFriends"
+          ></select-recipe>
           @if (selectedRecipe) {
             <select-ingredients
               [ingredients]="selectedRecipe.ingredients"

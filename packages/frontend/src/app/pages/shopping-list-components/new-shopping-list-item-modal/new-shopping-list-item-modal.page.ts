@@ -3,10 +3,13 @@ import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import { PreferencesService } from "../../../services/preferences.service";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import type { RecipeSummary } from "@recipesage/prisma";
 import {
   SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
+  MyRecipesIncludeFriendsOptions,
+  MyRecipesPreferenceKey,
   ParsedIngredient,
 } from "@recipesage/util/shared";
 import {
@@ -54,6 +57,15 @@ export class NewShoppingListItemModalPage {
   }
 
   private modalCtrl = inject(ModalController);
+  private preferencesService = inject(PreferencesService);
+
+  includeAllFriends =
+    this.preferencesService.preferences[
+      MyRecipesPreferenceKey.IncludeFriends
+    ] === MyRecipesIncludeFriendsOptions.Yes ||
+    this.preferencesService.preferences[
+      MyRecipesPreferenceKey.IncludeFriends
+    ] === MyRecipesIncludeFriendsOptions.Search;
 
   inputType = "items";
 

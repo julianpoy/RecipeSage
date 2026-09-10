@@ -53,7 +53,10 @@
       @case ("recipe") {
         <div>
           <br /><br />
-          <select-recipe [(selectedRecipe)]="recipe"></select-recipe>
+          <select-recipe
+            [(selectedRecipe)]="recipe"
+            [includeAllFriends]="includeAllFriends"
+          ></select-recipe>
         </div>
       }
     }
