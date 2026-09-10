@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Sortu kontua",
     "pages.getStarted.button.login": "Saioa hasi",
     "pages.getStarted.reason": "Sortu kontu bat zure errezetak, otordu-planak eta erosketa-zerrendak zure gailu guztietan sinkroniza daitezen, eta edozein webgunetatik errezetak automatikoki inportatu ahal izan ditzazun.",
-    "pages.getStarted.crossPlatform": "Kontu bakar batek zure telefonoan, tabletan, ordenagailuan eta webean funtzionatzen du."
+    "pages.getStarted.crossPlatform": "Kontu bakar batek zure telefonoan, tabletan, ordenagailuan eta webean funtzionatzen du.",
+    "pages.welcomeFlow.tabTitle": "Ongi etorri!"
 }
