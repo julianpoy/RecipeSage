@@ -9,10 +9,13 @@
     [createdAt]="(showAddedOn && group.items[0].createdAt) || undefined"
     [ownerName]="(showAddedBy && group.items[0].user.name) || undefined"
     [hideDeleteOption]="hideDeleteOption"
+    [otherShoppingLists]="otherShoppingLists"
     (completeToggle)="completeToggle.emit(group.items)"
     (recategorize)="recategorize.emit([group.items, $event])"
     (titleUpdate)="titleUpdate.emit([group.items, $event])"
     (deleteClick)="deleteClick.emit(group.items)"
+    (moveToList)="moveToList.emit([group.items, $event])"
+    (copyToList)="copyToList.emit([group.items, $event])"
   ></shopping-list-item>
 }
 @if (group.items.length > 1) {
@@ -54,7 +57,7 @@
       @if (groupTitleExpanded[categoryTitle + group.title]) {
         <ion-row class="indented-item">
           <ion-col size="12">
-            @for (item of group.items; track item) {
+            @for (item of group.items; track item.id) {
               <shopping-list-item
                 [id]="item.id"
                 [title]="item.title"
@@ -65,10 +68,13 @@
                 [createdAt]="(showAddedOn && item.createdAt) || undefined"
                 [ownerName]="(showAddedBy && item.user.name) || undefined"
                 [hideDeleteOption]="hideDeleteOption"
+                [otherShoppingLists]="otherShoppingLists"
                 (completeToggle)="completeToggle.emit([item])"
                 (recategorize)="recategorize.emit([[item], $event])"
                 (titleUpdate)="titleUpdate.emit([[item], $event])"
                 (deleteClick)="deleteClick.emit([item])"
+                (moveToList)="moveToList.emit([[item], $event])"
+                (copyToList)="copyToList.emit([[item], $event])"
               ></shopping-list-item>
             }
           </ion-col>

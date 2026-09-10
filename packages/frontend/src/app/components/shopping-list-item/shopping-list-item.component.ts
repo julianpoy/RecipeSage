@@ -25,7 +25,11 @@ import {
   SHOPPING_LIST_CATEGORY_I18N,
   SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
 } from "@recipesage/util/shared";
+import type { ShoppingListSummary } from "@recipesage/prisma";
 import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  copyOutline,
   createOutline,
   ellipsisVerticalOutline,
   trashOutline,
@@ -59,6 +63,7 @@ export class ShoppingListItemComponent {
   private translate = inject(TranslateService);
 
   moveToPopoverIsOpen = false;
+  popoverView: "menu" | "moveToList" | "copyToList" = "menu";
   isEditTitleModalOpen = false;
   editTitleInput = "";
   isCustomCategoryModalOpen = false;
@@ -92,23 +97,25 @@ export class ShoppingListItemComponent {
   @Input({
     required: false,
   })
-  showEditButton?: boolean;
-  @Input({
-    required: false,
-  })
   showDeleteButton?: boolean;
   @Input({
     required: false,
   })
-  hideRecategorizeButton?: boolean;
+  hideRecategorizeOptions?: boolean;
   @Input({
     required: false,
   })
   hideDeleteOption?: boolean;
+  @Input({
+    required: false,
+  })
+  otherShoppingLists?: ShoppingListSummary[];
   @Output() completeToggle = new EventEmitter<null>();
   @Output() recategorize = new EventEmitter<string>();
   @Output() titleUpdate = new EventEmitter<string>();
   @Output() deleteClick = new EventEmitter<null>();
+  @Output() moveToList = new EventEmitter<string>();
+  @Output() copyToList = new EventEmitter<string>();
 
   @ViewChild("moveToPopover") moveToPopover!: HTMLIonPopoverElement;
 
@@ -117,7 +124,14 @@ export class ShoppingListItemComponent {
   userKnownCategories = this.getUserKnownCategories();
 
   constructor() {
-    addIcons({ createOutline, ellipsisVerticalOutline, trashOutline });
+    addIcons({
+      arrowBackOutline,
+      arrowForwardOutline,
+      copyOutline,
+      createOutline,
+      ellipsisVerticalOutline,
+      trashOutline,
+    });
     this.generateBuiltinCategories();
   }
 
@@ -179,7 +193,29 @@ export class ShoppingListItemComponent {
 
   showMoveToPopover(event: Event) {
     this.moveToPopover.event = event;
+    this.popoverView = "menu";
     this.moveToPopoverIsOpen = true;
+  }
+
+  dismissMoveToPopover() {
+    this.moveToPopoverIsOpen = false;
+  }
+
+  onMoveToPopoverDismissed() {
+    this.moveToPopoverIsOpen = false;
+    this.popoverView = "menu";
+  }
+
+  selectDestinationList(shoppingListId: string) {
+    const popoverView = this.popoverView;
+    this.dismissMoveToPopover();
+
+    if (popoverView === "moveToList") {
+      this.moveToList.emit(shoppingListId);
+    }
+    if (popoverView === "copyToList") {
+      this.copyToList.emit(shoppingListId);
+    }
   }
 
   showEditTitleInput() {
