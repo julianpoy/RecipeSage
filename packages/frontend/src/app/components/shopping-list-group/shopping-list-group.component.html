@@ -8,8 +8,11 @@
     "
     [createdAt]="(showAddedOn && group.items[0].createdAt) || undefined"
     [ownerName]="(showAddedBy && group.items[0].user.name) || undefined"
+    [hideDeleteOption]="hideDeleteOption"
     (completeToggle)="completeToggle.emit(group.items)"
     (recategorize)="recategorize.emit([group.items, $event])"
+    (titleUpdate)="titleUpdate.emit([group.items, $event])"
+    (deleteClick)="deleteClick.emit(group.items)"
   ></shopping-list-item>
 }
 @if (group.items.length > 1) {
@@ -61,8 +64,11 @@
                 "
                 [createdAt]="(showAddedOn && item.createdAt) || undefined"
                 [ownerName]="(showAddedBy && item.user.name) || undefined"
+                [hideDeleteOption]="hideDeleteOption"
                 (completeToggle)="completeToggle.emit([item])"
                 (recategorize)="recategorize.emit([[item], $event])"
+                (titleUpdate)="titleUpdate.emit([[item], $event])"
+                (deleteClick)="deleteClick.emit([item])"
               ></shopping-list-item>
             }
           </ion-col>

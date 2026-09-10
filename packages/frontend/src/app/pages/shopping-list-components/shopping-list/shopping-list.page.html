@@ -64,8 +64,13 @@
                           preferences[preferenceKeys.ShowAddedBy] &&
                           !!shoppingList()?.collaboratorUsers?.length
                         "
+                        [hideDeleteOption]="
+                          preferences[preferenceKeys.PreferDelete]
+                        "
                         (completeToggle)="completeItems($event, true)"
                         (recategorize)="recategorizeItems($event[0], $event[1])"
+                        (titleUpdate)="retitleItems($event[0], $event[1])"
+                        (deleteClick)="removeItems($event)"
                       ></shopping-list-group>
                     </div>
                   }
@@ -94,8 +99,11 @@
                   preferences[preferenceKeys.ShowAddedBy] &&
                   !!shoppingList()?.collaboratorUsers?.length
                 "
+                [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
                 (completeToggle)="completeItems($event, true)"
                 (recategorize)="recategorizeItems($event[0], $event[1])"
+                (titleUpdate)="retitleItems($event[0], $event[1])"
+                (deleteClick)="removeItems($event)"
               ></shopping-list-group>
             </div>
           }
@@ -151,8 +159,13 @@
                             item.user.name) ||
                           undefined
                         "
+                        [hideDeleteOption]="
+                          preferences[preferenceKeys.PreferDelete]
+                        "
                         (completeToggle)="completeItems([item], true)"
                         (recategorize)="recategorizeItems([item], $event)"
+                        (titleUpdate)="retitleItems([item], $event)"
+                        (deleteClick)="removeItems([item])"
                       ></shopping-list-item>
                     </div>
                   }
@@ -188,8 +201,11 @@
                     item.user.name) ||
                   undefined
                 "
+                [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
                 (completeToggle)="completeItems([item], true)"
                 (recategorize)="recategorizeItems([item], $event)"
+                (titleUpdate)="retitleItems([item], $event)"
+                (deleteClick)="removeItems([item])"
               ></shopping-list-item>
             </div>
           }

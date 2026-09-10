@@ -2,6 +2,7 @@ import { authenticatedProcedure } from "../../trpc";
 import {
   WSBroadcastEventType,
   broadcastWSEventIgnoringErrors,
+  getShoppingListItemCategories,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
@@ -38,6 +39,8 @@ export const updateShoppingListItems = authenticatedProcedure
       },
       select: {
         id: true,
+        title: true,
+        categoryTitle: true,
       },
     });
 
@@ -62,6 +65,40 @@ export const updateShoppingListItems = authenticatedProcedure
       });
     }
 
+    const existingItemsById = new Map(
+      shoppingListItems.map((item) => [item.id, item]),
+    );
+
+    const itemsToRecategorize: { id: string; title: string }[] = [];
+    for (const item of input.items) {
+      if (item.title === undefined) continue;
+      if (item.categoryTitle !== undefined) continue;
+
+      const existingItem = existingItemsById.get(item.id);
+      if (!existingItem) continue;
+      if (existingItem.title === item.title) continue;
+      if (
+        existingItem.categoryTitle &&
+        !existingItem.categoryTitle.startsWith("::")
+      ) {
+        continue;
+      }
+
+      itemsToRecategorize.push({ id: item.id, title: item.title });
+    }
+
+    const autoCategories = itemsToRecategorize.length
+      ? await getShoppingListItemCategories(
+          itemsToRecategorize.map((item) => item.title),
+        )
+      : [];
+    const autoCategoryTitleByItemId = new Map(
+      itemsToRecategorize.map((item, idx) => [
+        item.id,
+        `::${autoCategories[idx]}`,
+      ]),
+    );
+
     await prisma.$transaction(async (tx) => {
       for (const item of input.items) {
         if (
@@ -81,7 +118,8 @@ export const updateShoppingListItems = authenticatedProcedure
             title: item.title,
             recipeId: item.recipeId,
             completed: item.completed,
-            categoryTitle: item.categoryTitle,
+            categoryTitle:
+              item.categoryTitle ?? autoCategoryTitleByItemId.get(item.id),
           },
         });
       }

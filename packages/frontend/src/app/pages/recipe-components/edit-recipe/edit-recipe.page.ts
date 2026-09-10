@@ -64,6 +64,7 @@ import { SelectRecipeComponent } from "../../../components/select-recipe/select-
 import { RecipeFormatToolbarComponent } from "../../../components/recipe-format-toolbar/recipe-format-toolbar.component";
 import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
+import { AlertModalComponent } from "../../../components/alert-modal/alert-modal.component";
 import {
   IonHeader,
   IonToolbar,
@@ -76,7 +77,6 @@ import {
   IonPopover,
   IonList,
   IonItem,
-  IonModal,
   IonAccordionGroup,
   IonAccordion,
   IonLabel,
@@ -107,6 +107,7 @@ import { addIcons } from "ionicons";
     RecipeFormatToolbarComponent,
     TextInputComponent,
     TextAreaComponent,
+    AlertModalComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -118,7 +119,6 @@ import { addIcons } from "ionicons";
     IonPopover,
     IonList,
     IonItem,
-    IonModal,
     IonAccordionGroup,
     IonAccordion,
     IonLabel,

@@ -56,6 +56,34 @@
     <ng-template>
       <ion-content>
         <ion-list>
+          <ion-item
+            fill="clear"
+            (click)="moveToPopoverIsOpen = false; showEditTitleInput()"
+            button
+            detail="false"
+          >
+            <ion-icon slot="start" icon="create-outline"></ion-icon>
+            <ion-label>
+              {{ "components.shoppingListItem.edit" | translate }}
+            </ion-label>
+          </ion-item>
+          @if (!hideDeleteOption) {
+            <ion-item
+              fill="clear"
+              (click)="moveToPopoverIsOpen = false; deleteClick.emit()"
+              button
+              detail="false"
+            >
+              <ion-icon
+                slot="start"
+                icon="trash-outline"
+                color="danger"
+              ></ion-icon>
+              <ion-label color="danger">
+                {{ "components.shoppingListItem.delete" | translate }}
+              </ion-label>
+            </ion-item>
+          }
           <ion-list-header>
             {{ "components.shoppingListItem.moveTo" | translate }}
           </ion-list-header>
@@ -100,3 +128,40 @@
     </ng-template>
   </ion-popover>
 </ion-item>
+
+<alert-modal
+  [(isOpen)]="isEditTitleModalOpen"
+  header="{{ 'components.shoppingListItem.editTitle.header' | translate }}"
+  (confirmed)="submitEditTitle()"
+>
+  <ng-template>
+    <text-input
+      [(ngModel)]="editTitleInput"
+      [maxlength]="titleLengthLimit"
+      placeholder="{{
+        'components.shoppingListItem.editTitle.placeholder' | translate
+      }}"
+      autocapitalize="on"
+    ></text-input>
+  </ng-template>
+</alert-modal>
+
+<alert-modal
+  [(isOpen)]="isCustomCategoryModalOpen"
+  header="{{ 'components.shoppingListItem.customCategory.title' | translate }}"
+  message="{{
+    'components.shoppingListItem.customCategory.message' | translate
+  }}"
+  confirmLabel="{{ 'generic.save' | translate }}"
+  (confirmed)="submitCustomCategory()"
+>
+  <ng-template>
+    <text-input
+      [(ngModel)]="customCategoryInput"
+      placeholder="{{
+        'components.shoppingListItem.customCategory.placeholder' | translate
+      }}"
+      autocapitalize="on"
+    ></text-input>
+  </ng-template>
+</alert-modal>

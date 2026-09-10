@@ -78,76 +78,47 @@
   </ion-button>
 </ion-footer>
 
-<ion-modal
-  cssClass="alert-modal"
-  [isOpen]="isRenameModalOpen"
-  (didDismiss)="isRenameModalOpen = false"
+<alert-modal
+  [(isOpen)]="isRenameModalOpen"
+  header="{{
+    'pages.manageLabelModal.rename.header' | translate: { name: label.title }
+  }}"
+  (confirmed)="submitRename()"
 >
   <ng-template>
-    <div class="alert-modal-inner">
-      <h2>
-        {{
-          "pages.manageLabelModal.rename.header"
-            | translate: { name: label.title }
-        }}
-      </h2>
-      <text-input
-        [(ngModel)]="renameInput"
-        placeholder="{{
-          'pages.manageLabelModal.rename.placeholder' | translate
-        }}"
-      ></text-input>
-      <div class="alert-modal-buttons">
-        <button (click)="isRenameModalOpen = false">
-          {{ "generic.cancel" | translate }}
-        </button>
-        <button (click)="submitRename()">
-          {{ "generic.okay" | translate }}
-        </button>
-      </div>
-    </div>
+    <text-input
+      [(ngModel)]="renameInput"
+      placeholder="{{
+        'pages.manageLabelModal.rename.placeholder' | translate
+      }}"
+    ></text-input>
   </ng-template>
-</ion-modal>
+</alert-modal>
 
-<ion-modal
-  cssClass="alert-modal"
-  [isOpen]="isMergeModalOpen"
-  (didDismiss)="isMergeModalOpen = false"
+<alert-modal
+  [(isOpen)]="isMergeModalOpen"
+  header="{{
+    'pages.manageLabelModal.merge.header' | translate: { title: label.title }
+  }}"
+  confirmLabel="{{ 'generic.confirm' | translate }}"
+  (confirmed)="submitMerge()"
 >
   <ng-template>
-    <div class="alert-modal-inner">
-      <h2>
-        {{
-          "pages.manageLabelModal.merge.header"
-            | translate: { title: label.title }
-        }}
-      </h2>
-      <p>
-        {{
-          "pages.manageLabelModal.merge.subHeader"
-            | translate: { title: label.title }
-        }}
-      </p>
-      <p>
-        {{
-          "pages.manageLabelModal.merge.message"
-            | translate: { title: label.title }
-        }}
-      </p>
-      <text-input
-        [(ngModel)]="mergeInput"
-        placeholder="{{
-          'pages.manageLabelModal.merge.placeholder' | translate
-        }}"
-      ></text-input>
-      <div class="alert-modal-buttons">
-        <button (click)="isMergeModalOpen = false">
-          {{ "generic.cancel" | translate }}
-        </button>
-        <button (click)="submitMerge()">
-          {{ "generic.confirm" | translate }}
-        </button>
-      </div>
-    </div>
+    <p>
+      {{
+        "pages.manageLabelModal.merge.subHeader"
+          | translate: { title: label.title }
+      }}
+    </p>
+    <p>
+      {{
+        "pages.manageLabelModal.merge.message"
+          | translate: { title: label.title }
+      }}
+    </p>
+    <text-input
+      [(ngModel)]="mergeInput"
+      placeholder="{{ 'pages.manageLabelModal.merge.placeholder' | translate }}"
+    ></text-input>
   </ng-template>
-</ion-modal>
+</alert-modal>

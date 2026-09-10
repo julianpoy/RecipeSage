@@ -13,6 +13,7 @@ import { cleanLabelTitle } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { AlertModalComponent } from "../../../components/alert-modal/alert-modal.component";
 import {
   IonHeader,
   IonToolbar,
@@ -24,7 +25,6 @@ import {
   IonItem,
   IonLabel,
   IonFooter,
-  IonModal,
 } from "@ionic/angular/standalone";
 import {
   closeOutline,
@@ -44,6 +44,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,
+    AlertModalComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -54,7 +55,6 @@ import { addIcons } from "ionicons";
     IonItem,
     IonLabel,
     IonFooter,
-    IonModal,
   ],
 })
 export class ManageLabelModalPage {
