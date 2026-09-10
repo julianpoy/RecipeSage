@@ -7,6 +7,7 @@ import { decryptDebugStore } from "./decryptDebugStore";
 import { indexRecipes } from "./indexRecipes";
 import { recomputeDiscoverRankScores } from "./recomputeDiscoverRankScores";
 import { remoderateStuckDiscoverRecipes } from "./remoderateStuckDiscoverRecipes";
+import { seed } from "./seeders/seed";
 
 const runAction =
   <O>(fn: (options: O) => Promise<void>) =>
@@ -94,6 +95,17 @@ program
         email: options.email,
         subscriptionName: options.subscriptionName,
       });
+    }),
+  );
+
+program
+  .command("seed")
+  .description(
+    "Seed baseline database records (the assistant user and the shared example recipe images).",
+  )
+  .action(
+    runAction(async () => {
+      await seed();
     }),
   );
 

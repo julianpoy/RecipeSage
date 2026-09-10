@@ -26,3 +26,4 @@ export * from "./getDiscoverDistinctSaverCounts";
 export * from "./discoverPubliclyVisibleWhere";
 export * from "./discoverPubliclyVisibleSql";
 export * from "./discoverRecipeVisibilitySelect";
+export * from "./exampleRecipeDefinitions";

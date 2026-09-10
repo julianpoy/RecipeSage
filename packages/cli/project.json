@@ -25,7 +25,14 @@
         "main": "packages/cli/src/main.ts",
         "tsConfig": "packages/cli/tsconfig.json",
         "generatePackageJson": true,
-        "esbuildConfig": "packages/cli/esbuild.config.js"
+        "esbuildConfig": "packages/cli/esbuild.config.js",
+        "assets": [
+          {
+            "glob": "*",
+            "input": "packages/cli/src/seeders/exampleRecipeImages/",
+            "output": "./assets/exampleRecipeImages/"
+          }
+        ]
       },
       "configurations": {
         "development": {

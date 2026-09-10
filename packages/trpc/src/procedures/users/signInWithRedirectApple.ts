@@ -174,5 +174,6 @@ export const signInWithRedirectApple = publicProcedure
       token: session.token,
       userId: session.userId,
       email: user.email,
+      isNewUser: !existingUser,
     } satisfies SessionDTO;
   });

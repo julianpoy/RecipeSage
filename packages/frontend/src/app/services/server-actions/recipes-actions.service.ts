@@ -475,6 +475,19 @@ export class RecipesActionsService extends ActionsBase {
     );
   }
 
+  createExampleRecipes(
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["recipes"]["createExampleRecipes"] | undefined> {
+    return this.executeMutation(
+      () => this.trpc.recipes.createExampleRecipes.mutate(),
+      () => {
+        void this.syncService.syncRecipes();
+        this.events.publish(EventName.RecipeCreated);
+      },
+      errorHandlers,
+    );
+  }
+
   updateRecipe(
     input: RouterInputs["recipes"]["updateRecipe"],
     errorHandlers?: ErrorHandlers,

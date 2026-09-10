@@ -93,5 +93,6 @@ export const signInWithGoogle = publicProcedure
       token: session.token,
       userId: session.userId,
       email: user.email,
+      isNewUser: !existingUser,
     } satisfies SessionDTO;
   });

@@ -240,7 +240,17 @@ export class AuthPage {
       this.messagingService.requestNotifications();
     }
 
+    await this.finishAuth(response.isNewUser);
+  }
+
+  private async finishAuth(isNewUser?: boolean) {
     this.events.publish(EventName.Auth);
+
+    if (isNewUser && !this.isSelfHost && !this.isInModal) {
+      this.navCtrl.navigateRoot(RouteMap.WelcomeFlowPage.getPath());
+      return;
+    }
+
     this.close();
   }
 
@@ -274,8 +284,7 @@ export class AuthPage {
       this.messagingService.requestNotifications();
     }
 
-    this.events.publish(EventName.Auth);
-    this.close();
+    await this.finishAuth(session.isNewUser);
   }
 
   async forgotPassword() {

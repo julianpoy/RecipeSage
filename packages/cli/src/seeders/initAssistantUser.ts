@@ -1,4 +1,4 @@
-import { prisma } from "..";
+import { prisma } from "@recipesage/prisma";
 
 export const initAssistantUser = async () => {
   const assistantUser = await prisma.user.upsert({

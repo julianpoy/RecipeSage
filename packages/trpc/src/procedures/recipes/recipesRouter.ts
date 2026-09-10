@@ -1,5 +1,6 @@
 import { router } from "../../trpc";
 import { createRecipe } from "./createRecipe";
+import { createExampleRecipes } from "./createExampleRecipes";
 import { deleteAllRecipes } from "./deleteAllRecipes";
 import { deleteRecipe } from "./deleteRecipe";
 import { deleteRecipesByIds } from "./deleteRecipesByIds";
@@ -20,6 +21,7 @@ import { updateRecipe } from "./updateRecipe";
 
 export const recipesRouter = router({
   createRecipe,
+  createExampleRecipes,
   getRecipe,
   getRecipeCount,
   updateRecipe,

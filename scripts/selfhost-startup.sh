@@ -4,7 +4,7 @@ echo "==== Running migrations, please wait... ===="
 pnpm exec prisma migrate deploy
 
 echo "==== Running database seeders, please wait... ===="
-pnpm exec nx seed prisma
+node dist/apps/cli/main.cjs seed
 
 echo "==== Rebuilding search index, please wait... ===="
 node dist/apps/cli/main.cjs indexRecipes

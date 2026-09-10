@@ -102,6 +102,11 @@ describe("parsers", () => {
         );
         expect(result).toEqual(["1 cup", "2 tablespoons"]);
       });
+
+      it("extracts measurements separated by a pipe", () => {
+        const result = getMeasurementsForIngredient("1 cup | 250 ml milk");
+        expect(result).toEqual(["1 cup", "250 ml"]);
+      });
     });
 
     describe("special formats", () => {

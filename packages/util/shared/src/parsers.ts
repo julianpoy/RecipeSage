@@ -195,7 +195,7 @@ const headerRegexp = /^\[.*\]$/;
  * Separates multipart measurements like "1 cup + 2 tablespoons",
  * "1 cup plus 2 tablespoons", or "1 cup or 250ml".
  */
-const multipartQuantifierRegexp = / \+ | plus | or | oder | und /;
+const multipartQuantifierRegexp = / \+ | plus | or | oder | und | \| /;
 
 /**
  * Matches a measurement number, including mixed fractions ("1 1/2"),

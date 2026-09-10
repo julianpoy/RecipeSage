@@ -1,0 +1,102 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page">
+    <section class="hero">
+      <img
+        class="hero-photo"
+        src="assets/stockphotos/chicken-salad-1280.jpg"
+        srcset="
+          assets/stockphotos/chicken-salad-640.jpg   640w,
+          assets/stockphotos/chicken-salad-1280.jpg 1280w,
+          assets/stockphotos/chicken-salad-1920.jpg 1920w
+        "
+        sizes="(min-width: 900px) 45vw, 100vw"
+        alt=""
+      />
+      <div class="scrim"></div>
+      <div class="hero-content">
+        <img
+          class="wordmark"
+          src="assets/recipesage-white-trimmed-600.png"
+          alt="RecipeSage"
+        />
+        <h1>{{ "pages.welcomeFlow.header" | translate }}</h1>
+        <p>{{ "pages.welcomeFlow.intro" | translate }}</p>
+      </div>
+    </section>
+
+    <section class="choices">
+      <button
+        type="button"
+        class="choice ion-activatable"
+        [disabled]="creating"
+        [attr.aria-busy]="creating"
+        (click)="addExampleRecipes()"
+      >
+        <span class="choice-icon">
+          @if (creating) {
+            <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+            <ion-icon name="restaurant-outline"></ion-icon>
+          }
+        </span>
+        <span class="choice-body">
+          <span class="choice-title">
+            {{ "pages.welcomeFlow.examples.title" | translate }}
+          </span>
+          <span class="choice-description">
+            {{ "pages.welcomeFlow.examples.description" | translate }}
+          </span>
+        </span>
+        <ion-ripple-effect></ion-ripple-effect>
+      </button>
+
+      <button
+        type="button"
+        class="choice ion-activatable"
+        [disabled]="creating"
+        (click)="goToImport()"
+      >
+        <span class="choice-icon">
+          <ion-icon name="download-outline"></ion-icon>
+        </span>
+        <span class="choice-body">
+          <span class="choice-title">
+            {{ "pages.welcomeFlow.import.title" | translate }}
+          </span>
+          <span class="choice-description">
+            {{ "pages.welcomeFlow.import.description" | translate }}
+          </span>
+        </span>
+        <ion-ripple-effect></ion-ripple-effect>
+      </button>
+
+      <button
+        type="button"
+        class="choice ion-activatable"
+        [disabled]="creating"
+        (click)="startBlank()"
+      >
+        <span class="choice-icon">
+          <ion-icon name="create-outline"></ion-icon>
+        </span>
+        <span class="choice-body">
+          <span class="choice-title">
+            {{ "pages.welcomeFlow.blank.title" | translate }}
+          </span>
+          <span class="choice-description">
+            {{ "pages.welcomeFlow.blank.description" | translate }}
+          </span>
+        </span>
+        <ion-ripple-effect></ion-ripple-effect>
+      </button>
+    </section>
+  </div>
+</ion-content>

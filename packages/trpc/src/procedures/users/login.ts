@@ -81,5 +81,6 @@ export const login = publicProcedure
       token: session.token,
       userId: session.userId,
       email: user.email,
+      isNewUser: false,
     } satisfies SessionDTO;
   });

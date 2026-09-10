@@ -4,13 +4,6 @@
   "sourceRoot": "packages/prisma/src",
   "projectType": "library",
   "targets": {
-    "seed": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "packages/prisma",
-        "command": "tsx src/seeders/index.ts"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
       "options": {

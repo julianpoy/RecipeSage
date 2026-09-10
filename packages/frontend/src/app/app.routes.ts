@@ -141,6 +141,14 @@ export const appRoutes: Routes = [
     title: "pages.getStarted.tabTitle",
   },
   {
+    path: RouteMap.WelcomeFlowPage.path,
+    loadComponent: () =>
+      import("./pages/welcome-flow/welcome-flow.page").then(
+        (m) => m.WelcomeFlowPage,
+      ),
+    title: "pages.welcomeFlow.tabTitle",
+  },
+  {
     path: RouteMap.AuthPage.path,
     loadComponent: () =>
       import("./pages/auth/auth.page").then((m) => m.AuthPage),

@@ -118,6 +118,12 @@ export const RouteMap = {
     },
     path: "get-started",
   },
+  WelcomeFlowPage: {
+    getPath() {
+      return `/welcome-flow`;
+    },
+    path: "welcome-flow",
+  },
   AuthPage: {
     getPath(authType: AuthType) {
       return `/auth/${authType}`;
