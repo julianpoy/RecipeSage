@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "アカウント作成",
     "pages.getStarted.button.login": "ログイン",
     "pages.getStarted.reason": "アカウントを作成すると、レシピ、献立、買い物リストをすべてのデバイス間で同期でき、あらゆるウェブサイトからレシピを自動的にインポートできます。",
-    "pages.getStarted.crossPlatform": "1つのアカウントで、スマートフォン、タブレット、コンピューター、ウェブで利用できます。"
+    "pages.getStarted.crossPlatform": "1つのアカウントで、スマートフォン、タブレット、コンピューター、ウェブで利用できます。",
+    "pages.welcomeFlow.tabTitle": "ようこそ！"
 }
