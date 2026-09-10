@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[스무디]\n물을 끓이기 시작하고, 블렌더에 재료를 준비하는 동안 물이 완전히 끓도록 합니다.\n냉동 재료를 블렌더에 넣은 다음 냉동하지 않은 재료를 넣습니다.\n끓인 물(또는 원하는 우유)을 블렌더에 붓습니다. 끓인 물을 사용하는 경우, 쉽게 갈리도록 반드시 냉동 재료 위에 직접 부으십시오.\n스무디가 잘 갈리지 않으면 뜨거운 물(또는 원하는 우유)을 더 넣으십시오. 부드럽게 갈릴 때까지 액체를 계속 추가합니다.\n[제공]\n스무디를 볼에 붓습니다.\n스무디를 볼에 담은 후 원하는 선택 토핑(좋아하는 수제 또는 시판 그래놀라, 잘게 썬 과일, 초콜릿 칩, 코코넛 플레이크, 씨앗 또는 견과류)을 추가합니다.\n더 달콤하게 즐기고 싶다면 꿀 또는 원하는 감미료를 올립니다.",
     "pages.shoppingList.removeRecipe": "이 레시피의 항목을 목록에서 제거",
     "components.shoppingListItem.editTitle.header": "항목 수정",
-    "components.shoppingListItem.editTitle.placeholder": "항목 이름..."
+    "components.shoppingListItem.editTitle.placeholder": "항목 이름...",
+    "components.shoppingListItem.edit": "편집",
+    "components.shoppingListItem.delete": "삭제"
 }
