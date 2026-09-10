@@ -49,7 +49,7 @@
                 <div>
                   @for (
                     group of groupsByCategoryTitle[categoryTitle];
-                    track group
+                    track group.title
                   ) {
                     <div class="shopping-list-item">
                       <shopping-list-group
@@ -67,10 +67,13 @@
                         [hideDeleteOption]="
                           preferences[preferenceKeys.PreferDelete]
                         "
+                        [otherShoppingLists]="otherShoppingLists()"
                         (completeToggle)="completeItems($event, true)"
                         (recategorize)="recategorizeItems($event[0], $event[1])"
                         (titleUpdate)="retitleItems($event[0], $event[1])"
                         (deleteClick)="removeItems($event)"
+                        (moveToList)="moveItemsToList($event[0], $event[1])"
+                        (copyToList)="copyItemsToList($event[0], $event[1])"
                       ></shopping-list-group>
                     </div>
                   }
@@ -100,10 +103,13 @@
                   !!shoppingList()?.collaboratorUsers?.length
                 "
                 [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
+                [otherShoppingLists]="otherShoppingLists()"
                 (completeToggle)="completeItems($event, true)"
                 (recategorize)="recategorizeItems($event[0], $event[1])"
                 (titleUpdate)="retitleItems($event[0], $event[1])"
                 (deleteClick)="removeItems($event)"
+                (moveToList)="moveItemsToList($event[0], $event[1])"
+                (copyToList)="copyItemsToList($event[0], $event[1])"
               ></shopping-list-group>
             </div>
           }
@@ -136,7 +142,7 @@
                 <div>
                   @for (
                     item of itemsByCategoryTitle[categoryTitle];
-                    track item
+                    track item.id
                   ) {
                     <div class="shopping-list-item">
                       <shopping-list-item
@@ -162,10 +168,13 @@
                         [hideDeleteOption]="
                           preferences[preferenceKeys.PreferDelete]
                         "
+                        [otherShoppingLists]="otherShoppingLists()"
                         (completeToggle)="completeItems([item], true)"
                         (recategorize)="recategorizeItems([item], $event)"
                         (titleUpdate)="retitleItems([item], $event)"
                         (deleteClick)="removeItems([item])"
+                        (moveToList)="moveItemsToList([item], $event)"
+                        (copyToList)="copyItemsToList([item], $event)"
                       ></shopping-list-item>
                     </div>
                   }
@@ -180,7 +189,7 @@
         !preferences[preferenceKeys.GroupSimilar]
       ) {
         <div>
-          @for (item of items; track item) {
+          @for (item of items; track item.id) {
             <div class="shopping-list-item">
               <shopping-list-item
                 [id]="item.id"
@@ -202,10 +211,13 @@
                   undefined
                 "
                 [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
+                [otherShoppingLists]="otherShoppingLists()"
                 (completeToggle)="completeItems([item], true)"
                 (recategorize)="recategorizeItems([item], $event)"
                 (titleUpdate)="retitleItems([item], $event)"
                 (deleteClick)="removeItems([item])"
+                (moveToList)="moveItemsToList([item], $event)"
+                (copyToList)="copyItemsToList([item], $event)"
               ></shopping-list-item>
             </div>
           }
@@ -300,7 +312,7 @@
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-item>
-        @for (item of completedItems; track item) {
+        @for (item of completedItems; track item.id) {
           <shopping-list-item
             [id]="item.id"
             [title]="item.title"
@@ -320,13 +332,16 @@
                 item.user.name) ||
               undefined
             "
-            [showEditButton]="true"
             [showDeleteButton]="true"
-            [hideRecategorizeButton]="true"
+            [hideDeleteOption]="true"
+            [hideRecategorizeOptions]="true"
+            [otherShoppingLists]="otherShoppingLists()"
             (completeToggle)="completeItems([item], false)"
             (recategorize)="recategorizeItems([item], $event)"
             (titleUpdate)="retitleItems([item], $event)"
             (deleteClick)="removeItems([item])"
+            (moveToList)="moveItemsToList([item], $event)"
+            (copyToList)="copyItemsToList([item], $event)"
           ></shopping-list-item>
         }
       </ion-list>

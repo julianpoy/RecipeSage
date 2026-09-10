@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import type { ShoppingListItemSummary } from "@recipesage/prisma";
+import type {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+} from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ShoppingListItemComponent } from "../shopping-list-item/shopping-list-item.component";
 import {
@@ -58,6 +61,10 @@ export class ShoppingListGroupComponent {
     required: false,
   })
   hideDeleteOption?: boolean;
+  @Input({
+    required: false,
+  })
+  otherShoppingLists?: ShoppingListSummary[];
   @Output() completeToggle = new EventEmitter<ShoppingListItemSummary[]>();
   @Output() recategorize = new EventEmitter<
     [ShoppingListItemSummary[], string]
@@ -66,6 +73,12 @@ export class ShoppingListGroupComponent {
     [ShoppingListItemSummary[], string]
   >();
   @Output() deleteClick = new EventEmitter<ShoppingListItemSummary[]>();
+  @Output() moveToList = new EventEmitter<
+    [ShoppingListItemSummary[], string]
+  >();
+  @Output() copyToList = new EventEmitter<
+    [ShoppingListItemSummary[], string]
+  >();
 
   constructor() {
     addIcons({ caretDown, caretUp });

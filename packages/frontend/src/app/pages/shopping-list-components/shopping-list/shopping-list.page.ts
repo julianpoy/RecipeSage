@@ -1,4 +1,4 @@
-import { Component, effect, inject } from "@angular/core";
+import { Component, computed, effect, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -28,7 +28,10 @@ import { ShoppingListItemComponent } from "../../../components/shopping-list-ite
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { ServerActionsService } from "../../../services/server-actions.service";
-import type { ShoppingListItemSummary } from "@recipesage/prisma";
+import type {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+} from "@recipesage/prisma";
 import {
   IonHeader,
   IonToolbar,
@@ -131,8 +134,15 @@ export class ShoppingListPage {
         404: () => this.handleListNoLongerAvailable(),
       },
     );
+  private shoppingListsQuery =
+    this.serverActionsService.shoppingLists.getShoppingLists();
   shoppingList = this.shoppingListQuery.value;
   shoppingListItems = this.shoppingListItemsQuery.value;
+  otherShoppingLists = computed<ShoppingListSummary[]>(() =>
+    (this.shoppingListsQuery.value() || [])
+      .filter((shoppingList) => shoppingList.id !== this.shoppingListId)
+      .sort((a, b) => a.title.localeCompare(b.title)),
+  );
 
   items: ShoppingListItemSummary[] = [];
   completedItems: ShoppingListItemSummary[] = [];
@@ -177,6 +187,7 @@ export class ShoppingListPage {
 
   ionViewWillEnter() {
     this.loadList();
+    this.shoppingListsQuery.refresh();
 
     this.websocketService.on("shoppinglist:updated", this.onWSEvent);
   }
@@ -201,20 +212,20 @@ export class ShoppingListPage {
   ) {
     const items = _items
       .filter((item) => !item.completed)
-      .map((el) => {
-        el.categoryTitle = this.parseCategoryTitle(
+      .map((el) => ({
+        ...el,
+        categoryTitle: this.parseCategoryTitle(
           el.categoryTitle || "::uncategorized",
-        );
-        return el;
-      });
+        ),
+      }));
     const completedItems = _items
       .filter((item) => item.completed)
-      .map((el) => {
-        el.categoryTitle = this.parseCategoryTitle(
+      .map((el) => ({
+        ...el,
+        categoryTitle: this.parseCategoryTitle(
           el.categoryTitle || "::uncategorized",
-        );
-        return el;
-      });
+        ),
+      }));
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -371,6 +382,130 @@ export class ShoppingListPage {
     this.loadList();
 
     loading.dismiss();
+  }
+
+  private async _createItemsInList(
+    items: ShoppingListItemSummary[],
+    destinationShoppingListId: string,
+  ) {
+    const rawItemsById = new Map(
+      (this.shoppingListItems() || []).map((item) => [item.id, item]),
+    );
+
+    return this.serverActionsService.shoppingLists.createShoppingListItems({
+      shoppingListId: destinationShoppingListId,
+      items: items.map((item) => ({
+        title: item.title,
+        recipeId: item.recipeId,
+        completed: item.completed,
+        categoryTitle: rawItemsById.get(item.id)?.categoryTitle || undefined,
+      })),
+    });
+  }
+
+  async copyItemsToList(
+    items: ShoppingListItemSummary[],
+    destinationShoppingListId: string,
+  ) {
+    if (!this.shoppingList()) return;
+    if (!items.length) return;
+
+    const destination = this.otherShoppingLists().find(
+      (shoppingList) => shoppingList.id === destinationShoppingListId,
+    );
+    if (!destination) return;
+
+    const loading = this.loadingService.start();
+
+    const createResponse = await this._createItemsInList(items, destination.id);
+    loading.dismiss();
+    if (!createResponse) return;
+
+    const message = await this.translate
+      .get("pages.shoppingList.copiedToList", {
+        itemCount: items.length,
+        title: destination.title,
+      })
+      .toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    toast.present();
+  }
+
+  async moveItemsToList(
+    items: ShoppingListItemSummary[],
+    destinationShoppingListId: string,
+  ) {
+    if (!this.shoppingList()) return;
+    if (!items.length) return;
+
+    const destination = this.otherShoppingLists().find(
+      (shoppingList) => shoppingList.id === destinationShoppingListId,
+    );
+    if (!destination) return;
+
+    const loading = this.loadingService.start();
+
+    const createResponse = await this._createItemsInList(items, destination.id);
+    if (!createResponse) {
+      loading.dismiss();
+      return;
+    }
+
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
+    const deleteResponse =
+      await this.serverActionsService.shoppingLists.deleteShoppingListItems(
+        {
+          shoppingListId: this.shoppingListId,
+          ids: items.map((item) => item.id),
+          reference,
+        },
+        {
+          0: () => {},
+          500: () => {},
+        },
+      );
+
+    this.loadList();
+    loading.dismiss();
+
+    if (!deleteResponse) {
+      const failureHeader = await this.translate
+        .get("pages.shoppingList.movedToListPartialFailure.header")
+        .toPromise();
+      const failureMessage = await this.translate
+        .get("pages.shoppingList.movedToListPartialFailure", {
+          title: destination.title,
+        })
+        .toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
+
+      const failureAlert = await this.alertCtrl.create({
+        header: failureHeader,
+        message: failureMessage,
+        buttons: [okay],
+      });
+      failureAlert.present();
+      return;
+    }
+
+    const message = await this.translate
+      .get("pages.shoppingList.movedToList", {
+        itemCount: items.length,
+        title: destination.title,
+      })
+      .toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+    });
+    toast.present();
   }
 
   removeRecipe(recipeId: string) {

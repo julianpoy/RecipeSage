@@ -25,7 +25,11 @@ import {
   SHOPPING_LIST_CATEGORY_I18N,
   SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
 } from "@recipesage/util/shared";
+import type { ShoppingListSummary } from "@recipesage/prisma";
 import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  copyOutline,
   createOutline,
   ellipsisVerticalOutline,
   trashOutline,
@@ -59,6 +63,7 @@ export class ShoppingListItemComponent {
   private translate = inject(TranslateService);
 
   moveToPopoverIsOpen = false;
+  popoverView: "menu" | "moveToList" | "copyToList" = "menu";
   isEditTitleModalOpen = false;
   editTitleInput = "";
   isCustomCategoryModalOpen = false;
@@ -92,45 +97,60 @@ export class ShoppingListItemComponent {
   @Input({
     required: false,
   })
-  showEditButton?: boolean;
-  @Input({
-    required: false,
-  })
   showDeleteButton?: boolean;
   @Input({
     required: false,
   })
-  hideRecategorizeButton?: boolean;
+  hideRecategorizeOptions?: boolean;
   @Input({
     required: false,
   })
   hideDeleteOption?: boolean;
+  @Input({
+    required: false,
+  })
+  otherShoppingLists?: ShoppingListSummary[];
   @Output() completeToggle = new EventEmitter<null>();
   @Output() recategorize = new EventEmitter<string>();
   @Output() titleUpdate = new EventEmitter<string>();
   @Output() deleteClick = new EventEmitter<null>();
+  @Output() moveToList = new EventEmitter<string>();
+  @Output() copyToList = new EventEmitter<string>();
 
   @ViewChild("moveToPopover") moveToPopover!: HTMLIonPopoverElement;
 
   builtinCategoryI18n = Object.values(SHOPPING_LIST_CATEGORY_I18N);
   builtinCategories: string[] = [];
-  userKnownCategories = this.getUserKnownCategories();
+  categories: string[] = [];
 
   constructor() {
-    addIcons({ createOutline, ellipsisVerticalOutline, trashOutline });
+    addIcons({
+      arrowBackOutline,
+      arrowForwardOutline,
+      copyOutline,
+      createOutline,
+      ellipsisVerticalOutline,
+      trashOutline,
+    });
+    this.refreshCategories();
     this.generateBuiltinCategories();
   }
 
   async generateBuiltinCategories() {
-    this.builtinCategories = (
-      await Promise.all(
-        this.builtinCategoryI18n.map((el) =>
-          this.translate.get(el).toPromise(),
-        ),
-      )
-    ).sort((a: string, b: string) => a.localeCompare(b));
+    this.builtinCategories = await Promise.all(
+      this.builtinCategoryI18n.map((el) => this.translate.get(el).toPromise()),
+    );
 
-    this.userKnownCategories = this.getUserKnownCategories();
+    this.refreshCategories();
+  }
+
+  refreshCategories() {
+    const collator = new Intl.Collator(this.utilService.getCurrentLocale());
+
+    this.categories = [
+      ...this.builtinCategories,
+      ...this.getUserKnownCategories(),
+    ].sort(collator.compare);
   }
 
   onComplete() {
@@ -141,12 +161,7 @@ export class ShoppingListItemComponent {
     return this.utilService.formatDate(date, { now: true });
   }
 
-  moveToCategoryI18n(i18n: string) {
-    const categoryTitle = this.translate.instant(i18n);
-    this.recategorize.emit(categoryTitle);
-  }
-
-  moveToCategoryCustom(title: string) {
+  moveToCategory(title: string) {
     this.recategorize.emit(title);
   }
 
@@ -161,9 +176,7 @@ export class ShoppingListItemComponent {
       userKnownCategories.delete(builtinCategory);
     }
 
-    return Array.from(userKnownCategories).sort((a: string, b: string) =>
-      a.localeCompare(b),
-    );
+    return Array.from(userKnownCategories);
   }
 
   addUserKnownCategory(category: string) {
@@ -179,7 +192,29 @@ export class ShoppingListItemComponent {
 
   showMoveToPopover(event: Event) {
     this.moveToPopover.event = event;
+    this.popoverView = "menu";
     this.moveToPopoverIsOpen = true;
+  }
+
+  dismissMoveToPopover() {
+    this.moveToPopoverIsOpen = false;
+  }
+
+  onMoveToPopoverDismissed() {
+    this.moveToPopoverIsOpen = false;
+    this.popoverView = "menu";
+  }
+
+  selectDestinationList(shoppingListId: string) {
+    const popoverView = this.popoverView;
+    this.dismissMoveToPopover();
+
+    if (popoverView === "moveToList") {
+      this.moveToList.emit(shoppingListId);
+    }
+    if (popoverView === "copyToList") {
+      this.copyToList.emit(shoppingListId);
+    }
   }
 
   showEditTitleInput() {
@@ -208,6 +243,7 @@ export class ShoppingListItemComponent {
 
     this.isCustomCategoryModalOpen = false;
     this.addUserKnownCategory(category);
-    this.moveToCategoryCustom(category);
+    this.refreshCategories();
+    this.moveToCategory(category);
   }
 }
