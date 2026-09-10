@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nKezdje el forralni a vizet, és hagyja teljesen felforrni, miközben előkészíti az összetevőket a turmixgépben.\nTegye a fagyasztott összetevőket a turmixgépbe, majd adja hozzá a nem fagyasztott összetevőket.\nÖntse a forralt vizet (vagy tetszés szerinti tejet) a turmixgépbe. Ha forralt vizet használ, ügyeljen arra, hogy közvetlenül a fagyasztott összetevőkre öntse, hogy könnyen turmixolható legyen.\nHa a smoothie nem turmixolódik könnyen, adjon hozzá több forró vizet (vagy tetszés szerinti tejet). Addig adjon hozzá több folyadékot, amíg simára nem turmixolódik.\n[Tálalás]\nÖntse a smoothie-t egy tálba.\nMiután a smoothie a tálba került, adja hozzá a kívánt opcionális feltéteket (kedvenc házi vagy bolti granola, aprított gyümölcs, csokoládécsepp, reszelt kókusz, magvak vagy diófélék).\nHa extra édességet szeretne, tegye a tetejére mézet vagy bármilyen tetszés szerinti édesítőszert.",
     "pages.shoppingList.removeRecipe": "A recept tételeinek eltávolítása a listáról",
     "components.shoppingListItem.editTitle.header": "Tétel szerkesztése",
-    "components.shoppingListItem.editTitle.placeholder": "Tétel neve..."
+    "components.shoppingListItem.editTitle.placeholder": "Tétel neve...",
+    "components.shoppingListItem.edit": "Szerkesztés",
+    "components.shoppingListItem.delete": "Törlés"
 }
