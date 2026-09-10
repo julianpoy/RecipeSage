@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Criar uma conta",
     "pages.getStarted.button.login": "Entrar",
     "pages.getStarted.reason": "Crie uma conta para que suas receitas, planos de refeições e listas de compras sejam sincronizados em todos os seus dispositivos e para que você possa importar receitas automaticamente de qualquer site.",
-    "pages.getStarted.crossPlatform": "Uma única conta funciona no seu celular, tablet, computador e na web."
+    "pages.getStarted.crossPlatform": "Uma única conta funciona no seu celular, tablet, computador e na web.",
+    "pages.welcomeFlow.tabTitle": "Boas-vindas!"
 }
