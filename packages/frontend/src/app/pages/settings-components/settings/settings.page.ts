@@ -17,6 +17,8 @@ import {
   CookModePreferenceKey,
   encryptUtf8WithRSAKey,
   GlobalPreferenceKey,
+  MyRecipesIncludeFriendsOptions,
+  MyRecipesPreferenceKey,
   OfflineModePromptOptions,
   PreferencesSync,
   RecipeDetailsPreferenceKey,
@@ -71,6 +73,7 @@ import {
   listOutline,
   logOutOutline,
   notificationsOutline,
+  peopleOutline,
   personOutline,
   restaurantOutline,
   serverOutline,
@@ -126,6 +129,8 @@ export class SettingsPage implements OnDestroy {
   preferenceKeys = GlobalPreferenceKey;
   offlineModePromptOptions = OfflineModePromptOptions;
   recipeDetailsPreferenceKeys = RecipeDetailsPreferenceKey;
+  myRecipesPreferenceKeys = MyRecipesPreferenceKey;
+  includeFriendsOptions = MyRecipesIncludeFriendsOptions;
 
   offlineModeEnabled = this.offlineModeService.enabled;
 
@@ -161,6 +166,7 @@ export class SettingsPage implements OnDestroy {
       listOutline,
       logOutOutline,
       notificationsOutline,
+      peopleOutline,
       personOutline,
       restaurantOutline,
       serverOutline,
