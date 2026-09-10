@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nPortare l'acqua a ebollizione e lasciarla raggiungere il pieno bollore mentre si preparano gli ingredienti nel frullatore.\nAggiungere gli ingredienti congelati al frullatore, seguiti dagli ingredienti non congelati.\nVersare l'acqua bollita (o il latte a scelta) nel frullatore. Se si utilizza acqua bollita, assicurarsi di versarla direttamente sugli ingredienti congelati per garantire una facile frullatura.\nSe lo smoothie non si frulla facilmente, aggiungere altra acqua calda (o latte a scelta). Continuare ad aggiungere liquido finché non si ottiene una consistenza omogenea.\n[Servire]\nVersare lo smoothie in una ciotola.\nUna volta versato lo smoothie nella ciotola, aggiungere le guarnizioni facoltative desiderate (granola preferita fatta in casa o acquistata, frutta tagliata, gocce di cioccolato, cocco grattugiato, semi o frutta a guscio).\nPer aggiungere ulteriore dolcezza, guarnire con miele o con un dolcificante a scelta.",
     "pages.shoppingList.removeRecipe": "Rimuovi gli elementi di questa ricetta dalla lista",
     "components.shoppingListItem.editTitle.header": "Modifica elemento",
-    "components.shoppingListItem.editTitle.placeholder": "Nome dell'elemento..."
+    "components.shoppingListItem.editTitle.placeholder": "Nome dell'elemento...",
+    "components.shoppingListItem.edit": "Modifica",
+    "components.shoppingListItem.delete": "Elimina"
 }
