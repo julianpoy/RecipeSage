@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Redaguoti elementą",
     "components.shoppingListItem.editTitle.placeholder": "Elemento pavadinimas...",
     "components.shoppingListItem.edit": "Redaguoti",
-    "components.shoppingListItem.delete": "Ištrinti"
+    "components.shoppingListItem.delete": "Ištrinti",
+    "pages.shoppingList.movedToList": "Perkelta {{itemCount}} prekė(-ės) į {{title}}",
+    "pages.shoppingList.copiedToList": "Nukopijuota {{itemCount}} prekė(-ės) į {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Prekės buvo nukopijuotos į {{title}}, tačiau jų nepavyko pašalinti iš šio sąrašo.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Perkėlimas nebaigtas",
+    "components.shoppingListItem.moveToList": "Perkelti į kitą sąrašą",
+    "components.shoppingListItem.moveToList.header": "Perkelti prekę į sąrašą",
+    "components.shoppingListItem.copyToList": "Kopijuoti į kitą sąrašą",
+    "components.shoppingListItem.copyToList.header": "Kopijuoti prekę į sąrašą",
+    "generic.back": "Atgal"
 }
