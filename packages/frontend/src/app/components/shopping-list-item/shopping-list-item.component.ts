@@ -92,6 +92,10 @@ export class ShoppingListItemComponent {
   @Input({
     required: false,
   })
+  showEditButton?: boolean;
+  @Input({
+    required: false,
+  })
   showDeleteButton?: boolean;
   @Input({
     required: false,

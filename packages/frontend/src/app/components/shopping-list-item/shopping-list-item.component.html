@@ -27,12 +27,23 @@
       }
     </div>
   </ion-checkbox>
+  @if (showEditButton) {
+    <ion-button
+      slot="end"
+      fill="clear"
+      [attr.aria-label]="'components.shoppingListItem.edit' | translate"
+      (click)="showEditTitleInput()"
+    >
+      <ion-icon slot="icon-only" icon="create-outline"></ion-icon>
+    </ion-button>
+  }
   @if (showDeleteButton) {
     <ion-button
       slot="end"
       style="icon-only"
       fill="clear"
       color="danger"
+      [attr.aria-label]="'components.shoppingListItem.delete' | translate"
       (click)="deleteClick.emit()"
     >
       <ion-icon slot="icon-only" icon="trash-outline"></ion-icon>

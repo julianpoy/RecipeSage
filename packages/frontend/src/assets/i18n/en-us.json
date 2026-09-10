@@ -1981,6 +1981,7 @@
   "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
   "pages.shoppingList.nullState.add": "Add the first item",
   "pages.shoppingList.recipes": "Recipes in this list",
+  "pages.shoppingList.removeRecipe": "Remove this recipe's items from the list",
   "pages.shoppingList.completed": "Completed Items",
   "pages.shoppingList.restoreAll": "Restore all completed items",
   "pages.shoppingList.deleteAll": "Delete all completed items",

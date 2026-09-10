@@ -5,6 +5,11 @@
 ion-list-header {
   cursor: pointer;
 
+  ion-label {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
   ion-icon {
     vertical-align: middle;
     margin-left: 8px;
@@ -12,20 +17,12 @@ ion-list-header {
 }
 
 .shopping-list-item:nth-child(odd) {
-  background: var(--ion-background-shade-color);
+  background: var(--rs-list-stripe-color);
 
   shopping-list-item,
   ion-item.groupedItem {
-    --background: var(--ion-background-shade-color);
+    --background: var(--rs-list-stripe-color);
   }
-}
-
-.delete-recipe {
-  transition: 0.1s;
-}
-
-.delete-recipe:hover {
-  color: var(--ion-color-danger);
 }
 
 .page-wrapper {
