@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Skapa ett konto",
     "pages.getStarted.button.login": "Logga in",
     "pages.getStarted.reason": "Skapa ett konto så att dina recept, måltidsplaner och inköpslistor synkroniseras på alla dina enheter och så att du automatiskt kan importera recept från vilken webbplats som helst.",
-    "pages.getStarted.crossPlatform": "Ett konto fungerar på din telefon, surfplatta, dator och på webben."
+    "pages.getStarted.crossPlatform": "Ett konto fungerar på din telefon, surfplatta, dator och på webben.",
+    "pages.welcomeFlow.tabTitle": "Välkommen!"
 }
