@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Créer un compte",
     "pages.getStarted.button.login": "Se connecter",
     "pages.getStarted.reason": "Créez un compte afin que vos recettes, plans de repas et listes de courses se synchronisent sur tous vos appareils et que vous puissiez importer automatiquement des recettes depuis n’importe quel site web.",
-    "pages.getStarted.crossPlatform": "Un seul compte fonctionne sur votre téléphone, tablette, ordinateur et sur le web."
+    "pages.getStarted.crossPlatform": "Un seul compte fonctionne sur votre téléphone, tablette, ordinateur et sur le web.",
+    "pages.welcomeFlow.tabTitle": "Bienvenue !"
 }
