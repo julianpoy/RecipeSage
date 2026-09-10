@@ -75,122 +75,78 @@
       </ng-template>
     </ion-popover>
 
-    <ion-modal
-      cssClass="alert-modal"
-      [isOpen]="isClipTextModalOpen"
-      (didDismiss)="isClipTextModalOpen = false"
+    <alert-modal
+      [(isOpen)]="isClipTextModalOpen"
+      header="{{ 'pages.editRecipe.clipText.header' | translate }}"
+      message="{{ 'pages.editRecipe.clipText.message' | translate }}"
+      (confirmed)="submitClipText()"
     >
       <ng-template>
-        <div class="alert-modal-inner">
-          <h2>{{ "pages.editRecipe.clipText.header" | translate }}</h2>
-          <p>{{ "pages.editRecipe.clipText.message" | translate }}</p>
-          <text-area
-            [(ngModel)]="clipTextInput"
-            placeholder="{{
-              'pages.editRecipe.clipText.placeholder' | translate
-            }}"
-            [rows]="4"
-          ></text-area>
-          <label class="alert-modal-checkbox">
-            <input type="checkbox" [(ngModel)]="clipTextIncludeNutrition" />
-            {{ "pages.editRecipe.clip.includeNutrition" | translate }}
-          </label>
-          <div class="alert-modal-buttons">
-            <button (click)="isClipTextModalOpen = false">
-              {{ "generic.cancel" | translate }}
-            </button>
-            <button (click)="submitClipText()">
-              {{ "generic.okay" | translate }}
-            </button>
-          </div>
-        </div>
+        <text-area
+          [(ngModel)]="clipTextInput"
+          placeholder="{{
+            'pages.editRecipe.clipText.placeholder' | translate
+          }}"
+          [rows]="4"
+        ></text-area>
+        <label class="alert-modal-checkbox">
+          <input type="checkbox" [(ngModel)]="clipTextIncludeNutrition" />
+          {{ "pages.editRecipe.clip.includeNutrition" | translate }}
+        </label>
       </ng-template>
-    </ion-modal>
+    </alert-modal>
 
-    <ion-modal
-      cssClass="alert-modal"
-      [isOpen]="isClipUrlModalOpen"
-      (didDismiss)="isClipUrlModalOpen = false"
+    <alert-modal
+      [(isOpen)]="isClipUrlModalOpen"
+      header="{{ 'pages.editRecipe.clipURL.header' | translate }}"
+      message="{{ 'pages.editRecipe.clipURL.message' | translate }}"
+      (confirmed)="submitClipUrl()"
     >
       <ng-template>
-        <div class="alert-modal-inner">
-          <h2>{{ "pages.editRecipe.clipURL.header" | translate }}</h2>
-          <p>{{ "pages.editRecipe.clipURL.message" | translate }}</p>
-          <text-input
-            type="url"
-            [(ngModel)]="clipUrlInput"
-            placeholder="{{
-              'pages.editRecipe.clipURL.placeholder' | translate
-            }}"
-          ></text-input>
-          <label class="alert-modal-checkbox">
-            <input type="checkbox" [(ngModel)]="clipUrlIncludeNutrition" />
-            {{ "pages.editRecipe.clip.includeNutrition" | translate }}
-          </label>
-          <div class="alert-modal-buttons">
-            <button (click)="isClipUrlModalOpen = false">
-              {{ "generic.cancel" | translate }}
-            </button>
-            <button (click)="submitClipUrl()">
-              {{ "generic.okay" | translate }}
-            </button>
-          </div>
-        </div>
+        <text-input
+          type="url"
+          [(ngModel)]="clipUrlInput"
+          placeholder="{{ 'pages.editRecipe.clipURL.placeholder' | translate }}"
+        ></text-input>
+        <label class="alert-modal-checkbox">
+          <input type="checkbox" [(ngModel)]="clipUrlIncludeNutrition" />
+          {{ "pages.editRecipe.clip.includeNutrition" | translate }}
+        </label>
       </ng-template>
-    </ion-modal>
+    </alert-modal>
 
-    <ion-modal
-      cssClass="alert-modal"
-      [isOpen]="isClipDocumentModalOpen"
-      (didDismiss)="isClipDocumentModalOpen = false"
+    <alert-modal
+      [(isOpen)]="isClipDocumentModalOpen"
+      header="{{ 'pages.editRecipe.clipDocument.header' | translate }}"
+      message="{{ 'pages.editRecipe.clipDocument.message' | translate }}"
+      confirmLabel="{{ 'pages.editRecipe.clipDocument.choose' | translate }}"
+      (confirmed)="submitClipDocument()"
     >
       <ng-template>
-        <div class="alert-modal-inner">
-          <h2>{{ "pages.editRecipe.clipDocument.header" | translate }}</h2>
-          <p>{{ "pages.editRecipe.clipDocument.message" | translate }}</p>
-          <label class="alert-modal-checkbox">
-            <input type="checkbox" [(ngModel)]="clipDocumentIncludeNutrition" />
-            {{ "pages.editRecipe.clip.includeNutrition" | translate }}
-          </label>
-          <div class="alert-modal-buttons">
-            <button (click)="isClipDocumentModalOpen = false">
-              {{ "generic.cancel" | translate }}
-            </button>
-            <button (click)="submitClipDocument()">
-              {{ "pages.editRecipe.clipDocument.choose" | translate }}
-            </button>
-          </div>
-        </div>
+        <label class="alert-modal-checkbox">
+          <input type="checkbox" [(ngModel)]="clipDocumentIncludeNutrition" />
+          {{ "pages.editRecipe.clip.includeNutrition" | translate }}
+        </label>
       </ng-template>
-    </ion-modal>
+    </alert-modal>
 
-    <ion-modal
-      cssClass="alert-modal"
-      [isOpen]="isAddImageByUrlModalOpen"
-      (didDismiss)="isAddImageByUrlModalOpen = false"
+    <alert-modal
+      [(isOpen)]="isAddImageByUrlModalOpen"
+      header="{{ 'pages.editRecipe.addImage.header' | translate }}"
+      message="{{ 'pages.editRecipe.addImage.message' | translate }}"
+      confirmLabel="{{ 'generic.confirm' | translate }}"
+      (confirmed)="submitAddImageByUrl()"
     >
       <ng-template>
-        <div class="alert-modal-inner">
-          <h2>{{ "pages.editRecipe.addImage.header" | translate }}</h2>
-          <p>{{ "pages.editRecipe.addImage.message" | translate }}</p>
-          <text-input
-            type="url"
-            [(ngModel)]="addImageByUrlInput"
-            placeholder="{{
-              'pages.editRecipe.addImage.placeholder' | translate
-            }}"
-          ></text-input>
-          <div class="alert-modal-buttons">
-            <button (click)="isAddImageByUrlModalOpen = false">
-              {{ "generic.cancel" | translate }}
-            </button>
-            <button (click)="submitAddImageByUrl()">
-              {{ "generic.confirm" | translate }}
-            </button>
-          </div>
-        </div>
+        <text-input
+          type="url"
+          [(ngModel)]="addImageByUrlInput"
+          placeholder="{{
+            'pages.editRecipe.addImage.placeholder' | translate
+          }}"
+        ></text-input>
       </ng-template>
-    </ion-modal>
+    </alert-modal>
 
     <br />
     <br />

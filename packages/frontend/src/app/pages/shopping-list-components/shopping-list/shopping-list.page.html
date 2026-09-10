@@ -35,7 +35,7 @@
                     !categoryTitleCollapsed[categoryTitle]
                 "
               >
-                <ion-title class="ion-no-padding">
+                <ion-label>
                   {{ categoryTitle }}
                   @if (!categoryTitleCollapsed[categoryTitle]) {
                     <ion-icon name="caret-down"></ion-icon>
@@ -43,7 +43,7 @@
                   @if (categoryTitleCollapsed[categoryTitle]) {
                     <ion-icon name="caret-up"></ion-icon>
                   }
-                </ion-title>
+                </ion-label>
               </ion-list-header>
               @if (!categoryTitleCollapsed[categoryTitle]) {
                 <div>
@@ -64,8 +64,13 @@
                           preferences[preferenceKeys.ShowAddedBy] &&
                           !!shoppingList()?.collaboratorUsers?.length
                         "
+                        [hideDeleteOption]="
+                          preferences[preferenceKeys.PreferDelete]
+                        "
                         (completeToggle)="completeItems($event, true)"
                         (recategorize)="recategorizeItems($event[0], $event[1])"
+                        (titleUpdate)="retitleItems($event[0], $event[1])"
+                        (deleteClick)="removeItems($event)"
                       ></shopping-list-group>
                     </div>
                   }
@@ -94,8 +99,11 @@
                   preferences[preferenceKeys.ShowAddedBy] &&
                   !!shoppingList()?.collaboratorUsers?.length
                 "
+                [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
                 (completeToggle)="completeItems($event, true)"
                 (recategorize)="recategorizeItems($event[0], $event[1])"
+                (titleUpdate)="retitleItems($event[0], $event[1])"
+                (deleteClick)="removeItems($event)"
               ></shopping-list-group>
             </div>
           }
@@ -114,7 +122,7 @@
                     !categoryTitleCollapsed[categoryTitle]
                 "
               >
-                <ion-title class="ion-no-padding">
+                <ion-label>
                   {{ categoryTitle }}
                   @if (!categoryTitleCollapsed[categoryTitle]) {
                     <ion-icon name="caret-down"></ion-icon>
@@ -122,7 +130,7 @@
                   @if (categoryTitleCollapsed[categoryTitle]) {
                     <ion-icon name="caret-up"></ion-icon>
                   }
-                </ion-title>
+                </ion-label>
               </ion-list-header>
               @if (!categoryTitleCollapsed[categoryTitle]) {
                 <div>
@@ -151,8 +159,13 @@
                             item.user.name) ||
                           undefined
                         "
+                        [hideDeleteOption]="
+                          preferences[preferenceKeys.PreferDelete]
+                        "
                         (completeToggle)="completeItems([item], true)"
                         (recategorize)="recategorizeItems([item], $event)"
+                        (titleUpdate)="retitleItems([item], $event)"
+                        (deleteClick)="removeItems([item])"
                       ></shopping-list-item>
                     </div>
                   }
@@ -188,8 +201,11 @@
                     item.user.name) ||
                   undefined
                 "
+                [hideDeleteOption]="preferences[preferenceKeys.PreferDelete]"
                 (completeToggle)="completeItems([item], true)"
                 (recategorize)="recategorizeItems([item], $event)"
+                (titleUpdate)="retitleItems([item], $event)"
+                (deleteClick)="removeItems([item])"
               ></shopping-list-item>
             </div>
           }
@@ -238,17 +254,20 @@
         </ion-item>
         @for (recipeId of recipeIds; track recipeId) {
           <ion-item button>
-            <ion-icon
-              class="delete-recipe"
-              name="trash-outline"
-              slot="start"
-              (click)="removeRecipe(recipeId)"
-            ></ion-icon>
             <ion-label
               (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe!.id)"
             >
               {{ itemsByRecipeId[recipeId][0].recipe!.title }}
             </ion-label>
+            <ion-button
+              slot="end"
+              fill="clear"
+              color="danger"
+              [attr.aria-label]="'pages.shoppingList.removeRecipe' | translate"
+              (click)="removeRecipe(recipeId)"
+            >
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
           </ion-item>
         }
       </ion-list>
@@ -301,10 +320,12 @@
                 item.user.name) ||
               undefined
             "
+            [showEditButton]="true"
             [showDeleteButton]="true"
             [hideRecategorizeButton]="true"
             (completeToggle)="completeItems([item], false)"
             (recategorize)="recategorizeItems([item], $event)"
+            (titleUpdate)="retitleItems([item], $event)"
             (deleteClick)="removeItems([item])"
           ></shopping-list-item>
         }

@@ -56,6 +56,81 @@ describe("updateShoppingListItems", () => {
       expect(updated2?.categoryTitle).toEqual("Bakery");
       expect(updated2?.title).toEqual("Bread");
     });
+
+    test("recategorizes an automatically categorized item when its title changes", async ({
+      trpc,
+      user,
+    }) => {
+      const shoppingList = await prisma.shoppingList.create({
+        data: {
+          title: faker.string.alphanumeric(10),
+          userId: user.id,
+        },
+      });
+      const item = await prisma.shoppingListItem.create({
+        data: {
+          shoppingListId: shoppingList.id,
+          userId: user.id,
+          title: "Apples",
+          completed: false,
+          categoryTitle: "::produce",
+        },
+      });
+
+      await trpc.shoppingLists.updateShoppingListItems({
+        shoppingListId: shoppingList.id,
+        items: [
+          {
+            id: item.id,
+            title: "Whole milk",
+          },
+        ],
+      });
+
+      const updated = await prisma.shoppingListItem.findUnique({
+        where: { id: item.id },
+      });
+      expect(updated?.title).toEqual("Whole milk");
+      expect(updated?.categoryTitle).not.toEqual("::produce");
+      expect(updated?.categoryTitle?.startsWith("::")).toEqual(true);
+    });
+
+    test("keeps a manually chosen category when the title changes", async ({
+      trpc,
+      user,
+    }) => {
+      const shoppingList = await prisma.shoppingList.create({
+        data: {
+          title: faker.string.alphanumeric(10),
+          userId: user.id,
+        },
+      });
+      const item = await prisma.shoppingListItem.create({
+        data: {
+          shoppingListId: shoppingList.id,
+          userId: user.id,
+          title: "Apples",
+          completed: false,
+          categoryTitle: "Snacks for the trip",
+        },
+      });
+
+      await trpc.shoppingLists.updateShoppingListItems({
+        shoppingListId: shoppingList.id,
+        items: [
+          {
+            id: item.id,
+            title: "Whole milk",
+          },
+        ],
+      });
+
+      const updated = await prisma.shoppingListItem.findUnique({
+        where: { id: item.id },
+      });
+      expect(updated?.title).toEqual("Whole milk");
+      expect(updated?.categoryTitle).toEqual("Snacks for the trip");
+    });
   });
 
   describe("error", () => {

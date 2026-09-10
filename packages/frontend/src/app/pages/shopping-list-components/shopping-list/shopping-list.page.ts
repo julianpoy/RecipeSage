@@ -346,6 +346,33 @@ export class ShoppingListPage {
     loading.dismiss();
   }
 
+  async retitleItems(items: ShoppingListItemSummary[], title: string) {
+    if (!this.shoppingList()) return;
+
+    const loading = this.loadingService.start();
+
+    const reference = crypto.randomUUID();
+    this.reference = reference;
+
+    const response =
+      await this.serverActionsService.shoppingLists.updateShoppingListItems({
+        shoppingListId: this.shoppingListId,
+        items: items.map((item) => ({
+          id: item.id,
+          title,
+        })),
+        reference,
+      });
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
+
+    this.loadList();
+
+    loading.dismiss();
+  }
+
   removeRecipe(recipeId: string) {
     this.removeItems(this.itemsByRecipeId[recipeId]);
   }

@@ -269,6 +269,10 @@ ion-button.button-outline {
   --max-height: 80vh;
 }
 
+alert-modal {
+  display: contents;
+}
+
 ion-modal.alert-modal {
   --width: 280px;
   --min-width: 280px;

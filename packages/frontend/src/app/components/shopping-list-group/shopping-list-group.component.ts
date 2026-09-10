@@ -54,10 +54,18 @@ export class ShoppingListGroupComponent {
     required: true,
   })
   showAddedBy!: boolean;
+  @Input({
+    required: false,
+  })
+  hideDeleteOption?: boolean;
   @Output() completeToggle = new EventEmitter<ShoppingListItemSummary[]>();
   @Output() recategorize = new EventEmitter<
     [ShoppingListItemSummary[], string]
   >();
+  @Output() titleUpdate = new EventEmitter<
+    [ShoppingListItemSummary[], string]
+  >();
+  @Output() deleteClick = new EventEmitter<ShoppingListItemSummary[]>();
 
   constructor() {
     addIcons({ caretDown, caretUp });

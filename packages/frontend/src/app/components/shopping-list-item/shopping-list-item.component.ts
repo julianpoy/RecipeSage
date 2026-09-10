@@ -10,7 +10,6 @@ import {
 import { UtilService } from "../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { TranslateService } from "@ngx-translate/core";
-import { AlertController } from "@ionic/angular/standalone";
 import {
   IonItem,
   IonCheckbox,
@@ -22,9 +21,18 @@ import {
   IonListHeader,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { SHOPPING_LIST_CATEGORY_I18N } from "@recipesage/util/shared";
-import { ellipsisVerticalOutline, trashOutline } from "ionicons/icons";
+import {
+  SHOPPING_LIST_CATEGORY_I18N,
+  SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
+} from "@recipesage/util/shared";
+import {
+  createOutline,
+  ellipsisVerticalOutline,
+  trashOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { AlertModalComponent } from "../alert-modal/alert-modal.component";
+import { TextInputComponent } from "../forms/text-input/text-input.component";
 
 @Component({
   standalone: true,
@@ -33,6 +41,8 @@ import { addIcons } from "ionicons";
   styleUrls: ["./shopping-list-item.component.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    AlertModalComponent,
+    TextInputComponent,
     IonItem,
     IonCheckbox,
     IonButton,
@@ -47,9 +57,13 @@ import { addIcons } from "ionicons";
 export class ShoppingListItemComponent {
   private utilService = inject(UtilService);
   private translate = inject(TranslateService);
-  private alertCtrl = inject(AlertController);
 
   moveToPopoverIsOpen = false;
+  isEditTitleModalOpen = false;
+  editTitleInput = "";
+  isCustomCategoryModalOpen = false;
+  customCategoryInput = "";
+  titleLengthLimit = SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT;
 
   @Input({
     required: true,
@@ -78,13 +92,22 @@ export class ShoppingListItemComponent {
   @Input({
     required: false,
   })
+  showEditButton?: boolean;
+  @Input({
+    required: false,
+  })
   showDeleteButton?: boolean;
   @Input({
     required: false,
   })
   hideRecategorizeButton?: boolean;
+  @Input({
+    required: false,
+  })
+  hideDeleteOption?: boolean;
   @Output() completeToggle = new EventEmitter<null>();
   @Output() recategorize = new EventEmitter<string>();
+  @Output() titleUpdate = new EventEmitter<string>();
   @Output() deleteClick = new EventEmitter<null>();
 
   @ViewChild("moveToPopover") moveToPopover!: HTMLIonPopoverElement;
@@ -94,7 +117,7 @@ export class ShoppingListItemComponent {
   userKnownCategories = this.getUserKnownCategories();
 
   constructor() {
-    addIcons({ ellipsisVerticalOutline, trashOutline });
+    addIcons({ createOutline, ellipsisVerticalOutline, trashOutline });
     this.generateBuiltinCategories();
   }
 
@@ -159,50 +182,32 @@ export class ShoppingListItemComponent {
     this.moveToPopoverIsOpen = true;
   }
 
-  async showMoveToArbitraryInput() {
-    const header = await this.translate
-      .get("components.shoppingListItem.customCategory.title")
-      .toPromise();
-    const message = await this.translate
-      .get("components.shoppingListItem.customCategory.message")
-      .toPromise();
-    const placeholder = await this.translate
-      .get("components.shoppingListItem.customCategory.placeholder")
-      .toPromise();
-    const save = await this.translate.get("generic.save").toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
+  showEditTitleInput() {
+    this.editTitleInput = this.title;
+    this.isEditTitleModalOpen = true;
+  }
 
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      inputs: [
-        {
-          name: "category",
-          placeholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          role: "cancel",
-        },
-        {
-          text: save,
-          role: "confirm",
-          handler: (values: { category?: string }) =>
-            (values.category || "").trim().length > 0,
-        },
-      ],
-    });
+  submitEditTitle() {
+    const title = this.editTitleInput.trim();
+    if (!title) return;
 
-    await alert.present();
-    const detail = await alert.onDidDismiss();
-    if (detail.role === "confirm") {
-      const category = (detail.data.values.category || "").trim();
-      if (!category) return;
+    this.isEditTitleModalOpen = false;
+    if (title === this.title) return;
 
-      this.addUserKnownCategory(category);
-      this.moveToCategoryCustom(category);
-    }
+    this.titleUpdate.emit(title);
+  }
+
+  showMoveToArbitraryInput() {
+    this.customCategoryInput = "";
+    this.isCustomCategoryModalOpen = true;
+  }
+
+  submitCustomCategory() {
+    const category = this.customCategoryInput.trim();
+    if (!category) return;
+
+    this.isCustomCategoryModalOpen = false;
+    this.addUserKnownCategory(category);
+    this.moveToCategoryCustom(category);
   }
 }
