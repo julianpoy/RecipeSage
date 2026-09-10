@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nBringen Sie Wasser zum Kochen und lassen Sie es vollständig aufkochen, während Sie die Zutaten im Mixer vorbereiten.\nGeben Sie die gefrorenen Zutaten in einen Mixer, gefolgt von den nicht gefrorenen Zutaten.\nGießen Sie das abgekochte Wasser (oder Milch Ihrer Wahl) in den Mixer. Wenn Sie abgekochtes Wasser verwenden, gießen Sie es direkt über die gefrorenen Zutaten, damit sie sich leicht mixen lassen.\nWenn sich Ihr Smoothie nicht leicht mixen lässt, geben Sie mehr heißes Wasser (oder Milch Ihrer Wahl) hinzu. Fügen Sie weiterhin Flüssigkeit hinzu, bis alles gleichmäßig gemixt ist.\n[Servieren]\nGießen Sie den Smoothie in eine Schüssel.\nSobald sich der Smoothie in der Schüssel befindet, fügen Sie die gewünschten optionalen Toppings hinzu (Lieblingsgranola, selbst gemacht oder gekauft, gehacktes Obst, Schokoladenstückchen, Kokosraspeln, Samen oder Nüsse).\nWenn Sie zusätzliche Süße wünschen, garnieren Sie ihn mit Honig oder einem Süßungsmittel Ihrer Wahl.",
     "pages.shoppingList.removeRecipe": "Die Einträge dieses Rezepts aus der Liste entfernen",
     "components.shoppingListItem.editTitle.header": "Eintrag bearbeiten",
-    "components.shoppingListItem.editTitle.placeholder": "Name des Eintrags..."
+    "components.shoppingListItem.editTitle.placeholder": "Name des Eintrags...",
+    "components.shoppingListItem.edit": "Bearbeiten",
+    "components.shoppingListItem.delete": "Löschen"
 }
