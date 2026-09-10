@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nPuneți apa la fiert și lăsați-o să ajungă la punctul de fierbere completă în timp ce pregătiți ingredientele în blender.\nAdăugați ingredientele congelate în blender, urmate de ingredientele necongelate.\nTurnați apa fiartă (sau laptele preferat) în blender. Dacă folosiți apă fiartă, asigurați-vă că o turnați direct peste ingredientele congelate pentru a facilita blenduirea.\nDacă smoothie-ul nu se blenduiește ușor, adăugați mai multă apă fierbinte (sau laptele preferat). Continuați să adăugați lichid până când se blenduiește omogen.\n[Servire]\nTurnați smoothie-ul într-un bol.\nDupă ce smoothie-ul este în bol, adăugați ingredientele opționale dorite pentru decor (granola preferată, făcută în casă sau cumpărată din magazin, fructe tăiate, picături de ciocolată, nucă de cocos rasă, semințe sau nuci).\nDacă doriți să adăugați mai multă dulceață, puneți deasupra miere sau orice îndulcitor preferat.",
     "pages.shoppingList.removeRecipe": "Eliminați articolele acestei rețete din listă",
     "components.shoppingListItem.editTitle.header": "Editați articolul",
-    "components.shoppingListItem.editTitle.placeholder": "Numele articolului..."
+    "components.shoppingListItem.editTitle.placeholder": "Numele articolului...",
+    "components.shoppingListItem.edit": "Editează",
+    "components.shoppingListItem.delete": "Șterge"
 }
