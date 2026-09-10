@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothiea]\nHasi ura irakiten, eta utzi erabat irakiten irabiagailuan osagaiak prestatzen dituzun bitartean.\nGehitu osagai izoztuak irabiagailura, eta ondoren izoztuta ez dauden osagaiak.\nBota ur irakina (edo aukeratutako esnea) irabiagailura. Ur irakina erabiltzen baduzu, ziurtatu zuzenean osagai izoztuen gainera botatzen duzula, erraz irabiatzen dela ziurtatzeko.\nZure smoothiea ez bada erraz nahasten, gehitu ur bero gehiago (edo aukeratutako esne gehiago). Jarraitu likido gehiago gehitzen leun nahastu arte.\n[Zerbitzatu]\nBota smoothiea ontzi batera.\nSmoothiea ontzian dagoenean, gehitu nahi dituzun aukerako gainak (etxean egindako edo dendan erositako granola gogokoena, fruta txikitua, txokolate-txipak, koko birrindua, haziak edo fruitu lehorrak).\nGozotasun gehiago gehitu nahi baduzu, jarri gainean eztia edo aukeratutako edozein gozagarri.",
     "pages.shoppingList.removeRecipe": "Kendu errezeta honetako elementuak zerrendatik",
     "components.shoppingListItem.editTitle.header": "Editatu elementua",
-    "components.shoppingListItem.editTitle.placeholder": "Elementuaren izena..."
+    "components.shoppingListItem.editTitle.placeholder": "Elementuaren izena...",
+    "components.shoppingListItem.edit": "Editatu",
+    "components.shoppingListItem.delete": "Ezabatu"
 }
