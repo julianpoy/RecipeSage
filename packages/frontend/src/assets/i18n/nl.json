@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nBreng water aan de kook en laat het volledig koken terwijl u de ingrediënten in een blender voorbereidt.\nDoe de bevroren ingrediënten in een blender, gevolgd door de niet-bevroren ingrediënten.\nGiet kokend water (of melk naar keuze) in de blender. Als u kokend water gebruikt, zorg er dan voor dat u het rechtstreeks over de bevroren ingrediënten giet, zodat alles gemakkelijk kan worden gemengd.\nAls uw smoothie niet gemakkelijk mengt, voeg dan meer heet water (of melk naar keuze) toe. Blijf meer vloeistof toevoegen totdat de smoothie glad gemengd is.\n[Serveren]\nGiet de smoothie in een kom.\nZodra de smoothie in de kom zit, voegt u de gewenste optionele toppings toe (favoriete zelfgemaakte of kant-en-klare granola, gesneden fruit, chocoladestukjes, geraspte kokos, zaden of noten).\nAls u extra zoetheid wilt toevoegen, garneer dan met honing of een zoetstof naar keuze.",
     "pages.shoppingList.removeRecipe": "Verwijder de items van dit recept uit de lijst",
     "components.shoppingListItem.editTitle.header": "Item bewerken",
-    "components.shoppingListItem.editTitle.placeholder": "Itemnaam..."
+    "components.shoppingListItem.editTitle.placeholder": "Itemnaam...",
+    "components.shoppingListItem.edit": "Bewerk",
+    "components.shoppingListItem.delete": "Verwijder"
 }
