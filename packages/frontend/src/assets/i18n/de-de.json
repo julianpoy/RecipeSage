@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Konto erstellen",
     "pages.getStarted.button.login": "Anmelden",
     "pages.getStarted.reason": "Erstellen Sie ein Konto, damit Ihre Rezepte, Speisepläne und Einkaufslisten auf all Ihren Geräten synchronisiert werden und Sie Rezepte automatisch von jeder Website importieren können.",
-    "pages.getStarted.crossPlatform": "Ein Konto funktioniert auf Ihrem Smartphone, Tablet, Computer und im Internet."
+    "pages.getStarted.crossPlatform": "Ein Konto funktioniert auf Ihrem Smartphone, Tablet, Computer und im Internet.",
+    "pages.welcomeFlow.tabTitle": "Willkommen!"
 }
