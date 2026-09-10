@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nComece a ferver a água e deixe-a atingir fervura plena enquanto prepara os ingredientes no liquidificador.\nAdicione os ingredientes congelados ao liquidificador, seguidos dos ingredientes não congelados.\nDespeje a água fervente (ou o leite de sua preferência) no liquidificador. Se estiver usando água fervente, despeje-a diretamente sobre os ingredientes congelados para garantir que sejam batidos facilmente.\nSe o smoothie não estiver sendo batido facilmente, adicione mais água quente (ou o leite de sua preferência). Continue adicionando mais líquido até que fique homogêneo.\n[Servir]\nDespeje o smoothie em uma tigela.\nQuando o smoothie estiver na tigela, adicione as coberturas opcionais desejadas (granola caseira ou comprada pronta de sua preferência, frutas picadas, gotas de chocolate, coco ralado, sementes ou oleaginosas).\nSe quiser adicionar mais doçura, cubra com mel ou qualquer adoçante de sua preferência.",
     "pages.shoppingList.removeRecipe": "Remover os itens desta receita da lista",
     "components.shoppingListItem.editTitle.header": "Editar item",
-    "components.shoppingListItem.editTitle.placeholder": "Nome do item..."
+    "components.shoppingListItem.editTitle.placeholder": "Nome do item...",
+    "components.shoppingListItem.edit": "Editar",
+    "components.shoppingListItem.delete": "Excluir"
 }
