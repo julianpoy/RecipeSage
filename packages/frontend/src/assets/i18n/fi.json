@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nAloita veden keittäminen ja anna sen kiehua voimakkaasti samalla, kun valmistelet ainekset tehosekoittimeen.\nLisää pakastetut ainekset tehosekoittimeen ja lisää sitten pakastamattomat ainekset.\nKaada kiehuva vesi (tai haluamasi maito) tehosekoittimeen. Jos käytät kiehuvaa vettä, kaada se suoraan pakastettujen ainesten päälle, jotta sekoittaminen onnistuu helposti.\nJos smoothie ei sekoitu helposti, lisää kuumaa vettä (tai haluamaasi maitoa). Jatka nesteen lisäämistä, kunnes seos on tasaista.\n[Tarjoile]\nKaada smoothie kulhoon.\nKun smoothie on kulhossa, lisää haluamasi valinnaiset päällysteet (suosikkigranolasi, itse tehty tai kaupasta ostettu, pilkotut hedelmät, suklaahiput, kookoshiutaleet, siemenet tai pähkinät).\nJos haluat lisää makeutta, lisää päälle hunajaa tai mitä tahansa haluamaasi makeutusainetta.",
     "pages.shoppingList.removeRecipe": "Poista tämän reseptin tuotteet luettelosta",
     "components.shoppingListItem.editTitle.header": "Muokkaa tuotetta",
-    "components.shoppingListItem.editTitle.placeholder": "Tuotteen nimi..."
+    "components.shoppingListItem.editTitle.placeholder": "Tuotteen nimi...",
+    "components.shoppingListItem.edit": "Muokkaa",
+    "components.shoppingListItem.delete": "Poista"
 }
