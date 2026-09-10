@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nMalzemeleri blender'da hazırlarken suyu kaynatmaya başlayın ve tamamen kaynamasını bekleyin.\nDondurulmuş malzemeleri, ardından dondurulmamış malzemeleri blender'a ekleyin.\nKaynatılmış suyu (veya tercih ettiğiniz sütü) blender'ın içine dökün. Kaynatılmış su kullanıyorsanız, kolayca karışmasını sağlamak için suyu doğrudan dondurulmuş malzemelerin üzerine döktüğünüzden emin olun.\nSmoothie'niz kolayca karışmıyorsa, daha fazla sıcak su (veya tercih ettiğiniz süt) ekleyin. Pürüzsüz bir şekilde karışana kadar daha fazla sıvı eklemeye devam edin.\n[Servis]\nSmoothie'yi bir kaseye dökün.\nSmoothie kasedeyken, istediğiniz isteğe bağlı üst malzemeleri ekleyin (sevdiğiniz ev yapımı veya hazır granola, doğranmış meyve, damla çikolata, Hindistan cevizi rendesi, tohumlar veya kuruyemişler).\nEkstra tatlılık katmak isterseniz, üzerine bal veya tercih ettiğiniz herhangi bir tatlandırıcı ekleyin.",
     "pages.shoppingList.removeRecipe": "Bu tarifin öğelerini listeden kaldır",
     "components.shoppingListItem.editTitle.header": "Öğeyi Düzenle",
-    "components.shoppingListItem.editTitle.placeholder": "Öğe adı..."
+    "components.shoppingListItem.editTitle.placeholder": "Öğe adı...",
+    "components.shoppingListItem.edit": "Düzenle",
+    "components.shoppingListItem.delete": "Sil"
 }
