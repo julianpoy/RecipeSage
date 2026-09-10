@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nBegynd at koge vandet, og lad det nå fuldt opkog, mens du forbereder ingredienserne i en blender.\nKom de frosne ingredienser i en blender efterfulgt af de ikke-frosne ingredienser.\nHæld kogt vand (eller mælk efter eget valg) i blenderen. Hvis du bruger kogt vand, skal du sørge for at hælde det direkte over de frosne ingredienser for at sikre nem blendning.\nHvis din smoothie ikke blender let, skal du tilsætte mere varmt vand (eller mælk efter eget valg). Fortsæt med at tilsætte mere væske, indtil den blender jævnt.\n[Servering]\nHæld smoothien i en skål.\nNår smoothien er i skålen, tilsættes ønsket valgfri topping (foretrukken hjemmelavet eller købt granola, hakket frugt, chokoladeknapper, revet kokos, frø eller nødder).\nHvis du ønsker ekstra sødme, toppes med honning eller et sødemiddel efter eget valg.",
     "pages.shoppingList.removeRecipe": "Fjern denne opskrifts varer fra listen",
     "components.shoppingListItem.editTitle.header": "Rediger vare",
-    "components.shoppingListItem.editTitle.placeholder": "Varenavn..."
+    "components.shoppingListItem.editTitle.placeholder": "Varenavn...",
+    "components.shoppingListItem.edit": "Rediger",
+    "components.shoppingListItem.delete": "Slet"
 }
