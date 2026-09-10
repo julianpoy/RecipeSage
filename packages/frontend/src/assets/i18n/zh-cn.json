@@ -2490,5 +2490,10 @@
     "seed.exampleRecipes.smoothieBowl.totalTime": "15 分钟",
     "seed.exampleRecipes.smoothieBowl.notes": "本食谱建议使用热水，以便在将食材倒入搅拌机时解冻食材，从而确保搅拌顺滑。如果您使用自选牛奶，可能需要比本食谱所要求的量加入更多液体。如果最终使用了牛奶，思慕雪的口感也会更加浓郁顺滑。",
     "seed.exampleRecipes.smoothieBowl.ingredients": "[思慕雪]\n1 - 1 1/2 杯 | 150-225 g 冷冻蓝莓\n3/4 杯 | 50 g 冷冻菠菜\n1/2 杯 | 80 g 冷冻芒果\n1/4 杯 | 40 g 冷冻草莓\n1/4 杯 | 40 g 冷冻桃子\n1 根香蕉\n1 1/2 大汤匙花生酱（或自选坚果酱）\n~1/2-1 杯 | 120-240 mL 沸水（或自选牛奶）\n[可选配料]\n格兰诺拉麦片\n切块水果\n巧克力豆\n椰蓉\n种子或坚果\n蜂蜜（或自选甜味剂）",
-    "seed.exampleRecipes.smoothieBowl.instructions": "[思慕雪]\n开始烧水，并在搅拌机中准备食材的同时让水完全沸腾。\n将冷冻食材放入搅拌机，随后加入非冷冻食材。\n将沸水（或自选牛奶）倒入搅拌机中。如果使用沸水，请务必将其直接倒在冷冻食材上，以确保能够轻松搅拌。\n如果思慕雪不易搅拌，请加入更多热水（或自选牛奶）。继续添加液体，直至搅拌顺滑。\n[享用]\n将思慕雪倒入碗中。\n思慕雪倒入碗中后，加入所需的可选配料（喜爱的自制或市售格兰诺拉麦片、切块水果、巧克力豆、椰蓉、种子或坚果）。\n如果想增加甜味，可在顶部淋上蜂蜜或任意自选甜味剂。"
+    "seed.exampleRecipes.smoothieBowl.instructions": "[思慕雪]\n开始烧水，并在搅拌机中准备食材的同时让水完全沸腾。\n将冷冻食材放入搅拌机，随后加入非冷冻食材。\n将沸水（或自选牛奶）倒入搅拌机中。如果使用沸水，请务必将其直接倒在冷冻食材上，以确保能够轻松搅拌。\n如果思慕雪不易搅拌，请加入更多热水（或自选牛奶）。继续添加液体，直至搅拌顺滑。\n[享用]\n将思慕雪倒入碗中。\n思慕雪倒入碗中后，加入所需的可选配料（喜爱的自制或市售格兰诺拉麦片、切块水果、巧克力豆、椰蓉、种子或坚果）。\n如果想增加甜味，可在顶部淋上蜂蜜或任意自选甜味剂。",
+    "pages.shoppingList.removeRecipe": "从列表中移除此食谱的项目",
+    "components.shoppingListItem.editTitle.header": "编辑项目",
+    "components.shoppingListItem.editTitle.placeholder": "项目名称…",
+    "components.shoppingListItem.edit": "编辑",
+    "components.shoppingListItem.delete": "删除"
 }

@@ -2490,5 +2490,10 @@
     "seed.exampleRecipes.smoothieBowl.totalTime": "15 分鐘",
     "seed.exampleRecipes.smoothieBowl.notes": "本食譜建議使用熱水，倒入果汁機時可解凍食材，確保攪拌均勻順滑。若使用您選擇的牛奶，可能需要加入比本食譜所需更多的液體。若最終使用牛奶，果昔的風味也會更加濃郁滑順。",
     "seed.exampleRecipes.smoothieBowl.ingredients": "[果昔]\n1 - 1 1/2 杯 | 150-225 g 冷凍藍莓\n3/4 杯 | 50 g 冷凍菠菜\n1/2 杯 | 80 g 冷凍芒果\n1/4 杯 | 40 g 冷凍草莓\n1/4 杯 | 40 g 冷凍桃子\n1 根香蕉\n1 1/2 大匙花生醬（或您選擇的堅果醬）\n約 1/2-1 杯 | 120-240 mL 沸水（或您選擇的牛奶）\n[可選配料]\n格蘭諾拉燕麥\n切碎的水果\n巧克力豆\n椰子絲\n種子或堅果\n蜂蜜或（您選擇的甜味劑）",
-    "seed.exampleRecipes.smoothieBowl.instructions": "[果昔]\n開始煮水，並在果汁機中準備食材時讓水煮至沸騰。\n將冷凍食材加入果汁機，接著加入非冷凍食材。\n將沸水（或您選擇的牛奶）倒入果汁機中。若使用沸水，請務必直接倒在冷凍食材上，以確保容易攪拌。\n若果昔不易攪拌，請加入更多熱水（或您選擇的牛奶）。持續加入液體，直到攪拌順滑為止。\n[享用]\n將果昔倒入碗中。\n果昔倒入碗中後，加入喜愛的可選配料（喜愛的自製或市售格蘭諾拉燕麥、切碎的水果、巧克力豆、椰子絲、種子或堅果）。\n若想增添甜味，可在上面淋上蜂蜜或任何您選擇的甜味劑。"
+    "seed.exampleRecipes.smoothieBowl.instructions": "[果昔]\n開始煮水，並在果汁機中準備食材時讓水煮至沸騰。\n將冷凍食材加入果汁機，接著加入非冷凍食材。\n將沸水（或您選擇的牛奶）倒入果汁機中。若使用沸水，請務必直接倒在冷凍食材上，以確保容易攪拌。\n若果昔不易攪拌，請加入更多熱水（或您選擇的牛奶）。持續加入液體，直到攪拌順滑為止。\n[享用]\n將果昔倒入碗中。\n果昔倒入碗中後，加入喜愛的可選配料（喜愛的自製或市售格蘭諾拉燕麥、切碎的水果、巧克力豆、椰子絲、種子或堅果）。\n若想增添甜味，可在上面淋上蜂蜜或任何您選擇的甜味劑。",
+    "pages.shoppingList.removeRecipe": "從清單中移除此食譜的項目",
+    "components.shoppingListItem.editTitle.header": "編輯項目",
+    "components.shoppingListItem.editTitle.placeholder": "項目名稱…",
+    "components.shoppingListItem.edit": "編輯",
+    "components.shoppingListItem.delete": "刪除"
 }
