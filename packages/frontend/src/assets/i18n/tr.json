@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Hesap oluştur",
     "pages.getStarted.button.login": "Oturum Aç",
     "pages.getStarted.reason": "Tariflerinizin, yemek planlarınızın ve alışveriş listelerinizin tüm cihazlarınızda eşitlenmesi ve tarifleri herhangi bir web sitesinden otomatik olarak içe aktarabilmeniz için bir hesap oluşturun.",
-    "pages.getStarted.crossPlatform": "Tek bir hesap telefonunuzda, tabletinizde, bilgisayarınızda ve web üzerinde çalışır."
+    "pages.getStarted.crossPlatform": "Tek bir hesap telefonunuzda, tabletinizde, bilgisayarınızda ve web üzerinde çalışır.",
+    "pages.welcomeFlow.tabTitle": "Hoş geldiniz!"
 }
