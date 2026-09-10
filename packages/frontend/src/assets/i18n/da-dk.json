@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "Opret en konto",
     "pages.getStarted.button.login": "Log Ind",
     "pages.getStarted.reason": "Opret en konto, så dine opskrifter, madplaner og indkøbslister synkroniseres på tværs af alle dine enheder, og så du automatisk kan importere opskrifter fra ethvert websted.",
-    "pages.getStarted.crossPlatform": "Én konto fungerer på din telefon, tablet, computer og internettet."
+    "pages.getStarted.crossPlatform": "Én konto fungerer på din telefon, tablet, computer og internettet.",
+    "pages.welcomeFlow.tabTitle": "Velkommen!"
 }
