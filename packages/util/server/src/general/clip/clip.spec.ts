@@ -232,3 +232,74 @@ describe("clipHtml grounding gate", () => {
     expect(result.recipe.ingredients).toContain("macaroni");
   });
 });
+
+describe("clipHtml text cleanup", () => {
+  beforeEach(() => {
+    textToRecipeMock.mockReset();
+  });
+
+  it("strips step numbering from a structured data recipe", async () => {
+    const jsonLd = {
+      "@type": "Recipe",
+      name: "Easy Pancakes",
+      recipeIngredient: [
+        "1 cup all purpose flour",
+        "1 tablespoon white granulated sugar",
+      ],
+      recipeInstructions: [
+        "1. Mix the flour and sugar together in a large bowl.",
+        "2. Cook on a hot griddle until golden brown on both sides.",
+      ],
+    };
+    const html = `<html><body>
+      <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+      <h1>Easy Pancakes</h1>
+      <p>1 cup all purpose flour</p>
+      <p>1 tablespoon white granulated sugar</p>
+      <p>1. Mix the flour and sugar together in a large bowl.</p>
+      <p>2. Cook on a hot griddle until golden brown on both sides.</p>
+    </body></html>`;
+
+    const { clipHtml } = await import("./clip");
+    const result = await clipHtml(html);
+
+    expect(result.recipe.instructions).toBe(
+      "Mix the flour and sugar together in a large bowl.\nCook on a hot griddle until golden brown on both sides.",
+    );
+  });
+
+  it("falls back to the LLM when structured data holds only step numbers", async () => {
+    const jsonLd = {
+      "@type": "Recipe",
+      name: "Simple Garlic Bread",
+      recipeIngredient: [
+        "1 loaf ciabatta bread, sliced lengthwise",
+        "half cup salted butter, softened to room temperature",
+      ],
+      recipeInstructions: ["1.", "2."],
+    };
+    const html = `<html><body>
+      <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+      <h1>Simple Garlic Bread</h1>
+      <p>1 loaf ciabatta bread, sliced lengthwise</p>
+      <p>half cup salted butter, softened to room temperature</p>
+      <p>Spread the softened butter over the ciabatta and broil until golden.</p>
+    </body></html>`;
+
+    textToRecipeMock.mockResolvedValue(
+      llmEntry({
+        title: "Simple Garlic Bread",
+        ingredients:
+          "1 loaf ciabatta bread, sliced lengthwise\nhalf cup salted butter, softened to room temperature",
+        instructions:
+          "Spread the softened butter over the ciabatta and broil until golden.",
+      }),
+    );
+
+    const { clipHtml } = await import("./clip");
+    const result = await clipHtml(html);
+
+    expect(textToRecipeMock).toHaveBeenCalledOnce();
+    expect(result.recipe.instructions).toContain("broil until golden");
+  });
+});
