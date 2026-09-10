@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Smoothie]\nBörja koka vatten och låt det koka upp ordentligt medan du förbereder ingredienserna i en mixer.\nTillsätt de frysta ingredienserna i en mixer, följt av de icke-frysta ingredienserna.\nHäll det kokande vattnet (eller valfri mjölk) i mixern. Om du använder kokande vatten ska du se till att hälla det direkt över de frysta ingredienserna för att underlätta mixningen.\nOm din smoothie inte mixas lätt, tillsätt mer hett vatten (eller valfri mjölk). Fortsätt att tillsätta mer vätska tills den blir slät.\n[Servera]\nHäll smoothien i en skål.\nNär smoothien är i skålen, tillsätt önskade valfria toppings (favoritgranola, hemlagad eller köpt i butik, hackad frukt, chokladbitar, riven kokos, frön eller nötter).\nOm du vill ha extra sötma, toppa med honung eller valfritt sötningsmedel.",
     "pages.shoppingList.removeRecipe": "Ta bort detta recepts ingredienser från listan",
     "components.shoppingListItem.editTitle.header": "Redigera ingrediens",
-    "components.shoppingListItem.editTitle.placeholder": "Ingrediensnamn..."
+    "components.shoppingListItem.editTitle.placeholder": "Ingrediensnamn...",
+    "components.shoppingListItem.edit": "Redigera",
+    "components.shoppingListItem.delete": "Ta bort"
 }
