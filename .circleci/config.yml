@@ -79,6 +79,9 @@ jobs:
           name: migrate
           command: pnpm exec prisma migrate dev
       - run:
+          name: seed
+          command: node dist/apps/cli/main.cjs seed
+      - run:
           name: start api
           command: node dist/apps/backend/main.cjs
           background: true
