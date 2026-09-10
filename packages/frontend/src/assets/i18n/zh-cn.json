@@ -2464,5 +2464,6 @@
     "pages.getStarted.button.register": "创建账号",
     "pages.getStarted.button.login": "登录",
     "pages.getStarted.reason": "创建账户后，您的食谱、膳食计划和购物清单将在所有设备间同步，您还可以从任何网站自动导入食谱。",
-    "pages.getStarted.crossPlatform": "一个账户可在您的手机、平板电脑、计算机和网页端使用。"
+    "pages.getStarted.crossPlatform": "一个账户可在您的手机、平板电脑、计算机和网页端使用。",
+    "pages.welcomeFlow.tabTitle": "欢迎！"
 }
