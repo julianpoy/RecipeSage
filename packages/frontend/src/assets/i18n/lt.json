@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Glotnutis]\nPradėkite virinti vandenį ir, kol ruošiate ingredientus trintuve, leiskite jam užvirti.\nĮ trintuvą sudėkite šaldytus ingredientus, tada – nešaldytus ingredientus.\nĮ trintuvą supilkite virintą vandenį (arba pasirinktą pieną). Jei naudojate virintą vandenį, būtinai pilkite jį tiesiai ant šaldytų ingredientų, kad būtų lengviau sutrinti.\nJei glotnutis sunkiai susitrina, įpilkite daugiau karšto vandens (arba pasirinkto pieno). Toliau pilkite skystį, kol glotnutis taps vientisas.\n[Patiekite]\nSupilkite glotnutį į dubenėlį.\nKai glotnutis bus dubenėlyje, pridėkite norimų pasirenkamų priedų (mėgstamos naminės arba parduotuvėje pirktos granolos, pjaustytų vaisių, šokolado lašelių, kokosų drožlių, sėklų arba riešutų).\nJei norite daugiau saldumo, ant viršaus užpilkite medaus arba pridėkite bet kokio pasirinkto saldiklio.",
     "pages.shoppingList.removeRecipe": "Pašalinti šio recepto elementus iš sąrašo",
     "components.shoppingListItem.editTitle.header": "Redaguoti elementą",
-    "components.shoppingListItem.editTitle.placeholder": "Elemento pavadinimas..."
+    "components.shoppingListItem.editTitle.placeholder": "Elemento pavadinimas...",
+    "components.shoppingListItem.edit": "Redaguoti",
+    "components.shoppingListItem.delete": "Ištrinti"
 }
