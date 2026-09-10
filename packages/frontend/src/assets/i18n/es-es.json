@@ -2493,5 +2493,7 @@
     "seed.exampleRecipes.smoothieBowl.instructions": "[Batido]\nPonga agua a hervir y deje que alcance el punto de ebullición mientras prepara los ingredientes en una licuadora.\nAñada los ingredientes congelados a la licuadora, seguidos de los ingredientes no congelados.\nVierta agua hervida (o la leche que prefiera) en la licuadora. Si utiliza agua hervida, asegúrese de verterla directamente sobre los ingredientes congelados para facilitar la mezcla.\nSi el batido no se mezcla fácilmente, añada más agua caliente (o la leche que prefiera). Siga añadiendo líquido hasta que se mezcle de forma homogénea.\n[Servir]\nVierta el batido en un bol.\nUna vez que el batido esté en el bol, añada los ingredientes opcionales que desee para decorar (granola casera o comprada en la tienda, fruta picada, chispas de chocolate, coco rallado, semillas o frutos secos).\nSi desea añadir más dulzor, cubra con miel o cualquier edulcorante de su elección.",
     "pages.shoppingList.removeRecipe": "Eliminar de la lista los elementos de esta receta",
     "components.shoppingListItem.editTitle.header": "Editar elemento",
-    "components.shoppingListItem.editTitle.placeholder": "Nombre del elemento..."
+    "components.shoppingListItem.editTitle.placeholder": "Nombre del elemento...",
+    "components.shoppingListItem.edit": "Editar",
+    "components.shoppingListItem.delete": "Eliminar"
 }
