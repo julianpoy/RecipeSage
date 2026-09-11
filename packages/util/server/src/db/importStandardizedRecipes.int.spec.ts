@@ -101,6 +101,39 @@ describe("importStandardizedRecipes", () => {
     expect(recipe.recipeLabels).toEqual([]);
   });
 
+  it("removes null characters from recipe fields and labels", async () => {
+    await importStandardizedRecipes(
+      user.id,
+      [
+        {
+          recipe: {
+            title: "Null\u0000Title",
+            notes: "Some\u0000notes",
+            ingredients: "1 cup\u0000 flour",
+            nutritionServingSize: "1\u0000 slice",
+          },
+          labels: ["null\u0000label"],
+          images: [],
+        },
+      ],
+      "en-us",
+      undefined,
+    );
+
+    const recipe = await prisma.recipe.findFirstOrThrow({
+      where: { userId: user.id },
+      include: { recipeLabels: { include: { label: true } } },
+    });
+
+    expect(recipe.title).toBe("NullTitle");
+    expect(recipe.notes).toBe("Somenotes");
+    expect(recipe.ingredients).toBe("1 cup flour");
+    expect(recipe.nutritionServingSize).toBe("1 slice");
+    expect(
+      recipe.recipeLabels.map((recipeLabel) => recipeLabel.label.title),
+    ).toEqual(["nulllabel"]);
+  });
+
   it("does not fail an import whose entry carries no rating", async () => {
     await importStandardizedRecipes(
       user.id,

@@ -34,6 +34,10 @@ const IMPORT_TRANSACTION_TIMEOUT_MS = 120000;
 const CONCURRENT_IMAGE_IMPORTS = 2;
 const MAX_IMAGES = 10;
 const MAX_IMPORT_LIMIT = 35000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
+const NULL_CHAR = "\u0000";
+
+const removeNullChars = (text: string | null | undefined) =>
+  text?.replaceAll(NULL_CHAR, "");
 
 /**
  * Centralized place for all recipe import tasks as a standardized format.
@@ -127,21 +131,29 @@ export const importStandardizedRecipes = async (
       await tx.recipe.createMany({
         data: entries.map((entry, idx) => ({
           id: recipeIds[idx],
-          title: (entry.recipe.title || untitledFallback).slice(0, 254),
-          description: entry.recipe.description || "",
-          yield: entry.recipe.yield || "",
-          activeTime: entry.recipe.activeTime || "",
-          totalTime: entry.recipe.totalTime || "",
-          source: entry.recipe.source || "",
-          url: entry.recipe.url || "",
-          notes: entry.recipe.notes || "",
-          ingredients: stripBlankLines(entry.recipe.ingredients || ""),
-          instructions: stripBlankLines(entry.recipe.instructions || ""),
+          title: (
+            removeNullChars(entry.recipe.title) || untitledFallback
+          ).slice(0, 254),
+          description: removeNullChars(entry.recipe.description) || "",
+          yield: removeNullChars(entry.recipe.yield) || "",
+          activeTime: removeNullChars(entry.recipe.activeTime) || "",
+          totalTime: removeNullChars(entry.recipe.totalTime) || "",
+          source: removeNullChars(entry.recipe.source) || "",
+          url: removeNullChars(entry.recipe.url) || "",
+          notes: removeNullChars(entry.recipe.notes) || "",
+          ingredients: stripBlankLines(
+            removeNullChars(entry.recipe.ingredients) || "",
+          ),
+          instructions: stripBlankLines(
+            removeNullChars(entry.recipe.instructions) || "",
+          ),
           rating: entry.recipe.rating,
           lastMadeAt: entry.recipe.lastMadeAt
             ? new Date(entry.recipe.lastMadeAt)
             : undefined,
-          nutritionServingSize: entry.recipe.nutritionServingSize ?? undefined,
+          nutritionServingSize: removeNullChars(
+            entry.recipe.nutritionServingSize,
+          ),
           nutritionCalories: entry.recipe.nutritionCalories ?? undefined,
           nutritionTotalFat: entry.recipe.nutritionTotalFat ?? undefined,
           nutritionSaturatedFat:
@@ -163,8 +175,9 @@ export const importStandardizedRecipes = async (
           nutritionCalcium: entry.recipe.nutritionCalcium ?? undefined,
           nutritionIron: entry.recipe.nutritionIron ?? undefined,
           nutritionPotassium: entry.recipe.nutritionPotassium ?? undefined,
-          nutritionOtherDetails:
-            entry.recipe.nutritionOtherDetails ?? undefined,
+          nutritionOtherDetails: removeNullChars(
+            entry.recipe.nutritionOtherDetails,
+          ),
           folder: ["inbox", "main"].includes(entry.recipe.folder || "")
             ? entry.recipe.folder || ""
             : "main",
@@ -177,7 +190,9 @@ export const importStandardizedRecipes = async (
       entries.forEach((entry, idx) => {
         const recipeId = recipeIds[idx];
         entry.labels.forEach((rawLabelTitle) => {
-          const labelTitle = cleanLabelTitle(rawLabelTitle);
+          const labelTitle = cleanLabelTitle(
+            removeNullChars(rawLabelTitle) || "",
+          );
           if (!labelTitle) return;
 
           const existing = recipeIdsByLabelTitle.get(labelTitle);
