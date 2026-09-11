@@ -144,6 +144,7 @@
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.6.2",
     "tsx": "^4.21.0",
+    "undici": "^7.29.1",
     "uuid": "^14.0.2",
     "workbox-core": "^7.4.1",
     "workbox-expiration": "^7.4.1",
