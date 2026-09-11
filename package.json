@@ -37,7 +37,7 @@
     "@ai-sdk/anthropic": "^4.0.41",
     "@ai-sdk/google": "^4.0.50",
     "@ai-sdk/openai": "^4.0.46",
-    "@angular/common": "21.2.19",
+    "@angular/common": "21.2.20",
     "@angular/core": "21.2.20",
     "@angular/forms": "21.2.1",
     "@angular/platform-browser": "21.2.1",
