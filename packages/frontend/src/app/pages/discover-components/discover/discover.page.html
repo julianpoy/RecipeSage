@@ -4,6 +4,11 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ "pages.discover.title" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openOptions($event)">
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -21,7 +26,6 @@
         (keydown.enter)="searchFieldEnter($event)"
       ></ion-searchbar>
       <ion-button fill="clear" size="small" (click)="openFilters($event)">
-        <ion-icon name="options-outline" slot="start"></ion-icon>
         {{ "pages.discover.filters.title" | translate }}
       </ion-button>
     </div>

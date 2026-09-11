@@ -23,9 +23,13 @@ import { RatingComponent } from "../../../components/rating/rating.component";
 import {
   DiscoverFilterPopoverPage,
   DiscoverFilterResult,
-  DiscoverSortBy,
   DiscoverPhotoFilter,
 } from "../discover-filter-popover/discover-filter-popover.page";
+import {
+  DiscoverPopoverPage,
+  DiscoverPopoverResult,
+  DiscoverSortBy,
+} from "../discover-popover/discover-popover.page";
 import {
   IonHeader,
   IonToolbar,
@@ -96,6 +100,8 @@ export class DiscoverPage {
   recipes: DiscoverRecipeSummary[] = [];
   reachedEnd = false;
   private searchGeneration = 0;
+  private hasEntered = false;
+  private categoriesParam: string | null = null;
   tileColCount = 1;
 
   datasource = new Datasource<DiscoverRecipeSummary>({
@@ -145,7 +151,9 @@ export class DiscoverPage {
 
   ionViewWillEnter() {
     const categoriesParam = this.route.snapshot.queryParamMap.get("categories");
-    if (categoriesParam) {
+    const categoriesParamChanged = categoriesParam !== this.categoriesParam;
+    this.categoriesParam = categoriesParam;
+    if (categoriesParamChanged && categoriesParam) {
       this.selectedCategories = categoriesParam
         .split(",")
         .map((category) => decodeURIComponent(category))
@@ -153,8 +161,12 @@ export class DiscoverPage {
     }
 
     window.addEventListener("resize", this.updateTileColCount);
-    this.computeTileColCount();
-    this.reload();
+    const tileColCountChanged = this.computeTileColCount();
+
+    if (!this.hasEntered || categoriesParamChanged || tileColCountChanged) {
+      this.hasEntered = true;
+      this.reload();
+    }
   }
 
   ionViewWillLeave() {
@@ -200,6 +212,24 @@ export class DiscoverPage {
     this.reload();
   }
 
+  async openOptions(event: Event) {
+    const popover = await this.popoverCtrl.create({
+      component: DiscoverPopoverPage,
+      componentProps: {
+        sortBy: this.sortBy,
+      },
+      event,
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onDidDismiss<DiscoverPopoverResult>();
+    if (!data) return;
+
+    this.sortBy = data.sortBy;
+    this.reload();
+  }
+
   async openFilters(event: Event) {
     const popover = await this.popoverCtrl.create({
       component: DiscoverFilterPopoverPage,
@@ -211,7 +241,6 @@ export class DiscoverPage {
         minRating: this.minRating,
         minRatingCount: this.minRatingCount,
         photo: this.photo,
-        sortBy: this.sortBy,
       },
       event,
     });
@@ -227,7 +256,6 @@ export class DiscoverPage {
     this.minRating = data.minRating;
     this.minRatingCount = data.minRatingCount;
     this.photo = data.photo;
-    this.sortBy = data.sortBy;
     if (data.refreshSearch) this.reload();
   }
 
