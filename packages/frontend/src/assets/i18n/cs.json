@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Upravit položku",
     "components.shoppingListItem.editTitle.placeholder": "Název položky...",
     "components.shoppingListItem.edit": "Upravit",
-    "components.shoppingListItem.delete": "Odstranit"
+    "components.shoppingListItem.delete": "Odstranit",
+    "pages.shoppingList.movedToList": "Přesunuto {{itemCount}} položek do {{title}}",
+    "pages.shoppingList.copiedToList": "Zkopírováno {{itemCount}} položek do {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Položky byly zkopírovány do {{title}}, ale z tohoto seznamu je nebylo možné odstranit.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Přesun nebyl dokončen",
+    "components.shoppingListItem.moveToList": "Přesunout do jiného seznamu",
+    "components.shoppingListItem.moveToList.header": "Přesunout položku do seznamu",
+    "components.shoppingListItem.copyToList": "Kopírovat do jiného seznamu",
+    "components.shoppingListItem.copyToList.header": "Kopírovat položku do seznamu",
+    "generic.back": "Zpět"
 }

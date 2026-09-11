@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Tétel szerkesztése",
     "components.shoppingListItem.editTitle.placeholder": "Tétel neve...",
     "components.shoppingListItem.edit": "Szerkesztés",
-    "components.shoppingListItem.delete": "Törlés"
+    "components.shoppingListItem.delete": "Törlés",
+    "pages.shoppingList.movedToList": "Áthelyezve {{itemCount}} tétel ide: {{title}}",
+    "pages.shoppingList.copiedToList": "Átmásolva {{itemCount}} tétel ide: {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "A tételek át lettek másolva ide: {{title}}, de erről a listáról nem sikerült eltávolítani őket.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Hiányos áthelyezés",
+    "components.shoppingListItem.moveToList": "Áthelyezés másik listára",
+    "components.shoppingListItem.moveToList.header": "Tétel áthelyezése listára",
+    "components.shoppingListItem.copyToList": "Másolás másik listára",
+    "components.shoppingListItem.copyToList.header": "Tétel másolása listára",
+    "generic.back": "Vissza"
 }

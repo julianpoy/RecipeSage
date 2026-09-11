@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "עריכת פריט",
     "components.shoppingListItem.editTitle.placeholder": "שם הפריט...",
     "components.shoppingListItem.edit": "עריכה",
-    "components.shoppingListItem.delete": "מחיקה"
+    "components.shoppingListItem.delete": "מחיקה",
+    "pages.shoppingList.movedToList": "הועברו {{itemCount}} פריט/ים אל {{title}}",
+    "pages.shoppingList.copiedToList": "הועתקו {{itemCount}} פריט/ים אל {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "הפריטים הועתקו אל {{title}}, אך לא ניתן היה להסיר אותם מרשימה זו.",
+    "pages.shoppingList.movedToListPartialFailure.header": "ההעברה לא הושלמה",
+    "components.shoppingListItem.moveToList": "העברה לרשימה אחרת",
+    "components.shoppingListItem.moveToList.header": "העברת פריט לרשימה",
+    "components.shoppingListItem.copyToList": "העתקה לרשימה אחרת",
+    "components.shoppingListItem.copyToList.header": "העתקת פריט לרשימה",
+    "generic.back": "חזרה"
 }

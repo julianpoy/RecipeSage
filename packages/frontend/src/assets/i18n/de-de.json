@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Eintrag bearbeiten",
     "components.shoppingListItem.editTitle.placeholder": "Name des Eintrags...",
     "components.shoppingListItem.edit": "Bearbeiten",
-    "components.shoppingListItem.delete": "Löschen"
+    "components.shoppingListItem.delete": "Löschen",
+    "pages.shoppingList.movedToList": "{{itemCount}} Artikel nach {{title}} verschoben",
+    "pages.shoppingList.copiedToList": "{{itemCount}} Artikel nach {{title}} kopiert",
+    "pages.shoppingList.movedToListPartialFailure": "Die Artikel wurden nach {{title}} kopiert, konnten jedoch nicht aus dieser Liste entfernt werden.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Verschieben unvollständig",
+    "components.shoppingListItem.moveToList": "In andere Liste verschieben",
+    "components.shoppingListItem.moveToList.header": "Artikel in Liste verschieben",
+    "components.shoppingListItem.copyToList": "In andere Liste kopieren",
+    "components.shoppingListItem.copyToList.header": "Artikel in Liste kopieren",
+    "generic.back": "Zurück"
 }

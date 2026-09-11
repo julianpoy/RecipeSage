@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "वस्तु संपादित करें",
     "components.shoppingListItem.editTitle.placeholder": "वस्तु का नाम..।",
     "components.shoppingListItem.edit": "संपादित करें",
-    "components.shoppingListItem.delete": "हटाएँ"
+    "components.shoppingListItem.delete": "हटाएँ",
+    "pages.shoppingList.movedToList": "{{itemCount}} आइटम {{title}} में स्थानांतरित किए गए",
+    "pages.shoppingList.copiedToList": "{{itemCount}} आइटम {{title}} में कॉपी किए गए",
+    "pages.shoppingList.movedToListPartialFailure": "आइटम {{title}} में कॉपी किए गए, लेकिन उन्हें इस सूची से हटाया नहीं जा सका।",
+    "pages.shoppingList.movedToListPartialFailure.header": "स्थानांतरण अपूर्ण",
+    "components.shoppingListItem.moveToList": "अन्य सूची में स्थानांतरित करें",
+    "components.shoppingListItem.moveToList.header": "आइटम को सूची में स्थानांतरित करें",
+    "components.shoppingListItem.copyToList": "अन्य सूची में कॉपी करें",
+    "components.shoppingListItem.copyToList.header": "आइटम को सूची में कॉपी करें",
+    "generic.back": "वापस"
 }

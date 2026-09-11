@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "項目を編集",
     "components.shoppingListItem.editTitle.placeholder": "項目名...",
     "components.shoppingListItem.edit": "編集",
-    "components.shoppingListItem.delete": "削除"
+    "components.shoppingListItem.delete": "削除",
+    "pages.shoppingList.movedToList": "{{itemCount}}件の項目を{{title}}に移動しました",
+    "pages.shoppingList.copiedToList": "{{itemCount}}件の項目を{{title}}にコピーしました",
+    "pages.shoppingList.movedToListPartialFailure": "項目は{{title}}にコピーされましたが、このリストから削除できませんでした。",
+    "pages.shoppingList.movedToListPartialFailure.header": "移動が完了しませんでした",
+    "components.shoppingListItem.moveToList": "別のリストに移動",
+    "components.shoppingListItem.moveToList.header": "項目をリストに移動",
+    "components.shoppingListItem.copyToList": "別のリストにコピー",
+    "components.shoppingListItem.copyToList.header": "項目をリストにコピー",
+    "generic.back": "戻る"
 }
