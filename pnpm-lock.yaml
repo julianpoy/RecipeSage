@@ -338,9 +338,6 @@ importers:
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
-      undici:
-        specifier: ^7.29.1
-        version: 7.29.1
       uuid:
         specifier: ^14.0.2
         version: 14.0.2
