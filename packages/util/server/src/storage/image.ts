@@ -108,7 +108,7 @@ export const writeImageStream = async (
     resolveConversionOptions(highResConversion);
 
   // Buffer the full input before transform so HEIC can be detected and
-  // pre-decoded via heic-decode (Sharp's prebuilt libvips cannot decode HEVC).
+  // pre-decoded via heif-convert (Sharp's prebuilt libvips cannot decode HEVC).
   const inputBuffer = await streamToBuffer(
     inputStream as Readable | ReadableStream,
   );

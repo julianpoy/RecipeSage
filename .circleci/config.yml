@@ -62,6 +62,12 @@ jobs:
           name: install-pandoc
           command: sudo apt-get update && sudo apt-get install -y pandoc
       - run:
+          name: install-libheif
+          command: |
+            sudo apt-get update && sudo apt-get install -y libheif-examples libheif-plugin-libde265
+            which heif-info
+            heif-convert --list-decoders | grep -A1 'HEIC decoders' | grep libde265
+      - run:
           name: prettier
           command: pnpm exec prettier --check .
       - run:
