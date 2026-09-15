@@ -1,4 +1,4 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, JobStatus } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { broadcastWSEventIgnoringErrors, WSBroadcastEventType } from "../grip";
 import { throttleDropPromise } from "../throttleDropPromise";
@@ -20,14 +20,20 @@ export const updateJobProgress = async (args: {
   userId: string;
   progress: number;
 }) => {
-  await prisma.job.update({
+  const { count } = await prisma.job.updateMany({
     where: {
       id: args.jobId,
+      status: JobStatus.RUN,
+      progress: {
+        lt: args.progress,
+      },
     },
     data: {
       progress: args.progress,
     },
   });
+
+  if (!count) return;
 
   await onJobUpdate({
     jobId: args.jobId,

@@ -1,6 +1,9 @@
 import type { ImportJobSummary } from "@recipesage/prisma";
 
-import type { StandardizedRecipeImportEntry } from "../../../../db/index";
+import {
+  MAX_IMAGES,
+  type StandardizedRecipeImportEntry,
+} from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import {
   OCR_MIN_VALID_TEXT,
@@ -63,6 +66,7 @@ const stageResources = async (
       await writeFile(pdfPath, Buffer.from(base64, "base64"));
       pdfPaths.push(pdfPath);
     } else if (IMAGE_MIME_TYPES.has(mime)) {
+      if (imagePaths.length >= MAX_IMAGES) continue;
       const imagePath = path.join(tempDir, randomUUID());
       await writeFile(imagePath, Buffer.from(base64, "base64"));
       imagePaths.push(imagePath);
@@ -85,18 +89,16 @@ const processNote = async (args: {
 }): Promise<ProcessedNote | undefined> => {
   const { noteXml, importLabels, unformattedLabel, tempDir, jobId } = args;
 
-  const parsedNote = JSON.parse(
-    xmljs.xml2json(noteXml, { compact: false }),
-  ) as XmlElement;
+  const parsedNote = xmljs.xml2js(noteXml, { compact: false }) as XmlElement;
   const note = findChild(parsedNote, "note");
   if (!note) return;
 
   const cdataText = elementText(findChild(note, "content"));
   let recipeText = "";
   if (cdataText) {
-    const parsedCdata = JSON.parse(
-      xmljs.xml2json(cdataText, { compact: false }),
-    ) as XmlElement;
+    const parsedCdata = xmljs.xml2js(cdataText, {
+      compact: false,
+    }) as XmlElement;
     const enNote = findChild(parsedCdata, "en-note");
     recipeText = normalizeRecipeText(extractText(enNote));
   }

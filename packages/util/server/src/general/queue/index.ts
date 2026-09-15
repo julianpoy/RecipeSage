@@ -3,6 +3,8 @@ import * as Sentry from "@sentry/node";
 import type { JobQueueItem } from "./JobQueueItem";
 import { prisma } from "@recipesage/prisma";
 import { JobStatus } from "@recipesage/prisma";
+import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { onJobUpdate } from "../jobs/updateJobProgress";
 
 export * from "./JobQueueItem";
 export * from "./processWorkerJob";
@@ -75,18 +77,42 @@ export const getJobQueueWorker = () => {
     console.log(`Job ${job.id} has triggered the completed event`);
   });
 
-  jobQueueWorker.on("failed", (job) => {
+  jobQueueWorker.on("failed", (job, error) => {
     console.log(`Job ${job?.id} has triggered the failed event`);
 
     if (job && "jobId" in job.data && job.data.jobId) {
+      const jobId = job.data.jobId;
+
+      console.error(error);
+      Sentry.captureException(error, {
+        extra: {
+          jobId,
+          queueJobId: job.id,
+          attemptsMade: job.attemptsMade,
+        },
+      });
+
       prisma.job
-        .update({
+        .updateManyAndReturn({
           where: {
-            id: job.data.jobId,
+            id: jobId,
+            resultCode: null,
           },
           data: {
             status: JobStatus.FAIL,
+            resultCode: JOB_RESULT_CODES.interrupted,
           },
+          select: {
+            userId: true,
+          },
+        })
+        .then(async (updated) => {
+          for (const { userId } of updated) {
+            await onJobUpdate({
+              jobId,
+              userId,
+            });
+          }
         })
         .catch((e) => {
           console.error(e);

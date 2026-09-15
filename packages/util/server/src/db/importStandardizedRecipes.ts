@@ -32,7 +32,7 @@ export interface StandardizedRecipeImportEntry extends Omit<
 
 const IMPORT_TRANSACTION_TIMEOUT_MS = 120000;
 const CONCURRENT_IMAGE_IMPORTS = 2;
-const MAX_IMAGES = 10;
+export const MAX_IMAGES = 10;
 const MAX_IMPORT_LIMIT = 35000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
 const NULL_CHAR = "\u0000";
 
@@ -201,28 +201,50 @@ export const importStandardizedRecipes = async (
         });
       });
 
-      for (const [labelTitle, labelRecipeIds] of recipeIdsByLabelTitle) {
-        const label = await tx.label.upsert({
-          where: {
-            userId_title: {
-              userId,
-              title: labelTitle,
-            },
-          },
-          create: {
+      const labelTitles = [...recipeIdsByLabelTitle.keys()];
+
+      if (labelTitles.length) {
+        await tx.label.createMany({
+          data: labelTitles.map((title) => ({
             userId,
-            title: labelTitle,
-          },
-          update: {},
+            title,
+          })),
+          skipDuplicates: true,
         });
 
+        const labels = await tx.label.findMany({
+          where: {
+            userId,
+            title: {
+              in: labelTitles,
+            },
+          },
+          select: {
+            id: true,
+            title: true,
+          },
+        });
+
+        const labelIdByTitle = new Map(
+          labels.map((label) => [label.title, label.id]),
+        );
+
         await tx.recipeLabel.createMany({
-          data: labelRecipeIds.map((recipeId) => {
-            return {
-              labelId: label.id,
-              recipeId,
-            };
-          }),
+          data: [...recipeIdsByLabelTitle].flatMap(
+            ([labelTitle, labelRecipeIds]) => {
+              const labelId = labelIdByTitle.get(labelTitle);
+              if (!labelId) {
+                throw new Error(
+                  "Could not resolve an imported label to a label id",
+                );
+              }
+
+              return labelRecipeIds.map((recipeId) => ({
+                labelId,
+                recipeId,
+              }));
+            },
+          ),
           skipDuplicates: true,
         });
       }
