@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Siirrä kohde luetteloon",
     "components.shoppingListItem.copyToList": "Kopioi toiseen luetteloon",
     "components.shoppingListItem.copyToList.header": "Kopioi kohde luetteloon",
-    "generic.back": "Takaisin"
+    "generic.back": "Takaisin",
+    "pages.jobs.status.fail.timeout": "Tämä kesti liian kauan ja keskeytettiin. Yritä uudelleen.",
+    "pages.jobs.status.fail.interrupted": "Tämä keskeytettiin ennen kuin se valmistui. Yritä uudelleen.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Olet ollut ahkera!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Kiitos, että jaat niin monta reseptiä yhteisön kanssa! Jotta monien eri kokkien resepteillä olisi tasapuolinen mahdollisuus tulla nähdyiksi ja roskapostin estämiseksi jokainen voi julkaista Discoverissa vain rajoitetun määrän reseptejä 24 tunnin aikana. Jo julkaisemasi reseptit ovat turvassa. Palaa hieman myöhemmin julkaisemaan tämä resepti."
 }
