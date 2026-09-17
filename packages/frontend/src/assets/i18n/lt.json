@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Perkelti prekę į sąrašą",
     "components.shoppingListItem.copyToList": "Kopijuoti į kitą sąrašą",
     "components.shoppingListItem.copyToList.header": "Kopijuoti prekę į sąrašą",
-    "generic.back": "Atgal"
+    "generic.back": "Atgal",
+    "pages.jobs.status.fail.timeout": "Tai užtruko per ilgai ir buvo sustabdyta. Bandykite dar kartą.",
+    "pages.jobs.status.fail.interrupted": "Tai buvo nutraukta nebaigus. Bandykite dar kartą.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Jūs tikrai daug nuveikėte!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Dėkojame, kad dalijatės tiek daug receptų su bendruomene! Kad daugelio skirtingų kulinarų receptai turėtų sąžiningą galimybę būti pastebėti ir siekiant išvengti šlamšto, per 24 valandų laikotarpį kiekvienas gali paskelbti sistemoje „Discover“ tik ribotą receptų skaičių. Jūsų jau paskelbti receptai yra saugūs. Grįžkite šiek tiek vėliau, kad paskelbtumėte šį receptą."
 }
