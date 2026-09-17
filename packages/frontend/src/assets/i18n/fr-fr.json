@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Déplacer l'élément vers une liste",
     "components.shoppingListItem.copyToList": "Copier vers une autre liste",
     "components.shoppingListItem.copyToList.header": "Copier l'élément vers une liste",
-    "generic.back": "Retour"
+    "generic.back": "Retour",
+    "pages.jobs.status.fail.timeout": "Cette opération a pris trop de temps et a été arrêtée. Veuillez réessayer.",
+    "pages.jobs.status.fail.interrupted": "Cette opération a été interrompue avant d’être terminée. Veuillez réessayer.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Vous avez été très actif !",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Merci de partager autant de recettes avec la communauté ! Afin que les recettes de nombreux cuisiniers différents aient toutes une chance équitable d’être vues et pour éviter le spam, chaque personne ne peut publier qu’un nombre limité de recettes dans Découvrir sur une période de 24 heures. Les recettes que vous avez déjà publiées sont en sécurité. Veuillez revenir un peu plus tard pour publier celle-ci."
 }
