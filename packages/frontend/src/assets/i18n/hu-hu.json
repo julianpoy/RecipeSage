@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Tétel áthelyezése listára",
     "components.shoppingListItem.copyToList": "Másolás másik listára",
     "components.shoppingListItem.copyToList.header": "Tétel másolása listára",
-    "generic.back": "Vissza"
+    "generic.back": "Vissza",
+    "pages.jobs.status.fail.timeout": "Ez túl sokáig tartott, ezért leállítottuk. Kérjük, próbálja újra.",
+    "pages.jobs.status.fail.interrupted": "Ez a befejezése előtt megszakadt. Kérjük, próbálja újra.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Igazán elfoglalt volt!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Köszönjük, hogy ilyen sok receptet oszt meg a közösséggel! Annak érdekében, hogy sokféle szakács receptjei is méltányos esélyt kapjanak a megjelenésre, valamint a kéretlen tartalmak megelőzése érdekében, mindenki csak korlátozott számú receptet tehet közzé a Felfedezésben 24 órán belül. A már közzétett receptjei biztonságban vannak. Kérjük, térjen vissza kicsit később, hogy ezt is közzétehesse."
 }
