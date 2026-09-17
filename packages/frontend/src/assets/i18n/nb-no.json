@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Rediger vare",
     "components.shoppingListItem.editTitle.placeholder": "Varenavn...",
     "components.shoppingListItem.edit": "Rediger",
-    "components.shoppingListItem.delete": "Slett"
+    "components.shoppingListItem.delete": "Slett",
+    "pages.shoppingList.movedToList": "Flyttet {{itemCount}} element(er) til {{title}}",
+    "pages.shoppingList.copiedToList": "Kopierte {{itemCount}} element(er) til {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Elementene ble kopiert til {{title}}, men kunne ikke fjernes fra denne listen.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Flyttingen ble ikke fullført",
+    "components.shoppingListItem.moveToList": "Flytt til en annen liste",
+    "components.shoppingListItem.moveToList.header": "Flytt element til liste",
+    "components.shoppingListItem.copyToList": "Kopier til en annen liste",
+    "components.shoppingListItem.copyToList.header": "Kopier element til liste",
+    "generic.back": "Tilbake"
 }

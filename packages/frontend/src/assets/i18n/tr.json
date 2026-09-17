@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Öğeyi Düzenle",
     "components.shoppingListItem.editTitle.placeholder": "Öğe adı...",
     "components.shoppingListItem.edit": "Düzenle",
-    "components.shoppingListItem.delete": "Sil"
+    "components.shoppingListItem.delete": "Sil",
+    "pages.shoppingList.movedToList": "{{itemCount}} öğe {{title}} listesine taşındı",
+    "pages.shoppingList.copiedToList": "{{itemCount}} öğe {{title}} listesine kopyalandı",
+    "pages.shoppingList.movedToListPartialFailure": "Öğeler {{title}} listesine kopyalandı, ancak bu listeden kaldırılamadı.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Taşıma Tamamlanamadı",
+    "components.shoppingListItem.moveToList": "Başka Listeye Taşı",
+    "components.shoppingListItem.moveToList.header": "Öğeyi Listeye Taşı",
+    "components.shoppingListItem.copyToList": "Başka Listeye Kopyala",
+    "components.shoppingListItem.copyToList.header": "Öğeyi Listeye Kopyala",
+    "generic.back": "Geri"
 }

@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "항목 수정",
     "components.shoppingListItem.editTitle.placeholder": "항목 이름...",
     "components.shoppingListItem.edit": "편집",
-    "components.shoppingListItem.delete": "삭제"
+    "components.shoppingListItem.delete": "삭제",
+    "pages.shoppingList.movedToList": "{{itemCount}}개 항목을 {{title}}으로 이동했습니다",
+    "pages.shoppingList.copiedToList": "{{itemCount}}개 항목을 {{title}}에 복사했습니다",
+    "pages.shoppingList.movedToListPartialFailure": "항목이 {{title}}에 복사되었지만 이 목록에서 제거할 수 없었습니다.",
+    "pages.shoppingList.movedToListPartialFailure.header": "이동 미완료",
+    "components.shoppingListItem.moveToList": "다른 목록으로 이동",
+    "components.shoppingListItem.moveToList.header": "항목을 목록으로 이동",
+    "components.shoppingListItem.copyToList": "다른 목록에 복사",
+    "components.shoppingListItem.copyToList.header": "항목을 목록에 복사",
+    "generic.back": "뒤로"
 }

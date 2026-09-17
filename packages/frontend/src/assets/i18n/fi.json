@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Muokkaa tuotetta",
     "components.shoppingListItem.editTitle.placeholder": "Tuotteen nimi...",
     "components.shoppingListItem.edit": "Muokkaa",
-    "components.shoppingListItem.delete": "Poista"
+    "components.shoppingListItem.delete": "Poista",
+    "pages.shoppingList.movedToList": "Luetteloon {{title}} siirrettiin {{itemCount}} kohdetta",
+    "pages.shoppingList.copiedToList": "Luetteloon {{title}} kopioitiin {{itemCount}} kohdetta",
+    "pages.shoppingList.movedToListPartialFailure": "Kohteet kopioitiin luetteloon {{title}}, mutta niitä ei voitu poistaa tästä luettelosta.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Siirto kesken",
+    "components.shoppingListItem.moveToList": "Siirrä toiseen luetteloon",
+    "components.shoppingListItem.moveToList.header": "Siirrä kohde luetteloon",
+    "components.shoppingListItem.copyToList": "Kopioi toiseen luetteloon",
+    "components.shoppingListItem.copyToList.header": "Kopioi kohde luetteloon",
+    "generic.back": "Takaisin"
 }

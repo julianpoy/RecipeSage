@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "編輯項目",
     "components.shoppingListItem.editTitle.placeholder": "項目名稱…",
     "components.shoppingListItem.edit": "編輯",
-    "components.shoppingListItem.delete": "刪除"
+    "components.shoppingListItem.delete": "刪除",
+    "pages.shoppingList.movedToList": "已將 {{itemCount}} 個項目移至 {{title}}",
+    "pages.shoppingList.copiedToList": "已將 {{itemCount}} 個項目複製到 {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "項目已複製到 {{title}}，但無法從此清單中移除。",
+    "pages.shoppingList.movedToListPartialFailure.header": "移動未完成",
+    "components.shoppingListItem.moveToList": "移至其他清單",
+    "components.shoppingListItem.moveToList.header": "將項目移至清單",
+    "components.shoppingListItem.copyToList": "複製到其他清單",
+    "components.shoppingListItem.copyToList.header": "將項目複製到清單",
+    "generic.back": "返回"
 }

@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Redigera ingrediens",
     "components.shoppingListItem.editTitle.placeholder": "Ingrediensnamn...",
     "components.shoppingListItem.edit": "Redigera",
-    "components.shoppingListItem.delete": "Ta bort"
+    "components.shoppingListItem.delete": "Ta bort",
+    "pages.shoppingList.movedToList": "Flyttade {{itemCount}} poster till {{title}}",
+    "pages.shoppingList.copiedToList": "Kopierade {{itemCount}} poster till {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Posterna kopierades till {{title}}, men de kunde inte tas bort från den här listan.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Flytten slutfördes inte",
+    "components.shoppingListItem.moveToList": "Flytta till en annan lista",
+    "components.shoppingListItem.moveToList.header": "Flytta post till lista",
+    "components.shoppingListItem.copyToList": "Kopiera till en annan lista",
+    "components.shoppingListItem.copyToList.header": "Kopiera post till lista",
+    "generic.back": "Tillbaka"
 }

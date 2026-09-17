@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Редактировать ингредиент",
     "components.shoppingListItem.editTitle.placeholder": "Название ингредиента...",
     "components.shoppingListItem.edit": "Изменить",
-    "components.shoppingListItem.delete": "Удалить"
+    "components.shoppingListItem.delete": "Удалить",
+    "pages.shoppingList.movedToList": "Перемещено {{itemCount}} элементов в {{title}}",
+    "pages.shoppingList.copiedToList": "Скопировано {{itemCount}} элементов в {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Элементы были скопированы в {{title}}, но их не удалось удалить из этого списка.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Перемещение не завершено",
+    "components.shoppingListItem.moveToList": "Переместить в другой список",
+    "components.shoppingListItem.moveToList.header": "Переместить элемент в список",
+    "components.shoppingListItem.copyToList": "Копировать в другой список",
+    "components.shoppingListItem.copyToList.header": "Копировать элемент в список",
+    "generic.back": "Назад"
 }

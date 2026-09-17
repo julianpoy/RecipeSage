@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Editați articolul",
     "components.shoppingListItem.editTitle.placeholder": "Numele articolului...",
     "components.shoppingListItem.edit": "Editează",
-    "components.shoppingListItem.delete": "Șterge"
+    "components.shoppingListItem.delete": "Șterge",
+    "pages.shoppingList.movedToList": "S-au mutat {{itemCount}} articol(e) în {{title}}",
+    "pages.shoppingList.copiedToList": "S-au copiat {{itemCount}} articol(e) în {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Articolele au fost copiate în {{title}}, dar nu au putut fi eliminate din această listă.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Mutare incompletă",
+    "components.shoppingListItem.moveToList": "Mută în altă listă",
+    "components.shoppingListItem.moveToList.header": "Mută articolul în listă",
+    "components.shoppingListItem.copyToList": "Copiază în altă listă",
+    "components.shoppingListItem.copyToList.header": "Copiază articolul în listă",
+    "generic.back": "Înapoi"
 }

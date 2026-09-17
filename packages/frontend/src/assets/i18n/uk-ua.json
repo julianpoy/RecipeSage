@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Редагувати продукт",
     "components.shoppingListItem.editTitle.placeholder": "Назва продукту...",
     "components.shoppingListItem.edit": "Редагувати",
-    "components.shoppingListItem.delete": "Видалити"
+    "components.shoppingListItem.delete": "Видалити",
+    "pages.shoppingList.movedToList": "Переміщено {{itemCount}} елемент(ів) до {{title}}",
+    "pages.shoppingList.copiedToList": "Скопійовано {{itemCount}} елемент(ів) до {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Елементи скопійовано до {{title}}, але їх не вдалося видалити з цього списку.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Переміщення не завершено",
+    "components.shoppingListItem.moveToList": "Перемістити до іншого списку",
+    "components.shoppingListItem.moveToList.header": "Перемістити елемент до списку",
+    "components.shoppingListItem.copyToList": "Копіювати до іншого списку",
+    "components.shoppingListItem.copyToList.header": "Копіювати елемент до списку",
+    "generic.back": "Назад"
 }

@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Επεξεργασία στοιχείου",
     "components.shoppingListItem.editTitle.placeholder": "Όνομα στοιχείου...",
     "components.shoppingListItem.edit": "Επεξεργασία",
-    "components.shoppingListItem.delete": "Διαγραφή"
+    "components.shoppingListItem.delete": "Διαγραφή",
+    "pages.shoppingList.movedToList": "Μετακινήθηκαν {{itemCount}} στοιχείο(α) στην {{title}}",
+    "pages.shoppingList.copiedToList": "Αντιγράφηκαν {{itemCount}} στοιχείο(α) στην {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "Τα στοιχεία αντιγράφηκαν στην {{title}}, αλλά δεν ήταν δυνατή η αφαίρεσή τους από αυτήν τη λίστα.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Η μετακίνηση δεν ολοκληρώθηκε",
+    "components.shoppingListItem.moveToList": "Μετακίνηση σε άλλη λίστα",
+    "components.shoppingListItem.moveToList.header": "Μετακίνηση στοιχείου σε λίστα",
+    "components.shoppingListItem.copyToList": "Αντιγραφή σε άλλη λίστα",
+    "components.shoppingListItem.copyToList.header": "Αντιγραφή στοιχείου σε λίστα",
+    "generic.back": "Πίσω"
 }

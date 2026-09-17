@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "تعديل العنصر",
     "components.shoppingListItem.editTitle.placeholder": "اسم العنصر...",
     "components.shoppingListItem.edit": "تعديل",
-    "components.shoppingListItem.delete": "حذف"
+    "components.shoppingListItem.delete": "حذف",
+    "pages.shoppingList.movedToList": "تم نقل {{itemCount}} عنصر/عناصر إلى {{title}}",
+    "pages.shoppingList.copiedToList": "تم نسخ {{itemCount}} عنصر/عناصر إلى {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "تم نسخ العناصر إلى {{title}}، ولكن تعذّر حذفها من هذه القائمة.",
+    "pages.shoppingList.movedToListPartialFailure.header": "النقل غير مكتمل",
+    "components.shoppingListItem.moveToList": "نقل إلى قائمة أخرى",
+    "components.shoppingListItem.moveToList.header": "نقل العنصر إلى قائمة",
+    "components.shoppingListItem.copyToList": "نسخ إلى قائمة أخرى",
+    "components.shoppingListItem.copyToList.header": "نسخ العنصر إلى قائمة",
+    "generic.back": "رجوع"
 }

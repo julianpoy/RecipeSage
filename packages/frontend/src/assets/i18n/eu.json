@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "Editatu elementua",
     "components.shoppingListItem.editTitle.placeholder": "Elementuaren izena...",
     "components.shoppingListItem.edit": "Editatu",
-    "components.shoppingListItem.delete": "Ezabatu"
+    "components.shoppingListItem.delete": "Ezabatu",
+    "pages.shoppingList.movedToList": "{{itemCount}} elementu {{title}} zerrendara eraman dira",
+    "pages.shoppingList.copiedToList": "{{itemCount}} elementu {{title}} zerrendara kopiatu dira",
+    "pages.shoppingList.movedToListPartialFailure": "Elementuak {{title}} zerrendara kopiatu dira, baina ezin izan dira zerrenda honetatik kendu.",
+    "pages.shoppingList.movedToListPartialFailure.header": "Lekualdaketa osatu gabe",
+    "components.shoppingListItem.moveToList": "Eraman beste zerrenda batera",
+    "components.shoppingListItem.moveToList.header": "Eraman elementua zerrendara",
+    "components.shoppingListItem.copyToList": "Kopiatu beste zerrenda batera",
+    "components.shoppingListItem.copyToList.header": "Kopiatu elementua zerrendara",
+    "generic.back": "Atzera"
 }

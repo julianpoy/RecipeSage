@@ -2495,5 +2495,14 @@
     "components.shoppingListItem.editTitle.header": "编辑项目",
     "components.shoppingListItem.editTitle.placeholder": "项目名称…",
     "components.shoppingListItem.edit": "编辑",
-    "components.shoppingListItem.delete": "删除"
+    "components.shoppingListItem.delete": "删除",
+    "pages.shoppingList.movedToList": "已将 {{itemCount}} 个项目移至 {{title}}",
+    "pages.shoppingList.copiedToList": "已将 {{itemCount}} 个项目复制到 {{title}}",
+    "pages.shoppingList.movedToListPartialFailure": "项目已复制到 {{title}}，但无法从此列表中移除。",
+    "pages.shoppingList.movedToListPartialFailure.header": "移动未完成",
+    "components.shoppingListItem.moveToList": "移至其他列表",
+    "components.shoppingListItem.moveToList.header": "将项目移至列表",
+    "components.shoppingListItem.copyToList": "复制到其他列表",
+    "components.shoppingListItem.copyToList.header": "将项目复制到列表",
+    "generic.back": "返回"
 }
