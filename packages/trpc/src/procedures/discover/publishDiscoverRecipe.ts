@@ -12,7 +12,7 @@ import { discoverRecipeContentInputSchema } from "./discoverRecipeSchemas";
 
 export const DISCOVER_TOS_VERSION = "1";
 
-const MAX_DISCOVER_PUBLISHES_PER_DAY = 5;
+const MAX_DISCOVER_PUBLISHES_PER_DAY = 8;
 const PUBLISH_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export const publishDiscoverRecipe = authenticatedProcedure
