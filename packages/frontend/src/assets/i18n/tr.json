@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Öğeyi Listeye Taşı",
     "components.shoppingListItem.copyToList": "Başka Listeye Kopyala",
     "components.shoppingListItem.copyToList.header": "Öğeyi Listeye Kopyala",
-    "generic.back": "Geri"
+    "generic.back": "Geri",
+    "pages.jobs.status.fail.timeout": "Bu işlem çok uzun sürdüğü için durduruldu. Lütfen tekrar deneyin.",
+    "pages.jobs.status.fail.interrupted": "Bu işlem tamamlanmadan önce kesintiye uğradı. Lütfen tekrar deneyin.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Oldukça meşguldünüz!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Toplulukla bu kadar çok tarif paylaştığınız için teşekkür ederiz! Farklı aşçıların tariflerinin görülmek için adil bir şansa sahip olması ve spam'i önlemek amacıyla herkes 24 saatlik bir süre içinde Keşfet'te yalnızca sınırlı sayıda tarif yayımlayabilir. Daha önce yayımladığınız tarifler güvendedir. Bunu yayımlamak için lütfen biraz sonra tekrar gelin."
 }

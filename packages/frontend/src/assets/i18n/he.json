@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "העברת פריט לרשימה",
     "components.shoppingListItem.copyToList": "העתקה לרשימה אחרת",
     "components.shoppingListItem.copyToList.header": "העתקת פריט לרשימה",
-    "generic.back": "חזרה"
+    "generic.back": "חזרה",
+    "pages.jobs.status.fail.timeout": "הפעולה ארכה זמן רב מדי והופסקה. אנא נסו שוב.",
+    "pages.jobs.status.fail.interrupted": "הפעולה נקטעה לפני שהסתיימה. אנא נסו שוב.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "הייתם עסוקים!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "תודה ששיתפתם כל כך הרבה מתכונים עם הקהילה! כדי שלמתכונים של בשלנים רבים ושונים תהיה הזדמנות הוגנת להיראות וכדי למנוע ספאם, כל אחד יכול לפרסם ב-Discover מספר מוגבל בלבד של מתכונים במהלך תקופה של 24 שעות. המתכונים שכבר פרסמתם בטוחים. אנא חזרו מעט מאוחר יותר כדי לפרסם את המתכון הזה."
 }

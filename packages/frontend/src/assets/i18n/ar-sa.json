@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "نقل العنصر إلى قائمة",
     "components.shoppingListItem.copyToList": "نسخ إلى قائمة أخرى",
     "components.shoppingListItem.copyToList.header": "نسخ العنصر إلى قائمة",
-    "generic.back": "رجوع"
+    "generic.back": "رجوع",
+    "pages.jobs.status.fail.timeout": "استغرق هذا وقتًا طويلًا وتم إيقافه. يُرجى المحاولة مرة أخرى.",
+    "pages.jobs.status.fail.interrupted": "تمت مقاطعة هذا قبل اكتماله. يُرجى المحاولة مرة أخرى.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "لقد كنت مشغولًا!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "شكرًا لمشاركة هذا العدد الكبير من الوصفات مع المجتمع! لضمان حصول وصفات العديد من الطهاة المختلفين على فرصة عادلة للظهور ولمنع الرسائل المزعجة، يمكن لكل شخص نشر عدد محدود فقط من الوصفات في قسم «اكتشف» خلال فترة 24 ساعة. الوصفات التي نشرتها بالفعل آمنة. يُرجى العودة بعد قليل لنشر هذه الوصفة."
 }

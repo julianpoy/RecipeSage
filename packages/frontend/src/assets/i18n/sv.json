@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Flytta post till lista",
     "components.shoppingListItem.copyToList": "Kopiera till en annan lista",
     "components.shoppingListItem.copyToList.header": "Kopiera post till lista",
-    "generic.back": "Tillbaka"
+    "generic.back": "Tillbaka",
+    "pages.jobs.status.fail.timeout": "Detta tog för lång tid och avbröts. Försök igen.",
+    "pages.jobs.status.fail.interrupted": "Detta avbröts innan det slutfördes. Försök igen.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Du har varit flitig!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Tack för att du delar så många recept med gemenskapen! För att recept från många olika kockar ska få en rättvis chans att synas och för att förhindra skräppost kan alla endast publicera ett begränsat antal recept på Discover under en 24-timmarsperiod. De recept du redan har publicerat är säkra. Kom gärna tillbaka lite senare för att publicera det här receptet."
 }

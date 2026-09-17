@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Переместить элемент в список",
     "components.shoppingListItem.copyToList": "Копировать в другой список",
     "components.shoppingListItem.copyToList.header": "Копировать элемент в список",
-    "generic.back": "Назад"
+    "generic.back": "Назад",
+    "pages.jobs.status.fail.timeout": "Выполнение заняло слишком много времени и было остановлено. Пожалуйста, попробуйте ещё раз.",
+    "pages.jobs.status.fail.interrupted": "Выполнение было прервано до завершения. Пожалуйста, попробуйте ещё раз.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Вы были очень активны!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Спасибо, что поделились с сообществом столькими рецептами! Чтобы рецепты от разных кулинаров имели равные шансы быть замеченными и для предотвращения спама, каждый может опубликовать в Discover лишь ограниченное количество рецептов в течение 24 часов. Рецепты, которые вы уже опубликовали, сохранены. Пожалуйста, вернитесь немного позже, чтобы опубликовать этот рецепт."
 }

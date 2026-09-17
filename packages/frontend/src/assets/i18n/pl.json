@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Przenieś pozycję do listy",
     "components.shoppingListItem.copyToList": "Kopiuj do innej listy",
     "components.shoppingListItem.copyToList.header": "Kopiuj pozycję do listy",
-    "generic.back": "Wstecz"
+    "generic.back": "Wstecz",
+    "pages.jobs.status.fail.timeout": "Trwało to zbyt długo i zostało zatrzymane. Spróbuj ponownie.",
+    "pages.jobs.status.fail.interrupted": "Proces został przerwany przed zakończeniem. Spróbuj ponownie.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Masz za sobą dużo pracy!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Dziękujemy za udostępnienie społeczności tak wielu przepisów! Aby przepisy od wielu różnych kucharzy miały uczciwą szansę na zauważenie oraz aby zapobiegać spamowi, każdy może opublikować w Discover tylko ograniczoną liczbę przepisów w ciągu 24 godzin. Przepisy, które już opublikowano, są bezpieczne. Wróć nieco później, aby opublikować ten przepis."
 }

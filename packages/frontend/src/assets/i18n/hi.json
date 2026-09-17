@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "आइटम को सूची में स्थानांतरित करें",
     "components.shoppingListItem.copyToList": "अन्य सूची में कॉपी करें",
     "components.shoppingListItem.copyToList.header": "आइटम को सूची में कॉपी करें",
-    "generic.back": "वापस"
+    "generic.back": "वापस",
+    "pages.jobs.status.fail.timeout": "इसमें बहुत अधिक समय लगा और इसे रोक दिया गया। कृपया पुनः प्रयास करें।",
+    "pages.jobs.status.fail.interrupted": "यह पूरा होने से पहले बाधित हो गया था। कृपया पुनः प्रयास करें।",
+    "pages.publishDiscoverRecipe.publishLimit.header": "आप बहुत व्यस्त रहे हैं!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "समुदाय के साथ इतनी सारी रेसिपी साझा करने के लिए धन्यवाद! अलग-अलग रसोइयों की रेसिपियों को देखे जाने का उचित अवसर देने और स्पैम रोकने के लिए, हर व्यक्ति 24 घंटे की अवधि में Discover पर केवल सीमित संख्या में रेसिपी प्रकाशित कर सकता है। आपने जो रेसिपी पहले ही प्रकाशित कर दी हैं, वे सुरक्षित हैं। कृपया इसे प्रकाशित करने के लिए कुछ समय बाद वापस आएँ।"
 }

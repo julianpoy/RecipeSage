@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "將項目移至清單",
     "components.shoppingListItem.copyToList": "複製到其他清單",
     "components.shoppingListItem.copyToList.header": "將項目複製到清單",
-    "generic.back": "返回"
+    "generic.back": "返回",
+    "pages.jobs.status.fail.timeout": "此作業耗時過久，已停止。請再試一次。",
+    "pages.jobs.status.fail.interrupted": "此作業在完成前已中斷。請再試一次。",
+    "pages.publishDiscoverRecipe.publishLimit.header": "您真是忙碌！",
+    "pages.publishDiscoverRecipe.publishLimit.message": "感謝您與社群分享這麼多食譜！為了讓不同廚師的食譜都有公平的機會被看見，並防止垃圾訊息，每位使用者在 24 小時內只能將有限數量的食譜發布到探索。您已發布的食譜都不會受到影響。請稍後再回來發布這份食譜。"
 }

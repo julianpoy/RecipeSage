@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Přesunout položku do seznamu",
     "components.shoppingListItem.copyToList": "Kopírovat do jiného seznamu",
     "components.shoppingListItem.copyToList.header": "Kopírovat položku do seznamu",
-    "generic.back": "Zpět"
+    "generic.back": "Zpět",
+    "pages.jobs.status.fail.timeout": "Trvalo to příliš dlouho a bylo to zastaveno. Zkuste to prosím znovu.",
+    "pages.jobs.status.fail.interrupted": "Bylo to přerušeno před dokončením. Zkuste to prosím znovu.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Byli jste opravdu aktivní!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Děkujeme, že s komunitou sdílíte tolik receptů! Aby recepty od mnoha různých kuchařů měly spravedlivou šanci být viděny a aby se zabránilo spamu, může každý během 24 hodin zveřejnit v Objevit pouze omezený počet receptů. Recepty, které jste již zveřejnili, jsou v bezpečí. Vraťte se prosím o něco později a zveřejněte tento recept."
 }

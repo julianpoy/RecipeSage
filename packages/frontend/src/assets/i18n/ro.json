@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Mută articolul în listă",
     "components.shoppingListItem.copyToList": "Copiază în altă listă",
     "components.shoppingListItem.copyToList.header": "Copiază articolul în listă",
-    "generic.back": "Înapoi"
+    "generic.back": "Înapoi",
+    "pages.jobs.status.fail.timeout": "Aceasta a durat prea mult și a fost oprită. Încercați din nou.",
+    "pages.jobs.status.fail.interrupted": "Aceasta a fost întreruptă înainte de finalizare. Încercați din nou.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Ați fost ocupați!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Vă mulțumim că ați împărtășit atât de multe rețete cu comunitatea! Pentru ca rețetele de la mulți bucătari diferiți să aibă o șansă echitabilă de a fi văzute și pentru a preveni spamul, fiecare persoană poate publica doar un număr limitat de rețete în Descoperă într-o perioadă de 24 de ore. Rețetele pe care le-ați publicat deja sunt în siguranță. Vă rugăm să reveniți puțin mai târziu pentru a o publica pe aceasta."
 }

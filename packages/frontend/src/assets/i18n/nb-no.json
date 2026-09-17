@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Flytt element til liste",
     "components.shoppingListItem.copyToList": "Kopier til en annen liste",
     "components.shoppingListItem.copyToList.header": "Kopier element til liste",
-    "generic.back": "Tilbake"
+    "generic.back": "Tilbake",
+    "pages.jobs.status.fail.timeout": "Dette tok for lang tid og ble stanset. Prøv igjen.",
+    "pages.jobs.status.fail.interrupted": "Dette ble avbrutt før det ble fullført. Prøv igjen.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Du har vært travel!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Takk for at du deler så mange oppskrifter med fellesskapet! For at oppskrifter fra mange ulike kokker skal få en rettferdig sjanse til å bli sett, og for å hindre søppelinnhold, kan alle bare publisere et begrenset antall oppskrifter på Oppdag i løpet av en 24-timersperiode. Oppskriftene du allerede har publisert, er trygge. Kom gjerne tilbake litt senere for å publisere denne."
 }
