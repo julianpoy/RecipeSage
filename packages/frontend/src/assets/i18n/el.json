@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Μετακίνηση στοιχείου σε λίστα",
     "components.shoppingListItem.copyToList": "Αντιγραφή σε άλλη λίστα",
     "components.shoppingListItem.copyToList.header": "Αντιγραφή στοιχείου σε λίστα",
-    "generic.back": "Πίσω"
+    "generic.back": "Πίσω",
+    "pages.jobs.status.fail.timeout": "Αυτό διήρκεσε υπερβολικά και διακόπηκε. Παρακαλώ δοκιμάστε ξανά.",
+    "pages.jobs.status.fail.interrupted": "Αυτό διακόπηκε πριν ολοκληρωθεί. Παρακαλώ δοκιμάστε ξανά.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Ήσασταν δραστήριοι!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Σας ευχαριστούμε που μοιράζεστε τόσες πολλές συνταγές με την κοινότητα! Για να έχουν οι συνταγές από πολλούς διαφορετικούς μάγειρες δίκαιη ευκαιρία να προβληθούν και για την αποτροπή ανεπιθύμητων μηνυμάτων, όλοι μπορούν να δημοσιεύουν μόνο περιορισμένο αριθμό συνταγών στο Discover εντός περιόδου 24 ωρών. Οι συνταγές που έχετε ήδη δημοσιεύσει είναι ασφαλείς. Παρακαλώ επιστρέψτε λίγο αργότερα για να δημοσιεύσετε αυτήν."
 }
