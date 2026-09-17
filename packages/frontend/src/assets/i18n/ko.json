@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "항목을 목록으로 이동",
     "components.shoppingListItem.copyToList": "다른 목록에 복사",
     "components.shoppingListItem.copyToList.header": "항목을 목록에 복사",
-    "generic.back": "뒤로"
+    "generic.back": "뒤로",
+    "pages.jobs.status.fail.timeout": "처리 시간이 너무 오래 걸려 중지되었습니다. 다시 시도해 주세요.",
+    "pages.jobs.status.fail.interrupted": "완료되기 전에 중단되었습니다. 다시 시도해 주세요.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "정말 많은 활동을 하셨네요!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "커뮤니티에 এত 많은 레시피를 공유해 주셔서 감사합니다! 다양한 요리사의 레시피가 공정하게 노출될 기회를 얻고 스팸을 방지하기 위해, 모든 사용자는 24시간 동안 Discover에 제한된 수의 레시피만 게시할 수 있습니다. 이미 게시한 레시피는 안전하게 보관됩니다. 이 레시피를 게시하려면 잠시 후 다시 방문해 주세요."
 }
