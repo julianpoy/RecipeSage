@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Eraman elementua zerrendara",
     "components.shoppingListItem.copyToList": "Kopiatu beste zerrenda batera",
     "components.shoppingListItem.copyToList.header": "Kopiatu elementua zerrendara",
-    "generic.back": "Atzera"
+    "generic.back": "Atzera",
+    "pages.jobs.status.fail.timeout": "Honek luzeegi iraun zuen eta gelditu egin da. Saiatu berriro, mesedez.",
+    "pages.jobs.status.fail.interrupted": "Amaitu aurretik eten egin da. Saiatu berriro, mesedez.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Lanpetuta ibili zara!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Eskerrik asko komunitatearekin hainbeste errezeta partekatzeagatik! Sukaldari askoren errezetek ikusiak izateko aukera bidezkoa izan dezaten eta spama saihesteko, pertsona bakoitzak errezeta kopuru mugatu bat baino ezin du argitaratu Discover-en 24 orduko epean. Dagoeneko argitaratu dituzun errezetak seguru daude. Itzuli pixka bat geroago hau argitaratzeko."
 }
