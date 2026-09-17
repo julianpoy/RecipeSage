@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "将项目移至列表",
     "components.shoppingListItem.copyToList": "复制到其他列表",
     "components.shoppingListItem.copyToList.header": "将项目复制到列表",
-    "generic.back": "返回"
+    "generic.back": "返回",
+    "pages.jobs.status.fail.timeout": "耗时过长，已停止。请重试。",
+    "pages.jobs.status.fail.interrupted": "在完成前已中断。请重试。",
+    "pages.publishDiscoverRecipe.publishLimit.header": "您真是忙碌！",
+    "pages.publishDiscoverRecipe.publishLimit.message": "感谢您与社区分享这么多食谱！为使不同厨师的食谱都有公平的机会被看到，并防止垃圾信息，每位用户在 24 小时内只能向“发现”发布有限数量的食谱。您已发布的食谱不受影响。请稍后再来发布此食谱。"
 }
