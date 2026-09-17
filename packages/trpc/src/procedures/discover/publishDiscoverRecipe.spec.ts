@@ -175,7 +175,7 @@ describe("publishDiscoverRecipe", () => {
       user,
     }) => {
       await createActiveSubscription(user.id);
-      await seedPublishes(user.id, 5);
+      await seedPublishes(user.id, 8);
       const recipe = await eligibleRecipe(user.id);
 
       await expect(
@@ -199,7 +199,7 @@ describe("publishDiscoverRecipe", () => {
         where: { id: user.id },
         data: { discoverStanding: UserDiscoverStanding.TRUSTED },
       });
-      await seedPublishes(user.id, 5);
+      await seedPublishes(user.id, 8);
       const recipe = await eligibleRecipe(user.id);
 
       const response = await trpc.discover.publishDiscoverRecipe({

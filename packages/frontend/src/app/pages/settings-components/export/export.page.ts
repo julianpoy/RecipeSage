@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/browser";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import type { ExportJobSummary } from "@recipesage/prisma";
+import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { WebsocketService } from "../../../services/websocket.service";
@@ -32,8 +33,14 @@ export enum ExportFormat {
 
 export const getJobFailureI18n = (exportJob: ExportJobSummary) => {
   switch (exportJob.resultCode) {
+    case JOB_RESULT_CODES.timeout: {
+      return "pages.jobs.status.fail.timeout";
+    }
+    case JOB_RESULT_CODES.interrupted: {
+      return "pages.jobs.status.fail.interrupted";
+    }
     default: {
-      return "pages.import.jobs.status.fail.unknown";
+      return "pages.export.jobs.status.fail.unknown";
     }
   }
 };

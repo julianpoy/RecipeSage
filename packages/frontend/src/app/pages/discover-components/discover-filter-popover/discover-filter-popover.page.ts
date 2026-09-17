@@ -28,7 +28,6 @@ import {
 import { caretDownSharp } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
-export type DiscoverSortBy = "trending" | "newest" | "topRated" | "mostSaved";
 export type DiscoverPhotoFilter = "optional" | "required" | "none";
 
 export interface DiscoverFilterResult {
@@ -39,7 +38,6 @@ export interface DiscoverFilterResult {
   minRating: number;
   minRatingCount: number;
   photo: DiscoverPhotoFilter;
-  sortBy: DiscoverSortBy;
 }
 
 @Component({
@@ -71,7 +69,6 @@ export class DiscoverFilterPopoverPage {
   @Input() minRating = 0;
   @Input() minRatingCount = 0;
   @Input() photo: DiscoverPhotoFilter = "optional";
-  @Input() sortBy: DiscoverSortBy = "trending";
 
   constructor() {
     addIcons({ caretDownSharp });
@@ -86,7 +83,6 @@ export class DiscoverFilterPopoverPage {
       minRating: this.minRating,
       minRatingCount: this.minRatingCount,
       photo: this.photo,
-      sortBy: this.sortBy,
     } satisfies DiscoverFilterResult);
   }
 

@@ -1,0 +1,26 @@
+<ion-list no-border>
+  <ion-list-header>{{ "generic.options" | translate }}</ion-list-header>
+
+  <ion-item lines="full">
+    <ion-select
+      label="{{ 'pages.discover.filters.sort' | translate }}"
+      [(ngModel)]="sortBy"
+      (ngModelChange)="onSortByChange()"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
+    >
+      <ion-select-option value="trending">{{
+        "pages.discover.filters.sort.trending" | translate
+      }}</ion-select-option>
+      <ion-select-option value="newest">{{
+        "pages.discover.filters.sort.newest" | translate
+      }}</ion-select-option>
+      <ion-select-option value="topRated">{{
+        "pages.discover.filters.sort.topRated" | translate
+      }}</ion-select-option>
+      <ion-select-option value="mostSaved">{{
+        "pages.discover.filters.sort.mostSaved" | translate
+      }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list>

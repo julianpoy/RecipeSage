@@ -38,6 +38,12 @@ export const getJobFailureI18n = (importJob: ImportJobSummary) => {
     case JOB_RESULT_CODES.tooManyRecipes: {
       return "pages.import.jobs.status.fail.tooManyRecipes";
     }
+    case JOB_RESULT_CODES.timeout: {
+      return "pages.jobs.status.fail.timeout";
+    }
+    case JOB_RESULT_CODES.interrupted: {
+      return "pages.jobs.status.fail.interrupted";
+    }
     default: {
       return "pages.import.jobs.status.fail.unknown";
     }

@@ -55,6 +55,68 @@ describe("importStandardizedRecipes", () => {
     expect(labelsByTitle.get("Charlie")).toEqual(["charlielabel"]);
   });
 
+  it("reuses a label that already exists rather than creating a second one", async () => {
+    const existing = await prisma.label.create({
+      data: { userId: user.id, title: "sharedlabel" },
+    });
+
+    await importStandardizedRecipes(
+      user.id,
+      [
+        {
+          recipe: { title: "Delta" },
+          labels: ["sharedlabel"],
+          images: [],
+        },
+      ],
+      "en-us",
+      undefined,
+    );
+
+    const labels = await prisma.label.findMany({
+      where: { userId: user.id, title: "sharedlabel" },
+    });
+
+    expect(labels).toHaveLength(1);
+    expect(labels[0].id).toBe(existing.id);
+
+    const recipe = await prisma.recipe.findFirstOrThrow({
+      where: { userId: user.id, title: "Delta" },
+      include: { recipeLabels: true },
+    });
+
+    expect(recipe.recipeLabels.map((r) => r.labelId)).toEqual([existing.id]);
+  });
+
+  it("attaches one label shared by several recipes to every one of them", async () => {
+    await importStandardizedRecipes(
+      user.id,
+      [
+        { recipe: { title: "Echo" }, labels: ["dinner", "quick"], images: [] },
+        { recipe: { title: "Foxtrot" }, labels: ["dinner"], images: [] },
+        { recipe: { title: "Golf" }, labels: ["dinner", "quick"], images: [] },
+      ],
+      "en-us",
+      undefined,
+    );
+
+    const labels = await prisma.label.findMany({
+      where: { userId: user.id },
+      include: { recipeLabels: { include: { recipe: true } } },
+    });
+
+    const titlesByLabel = new Map(
+      labels.map((label) => [
+        label.title,
+        label.recipeLabels.map((r) => r.recipe.title).sort(),
+      ]),
+    );
+
+    expect(labels).toHaveLength(2);
+    expect(titlesByLabel.get("dinner")).toEqual(["Echo", "Foxtrot", "Golf"]);
+    expect(titlesByLabel.get("quick")).toEqual(["Echo", "Golf"]);
+  });
+
   it("imports a label whose title collides with an Object prototype key", async () => {
     await importStandardizedRecipes(
       user.id,

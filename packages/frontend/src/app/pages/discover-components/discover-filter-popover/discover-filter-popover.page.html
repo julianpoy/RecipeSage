@@ -3,28 +3,6 @@
     "pages.discover.filters.title" | translate
   }}</ion-list-header>
 
-  <ion-item lines="full">
-    <ion-select
-      label="{{ 'pages.discover.filters.sort' | translate }}"
-      [(ngModel)]="sortBy"
-      (ngModelChange)="onFilterChange()"
-      interface="popover"
-    >
-      <ion-select-option value="trending">{{
-        "pages.discover.filters.sort.trending" | translate
-      }}</ion-select-option>
-      <ion-select-option value="newest">{{
-        "pages.discover.filters.sort.newest" | translate
-      }}</ion-select-option>
-      <ion-select-option value="topRated">{{
-        "pages.discover.filters.sort.topRated" | translate
-      }}</ion-select-option>
-      <ion-select-option value="mostSaved">{{
-        "pages.discover.filters.sort.mostSaved" | translate
-      }}</ion-select-option>
-    </ion-select>
-  </ion-item>
-
   <ion-item
     lines="full"
     class="cursor-pointer"
@@ -69,7 +47,8 @@
       label="{{ 'pages.discover.filters.minRating' | translate }}"
       [(ngModel)]="minRating"
       (ngModelChange)="onFilterChange()"
-      interface="popover"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option [value]="0">{{
         "pages.discover.filters.minRating.any" | translate
@@ -87,7 +66,8 @@
       label="{{ 'pages.discover.filters.minRatingCount' | translate }}"
       [(ngModel)]="minRatingCount"
       (ngModelChange)="onFilterChange()"
-      interface="popover"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option [value]="0">{{
         "pages.discover.filters.minRatingCount.any" | translate
@@ -104,7 +84,8 @@
       label="{{ 'pages.discover.filters.photo' | translate }}"
       [(ngModel)]="photo"
       (ngModelChange)="onFilterChange()"
-      interface="popover"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="optional">{{
         "pages.discover.filters.photo.optional" | translate

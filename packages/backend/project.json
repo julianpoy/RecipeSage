@@ -20,7 +20,9 @@
           "pdfmake",
           "yauzl-promise",
           "bullmq",
-          "sharp"
+          "sharp",
+          "ai",
+          "@ai-sdk/*"
         ],
         "main": "packages/backend/src/main.ts",
         "tsConfig": "packages/backend/tsconfig.json",

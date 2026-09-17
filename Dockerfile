@@ -14,6 +14,9 @@ RUN apk add --no-cache poppler-utils
 # pandoc (rtf/odt/docx text extraction)
 RUN apk add --no-cache pandoc
 
+# heif-convert (heic/heif decoding, which sharp's prebuilt libvips cannot do)
+RUN apk add --no-cache libheif-tools
+
 # dev watch script
 RUN apk add --no-cache inotify-tools
 

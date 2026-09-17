@@ -4,6 +4,7 @@ import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
+import { MAX_IMAGES } from "../../../../db/index";
 
 const importJobFinishCommon = vi.fn();
 const textToRecipe = vi.fn();
@@ -36,8 +37,13 @@ vi.mock("./shared/s3Download", () => ({
 
 const { enexImportJobHandler } = await import("./enexImportJobHandler");
 
-const makeNote = (title: string, body: string) =>
-  `<note><title>${title}</title><content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><en-note><div>${body}</div></en-note>]]></content><tag>dinner</tag></note>`;
+const makeNote = (title: string, body: string, resources = "") =>
+  `<note><title>${title}</title><content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><en-note><div>${body}</div></en-note>]]></content><tag>dinner</tag>${resources}</note>`;
+
+const makeImageResource = (index: number) =>
+  `<resource><data encoding="base64">${Buffer.from(`image-${index}`).toString(
+    "base64",
+  )}</data><mime>image/png</mime></resource>`;
 
 const buildEnex = async (notes: string[]) => {
   const dir = await mkdtemp(path.join(tmpdir(), "enexverify-"));
@@ -113,6 +119,34 @@ describe("enex import fallback", () => {
       (e: { recipe: { title: string } }) => e.recipe.title === "Good Recipe",
     );
     expect(good.labels).not.toContain("automatic import unformatted");
+  });
+
+  it("stages at most MAX_IMAGES images from a single note", async () => {
+    const resources = Array.from({ length: 25 }, (_, index) =>
+      makeImageResource(index),
+    ).join("");
+
+    enexPath = await buildEnex([
+      makeNote(
+        "Many Photos",
+        "Bake the bread until the crust is deep golden.",
+        resources,
+      ),
+    ]);
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "LLM Title", ingredients: "flour", instructions: "" },
+      labels: [],
+      images: [],
+    });
+
+    await enexImportJobHandler(job, queueItem);
+
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(args.standardizedRecipeImportInput).toHaveLength(1);
+    expect(args.standardizedRecipeImportInput[0].images).toHaveLength(
+      MAX_IMAGES,
+    );
   });
 
   it("does not fail the job when every note fails", async () => {

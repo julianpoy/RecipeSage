@@ -59,6 +59,27 @@ describe("transformImageBuffer", () => {
     expect(meta.width).toBe(400);
   });
 
+  it("converts a multi-image HEIC using its primary image", async () => {
+    const input = await fixture("grid.heic");
+
+    const output = await transformImageBuffer(input, 2000, 2000, 55, "inside");
+
+    const meta = await sharp(output).metadata();
+    expect(meta.width).toBe(640);
+    expect(meta.height).toBe(360);
+  });
+
+  it("converts a rotated HEIC so the output is displayed upright", async () => {
+    const input = await fixture("rotated.heic");
+
+    const output = await transformImageBuffer(input, 500, 500, 80, "inside");
+
+    expect(isJpeg(output)).toBe(true);
+    const meta = await sharp(output).metadata();
+    expect(meta.width).toBeGreaterThan(meta.height ?? 0);
+    expect(meta.orientation ?? 1).toBe(1);
+  });
+
   it("converts a JPEG and applies EXIF orientation so the output is displayed upright", async () => {
     const input = await fixture("photo-exif-orientation-6.jpg");
 
@@ -82,7 +103,7 @@ describe("transformImageBuffer", () => {
     expect(meta.channels).toBe(3); // alpha flattened
   });
 
-  it("converts an AVIF to JPEG via Sharp (not heic-decode)", async () => {
+  it("converts an AVIF to JPEG via Sharp (not heif-convert)", async () => {
     const input = await fixture("sample.avif");
 
     const output = await transformImageBuffer(input, 200, 200, 70, "inside");
@@ -168,7 +189,7 @@ describe("transformImageFile", () => {
     expect(meta.orientation ?? 1).toBe(1);
   });
 
-  it("routes a HEIC file through heic-decode using only the file header", async () => {
+  it("routes a HEIC file through heif-convert using only the file header", async () => {
     const output = await transformImageFile(
       fixturePath("single.heic"),
       512,
@@ -196,7 +217,7 @@ describe("transformImageFile", () => {
     expect(meta.width).toBe(400);
   });
 
-  it("converts an AVIF file via Sharp rather than heic-decode", async () => {
+  it("converts an AVIF file via Sharp rather than heif-convert", async () => {
     const output = await transformImageFile(
       fixturePath("sample.avif"),
       200,

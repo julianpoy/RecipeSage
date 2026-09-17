@@ -23,7 +23,9 @@
           "pdfmake",
           "bullmq",
           "yauzl-promise",
-          "sharp"
+          "sharp",
+          "ai",
+          "@ai-sdk/*"
         ],
         "generatePackageJson": true,
         "esbuildConfig": "packages/queue-worker/esbuild.config.js"
