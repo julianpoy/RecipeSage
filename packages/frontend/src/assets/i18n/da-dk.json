@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Flyt element til liste",
     "components.shoppingListItem.copyToList": "Kopiér til en anden liste",
     "components.shoppingListItem.copyToList.header": "Kopiér element til liste",
-    "generic.back": "Tilbage"
+    "generic.back": "Tilbage",
+    "pages.jobs.status.fail.timeout": "Dette tog for lang tid og blev stoppet. Prøv venligst igen.",
+    "pages.jobs.status.fail.interrupted": "Dette blev afbrudt, før det blev færdigt. Prøv venligst igen.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Du har haft travlt!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Tak, fordi du deler så mange opskrifter med fællesskabet! For at opskrifter fra mange forskellige kokke får en fair chance for at blive set og for at forhindre spam kan alle kun publicere et begrænset antal opskrifter på Discover i løbet af en periode på 24 timer. De opskrifter, du allerede har publiceret, er sikre. Kom venligst tilbage lidt senere for at publicere denne."
 }
