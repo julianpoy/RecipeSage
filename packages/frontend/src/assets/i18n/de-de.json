@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Artikel in Liste verschieben",
     "components.shoppingListItem.copyToList": "In andere Liste kopieren",
     "components.shoppingListItem.copyToList.header": "Artikel in Liste kopieren",
-    "generic.back": "Zurück"
+    "generic.back": "Zurück",
+    "pages.jobs.status.fail.timeout": "Dies hat zu lange gedauert und wurde abgebrochen. Bitte versuchen Sie es erneut.",
+    "pages.jobs.status.fail.interrupted": "Dies wurde unterbrochen, bevor es abgeschlossen war. Bitte versuchen Sie es erneut.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Sie waren fleißig!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Vielen Dank, dass Sie so viele Rezepte mit der Community teilen! Damit Rezepte von vielen verschiedenen Köchinnen und Köchen eine faire Chance haben, gesehen zu werden, und um Spam zu verhindern, kann jede Person innerhalb von 24 Stunden nur eine begrenzte Anzahl von Rezepten bei Entdecken veröffentlichen. Die Rezepte, die Sie bereits veröffentlicht haben, sind sicher. Bitte kommen Sie etwas später wieder, um dieses Rezept zu veröffentlichen."
 }
