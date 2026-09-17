@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Mover item para a lista",
     "components.shoppingListItem.copyToList": "Copiar para outra lista",
     "components.shoppingListItem.copyToList.header": "Copiar item para a lista",
-    "generic.back": "Voltar"
+    "generic.back": "Voltar",
+    "pages.jobs.status.fail.timeout": "Isto demorou demasiado tempo e foi interrompido. Tente novamente.",
+    "pages.jobs.status.fail.interrupted": "Isto foi interrompido antes de terminar. Tente novamente.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "Tem andado muito ocupado!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Agradecemos por partilhar tantas receitas com a comunidade! Para que receitas de muitos cozinheiros diferentes tenham uma oportunidade justa de serem vistas e para evitar spam, cada pessoa só pode publicar um número limitado de receitas no Discover num período de 24 horas. As receitas que já publicou estão seguras. Volte um pouco mais tarde para publicar esta."
 }
