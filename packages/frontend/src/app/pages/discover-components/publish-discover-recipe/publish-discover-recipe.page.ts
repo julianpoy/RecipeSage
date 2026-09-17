@@ -393,6 +393,28 @@ export class PublishDiscoverRecipePage {
     alert.present();
   }
 
+  private async showPublishLimitAlert() {
+    const header = await this.translate
+      .get("pages.publishDiscoverRecipe.publishLimit.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.publishDiscoverRecipe.publishLimit.message")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+          role: "cancel",
+        },
+      ],
+    });
+    alert.present();
+  }
+
   private toNutritionNumber(value: NutritionNumberValue): number | null {
     if (value == null || value === "") return null;
     const num = Number(value);
@@ -667,16 +689,21 @@ export class PublishDiscoverRecipePage {
     this.saving = true;
 
     const response = await this.serverActionsService.discover
-      .publishDiscoverRecipe({
-        recipeId: this.recipeId,
-        content: this.buildContent(),
-        language: this.language,
-        imageIds: this.images.map((image) => image.id),
-        linkedDiscoverRecipeIds: this.selectedLinkedRecipes.map(
-          (recipe) => recipe.id,
-        ),
-        agreedToTos: true,
-      })
+      .publishDiscoverRecipe(
+        {
+          recipeId: this.recipeId,
+          content: this.buildContent(),
+          language: this.language,
+          imageIds: this.images.map((image) => image.id),
+          linkedDiscoverRecipeIds: this.selectedLinkedRecipes.map(
+            (recipe) => recipe.id,
+          ),
+          agreedToTos: true,
+        },
+        {
+          429: () => this.showPublishLimitAlert(),
+        },
+      )
       .finally(() => {
         loading.dismiss();
         this.saving = false;
