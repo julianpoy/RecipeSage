@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "項目をリストに移動",
     "components.shoppingListItem.copyToList": "別のリストにコピー",
     "components.shoppingListItem.copyToList.header": "項目をリストにコピー",
-    "generic.back": "戻る"
+    "generic.back": "戻る",
+    "pages.jobs.status.fail.timeout": "処理に時間がかかりすぎたため、中止されました。もう一度お試しください。",
+    "pages.jobs.status.fail.interrupted": "完了する前に中断されました。もう一度お試しください。",
+    "pages.publishDiscoverRecipe.publishLimit.header": "たくさん投稿されていますね！",
+    "pages.publishDiscoverRecipe.publishLimit.message": "コミュニティでたくさんのレシピを共有していただき、ありがとうございます！さまざまな料理人のレシピが公平に見つけてもらえる機会を得られるようにし、スパムを防止するため、Discoverに公開できるレシピ数は24時間あたり一定数に制限されています。すでに公開したレシピはそのまま安全に保存されています。しばらくしてから、このレシピを公開してください。"
 }
