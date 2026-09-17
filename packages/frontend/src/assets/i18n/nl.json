@@ -2504,5 +2504,9 @@
     "components.shoppingListItem.moveToList.header": "Item naar lijst verplaatsen",
     "components.shoppingListItem.copyToList": "Naar andere lijst kopiëren",
     "components.shoppingListItem.copyToList.header": "Item naar lijst kopiëren",
-    "generic.back": "Terug"
+    "generic.back": "Terug",
+    "pages.jobs.status.fail.timeout": "Dit duurde te lang en is gestopt. Probeer het opnieuw.",
+    "pages.jobs.status.fail.interrupted": "Dit werd onderbroken voordat het was voltooid. Probeer het opnieuw.",
+    "pages.publishDiscoverRecipe.publishLimit.header": "U bent druk bezig geweest!",
+    "pages.publishDiscoverRecipe.publishLimit.message": "Bedankt dat u zoveel recepten met de community deelt! Om recepten van veel verschillende koks een eerlijke kans te geven om gezien te worden en spam te voorkomen, kan iedereen binnen een periode van 24 uur slechts een beperkt aantal recepten op Discover publiceren. De recepten die u al hebt gepubliceerd, zijn veilig. Kom iets later terug om dit recept te publiceren."
 }
