@@ -63,6 +63,24 @@
           {{ "pages.cookbook.field.includeLabels" | translate }}
         </ion-toggle>
       </ion-item>
+
+      <ion-item>
+        <ion-toggle [(ngModel)]="includeLastMade">
+          {{ "pages.cookbook.field.includeLastMade" | translate }}
+        </ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-toggle [(ngModel)]="includeLinkedRecipes">
+          {{ "pages.cookbook.field.includeLinkedRecipes" | translate }}
+        </ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-toggle [(ngModel)]="includeRecipeSageUrl">
+          {{ "pages.cookbook.field.includeRecipeSageUrl" | translate }}
+        </ion-toggle>
+      </ion-item>
     </ion-list>
 
     <ion-list>

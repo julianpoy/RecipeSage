@@ -45,8 +45,10 @@ export * from "./decryptWithRSAKey";
 export * from "./deletePathsSilent";
 export * from "./throttleDropPromise";
 export * from "./translate";
+export * from "./getNutritionDisplayRows";
 export * from "./getRequestLanguage";
 export * from "./sanitizeRemoveHtmlFromString";
+export * from "./sanitizeRemoveHtmlToPlainText";
 export * from "./formatDateUTC";
 export * from "./formatDateUTCLocalized";
 

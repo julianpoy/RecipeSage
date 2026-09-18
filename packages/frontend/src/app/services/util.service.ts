@@ -18,6 +18,10 @@ export interface RecipeTemplateModifiers {
   hideNotes?: boolean;
   hideSource?: boolean;
   hideSourceURL?: boolean;
+  hideRating?: boolean;
+  hideNutrition?: boolean;
+  hideLinkedRecipes?: boolean;
+  showLastMade?: boolean;
   printPreview?: boolean;
   showPrintButton?: boolean;
   print?: boolean; // Triggers immediate print

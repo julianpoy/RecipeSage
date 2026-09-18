@@ -37,14 +37,18 @@ import {
   type SegmentCustomEvent,
 } from "@ionic/angular/standalone";
 import {
+  calendarOutline,
   closeOutline,
   codeWorkingOutline,
   documentTextOutline,
+  fitnessOutline,
+  gitNetworkOutline,
   imageOutline,
   linkOutline,
   printOutline,
   resizeOutline,
   sendOutline,
+  starOutline,
   swapHorizontalOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -107,6 +111,10 @@ export class ShareModalPage {
     hideNotes: false,
     hideSource: false,
     hideSourceURL: false,
+    hideRating: false,
+    hideNutrition: false,
+    hideLinkedRecipes: false,
+    showLastMade: false,
     showPrintButton: true,
   };
   recipePreviewURL?: string;
@@ -115,14 +123,18 @@ export class ShareModalPage {
 
   constructor() {
     addIcons({
+      calendarOutline,
       closeOutline,
       codeWorkingOutline,
       documentTextOutline,
+      fitnessOutline,
+      gitNetworkOutline,
       imageOutline,
       linkOutline,
       printOutline,
       resizeOutline,
       sendOutline,
+      starOutline,
       swapHorizontalOutline,
     });
     setTimeout(() => {

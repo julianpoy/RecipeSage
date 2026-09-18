@@ -37,6 +37,7 @@ export async function pdfExportJobHandler(
     language,
     includeImageUrls: true,
     includeLabels: true,
+    includeLastMade: true,
   })) {
     await new Promise<void>((resolve, reject) => {
       zipStream.entry(

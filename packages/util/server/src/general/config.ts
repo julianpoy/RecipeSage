@@ -56,6 +56,9 @@ export const config = {
     publicUrl: getEnvString("API_PUBLIC_BASE_URL", Environment.All),
     enablePrivateFetch: getEnvString("API_ENABLE_PRIVATE_FETCH", []) === "true",
   },
+  appUi: {
+    baseUrl: getEnvString("APP_UI_BASE_URL", []) || "https://recipesage.com",
+  },
   rateLimit: {
     enabled:
       getEnvString("RATE_LIMIT_ENABLED", []) !== "false" &&

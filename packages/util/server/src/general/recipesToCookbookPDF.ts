@@ -12,6 +12,9 @@ export interface CookbookOptions {
   includeToc: boolean;
   includeImages: boolean;
   includeLabels: boolean;
+  includeLastMade: boolean;
+  includeLinkedRecipes: boolean;
+  includeRecipeSageUrl: boolean;
   language: string;
   introductionLabel: string;
   contentsLabel: string;
@@ -83,6 +86,9 @@ export const generateCookbookPDFStream = async (
         includePrimaryImage: options.includeImages,
         renderInlineImages: options.includeImages,
         includeLabels: options.includeLabels,
+        includeLastMade: options.includeLastMade,
+        includeLinkedRecipes: options.includeLinkedRecipes,
+        includeRecipeSageUrl: options.includeRecipeSageUrl,
         pageBreakBefore: true,
         tocItem: options.includeToc,
       }),

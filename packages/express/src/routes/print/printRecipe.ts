@@ -10,8 +10,10 @@ import {
   inferRecipeNotation,
 } from "@recipesage/util/shared";
 import {
+  config,
   formatDateUTC,
   formatDateUTCLocalized,
+  getNutritionDisplayRows,
   getRequestLanguage,
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,
@@ -29,6 +31,10 @@ const schema = {
     hideNotes: z.string().optional(),
     hideSource: z.string().optional(),
     hideSourceURL: z.string().optional(),
+    hideRating: z.string().optional(),
+    hideNutrition: z.string().optional(),
+    hideLinkedRecipes: z.string().optional(),
+    showLastMade: z.string().optional(),
     printPreview: z.string().optional(),
     showPrintButton: z.string().optional(),
     print: z.string().optional(),
@@ -96,6 +102,10 @@ export const printRecipeHandler = defineHandler(
       hideNotes: !!req.query.hideNotes,
       hideSource: !!req.query.hideSource,
       hideSourceURL: !!req.query.hideSourceURL,
+      hideRating: !!req.query.hideRating,
+      hideNutrition: !!req.query.hideNutrition,
+      hideLinkedRecipes: !!req.query.hideLinkedRecipes,
+      showLastMade: !!req.query.showLastMade,
       printPreview: !!req.query.printPreview,
       showPrintButton: !!req.query.showPrintButton,
       scale,
@@ -113,7 +123,23 @@ export const printRecipeHandler = defineHandler(
 
     const labelsText = labels.map((label) => label.title).join(" · ");
 
-    const appBaseURL = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+    const appBaseURL = config.appUi.baseUrl;
+
+    const linkedRecipes = sorted.recipeLinks.map((link) => ({
+      title: link.linkedRecipe.title,
+      url: `${appBaseURL}/app/recipe/${link.linkedRecipe.id}`,
+    }));
+
+    const nutritionFields = await getNutritionDisplayRows(sorted, locale);
+
+    const hasNutrition =
+      !!sorted.nutritionServingSize ||
+      !!sorted.nutritionOtherDetails ||
+      nutritionFields.length > 0;
+
+    const lastMadeAt = sorted.lastMadeAt
+      ? formatDateUTCLocalized(formatDateUTC(sorted.lastMadeAt), locale)
+      : null;
 
     const translations = {
       openInRecipeSage: await translate(
@@ -125,7 +151,26 @@ export const printRecipeHandler = defineHandler(
       totalTime: await translate(locale, "pages.recipeDetails.totalTime"),
       yield: await translate(locale, "pages.recipeDetails.yield"),
       notes: await translate(locale, "pages.recipeDetails.notes"),
+      rating: await translate(locale, "pages.recipeDetails.rating"),
+      ratingLabel: await translate(locale, "components.rating.label", {
+        rating: String(sorted.rating ?? 0),
+      }),
+      lastMadeAt: await translate(locale, "pages.recipeDetails.lastMadeAt"),
+      nutrition: await translate(locale, "pages.recipeDetails.nutrition"),
+      nutritionServingSize: await translate(
+        locale,
+        "pages.recipeDetails.nutritionServingSize",
+      ),
+      nutritionOtherDetails: await translate(
+        locale,
+        "pages.recipeDetails.nutritionOtherDetails",
+      ),
+      linkedRecipes: await translate(
+        locale,
+        "pages.recipeDetails.linkedRecipes",
+      ),
       sourceUrl: await translate(locale, "pages.editRecipe.input.sourceUrl"),
+      labels: await translate(locale, "pages.recipeDetails.labels"),
       ingredientsAtScale: await translate(
         locale,
         "printViews.recipe.ingredientsAtScale",
@@ -145,19 +190,32 @@ export const printRecipeHandler = defineHandler(
         totalTime: sorted.totalTime,
         source: sorted.source,
         url: sorted.url,
+        rating: sorted.rating,
+        lastMadeAt,
+        nutritionServingSize: sorted.nutritionServingSize,
+        nutritionOtherDetails: sorted.nutritionOtherDetails,
+        nutritionFields,
+        hasNutrition,
+        linkedRecipes,
         images,
         labelsText,
-        ingredients: parseIngredients(ingredientsText, scale, {
-          decimalNotationMode,
-        }),
-        instructions: parseInstructions(instructionsText, scale, {
-          decimalNotationMode,
-          images: inlineImageRefs,
-        }),
-        notes: parseNotes(notesText, scale, {
-          decimalNotationMode,
-          images: inlineImageRefs,
-        }),
+        ingredients: ingredientsText.trim()
+          ? parseIngredients(ingredientsText, scale, {
+              decimalNotationMode,
+            })
+          : [],
+        instructions: instructionsText.trim()
+          ? parseInstructions(instructionsText, scale, {
+              decimalNotationMode,
+              images: inlineImageRefs,
+            })
+          : [],
+        notes: notesText.trim()
+          ? parseNotes(notesText, scale, {
+              decimalNotationMode,
+              images: inlineImageRefs,
+            })
+          : [],
       },
       recipeURL: `${appBaseURL}/app/recipe/${sorted.id}`,
       appBaseURL,

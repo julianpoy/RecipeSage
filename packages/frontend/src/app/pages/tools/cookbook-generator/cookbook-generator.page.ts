@@ -95,6 +95,9 @@ export class CookbookGeneratorPage {
   includeToc = true;
   includeImages = true;
   includeLabels = false;
+  includeLastMade = false;
+  includeLinkedRecipes = false;
+  includeRecipeSageUrl = false;
 
   recipes: CookbookRecipe[] = [];
   loadingRecipes = false;
@@ -202,6 +205,9 @@ export class CookbookGeneratorPage {
         includeToc: this.includeToc,
         includeImages: this.includeImages,
         includeLabels: this.includeLabels,
+        includeLastMade: this.includeLastMade,
+        includeLinkedRecipes: this.includeLinkedRecipes,
+        includeRecipeSageUrl: this.includeRecipeSageUrl,
         recipeIds: this.recipes.map((recipe) => recipe.id),
       });
     } finally {

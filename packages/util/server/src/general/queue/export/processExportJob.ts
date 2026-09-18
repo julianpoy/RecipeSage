@@ -1,9 +1,4 @@
-import type {
-  ExportJobMeta,
-  JobSummary,
-  Prisma,
-  RecipeSummary,
-} from "@recipesage/prisma";
+import type { ExportJobMeta, JobSummary, Prisma } from "@recipesage/prisma";
 import type { StandardJobQueueItem } from "../JobQueueItem";
 import * as Sentry from "@sentry/node";
 import {
@@ -22,6 +17,7 @@ import {
   convertJobProgress,
   updateJobProgress,
 } from "../../jobs/updateJobProgress";
+import { convertPrismaDateToDatestampNullable } from "../../../db";
 
 const EXPORT_JOB_STEP_COUNT = 1;
 
@@ -64,8 +60,14 @@ export const processExportJob = async (
     {
       batchSize: 100,
       prefill: 100,
+      batchTransformer: async (
+        batch: Prisma.RecipeGetPayload<typeof recipeSummary>[],
+      ) =>
+        batch.map((recipe) =>
+          convertPrismaDateToDatestampNullable(recipe, "lastMadeAt"),
+        ),
     },
-  ) as unknown as AsyncIterable<RecipeSummary>;
+  );
 
   const onProgress = throttleDropPromise(async (processedCount: number) => {
     try {

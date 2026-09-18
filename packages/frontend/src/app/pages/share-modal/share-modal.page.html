@@ -121,6 +121,50 @@
                     </div>
                   </ion-toggle>
                 </ion-item>
+                <ion-item>
+                  <ion-icon name="star-outline" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.hideRating"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.rating" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="fitness-outline" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.hideNutrition"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.nutrition" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="git-network-outline" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.hideLinkedRecipes"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.linkedRecipes" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="embedConfig.showLastMade"
+                    (ngModelChange)="updateEmbed(true)"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.lastMadeAt" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
               </div>
             }
             <ion-item>
