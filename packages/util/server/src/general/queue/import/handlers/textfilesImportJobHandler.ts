@@ -49,7 +49,11 @@ export async function textfilesImportJobHandler(
 
   const documentFileNames = fileNames.filter((fileName) => {
     const extension = path.extname(fileName).toLowerCase();
-    return extension === ".txt" || isExtractableDocumentExtension(extension);
+    return (
+      extension === ".txt" ||
+      extension === ".md" ||
+      isExtractableDocumentExtension(extension)
+    );
   });
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
@@ -75,7 +79,7 @@ export async function textfilesImportJobHandler(
       const extension = path.extname(fileName).toLowerCase();
 
       const recipeText =
-        extension === ".txt"
+        extension === ".txt" || extension === ".md"
           ? (await readFile(filePath, "utf-8")).trim()
           : await extractTextFromDocument(filePath);
 
