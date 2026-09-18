@@ -50,7 +50,12 @@ vi.mock("@recipesage/util/server/general", () => ({
   validateSession: vi.fn(),
   extendSession: vi.fn(),
   RateLimitTier: {},
-  config: {},
+  Environment: {
+    Selfhost: "selfhost",
+  },
+  config: {
+    environment: "test",
+  },
 }));
 
 vi.mock("@recipesage/prisma", () => ({

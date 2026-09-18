@@ -11,7 +11,7 @@ import {
 } from "@recipesage/util/server/capabilities";
 import assert from "assert";
 import { prisma } from "@recipesage/prisma";
-import { config, metrics } from "@recipesage/util/server/general";
+import { config, Environment, metrics } from "@recipesage/util/server/general";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
 
 const schema = {
@@ -24,7 +24,7 @@ export const webhookHandler = defineHandler(
     authentication: AuthenticationEnforcement.None,
   },
   async (req) => {
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       throw new InternalServerError("Selfhost cannot use payments");
     }
 

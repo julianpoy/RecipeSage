@@ -5,6 +5,7 @@ import {
   createOrRetrieveCustomerId,
   createPYOSession,
 } from "@recipesage/util/server/capabilities";
+import { config, Environment } from "@recipesage/util/server/general";
 
 const ALLOWED_REDIRECT_HOSTNAME = "recipesage.com";
 
@@ -42,7 +43,7 @@ export const createStripeCheckoutSession = publicProcedure
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
 
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Selfhost cannot use payments",
@@ -50,7 +51,7 @@ export const createStripeCheckoutSession = publicProcedure
     }
 
     if (
-      process.env.NODE_ENV !== "development" &&
+      config.environment !== Environment.Development &&
       !isAllowedRedirectUrl(input.successUrl)
     ) {
       throw new TRPCError({
@@ -60,7 +61,7 @@ export const createStripeCheckoutSession = publicProcedure
     }
 
     if (
-      process.env.NODE_ENV !== "development" &&
+      config.environment !== Environment.Development &&
       !isAllowedRedirectUrl(input.cancelUrl)
     ) {
       throw new TRPCError({

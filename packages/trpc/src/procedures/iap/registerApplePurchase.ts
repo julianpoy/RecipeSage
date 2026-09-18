@@ -9,6 +9,7 @@ import {
   SubscriptionPlatform,
   verifyAppleTransaction,
 } from "@recipesage/util/server/capabilities";
+import { config, Environment } from "@recipesage/util/server/general";
 
 export const registerApplePurchase = authenticatedProcedure
   .input(
@@ -24,7 +25,7 @@ export const registerApplePurchase = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Selfhost cannot use payments",

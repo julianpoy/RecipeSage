@@ -1,4 +1,4 @@
-enum Environment {
+export enum Environment {
   Prod = "production",
   Selfhost = "selfhost",
   Test = "test",
@@ -7,27 +7,45 @@ enum Environment {
   AllRuntime = "all-runtime",
 }
 
+type RuntimeEnvironment = Exclude<
+  Environment,
+  Environment.All | Environment.AllRuntime
+>;
+
+type RequiredEnvironments =
+  | RuntimeEnvironment[]
+  | Environment.All
+  | Environment.AllRuntime;
+
+const RUNTIME_ENVIRONMENTS: RuntimeEnvironment[] = [
+  Environment.Prod,
+  Environment.Selfhost,
+  Environment.Test,
+  Environment.Development,
+];
+
+const runtimeEnvironment: RuntimeEnvironment =
+  RUNTIME_ENVIRONMENTS.find(
+    (environment) => environment === process.env.NODE_ENV,
+  ) ?? Environment.Prod;
+
 const getEnvString = <
-  T extends
-    | Exclude<Environment, Environment.All | Environment.AllRuntime>[]
-    | Environment.All
-    | Environment.AllRuntime,
+  T extends RequiredEnvironments,
   R extends T extends Environment.All ? string : string | undefined,
 >(
   name: string,
   requiredEnvironments: T,
 ): R => {
   const value = process.env[name];
+  const environments: RequiredEnvironments = requiredEnvironments;
 
   let isRequired;
-  if (requiredEnvironments === Environment.All) {
+  if (environments === Environment.All) {
     isRequired = true;
-  } else if (requiredEnvironments === Environment.AllRuntime) {
-    isRequired = (process.env.NODE_ENV || "production") !== Environment.Test;
+  } else if (environments === Environment.AllRuntime) {
+    isRequired = runtimeEnvironment !== Environment.Test;
   } else {
-    const _requiredEnvironments = requiredEnvironments as Environment[];
-    const nodeEnv = process.env.NODE_ENV || "production";
-    isRequired = _requiredEnvironments.includes(nodeEnv as Environment);
+    isRequired = environments.includes(runtimeEnvironment);
   }
 
   if (!value && isRequired) {
@@ -41,10 +59,7 @@ const rateLimitRedisHost = getEnvString("RATE_LIMIT_REDIS_HOST", []);
 
 const getEnvStringList = (
   name: string,
-  requiredEnvironments:
-    | Exclude<Environment, Environment.All | Environment.AllRuntime>[]
-    | Environment.All
-    | Environment.AllRuntime,
+  requiredEnvironments: RequiredEnvironments,
 ): string[] =>
   (getEnvString(name, requiredEnvironments) || "")
     .split(",")
@@ -52,12 +67,16 @@ const getEnvStringList = (
     .filter((value) => value.length > 0);
 
 export const config = {
+  environment: runtimeEnvironment,
   api: {
     publicUrl: getEnvString("API_PUBLIC_BASE_URL", Environment.All),
     enablePrivateFetch: getEnvString("API_ENABLE_PRIVATE_FETCH", []) === "true",
   },
   appUi: {
     baseUrl: getEnvString("APP_UI_BASE_URL", []) || "https://recipesage.com",
+  },
+  fonts: {
+    path: getEnvString("FONTS_PATH", Environment.All),
   },
   rateLimit: {
     enabled:

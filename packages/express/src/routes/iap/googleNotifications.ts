@@ -15,7 +15,7 @@ import {
   SubscriptionPlatform,
   suspendStoreSubscription,
 } from "@recipesage/util/server/capabilities";
-import { config } from "@recipesage/util/server/general";
+import { config, Environment } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { AuthenticationEnforcement } from "../../authenticationEnforcement";
 import { defineHandler } from "../../defineHandler";
@@ -200,7 +200,7 @@ export const googleNotificationsHandler = defineHandler(
     authentication: AuthenticationEnforcement.None,
   },
   async (req) => {
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       throw new InternalServerError("Selfhost cannot use payments");
     }
     if (req.query.token !== config.google.iap.pubsubVerificationToken) {

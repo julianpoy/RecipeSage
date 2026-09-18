@@ -3,6 +3,7 @@ import admin, { type ServiceAccount } from "firebase-admin";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { IS_FIREBASE_AVAILABLE } from "./isFirebaseAvailable";
+import { config, Environment } from "./config";
 
 let initPromise: Promise<typeof admin | null> | undefined;
 
@@ -27,8 +28,8 @@ const init = async (): Promise<typeof admin | null> => {
     return admin;
   } catch (e) {
     if (
-      process.env.NODE_ENV !== "test" &&
-      process.env.NODE_ENV !== "selfhost"
+      config.environment !== Environment.Test &&
+      config.environment !== Environment.Selfhost
     ) {
       console.error("Error while initializing firebase for notifications", e);
       Sentry.captureException(e);

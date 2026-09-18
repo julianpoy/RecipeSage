@@ -57,7 +57,11 @@ vi.mock("@recipesage/util/server/general", () => ({
   validateSession: vi.fn(),
   extendSession: vi.fn(),
   RateLimitTier: {},
+  Environment: {
+    Selfhost: "selfhost",
+  },
   config: {
+    environment: "test",
     google: {
       iap: {
         pubsubVerificationToken: "secret",

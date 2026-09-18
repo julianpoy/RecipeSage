@@ -2,10 +2,11 @@ import * as Sentry from "@sentry/node";
 import type { MessageSummary } from "@recipesage/prisma";
 import { broadcastWSEventIgnoringErrors, WSBroadcastEventType } from "./grip";
 import { sendFCMMessages } from "./firebase";
+import { config } from "./config";
 
 const MESSAGE_BODY_NOTIFICATION_LIMIT = 500;
 
-const WEB_ORIGIN = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+const WEB_ORIGIN = config.appUi.baseUrl;
 
 interface MessageNotificationUser {
   id: string;

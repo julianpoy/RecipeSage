@@ -1,6 +1,6 @@
 import { WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip/node";
-import { config } from "./config";
+import { config, Environment } from "./config";
 import { metrics } from "./metrics";
 
 export const serveGrip = new ServeGrip({
@@ -56,7 +56,7 @@ export const broadcastWSEvent = async function <T extends WSBroadcastEventType>(
   type: T,
   data: WSBroadcastEventData[T],
 ) {
-  if (process.env.NODE_ENV === "test") return;
+  if (config.environment === Environment.Test) return;
 
   const body = {
     type: type,

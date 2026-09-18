@@ -3,12 +3,12 @@ import type { Readable } from "stream";
 import { Prisma, PrismaTransactionClient, prisma } from "@recipesage/prisma";
 import { getUniqueRecipeTitle } from "./getUniqueRecipeTitle";
 import { ObjectTypes, readStream, writeStream } from "../storage";
+import { config } from "../general/config";
 
 const SHARED_IMAGE_MIMETYPE = "image/jpeg";
 
 const getDiscoverRecipeUrl = (discoverRecipeId: string) => {
-  const base = process.env.APP_UI_BASE_URL || "https://recipesage.com";
-  return `${base}/app/discover/${discoverRecipeId}`;
+  return `${config.appUi.baseUrl}/app/discover/${discoverRecipeId}`;
 };
 
 export const saveDiscoverRecipeToUser = async (

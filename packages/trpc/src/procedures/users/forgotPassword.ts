@@ -4,6 +4,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
   SessionType,
+  config,
   generateSession,
   sendPasswordResetEmail,
 } from "@recipesage/util/server/general";
@@ -40,7 +41,7 @@ export const forgotPassword = publicProcedure
 
     const session = await generateSession(user.id, SessionType.User);
 
-    const appuiOrigin = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+    const appuiOrigin = config.appUi.baseUrl;
     const resetLink = `${appuiOrigin}/app/settings/account?token=${session.token}`;
 
     await sendPasswordResetEmail({

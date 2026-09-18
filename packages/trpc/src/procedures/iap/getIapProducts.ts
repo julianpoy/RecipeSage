@@ -1,6 +1,6 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { config } from "@recipesage/util/server/general";
+import { config, Environment } from "@recipesage/util/server/general";
 
 export const getIapProducts = publicProcedure
   .input(
@@ -16,7 +16,7 @@ export const getIapProducts = publicProcedure
     }),
   )
   .query(async ({ input }) => {
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       return { productIds: [], monthly: [], yearly: [] };
     }
 

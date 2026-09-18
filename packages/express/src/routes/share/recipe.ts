@@ -4,6 +4,7 @@ import { NotFoundError } from "../../errors";
 import { AuthenticationEnforcement } from "../../authenticationEnforcement";
 import { defineHandler } from "../../defineHandler";
 import {
+  config,
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,
 } from "@recipesage/util/server/general";
@@ -37,7 +38,7 @@ export const shareRecipeHandler = defineHandler(
     );
     const image = sorted.recipeImages[0]?.image.location;
 
-    const appuiOrigin = process.env.APP_UI_BASE_URL || "https://recipesage.com";
+    const appuiOrigin = config.appUi.baseUrl;
     const shareURL = `${appuiOrigin}/api/share/recipe/${sorted.id}`;
     const redirectURL = `${appuiOrigin}/app/recipe/${sorted.id}`;
 

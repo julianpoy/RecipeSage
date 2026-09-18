@@ -9,20 +9,16 @@ import {
   stripImageTokens,
 } from "@recipesage/util/shared";
 import { sanitizeRemoveHtmlToPlainText } from "./sanitizeRemoveHtmlToPlainText";
-import { config } from "./config";
+import { config, Environment } from "./config";
 import { fetchURL } from "../general/fetch";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 import path from "path";
 import { RecipeSummary } from "@recipesage/prisma";
 import { readFile } from "fs/promises";
-import process from "node:process";
 import { setTimeout } from "node:timers/promises";
 import { translate } from "./translate";
 import { getNutritionDisplayRows } from "./getNutritionDisplayRows";
 import { formatDateUTCLocalized } from "./formatDateUTCLocalized";
-
-const FONT_PATH = process.env.FONTS_PATH;
-if (!FONT_PATH) throw new Error("FONTS_PATH must be provided");
 
 // DefinitelyTyped hasn't been updated for pdfmake 0.3.x yet.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,10 +26,13 @@ export const pdfmake = _pdfmake as any;
 
 const FONTS = {
   NotoSans: {
-    normal: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Regular.ttf"),
-    bold: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Bold.ttf"),
-    italics: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-Italic.ttf"),
-    bolditalics: path.resolve(FONT_PATH, "Noto_Sans/NotoSans-BoldItalic.ttf"),
+    normal: path.resolve(config.fonts.path, "Noto_Sans/NotoSans-Regular.ttf"),
+    bold: path.resolve(config.fonts.path, "Noto_Sans/NotoSans-Bold.ttf"),
+    italics: path.resolve(config.fonts.path, "Noto_Sans/NotoSans-Italic.ttf"),
+    bolditalics: path.resolve(
+      config.fonts.path,
+      "Noto_Sans/NotoSans-BoldItalic.ttf",
+    ),
   },
 };
 
@@ -164,7 +163,7 @@ const getInlineImageFit = (
 const fetchImageAsDataUrl = async (url: string): Promise<string | null> => {
   try {
     let buffer: Buffer;
-    if (process.env.NODE_ENV === "selfhost" && url.startsWith("/")) {
+    if (config.environment === Environment.Selfhost && url.startsWith("/")) {
       buffer = await readFile(url);
     } else {
       const response = await fetchURL(url, { timeout: IMAGE_FETCH_TIMEOUT_MS });

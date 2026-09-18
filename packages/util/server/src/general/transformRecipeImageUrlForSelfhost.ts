@@ -1,8 +1,9 @@
 import { readFile } from "fs/promises";
 import { fetchURL } from "./fetch";
+import { config, Environment } from "./config";
 
 export const transformRecipeImageUrlForSelfhost = async (location: string) => {
-  if (process.env.NODE_ENV !== "selfhost") return location;
+  if (config.environment !== Environment.Selfhost) return location;
 
   if (location.startsWith("http://") || location.startsWith("https://")) {
     return location;

@@ -10,6 +10,7 @@ import {
   verifyAppleNotification,
   verifyAppleTransaction,
 } from "@recipesage/util/server/capabilities";
+import { config, Environment } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { AuthenticationEnforcement } from "../../authenticationEnforcement";
 import { defineHandler } from "../../defineHandler";
@@ -49,7 +50,7 @@ export const appleNotificationsHandler = defineHandler(
     authentication: AuthenticationEnforcement.None,
   },
   async (req) => {
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       throw new InternalServerError("Selfhost cannot use payments");
     }
 

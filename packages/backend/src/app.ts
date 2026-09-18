@@ -23,7 +23,7 @@ import {
 
 import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
 setupInvalidateStaleJobsInterval();
-import { metrics, config } from "@recipesage/util/server/general";
+import { metrics, config, Environment } from "@recipesage/util/server/general";
 
 // Routes
 import index from "./routes/index.js";
@@ -70,7 +70,7 @@ const corsOptions = {
       return;
     }
 
-    if (process.env.NODE_ENV === "selfhost") {
+    if (config.environment === Environment.Selfhost) {
       // No default allowlist, so we do not know selfhost user's origin
       // we allow all.
       callback(null, true);
@@ -108,7 +108,7 @@ if (!EXPRESS_VIEWS_PATH) throw new Error("EXPRESS_VIEWS_PATH must be provided");
 app.set("views", EXPRESS_VIEWS_PATH);
 app.set("view engine", "pug");
 
-if (process.env.NODE_ENV !== "test") app.use(logger("dev"));
+if (config.environment !== Environment.Test) app.use(logger("dev"));
 app.use(
   bodyParser.json({
     limit: "2MB",
