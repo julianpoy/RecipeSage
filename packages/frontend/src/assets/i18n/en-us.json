@@ -191,7 +191,7 @@
   "pages.welcomeFlow.blank.title": "Skip this, start empty",
   "pages.welcomeFlow.blank.description": "A completely empty app, ready for your first recipe.",
   "pages.welcomeFlow.examples.title": "Start with 2 example recipes",
-  "pages.welcomeFlow.examples.description": "See what RecipeSage looks like with 2 example recipes. Delete them anytime.",
+  "pages.welcomeFlow.examples.description": "See what RecipeSage looks like with 2 example recipes. You can delete them at any point.",
   "pages.welcomeFlow.import.title": "Import recipes from elsewhere",
   "pages.welcomeFlow.import.description": "Bring in your existing recipes from another app, a set of files, or a list of URLs.",
 
