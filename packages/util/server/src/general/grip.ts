@@ -1,15 +1,30 @@
-import { WebSocketMessageFormat } from "@fanoutio/grip";
+import { Publisher, WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip/node";
 import { config, Environment } from "./config";
 import { metrics } from "./metrics";
 
+const fetchWithoutContentLength: typeof fetch = (input, init) => {
+  const headers = new Headers(init?.headers);
+  headers.delete("Content-Length");
+
+  return fetch(input, {
+    ...init,
+    headers,
+  });
+};
+
 export const serveGrip = new ServeGrip({
-  grip: [
+  grip: new Publisher(
+    [
+      {
+        control_uri: config.grip.url,
+        key: config.grip.key,
+      },
+    ],
     {
-      control_uri: config.grip.url,
-      key: config.grip.key,
+      fetch: fetchWithoutContentLength,
     },
-  ],
+  ),
 });
 
 export enum WSBroadcastEventType {
