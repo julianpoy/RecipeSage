@@ -150,11 +150,17 @@
         <ion-list>
           <ion-item (click)="startImport('jsonld')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            <ion-label> {{ "pages.import.jsonld" | translate }} </ion-label>
+            <ion-label class="ion-text-wrap">
+              {{ "pages.import.jsonld" | translate }}
+              <p>{{ "pages.import.jsonld.subtitle" | translate }}</p>
+            </ion-label>
           </ion-item>
           <ion-item (click)="startImport('textfiles')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            <ion-label> {{ "pages.import.textFiles" | translate }} </ion-label>
+            <ion-label class="ion-text-wrap">
+              {{ "pages.import.textFiles" | translate }}
+              <p>{{ "pages.import.textFiles.subtitle" | translate }}</p>
+            </ion-label>
           </ion-item>
           <ion-item (click)="startImport('urls')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
@@ -162,15 +168,24 @@
           </ion-item>
           <ion-item (click)="startImport('pdfs')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            <ion-label> {{ "pages.import.pdfs" | translate }} </ion-label>
+            <ion-label class="ion-text-wrap">
+              {{ "pages.import.pdfs" | translate }}
+              <p>{{ "pages.import.pdfs.subtitle" | translate }}</p>
+            </ion-label>
           </ion-item>
           <ion-item (click)="startImport('images')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            <ion-label> {{ "pages.import.images" | translate }} </ion-label>
+            <ion-label class="ion-text-wrap">
+              {{ "pages.import.images" | translate }}
+              <p>{{ "pages.import.images.subtitle" | translate }}</p>
+            </ion-label>
           </ion-item>
           <ion-item (click)="startImport('csv')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            <ion-label> {{ "pages.import.csv" | translate }} </ion-label>
+            <ion-label class="ion-text-wrap">
+              {{ "pages.import.csv" | translate }}
+              <p>{{ "pages.import.csv.subtitle" | translate }}</p>
+            </ion-label>
           </ion-item>
           <ion-item (click)="startImport('paprika')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>

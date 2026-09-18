@@ -9,13 +9,13 @@ import {
   buildUnstructuredRecipeEntry,
   getUnformattedImportLabel,
 } from "./shared/unstructuredRecipeEntry";
-import { readdir, readFile, mkdtempDisposable } from "fs/promises";
+import { readFile, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
 import path from "path";
-import {
-  extractTextFromDocument,
-  isExtractableDocumentExtension,
-} from "../../../extractTextFromDocument";
+import { extractTextFromDocument } from "../../../extractTextFromDocument";
+import { listImportDocuments } from "./shared/listImportDocuments";
+import { isPlainTextDocumentExtension } from "./shared/isPlainTextDocumentExtension";
+import { getDocumentTitleFromFileName } from "./shared/getDocumentTitleFromFileName";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
@@ -45,16 +45,7 @@ export async function textfilesImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
-
-  const documentFileNames = fileNames.filter((fileName) => {
-    const extension = path.extname(fileName).toLowerCase();
-    return (
-      extension === ".txt" ||
-      extension === ".md" ||
-      isExtractableDocumentExtension(extension)
-    );
-  });
+  const documentPaths = await listImportDocuments(extractPath);
 
   const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
 
@@ -63,7 +54,7 @@ export async function textfilesImportJobHandler(
     userId: job.userId,
   });
 
-  const totalCount = documentFileNames.length;
+  const totalCount = documentPaths.length;
   if (totalCount > MAX_COUNT_LIMIT) {
     throw new ImportTooManyRecipesError();
   }
@@ -73,17 +64,19 @@ export async function textfilesImportJobHandler(
   let processedCount = 0;
   let partialCount = 0;
   let failedCount = 0;
-  for (const fileName of documentFileNames) {
+  for (const documentPath of documentPaths) {
     try {
-      const filePath = path.join(extractPath, fileName);
-      const extension = path.extname(fileName).toLowerCase();
+      const filePath = path.join(extractPath, documentPath);
+      const extension = path.extname(documentPath).toLowerCase();
 
-      const recipeText =
-        extension === ".txt" || extension === ".md"
-          ? (await readFile(filePath, "utf-8")).trim()
-          : await extractTextFromDocument(filePath);
+      const recipeText = isPlainTextDocumentExtension(extension)
+        ? (await readFile(filePath, "utf-8")).trim()
+        : await extractTextFromDocument(filePath);
 
-      const images = await readSideCarImages(extractPath, fileName);
+      const images = await readSideCarImages(
+        path.dirname(filePath),
+        documentPath,
+      );
 
       let entry: StandardizedRecipeImportEntry | undefined;
       try {
@@ -104,7 +97,7 @@ export async function textfilesImportJobHandler(
 
       if (!entry) {
         entry = buildUnstructuredRecipeEntry({
-          title: path.basename(fileName, path.extname(fileName)),
+          title: getDocumentTitleFromFileName(documentPath),
           notes: recipeText,
           labels: [...importLabels, unformattedLabel],
           images,

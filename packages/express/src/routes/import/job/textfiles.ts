@@ -37,7 +37,7 @@ export const textfilesHandler = defineHandler(
       method: "post",
       path: "/import/job/textfiles",
       tags: ["import"],
-      summary: "Import recipes from plain text files",
+      summary: "Import recipes from a zip of notes or documents",
       successStatus: 201,
       upload: {
         field: "file",

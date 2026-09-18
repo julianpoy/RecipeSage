@@ -13,7 +13,7 @@ const SIDE_CAR_IMAGE_EXTENSIONS = [
 ];
 
 export const readSideCarImages = async (
-  extractPath: string,
+  directoryPath: string,
   fileName: string,
 ): Promise<Buffer[]> => {
   const baseName = path.basename(fileName, path.extname(fileName));
@@ -21,7 +21,7 @@ export const readSideCarImages = async (
   const images: Buffer[] = [];
   for (const extension of SIDE_CAR_IMAGE_EXTENSIONS) {
     const fileContents = await readFile(
-      path.join(extractPath, `${baseName}${extension}`),
+      path.join(directoryPath, `${baseName}${extension}`),
     ).catch(() => null);
     if (fileContents) images.push(fileContents);
   }
