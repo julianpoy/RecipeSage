@@ -99,6 +99,8 @@ export class MealPlanItemDetailsModalPage {
   mealItem!: MealPlanItemSummary;
   @Input() customMealOptions: string | null = null;
 
+  modal?: HTMLIonModalElement;
+
   parsedNotes: ReturnType<typeof parseNotes> = [];
 
   ngOnInit() {
@@ -285,6 +287,6 @@ export class MealPlanItemDetailsModalPage {
   }
 
   close(args?: any) {
-    this.modalCtrl.dismiss(args);
+    this.modal?.dismiss(args);
   }
 }
