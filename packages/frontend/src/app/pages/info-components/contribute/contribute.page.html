@@ -179,17 +179,20 @@
             {{ "pages.contribute.native.unavailable" | translate }}
           </p>
         } @else {
-          <div class="amount-row">
+          <div class="native-product-list">
             @for (
               product of nativeProducts;
               track product.offerToken ?? product.identifier
             ) {
               <ion-button
+                expand="block"
                 [disabled]="purchasing"
                 (click)="purchaseNative(product)"
               >
-                <span>{{ product.title }}</span>
-                <span>{{ product.priceString }}</span>
+                <span class="native-product-title">{{ product.title }}</span>
+                <span class="native-product-price">{{
+                  product.priceString
+                }}</span>
               </ion-button>
             }
           </div>

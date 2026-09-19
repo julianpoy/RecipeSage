@@ -250,10 +250,11 @@ export class ContributePage {
       return;
     }
 
-    this.nativeProducts =
+    const products =
       this.nativeFrequency === "monthly"
         ? this.nativeOfferings.monthly
         : this.nativeOfferings.yearly;
+    this.nativeProducts = [...products].sort((a, b) => a.price - b.price);
   }
 
   async purchaseNative(product: Product) {
