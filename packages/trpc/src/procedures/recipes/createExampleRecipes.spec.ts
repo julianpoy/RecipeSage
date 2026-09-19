@@ -56,6 +56,11 @@ describe("createExampleRecipes", () => {
         .map((definition) => definition.images.length)
         .sort();
       expect(imageCounts).toEqual(expectedCounts);
+
+      const fetchedRecipes = await trpc.recipes.getRecipesByIds({
+        ids: recipes.map((recipe) => recipe.id),
+      });
+      expect(fetchedRecipes.length).toEqual(exampleRecipeDefinitions.length);
     });
   });
 });
