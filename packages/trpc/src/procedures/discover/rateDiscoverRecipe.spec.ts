@@ -43,6 +43,27 @@ describe("rateDiscoverRecipe", () => {
       expect(updated?.ratingCount).toEqual(1);
     });
 
+    test("updates the stored rating and rank scores", async ({
+      trpc2,
+      user,
+    }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          qualityScore: 5,
+          rankScore: 0.42,
+        },
+      });
+
+      await trpc2.discover.rateDiscoverRecipe({ id: recipe.id, rating: 1 });
+
+      const updated = await prisma.discoverRecipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+      });
+      expect(updated.ratingScore).toBeCloseTo(3.083);
+      expect(updated.rankScore).not.toEqual(recipe.rankScore);
+    });
+
     test("overwrites the caller's previous rating", async ({ trpc2, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: discoverRecipeFactory(user.id),

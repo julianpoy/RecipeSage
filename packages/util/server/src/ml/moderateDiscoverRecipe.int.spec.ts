@@ -30,8 +30,14 @@ function mockModerationOutput(output: {
   reason: string;
   categories: string[];
   language: string;
+  qualityScore?: number;
 }) {
-  generateTextMock.mockResolvedValue({ output });
+  generateTextMock.mockResolvedValue({
+    output: {
+      qualityScore: 3,
+      ...output,
+    },
+  });
 }
 
 describe("moderateDiscoverRecipe", () => {
@@ -74,11 +80,47 @@ describe("moderateDiscoverRecipe", () => {
     });
     expect(updated.approvalState).toEqual(DiscoverApprovalState.ACTIVE);
     expect(updated.categories).toContain("dinner");
+    expect(updated.qualityScore).toEqual(3);
 
     const reports = await prisma.discoverRecipeReport.findMany({
       where: { discoverRecipeId: recipe.id },
     });
     expect(reports).toHaveLength(0);
+  });
+
+  it("ranks a high quality recipe above a low quality one", async () => {
+    const highQuality = await createPendingRecipe();
+    mockModerationOutput({
+      appropriate: true,
+      reason: "",
+      categories: ["dinner"],
+      language: "en",
+      qualityScore: 5,
+    });
+    await moderateDiscoverRecipe(highQuality.id);
+
+    const lowQuality = await createPendingRecipe();
+    mockModerationOutput({
+      appropriate: true,
+      reason: "",
+      categories: ["dinner"],
+      language: "en",
+      qualityScore: 1,
+    });
+    await moderateDiscoverRecipe(lowQuality.id);
+
+    const updatedHighQuality = await prisma.discoverRecipe.findUniqueOrThrow({
+      where: { id: highQuality.id },
+    });
+    const updatedLowQuality = await prisma.discoverRecipe.findUniqueOrThrow({
+      where: { id: lowQuality.id },
+    });
+
+    expect(updatedHighQuality.qualityScore).toEqual(5);
+    expect(updatedLowQuality.qualityScore).toEqual(1);
+    expect(updatedHighQuality.rankScore).toBeGreaterThan(
+      updatedLowQuality.rankScore,
+    );
   });
 
   it("shadowbans an inappropriate recipe and records a SYSTEM report with the reason", async () => {

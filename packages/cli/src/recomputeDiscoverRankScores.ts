@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import { Prisma, prisma } from "@recipesage/prisma";
 import {
   computeDiscoverRankScore,
+  computeDiscoverRatingScore,
   getDiscoverDistinctSaverCounts,
 } from "@recipesage/util/server/db";
 
@@ -21,6 +22,12 @@ export const recomputeDiscoverRankScores = async (options: {
           createdAt: true,
           ratingAverage: true,
           ratingCount: true,
+          qualityScore: true,
+          _count: {
+            select: {
+              discoverRecipeImages: true,
+            },
+          },
         },
         orderBy: {
           id: "asc",
@@ -49,24 +56,32 @@ export const recomputeDiscoverRankScores = async (options: {
           saveCount,
           ratingAverage: discoverRecipe.ratingAverage,
           ratingCount: discoverRecipe.ratingCount,
+          qualityScore: discoverRecipe.qualityScore,
+          hasImage: discoverRecipe._count.discoverRecipeImages > 0,
           now,
         });
-        return Prisma.sql`(${discoverRecipe.id}::uuid, ${saveCount}::integer, ${rankScore}::double precision)`;
+        const ratingScore = computeDiscoverRatingScore({
+          ratingAverage: discoverRecipe.ratingAverage,
+          ratingCount: discoverRecipe.ratingCount,
+        });
+        return Prisma.sql`(${discoverRecipe.id}::uuid, ${saveCount}::integer, ${rankScore}::double precision, ${ratingScore}::double precision)`;
       });
 
       await prisma.$executeRaw(Prisma.sql`
         UPDATE "Discover_Recipes" AS d
-        SET "saveCount" = v.saveCount, "rankScore" = v.rankScore
-        FROM (VALUES ${Prisma.join(valueTuples)}) AS v(id, saveCount, rankScore)
+        SET "saveCount" = v.saveCount, "rankScore" = v.rankScore, "ratingScore" = v.ratingScore
+        FROM (VALUES ${Prisma.join(valueTuples)}) AS v(id, saveCount, rankScore, ratingScore)
         WHERE d.id = v.id
       `);
 
       processed += discoverRecipes.length;
       cursor = discoverRecipes[discoverRecipes.length - 1].id;
-      console.log(`Recomputed rank scores for ${processed} discover recipes`);
+      console.log(
+        `Recomputed rank and rating scores for ${processed} discover recipes`,
+      );
     }
 
-    console.log("Discover rank score recompute complete!");
+    console.log("Discover rank and rating score recompute complete!");
   } catch (e) {
     Sentry.captureException(e);
     console.log("Error while recomputing discover rank scores", e);

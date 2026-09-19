@@ -49,7 +49,7 @@ program
 program
   .command("recomputeDiscoverRankScores")
   .description(
-    "Recompute the smart-ranking score for every discover recipe. Intended to be scheduled (for example, as a Kubernetes CronJob).",
+    "Recompute the smart-ranking and rating scores for every discover recipe. Intended to be scheduled (for example, as a Kubernetes CronJob).",
   )
   .option("-b, --batch-size <size>", "Batch size", "1000")
   .action(

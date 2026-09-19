@@ -3,7 +3,11 @@ import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { assertDiscoverRecipeVisible } from "@recipesage/util/server/trpc";
-import { discoverRecipeVisibilitySelect } from "@recipesage/util/server/db";
+import {
+  computeDiscoverRankScore,
+  computeDiscoverRatingScore,
+  discoverRecipeVisibilitySelect,
+} from "@recipesage/util/server/db";
 
 export const rateDiscoverRecipe = authenticatedProcedure
   .meta({
@@ -35,6 +39,14 @@ export const rateDiscoverRecipe = authenticatedProcedure
       },
       select: {
         id: true,
+        createdAt: true,
+        saveCount: true,
+        qualityScore: true,
+        _count: {
+          select: {
+            discoverRecipeImages: true,
+          },
+        },
         ...discoverRecipeVisibilitySelect,
       },
     });
@@ -106,6 +118,18 @@ export const rateDiscoverRecipe = authenticatedProcedure
         data: {
           ratingAverage,
           ratingCount,
+          ratingScore: computeDiscoverRatingScore({
+            ratingAverage,
+            ratingCount,
+          }),
+          rankScore: computeDiscoverRankScore({
+            createdAt: discoverRecipe.createdAt,
+            saveCount: discoverRecipe.saveCount,
+            ratingAverage,
+            ratingCount,
+            qualityScore: discoverRecipe.qualityScore,
+            hasImage: discoverRecipe._count.discoverRecipeImages > 0,
+          }),
         },
       });
 

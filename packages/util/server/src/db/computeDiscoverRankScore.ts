@@ -1,32 +1,55 @@
-const RECENCY_WEIGHT = 0.5;
-const SAVE_WEIGHT = 0.3;
-const RATING_WEIGHT = 0.2;
-const RECENCY_TAU_MS = 14 * 24 * 60 * 60 * 1000;
-const RATING_PRIOR_COUNT = 10;
-const RATING_PRIOR_MEAN = 3.5;
-const MAX_RATING = 5;
+import {
+  computeDiscoverRatingScore,
+  MIN_RATING,
+  MAX_RATING,
+} from "./computeDiscoverRatingScore";
+
+const BASE_WEIGHT = 0.4;
+const FRESHNESS_WEIGHT = 0.6;
+const SAVE_WEIGHT = 0.1;
+const IMAGE_WEIGHT = 0.05;
+const FRESHNESS_TAU_MS = 7 * 24 * 60 * 60 * 1000;
+const SAVES_FOR_HALF_POPULARITY = 5;
+const UNSCORED_QUALITY_SCORE = 3;
+
+export const MIN_QUALITY_SCORE = 1;
+export const MAX_QUALITY_SCORE = 5;
 
 export const computeDiscoverRankScore = (input: {
   createdAt: Date;
   saveCount: number;
   ratingAverage: number;
   ratingCount: number;
+  qualityScore: number | null;
+  hasImage: boolean;
   now?: Date;
 }): number => {
   const now = input.now ?? new Date();
   const ageMs = Math.max(0, now.getTime() - input.createdAt.getTime());
+  const saveCount = Math.max(0, input.saveCount);
+  const qualityScore = Math.min(
+    Math.max(input.qualityScore ?? UNSCORED_QUALITY_SCORE, MIN_QUALITY_SCORE),
+    MAX_QUALITY_SCORE,
+  );
 
-  const recency = Math.exp(-ageMs / RECENCY_TAU_MS);
-  const popularity = Math.log10(1 + Math.max(0, input.saveCount));
-  const bayesianRating =
-    (RATING_PRIOR_COUNT * RATING_PRIOR_MEAN +
-      input.ratingCount * input.ratingAverage) /
-    (RATING_PRIOR_COUNT + input.ratingCount);
-  const quality = bayesianRating / MAX_RATING;
+  const freshness = Math.exp(-ageMs / FRESHNESS_TAU_MS);
+  const popularity = saveCount / (saveCount + SAVES_FOR_HALF_POPULARITY);
+  const quality =
+    (qualityScore - MIN_QUALITY_SCORE) /
+    (MAX_QUALITY_SCORE - MIN_QUALITY_SCORE);
+
+  const ratingScore = computeDiscoverRatingScore({
+    ratingAverage: input.ratingAverage,
+    ratingCount: input.ratingCount,
+  });
+  const rating = (ratingScore - MIN_RATING) / (MAX_RATING - MIN_RATING);
 
   return (
-    RECENCY_WEIGHT * recency +
-    SAVE_WEIGHT * popularity +
-    RATING_WEIGHT * quality
+    quality *
+    rating *
+    (BASE_WEIGHT +
+      FRESHNESS_WEIGHT * freshness +
+      SAVE_WEIGHT * popularity +
+      (input.hasImage ? IMAGE_WEIGHT : 0))
   );
 };

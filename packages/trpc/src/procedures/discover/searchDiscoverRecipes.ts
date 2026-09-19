@@ -97,7 +97,7 @@ export const searchDiscoverRecipes = publicProcedure
         orderBy = Prisma.sql`"createdAt" DESC`;
         break;
       case "topRated":
-        orderBy = Prisma.sql`"ratingAverage" DESC, "ratingCount" DESC`;
+        orderBy = Prisma.sql`"ratingScore" DESC, "ratingCount" DESC`;
         break;
       case "mostSaved":
         orderBy = Prisma.sql`"saveCount" DESC, "createdAt" DESC`;

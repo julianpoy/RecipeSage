@@ -214,28 +214,42 @@ describe("searchDiscoverRecipes", () => {
       expect(withoutPhoto.recipes.map((r) => r.id)).toEqual([recipe.id]);
     });
 
-    test("sorts by newest, top rated, and most saved", async ({ user }) => {
+    test("sorts by newest, top rated, and most saved", async ({
+      user,
+      user2,
+    }) => {
       const language = uniqueLanguage();
       const oldest = await createActive(user.id, {
         language,
         createdAt: new Date("2020-01-01T00:00:00Z"),
         ratingAverage: 1,
         ratingCount: 1,
-        saveCount: 100,
+        ratingScore: 3.08,
+        saveCount: 2,
       });
       const middle = await createActive(user.id, {
         language,
         createdAt: new Date("2021-01-01T00:00:00Z"),
         ratingAverage: 5,
         ratingCount: 1,
-        saveCount: 1,
+        ratingScore: 3.75,
+        saveCount: 0,
       });
       const newest = await createActive(user.id, {
         language,
         createdAt: new Date("2022-01-01T00:00:00Z"),
         ratingAverage: 3,
         ratingCount: 1,
-        saveCount: 50,
+        ratingScore: 3.42,
+        saveCount: 1,
+      });
+
+      await prisma.discoverRecipeSave.createMany({
+        data: [
+          { discoverRecipeId: oldest.id, userId: user.id },
+          { discoverRecipeId: oldest.id, userId: user2.id },
+          { discoverRecipeId: newest.id, userId: user.id },
+        ],
       });
 
       const byNewest = await anonymousTrpc.discover.searchDiscoverRecipes({

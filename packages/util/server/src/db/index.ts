@@ -22,6 +22,7 @@ export * from "./shareRecipeToUser";
 export * from "./createDiscoverRecipeFromRecipe";
 export * from "./saveDiscoverRecipeToUser";
 export * from "./computeDiscoverRankScore";
+export * from "./computeDiscoverRatingScore";
 export * from "./getDiscoverDistinctSaverCounts";
 export * from "./discoverPubliclyVisibleWhere";
 export * from "./discoverPubliclyVisibleSql";
