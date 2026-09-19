@@ -32,24 +32,23 @@ export const paprika: CompetitorData = {
       recipesage: true,
       competitor: false,
     },
-    { feature: "iOS app", recipesage: "Free", competitor: "$4.99" },
-    { feature: "Android app", recipesage: "Free", competitor: "$4.99" },
     {
       feature: "Native desktop app (Windows, macOS, Linux)",
       recipesage: "Free",
       competitor: "$29.99 each (Mac and Windows only)",
       note: "Paprika sells native Mac and Windows apps separately and has no Linux app. RecipeSage's desktop app is free on all three.",
     },
+    { feature: "Android app", recipesage: "Free", competitor: "$4.99" },
     {
-      feature: "Apple Watch app",
-      recipesage: false,
-      competitor: true,
-      note: "Paprika has a watchOS app for timers and grocery list viewing.",
+      feature: "Real multi-user collaboration",
+      recipesage: true,
+      competitor: false,
+      note: "Paprika households share one login. Separate accounts and cookbook sharing are announced for Paprika 4 but aren't available yet.",
     },
     {
-      feature: "Auto import from a URL",
+      feature: "Nutrition tracking (macros, vitamins, minerals)",
       recipesage: true,
-      competitor: true,
+      competitor: false,
     },
     {
       feature: "Import from a photo (OCR)",
@@ -62,6 +61,13 @@ export const paprika: CompetitorData = {
       recipesage: true,
       competitor: false,
     },
+    { feature: "iOS app", recipesage: "Free", competitor: "$4.99" },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Paprika shares recipes only by emailing or AirDropping its proprietary files.",
+    },
     {
       feature: "Firefox and Chrome extension",
       recipesage: true,
@@ -69,15 +75,26 @@ export const paprika: CompetitorData = {
       note: "Paprika offers a bookmarklet only. No official browser extension.",
     },
     {
-      feature: "Drag-and-drop meal planner",
+      feature: "Typo-tolerant search",
       recipesage: true,
-      competitor: true,
+      competitor: "partial",
+      note: "Paprika search is substring-based, not fuzzy.",
     },
     {
       feature: "Recurring meal plan items",
       recipesage: true,
       competitor: false,
       note: "Paprika adds meals to specific dates only. You can save and reapply menus, but there's no repeating option.",
+    },
+    {
+      feature: "Auto import from a URL",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Drag-and-drop meal planner",
+      recipesage: true,
+      competitor: true,
     },
     {
       feature: "Smart shopping list with aisle categorization",
@@ -90,23 +107,6 @@ export const paprika: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Nutrition tracking (macros, vitamins, minerals)",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Typo-tolerant search",
-      recipesage: true,
-      competitor: "partial",
-      note: "Paprika search is substring-based, not fuzzy.",
-    },
-    {
-      feature: "Real multi-user collaboration",
-      recipesage: true,
-      competitor: false,
-      note: "Paprika households share one login. Separate accounts and cookbook sharing are announced for Paprika 4 but aren't available yet.",
-    },
-    {
       feature: "Works offline",
       recipesage: true,
       competitor: true,
@@ -117,10 +117,16 @@ export const paprika: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Built-in kitchen toolkit",
+      feature: "Apple Watch app",
+      recipesage: false,
+      competitor: true,
+      note: "Paprika has a watchOS app for timers and grocery list viewing.",
+    },
+    {
+      feature: "Data portability",
       recipesage: true,
-      competitor: "partial",
-      note: "Paprika converts ingredient units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
+      competitor: "Proprietary",
+      note: "Paprika's export is a non-standard .paprikarecipes archive. RecipeSage supports well-recognized standardized formats.",
     },
     {
       feature: "Open source",
@@ -133,16 +139,10 @@ export const paprika: CompetitorData = {
       competitor: false,
     },
     {
-      feature: "Data portability",
+      feature: "Built-in kitchen toolkit",
       recipesage: true,
-      competitor: "Proprietary",
-      note: "Paprika's export is a non-standard .paprikarecipes archive. RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Paprika shares recipes only by emailing or AirDropping its proprietary files.",
+      competitor: "partial",
+      note: "Paprika converts ingredient units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
     },
     {
       feature: "Printable PDF cookbook generator",

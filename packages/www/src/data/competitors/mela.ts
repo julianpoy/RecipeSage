@@ -27,8 +27,54 @@ export const mela: CompetitorData = {
       recipesage: "Free, open source",
       competitor: "~$22 total",
     },
+    { feature: "Android app", recipesage: "Free", competitor: false },
+    {
+      feature: "Windows and Linux",
+      recipesage: "Free",
+      competitor: false,
+    },
     {
       feature: "Web app (use from any browser)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Multi-household free hosted account",
+      recipesage: true,
+      competitor: false,
+      note: "Mela shares a whole library through iCloud, with no per-recipe permissions or read-only role. Every participant needs an Apple ID and a Mela install.",
+    },
+    {
+      feature: "Smart shopping list with aisle categorization",
+      recipesage: true,
+      competitor: false,
+      note: "Mela's grocery list lives in Apple Reminders as a flat, unsorted list.",
+    },
+    {
+      feature: "Built-in nutrition (macros, vitamins, minerals)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Mela stores and displays whatever nutrition text the source page provided but doesn't have any auto-fill support for nutrition.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Mela shares through iCloud (everyone needs an Apple ID and Mela) or by sending files.",
+    },
+    {
+      feature: "Drag-and-drop meal planner",
+      recipesage: true,
+      competitor: "partial",
+      note: "Mela's meal planner uses your device's native calendar. RecipeSage has inbuilt scheduling and can also use your device's calendar.",
+    },
+    {
+      feature: "Browser extension (Firefox, Chrome)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Import from PDF and Word documents",
       recipesage: true,
       competitor: false,
     },
@@ -38,16 +84,10 @@ export const mela: CompetitorData = {
       competitor: "$6.99",
       note: "Mela is a free download with a small free tier, and the in-app purchase unlocks unlimited recipes.",
     },
-    { feature: "Android app", recipesage: "Free", competitor: false },
     {
       feature: "macOS app",
       recipesage: "Free",
       competitor: "$14.99",
-    },
-    {
-      feature: "Windows and Linux",
-      recipesage: "Free",
-      competitor: false,
     },
     {
       feature: "Auto import from a URL",
@@ -60,54 +100,25 @@ export const mela: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Import from PDF and Word documents",
+      feature: "Recipe scaling and metric/imperial conversion",
       recipesage: true,
-      competitor: false,
+      competitor: true,
     },
     {
-      feature: "Browser extension (Firefox, Chrome)",
+      feature: "Works offline",
       recipesage: true,
-      competitor: false,
+      competitor: true,
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
     },
     {
       feature: "RSS-style recipe blog feed reader",
       recipesage: false,
       competitor: true,
       note: "Mela's signature feature. Subscribe to cooking blog feeds and triage new posts inside the app.",
-    },
-    {
-      feature: "Drag-and-drop meal planner",
-      recipesage: true,
-      competitor: "partial",
-      note: "Mela's meal planner uses your device's native calendar. RecipeSage has inbuilt scheduling and can also use your device's calendar.",
-    },
-    {
-      feature: "Smart shopping list with aisle categorization",
-      recipesage: true,
-      competitor: false,
-      note: "Mela's grocery list lives in Apple Reminders as a flat, unsorted list.",
-    },
-    {
-      feature: "Recipe scaling and metric/imperial conversion",
-      recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Built-in nutrition (macros, vitamins, minerals)",
-      recipesage: true,
-      competitor: "partial",
-      note: "Mela stores and displays whatever nutrition text the source page provided but doesn't have any auto-fill support for nutrition.",
-    },
-    {
-      feature: "Multi-household free hosted account",
-      recipesage: true,
-      competitor: false,
-      note: "Mela shares a whole library through iCloud, with no per-recipe permissions or read-only role. Every participant needs an Apple ID and a Mela install.",
-    },
-    {
-      feature: "Works offline",
-      recipesage: true,
-      competitor: true,
     },
     {
       feature: "Open source",
@@ -119,17 +130,6 @@ export const mela: CompetitorData = {
       recipesage: true,
       competitor: true,
       note: "Both are open: Mela exports a documented plain-JSON .melarecipe format, and RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Mela shares through iCloud (everyone needs an Apple ID and Mela) or by sending files.",
-    },
-    {
-      feature: "Cook Mode (full-screen, distraction-free cooking view)",
-      recipesage: true,
-      competitor: true,
     },
     {
       feature: "Built-in kitchen toolkit",

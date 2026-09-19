@@ -29,7 +29,57 @@ export const crouton: CompetitorData = {
       competitor: "Free with a cap, $24.99 one-time Plus, $14.99/year Discover",
     },
     {
+      feature: "Android app",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Windows and Linux",
+      recipesage: true,
+      competitor: false,
+    },
+    {
       feature: "Web app (use from any browser)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Real multi-user collaboration with separate accounts",
+      recipesage: true,
+      competitor: false,
+      note: "Crouton shares libraries through iCloud which is extremely limited. RecipeSage has in-depth sharing permissions and collections.",
+    },
+    {
+      feature: "AI import from a single photo",
+      recipesage: true,
+      competitor: true,
+      note: "RecipeSage's AI photo import is free. Crouton's AI photo import requires the $14.99/year Discover subscription.",
+    },
+    {
+      feature: "Built-in nutrition tracking (macros, vitamins, minerals)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Crouton displays nutrition values pulled from the imported source but has no nutrition database, macro and micronutrient computation, or scaling-aware recalculation.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: "partial",
+      note: "RecipeSage's public profile, link sharing, and website embeds are free. Crouton's shareable recipe links require the paid Discover tier, and it has no website embed.",
+    },
+    {
+      feature: "Smart shopping list with aisle categorization",
+      recipesage: true,
+      competitor: "partial",
+      note: "Crouton's groceries tab syncs with Apple Reminders.",
+    },
+    {
+      feature: "Firefox and Chrome browser extension",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Import from Word documents",
       recipesage: true,
       competitor: false,
     },
@@ -39,23 +89,8 @@ export const crouton: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Android app",
-      recipesage: true,
-      competitor: false,
-    },
-    {
       feature: "macOS app",
       recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Windows and Linux",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Apple Watch app",
-      recipesage: false,
       competitor: true,
     },
     {
@@ -65,25 +100,9 @@ export const crouton: CompetitorData = {
       note: "Crouton's importer compatibility is more limited than RecipeSage's"
     },
     {
-      feature: "AI import from a single photo",
-      recipesage: true,
-      competitor: true,
-      note: "RecipeSage's AI photo import is free. Crouton's AI photo import requires the $14.99/year Discover subscription.",
-    },
-    {
       feature: "Import from PDF",
       recipesage: true,
       competitor: true,
-    },
-    {
-      feature: "Import from Word documents",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Firefox and Chrome browser extension",
-      recipesage: true,
-      competitor: false,
     },
     {
       feature: "Drag-and-drop meal planner",
@@ -91,33 +110,9 @@ export const crouton: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Smart shopping list with aisle categorization",
-      recipesage: true,
-      competitor: "partial",
-      note: "Crouton's groceries tab syncs with Apple Reminders.",
-    },
-    {
       feature: "Recipe scaling and metric/imperial conversion",
       recipesage: true,
       competitor: true,
-    },
-    {
-      feature: "Built-in nutrition tracking (macros, vitamins, minerals)",
-      recipesage: true,
-      competitor: "partial",
-      note: "Crouton displays nutrition values pulled from the imported source but has no nutrition database, macro and micronutrient computation, or scaling-aware recalculation.",
-    },
-    {
-      feature: "RSS-style recipe blog feed reader",
-      recipesage: false,
-      competitor: true,
-      note: "Crouton's Discover tab is a feed reader for recipe blogs with one-tap import. It requires the $14.99/year Discover subscription.",
-    },
-    {
-      feature: "In-app cooking timers and Live Activities",
-      recipesage: false,
-      competitor: true,
-      note: "Crouton auto-detects timers from recipe text and surfaces them on the Lock Screen, Apple Watch, and Vision Pro.",
     },
     {
       feature: "Cook Mode (full-screen, distraction-free cooking view)",
@@ -126,10 +121,21 @@ export const crouton: CompetitorData = {
       note: "Both offer a full-screen cooking view that keeps the screen awake. RecipeSage lets you check off ingredients and steps as you cook and scale servings without leaving, while Crouton adds TrueDepth wink and mouth gestures to advance without touching the screen.",
     },
     {
-      feature: "Real multi-user collaboration with separate accounts",
-      recipesage: true,
-      competitor: false,
-      note: "Crouton shares libraries through iCloud which is extremely limited. RecipeSage has in-depth sharing permissions and collections.",
+      feature: "Apple Watch app",
+      recipesage: false,
+      competitor: true,
+    },
+    {
+      feature: "In-app cooking timers and Live Activities",
+      recipesage: false,
+      competitor: true,
+      note: "Crouton auto-detects timers from recipe text and surfaces them on the Lock Screen, Apple Watch, and Vision Pro.",
+    },
+    {
+      feature: "RSS-style recipe blog feed reader",
+      recipesage: false,
+      competitor: true,
+      note: "Crouton's Discover tab is a feed reader for recipe blogs with one-tap import. It requires the $14.99/year Discover subscription.",
     },
     {
       feature: "Open source",
@@ -146,12 +152,6 @@ export const crouton: CompetitorData = {
       recipesage: true,
       competitor: true,
       note: "Crouton exports a proprietary .crumb file and PDF. RecipeSage supports well-recognized standardized formats including JSON-LD.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: "partial",
-      note: "RecipeSage's public profile, link sharing, and website embeds are free. Crouton's shareable recipe links require the paid Discover tier, and it has no website embed.",
     },
     {
       feature: "Built-in kitchen toolkit",

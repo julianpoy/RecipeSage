@@ -6,14 +6,14 @@ export const evernote: CompetitorData = {
   url: "https://evernote.com/",
   tagline: "Move your recipe notes into an app built for recipes",
   subtitle:
-    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. If you've been keeping recipes in Evernote notes, we'll import your .enex export and give your collection structured ingredients, automatic shopping lists, scaling, and nutrition.",
+    "RecipeSage is a free, open source recipe organizer, meal planner, and shopping list manager. If you've been keeping recipes in Evernote notes, we'll import your .enex export and give your collection structured ingredients, automatic shopping lists, and scaling.",
   seoDescription:
     "Using Evernote for recipes? RecipeSage is a free, open source recipe app with real recipe import, meal planning, and smart shopping lists. Always free.",
   cardSummary:
     "Great note app, not a recipe app. The free tier now caps at 50 notes total, and renewal prices have jumped roughly 70%.",
   intro: [
     "Evernote is a general-purpose note-taking app. Saving recipes in Evernote notes (typed in, clipped from blogs, or photographed from cookbooks) has been one of the most common home-cook patterns for over a decade, and Evernote Food shutting down in 2015 left those users on the regular note app. Since the Bending Spoons takeover in January 2023, the free plan has been capped at 50 notes total on 1 device (December 2023), and long-time paid customers have widely reported renewal increases of around 70% or more.",
-    "My wife and I made RecipeSage as a real recipe app for people in exactly this spot. Notes apps can hold the words of a recipe, but the things home cooks actually want (a shopping list that combines garlic from three recipes, a drag-and-drop weekly plan, 2x scaling, nutrition per serving) only work when ingredients live in structured fields. RecipeSage has a one-click `.enex` importer so your existing Evernote recipes come over without retyping.",
+    "My wife and I made RecipeSage as a real recipe app for people in exactly this spot. Notes apps can hold the words of a recipe, but the things home cooks actually want (a shopping list that combines garlic from three recipes, or 2x scaling) only work when ingredients live in structured fields. RecipeSage has a one-click `.enex` importer so your existing Evernote recipes come over without retyping.",
   ],
   pricingSummary: {
     recipesage:
@@ -33,20 +33,52 @@ export const evernote: CompetitorData = {
       competitor: "50 notes total, 1 notebook, 1 device",
       note: "Free Evernote was capped at 50 notes and 1 notebook in December 2023, and limited to 1 connected device.",
     },
-    { feature: "Web app", recipesage: true, competitor: true },
-    { feature: "iOS app", recipesage: true, competitor: true },
-    { feature: "Android app", recipesage: true, competitor: true },
     {
-      feature: "Firefox and Chrome extension",
+      feature: "Structured ingredient fields",
       recipesage: true,
-      competitor: true,
-      note: "Evernote's Web Clipper saves the full web page. RecipeSage's clipper parses the page into a structured recipe with ingredients and steps.",
+      competitor: false,
+      note: "Evernote stores recipes as free text inside a note. RecipeSage parses ingredients into quantity, unit, and item, which is what unlocks merged shopping lists and scaling.",
     },
     {
       feature: "Auto import recipes from a URL",
       recipesage: true,
       competitor: false,
       note: "Evernote isn't designed for recipe parsing. The Web Clipper can save the page, but it doesn't break it into ingredients, directions, yield, or times.",
+    },
+    {
+      feature: "Smart shopping list with aisle categorization",
+      recipesage: true,
+      competitor: false,
+      note: "Evernote shopping lists are a manually maintained note with checkboxes. No ingredient consolidation across recipes, no aisle grouping, no per-recipe add-to-list.",
+    },
+    {
+      feature: "Drag-and-drop meal planner",
+      recipesage: true,
+      competitor: false,
+      note: "Evernote isn't designed for meal planning. People type meals into a table-shaped note, or paste note links into Google Calendar events.",
+    },
+    {
+      feature: "Recipe scaling and unit conversion",
+      recipesage: true,
+      competitor: false,
+      note: "Evernote doesn't know an ingredient from a paragraph, so it can't rescale quantities.",
+    },
+    {
+      feature: "Nutrition tracking (macros, vitamins, minerals)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: false,
+      note: "Evernote is a general note app with no cooking view.",
+    },
+    {
+      feature: "Firefox and Chrome extension",
+      recipesage: true,
+      competitor: true,
+      note: "Evernote's Web Clipper saves the full web page. RecipeSage's clipper parses the page into a structured recipe with ingredients and steps.",
     },
     {
       feature: "Import recipes from a photo (OCR)",
@@ -61,50 +93,21 @@ export const evernote: CompetitorData = {
       note: "Evernote can attach files to a note, but it doesn't read them as recipes.",
     },
     {
-      feature: "Structured ingredient fields",
-      recipesage: true,
-      competitor: false,
-      note: "Evernote stores recipes as free text inside a note. RecipeSage parses ingredients into quantity, unit, and item, which is what unlocks shopping lists, scaling, and nutrition.",
-    },
-    {
-      feature: "Drag-and-drop meal planner",
-      recipesage: true,
-      competitor: false,
-      note: "Evernote isn't designed for meal planning. People type meals into a table-shaped note, or paste note links into Google Calendar events.",
-    },
-    {
       feature: "Recurring meal plan items",
       recipesage: true,
       competitor: false,
     },
     {
-      feature: "Smart shopping list with aisle categorization",
+      feature: "Built-in kitchen toolkit",
       recipesage: true,
       competitor: false,
-      note: "Evernote shopping lists are a manually maintained note with checkboxes. No ingredient consolidation across recipes, no aisle grouping, no per-recipe add-to-list.",
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Evernote has none of these.",
     },
     {
-      feature: "Recipe scaling and unit conversion",
-      recipesage: true,
-      competitor: false,
-      note: "Evernote doesn't know an ingredient from a paragraph, so it can't rescale quantities.",
-    },
-    {
-      feature: "Nutrition tracking (macros, vitamins, minerals)",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "AI cooking assistant",
+      feature: "Recipe-focused search",
       recipesage: true,
       competitor: "partial",
-      note: "Evernote v11 added a general AI Assistant and semantic search over your notes. They aren't recipe-aware, so there's no scaling, no shopping-list generation, and no cooking mode.",
-    },
-    {
-      feature: "Typo-tolerant search",
-      recipesage: true,
-      competitor: "partial",
-      note: "Evernote's classic search is keyword/operator based. Semantic search exists on paid plans but isn't ingredient-aware.",
+      note: "RecipeSage has typeo tolerant search, search by ingredients you have on hand, a plethora of filtering options to make managing a large collection easy.",
     },
     {
       feature: "Real collaboration with separate accounts",
@@ -118,6 +121,15 @@ export const evernote: CompetitorData = {
       competitor: "partial",
       note: "Evernote desktop apps work offline. Marking specific notebooks offline on mobile requires a paid plan.",
     },
+    {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Evernote has native Windows and Mac apps but no official Linux app. RecipeSage has native apps for all three.",
+    },
+    { feature: "Web app", recipesage: true, competitor: true },
+    { feature: "iOS app", recipesage: true, competitor: true },
+    { feature: "Android app", recipesage: true, competitor: true },
     {
       feature: "Open source",
       recipesage: true,
@@ -135,28 +147,16 @@ export const evernote: CompetitorData = {
       note: "Evernote exports to .enex, which is a documented XML format but specific to Evernote. RecipeSage supports well-recognized standardized recipe formats like JSON-LD.",
     },
     {
-      feature: "Native desktop app (Windows, macOS, Linux)",
-      recipesage: true,
-      competitor: "partial",
-      note: "Evernote has native Windows and Mac apps but no official Linux app. RecipeSage has native apps for all three.",
-    },
-    {
-      feature: "Cook Mode (full-screen, distraction-free cooking view)",
-      recipesage: true,
-      competitor: false,
-      note: "Evernote is a general note app with no cooking view.",
-    },
-    {
-      feature: "Built-in kitchen toolkit",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. Evernote has none of these.",
-    },
-    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
       note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
+    {
+      feature: "AI cooking assistant",
+      recipesage: true,
+      competitor: "partial",
+      note: "Evernote v11 added a general AI Assistant and semantic search over your notes. They aren't recipe-aware, so there's no scaling, no shopping-list generation, and no cooking mode.",
     },
   ],
   whySwitch: [
@@ -170,7 +170,7 @@ export const evernote: CompetitorData = {
     },
     {
       title: "Structure is what unlocks recipe features",
-      body: "A shopping list that combines garlic across three recipes, 2x scaling, nutrition per serving, and an ingredient-aware search all require parsed ingredients. Evernote stores recipes as free text in a note, so none of those features can exist there.",
+      body: "A shopping list that combines garlic across three recipes, 2x scaling, and an ingredient-aware search all require parsed ingredients. Evernote stores recipes as free text in a note, so none of those features can exist there.",
     },
     {
       title: "A real meal planner instead of a typed table",
@@ -202,10 +202,6 @@ export const evernote: CompetitorData = {
       title: "A real general-purpose note app",
       body: "Evernote is genuinely good at meeting notes, journals, scanned documents, and project notes. RecipeSage is recipes-only by design, so Evernote stays useful for everything that isn't a recipe.",
     },
-    {
-      title: "OCR search across scanned cookbook pages",
-      body: "Evernote indexes text inside scanned images and PDFs, so a photo of a cookbook page is searchable. RecipeSage's photo import parses recipes into structured fields, which is a different (and we'd argue more useful) thing for cooking, but Evernote's blanket OCR over arbitrary images is a real strength.",
-    },
   ],
   migration: {
     headline: "Bringing your Evernote recipes over",
@@ -231,12 +227,11 @@ export const evernote: CompetitorData = {
     docsUrl: "https://docs.recipesage.com/docs/tutorials/settings/import/evernote/",
     docsLabel: "Read the full Evernote import guide",
     importUrl: "/app/settings/import/enex",
-    note: "Because Evernote stores recipes as free text, the importer can't magically split a note into ingredient and direction fields. The content, title, and images all come across, and you can structure individual recipes afterward to take advantage of shopping lists, scaling, and nutrition. Free Evernote users with more than 50 notes can still export everything they already have.",
   },
   faqs: [
     {
       q: "Will my Evernote notes come over as proper recipes?",
-      a: "Each note becomes a recipe with its title, content, and images preserved. Because Evernote stores recipes as free-form notes, structured fields like ingredients and directions are inferred where possible, but some recipes will need a quick edit to take full advantage of shopping lists, scaling, and nutrition.",
+      a: "Each note becomes a recipe with its title, content, and images preserved. Because Evernote stores recipes as free-form notes, structured fields like ingredients and directions are inferred where possible, but some recipes will need a quick edit to take full advantage of shopping lists and scaling.",
     },
     {
       q: "Can I keep using Evernote for non-recipe notes?",

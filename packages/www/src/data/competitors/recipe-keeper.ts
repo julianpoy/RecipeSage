@@ -28,9 +28,9 @@ export const recipeKeeper: CompetitorData = {
       competitor: "Free up to 20 recipes, then paid per platform",
     },
     {
-      feature: "Web app (use from any browser)",
-      recipesage: true,
-      competitor: false,
+      feature: "Free tier recipe cap",
+      recipesage: "No cap",
+      competitor: "20 recipes",
     },
     { feature: "iOS app", recipesage: "Free", competitor: "$19.99 Pro" },
     { feature: "Android app", recipesage: "Free", competitor: "$19.99 Pro" },
@@ -46,15 +46,55 @@ export const recipeKeeper: CompetitorData = {
       note: "Recipe Keeper does not enable Family Sharing. Each Apple ID needs its own Pro upgrade.",
     },
     {
-      feature: "Free tier recipe cap",
-      recipesage: "No cap",
-      competitor: "20 recipes",
+      feature: "Web app (use from any browser)",
+      recipesage: true,
+      competitor: false,
     },
     {
       feature: "Firefox and Chrome extension",
       recipesage: true,
       competitor: false,
       note: "Recipe Keeper has no official browser extension so no convenient way of clipping recipes.",
+    },
+    {
+      feature: "Real multi-user collaboration",
+      recipesage: true,
+      competitor: false,
+      note: "Recipe Keeper's only path to share a library is to sign multiple devices into the same account.",
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: "partial",
+      note: "Recipe Keeper offers hands-free cooking through an Amazon Alexa skill. RecipeSage has an on-device Cook Mode that shows the ingredients and steps together, lets you check off each as you cook, scale on the fly, and keeps the screen awake with a large adjustable font.",
+    },
+    {
+      feature: "Import from Word documents",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Typo-tolerant search",
+      recipesage: true,
+      competitor: false,
+      note: "Recipe Keeper's search is substring-based on the indexed fields, not fuzzy.",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Recipe Keeper shares one recipe at a time by email or social, with no public profile or embed.",
+    },
+    {
+      feature: "Recurring meal plan items",
+      recipesage: true,
+      competitor: "partial",
+    },
+    {
+      feature: "Built-in kitchen toolkit",
+      recipesage: true,
+      competitor: "partial",
+      note: "Recipe Keeper converts units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
     },
     {
       feature: "Auto import from a URL",
@@ -72,19 +112,9 @@ export const recipeKeeper: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Import from Word documents",
-      recipesage: true,
-      competitor: false,
-    },
-    {
       feature: "Drag-and-drop meal planner",
       recipesage: true,
       competitor: true,
-    },
-    {
-      feature: "Recurring meal plan items",
-      recipesage: true,
-      competitor: "partial",
     },
     {
       feature: "Smart shopping list with aisle categorization",
@@ -102,18 +132,6 @@ export const recipeKeeper: CompetitorData = {
       competitor: true,
     },
     {
-      feature: "Typo-tolerant search",
-      recipesage: true,
-      competitor: false,
-      note: "Recipe Keeper's search is substring-based on the indexed fields, not fuzzy.",
-    },
-    {
-      feature: "Real multi-user collaboration",
-      recipesage: true,
-      competitor: false,
-      note: "Recipe Keeper's only path to share a library is to sign multiple devices into the same account.",
-    },
-    {
       feature: "Works offline",
       recipesage: true,
       competitor: true,
@@ -128,24 +146,6 @@ export const recipeKeeper: CompetitorData = {
       recipesage: true,
       competitor: "partial",
       note: "Recipe Keeper exports an undocumented .zip with an HTML file and an images folder. RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Recipe Keeper shares one recipe at a time by email or social, with no public profile or embed.",
-    },
-    {
-      feature: "Cook Mode (full-screen, distraction-free cooking view)",
-      recipesage: true,
-      competitor: "partial",
-      note: "Recipe Keeper offers hands-free cooking through an Amazon Alexa skill. RecipeSage has an on-device Cook Mode that shows the ingredients and steps together, lets you check off each as you cook, scale on the fly, and keeps the screen awake with a large adjustable font.",
-    },
-    {
-      feature: "Built-in kitchen toolkit",
-      recipesage: true,
-      competitor: "partial",
-      note: "Recipe Keeper converts units. RecipeSage's toolkit adds a pan and bakeware converter that suggests bake time and temperature adjustments and a cooking-temperature reference for safe internal temperatures.",
     },
     {
       feature: "Printable PDF cookbook generator",

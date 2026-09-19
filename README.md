@@ -19,7 +19,7 @@ Share and collaborate on recipes, manage household shopping lists and meal plann
 - **Labelling/categorization system**: Tag your recipes and filter by tags
 - **Rich text in ingredients, instructions, and notes**: Bold, italic, underline, tables, and embedded images
 - **Sharing and public profiles**: Share your recipe collection and collaborate on meal plans/shopping lists with your family or friends
-- **Import**: Supports JSON-LD, Pepperplate, Living Cookbook, Paprika, Cookmate, Recipe Keeper, CopyMeThat, Evernote, and CSV as import formats
+- **Import**: Supports Paprika, Mela, Crouton, Recipe Keeper, CopyMeThat, Cookmate, CookBookManager, Flavorish, Pepperplate, Living Cookbook, Plan to Eat, MyRecipeBox, Evernote, and Tandoor, plus notes apps and documents (Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote), JSON-LD, and CSV
 - **Export**: Back up your recipes to PDF, JSON-LD, or text for data portability
 - **Dark mode**: Never blind yourself at night again! _(or leave dark mode enabled all the time like I do)_
 

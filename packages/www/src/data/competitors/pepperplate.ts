@@ -27,7 +27,11 @@ export const pepperplate: CompetitorData = {
       recipesage: "Free, open source",
       competitor: "$33 per year",
     },
-    { feature: "Web app", recipesage: true, competitor: true },
+    {
+      feature: "Actively developed",
+      recipesage: true,
+      competitor: false,
+    },
     {
       feature: "iOS app",
       recipesage: true,
@@ -40,25 +44,16 @@ export const pepperplate: CompetitorData = {
       competitor: "partial",
     },
     {
-      feature: "Actively developed",
+      feature: "Data portability",
       recipesage: true,
-      competitor: false,
+      competitor: "Plain-text .zip",
+      note: "Pepperplate's only export is a .zip of unstructured plain-text files that other apps can't reliably re-import. RecipeSage supports well-recognized standardized formats.",
     },
     {
       feature: "Auto import from a URL",
       recipesage: true,
       competitor: "partial",
       note: "Pepperplate imports from a limited set of supported sites. RecipeSage's URL importer covers a wider range.",
-    },
-    {
-      feature: "Import from a photo (OCR)",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Import from PDF and Word documents",
-      recipesage: true,
-      competitor: false,
     },
     {
       feature: "Firefox and Chrome extension",
@@ -71,17 +66,22 @@ export const pepperplate: CompetitorData = {
       competitor: "partial",
     },
     {
-      feature: "Recurring meal plan items",
-      recipesage: true,
-      competitor: false,
-    },
-    {
       feature: "Smart shopping list with aisle categorization",
       recipesage: true,
       competitor: "partial",
     },
     {
-      feature: "Nutrition tracking",
+      feature: "Import from a photo (OCR)",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Import from PDF and Word documents",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Recurring meal plan items",
       recipesage: true,
       competitor: false,
     },
@@ -91,36 +91,19 @@ export const pepperplate: CompetitorData = {
       competitor: false,
     },
     {
+      feature: "Nutrition tracking",
+      recipesage: true,
+      competitor: false,
+    },
+    {
       feature: "Real collaboration with named users",
       recipesage: true,
       competitor: false,
     },
     {
-      feature: "Works offline",
-      recipesage: true,
-      competitor: "partial",
-    },
-    {
       feature: "Open source",
       recipesage: true,
       competitor: false,
-    },
-    {
-      feature: "Self-hostable",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Data portability",
-      recipesage: true,
-      competitor: "Plain-text .zip",
-      note: "Pepperplate's only export is a .zip of unstructured plain-text files that other apps can't reliably re-import. RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Pepperplate shares one recipe at a time by email or social post, with no public profile or embed.",
     },
     {
       feature: "Native desktop app (Windows, macOS, Linux)",
@@ -129,10 +112,27 @@ export const pepperplate: CompetitorData = {
       note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. Pepperplate is web and mobile only.",
     },
     {
+      feature: "Works offline",
+      recipesage: true,
+      competitor: "partial",
+    },
+    {
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage gives you a public profile to share a recipe, a label, or your whole collection by link, plus website embed codes. Pepperplate shares one recipe at a time by email or social post, with no public profile or embed.",
+    },
+    { feature: "Web app", recipesage: true, competitor: true },
+    {
       feature: "Cook Mode (full-screen, distraction-free cooking view)",
       recipesage: true,
       competitor: true,
       note: "Both offer a cook mode that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
+    },
+    {
+      feature: "Self-hostable",
+      recipesage: true,
+      competitor: false,
     },
     {
       feature: "Built-in kitchen toolkit",

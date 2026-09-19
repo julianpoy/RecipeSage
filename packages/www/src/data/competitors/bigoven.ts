@@ -28,16 +28,16 @@ export const bigoven: CompetitorData = {
       competitor: "Free up to 200 recipes with ads, $24.99/year for Pro",
     },
     {
-      feature: "Completely ad-free",
-      recipesage: true,
-      competitor: false,
-      note: "BigOven shows video pop-ups and ads on printed recipes.",
-    },
-    {
       feature: "Unlimited saved recipes",
       recipesage: true,
       competitor: false,
       note: "BigOven caps free-tier at 200 recipes.",
+    },
+    {
+      feature: "Completely ad-free",
+      recipesage: true,
+      competitor: false,
+      note: "BigOven shows video pop-ups and ads on printed recipes.",
     },
     {
       feature: "Custom folders / labels on the free tier",
@@ -50,14 +50,11 @@ export const bigoven: CompetitorData = {
       recipesage: true,
       competitor: false,
     },
-    { feature: "Web app", recipesage: true, competitor: true },
-    { feature: "iOS app", recipesage: true, competitor: true },
-    { feature: "Android app", recipesage: true, competitor: true },
     {
-      feature: "Auto import from a URL",
+      feature: "Ingredient-level nutrition tracking",
       recipesage: true,
-      competitor: true,
-      note: "RecipeSage's URL importer supports a wider range of recipe sites.",
+      competitor: "partial",
+      note: "Ingredient-by-ingredient Nutrition Insight requires Pro.",
     },
     {
       feature: "Instant photo import (OCR)",
@@ -71,69 +68,10 @@ export const bigoven: CompetitorData = {
       competitor: false,
     },
     {
-      feature: "Real Firefox and Chrome extension",
-      recipesage: true,
-      competitor: false,
-      note: "BigOven offers a less-capable bookmarklet, not a real extension.",
-    },
-    {
       feature: "Data portability",
       recipesage: true,
       competitor: false,
       note: "BigOven's cloud product has no bulk export. RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Drag-and-drop meal planner",
-      recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Recurring meal plan items",
-      recipesage: true,
-      competitor: "partial",
-    },
-    {
-      feature: "Smart shopping list",
-      recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Multi-account sharing",
-      recipesage: true,
-      competitor: "partial",
-      note: "Multi-account sharing requires BigOven Pro.",
-    },
-    {
-      feature: "Ingredient-level nutrition tracking",
-      recipesage: true,
-      competitor: "partial",
-      note: "Ingredient-by-ingredient Nutrition Insight requires Pro.",
-    },
-    {
-      feature: "Typo-tolerant search",
-      recipesage: true,
-      competitor: "partial",
-    },
-    {
-      feature: "Works offline",
-      recipesage: true,
-      competitor: "partial",
-    },
-    {
-      feature: "Open source",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Self-hostable",
-      recipesage: true,
-      competitor: false,
-    },
-    {
-      feature: "Native desktop app (Windows, macOS, Linux)",
-      recipesage: true,
-      competitor: "partial",
-      note: "BigOven has a native Windows app, while Mac and Linux use the browser. RecipeSage has native apps for all three.",
     },
     {
       feature: "Cook Mode (full-screen, distraction-free cooking view)",
@@ -147,10 +85,72 @@ export const bigoven: CompetitorData = {
       note: "BigOven converts units within a recipe. RecipeSage's toolkit adds a measurement converter, a pan and bakeware converter that suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures.",
     },
     {
+      feature: "Real Firefox and Chrome extension",
+      recipesage: true,
+      competitor: false,
+      note: "BigOven offers a less-capable bookmarklet, not a real extension.",
+    },
+    {
+      feature: "Multi-account sharing",
+      recipesage: true,
+      competitor: "partial",
+      note: "Multi-account sharing requires BigOven Pro.",
+    },
+    {
       feature: "Printable PDF cookbook generator",
       recipesage: true,
       competitor: false,
       note: "RecipeSage's Cookbook Generator compiles your recipes into one printable PDF with a cover page, optional table of contents, and each recipe on its own page.",
+    },
+    {
+      feature: "Auto import from a URL",
+      recipesage: true,
+      competitor: true,
+      note: "RecipeSage's URL importer supports a wider range of recipe sites.",
+    },
+    {
+      feature: "Recurring meal plan items",
+      recipesage: true,
+      competitor: "partial",
+    },
+    {
+      feature: "Typo-tolerant search",
+      recipesage: true,
+      competitor: "partial",
+    },
+    {
+      feature: "Works offline",
+      recipesage: true,
+      competitor: "partial",
+    },
+    {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "BigOven is web and mobile only. Its Windows app was discontinued in 2016.",
+    },
+    {
+      feature: "Drag-and-drop meal planner",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Smart shopping list",
+      recipesage: true,
+      competitor: true,
+    },
+    { feature: "Web app", recipesage: true, competitor: true },
+    { feature: "iOS app", recipesage: true, competitor: true },
+    { feature: "Android app", recipesage: true, competitor: true },
+    {
+      feature: "Open source",
+      recipesage: true,
+      competitor: false,
+    },
+    {
+      feature: "Self-hostable",
+      recipesage: true,
+      competitor: false,
     },
   ],
   whySwitch: [

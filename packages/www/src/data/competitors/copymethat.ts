@@ -27,9 +27,6 @@ export const copymethat: CompetitorData = {
       recipesage: "Free, open source",
       competitor: "Free up to 40 recipes, then paid",
     },
-    { feature: "Web app", recipesage: true, competitor: true },
-    { feature: "iOS app", recipesage: true, competitor: true },
-    { feature: "Android app", recipesage: true, competitor: true },
     {
       feature: "Unlimited recipes on the free tier",
       recipesage: true,
@@ -38,11 +35,6 @@ export const copymethat: CompetitorData = {
     },
     {
       feature: "Firefox and Chrome extension",
-      recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Auto import from any URL",
       recipesage: true,
       competitor: true,
     },
@@ -62,19 +54,14 @@ export const copymethat: CompetitorData = {
       competitor: false,
     },
     {
-      feature: "Drag-and-drop meal planner",
-      recipesage: true,
-      competitor: true,
-    },
-    {
-      feature: "Recurring meal plan items",
+      feature: "Works offline",
       recipesage: true,
       competitor: false,
     },
     {
-      feature: "Smart shopping list",
+      feature: "Nutrition tracking (macros, vitamins, minerals)",
       recipesage: true,
-      competitor: true,
+      competitor: false,
     },
     {
       feature: "Editable aisle categorization",
@@ -82,12 +69,19 @@ export const copymethat: CompetitorData = {
       competitor: false,
     },
     {
-      feature: "Recipe scaling and unit conversion",
+      feature: "Real multi-user collaboration with separate accounts",
       recipesage: true,
-      competitor: true,
+      competitor: false,
+      note: "CopyMeThat family sharing means logging into one shared account.",
     },
     {
-      feature: "Nutrition tracking (macros, vitamins, minerals)",
+      feature: "Public sharing by link or embed, no account needed",
+      recipesage: true,
+      competitor: "partial",
+      note: "CopyMeThat can share a recipe link, but people without an account see only the image, source link, and ingredients, and there's no website embed.",
+    },
+    {
+      feature: "Recurring meal plan items",
       recipesage: true,
       competitor: false,
     },
@@ -97,9 +91,45 @@ export const copymethat: CompetitorData = {
       competitor: "partial",
     },
     {
-      feature: "Works offline",
+      feature: "Built-in kitchen toolkit",
       recipesage: true,
       competitor: false,
+      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. CopyMeThat has none of these.",
+    },
+    {
+      feature: "Native desktop app (Windows, macOS, Linux)",
+      recipesage: true,
+      competitor: false,
+      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. CopyMeThat is a web app (installable) and mobile only.",
+    },
+    {
+      feature: "Auto import from any URL",
+      recipesage: true,
+      competitor: true,
+    },
+    { feature: "Web app", recipesage: true, competitor: true },
+    { feature: "iOS app", recipesage: true, competitor: true },
+    { feature: "Android app", recipesage: true, competitor: true },
+    {
+      feature: "Drag-and-drop meal planner",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Smart shopping list",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Recipe scaling and unit conversion",
+      recipesage: true,
+      competitor: true,
+    },
+    {
+      feature: "Cook Mode (full-screen, distraction-free cooking view)",
+      recipesage: true,
+      competitor: true,
+      note: "Both offer a cook mode that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
     },
     {
       feature: "Open source",
@@ -116,36 +146,6 @@ export const copymethat: CompetitorData = {
       recipesage: true,
       competitor: "HTML zip",
       note: "CopyMeThat exports an HTML zip. RecipeSage supports well-recognized standardized formats.",
-    },
-    {
-      feature: "Real multi-user collaboration with separate accounts",
-      recipesage: true,
-      competitor: false,
-      note: "CopyMeThat family sharing means logging into one shared account.",
-    },
-    {
-      feature: "Public sharing by link or embed, no account needed",
-      recipesage: true,
-      competitor: "partial",
-      note: "CopyMeThat can share a recipe link, but people without an account see only the image, source link, and ingredients, and there's no website embed.",
-    },
-    {
-      feature: "Native desktop app (Windows, macOS, Linux)",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage has native desktop apps for Windows, macOS, and Linux. CopyMeThat is a web app (installable) and mobile only.",
-    },
-    {
-      feature: "Cook Mode (full-screen, distraction-free cooking view)",
-      recipesage: true,
-      competitor: true,
-      note: "Both offer a cook mode that keeps the screen awake. RecipeSage's also lets you check off ingredients and steps as you cook and scale servings without leaving.",
-    },
-    {
-      feature: "Built-in kitchen toolkit",
-      recipesage: true,
-      competitor: false,
-      note: "RecipeSage's toolkit includes a measurement converter, a pan and bakeware converter that rescales ingredients and suggests bake time and temperature adjustments, and a cooking-temperature reference for safe internal temperatures. CopyMeThat has none of these.",
     },
     {
       feature: "Printable PDF cookbook generator",
