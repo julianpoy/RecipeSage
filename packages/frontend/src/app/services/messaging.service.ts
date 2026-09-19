@@ -16,7 +16,7 @@ import { AlertController } from "@ionic/angular/standalone";
 
 import { ServerActionsService } from "./server-actions.service";
 import { EventName, EventService } from "./event.service";
-import { RouteMap } from "./util.service";
+import { RouteMap, UtilService } from "./util.service";
 import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
@@ -26,6 +26,7 @@ export class MessagingService {
   private events = inject(EventService);
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
+  private utilService = inject(UtilService);
   private alertCtrl = inject(AlertController);
   private router = inject(Router);
   private ngZone = inject(NgZone);
@@ -95,6 +96,16 @@ export class MessagingService {
       },
     );
 
+    this.events.subscribe(EventName.Auth, async () => {
+      if (!this.utilService.isLoggedIn()) return;
+
+      const { receive } = await FirebaseMessaging.checkPermissions();
+      this.nativePermissionGranted = receive === "granted";
+      if (this.nativePermissionGranted) {
+        void this.updateToken();
+      }
+    });
+
     if (this.nativePermissionGranted) {
       void this.updateToken();
     }
@@ -134,8 +145,14 @@ export class MessagingService {
   private async onNativeTokenReceived(token: string) {
     if (!token) return;
     this.fcmToken = token;
+    if (!this.utilService.isLoggedIn()) return;
     try {
-      await this.serverActionsService.users.saveFCMToken({ fcmToken: token });
+      await this.serverActionsService.users.saveFCMToken(
+        { fcmToken: token },
+        {
+          "*": () => {},
+        },
+      );
     } catch (err) {
       console.log("Unable to save refreshed notification token. ", err);
     }
@@ -296,9 +313,16 @@ export class MessagingService {
 
       this.fcmToken = currentToken;
 
-      await this.serverActionsService.users.saveFCMToken({
-        fcmToken: currentToken,
-      });
+      if (!this.utilService.isLoggedIn()) return;
+
+      await this.serverActionsService.users.saveFCMToken(
+        {
+          fcmToken: currentToken,
+        },
+        {
+          "*": () => {},
+        },
+      );
     } catch (err) {
       console.log("Unable to get notification token. ", err);
     }
