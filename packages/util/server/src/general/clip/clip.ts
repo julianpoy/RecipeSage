@@ -16,6 +16,7 @@ import {
   extractPageText,
   PageText,
 } from "./htmlExtract";
+import { cleanRecipeFields } from "./cleanRecipeFields";
 import { htmlmetaparserToRecipe } from "./htmlmetaparserToRecipe";
 import { isRecipeGrounded } from "./isRecipeGrounded";
 import { normalizeClipUrl } from "./normalizeClipUrl";
@@ -228,6 +229,7 @@ export const clipUrl = async (
       method: "pdf",
     });
 
+    result.recipe = cleanRecipeFields(result.recipe);
     result.recipe.url = normalizedUrl;
 
     if (isCompleteRecipe(result)) await cacheResult(result);
@@ -268,6 +270,7 @@ export const clipUrl = async (
       method: "image",
     });
 
+    result.recipe = cleanRecipeFields(result.recipe);
     result.recipe.url = normalizedUrl;
     result.images.push(normalizedUrl);
 
@@ -407,16 +410,22 @@ export const clipHtml = async (
 
         if (!result) continue;
 
+        result.recipe = cleanRecipeFields(result.recipe);
+
+        const hasContent = !!(
+          result.recipe.ingredients || result.recipe.instructions
+        );
         const usable = !!(
           result.recipe.ingredients && result.recipe.instructions
         );
-        const grounded = isRecipeGrounded(result.recipe, getPageText().text);
+        const grounded =
+          hasContent && isRecipeGrounded(result.recipe, getPageText().text);
 
         if (usable && grounded) {
           return [name, result];
         }
 
-        if (name === "llm" && !grounded) {
+        if (name === "llm" && hasContent && !grounded) {
           metrics.clipUngrounded.inc({
             form,
           });
