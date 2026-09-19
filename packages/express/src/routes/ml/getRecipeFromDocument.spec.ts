@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import express from "express";
 import request from "supertest";
+import { ExtractTextFromDocumentError } from "@recipesage/util/server/general";
 import { readdir } from "fs/promises";
 import { tmpdir } from "os";
 
@@ -193,8 +194,6 @@ describe("POST /ml/getRecipeFromDocument", () => {
   });
 
   it("returns 400 when extraction throws ExtractTextFromDocumentError", async () => {
-    const { ExtractTextFromDocumentError } =
-      await import("@recipesage/util/server/general");
     documentToRecipeMock.mockRejectedValue(
       new ExtractTextFromDocumentError("pandoc failed"),
     );

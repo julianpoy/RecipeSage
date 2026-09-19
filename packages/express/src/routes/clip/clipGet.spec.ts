@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import express from "express";
 import bodyParser from "body-parser";
 import request from "supertest";
+import {
+  ClipFetchError,
+  ClipTimeoutError,
+} from "@recipesage/util/server/general";
 
 const clipUrlMock = vi.fn();
 
@@ -129,8 +133,6 @@ describe("GET /clip", () => {
   });
 
   it("returns 400 when clipUrl throws ClipTimeoutError", async () => {
-    const { ClipTimeoutError } =
-      await import("@recipesage/util/server/general");
     clipUrlMock.mockRejectedValue(new ClipTimeoutError());
 
     const app = await buildApp();
@@ -143,7 +145,6 @@ describe("GET /clip", () => {
   });
 
   it("returns 400 when clipUrl throws ClipFetchError", async () => {
-    const { ClipFetchError } = await import("@recipesage/util/server/general");
     clipUrlMock.mockRejectedValue(new ClipFetchError());
 
     const app = await buildApp();
