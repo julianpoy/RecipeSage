@@ -5,9 +5,12 @@ import { JsonLD, jsonLDToStandardizedRecipeImportEntry } from "../jsonLD";
 import { collectRecipeNodes } from "../collectRecipeNodes";
 import { recipeGroundingScore } from "./isRecipeGrounded";
 
+const NULL_CHAR = "\u0000";
+
 const cleanText = (value: string): string =>
   he
     .decode(value.replace(/<\/?[a-zA-Z][^>]*>/g, " "))
+    .replaceAll(NULL_CHAR, "")
     .replace(/[^\S\n]+/g, " ")
     .trim();
 

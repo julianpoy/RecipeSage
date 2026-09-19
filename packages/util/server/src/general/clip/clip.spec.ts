@@ -231,4 +231,63 @@ describe("clipHtml grounding gate", () => {
     expect(result.recipe.title).toBe("Hidden Casserole");
     expect(result.recipe.ingredients).toContain("macaroni");
   });
+
+  it("strips null characters escaped within JSON-LD", async () => {
+    const jsonLd = {
+      "@type": "Recipe",
+      name: "Null\u0000 Soup",
+      recipeIngredient: [
+        "2 large carrots, peeled\u0000 and diced",
+        "1 yellow onion, chopped",
+      ],
+      recipeInstructions:
+        "Simmer the carrots and onion in broth\u0000 until tender.",
+    };
+    const html = `<html><body>
+      <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+      <h1>Null Soup</h1>
+      <p>2 large carrots, peeled and diced</p>
+      <p>1 yellow onion, chopped</p>
+      <p>Simmer the carrots and onion in broth until tender.</p>
+    </body></html>`;
+
+    const { clipHtml } = await import("./clip");
+    const result = await clipHtml(html);
+
+    expect(textToRecipeMock).not.toHaveBeenCalled();
+    expect(result.recipe.title).toBe("Null Soup");
+    expect(result.recipe.ingredients).toContain("peeled and diced");
+    expect(result.recipe.instructions).toContain("broth until tender");
+    expect(JSON.stringify(result)).not.toContain("\\u0000");
+  });
+
+  it("strips raw null characters from the page before extraction", async () => {
+    const html = `<html><body>
+      <h1>Easy\u0000 Pancakes</h1>
+      <p>1 cup all purpose\u0000 flour</p>
+      <p>1 tablespoon white granulated sugar</p>
+      <p>Mix the flour and sugar together in a large bowl.</p>
+      <p>Cook on a hot griddle until golden brown on both sides.</p>
+    </body></html>`;
+
+    textToRecipeMock.mockResolvedValue(
+      llmEntry({
+        title: "Easy Pancakes",
+        ingredients:
+          "1 cup all purpose flour\n1 tablespoon white granulated sugar",
+        instructions:
+          "Mix the flour and sugar together in a large bowl.\nCook on a hot griddle until golden brown on both sides.",
+      }),
+    );
+
+    const { clipHtml } = await import("./clip");
+    const result = await clipHtml(html);
+
+    expect(textToRecipeMock).toHaveBeenCalledOnce();
+    expect(textToRecipeMock.mock.calls[0][0]).toContain(
+      "1 cup all purpose flour",
+    );
+    expect(textToRecipeMock.mock.calls[0][0]).not.toContain("\u0000");
+    expect(result.recipe.title).toBe("Easy Pancakes");
+  });
 });

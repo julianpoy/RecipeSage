@@ -22,6 +22,7 @@ import { normalizeClipUrl } from "./normalizeClipUrl";
 import type { Result } from "htmlmetaparser";
 
 const CLIP_CACHE_VERSION = 1;
+const NULL_CHAR = "\u0000";
 
 const hashUrl = (url: string) => createHash("sha256").update(url).digest();
 
@@ -287,10 +288,11 @@ export const clipUrl = async (
 };
 
 export const clipHtml = async (
-  htmlDocument: string,
+  rawHtmlDocument: string,
   url?: string,
   captureError?: (method: string, error: unknown) => void,
 ): Promise<StandardizedRecipeImportEntry> => {
+  const htmlDocument = rawHtmlDocument.replaceAll(NULL_CHAR, "");
   const form = url ? "url" : "html";
 
   if (!url) {
