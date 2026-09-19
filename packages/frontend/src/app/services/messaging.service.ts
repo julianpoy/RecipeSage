@@ -251,9 +251,14 @@ export class MessagingService {
         console.log("Unable to delete notification token. ", err);
       }
       if (token) {
-        await this.serverActionsService.users.removeFCMToken({
-          fcmToken: token,
-        });
+        await this.serverActionsService.users.removeFCMToken(
+          {
+            fcmToken: token,
+          },
+          {
+            "*": () => {},
+          },
+        );
       }
       this.fcmToken = undefined;
       return;
@@ -262,7 +267,12 @@ export class MessagingService {
     if (!this.messaging) return;
     if (!token) return;
 
-    await this.serverActionsService.users.removeFCMToken({ fcmToken: token });
+    await this.serverActionsService.users.removeFCMToken(
+      { fcmToken: token },
+      {
+        "*": () => {},
+      },
+    );
     this.fcmToken = undefined;
   }
 

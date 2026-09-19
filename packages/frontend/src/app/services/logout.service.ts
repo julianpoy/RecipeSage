@@ -13,7 +13,7 @@ export class LogoutService {
   private events = inject(EventService);
 
   async logout(): Promise<void> {
-    this.messagingService.disableNotifications();
+    await this.messagingService.disableNotifications();
 
     this.serverActionsService.users.logout({
       "*": () => {},
