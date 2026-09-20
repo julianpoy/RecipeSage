@@ -187,7 +187,7 @@ export class RecipesActionsService extends ActionsBase {
 
         if (ratings) {
           recipes = recipes.filter((recipe) => {
-            return ratings.includes(recipe.rating);
+            return ratings.includes(recipe.rating || null);
           });
         }
 
@@ -427,7 +427,7 @@ export class RecipesActionsService extends ActionsBase {
 
         if (ratings) {
           recipes = recipes.filter((recipe) => {
-            return ratings.includes(recipe.rating);
+            return ratings.includes(recipe.rating || null);
           });
         }
 
