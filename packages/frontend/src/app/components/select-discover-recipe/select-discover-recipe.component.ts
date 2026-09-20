@@ -3,6 +3,7 @@ import { LoadingService } from "../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { RouterOutputs } from "../../services/server-actions/actions-base";
+import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 import {
   IonItem,
   IonAvatar,
@@ -44,6 +45,8 @@ export class SelectDiscoverRecipeComponent {
   searchText = "";
   searching = false;
   PAUSE_BEFORE_SEARCH = 500;
+
+  readonly searchTermMaxLength = SEARCH_TERM_LENGTH_LIMIT;
 
   private UUID_REGEX =
     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;

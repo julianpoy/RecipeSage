@@ -91,6 +91,7 @@
           enterkeyhint="search"
           inputmode="search"
           type="search"
+          [attr.maxlength]="searchTermMaxLength"
           (ionClear)="search('')"
           (keydown.enter)="searchFieldEnter($event)"
         ></ion-searchbar>

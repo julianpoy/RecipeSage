@@ -7,6 +7,7 @@ import {
   prismaDiscoverRecipeToSummary,
 } from "./discoverRecipeSchemas";
 import { discoverPubliclyVisibleSql } from "@recipesage/util/server/db";
+import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 
 const buildTsQuery = (searchTerm: string): string | undefined => {
   const tokens = searchTerm
@@ -32,7 +33,7 @@ export const searchDiscoverRecipes = publicProcedure
   })
   .input(
     z.object({
-      searchTerm: z.string().max(255).optional(),
+      searchTerm: z.string().max(SEARCH_TERM_LENGTH_LIMIT).optional(),
       languages: z.array(z.string().max(35)).max(20).optional(),
       categories: z.array(z.string().max(255)).max(20).optional(),
       matchAllCategories: z.boolean().optional(),

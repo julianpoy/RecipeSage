@@ -13,6 +13,7 @@ import {
   recipeSummaryLite,
   recipeSummaryLiteSchema,
 } from "@recipesage/prisma";
+import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 
 export const searchRecipes = publicProcedure
   .meta({
@@ -26,7 +27,7 @@ export const searchRecipes = publicProcedure
   })
   .input(
     z.object({
-      searchTerm: z.string().min(1).max(255),
+      searchTerm: z.string().min(1).max(SEARCH_TERM_LENGTH_LIMIT),
       userIds: z.array(z.uuid()).optional(),
       folder: z.enum(["main", "inbox"]),
       labels: z.array(z.string()).optional(),

@@ -18,6 +18,7 @@ import {
   MyRecipesPreferenceKey,
   GlobalPreferenceKey,
   isRtlText,
+  SEARCH_TERM_LENGTH_LIMIT,
 } from "@recipesage/util/shared";
 import { HomePopoverPage } from "../home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "../home-search-popover/home-search-filter-popover.page";
@@ -132,6 +133,7 @@ export class HomePage implements OnDestroy {
   selectionMode = false;
 
   searchText = "";
+  readonly searchTermMaxLength = SEARCH_TERM_LENGTH_LIMIT;
 
   folder: "main" | "inbox" = "main";
 

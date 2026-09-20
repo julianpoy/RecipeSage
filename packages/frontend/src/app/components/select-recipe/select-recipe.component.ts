@@ -7,6 +7,7 @@ import type {
   RecipeSummaryLite,
   UserPublic,
 } from "@recipesage/prisma";
+import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 import {
   IonItem,
   IonAvatar,
@@ -51,6 +52,8 @@ export class SelectRecipeComponent {
   searchText = "";
   searching = false;
   PAUSE_BEFORE_SEARCH = 500;
+
+  readonly searchTermMaxLength = SEARCH_TERM_LENGTH_LIMIT;
 
   @Input() includeAllFriends = false;
   @Input() enableSelectedState = true;

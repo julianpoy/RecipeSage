@@ -31,6 +31,7 @@
         (ionInput)="onSearchInputChange()"
         placeholder="{{ 'components.selectRecipe.search' | translate }}"
         autocomplete="off"
+        [attr.maxlength]="searchTermMaxLength"
       ></ion-searchbar>
       <div class="ion-padding-start ion-padding-end">
         @if (searchText.length) {
