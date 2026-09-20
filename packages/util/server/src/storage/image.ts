@@ -1,7 +1,9 @@
 import { StorageObjectRecord, writeBuffer } from "./index";
 import { ObjectTypes } from "./shared";
+import { AbortError } from "node-fetch";
 import {
   fetchURL,
+  FetchTimeoutError,
   transformImageBuffer,
   transformImageFile,
   fetchBufferViaScrapfly,
@@ -51,27 +53,36 @@ export const writeImageURL = async (
   url: string,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const response = await fetchURL(url, {
-    timeout: WRITE_IMAGE_URL_TIMEOUT_SECONDS * 1000,
-  });
+  try {
+    const response = await fetchURL(url, {
+      timeout: WRITE_IMAGE_URL_TIMEOUT_SECONDS * 1000,
+    });
 
-  if (response.status === 200 && response.body) {
-    return writeImageStream(objectType, response.body, highResConversion);
+    if (response.status === 200 && response.body) {
+      return await writeImageStream(
+        objectType,
+        response.body,
+        highResConversion,
+      );
+    }
+
+    if (
+      SCRAPFLY_FALLBACK_STATUSES.has(response.status) &&
+      process.env.SCRAPFLY_API_KEY
+    ) {
+      const buffer = await fetchBufferViaScrapfly(url);
+      return await writeImageStream(
+        objectType,
+        Readable.from(buffer),
+        highResConversion,
+      );
+    }
+
+    throw new ImageFetchError(response.status);
+  } catch (e) {
+    if (e instanceof AbortError) throw new FetchTimeoutError(url);
+    throw e;
   }
-
-  if (
-    SCRAPFLY_FALLBACK_STATUSES.has(response.status) &&
-    process.env.SCRAPFLY_API_KEY
-  ) {
-    const buffer = await fetchBufferViaScrapfly(url);
-    return writeImageStream(
-      objectType,
-      Readable.from(buffer),
-      highResConversion,
-    );
-  }
-
-  throw new ImageFetchError(response.status);
 };
 
 export const writeImageFile = async (

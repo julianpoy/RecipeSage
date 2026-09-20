@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Response, FetchError } from "node-fetch";
+import { Response, FetchError, AbortError } from "node-fetch";
 import { Readable } from "stream";
-import { fetchURL, fetchBufferViaScrapfly, ScrapflyError } from "../general";
+import {
+  fetchURL,
+  fetchBufferViaScrapfly,
+  FetchTimeoutError,
+  ScrapflyError,
+} from "../general";
 import { writeBuffer } from "./index";
 import { writeImageURL } from "./image";
 import { ObjectTypes } from "./shared";
@@ -105,5 +110,28 @@ describe("writeImageURL", () => {
     await expect(
       writeImageURL(ObjectTypes.RECIPE_IMAGE, "https://x/img.jpg", true),
     ).rejects.toThrow("content size over limit");
+  });
+
+  it("reports a timeout before the response headers arrive as a fetch timeout", async () => {
+    vi.mocked(fetchURL).mockRejectedValue(
+      new AbortError("The operation was aborted."),
+    );
+
+    await expect(
+      writeImageURL(ObjectTypes.RECIPE_IMAGE, "https://x/img.jpg", true),
+    ).rejects.toBeInstanceOf(FetchTimeoutError);
+  });
+
+  it("reports a timeout while reading the image body as a fetch timeout", async () => {
+    const body = new Readable({
+      read() {
+        this.destroy(new AbortError("The operation was aborted."));
+      },
+    });
+    vi.mocked(fetchURL).mockResolvedValue(new Response(body, { status: 200 }));
+
+    await expect(
+      writeImageURL(ObjectTypes.RECIPE_IMAGE, "https://x/img.jpg", true),
+    ).rejects.toBeInstanceOf(FetchTimeoutError);
   });
 });

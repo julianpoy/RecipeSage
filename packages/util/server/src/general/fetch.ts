@@ -1,5 +1,6 @@
-import fetch, { RequestInit } from "node-fetch";
+import fetch, { AbortError, RequestInit } from "node-fetch";
 import { useAgent } from "request-filtering-agent";
+import { FetchTimeoutError } from "./FetchTimeoutError";
 import { FetchURLError } from "./fetchURLError";
 import { config } from "./config";
 
@@ -58,6 +59,9 @@ export const fetchURL = (
   return fetch(normalizedURL, fetchOpts).catch((error) => {
     if (isBlockedAddressError(error)) {
       throw new FetchURLError(destURL);
+    }
+    if (error instanceof AbortError) {
+      throw new FetchTimeoutError(destURL);
     }
     throw error;
   });

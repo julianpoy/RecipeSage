@@ -1,8 +1,8 @@
 import { createHash } from "crypto";
-import { AbortError } from "node-fetch";
 import * as Sentry from "@sentry/node";
 import { Prisma, prisma } from "@recipesage/prisma";
 import { fetchURL } from "../fetch";
+import { FetchTimeoutError } from "../FetchTimeoutError";
 import { StandardizedRecipeImportEntry } from "../../db";
 import { metrics } from "../metrics";
 import {
@@ -156,7 +156,7 @@ export const clipUrl = async (
       timeout,
     });
   })().catch((e) => {
-    if (e instanceof AbortError) {
+    if (e instanceof FetchTimeoutError) {
       metrics.clipError.inc({
         form: "url",
         method: "timeout",

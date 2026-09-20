@@ -4,6 +4,7 @@ import { authenticatedProcedure } from "../../trpc";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { Capabilities } from "@recipesage/util/shared";
 import {
+  FetchTimeoutError,
   FetchURLError,
   FileTransformError,
 } from "@recipesage/util/server/general";
@@ -46,7 +47,11 @@ export const createRecipeImageFromUrl = authenticatedProcedure
         encodeInHighRes,
       );
     } catch (e) {
-      if (e instanceof ImageFetchError || e instanceof FetchURLError) {
+      if (
+        e instanceof ImageFetchError ||
+        e instanceof FetchURLError ||
+        e instanceof FetchTimeoutError
+      ) {
         throw new TRPCError({
           message: "Could not fetch image from url",
           code: "BAD_REQUEST",

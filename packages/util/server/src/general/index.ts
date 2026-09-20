@@ -34,6 +34,7 @@ export * from "./firebaseAdmin";
 export * from "./firebase";
 export * from "./dispatchMessageNotification";
 export * from "./fetch";
+export * from "./FetchTimeoutError";
 export * from "./fetchURLError";
 export * from "./fetchBufferViaScrapfly";
 export * from "./ScrapflyError";
