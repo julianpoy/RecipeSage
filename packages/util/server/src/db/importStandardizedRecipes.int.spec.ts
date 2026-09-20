@@ -216,4 +216,54 @@ describe("importStandardizedRecipes", () => {
 
     expect(recipe?.rating).toBeNull();
   });
+
+  it("rounds imported ratings and drops those outside of the supported range", async () => {
+    await importStandardizedRecipes(
+      user.id,
+      [
+        {
+          recipe: { title: "ValidRating", rating: 3 },
+          labels: [],
+          images: [],
+        },
+        {
+          recipe: { title: "ZeroRating", rating: 0 },
+          labels: [],
+          images: [],
+        },
+        {
+          recipe: { title: "HighRating", rating: 9 },
+          labels: [],
+          images: [],
+        },
+        {
+          recipe: { title: "FractionalRating", rating: 4.4 },
+          labels: [],
+          images: [],
+        },
+      ],
+      "en-us",
+      undefined,
+    );
+
+    const recipes = await prisma.recipe.findMany({
+      where: {
+        userId: user.id,
+        title: {
+          in: ["ValidRating", "ZeroRating", "HighRating", "FractionalRating"],
+        },
+      },
+    });
+
+    const ratingsByTitle = Object.fromEntries(
+      recipes.map((recipe) => [recipe.title, recipe.rating]),
+    );
+
+    expect(ratingsByTitle).toEqual({
+      ValidRating: 3,
+      ZeroRating: null,
+      HighRating: null,
+      FractionalRating: 4,
+    });
+  });
 });

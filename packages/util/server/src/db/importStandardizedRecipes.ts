@@ -39,6 +39,19 @@ const NULL_CHAR = "\u0000";
 const removeNullChars = (text: string | null | undefined) =>
   text?.replaceAll(NULL_CHAR, "");
 
+const MIN_RATING = 1;
+const MAX_RATING = 5;
+
+const normalizeRating = (rating: number | string | null | undefined) => {
+  const parsed =
+    typeof rating === "string" ? parseFloat(rating.trim()) : rating;
+  if (typeof parsed !== "number" || !Number.isFinite(parsed)) return undefined;
+
+  const rounded = Math.round(parsed);
+
+  return rounded >= MIN_RATING && rounded <= MAX_RATING ? rounded : undefined;
+};
+
 /**
  * Centralized place for all recipe import tasks as a standardized format.
  * importTempDirectory is required if reading paths from disk, and represents a bounded parent directory that can be read from. Any access outside of this path will result in an error.
@@ -147,7 +160,7 @@ export const importStandardizedRecipes = async (
           instructions: stripBlankLines(
             removeNullChars(entry.recipe.instructions) || "",
           ),
-          rating: entry.recipe.rating,
+          rating: normalizeRating(entry.recipe.rating),
           lastMadeAt: entry.recipe.lastMadeAt
             ? new Date(entry.recipe.lastMadeAt)
             : undefined,
