@@ -303,7 +303,9 @@ export class AppComponent {
   initUpdateListeners() {
     (window as any).appLoaded = true;
 
-    (window as any).swRegistration?.update();
+    (window as any).swRegistration?.update()?.catch((e: unknown) => {
+      console.error("Failed to check for service worker update", e);
+    });
   }
 
   initEventListeners() {

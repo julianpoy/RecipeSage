@@ -196,7 +196,9 @@ const connect = () => {
           self.registration instanceof ServiceWorkerRegistration
         ) {
           // We're in a service worker
-          self.registration.update();
+          self.registration.update().catch((e) => {
+            console.error("Failed to check for service worker update", e);
+          });
         } else {
           // We're in a window
           const messages = getLocalDbUpgradeMessages();
