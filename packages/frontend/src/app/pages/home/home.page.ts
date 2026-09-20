@@ -740,6 +740,7 @@ export class HomePage implements OnDestroy {
   }
 
   async addLabelToSelectedRecipes() {
+    if (!this.selectedRecipeIds.length) return;
     if (await this.blockedBySelectedRecipesFromOtherUsers()) return;
 
     const header = await this.translate
@@ -770,6 +771,8 @@ export class HomePage implements OnDestroy {
         {
           text: save,
           handler: async ({ labelName }) => {
+            if (!this.selectedRecipeIds.length) return;
+
             const loading = this.loadingService.start();
             const response = await this.serverActionsService.labels.upsertLabel(
               {
@@ -788,6 +791,8 @@ export class HomePage implements OnDestroy {
   }
 
   async exportSelectedRecipes() {
+    if (!this.selectedRecipeIds.length) return;
+
     const header = await this.translate
       .get("pages.home.exportSelected.header")
       .toPromise();
@@ -830,6 +835,8 @@ export class HomePage implements OnDestroy {
   }
 
   async startExport(recipeIds: string[], format: "txt" | "pdf" | "jsonld") {
+    if (!recipeIds.length) return;
+
     const result = await this.serverActionsService.jobs.startExportJob({
       format,
       recipeIds,
@@ -868,6 +875,7 @@ export class HomePage implements OnDestroy {
   }
 
   async deleteSelectedRecipes() {
+    if (!this.selectedRecipeIds.length) return;
     if (await this.blockedBySelectedRecipesFromOtherUsers()) return;
 
     const recipeNames = this.selectedRecipeIds
@@ -900,6 +908,8 @@ export class HomePage implements OnDestroy {
           text: del,
           cssClass: "alertDanger",
           handler: async () => {
+            if (!this.selectedRecipeIds.length) return;
+
             const loading = this.loadingService.start();
             try {
               const response =
