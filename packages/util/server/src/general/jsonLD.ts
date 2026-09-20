@@ -18,7 +18,7 @@ type JsonLDImages =
 
 export type NutritionInformation = {
   "@type"?: "NutritionInformation";
-  servingSize?: string;
+  servingSize?: string | number;
   calories?: string;
   fatContent?: string;
   saturatedFatContent?: string;
@@ -118,6 +118,14 @@ export type JsonLD = {
   images?: JsonLDImages;
   image?: JsonLDImages;
   nutrition?: string | NutritionInformation | NutritionInformation[];
+};
+
+const parseSchemaOrgString = (
+  value: string | number | null | undefined,
+): string | undefined => {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return isNaN(value) ? undefined : `${value}`;
+  return undefined;
 };
 
 const parseSchemaOrgNumber = (
@@ -543,7 +551,7 @@ const getNutritionFromSchema = (jsonLD: JsonLD) => {
     : undefined;
 
   return {
-    nutritionServingSize: nutrition.servingSize ?? undefined,
+    nutritionServingSize: parseSchemaOrgString(nutrition.servingSize),
     nutritionCalories: parseSchemaOrgNumber(nutrition.calories),
     nutritionTotalFat: parseSchemaOrgNumber(nutrition.fatContent),
     nutritionSaturatedFat: parseSchemaOrgNumber(nutrition.saturatedFatContent),
@@ -567,8 +575,9 @@ export const jsonLDToStandardizedRecipeImportEntry = (
     yield: getYieldFromSchema(jsonLD),
     activeTime: getActiveTimeFromSchema(jsonLD),
     totalTime: getTotalTimeFromSchema(jsonLD),
-    source: jsonLD.creditText || getAuthorFromSchema(jsonLD),
-    url: jsonLD.isBasedOn || "",
+    source:
+      parseSchemaOrgString(jsonLD.creditText) || getAuthorFromSchema(jsonLD),
+    url: parseSchemaOrgString(jsonLD.isBasedOn) || "",
     notes: getAuthorNotesCommentFromSchema(jsonLD) || "",
     ingredients: getIngredientsFromSchema(jsonLD),
     instructions: getInstructionsFromSchema(jsonLD),

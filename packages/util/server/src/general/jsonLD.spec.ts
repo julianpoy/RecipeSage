@@ -260,6 +260,22 @@ describe("jsonLDToStandardizedRecipeImportEntry", () => {
       expect(entry.recipe.nutritionProtein).toEqual(12.5);
       expect(entry.recipe.nutritionTransFat).toEqual(0);
     });
+
+    it("converts a serving size supplied as a number to a string", () => {
+      const jsonLD: JsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        name: "Test",
+        nutrition: {
+          "@type": "NutritionInformation",
+          servingSize: 4,
+        },
+      };
+
+      const entry = jsonLDToStandardizedRecipeImportEntry(jsonLD);
+
+      expect(entry.recipe.nutritionServingSize).toEqual("4");
+    });
   });
 });
 
