@@ -11,7 +11,23 @@ const ocrImagesToRecipe = vi.fn();
 const pdfToRecipe = vi.fn();
 const clipUrl = vi.fn();
 
+class ClipFetchError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipFetchError";
+  }
+}
+
+class ClipTimeoutError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipTimeoutError";
+  }
+}
+
 vi.mock("../../../index", () => ({
+  ClipFetchError,
+  ClipTimeoutError,
   importJobFinishCommon: (...args: unknown[]) => importJobFinishCommon(...args),
   translate: async () => "Automatic Import Unformatted",
   clipUrl: (...args: unknown[]) => clipUrl(...args),

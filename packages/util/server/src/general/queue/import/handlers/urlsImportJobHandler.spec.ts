@@ -7,13 +7,30 @@ import type { StandardJobQueueItem } from "../../JobQueueItem";
 
 const importJobFinishCommon = vi.fn();
 const clipUrl = vi.fn();
+const captureException = vi.fn();
 
 vi.mock("@sentry/node", () => ({
-  captureException: vi.fn(),
+  captureException: (...args: unknown[]) => captureException(...args),
   captureMessage: vi.fn(),
 }));
 
+class ClipFetchError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipFetchError";
+  }
+}
+
+class ClipTimeoutError extends Error {
+  constructor() {
+    super();
+    this.name = "ClipTimeoutError";
+  }
+}
+
 vi.mock("../../../index", () => ({
+  ClipFetchError,
+  ClipTimeoutError,
   importJobFinishCommon: (...args: unknown[]) => importJobFinishCommon(...args),
   clipUrl: (...args: unknown[]) => clipUrl(...args),
   isRecipeRecognitionSuccess: (recipe: {
@@ -74,6 +91,7 @@ const clippedUrls = () => clipUrl.mock.calls.map((call) => call[0]);
 
 beforeEach(() => {
   importJobFinishCommon.mockClear();
+  captureException.mockClear();
   clipUrl.mockReset();
   clipUrl.mockImplementation(async (url: string) => ({
     recipe: {
@@ -191,7 +209,28 @@ describe("urlsImportJobHandler", () => {
     expect(args.standardizedRecipeImportInput).toHaveLength(1);
     expect(args.failedCount).toBe(1);
     expect(args.failedUrls).toEqual(["https://example.com/boom"]);
+    expect(captureException).toHaveBeenCalledTimes(1);
   });
+
+  it.each([
+    ["ClipFetchError", () => new ClipFetchError()],
+    ["ClipTimeoutError", () => new ClipTimeoutError()],
+  ])(
+    "counts a %s as failed without reporting it",
+    async (_name, buildError) => {
+      urlsPath = await writeUrlsFile("https://example.com/boom");
+      clipUrl.mockImplementation(async () => {
+        throw buildError();
+      });
+
+      await urlsImportJobHandler(job, queueItem);
+
+      const args = importJobFinishCommon.mock.calls[0][0];
+      expect(args.failedCount).toBe(1);
+      expect(args.failedUrls).toEqual(["https://example.com/boom"]);
+      expect(captureException).not.toHaveBeenCalled();
+    },
+  );
 
   it("does not charge credits when 25% or fewer urls are recognized", async () => {
     urlsPath = await writeUrlsFile(

@@ -2,6 +2,8 @@ import type { ImportJobSummary } from "@recipesage/prisma";
 
 import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import {
+  ClipFetchError,
+  ClipTimeoutError,
   clipUrl,
   importJobFinishCommon,
   isRecipeRecognitionSuccess,
@@ -73,7 +75,11 @@ export async function urlsImportJobHandler(
         }
       }
     } catch (e) {
-      Sentry.captureException(e, { extra: { jobId: job.id } });
+      const isExpectedClipFailure =
+        e instanceof ClipFetchError || e instanceof ClipTimeoutError;
+      if (!isExpectedClipFailure) {
+        Sentry.captureException(e, { extra: { jobId: job.id } });
+      }
       failedCount++;
       failedUrls.push(url);
     }
