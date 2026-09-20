@@ -84,12 +84,16 @@ export class SelectUserComponent implements OnInit {
 
   onSearchInputChange(event: SearchbarCustomEvent) {
     this.searchText = event.detail.value || "";
+
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = undefined;
+    }
+    this.searching = false;
+
     if (!this.searchText) return;
 
     this.results = [];
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
     if (!this.searchText.trim() || this.searchText.trim() === "@") return;
 
     this.searching = true;
@@ -101,12 +105,14 @@ export class SelectUserComponent implements OnInit {
   }
 
   async search(input: string) {
-    input = input || "";
+    input = (input || "").trim();
+    const handle = input.startsWith("@") ? input.substring(1) : input;
+    if (!handle) return;
+
     const loading = this.loadingService.start();
 
     const results: UserPublic[] = [];
 
-    const handle = input.startsWith("@") ? input.substring(1) : input;
     const profileResponse =
       await this.serverActionsService.users.getUserProfileByHandle(
         {
