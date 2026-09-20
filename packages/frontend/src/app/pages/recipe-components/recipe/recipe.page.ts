@@ -642,7 +642,7 @@ export class RecipePage {
       notes: this.recipe.notes,
       ingredients: this.recipe.ingredients,
       instructions: this.recipe.instructions,
-      rating: this.recipe.rating,
+      rating: this.recipe.rating || null,
       folder: this.recipe.folder as "main" | "inbox",
       imageIds: this.recipe.recipeImages.map((ri) => ri.image.id),
       labelIds: this.recipe.recipeLabels.map((rl) => rl.label.id),
@@ -726,7 +726,7 @@ export class RecipePage {
       notes: this.recipe.notes,
       ingredients: this.recipe.ingredients,
       instructions: this.recipe.instructions,
-      rating: this.recipe.rating,
+      rating: this.recipe.rating || null,
       folder: folderName,
       labelIds: this.recipe.recipeLabels.map(
         (recipeLabel) => recipeLabel.label.id,
@@ -763,7 +763,7 @@ export class RecipePage {
       notes: this.recipe.notes,
       ingredients: this.recipe.ingredients,
       instructions: this.recipe.instructions,
-      rating: this.recipe.rating,
+      rating: this.recipe.rating || null,
       folder: this.recipe.folder as "main" | "inbox",
       labelIds,
       imageIds: this.recipe.recipeImages.map(
