@@ -79,6 +79,7 @@
     <recurrence-editor
       [baseDate]="scheduledDate"
       (ruleChange)="recurrenceChange($event)"
+      (ruleValidChange)="recurrenceValidChange($event)"
     ></recurrence-editor>
   }
 

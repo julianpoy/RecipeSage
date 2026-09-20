@@ -387,7 +387,7 @@ export class MealPlanPage {
     const modal = await this.modalCtrl.create({
       component: NewMealPlanItemModalPage,
       componentProps: {
-        scheduledDate: this.selectedDays[0],
+        scheduledDate: this.selectedDays[0] ?? dayjs().format("YYYY-MM-DD"),
         customMealOptions: this.mealPlan()?.customMealOptions ?? null,
       },
     });

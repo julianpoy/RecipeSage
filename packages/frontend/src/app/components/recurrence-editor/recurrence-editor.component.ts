@@ -62,6 +62,7 @@ export class RecurrenceEditorComponent implements OnChanges {
 
   @Input() baseDate: string = dayjs().format("YYYY-MM-DD");
   @Output() ruleChange = new EventEmitter<RecurrenceRule | null>();
+  @Output() ruleValidChange = new EventEmitter<boolean>();
 
   enabled = false;
   frequency: RecurrenceFrequency = "weekly";
@@ -153,6 +154,9 @@ export class RecurrenceEditorComponent implements OnChanges {
   onChange() {
     this.updatePreview();
     this.ruleChange.emit(this.enabled ? this.rule : null);
+    this.ruleValidChange.emit(
+      !this.enabled || (!this.preview.error && this.preview.count > 0),
+    );
   }
 
   toggleWeekday(weekday: number) {

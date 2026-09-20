@@ -34,6 +34,8 @@ import {
 import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
+const DATE_STAMP_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 export interface MealPlanItemDraft {
   title: string;
   recipeId: string | null;
@@ -94,19 +96,29 @@ export class NewMealPlanItemModalPage {
   @Input() scheduledDate = dayjs().format("YYYY-MM-DD");
 
   recurrence: RecurrenceRule | null = null;
+  isRecurrenceValid = true;
 
   readonly titleMaxLength = MEAL_PLAN_ITEMS_TITLE_LENGTH_LIMIT;
   readonly notesMaxLength = MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT;
 
   scheduledDateChange(event: any) {
-    this.scheduledDate = dayjs(event.target.value).format("YYYY-MM-DD");
+    const value = event.target.value;
+    this.scheduledDate = DATE_STAMP_REGEX.test(value) ? value : "";
   }
 
   recurrenceChange(rule: RecurrenceRule | null) {
     this.recurrence = rule;
   }
 
+  recurrenceValidChange(isValid: boolean) {
+    this.isRecurrenceValid = isValid;
+  }
+
   isFormValid() {
+    if (!DATE_STAMP_REGEX.test(this.scheduledDate)) return false;
+
+    if (!this.isEditing && !this.isRecurrenceValid) return false;
+
     if (this.inputType === "recipe" && !this.recipe) return false;
 
     if (
@@ -121,7 +133,7 @@ export class NewMealPlanItemModalPage {
   }
 
   save() {
-    if (!this.meal || !this.scheduledDate) return;
+    if (!this.meal || !this.isFormValid()) return;
 
     const baseItem: MealPlanItemDraft = {
       title:
