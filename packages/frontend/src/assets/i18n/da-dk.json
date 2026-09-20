@@ -1218,7 +1218,7 @@
     "pages.welcome.description.features.sharing.title": "Deling og samarbejde",
     "pages.welcome.description.features.sharing.description": "Del opskrifter offentligt eller med venner, og samarbejd om madplaner og indkøbslister",
     "pages.welcome.description.features.migration.title": "Masseimport fra en lang række kilder",
-    "pages.welcome.description.features.migration.description": "Importer fra: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox eller enhver JSON-LD-/CSV-eksport",
+    "pages.welcome.description.features.migration.description": "Importerer fra: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote eller enhver JSON-LD-/CSV-eksport",
     "pages.welcome.description.features.export.title": "Eksport og dataportabilitet",
     "pages.welcome.description.features.export.description": "Dine data er dine egne. RecipeSage holder dem ikke som gidsler. Eksportér dine data til PDF, JSON-LD eller ren tekst når som helst",
     "pages.welcome.languages.title": "På dit sprog",
