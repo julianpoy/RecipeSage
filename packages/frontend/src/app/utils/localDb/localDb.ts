@@ -184,6 +184,16 @@ const connect = () => {
   ];
 
   const dbP = openDB<RSLocalDB>(`localDb`, migrations.length, {
+    terminated: () => {
+      console.error(
+        "Local DB connection was terminated by the browser. Reconnecting on next use.",
+      );
+      Sentry.captureMessage("Local DB connection was terminated", {
+        level: "warning",
+      });
+
+      if (localDbP === dbP) localDbP = undefined;
+    },
     blocking: async () => {
       dbP.then((db) => {
         db.close();

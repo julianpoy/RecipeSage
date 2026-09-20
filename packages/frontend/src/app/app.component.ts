@@ -724,23 +724,7 @@ export class AppComponent {
 
   async migrateSession() {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const currentIdbSession = await appIdbStorageManager.getSession();
-      if (currentIdbSession) return;
-
-      const me = await this.trpcService.trpc.users.getMe
-        .query()
-        .catch(() => undefined);
-
-      if (!me) return;
-
-      await appIdbStorageManager.setSession({
-        userId: me.id,
-        email: me.email,
-        token,
-      });
+      await appIdbStorageManager.restoreSessionFromToken();
     } catch (e) {
       Sentry.captureException(e);
     }

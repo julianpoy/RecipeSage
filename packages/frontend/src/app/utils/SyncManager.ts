@@ -4,6 +4,7 @@ import type { SearchManager } from "./SearchManager";
 import { trpcClient as trpc } from "./trpcClient";
 import {
   getKvStoreEntry,
+  getLocalDb,
   KVStoreKeys,
   ObjectStoreName,
   RSLocalDB,
@@ -58,6 +59,7 @@ export class SyncManager {
 
     await navigator.locks.request(WEBLOCKS_NAME, async () => {
       const abortSignal = this.getSyncAbortSignal();
+      this.localDb = await getLocalDb();
 
       performance.mark("startSync");
 
@@ -142,6 +144,7 @@ export class SyncManager {
 
     return navigator.locks.request(WEBLOCKS_NAME, async () => {
       const abortSignal = this.getSyncAbortSignal();
+      this.localDb = await getLocalDb();
       await method(abortSignal);
     });
   }
@@ -152,7 +155,7 @@ export class SyncManager {
       return null;
     }
 
-    const session = await appIdbStorageManager.getSession();
+    const session = await appIdbStorageManager.restoreSessionFromToken();
     if (!session) {
       console.log("Not logged in, will not perform sync.");
       return null;

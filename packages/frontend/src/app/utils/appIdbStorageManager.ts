@@ -5,6 +5,7 @@ import {
   ObjectStoreName,
 } from "./localDb";
 import type { SessionDTO } from "@recipesage/prisma";
+import { trpcClient } from "./trpcClient";
 
 export class AppIdbStorageManager {
   async getSession(): Promise<SessionDTO | null> {
@@ -26,6 +27,26 @@ export class AppIdbStorageManager {
       value: session.userId,
     });
     await tx.done;
+  }
+
+  async restoreSessionFromToken(): Promise<SessionDTO | null> {
+    const existingSession = await this.getSession();
+    if (existingSession) return existingSession;
+
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    const me = await trpcClient.users.getMe.query().catch(() => undefined);
+    if (!me) return null;
+
+    const session = {
+      userId: me.id,
+      email: me.email,
+      token,
+    };
+    await this.setSession(session);
+
+    return session;
   }
 
   async removeSession(): Promise<void> {

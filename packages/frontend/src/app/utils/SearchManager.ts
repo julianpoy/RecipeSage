@@ -6,6 +6,7 @@ import MiniSearch, {
 import { IDBPDatabase } from "idb";
 import {
   getKvStoreEntry,
+  getLocalDb,
   KVStoreKeys,
   ObjectStoreName,
   RSLocalDB,
@@ -117,6 +118,7 @@ export class SearchManager {
   }
 
   private async rebuildFromLocalRecipes(): Promise<void> {
+    this.localDb = await getLocalDb();
     const recipes = await this.localDb.getAll(ObjectStoreName.Recipes);
 
     this.miniSearch = new MiniSearch(this.miniSearchOptions);
@@ -233,6 +235,7 @@ export class SearchManager {
     this.saveTimeout = undefined;
     this.maxSaveTimeout = undefined;
 
+    this.localDb = await getLocalDb();
     await Promise.all([
       this.localDb.put(ObjectStoreName.KV, {
         key: KVStoreKeys.RecipeSearchIndex,

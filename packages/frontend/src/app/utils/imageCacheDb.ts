@@ -18,12 +18,25 @@ interface ImageCacheDB extends DBSchema {
 }
 
 const connect = () => {
-  return openDB<ImageCacheDB>("imageCache", 1, {
-    upgrade: (db) => {
-      const store = db.createObjectStore("images", { keyPath: "url" });
-      store.createIndex("lastUsed", "lastUsed");
+  const connecting: Promise<IDBPDatabase<ImageCacheDB>> = openDB<ImageCacheDB>(
+    "imageCache",
+    1,
+    {
+      terminated: () => {
+        console.error(
+          "Image cache DB connection was terminated by the browser. Reconnecting on next use.",
+        );
+
+        if (dbP === connecting) dbP = undefined;
+      },
+      upgrade: (db) => {
+        const store = db.createObjectStore("images", { keyPath: "url" });
+        store.createIndex("lastUsed", "lastUsed");
+      },
     },
-  });
+  );
+
+  return connecting;
 };
 
 let dbP: Promise<IDBPDatabase<ImageCacheDB>> | undefined = undefined;
