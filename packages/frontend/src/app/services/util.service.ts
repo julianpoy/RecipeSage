@@ -26,6 +26,7 @@ export interface RecipeTemplateModifiers {
   showPrintButton?: boolean;
   print?: boolean; // Triggers immediate print
   scale?: string;
+  unitSystem?: string;
   preferredLanguage?: string;
   today?: string;
 }

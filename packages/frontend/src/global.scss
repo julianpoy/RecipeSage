@@ -38,3 +38,8 @@ ion-fab[vertical="bottom"] {
 ion-fab[vertical="top"] {
   margin-top: var(--ion-safe-area-top, 0);
 }
+
+.autoTextDirection {
+  unicode-bidi: plaintext;
+  text-align: start;
+}

@@ -2,7 +2,10 @@ import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
-import { ScaleRecipeComponent } from "../../modals/scale-recipe/scale-recipe.component";
+import {
+  ScaleRecipeComponent,
+  type UnitSystem,
+} from "../../modals/scale-recipe/scale-recipe.component";
 import { PreferencesService } from "../../services/preferences.service";
 import { UtilService } from "../../services/util.service";
 import {
@@ -13,6 +16,7 @@ import {
   applyDecimalNotation,
   type DecimalNotation,
 } from "@recipesage/util/shared";
+import { System } from "@recipesage/unitz-ts";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
 
@@ -33,6 +37,7 @@ export class SelectIngredientsComponent {
   ingredientBinders: { [index: number]: boolean } = {};
   scaledIngredients: ParsedIngredient[] = [];
   scale: string = "1";
+  unitSystem: UnitSystem = "original";
   decimalNotationMode: DecimalNotation = ".";
 
   _ingredients!: string;
@@ -66,11 +71,18 @@ export class SelectIngredientsComponent {
     this.applyScale();
   }
 
+  @Input()
+  set initialUnitSystem(val: UnitSystem) {
+    this.unitSystem = val;
+    this.applyScale();
+  }
+
   async changeScale() {
     const modal = await this.modalCtrl.create({
       component: ScaleRecipeComponent,
       componentProps: {
         scale: this.scale,
+        unitSystem: this.unitSystem,
         ingredients: this.scaledIngredients ?? [],
         decimalNotationMode: this.decimalNotationMode,
       },
@@ -80,10 +92,15 @@ export class SelectIngredientsComponent {
     await modal.present();
     const { data } = await modal.onDidDismiss();
 
-    if (data?.scale) {
+    if (!data) return;
+
+    if (data.scale) {
       this.scale = data.scale;
-      this.applyScale();
     }
+    if (data.unitSystem) {
+      this.unitSystem = data.unitSystem;
+    }
+    this.applyScale();
   }
 
   isIngredientIgnored(ingredient: ParsedIngredient) {
@@ -109,7 +126,15 @@ export class SelectIngredientsComponent {
       this._ingredients,
       this.utilService.getCurrentLocale(),
     );
+    const targetSystem =
+      this.unitSystem === "metric"
+        ? System.METRIC
+        : this.unitSystem === "imperial"
+          ? System.US
+          : undefined;
+
     this.scaledIngredients = parseIngredients(this._ingredients, this.scale, {
+      targetSystem,
       decimalNotationMode: this.decimalNotationMode,
     }).filter((e) => !e.isHeader);
 

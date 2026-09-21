@@ -670,6 +670,7 @@ export class RecipePage {
       componentProps: {
         recipes: [this.recipe],
         scale: this.scale,
+        unitSystem: this.unitSystem,
       },
     });
 
@@ -693,6 +694,7 @@ export class RecipePage {
       componentProps: {
         recipe: this.recipe,
         scale: this.scale,
+        unitSystem: this.unitSystem,
       },
     });
 

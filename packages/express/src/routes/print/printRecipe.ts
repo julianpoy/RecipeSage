@@ -20,6 +20,7 @@ import {
   translate,
 } from "@recipesage/util/server/general";
 import { getLanguageDirection } from "@recipesage/util/shared";
+import { System } from "@recipesage/unitz-ts";
 
 const schema = {
   query: z.object({
@@ -39,6 +40,7 @@ const schema = {
     showPrintButton: z.string().optional(),
     print: z.string().optional(),
     scale: z.string().optional(),
+    unitSystem: z.enum(["original", "metric", "imperial"]).optional(),
     token: z.string().optional(),
     preferredLanguage: z.string().optional(),
     today: z
@@ -78,6 +80,13 @@ export const printRecipeHandler = defineHandler(
       typeof req.query.scale === "string" && req.query.scale.trim()
         ? req.query.scale.trim()
         : "1";
+
+    const targetSystem =
+      req.query.unitSystem === "metric"
+        ? System.METRIC
+        : req.query.unitSystem === "imperial"
+          ? System.US
+          : undefined;
 
     const locale = getRequestLanguage(req);
 
@@ -201,17 +210,20 @@ export const printRecipeHandler = defineHandler(
         labelsText,
         ingredients: ingredientsText.trim()
           ? parseIngredients(ingredientsText, scale, {
+              targetSystem,
               decimalNotationMode,
             })
           : [],
         instructions: instructionsText.trim()
           ? parseInstructions(instructionsText, scale, {
+              targetSystem,
               decimalNotationMode,
               images: inlineImageRefs,
             })
           : [],
         notes: notesText.trim()
           ? parseNotes(notesText, scale, {
+              targetSystem,
               decimalNotationMode,
               images: inlineImageRefs,
             })

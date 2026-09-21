@@ -30,7 +30,7 @@
               [(ngModel)]="group.items[0].completed"
               (ngModelChange)="completeToggle.emit(group.items)"
             >
-              <div class="ion-text-wrap">
+              <div class="ion-text-wrap" dir="auto">
                 {{ group.title }}
               </div>
             </ion-checkbox>

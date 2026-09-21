@@ -115,6 +115,25 @@ describe("parsers", () => {
         expect(result).toEqual(["1/2 cup"]);
       });
 
+      it("ignores a percentage that names the ingredient", () => {
+        expect(getMeasurementsForIngredient("1% milk")).toEqual([]);
+        expect(getMeasurementsForIngredient("70% dark chocolate")).toEqual([]);
+        expect(getMeasurementsForIngredient("1% milk or 240 ml")).toEqual([
+          "240 ml",
+        ]);
+      });
+
+      it("reads an already-scaled approximate measurement", () => {
+        expect(getMeasurementsForIngredient("~2 cups flour")).toEqual([
+          "2 cups",
+        ]);
+        expect(
+          getMeasurementsForIngredient(
+            "~1 3/4 cup + ~3 9/16 tablespoons flour",
+          ),
+        ).toEqual(["1 3/4 cup", "3 9/16 tablespoons"]);
+      });
+
       it("handles range measurements", () => {
         const result = getMeasurementsForIngredient("1-2 teaspoons salt");
         expect(result).toEqual(["1-2 teaspoons"]);
@@ -207,6 +226,98 @@ describe("parsers", () => {
     });
   });
 
+  describe("getPlainMeasurementsForLocaleIngredient", () => {
+    it("counts every part that adds to the amount", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup + 2 tablespoons sugar",
+          ".",
+        ),
+      ).toEqual(["1 cup", "2 tablespoons"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup und 2 tablespoons sugar",
+          ".",
+        ),
+      ).toEqual(["1 cup", "2 tablespoons"]);
+    });
+
+    it("counts only the first of two ways to give the same amount", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient("1 cup or 250ml milk", "."),
+      ).toEqual(["1 cup"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient("1 cup oder 250 ml Milch", "."),
+      ).toEqual(["1 cup"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient("1 cup | 250 ml milk", "."),
+      ).toEqual(["1 cup"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup or 250 ml or 8 oz water",
+          ".",
+        ),
+      ).toEqual(["1 cup"]);
+    });
+
+    it("counts the added parts of the first way only", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup + 2 tablespoons flour or 150 g flour",
+          ".",
+        ),
+      ).toEqual(["1 cup", "2 tablespoons"]);
+    });
+
+    it("counts an added part that follows the second way", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup or 250 ml milk plus 2 tbsp",
+          ".",
+        ),
+      ).toEqual(["1 cup", "2 tbsp"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "2 cups flour or 250 g flour plus 1 tsp salt",
+          ".",
+        ),
+      ).toEqual(["2 cups", "1 tsp"]);
+    });
+
+    it("ignores a joining word inside a parenthetical note", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "1 cup flour (sifted or not) + 2 tbsp sugar",
+          ".",
+        ),
+      ).toEqual(["1 cup", "2 tbsp"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "2 tbsp butter (or margarine) + 1 tsp salt",
+          ".",
+        ),
+      ).toEqual(["2 tbsp", "1 tsp"]);
+    });
+
+    it("falls back to a later way when the first one has no measurement", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient("milk 1 cup or 250 ml", "."),
+      ).toEqual(["250 ml"]);
+      expect(
+        getPlainMeasurementsForLocaleIngredient(
+          "cocoa powder or 2 tbsp cacao",
+          ".",
+        ),
+      ).toEqual(["2 tbsp"]);
+    });
+
+    it("returns an empty array when no way has a measurement", () => {
+      expect(
+        getPlainMeasurementsForLocaleIngredient("salt or pepper", "."),
+      ).toEqual([]);
+    });
+  });
+
   describe("getAnchorMeasurement", () => {
     it("returns qty + unit for a clean line", () => {
       expect(getAnchorMeasurement("2 cups flour", ".")).toEqual({
@@ -250,6 +361,108 @@ describe("parsers", () => {
       });
     });
 
+    it("anchors one amount stated two ways on the first way", () => {
+      expect(getAnchorMeasurement("1 cup or 200 g water", ".")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "cup",
+      });
+      expect(getAnchorMeasurement("1 cup | 250 ml milk", ".")).toEqual({
+        qtyText: "1",
+        qtyValue: 1,
+        unit: "cup",
+      });
+      expect(getAnchorMeasurement("2 cups oder 480 ml Milch", ".")).toEqual({
+        qtyText: "2",
+        qtyValue: 2,
+        unit: "cups",
+      });
+      expect(getAnchorMeasurement("2 tbsp butter or margarine", ".")).toEqual({
+        qtyText: "2",
+        qtyValue: 2,
+        unit: "tbsp",
+      });
+    });
+
+    it("anchors added measurements of one ingredient on their total", () => {
+      expect(getAnchorMeasurement("1 cup + 2 tablespoons flour", ".")).toEqual({
+        qtyText: "1 1/8",
+        qtyValue: 1.125,
+        unit: "cup",
+      });
+      expect(
+        getAnchorMeasurement("1 cup plus 2 tablespoons flour", "."),
+      ).toEqual({
+        qtyText: "1 1/8",
+        qtyValue: 1.125,
+        unit: "cup",
+      });
+      expect(getAnchorMeasurement("500 g flour plus 200 g flour", ".")).toEqual(
+        {
+          qtyText: "700",
+          qtyValue: 700,
+          unit: "g",
+        },
+      );
+    });
+
+    it("anchors on the total when the name sits in the second way", () => {
+      expect(
+        getAnchorMeasurement("1 cup or 250 ml milk plus 2 tbsp", "."),
+      ).toEqual({
+        qtyText: "1 1/8",
+        qtyValue: 1.125,
+        unit: "cup",
+      });
+    });
+
+    it("shows the same quantity it scales by", () => {
+      const anchor = getAnchorMeasurement("1/3 cup + 1 tablespoon oil", ".");
+      expect(anchor).toEqual({
+        qtyText: "0.396",
+        qtyValue: 0.396,
+        unit: "cup",
+      });
+      expect(
+        getAnchorMeasurement("0.0001 cup water plus 0.0001 cup water", "."),
+      ).toBeNull();
+    });
+
+    it("returns null when a second ingredient is added", () => {
+      expect(getAnchorMeasurement("2 cups flour + 1 tsp salt", ".")).toBeNull();
+      expect(getAnchorMeasurement("500 g Mehl und 1 TL Salz", ".")).toBeNull();
+      expect(
+        getAnchorMeasurement(
+          "2 cups flour or 250 g flour plus 1 tsp salt",
+          ".",
+        ),
+      ).toBeNull();
+      expect(
+        getAnchorMeasurement("1 stick butter plus more for greasing", "."),
+      ).toBeNull();
+      expect(
+        getAnchorMeasurement(
+          "2 cups flour, sifted, plus more for dusting",
+          ".",
+        ),
+      ).toBeNull();
+    });
+
+    it("returns null when an added measurement has no comparable unit", () => {
+      expect(getAnchorMeasurement("3 eggs plus 1 yolk", ".")).toBeNull();
+      expect(getAnchorMeasurement("1 cup und 2 EL Zucker", ".")).toBeNull();
+    });
+
+    it("ignores a joining word inside a parenthetical note", () => {
+      expect(getAnchorMeasurement("1 cup milk (whole plus skim)", ".")).toEqual(
+        {
+          qtyText: "1",
+          qtyValue: 1,
+          unit: "cup",
+        },
+      );
+    });
+
     it("returns null for headers", () => {
       expect(getAnchorMeasurement("[Sauce]", ".")).toBeNull();
     });
@@ -257,6 +470,11 @@ describe("parsers", () => {
     it("returns null for empty input", () => {
       expect(getAnchorMeasurement("", ".")).toBeNull();
       expect(getAnchorMeasurement("   ", ".")).toBeNull();
+    });
+
+    it("returns null when a percentage names the ingredient", () => {
+      expect(getAnchorMeasurement("1% milk", ".")).toBeNull();
+      expect(getAnchorMeasurement("70% dark chocolate", ".")).toBeNull();
     });
 
     it("returns null for unquantified ingredients", () => {
@@ -302,13 +520,6 @@ describe("parsers", () => {
         qtyValue: 1,
         unit: "",
       });
-    });
-
-    it("returns null for multipart measurements", () => {
-      expect(
-        getAnchorMeasurement("1 cup + 2 tablespoons sugar", "."),
-      ).toBeNull();
-      expect(getAnchorMeasurement("1 cup or 250ml milk", ".")).toBeNull();
     });
   });
 
@@ -434,6 +645,94 @@ describe("parsers", () => {
       it("handles a very long quantity prefixed line", () => {
         const result = stripIngredient("1 ".repeat(5000) + "apples");
         expect(result).toBe("apples");
+      });
+
+      it("removes the other parts of a multipart measurement", () => {
+        expect(stripIngredient("1 cup or 200 g water")).toBe("water");
+        expect(stripIngredient("1 cup + 2 tablespoons flour")).toBe("flour");
+        expect(stripIngredient("1 cup plus 2 tablespoons flour")).toBe("flour");
+        expect(stripIngredient("1 cup | 250 ml milk")).toBe("milk");
+      });
+
+      it("removes the other parts when the name comes first", () => {
+        expect(stripIngredient("1 cup flour or 120 g")).toBe("flour");
+        expect(stripIngredient("2 cups water + 1 tablespoon")).toBe("water");
+      });
+
+      it("removes the other parts of a non-English multipart measurement", () => {
+        expect(stripIngredient("2 cups oder 480 ml Milch")).toBe("Milch");
+        expect(stripIngredient("1 cup und 2 EL Zucker")).toBe("Zucker");
+      });
+
+      it("keeps both names when a second ingredient is added", () => {
+        expect(stripIngredient("500 g Mehl und 1 TL Salz")).toBe(
+          "Mehl und Salz",
+        );
+        expect(stripIngredient("2 cups flour plus 1 tsp salt")).toBe(
+          "flour plus salt",
+        );
+        expect(stripIngredient("2 cups flour + 1 tsp salt")).toBe(
+          "flour + salt",
+        );
+      });
+
+      it("keeps both names when a second ingredient is offered instead", () => {
+        expect(stripIngredient("2 tbsp butter or margarine")).toBe(
+          "butter or margarine",
+        );
+        expect(stripIngredient("salt or pepper")).toBe("salt or pepper");
+        expect(stripIngredient("1 onion, diced or 2 shallots")).toBe(
+          "onion or shallots",
+        );
+      });
+
+      it("keeps one name when both ways name the same ingredient", () => {
+        expect(stripIngredient("1 cup water or 200 g water")).toBe("water");
+        expect(stripIngredient("1 cup Water or 200 g water")).toBe("Water");
+      });
+
+      it("keeps every name of a line with both kinds of part", () => {
+        expect(
+          stripIngredient("500 g Mehl und 1 TL Salz oder 1 Backmischung"),
+        ).toBe("Mehl und Salz oder Backmischung");
+      });
+
+      it("keeps a name that begins with a multipart word", () => {
+        expect(stripIngredient("Or alimentaire")).toBe("Or alimentaire");
+        expect(stripIngredient("Und Salz")).toBe("Und Salz");
+        expect(stripIngredient("1 g Or alimentaire")).toBe("Or alimentaire");
+        expect(stripIngredient("500 g Mehl Und Salz")).toBe("Mehl Und Salz");
+        expect(
+          stripIngredient("500 g Mehl Und 1 TL Salz oder 1 Backmischung"),
+        ).toBe("Mehl Und 1 TL Salz oder Backmischung");
+      });
+
+      it("keeps the joining word that sits between the kept names", () => {
+        expect(
+          stripIngredient("1 cup sugar + 1 cup sugar or 1 cup honey"),
+        ).toBe("sugar or honey");
+        expect(
+          stripIngredient("500 g Mehl und 500 g Mehl oder 1 Backmischung"),
+        ).toBe("Mehl oder Backmischung");
+        expect(stripIngredient("1 cup flour or 120 g plus 1 tsp salt")).toBe(
+          "flour plus salt",
+        );
+        expect(
+          stripIngredient("2 cups flour or 250 g flour, plus more for dusting"),
+        ).toBe("flour plus more for dusting");
+      });
+
+      it("removes an approximation marker from every part", () => {
+        expect(stripIngredient("~1 cup or 240 ml stock")).toBe("stock");
+        expect(stripIngredient("~ 1 cup or 200 g water")).toBe("water");
+      });
+
+      it("ignores a multipart word inside a parenthetical note", () => {
+        expect(stripIngredient("1 cup milk (whole or skim)")).toBe("milk");
+        expect(stripIngredient("1 cup (240 ml or 1 lb) water")).toBe("water");
+        expect(stripIngredient("1 cup flour (about 120 g, plus more)")).toBe(
+          "flour",
+        );
       });
     });
 
@@ -2791,6 +3090,18 @@ describe("parsers", () => {
         expect(
           getPlainMeasurementsForLocaleIngredient("1,125 kg Mehl", ","),
         ).toEqual(["1.125 kg"]);
+        expect(
+          getPlainMeasurementsForLocaleIngredient(
+            "1,5 kg oder 1500 g Kartoffeln",
+            ",",
+          ),
+        ).toEqual(["1.5 kg"]);
+        expect(
+          getPlainMeasurementsForLocaleIngredient(
+            "1,5 kg + 500 g Kartoffeln",
+            ",",
+          ),
+        ).toEqual(["1.5 kg", "500 g"]);
       });
 
       it("strips a comma-written measurement from the ingredient title", () => {

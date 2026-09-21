@@ -20,6 +20,7 @@ import {
   parseIngredients,
   parseYieldCount,
   stripIngredient,
+  type AnchorMeasurement,
   ParsedIngredient,
   type DecimalNotation,
   applyDecimalNotation,
@@ -30,12 +31,9 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 export type UnitSystem = "original" | "metric" | "imperial";
 
-interface AnchorOption {
+interface AnchorOption extends AnchorMeasurement {
   index: number;
   label: string;
-  qtyText: string;
-  qtyValue: number;
-  unit: string;
 }
 
 @Component({
@@ -159,6 +157,7 @@ export class ScaleRecipeComponent implements OnInit {
     const ingredient = this.ingredients[this.anchorIndex];
     if (!ingredient) return;
     const scaleStr = this.scale.trim() || "1";
+    if (this.toNumeric(scaleStr) === null) return;
     const parsed = parseIngredients(ingredient.originalContent, scaleStr, {
       targetSystem: this.targetSystem(),
       decimalNotationMode: this.decimalNotationMode,

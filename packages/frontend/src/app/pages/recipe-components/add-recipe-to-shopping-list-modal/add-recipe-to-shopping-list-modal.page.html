@@ -73,6 +73,7 @@
       <select-ingredients
         [ingredients]="recipe.ingredients"
         [initialScale]="scale"
+        [initialUnitSystem]="unitSystem"
         (selectedIngredientsChange)="
           selectedIngredientsChange(recipe.id, $event)
         "

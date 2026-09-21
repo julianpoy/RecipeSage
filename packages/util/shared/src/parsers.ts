@@ -191,11 +191,19 @@ const stripNewlines = (text: string): string => {
  */
 const headerRegexp = /^\[.*\]$/;
 
+/** Separates parts that are all used together: "1 cup + 2 tablespoons". */
+const additiveQuantifierRegexp = / \+ | plus | und /;
+
+/** Separates choices where only one is used: "1 cup or 250ml". */
+const alternativeQuantifierRegexp = / or | oder | \| /;
+
 /**
  * Separates multipart measurements like "1 cup + 2 tablespoons",
  * "1 cup plus 2 tablespoons", or "1 cup or 250ml".
  */
-const multipartQuantifierRegexp = / \+ | plus | or | oder | und | \| /;
+const multipartQuantifierRegexp = new RegExp(
+  `${additiveQuantifierRegexp.source}|${alternativeQuantifierRegexp.source}`,
+);
 
 /**
  * Matches a measurement number, including mixed fractions ("1 1/2"),
@@ -246,6 +254,14 @@ const fillerWordsRegexp =
  */
 const notesRegexp = /\(.*?\)/;
 
+/** The "~" marker a scaled measurement carries: "~2 cups". */
+const leadingApproximationRegexp = /^~\s*/;
+
+const isMeasurementAPercentage = (
+  ingredientPart: string,
+  measurement: string,
+): boolean => ingredientPart.charAt(measurement.length) === "%";
+
 /**
  * Removes inline notes within parenthesis.
  * For example: "1 cup tomato sauce (see sauce section)" becomes
@@ -268,45 +284,134 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
   return strippedIngredient
     .split(multipartQuantifierRegexp)
     .map((ingredientPart) => {
-      const measurementMatch = stripNotes(ingredientPart).match(
+      const part = stripNotes(ingredientPart)
+        .trim()
+        .replace(leadingApproximationRegexp, "");
+      const measurementMatch = part.match(
         new RegExp(measurementQuantityRegExp.source, "i"),
       );
 
-      if (measurementMatch) return measurementMatch[0].trim();
-      return null;
+      if (!measurementMatch) return null;
+      if (isMeasurementAPercentage(part, measurementMatch[0])) return null;
+      return measurementMatch[0].trim();
     })
     .filter((measurement): measurement is string => !!measurement);
+};
+
+export interface AnchorMeasurement {
+  qtyText: string;
+  qtyValue: number;
+  unit: string;
+}
+
+/**
+ * Splits an ingredient line on its joining words, and hands back those words
+ * too, so a caller can tell an addition from an alternative.
+ */
+const splitIntoJoinedParts = (
+  ingredient: string,
+): { parts: string[]; joiningWords: string[] } => {
+  const cleaned = stripNotes(stripNewlines(ingredient));
+
+  return {
+    parts: cleaned.split(multipartQuantifierRegexp),
+    joiningWords:
+      cleaned.match(new RegExp(multipartQuantifierRegexp, "g")) || [],
+  };
+};
+
+/**
+ * The measurements that add up to the amount the recipe calls for. Where a
+ * line writes one amount a second way ("1 cup or 250ml"), only the first way
+ * carrying a measurement counts, so the total is not doubled.
+ */
+const getAmountMeasurementsForIngredient = (ingredient: string): string[] => {
+  const { parts, joiningWords } = splitIntoJoinedParts(ingredient);
+  const measurements: string[] = [];
+
+  parts.forEach((part, index) => {
+    const restatesTheAmount =
+      index > 0 &&
+      alternativeQuantifierRegexp.test(joiningWords[index - 1] || "");
+    if (restatesTheAmount && measurements.length) return;
+    measurements.push(...getMeasurementsForIngredient(part));
+  });
+
+  return measurements;
 };
 
 export const getPlainMeasurementsForLocaleIngredient = (
   ingredient: string,
   decimalNotationMode: DecimalNotation,
 ): string[] =>
-  getMeasurementsForIngredient(ingredient).map((measurement) =>
+  getAmountMeasurementsForIngredient(ingredient).map((measurement) =>
     localeToPlainMeasurement(measurement, decimalNotationMode),
   );
 
 /**
+ * The anchor for a line that adds measurements of one ingredient, so
+ * "1 cup + 2 tbsp flour" anchors on 1 1/8 cup. Null when the line names a
+ * second ingredient, or when a part will not convert to `unit`.
+ */
+const getSummedAnchorMeasurement = (
+  ingredient: string,
+  unit: string,
+  decimalNotationMode: DecimalNotation,
+): AnchorMeasurement | null => {
+  if (!unit) return null;
+
+  const { parts } = splitIntoJoinedParts(ingredient);
+  if (stripIngredientParts(parts).length !== 1) return null;
+
+  let total = 0;
+  for (const measurement of getPlainMeasurementsForLocaleIngredient(
+    ingredient,
+    decimalNotationMode,
+  )) {
+    const converted = parseUnit(measurement).to(unit);
+    if (!converted || !(converted.value > 0)) return null;
+    total += converted.value;
+  }
+
+  const readable = nearestCleanFraction(total);
+  const isExact = readable.n / readable.d === total;
+  const qtyValue = isExact ? total : parseFloat(total.toFixed(3));
+  if (qtyValue <= 0) return null;
+
+  return {
+    qtyText: isExact
+      ? applyDecimalNotation(
+          new FractionJS(readable.n, readable.d).toFraction(true),
+          decimalNotationMode,
+        )
+      : formatQuantity(qtyValue, decimalNotationMode, 3),
+    qtyValue,
+    unit,
+  };
+};
+
+/**
  * Returns the measurement to anchor scaling on for an ingredient line, or null
- * if the line is empty, a header, multipart ("1 cup + 2 tbsp"), or otherwise
- * has no numerically-parseable leading quantity. For ranges ("1-2 cups",
- * "1 to 2 cups") the lower bound is used as the anchor.
+ * if the line is empty, a header, or otherwise has no numerically-parseable
+ * leading quantity. For ranges ("1-2 cups", "1 to 2 cups") the lower bound is
+ * used as the anchor.
  */
 export const getAnchorMeasurement = (
   ingredient: string,
   decimalNotationMode: DecimalNotation,
-): { qtyText: string; qtyValue: number; unit: string } | null => {
+): AnchorMeasurement | null => {
   const cleaned = stripNewlines(ingredient).trim();
   if (!cleaned) return null;
   if (headerRegexp.test(cleaned)) return null;
 
   const withFractions = replaceFractionsInText(cleaned);
-  const parts = withFractions.split(multipartQuantifierRegexp);
-  if (parts.length !== 1) return null;
-
-  const noNotes = stripNotes(parts[0]).replace(/^~\s*/, "");
+  const noNotes = stripNotes(withFractions).replace(
+    leadingApproximationRegexp,
+    "",
+  );
   const match = noNotes.match(new RegExp(measurementQuantityRegExp, "i"));
   if (!match || !match[1]) return null;
+  if (isMeasurementAPercentage(noNotes, match[0])) return null;
 
   const plainQty = localeToPlainMeasurement(
     match[1]
@@ -325,6 +430,10 @@ export const getAnchorMeasurement = (
   if (!Number.isFinite(qtyValue) || qtyValue <= 0) return null;
 
   const unit = match[0].substring(match[1].length).trim();
+  if (additiveQuantifierRegexp.test(noNotes)) {
+    return getSummedAnchorMeasurement(noNotes, unit, decimalNotationMode);
+  }
+
   return {
     qtyText: applyDecimalNotation(plainQty, decimalNotationMode),
     qtyValue,
@@ -383,32 +492,93 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .join("");
 };
 
+/** A measurement at the start of a part: the "2" of "2 cups flour". */
+const leadingMeasurementRegexp = new RegExp(`^(${measurementRegexp.source})`);
+
+/** A unit name at the start of a part: the "cups" of "cups flour". */
+const leadingQuantityRegexp = new RegExp(`^(${quantityRegexp.source})`, "i");
+
+/** A filler word at the start of a part: the "chopped" of "chopped onions". */
+const leadingFillerWordsRegexp = new RegExp(
+  `^(${fillerWordsRegexp.source})`,
+  "i",
+);
+
+/** A filler word at the end of a part: the "chopped" of "onions chopped". */
+const trailingFillerWordsRegexp = new RegExp(
+  `(${fillerWordsRegexp.source})$`,
+  "i",
+);
+
+/** An inline note anywhere in a part: the "(peeled)" of "apples (peeled)". */
+const anyNotesRegexp = new RegExp(`(${notesRegexp.source})`, "i");
+
+/** A comma left at the end of a part: the "," of "flour,". */
+const trailingCommaRegexp = /,$/;
+
 /**
- * As best we can, removes anything but the singular ingredient name itself.
- * 3 apples, blended => apples
+ * Takes the measurement, unit, filler words and notes off one part of a line,
+ * leaving the ingredient name. Repeats until nothing more comes off.
  */
-export const stripIngredient = (ingredient: string): string => {
-  let current = stripNewlines(ingredient);
+const stripIngredientPart = (ingredientPart: string): string => {
+  let current = ingredientPart;
 
   for (;;) {
     const trimmed = replaceFractionsInText(current)
       .trim()
-      .replace(new RegExp(`^(${measurementRegexp.source})`), "")
+      .replace(leadingApproximationRegexp, "")
       .trim()
-      .replace(new RegExp(`^(${quantityRegexp.source})`, "i"), "")
+      .replace(leadingMeasurementRegexp, "")
       .trim()
-      .replace(new RegExp(`^(${fillerWordsRegexp.source})`, "i"), "")
+      .replace(leadingQuantityRegexp, "")
       .trim()
-      .replace(new RegExp(`(${fillerWordsRegexp.source})$`, "i"), "")
+      .replace(leadingFillerWordsRegexp, "")
       .trim()
-      .replace(new RegExp(`(${notesRegexp.source})`, "i"), "")
+      .replace(trailingFillerWordsRegexp, "")
       .trim()
-      .replace(new RegExp(`,$`, "i"), "")
+      .replace(anyNotesRegexp, "")
+      .trim()
+      .replace(trailingCommaRegexp, "")
       .trim();
 
     if (trimmed === current) return trimmed;
     current = trimmed;
   }
+};
+
+/**
+ * The ingredient name of each part, dropping the parts that name nothing and
+ * any name already seen. Each name keeps the index of the part it came from.
+ */
+const stripIngredientParts = (
+  parts: string[],
+): { name: string; index: number }[] => {
+  const seenNames = new Set<string>();
+
+  return parts
+    .map((part, index) => ({ name: stripIngredientPart(part), index }))
+    .filter(({ name }) => {
+      const seenKey = name.normalize("NFC").toLowerCase();
+      if (!name || seenNames.has(seenKey)) return false;
+      seenNames.add(seenKey);
+      return true;
+    });
+};
+
+/**
+ * As best we can, removes anything but the singular ingredient name itself.
+ * 3 apples, blended => apples
+ */
+export const stripIngredient = (ingredient: string): string => {
+  const { parts, joiningWords } = splitIntoJoinedParts(ingredient);
+  const names = stripIngredientParts(parts);
+
+  return names
+    .map(({ name }, position) => {
+      const next = names[position + 1];
+      return next ? name + (joiningWords[next.index - 1] || "") : name;
+    })
+    .join("");
 };
 
 /**

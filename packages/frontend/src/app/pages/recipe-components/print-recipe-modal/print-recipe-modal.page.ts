@@ -8,6 +8,7 @@ import {
   UtilService,
   RecipeTemplateModifiers,
 } from "../../../services/util.service";
+import type { UnitSystem } from "../../../modals/scale-recipe/scale-recipe.component";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RecipePreviewComponent } from "../../../components/recipe-preview/recipe-preview.component";
 import {
@@ -67,6 +68,8 @@ export class PrintRecipeModalPage {
     required: true,
   })
   scale!: string;
+  @Input()
+  unitSystem: UnitSystem = "original";
 
   selectedTemplate = -1;
   templates: PrintOption[] = [];
@@ -145,6 +148,7 @@ export class PrintRecipeModalPage {
     const token = this.utilService.getToken();
     for (const template of this.templates) {
       template.modifiers.scale = this.scale;
+      template.modifiers.unitSystem = this.unitSystem;
       template.modifiers.showLastMade = true;
       template.modifiers.hideLinkedRecipes = true;
       template.modifiers.preferredLanguage =

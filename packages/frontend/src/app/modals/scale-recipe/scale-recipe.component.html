@@ -54,11 +54,12 @@
         placeholder="{{
           'components.scaleRecipe.anchorPlaceholder' | translate
         }}"
+        dir="auto"
         [ngModel]="anchorIndex"
         (ngModelChange)="onAnchorIngredientChange($event)"
       >
         @for (option of anchorOptions; track option.index) {
-          <ion-select-option [value]="option.index">
+          <ion-select-option [value]="option.index" class="autoTextDirection">
             {{ option.label }}
           </ion-select-option>
         }

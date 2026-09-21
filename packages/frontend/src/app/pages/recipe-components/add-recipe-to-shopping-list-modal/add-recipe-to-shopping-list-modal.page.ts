@@ -19,6 +19,7 @@ import { UtilService } from "../../../services/util.service";
 import { NewShoppingListModalPage } from "../../shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
+import type { UnitSystem } from "../../../modals/scale-recipe/scale-recipe.component";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RecipeSummary, ShoppingListSummary } from "@recipesage/prisma";
 import {
@@ -80,6 +81,7 @@ export class AddRecipeToShoppingListModalPage {
   })
   recipes!: Pick<RecipeSummary, "id" | "title" | "ingredients">[];
   @Input() scale: string = "1";
+  @Input() unitSystem: UnitSystem = "original";
   selectedIngredientsByRecipe: { [key: string]: ParsedIngredient[] } = {};
   selectedIngredients: ParsedIngredient[] = [];
 
