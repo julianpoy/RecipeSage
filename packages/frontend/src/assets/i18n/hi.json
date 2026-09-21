@@ -59,7 +59,7 @@
     "pages.welcome.description.features.sharing.title": "साझाकरण और सहयोग:",
     "pages.welcome.description.features.sharing.description": "रेसिपी को सार्वजनिक रूप से या मित्रों के साथ साझा करें, और भोजन योजनाओं तथा खरीदारी सूचियों पर सहयोग करें",
     "pages.welcome.description.features.migration.title": "विभिन्न प्रकार के स्रोतों से एक साथ आयात करें",
-    "pages.welcome.description.features.migration.description": "इनसे आयात: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, या कोई भी JSON-LD / CSV निर्यात",
+    "pages.welcome.description.features.migration.description": "इनसे आयात करें: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote या कोई भी JSON-LD / CSV निर्यात",
     "pages.welcome.description.features.export.title": "निर्यात और डेटा पोर्टेबिलिटी:",
     "pages.welcome.description.features.export.description": "आपका डेटा आपका अपना है। RecipeSage उसे बंधक नहीं रखता। अपने डेटा को कभी भी PDF, JSON-LD या सादे पाठ में निर्यात करें",
     "pages.welcome.description.cta": "RecipeSage क्यों?",

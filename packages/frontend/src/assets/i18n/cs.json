@@ -732,7 +732,7 @@
     "pages.welcome.description.features.sharing.title": "Sdílení a spolupráce:",
     "pages.welcome.description.features.sharing.description": "Sdílejte recepty veřejně nebo s přáteli a spolupracujte na jídelních plánech a nákupních seznamech",
     "pages.welcome.description.features.migration.title": "Hromadný import z široké škály zdrojů",
-    "pages.welcome.description.features.migration.description": "Import z: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox nebo libovolného exportu JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Importuje z: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote nebo z libovolného exportu JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Export a přenositelnost dat:",
     "pages.welcome.description.features.export.description": "Vaše data jsou vaše. RecipeSage je nedrží jako rukojmí. Data můžete kdykoli exportovat do formátu PDF, JSON-LD nebo prostého textu",
     "pages.welcome.description.cta.noAds": "Zdarma a s otevřeným zdrojovým kódem: bez reklam, bez placeného přístupu, bez sledování",

@@ -397,7 +397,7 @@
     "pages.welcome.description.features.sharing.title": "Compartilhamento e colaboração:",
     "pages.welcome.description.features.sharing.description": "Compartilhe receitas publicamente ou com amigos, e colabore em planos de refeições e listas de compras",
     "pages.welcome.description.features.migration.title": "Importação em massa de uma grande variedade de fontes",
-    "pages.welcome.description.features.migration.description": "Importações de: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox ou qualquer exportação JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Importa de: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote ou qualquer exportação em JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Exportação e portabilidade de dados:",
     "pages.welcome.description.features.export.description": "Seus dados são seus. O RecipeSage não os mantém reféns. Exporte seus dados para PDF, JSON-LD ou texto simples a qualquer momento",
     "pages.welcome.languages.title": "No seu idioma",

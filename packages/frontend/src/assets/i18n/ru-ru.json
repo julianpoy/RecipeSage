@@ -1192,7 +1192,7 @@
     "pages.welcome.description.features.sharing.title": "Общий доступ и совместная работа",
     "pages.welcome.description.features.sharing.description": "Делитесь рецептами публично или с друзьями и совместно работайте над планами питания и списками покупок",
     "pages.welcome.description.features.migration.title": "Массовый импорт из широкого спектра источников",
-    "pages.welcome.description.features.migration.description": "Импорт из: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox или любого экспорта JSON-LD / CSV",
+    "pages.welcome.description.features.migration.description": "Импорт из: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote или любого экспорта JSON-LD / CSV",
     "pages.welcome.description.features.export.title": "Экспорт и переносимость данных",
     "pages.welcome.description.features.export.description": "Ваши данные принадлежат только вам. RecipeSage не удерживает их в заложниках. Экспортируйте данные в PDF, JSON-LD или обычный текст в любое время",
     "pages.welcome.languages.title": "На вашем языке",

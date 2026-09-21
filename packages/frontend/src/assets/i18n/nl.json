@@ -1089,7 +1089,7 @@
     "pages.welcome.description.features.sharing.title": "Delen en samenwerken",
     "pages.welcome.description.features.sharing.description": "Deel recepten openbaar of met vrienden, en werk samen aan maaltijdplannen en boodschappenlijsten",
     "pages.welcome.description.features.migration.title": "In bulk importeren uit een grote verscheidenheid aan bronnen",
-    "pages.welcome.description.features.migration.description": "Importen uit: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox of een willekeurige JSON-LD- / CSV-export",
+    "pages.welcome.description.features.migration.description": "Importeert uit: Pepperplate, Living Cookbook, Paprika, Mela, Crouton, Cookmate, Recipe Keeper, CopyMeThat, CookBookManager, Flavorish, Evernote, Plan to Eat, MyRecipeBox, Tandoor, Apple Notes, Google Keep, Google Docs, Microsoft Word, Obsidian, Notion, Joplin, Bear, Logseq, Simplenote of een willekeurige JSON-LD- / CSV-export",
     "pages.welcome.description.features.export.title": "Exporteren en gegevensportabiliteit",
     "pages.welcome.description.features.export.description": "Uw gegevens zijn van u. RecipeSage houdt ze niet gegijzeld. Exporteer uw gegevens op elk moment naar PDF, JSON-LD of platte tekst",
     "pages.welcome.languages.title": "In uw taal",
