@@ -589,8 +589,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(webpack@5.107.2)
       electron:
-        specifier: ^42.4.1
-        version: 42.4.1
+        specifier: ^44.4.3
+        version: 44.4.3
       electron-squirrel-startup:
         specifier: ^1.0.1
         version: 1.0.1
@@ -8438,8 +8438,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@42.4.1:
-    resolution: {integrity: sha512-8CYHJP5O4wFO+ycoJR98yy907MmPeo+vWXrzjxmGGgRNKqv8pOjjm+wphO0CCgQJnBU7+QUPSJS4QXhbKrO50w==}
+  electron@44.4.3:
+    resolution: {integrity: sha512-LTpSFTB40qVCXIX5xMo+cgHI/Jjkbjw7VpB26PccEbroqOn72LBukeaDwPVo1fBYzSzs0c9iPuAucFCO7Tw81Q==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -23978,7 +23978,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@42.4.1:
+  electron@44.4.3:
     dependencies:
       '@electron-internal/extract-zip': 1.0.4
       '@electron/get': 5.0.0
