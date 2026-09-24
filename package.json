@@ -220,7 +220,7 @@
     "@types/pdfmake": "^0.3.3",
     "@types/sanitize-html": "^2.16.0",
     "@types/showdown": "^2.0.6",
-    "@types/supertest": "^6.0.2",
+    "@types/supertest": "^7.2.1",
     "@types/yauzl-promise": "^4.0.1",
     "@types/zip-stream": "^7.0.0",
     "@vitest/coverage-v8": "4.1.11",
