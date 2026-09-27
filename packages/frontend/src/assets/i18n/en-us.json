@@ -1946,6 +1946,10 @@
   "pages.serverSettings.gripWs.placeholder": "wss://example.com/grip/ws",
   "pages.serverSettings.gripWs.helper": "The WebSocket URL the app uses for live updates. This may be on a different host than the API. The app will reload when you save.",
   "pages.serverSettings.gripWs.invalid": "Please enter a valid ws(s) URL.",
+  "pages.serverSettings.webBase.label": "Web URL",
+  "pages.serverSettings.webBase.placeholder": "https://example.com",
+  "pages.serverSettings.webBase.helper": "The address you use to open RecipeSage in a web browser. Links you share will use this address.",
+  "pages.serverSettings.webBase.invalid": "Please enter a valid http(s) URL without a path, such as https://example.com. Do not include /app.",
   "sync.notification.title": "Offline Sync Complete",
   "sync.notification.body": "Your content has been cached for offline use, and will be kept up-to-date automatically.",
 

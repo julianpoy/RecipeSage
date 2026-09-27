@@ -293,8 +293,8 @@ export class AssistantPage {
     });
   }
 
-  openRecipe(recipe: RecipeSummaryLite) {
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
+  openRecipe(recipe: RecipeSummaryLite, event: MouseEvent) {
+    this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
   onMessageKeyDown(event: KeyboardEvent) {

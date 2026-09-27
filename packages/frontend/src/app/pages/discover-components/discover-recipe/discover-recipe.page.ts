@@ -45,6 +45,7 @@ import {
 } from "@recipesage/util/shared";
 import { System } from "@recipesage/unitz-ts";
 import { linkifyHtml } from "../../../utils/linkify";
+import { getShareLinkOrigin } from "../../../utils/serverConfig";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import {
@@ -415,7 +416,7 @@ export class DiscoverRecipePage {
     if (!this.recipe) return;
 
     const url =
-      window.location.origin +
+      getShareLinkOrigin() +
       "/app" +
       RouteMap.DiscoverRecipePage.getPath(this.recipe.id);
 

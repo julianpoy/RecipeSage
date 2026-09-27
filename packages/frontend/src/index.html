@@ -61,7 +61,7 @@
         window.deferredInstallPrompt = e;
       });
 
-      if ("serviceWorker" in navigator) {
+      if ("serviceWorker" in navigator && !window.electronAPI) {
         navigator.serviceWorker
           .register("/service-worker.js", {
             scope: "/",

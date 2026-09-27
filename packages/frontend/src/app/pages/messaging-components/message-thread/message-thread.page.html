@@ -42,7 +42,10 @@
           <div class="recipe">
             <!-- RECIPIENT -->
             @if (item.message.recipe) {
-              <ion-item (click)="openRecipe(item.message.recipe)" lines="none">
+              <ion-item
+                (click)="openRecipe(item.message.recipe, $event)"
+                lines="none"
+              >
                 @if (
                   item.message.recipe.recipeImages.at(0)?.image?.location;
                   as recipeImage
@@ -80,7 +83,7 @@
             <!-- SENDER -->
             @if (item.message.originalRecipe) {
               <ion-item
-                (click)="openRecipe(item.message.originalRecipe)"
+                (click)="openRecipe(item.message.originalRecipe, $event)"
                 lines="none"
               >
                 @if (

@@ -85,6 +85,23 @@
         ></text-input>
 
         <br />
+
+        @if (canCustomizeWebBase) {
+          <text-input
+            [label]="'pages.serverSettings.webBase.label' | translate"
+            [placeholder]="
+              'pages.serverSettings.webBase.placeholder' | translate
+            "
+            [helperText]="'pages.serverSettings.webBase.helper' | translate"
+            [errorText]="'pages.serverSettings.webBase.invalid' | translate"
+            [invalid]="webBaseInvalid"
+            type="url"
+            inputmode="url"
+            [(ngModel)]="webBase"
+          ></text-input>
+
+          <br />
+        }
       }
 
       @if (previewApiBase; as apiBase) {

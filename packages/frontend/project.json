@@ -53,12 +53,7 @@
       "dependsOn": ["util-shared:build"],
       "options": {
         "cwd": "packages/frontend",
-        "commands": [
-          "ng build --configuration=desktop",
-          "IS_DESKTOP=true tsx build-service-worker.ts",
-          "workbox injectManifest"
-        ],
-        "parallel": false
+        "command": "ng build --configuration=desktop"
       }
     },
     "typecheck": {

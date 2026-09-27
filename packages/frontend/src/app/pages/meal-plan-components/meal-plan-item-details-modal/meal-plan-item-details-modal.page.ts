@@ -117,12 +117,10 @@ export class MealPlanItemDetailsModalPage {
     }
   }
 
-  openRecipe() {
+  openRecipe(event: MouseEvent) {
     if (!this.mealItem.recipe) return;
 
-    this.navCtrl.navigateForward(
-      RouteMap.RecipePage.getPath(this.mealItem.recipe.id),
-    );
+    this.utilService.openRecipe(this.navCtrl, this.mealItem.recipe.id, event);
     this.close();
   }
 

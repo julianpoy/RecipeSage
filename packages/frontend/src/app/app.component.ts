@@ -47,6 +47,8 @@ import { ServerActionsService } from "./services/server-actions.service";
 import { SyncService } from "./services/sync.service";
 import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 import { getRoutePattern } from "./utils/getRoutePattern";
+import { getElectronAPI } from "./utils/electron";
+import { showLocalNotification } from "./utils/showLocalNotification";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
@@ -233,6 +235,8 @@ export class AppComponent {
       this.messagingService.requestNotifications();
     }
 
+    this.initDesktopNotifications();
+
     this.updateNavList();
     this.updateIsLoggedIn();
     this.migrateSession();
@@ -308,6 +312,17 @@ export class AppComponent {
     });
   }
 
+  private initDesktopNotifications() {
+    const electronAPI = getElectronAPI();
+    if (!electronAPI) return;
+
+    electronAPI.onNotificationClick((route) => {
+      this.ngZone.run(() => {
+        void this.router.navigateByUrl(route);
+      });
+    });
+  }
+
   initEventListeners() {
     this.events.subscribe(
       [
@@ -366,6 +381,16 @@ export class AppComponent {
         ],
       });
       toast.present();
+
+      if (!document.hasFocus()) {
+        showLocalNotification({
+          title: payload.otherUser.name,
+          body: payload.recipe ? payload.recipe.title : payload.body,
+          route: RouteMap.MessageThreadPage.getPath(payload.otherUser.id),
+          tag: `messages:new-${payload.otherUser.id}`,
+          skipWhenHidden: true,
+        });
+      }
     });
   }
 

@@ -17,6 +17,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserKnownUserComponent } from "../../components/select-user-knownuser/select-user-knownuser.component";
 import { CopyWithWebshareComponent } from "../../components/copy-with-webshare/copy-with-webshare.component";
 import { RecipePreviewComponent } from "../../components/recipe-preview/recipe-preview.component";
+import { getShareLinkOrigin } from "../../utils/serverConfig";
 import {
   IonHeader,
   IonToolbar,
@@ -137,10 +138,10 @@ export class ShareModalPage {
       starOutline,
       swapHorizontalOutline,
     });
+    const origin = getShareLinkOrigin();
+
     setTimeout(() => {
-      this.recipeURL =
-        `${window.location.protocol}//${window.location.host}` +
-        `/api/share/recipe/${this.recipe.id}`;
+      this.recipeURL = `${origin}/api/share/recipe/${this.recipe.id}`;
 
       this.updateEmbed(true);
     });

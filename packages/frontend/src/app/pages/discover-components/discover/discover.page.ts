@@ -320,9 +320,11 @@ export class DiscoverPage {
     return response.recipes.length > 0;
   }
 
-  openRecipe(recipe: DiscoverRecipeSummary) {
-    this.navCtrl.navigateForward(
+  openRecipe(recipe: DiscoverRecipeSummary, event: MouseEvent) {
+    this.utilService.navigateForwardOrOpenWindow(
+      this.navCtrl,
       RouteMap.DiscoverRecipePage.getPath(recipe.id),
+      event,
     );
   }
 }

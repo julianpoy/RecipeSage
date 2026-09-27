@@ -33,14 +33,22 @@ import {
 import {
   serverConfig,
   canCustomizeServerUrls,
+  canCustomizeWebBase,
   BETA_API_BASE_URL,
   BETA_GRIP_WS_BASE,
   SERVER_PRESET_STORAGE_KEY,
   CUSTOM_API_BASE_URL_KEY,
   CUSTOM_GRIP_WS_URL_KEY,
+  CUSTOM_WEB_BASE_URL_KEY,
 } from "../../../utils/serverConfig";
 
 type SelectablePreset = "default" | "beta" | "custom";
+
+interface ServerTarget {
+  apiBase: string;
+  gripWsBase: string;
+  webBase: string | null;
+}
 
 @Component({
   standalone: true,
@@ -81,9 +89,13 @@ export class ServerSettingsPage {
 
   apiBase = serverConfig.preset === "custom" ? serverConfig.apiBase : "";
   gripWsBase = serverConfig.preset === "custom" ? serverConfig.gripWsBase : "";
+  webBase = serverConfig.preset === "custom" ? serverConfig.webBase : "";
+
+  canCustomizeWebBase = canCustomizeWebBase;
 
   apiBaseInvalid = false;
   gripWsInvalid = false;
+  webBaseInvalid = false;
 
   constructor() {
     addIcons({ serverOutline, warningOutline });
@@ -102,6 +114,7 @@ export class ServerSettingsPage {
   onPresetChange() {
     this.apiBaseInvalid = false;
     this.gripWsInvalid = false;
+    this.webBaseInvalid = false;
   }
 
   get previewApiBase(): string {
@@ -136,24 +149,41 @@ export class ServerSettingsPage {
     return value.endsWith("/") ? value : `${value}/`;
   }
 
-  private resolveTarget(): { apiBase: string; gripWsBase: string } | null {
+  private resolveWebBase(): string | null {
+    const value = this.validateUrl(this.webBase, ["http:", "https:"]);
+    if (!value) return null;
+
+    const parsed = new URL(value);
+    if (parsed.pathname !== "/" || parsed.search || parsed.hash) return null;
+
+    return parsed.origin;
+  }
+
+  private resolveTarget(): ServerTarget | null {
     switch (this.preset) {
       case "beta":
-        return { apiBase: BETA_API_BASE_URL, gripWsBase: BETA_GRIP_WS_BASE };
+        return {
+          apiBase: BETA_API_BASE_URL,
+          gripWsBase: BETA_GRIP_WS_BASE,
+          webBase: null,
+        };
       case "custom": {
         const apiBase = this.resolveApiBase();
         const gripWsBase = this.validateUrl(this.gripWsBase, ["ws:", "wss:"]);
+        const webBase = canCustomizeWebBase ? this.resolveWebBase() : null;
 
         this.apiBaseInvalid = !apiBase;
         this.gripWsInvalid = !gripWsBase;
-        if (!apiBase || !gripWsBase) return null;
+        this.webBaseInvalid = canCustomizeWebBase && !webBase;
+        if (!apiBase || !gripWsBase || this.webBaseInvalid) return null;
 
-        return { apiBase, gripWsBase };
+        return { apiBase, gripWsBase, webBase };
       }
       default:
         return {
           apiBase: DEFAULT_API_BASE_URL,
           gripWsBase: DEFAULT_GRIP_WS_URL,
+          webBase: null,
         };
     }
   }
@@ -162,11 +192,20 @@ export class ServerSettingsPage {
     const target = this.resolveTarget();
     if (!target) return;
 
+    const customPresetChanged =
+      (this.preset === "custom") !== (serverConfig.preset === "custom");
     const serverChanged =
+      customPresetChanged ||
       target.apiBase !== serverConfig.apiBase ||
       target.gripWsBase !== serverConfig.gripWsBase;
 
     if (!serverChanged) {
+      if (target.webBase && target.webBase !== serverConfig.webBase) {
+        localStorage.setItem(CUSTOM_WEB_BASE_URL_KEY, target.webBase);
+        window.location.reload();
+        return;
+      }
+
       this.navCtrl.navigateBack(RouteMap.SettingsPage.getPath());
       return;
     }
@@ -203,14 +242,16 @@ export class ServerSettingsPage {
     await alert.present();
   }
 
-  private async applyServerChange(target: {
-    apiBase: string;
-    gripWsBase: string;
-  }) {
+  private async applyServerChange(target: ServerTarget) {
     if (this.preset === "custom") {
       localStorage.setItem(SERVER_PRESET_STORAGE_KEY, "custom");
       localStorage.setItem(CUSTOM_API_BASE_URL_KEY, target.apiBase);
       localStorage.setItem(CUSTOM_GRIP_WS_URL_KEY, target.gripWsBase);
+      if (target.webBase) {
+        localStorage.setItem(CUSTOM_WEB_BASE_URL_KEY, target.webBase);
+      } else {
+        localStorage.removeItem(CUSTOM_WEB_BASE_URL_KEY);
+      }
     } else {
       localStorage.setItem(SERVER_PRESET_STORAGE_KEY, this.preset);
     }

@@ -1,6 +1,17 @@
+export interface DesktopNotification {
+  title: string;
+  body: string;
+  tag: string;
+  route?: string;
+}
+
 export interface ElectronAPI {
   isDesktop: true;
   onAuthCode: (callback: (code: string) => void) => () => void;
+  writeCachedImageFile: (cachePath: string, data: Uint8Array) => Promise<void>;
+  deleteCachedImageFile: (cachePath: string) => Promise<void>;
+  showNotification: (notification: DesktopNotification) => Promise<void>;
+  onNotificationClick: (callback: (route: string) => void) => () => void;
 }
 
 declare global {

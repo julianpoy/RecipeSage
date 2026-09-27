@@ -1,12 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { AbortedSyncError, SyncManager } from "../utils/SyncManager";
 import { getLocalDb } from "../utils/localDb";
+import { showLocalNotification } from "../utils/showLocalNotification";
 import { SearchService } from "./search.service";
 import { EventName, EventService } from "./event.service";
 import { TRPCClientError } from "@trpc/client";
 import * as Sentry from "@sentry/browser";
-
-const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
 @Injectable({
   providedIn: "root",
@@ -75,18 +74,11 @@ export class SyncService {
       const manager = await this.managerP;
       await manager.triggerSyncAll();
 
-      if (!("serviceWorker" in navigator)) return;
-
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        await registration.showNotification(notification.title, {
-          tag: notification.tag || "syncCompleted",
-          icon: RS_LOGO_URL,
-          body: notification.body,
-        });
-      } catch (e) {
-        console.warn("Failed to show sync-completed notification", e);
-      }
+      showLocalNotification({
+        title: notification.title,
+        body: notification.body,
+        tag: notification.tag || "syncCompleted",
+      });
     } catch (e) {
       this.handleSyncManagerError(e);
     }

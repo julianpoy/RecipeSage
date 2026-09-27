@@ -681,8 +681,8 @@ export class ShoppingListPage {
     this.loadList();
   }
 
-  openRecipe(id: string): void {
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
+  openRecipe(id: string, event: MouseEvent): void {
+    this.utilService.openRecipe(this.navCtrl, id, event);
   }
 
   parseCategoryTitle(title: string) {

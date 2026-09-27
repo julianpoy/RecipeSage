@@ -17,6 +17,7 @@ import { AlertController } from "@ionic/angular/standalone";
 import { ServerActionsService } from "./server-actions.service";
 import { EventName, EventService } from "./event.service";
 import { RouteMap, UtilService } from "./util.service";
+import { getIsElectron } from "../utils/electron";
 import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
@@ -35,6 +36,7 @@ export class MessagingService {
   private fcmToken?: string;
 
   private isNative = Capacitor.isNativePlatform();
+  private isDesktop = getIsElectron();
   private nativePermissionGranted = false;
 
   private _isFCMSupported: boolean = false;
@@ -172,6 +174,10 @@ export class MessagingService {
   isNotificationsEnabled() {
     if (this.isNative) {
       return this._isFCMSupported && this.nativePermissionGranted;
+    }
+
+    if (this.isDesktop) {
+      return true;
     }
 
     return (

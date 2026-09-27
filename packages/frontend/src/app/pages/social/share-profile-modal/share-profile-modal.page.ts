@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { RouteMap } from "../../../services/util.service";
+import { getShareLinkOrigin } from "../../../utils/serverConfig";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 import {
@@ -103,7 +104,7 @@ export class ShareProfileModalPage implements OnInit {
       return this.translate.instant(
         "pages.shareProfileModal.errorLoadingProfileUrl",
       );
-    return `https://${window.location.host}/app/${RouteMap.ProfilePage.getPath(
+    return `${getShareLinkOrigin()}/app/${RouteMap.ProfilePage.getPath(
       `@${this.profile.handle}`,
     )}`;
   }

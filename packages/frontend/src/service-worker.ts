@@ -66,8 +66,6 @@ import { SWMessageType } from "./app/utils/localDb/sendMessageToSW";
 import { DebugStoreService } from "./app/services/debugStore.service";
 import { BASE_CACHE_NAME, LANG_CACHE_NAME } from "./app/utils/swCacheNames";
 
-const IS_DESKTOP = process.env.IS_DESKTOP === "true";
-
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST || []);
 
@@ -116,18 +114,16 @@ const langStrategy = new StaleWhileRevalidate({
   ],
 });
 
-if (!IS_DESKTOP) {
-  registerRoute(
-    new NavigationRoute(
-      (options) =>
-        indexStrategy.handle({
-          request: new Request("/app/index.html", { cache: "no-cache" }),
-          event: options.event,
-        }),
-      { allowlist: [/^\/app(\/|$)/] },
-    ),
-  );
-}
+registerRoute(
+  new NavigationRoute(
+    (options) =>
+      indexStrategy.handle({
+        request: new Request("/app/index.html", { cache: "no-cache" }),
+        event: options.event,
+      }),
+    { allowlist: [/^\/app(\/|$)/] },
+  ),
+);
 
 const astroStrategy = new StaleWhileRevalidate({
   cacheName: "astro-pages",
@@ -164,31 +160,29 @@ registerRoute(
 clientsClaim();
 
 self.addEventListener("install", async (event) => {
-  if (!IS_DESKTOP) {
-    event.waitUntil(
-      caches
-        .open(BASE_CACHE_NAME)
-        .then((cache) =>
-          cache.add(new Request("/app/index.html", { cache: "reload" })),
-        )
-        .catch((e) => {
-          console.error(e);
-        }),
-    );
-
-    const [, langWarmDone] = langStrategy.handleAll({
-      request: new Request(
-        `/app/assets/i18n/en-us.json?version=${process.env.APP_VERSION}`,
-      ),
-      event,
-    });
-
-    event.waitUntil(
-      langWarmDone.catch((e) => {
+  event.waitUntil(
+    caches
+      .open(BASE_CACHE_NAME)
+      .then((cache) =>
+        cache.add(new Request("/app/index.html", { cache: "reload" })),
+      )
+      .catch((e) => {
         console.error(e);
       }),
-    );
-  }
+  );
+
+  const [, langWarmDone] = langStrategy.handleAll({
+    request: new Request(
+      `/app/assets/i18n/en-us.json?version=${process.env.APP_VERSION}`,
+    ),
+    event,
+  });
+
+  event.waitUntil(
+    langWarmDone.catch((e) => {
+      console.error(e);
+    }),
+  );
 
   self.skipWaiting();
 });
@@ -220,11 +214,9 @@ addEventListener("message", async (event) => {
   }
 });
 
-if (!IS_DESKTOP) {
-  registerRoute(/\/app\/index\.html$/, indexStrategy);
+registerRoute(/\/app\/index\.html$/, indexStrategy);
 
-  registerRoute(/\/app\/assets\/i18n\//, langStrategy);
-}
+registerRoute(/\/app\/assets\/i18n\//, langStrategy);
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
@@ -275,6 +267,26 @@ const initializeFirebase = async () => {
 
 initializeFirebase().catch((e) => {
   console.error(e);
+});
+
+self.addEventListener("notificationclick", (event) => {
+  const route = event.notification.data?.route;
+  if (typeof route !== "string" || !route) return;
+
+  event.notification.close();
+  const url = new URL(`/app${route}`, self.location.origin);
+
+  event.waitUntil(
+    (async () => {
+      const [windowClient] = await self.clients.matchAll({ type: "window" });
+      if (windowClient) {
+        await windowClient.focus();
+        await windowClient.navigate(url.href);
+        return;
+      }
+      await self.clients.openWindow(url.href);
+    })(),
+  );
 });
 
 console.log("Service worker mounted");

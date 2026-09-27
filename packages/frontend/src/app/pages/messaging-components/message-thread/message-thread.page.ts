@@ -277,8 +277,11 @@ export class MessageThreadPage {
     this.loadMessages();
   }
 
-  openRecipe(recipe: NonNullable<MessageSummary["originalRecipe"]>) {
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
+  openRecipe(
+    recipe: NonNullable<MessageSummary["originalRecipe"]>,
+    event: MouseEvent,
+  ) {
+    this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
   onMessageKeyDown(event: KeyboardEvent) {

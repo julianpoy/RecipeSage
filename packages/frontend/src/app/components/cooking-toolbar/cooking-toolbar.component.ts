@@ -3,7 +3,7 @@ import { AlertController, NavController } from "@ionic/angular/standalone";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RouteMap } from "../../services/util.service";
+import { RouteMap, UtilService } from "../../services/util.service";
 import {
   CookingToolbarService,
   PinnedRecipe,
@@ -29,18 +29,23 @@ export class CookingToolbarComponent {
   private router = inject(Router);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
+  private utilService = inject(UtilService);
   cookingToolbarService = inject(CookingToolbarService);
 
-  openRecipe(pinnedRecipe: PinnedRecipe) {
+  openRecipe(pinnedRecipe: PinnedRecipe, event: MouseEvent) {
     if (pinnedRecipe.path) {
-      this.navCtrl.navigateForward(pinnedRecipe.path);
+      this.utilService.navigateForwardOrOpenWindow(
+        this.navCtrl,
+        pinnedRecipe.path,
+        event,
+      );
       return;
     }
     const inCookMode = this.router.url.split("?")[0].endsWith("/cook");
     const path = inCookMode
       ? RouteMap.RecipePageCook.getPath(pinnedRecipe.id)
       : RouteMap.RecipePage.getPath(pinnedRecipe.id);
-    this.navCtrl.navigateForward(path);
+    this.utilService.navigateForwardOrOpenWindow(this.navCtrl, path, event);
   }
 
   async clearPins() {

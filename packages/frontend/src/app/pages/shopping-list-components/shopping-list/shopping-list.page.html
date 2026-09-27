@@ -267,7 +267,9 @@
         @for (recipeId of recipeIds; track recipeId) {
           <ion-item button>
             <ion-label
-              (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe!.id)"
+              (click)="
+                openRecipe(itemsByRecipeId[recipeId][0].recipe!.id, $event)
+              "
             >
               {{ itemsByRecipeId[recipeId][0].recipe!.title }}
             </ion-label>

@@ -9,6 +9,7 @@ import {
   putCachedImage,
   touchCachedImage,
 } from "../utils/imageCacheDb";
+import { getElectronAPI } from "../utils/electron";
 
 const CACHE_SUBDIR = "image-cache";
 const MAX_CACHE_BYTES = 150 * 1024 * 1024;
@@ -18,11 +19,13 @@ const EVICTION_BATCH = 25;
   providedIn: "root",
 })
 export class ImageCacheService {
-  private isNative = Capacitor.isNativePlatform();
+  private electronAPI = getElectronAPI();
+  private isImageCacheSupported =
+    Capacitor.isNativePlatform() || !!this.electronAPI;
   private inFlight = new Set<string>();
 
   async prime(remoteUrl: string): Promise<void> {
-    if (!this.isNative || !this.isCacheable(remoteUrl)) return;
+    if (!this.isImageCacheSupported || !this.isCacheable(remoteUrl)) return;
 
     try {
       const entry = await getCachedImage(remoteUrl);
@@ -38,12 +41,15 @@ export class ImageCacheService {
   }
 
   async resolveCached(remoteUrl: string): Promise<string | null> {
-    if (!this.isNative || !this.isCacheable(remoteUrl)) return null;
+    if (!this.isImageCacheSupported || !this.isCacheable(remoteUrl))
+      return null;
 
     try {
       const entry = await getCachedImage(remoteUrl);
       if (!entry) return null;
       void touchCachedImage(remoteUrl);
+      if (this.electronAPI) return `${self.location.origin}/${entry.path}`;
+
       const { uri } = await Filesystem.getUri({
         path: entry.path,
         directory: Directory.Cache,
@@ -72,15 +78,9 @@ export class ImageCacheService {
       if (!response.ok) return;
 
       const blob = await response.blob();
-      const base64 = await this.blobToBase64(blob);
       const path = `${CACHE_SUBDIR}/${await this.fileNameFor(remoteUrl)}`;
 
-      await Filesystem.writeFile({
-        path,
-        data: base64,
-        directory: Directory.Cache,
-        recursive: true,
-      });
+      await this.writeFile(path, blob);
 
       await putCachedImage({
         url: remoteUrl,
@@ -105,16 +105,40 @@ export class ImageCacheService {
     for (const entry of candidates) {
       if (total <= MAX_CACHE_BYTES) break;
       try {
-        await Filesystem.deleteFile({
-          path: entry.path,
-          directory: Directory.Cache,
-        });
+        await this.deleteFile(entry.path);
       } catch {
         // File may already be gone; still drop the manifest entry.
       }
       await deleteCachedImage(entry.url);
       total -= entry.bytes;
     }
+  }
+
+  private async writeFile(path: string, blob: Blob): Promise<void> {
+    if (this.electronAPI) {
+      const data = new Uint8Array(await blob.arrayBuffer());
+      await this.electronAPI.writeCachedImageFile(path, data);
+      return;
+    }
+
+    await Filesystem.writeFile({
+      path,
+      data: await this.blobToBase64(blob),
+      directory: Directory.Cache,
+      recursive: true,
+    });
+  }
+
+  private async deleteFile(path: string): Promise<void> {
+    if (this.electronAPI) {
+      await this.electronAPI.deleteCachedImageFile(path);
+      return;
+    }
+
+    await Filesystem.deleteFile({
+      path,
+      directory: Directory.Cache,
+    });
   }
 
   private async fileNameFor(url: string): Promise<string> {

@@ -96,7 +96,6 @@
               ],
               "assets": [
                 "src/manifest.json",
-                "src/service-worker.js",
                 {
                   "glob": "**/*",
                   "input": "src/assets",
