@@ -20,11 +20,11 @@ RUN apk add --no-cache libheif-tools
 # dev watch script
 RUN apk add --no-cache inotify-tools
 
-RUN corepack enable
-
 COPY .npmrc .npmrc
 COPY pnpm-lock.yaml pnpm-lock.yaml
 COPY package.json package.json
+
+RUN corepack enable && corepack install
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 
 COPY .prettierignore .prettierignore
