@@ -15,7 +15,11 @@
     <ion-item lines="none">
       @if (recipe.recipeImages && recipe.recipeImages.length > 0) {
         <ion-avatar slot="start">
-          <img src="{{ recipe.recipeImages[0].image.location }}" />
+          <img
+            src="{{
+              recipe.recipeImages[0].image.location | resolveStorageLocation
+            }}"
+          />
         </ion-avatar>
       }
       <ion-label>

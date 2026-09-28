@@ -9,12 +9,13 @@ import {
   stripImageTokens,
 } from "@recipesage/util/shared";
 import { sanitizeRemoveHtmlToPlainText } from "./sanitizeRemoveHtmlToPlainText";
-import { config, Environment } from "./config";
+import { config } from "./config";
 import { fetchURL } from "../general/fetch";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 import path from "path";
 import { RecipeSummary } from "@recipesage/prisma";
-import { readFile } from "fs/promises";
+import { transformRecipeImageUrlForSelfhost } from "./transformRecipeImageUrlForSelfhost";
+import { resolveStorageLocationToPublicUrl } from "./resolveStorageLocationToPublicUrl";
 import { setTimeout } from "node:timers/promises";
 import { translate } from "./translate";
 import { getNutritionDisplayRows } from "./getNutritionDisplayRows";
@@ -160,15 +161,15 @@ const getInlineImageFit = (
   return [Math.min(dims[0], maxWidth), dims[1]];
 };
 
-const fetchImageAsDataUrl = async (url: string): Promise<string | null> => {
+const fetchImageAsDataUrl = async (
+  location: string,
+): Promise<string | null> => {
   try {
-    let buffer: Buffer;
-    if (config.environment === Environment.Selfhost && url.startsWith("/")) {
-      buffer = await readFile(url);
-    } else {
-      const response = await fetchURL(url, { timeout: IMAGE_FETCH_TIMEOUT_MS });
-      buffer = await response.buffer();
-    }
+    const url = await transformRecipeImageUrlForSelfhost(location);
+    if (url.startsWith("data:")) return url;
+
+    const response = await fetchURL(url, { timeout: IMAGE_FETCH_TIMEOUT_MS });
+    const buffer = await response.buffer();
     return `data:image/jpeg;base64,${buffer.toString("base64")}`;
   } catch (_e) {
     return null;
@@ -623,7 +624,9 @@ export const recipeToPDFMakeSchema = async (
     });
   }
 
-  const otherImageUrls = recipe.recipeImages.map((el) => el.image.location);
+  const otherImageUrls = recipe.recipeImages.map((el) =>
+    resolveStorageLocationToPublicUrl(el.image.location),
+  );
   // Primary image is already included
   if (options.includePrimaryImage) otherImageUrls.splice(0, 1);
   if (options.includeImageUrls) {

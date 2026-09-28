@@ -51,7 +51,10 @@
                   loading="lazy"
                   decoding="async"
                   [alt]="recipe.title"
-                  [src]="recipe.discoverRecipeImages[0].image.location"
+                  [src]="
+                    recipe.discoverRecipeImages[0].image.location
+                      | resolveStorageLocation
+                  "
                 />
               } @else {
                 <img
@@ -104,7 +107,10 @@
               loading="lazy"
               decoding="async"
               [alt]="recipe.title"
-              [src]="recipe.discoverRecipeImages[0].image.location"
+              [src]="
+                recipe.discoverRecipeImages[0].image.location
+                  | resolveStorageLocation
+              "
             />
           } @else {
             <img

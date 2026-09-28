@@ -39,7 +39,12 @@
               <img src="assets/avatar.svg" />
             }
             @if (me()?.profileImages?.length) {
-              <img [src]="me()?.profileImages?.at(0)?.image?.location" />
+              <img
+                [src]="
+                  me()?.profileImages?.at(0)?.image?.location
+                    | resolveStorageLocation
+                "
+              />
             }
           </ion-avatar>
           <ion-label> {{ "pages.people.edit" | translate }} </ion-label>
@@ -98,7 +103,12 @@
                 <img src="assets/avatar.svg" />
               }
               @if (friendship.profileImages?.length) {
-                <img [src]="friendship.profileImages[0].image.location" />
+                <img
+                  [src]="
+                    friendship.profileImages[0].image.location
+                      | resolveStorageLocation
+                  "
+                />
               }
             </ion-avatar>
             <ion-label>{{ friendship.name }}</ion-label>
@@ -123,7 +133,12 @@
                 <img src="assets/avatar.svg" />
               }
               @if (friendship.profileImages?.length) {
-                <img [src]="friendship.profileImages[0].image.location" />
+                <img
+                  [src]="
+                    friendship.profileImages[0].image.location
+                      | resolveStorageLocation
+                  "
+                />
               }
             </ion-avatar>
             <ion-label>{{ friendship.name }}</ion-label>
@@ -156,7 +171,12 @@
                 <img src="assets/avatar.svg" />
               }
               @if (friendship.profileImages?.length) {
-                <img [src]="friendship.profileImages[0].image.location" />
+                <img
+                  [src]="
+                    friendship.profileImages[0].image.location
+                      | resolveStorageLocation
+                  "
+                />
               }
             </ion-avatar>
             <ion-label>{{ friendship.name }}</ion-label>

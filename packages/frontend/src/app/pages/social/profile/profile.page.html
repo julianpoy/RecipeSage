@@ -44,7 +44,12 @@
             slot="start"
             (click)="openImageViewer()"
           >
-            <img src="{{ profile.profileImages.at(0)?.image?.location }}" />
+            <img
+              src="{{
+                profile.profileImages.at(0)?.image?.location
+                  | resolveStorageLocation
+              }}"
+            />
           </ion-thumbnail>
         }
         <div class="profile-details">
@@ -95,6 +100,7 @@
                       <img
                         [src]="
                           item.recipe?.recipeImages?.at(0)?.image?.location
+                            | resolveStorageLocation
                         "
                       />
                     </ion-avatar>
@@ -151,6 +157,7 @@
                   <img
                     [src]="
                       publishedRecipe.discoverRecipeImages[0].image.location
+                        | resolveStorageLocation
                     "
                     alt=""
                   />

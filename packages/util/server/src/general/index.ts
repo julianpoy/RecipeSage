@@ -28,6 +28,7 @@ export * from "./rateLimit/resolveClientIp";
 export * from "./credits";
 export * from "./clip";
 export * from "./sortRecipeImages";
+export * from "./resolveStorageLocationToPublicUrl";
 export * from "./fileTransformer";
 export * from "./config";
 export * from "./grip";

@@ -15,7 +15,12 @@
                 <img src="assets/avatar.svg" />
               }
               @if (friendship.profileImages?.length) {
-                <img [src]="friendship.profileImages[0].image.location" />
+                <img
+                  [src]="
+                    friendship.profileImages[0].image.location
+                      | resolveStorageLocation
+                  "
+                />
               }
             </ion-avatar>
             <ion-radio

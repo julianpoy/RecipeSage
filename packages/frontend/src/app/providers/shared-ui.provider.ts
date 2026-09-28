@@ -3,6 +3,7 @@ import { TranslateDirective, TranslatePipe } from "@ngx-translate/core";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { CachedImageDirective } from "../directives/cached-image.directive";
+import { ResolveStorageLocationPipe } from "../pipes/resolve-storage-location.pipe";
 
 export const SHARED_UI_IMPORTS = [
   CommonModule,
@@ -11,4 +12,5 @@ export const SHARED_UI_IMPORTS = [
   FormsModule,
   RouterModule,
   CachedImageDirective,
+  ResolveStorageLocationPipe,
 ];

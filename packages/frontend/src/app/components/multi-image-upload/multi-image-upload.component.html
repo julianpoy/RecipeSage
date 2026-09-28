@@ -30,7 +30,7 @@
               (click)="showContributorHint(); $event.stopPropagation()"
             ></ion-icon>
           }
-          <img src="{{ image.location }}" />
+          <img src="{{ image.location | resolveStorageLocation }}" />
         </div>
         @if (images.length > 1) {
           <div class="image-subtext">

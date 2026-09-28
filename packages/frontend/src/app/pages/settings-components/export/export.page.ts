@@ -24,6 +24,7 @@ import {
 } from "@ionic/angular/standalone";
 import { cloudDownloadOutline, documentOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
 export enum ExportFormat {
   PDF = "pdf",
@@ -181,7 +182,11 @@ export class ExportPage {
       },
     );
     if (!response) return;
-    window.open(response.signedUrl, "_blank", 'rel="noopener"');
+    window.open(
+      resolveStorageLocation(response.signedUrl),
+      "_blank",
+      'rel="noopener"',
+    );
   }
 
   getJobFailureI18n(job: ExportJobSummary) {

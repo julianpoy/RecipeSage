@@ -6,6 +6,7 @@ import {
   type OnChanges,
 } from "@angular/core";
 import { ImageCacheService } from "../services/image-cache.service";
+import { resolveStorageLocation } from "../utils/resolveStorageLocation";
 
 @Directive({
   standalone: true,
@@ -20,15 +21,16 @@ export class CachedImageDirective implements OnChanges {
   private requestToken = 0;
 
   ngOnChanges() {
-    const url = this.cachedSrc;
     const el = this.el.nativeElement;
 
     el.onerror = null;
 
-    if (!url) {
+    if (!this.cachedSrc) {
       el.removeAttribute("src");
       return;
     }
+
+    const url = resolveStorageLocation(this.cachedSrc);
 
     const token = ++this.requestToken;
 

@@ -585,7 +585,10 @@
                 @if (linkedRecipe.recipeImages.length) {
                   <ion-avatar slot="start">
                     <img
-                      src="{{ linkedRecipe.recipeImages[0].image.location }}"
+                      src="{{
+                        linkedRecipe.recipeImages[0].image.location
+                          | resolveStorageLocation
+                      }}"
                     />
                   </ion-avatar>
                 }

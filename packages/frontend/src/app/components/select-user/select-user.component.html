@@ -4,8 +4,8 @@
       <ion-avatar slot="start">
         <img
           [src]="
-            getFirstProfileImage(selectedUser)?.image?.location ||
-            'assets/avatar.svg'
+            (getFirstProfileImage(selectedUser)?.image?.location
+              | resolveStorageLocation) || 'assets/avatar.svg'
           "
         />
       </ion-avatar>
@@ -37,8 +37,8 @@
                   <ion-avatar slot="start">
                     <img
                       [src]="
-                        getFirstProfileImage(user)?.image?.location ||
-                        'assets/avatar.svg'
+                        (getFirstProfileImage(user)?.image?.location
+                          | resolveStorageLocation) || 'assets/avatar.svg'
                       "
                     />
                   </ion-avatar>

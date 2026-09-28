@@ -51,7 +51,7 @@
                   as recipeImage
                 ) {
                   <ion-avatar slot="start">
-                    <img src="{{ recipeImage }}" />
+                    <img src="{{ recipeImage | resolveStorageLocation }}" />
                   </ion-avatar>
                 }
                 <ion-label>
@@ -92,7 +92,7 @@
                   as recipeImage
                 ) {
                   <ion-avatar slot="start">
-                    <img src="{{ recipeImage }}" />
+                    <img src="{{ recipeImage | resolveStorageLocation }}" />
                   </ion-avatar>
                 }
                 <ion-label>

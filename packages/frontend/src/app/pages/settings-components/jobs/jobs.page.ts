@@ -30,6 +30,7 @@ import {
   listOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
 /**
  * Polling is a fallback for ws updates
@@ -151,7 +152,11 @@ export class JobsPage {
       },
     );
     if (!response) return;
-    window.open(response.signedUrl, "_blank", 'rel="noopener"');
+    window.open(
+      resolveStorageLocation(response.signedUrl),
+      "_blank",
+      'rel="noopener"',
+    );
   }
 
   getJobIcon(job: JobSummary): string {

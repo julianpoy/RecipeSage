@@ -72,7 +72,10 @@
                 ) {
                   <ion-avatar slot="start">
                     <img
-                      src="{{ message.recipe.recipeImages[0].image.location }}"
+                      src="{{
+                        message.recipe.recipeImages[0].image.location
+                          | resolveStorageLocation
+                      }}"
                     />
                   </ion-avatar>
                 }
@@ -121,7 +124,10 @@
                 ) {
                   <ion-avatar slot="start">
                     <img
-                      src="{{ message.recipe.recipeImages[0].image.location }}"
+                      src="{{
+                        message.recipe.recipeImages[0].image.location
+                          | resolveStorageLocation
+                      }}"
                     />
                   </ion-avatar>
                 }

@@ -27,6 +27,7 @@ import {
   mailOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
 @Component({
   standalone: true,
@@ -139,7 +140,9 @@ export class ShareProfileModalPage implements OnInit {
       .toPromise();
 
     const imageUrl = encodeURIComponent(
-      this.profile.profileImages?.[0]?.image?.location || "",
+      resolveStorageLocation(
+        this.profile.profileImages?.[0]?.image?.location || "",
+      ),
     );
     const url = encodeURIComponent(this.getProfileUrl());
 

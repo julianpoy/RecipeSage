@@ -25,7 +25,9 @@
   >
     @for (imageUrl of imageUrls; track imageUrl) {
       <swiper-slide>
-        <div class="image-container"><img [src]="imageUrl" /></div>
+        <div class="image-container">
+          <img [src]="imageUrl | resolveStorageLocation" />
+        </div>
       </swiper-slide>
     }
   </swiper-container>

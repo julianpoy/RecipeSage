@@ -44,6 +44,7 @@ import {
 } from "@ionic/angular/standalone";
 import { alertCircleOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
 interface CookableRecipe {
   title: string;
@@ -265,7 +266,7 @@ export class CookPage {
     if (!this.recipe) return [];
     return [...this.recipe.images]
       .sort((a, b) => a.order - b.order)
-      .map((image) => ({ url: image.location }));
+      .map((image) => ({ url: resolveStorageLocation(image.location) }));
   }
 
   async changeScale() {

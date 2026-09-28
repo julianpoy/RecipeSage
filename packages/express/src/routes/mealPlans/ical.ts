@@ -9,7 +9,10 @@ import {
   getSignedDownloadUrl,
   ObjectTypes,
 } from "@recipesage/util/server/storage";
-import { config } from "@recipesage/util/server/general";
+import {
+  config,
+  resolveStorageLocationToPublicUrl,
+} from "@recipesage/util/server/general";
 
 const HISTORICAL_DATE_LIMIT_DAYS = 30; // We return this number of past days of meal plan items
 
@@ -109,7 +112,7 @@ export const mealPlansIcalHandler = defineHandler(
         summary: mealPlanItem.recipe?.title || mealPlanItem.title,
         description: mealPlanItem.notes || undefined,
         url: `${config.appUi.baseUrl}/app/meal-planners/${mealPlan.id}`,
-        attachments: signedImages,
+        attachments: signedImages.map(resolveStorageLocationToPublicUrl),
         lastModified,
       });
     }

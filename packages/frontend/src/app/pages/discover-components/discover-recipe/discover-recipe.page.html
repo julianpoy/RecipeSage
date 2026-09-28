@@ -33,7 +33,10 @@
             (click)="openImageViewer()"
           >
             <img
-              src="{{ recipe.discoverRecipeImages[0].image.location }}"
+              src="{{
+                recipe.discoverRecipeImages[0].image.location
+                  | resolveStorageLocation
+              }}"
               alt=""
             />
           </ion-thumbnail>
@@ -593,6 +596,7 @@
                   <img
                     src="{{
                       linkedRecipe.discoverRecipeImages[0].image.location
+                        | resolveStorageLocation
                     }}"
                     alt=""
                   />

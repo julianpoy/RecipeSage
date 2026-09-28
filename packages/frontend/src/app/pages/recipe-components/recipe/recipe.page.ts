@@ -88,6 +88,7 @@ import {
   trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
 @Component({
   standalone: true,
@@ -535,7 +536,7 @@ export class RecipePage {
     if (!this.recipe) return [];
     return [...this.recipe.recipeImages]
       .sort((a, b) => a.order - b.order)
-      .map((ri) => ({ url: ri.image.location }));
+      .map((ri) => ({ url: resolveStorageLocation(ri.image.location) }));
   }
 
   editRecipe() {

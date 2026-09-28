@@ -225,6 +225,7 @@
                         <img
                           [src]="
                             item.recipe?.recipeImages?.at(0)?.image?.location
+                              | resolveStorageLocation
                           "
                         />
                       </ion-avatar>

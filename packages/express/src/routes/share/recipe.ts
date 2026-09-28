@@ -5,6 +5,7 @@ import { AuthenticationEnforcement } from "../../authenticationEnforcement";
 import { defineHandler } from "../../defineHandler";
 import {
   config,
+  resolveStorageLocationToPublicUrl,
   sanitizeRemoveHtmlFromString,
   sortRecipeImages,
 } from "@recipesage/util/server/general";
@@ -36,7 +37,10 @@ export const shareRecipeHandler = defineHandler(
     const sorted = sortRecipeImages(
       convertPrismaRecipeSummaryToRecipeSummary(recipe),
     );
-    const image = sorted.recipeImages[0]?.image.location;
+    const imageLocation = sorted.recipeImages[0]?.image.location;
+    const image = imageLocation
+      ? resolveStorageLocationToPublicUrl(imageLocation)
+      : undefined;
 
     const appuiOrigin = config.appUi.baseUrl;
     const shareURL = `${appuiOrigin}/api/share/recipe/${sorted.id}`;
