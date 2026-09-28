@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Ezkutatu balorazioa",
     "pages.share.byEmbed.nutrition": "Ezkutatu nutrizio-informazioa",
     "pages.share.byEmbed.linkedRecipes": "Ezkutatu estekatutako errezetak",
-    "pages.share.byEmbed.lastMadeAt": "Erakutsi azken aldiz prestatutako data"
+    "pages.share.byEmbed.lastMadeAt": "Erakutsi azken aldiz prestatutako data",
+    "pages.serverSettings.webBase.label": "Webgunearen URLa",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "RecipeSage web-nabigatzaile batean irekitzeko erabiltzen duzun helbidea. Partekatzen dituzun estekek helbide hau erabiliko dute.",
+    "pages.serverSettings.webBase.invalid": "Sartu baliozko http(s) URL bat biderik gabe, adibidez https://example.com. Ez sartu /app.",
+    "pages.import.goToCreateRecipePage": "Joan Errezeta sortzeko orrira",
+    "pages.importTextfiles.singleDocument": "Dokumentu bakarra hautatu duzu. Orrialde honek hainbat dokumentu soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. Dokumentu bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria.",
+    "pages.importPDFs.singlePdf": "PDF bakarra hautatu duzu. Orrialde honek hainbat PDF soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. PDF bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria.",
+    "pages.importImages.singleImage": "Argazki bakarra hautatu duzu. Orrialde honek hainbat argazki soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. Argazki bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria."
 }

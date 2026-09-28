@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "रेटिंग छिपाएँ",
     "pages.share.byEmbed.nutrition": "पोषण छिपाएँ",
     "pages.share.byEmbed.linkedRecipes": "लिंक की गई रेसिपी छिपाएँ",
-    "pages.share.byEmbed.lastMadeAt": "अंतिम बार बनाने की तारीख दिखाएँ"
+    "pages.share.byEmbed.lastMadeAt": "अंतिम बार बनाने की तारीख दिखाएँ",
+    "pages.serverSettings.webBase.label": "वेब URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "वह पता जिसका उपयोग आप वेब ब्राउज़र में RecipeSage खोलने के लिए करते हैं। आपके द्वारा साझा किए गए लिंक इसी पते का उपयोग करेंगे।",
+    "pages.serverSettings.webBase.invalid": "कृपया बिना पथ वाला एक मान्य http(s) URL दर्ज करें, जैसे https://example.com। /app शामिल न करें।",
+    "pages.import.goToCreateRecipePage": "रेसिपी बनाने के पृष्ठ पर जाएँ",
+    "pages.importTextfiles.singleDocument": "आपने एकल दस्तावेज़ चुना है। यह पृष्ठ केवल ज़िप फ़ाइल में संकलित कई दस्तावेज़ों को एक साथ आयात करता है। एक दस्तावेज़ को रेसिपी में बदलने के लिए, इसके बजाय रेसिपी बनाने के पृष्ठ का उपयोग करें।",
+    "pages.importPDFs.singlePdf": "आपने एकल PDF चुना है। यह पृष्ठ केवल ज़िप फ़ाइल में संकलित कई PDF को एक साथ आयात करता है। एक PDF को रेसिपी में बदलने के लिए, इसके बजाय रेसिपी बनाने के पृष्ठ का उपयोग करें।",
+    "pages.importImages.singleImage": "आपने एकल फ़ोटो चुनी है। यह पृष्ठ केवल ज़िप फ़ाइल में संकलित कई फ़ोटो को एक साथ आयात करता है। एक फ़ोटो को रेसिपी में बदलने के लिए, इसके बजाय रेसिपी बनाने के पृष्ठ का उपयोग करें।"
 }

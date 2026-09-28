@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Ocultar avaliação",
     "pages.share.byEmbed.nutrition": "Ocultar informações nutricionais",
     "pages.share.byEmbed.linkedRecipes": "Ocultar receitas vinculadas",
-    "pages.share.byEmbed.lastMadeAt": "Mostrar data do último preparo"
+    "pages.share.byEmbed.lastMadeAt": "Mostrar data do último preparo",
+    "pages.serverSettings.webBase.label": "URL da web",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "O endereço que você usa para abrir o RecipeSage em um navegador da web. Os links que você compartilhar usarão este endereço.",
+    "pages.serverSettings.webBase.invalid": "Insira uma URL http(s) válida sem um caminho, como https://example.com. Não inclua /app.",
+    "pages.import.goToCreateRecipePage": "Ir para a página Criar receita",
+    "pages.importTextfiles.singleDocument": "Você selecionou um único documento. Esta página importa apenas vários documentos de uma vez, compactados em um arquivo ZIP. Para transformar um documento em uma receita, use a página Criar receita.",
+    "pages.importPDFs.singlePdf": "Você selecionou um único PDF. Esta página importa apenas vários PDFs de uma vez, compactados em um arquivo ZIP. Para transformar um PDF em uma receita, use a página Criar receita.",
+    "pages.importImages.singleImage": "Você selecionou uma única foto. Esta página importa apenas várias fotos de uma vez, compactadas em um arquivo ZIP. Para transformar uma foto em uma receita, use a página Criar receita."
 }

@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Skrýt hodnocení",
     "pages.share.byEmbed.nutrition": "Skrýt nutriční hodnoty",
     "pages.share.byEmbed.linkedRecipes": "Skrýt propojené recepty",
-    "pages.share.byEmbed.lastMadeAt": "Zobrazit datum poslední přípravy"
+    "pages.share.byEmbed.lastMadeAt": "Zobrazit datum poslední přípravy",
+    "pages.serverSettings.webBase.label": "Webová adresa URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Adresa, kterou používáte k otevření RecipeSage ve webovém prohlížeči. Sdílené odkazy budou používat tuto adresu.",
+    "pages.serverSettings.webBase.invalid": "Zadejte prosím platnou adresu URL http(s) bez cesty, například https://example.com. Neuvádějte /app.",
+    "pages.import.goToCreateRecipePage": "Přejít na stránku Vytvořit recept",
+    "pages.importTextfiles.singleDocument": "Vybrali jste jeden dokument. Tato stránka umožňuje najednou importovat pouze více dokumentů zabalených v souboru ZIP. Chcete-li z jednoho dokumentu vytvořit recept, použijte místo toho stránku Vytvořit recept.",
+    "pages.importPDFs.singlePdf": "Vybrali jste jeden soubor PDF. Tato stránka umožňuje najednou importovat pouze více souborů PDF zabalených v souboru ZIP. Chcete-li z jednoho souboru PDF vytvořit recept, použijte místo toho stránku Vytvořit recept.",
+    "pages.importImages.singleImage": "Vybrali jste jednu fotografii. Tato stránka umožňuje najednou importovat pouze více fotografií zabalených v souboru ZIP. Chcete-li z jedné fotografie vytvořit recept, použijte místo toho stránku Vytvořit recept."
 }

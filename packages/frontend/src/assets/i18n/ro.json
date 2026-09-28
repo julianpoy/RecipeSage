@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Ascunde evaluarea",
     "pages.share.byEmbed.nutrition": "Ascunde informațiile nutriționale",
     "pages.share.byEmbed.linkedRecipes": "Ascunde rețetele asociate",
-    "pages.share.byEmbed.lastMadeAt": "Afișează data ultimei preparări"
+    "pages.share.byEmbed.lastMadeAt": "Afișează data ultimei preparări",
+    "pages.serverSettings.webBase.label": "Adresă URL web",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Adresa pe care o utilizați pentru a deschide RecipeSage într-un browser web. Linkurile pe care le distribuiți vor utiliza această adresă.",
+    "pages.serverSettings.webBase.invalid": "Introduceți un URL http(s) valid fără cale, cum ar fi https://example.com. Nu includeți /app.",
+    "pages.import.goToCreateRecipePage": "Accesați pagina Creare rețetă",
+    "pages.importTextfiles.singleDocument": "Ați selectat un singur document. Această pagină importă doar mai multe documente simultan, arhivate într-un fișier ZIP. Pentru a transforma un document într-o rețetă, utilizați în schimb pagina Creare rețetă.",
+    "pages.importPDFs.singlePdf": "Ați selectat un singur fișier PDF. Această pagină importă doar mai multe fișiere PDF simultan, arhivate într-un fișier ZIP. Pentru a transforma un fișier PDF într-o rețetă, utilizați în schimb pagina Creare rețetă.",
+    "pages.importImages.singleImage": "Ați selectat o singură fotografie. Această pagină importă doar mai multe fotografii simultan, arhivate într-un fișier ZIP. Pentru a transforma o fotografie într-o rețetă, utilizați în schimb pagina Creare rețetă."
 }

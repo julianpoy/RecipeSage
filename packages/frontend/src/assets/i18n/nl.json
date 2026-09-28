@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Beoordeling verbergen",
     "pages.share.byEmbed.nutrition": "Voedingswaarde verbergen",
     "pages.share.byEmbed.linkedRecipes": "Gekoppelde recepten verbergen",
-    "pages.share.byEmbed.lastMadeAt": "Datum van laatste bereiding tonen"
+    "pages.share.byEmbed.lastMadeAt": "Datum van laatste bereiding tonen",
+    "pages.serverSettings.webBase.label": "Web-URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Het adres dat u gebruikt om RecipeSage in een webbrowser te openen. De links die u deelt, gebruiken dit adres.",
+    "pages.serverSettings.webBase.invalid": "Voer een geldige http(s)-URL zonder pad in, zoals https://example.com. Neem /app niet op.",
+    "pages.import.goToCreateRecipePage": "Ga naar de pagina Recept maken",
+    "pages.importTextfiles.singleDocument": "U hebt één document geselecteerd. Op deze pagina kunnen alleen meerdere documenten tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één document in een recept om te zetten.",
+    "pages.importPDFs.singlePdf": "U hebt één pdf geselecteerd. Op deze pagina kunnen alleen meerdere pdf's tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één pdf in een recept om te zetten.",
+    "pages.importImages.singleImage": "U hebt één foto geselecteerd. Op deze pagina kunnen alleen meerdere foto's tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één foto in een recept om te zetten."
 }

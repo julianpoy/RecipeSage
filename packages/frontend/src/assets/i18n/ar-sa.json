@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "إخفاء التقييم",
     "pages.share.byEmbed.nutrition": "إخفاء المعلومات الغذائية",
     "pages.share.byEmbed.linkedRecipes": "إخفاء الوصفات المرتبطة",
-    "pages.share.byEmbed.lastMadeAt": "إظهار تاريخ آخر إعداد"
+    "pages.share.byEmbed.lastMadeAt": "إظهار تاريخ آخر إعداد",
+    "pages.serverSettings.webBase.label": "عنوان URL للويب",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "العنوان الذي تستخدمه لفتح RecipeSage في متصفح ويب. ستستخدم الروابط التي تشاركها هذا العنوان.",
+    "pages.serverSettings.webBase.invalid": "يرجى إدخال عنوان URL صالح لبروتوكول http(s) بدون مسار، مثل https://example.com. لا تُضمّن /app.",
+    "pages.import.goToCreateRecipePage": "انتقل إلى صفحة إنشاء وصفة",
+    "pages.importTextfiles.singleDocument": "لقد اخترت مستندًا واحدًا. تستورد هذه الصفحة عدة مستندات دفعة واحدة فقط، مجمّعة في ملف ZIP. لتحويل مستند واحد إلى وصفة، استخدم صفحة إنشاء وصفة بدلًا من ذلك.",
+    "pages.importPDFs.singlePdf": "لقد اخترت ملف PDF واحدًا. تستورد هذه الصفحة عدة ملفات PDF دفعة واحدة فقط، مجمّعة في ملف ZIP. لتحويل ملف PDF واحد إلى وصفة، استخدم صفحة إنشاء وصفة بدلًا من ذلك.",
+    "pages.importImages.singleImage": "لقد اخترت صورة واحدة. تستورد هذه الصفحة عدة صور دفعة واحدة فقط، مجمّعة في ملف ZIP. لتحويل صورة واحدة إلى وصفة، استخدم صفحة إنشاء وصفة بدلًا من ذلك."
 }
