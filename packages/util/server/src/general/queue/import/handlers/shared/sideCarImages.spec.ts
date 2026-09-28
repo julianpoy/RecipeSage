@@ -1,12 +1,23 @@
-import { describe, it, expect } from "vitest";
-import { mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, afterEach } from "vitest";
+import { mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { readSideCarImages } from "./sideCarImages";
 
 describe("readSideCarImages", () => {
+  const temporaryDirectories: string[] = [];
+
+  afterEach(async () => {
+    await Promise.all(
+      temporaryDirectories
+        .splice(0)
+        .map((directory) => rm(directory, { recursive: true, force: true })),
+    );
+  });
+
   const setup = async (files: Record<string, string>) => {
     const dir = await mkdtemp(path.join(tmpdir(), "sidecar-"));
+    temporaryDirectories.push(dir);
     for (const [name, contents] of Object.entries(files)) {
       await writeFile(path.join(dir, name), contents);
     }

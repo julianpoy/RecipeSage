@@ -1,10 +1,8 @@
 import { Worker, Queue, type JobsOptions } from "bullmq";
 import * as Sentry from "@sentry/node";
 import type { JobQueueItem } from "./JobQueueItem";
-import { prisma } from "@recipesage/prisma";
-import { JobStatus } from "@recipesage/prisma";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
-import { onJobUpdate } from "../jobs/updateJobProgress";
+import { markJobFailed } from "../jobs/markJobFailed";
 
 export * from "./JobQueueItem";
 export * from "./processWorkerJob";
@@ -92,32 +90,10 @@ export const getJobQueueWorker = () => {
         },
       });
 
-      prisma.job
-        .updateManyAndReturn({
-          where: {
-            id: jobId,
-            resultCode: null,
-          },
-          data: {
-            status: JobStatus.FAIL,
-            resultCode: JOB_RESULT_CODES.interrupted,
-          },
-          select: {
-            userId: true,
-          },
-        })
-        .then(async (updated) => {
-          for (const { userId } of updated) {
-            await onJobUpdate({
-              jobId,
-              userId,
-            });
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-          Sentry.captureException(e);
-        });
+      markJobFailed(jobId, JOB_RESULT_CODES.interrupted).catch((e) => {
+        console.error(e);
+        Sentry.captureException(e);
+      });
     }
   });
 

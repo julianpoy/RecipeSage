@@ -45,6 +45,9 @@ const CONCURRENT_NOTE_PROCESSING = 4;
 const MAX_COUNT_LIMIT = 500;
 const MAX_OCR_IMAGES = 3;
 
+const copyStringWithoutParentReference = (value: string) =>
+  Buffer.from(value, "utf8").toString("utf8");
+
 interface StagedResources {
   pdfPaths: string[];
   imagePaths: string[];
@@ -105,7 +108,9 @@ const processNote = async (args: {
 
   const { pdfPaths, imagePaths } = await stageResources(note, tempDir);
 
-  const titleText = elementText(findChild(note, "title")).trim();
+  const titleText = copyStringWithoutParentReference(
+    elementText(findChild(note, "title")).trim(),
+  );
   if (!titleText && !recipeText && !pdfPaths.length && !imagePaths.length) {
     return;
   }
@@ -134,7 +139,7 @@ const processNote = async (args: {
   if (!recipe) {
     recipe = buildUnstructuredRecipeEntry({
       title: "",
-      notes: recipeText,
+      notes: copyStringWithoutParentReference(recipeText),
       labels: [],
       images: [],
     });
@@ -147,13 +152,17 @@ const processNote = async (args: {
     const sourceUrl = elementText(
       findChild(noteAttributes, "source-url"),
     ).trim();
-    if (sourceUrl) recipe.recipe.url = sourceUrl;
+    if (sourceUrl)
+      recipe.recipe.url = copyStringWithoutParentReference(sourceUrl);
     const author = elementText(findChild(noteAttributes, "author")).trim();
-    if (author && !recipe.recipe.source) recipe.recipe.source = author;
+    if (author && !recipe.recipe.source)
+      recipe.recipe.source = copyStringWithoutParentReference(author);
   }
 
   const labels = findChildren(note, "tag")
-    .map((t) => cleanLabelTitle(elementText(t)))
+    .map((t) =>
+      copyStringWithoutParentReference(cleanLabelTitle(elementText(t))),
+    )
     .filter((l) => l.length);
   recipe.labels.push(...labels, ...importLabels);
   if (failedToStructure) recipe.labels.push(unformattedLabel);

@@ -4,8 +4,9 @@ import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { ocrImagesToRecipe } from "../../../../ml/index";
 import { downloadS3ToTemp } from "./shared/s3Download";
-import { readdir, readFile, mkdtempDisposable } from "fs/promises";
+import { readFile, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
+import { listImportFiles } from "./shared/listImportFiles";
 import path from "path";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
@@ -47,7 +48,7 @@ export async function imagesImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
+  const fileNames = await listImportFiles(extractPath);
 
   const imageFileNames = fileNames.filter((fileName) =>
     SUPPORTED_EXTENSIONS.has(path.extname(fileName).toLowerCase()),

@@ -1,12 +1,23 @@
-import { describe, it, expect } from "vitest";
-import { mkdir, mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, afterEach } from "vitest";
+import { mkdir, mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { listImportDocuments } from "./listImportDocuments";
 
 describe("listImportDocuments", () => {
+  const temporaryDirectories: string[] = [];
+
+  afterEach(async () => {
+    await Promise.all(
+      temporaryDirectories
+        .splice(0)
+        .map((directory) => rm(directory, { recursive: true, force: true })),
+    );
+  });
+
   const setup = async (files: string[]) => {
     const dir = await mkdtemp(path.join(tmpdir(), "import-documents-"));
+    temporaryDirectories.push(dir);
     for (const file of files) {
       const filePath = path.join(dir, file);
       await mkdir(path.dirname(filePath), { recursive: true });

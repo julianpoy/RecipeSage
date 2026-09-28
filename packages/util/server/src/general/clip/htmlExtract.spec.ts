@@ -37,6 +37,27 @@ describe("extractPageText", () => {
     expect(ogImage).toBe("https://x/social.jpg");
   });
 
+  it("includes og:title and og:description text that the body does not contain", () => {
+    const html = `<html><head>
+      <meta property="og:title" content="Chef on Instagram: &quot;Butternut Squash Soup&#10;Ingredients:&#10;- 1 squash&#10;Instructions:&#10;1. Roast it&quot;" />
+      <meta property="og:description" content="1,000 likes - A cozy soup" />
+      </head><body><div>Log in</div></body></html>`;
+    const { text } = extractPageText(html);
+    expect(text).toContain("Butternut Squash Soup\nIngredients:\n- 1 squash");
+    expect(text).toContain("1. Roast it");
+    expect(text).toContain("1,000 likes - A cozy soup");
+    expect(text).toContain("Log in");
+  });
+
+  it("does not repeat og:title or og:description text already in the body", () => {
+    const html = `<html><head>
+      <meta property="og:title" content="Pancakes" />
+      <meta property="og:description" content="Fluffy and   delicious." />
+      </head><body><h1>Pancakes</h1><p>Fluffy and delicious.</p></body></html>`;
+    const { text } = extractPageText(html);
+    expect(text).toBe("Pancakes\nFluffy and delicious.");
+  });
+
   it("falls back to twitter:image when og:image is absent", () => {
     const html = `<html><head>
       <meta name="twitter:image" content="https://x/twitter.jpg" />

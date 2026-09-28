@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { writeFile } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
@@ -23,10 +23,17 @@ vi.mock("./shared/s3Download", () => ({
 }));
 
 let xmlFixture = "";
+let fixtureFolder = "";
+let fixtureImageNames: string[] = [];
 
 vi.mock("../../../safeExtractZip", () => ({
   safeExtractZip: async (_zip: string, extractPath: string) => {
-    await writeFile(path.join(extractPath, "recipes.xml"), xmlFixture);
+    const folderPath = path.join(extractPath, fixtureFolder);
+    await mkdir(path.join(folderPath, "images"), { recursive: true });
+    await writeFile(path.join(folderPath, "recipes.xml"), xmlFixture);
+    for (const imageName of fixtureImageNames) {
+      await writeFile(path.join(folderPath, "images", imageName), "image");
+    }
   },
 }));
 
@@ -71,9 +78,30 @@ const importedTitles = () =>
 beforeEach(() => {
   importJobFinishCommon.mockClear();
   xmlFixture = "";
+  fixtureFolder = "";
+  fixtureImageNames = [];
 });
 
 describe("cookmateImportJobHandler", () => {
+  it("imports an export and its images from a folder inside the zip", async () => {
+    fixtureFolder = "Cookmate Export";
+    fixtureImageNames = ["soup.jpg"];
+    xmlFixture = cookbookXml(
+      `<recipe><title>Soup</title><imagepath>images/soup.jpg</imagepath><ingredient><li>1 carrot</li></ingredient><recipetext><li>Boil it</li></recipetext></recipe>`,
+    );
+
+    await cookmateImportJobHandler(job, queueItem);
+
+    const [recipe] = importedRecipes();
+    expect(recipe.recipe.title).toBe("Soup");
+    expect(recipe.images).toHaveLength(1);
+    expect(
+      recipe.images[0].endsWith(
+        path.join("Cookmate Export", "images", "soup.jpg"),
+      ),
+    ).toBe(true);
+  });
+
   it("imports an export containing a single recipe", async () => {
     xmlFixture = cookbookXml(recipeXml("Only Recipe", "1 cup flour", "2 eggs"));
 

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
@@ -60,8 +60,19 @@ const { urlsImportJobHandler } = await import("./urlsImportJobHandler");
 
 const UTF8_BOM = Buffer.from([0xef, 0xbb, 0xbf]);
 
+const temporaryDirectories: string[] = [];
+
+afterEach(async () => {
+  await Promise.all(
+    temporaryDirectories
+      .splice(0)
+      .map((directory) => rm(directory, { recursive: true, force: true })),
+  );
+});
+
 const writeUrlsFile = async (body: string, prefix = Buffer.alloc(0)) => {
   const dir = await mkdtemp(path.join(tmpdir(), "urlsverify-"));
+  temporaryDirectories.push(dir);
   const filePath = path.join(dir, "urls.txt");
   await writeFile(
     filePath,
@@ -134,6 +145,90 @@ describe("urlsImportJobHandler", () => {
       "https://example.com/first",
       "https://example.com/second",
     ]);
+  });
+
+  it("clips the url within a line that has other text around it", async () => {
+    urlsPath = await writeUrlsFile(
+      [
+        "1. https://example.com/numbered",
+        "Soup Recipe | Example https://example.com/titled",
+        "(https://example.com/wrapped).",
+        "https://en.wikipedia.org/wiki/Soup_(food)",
+      ].join("\n"),
+    );
+
+    await urlsImportJobHandler(job, queueItem);
+
+    expect(clippedUrls()).toEqual([
+      "https://example.com/numbered",
+      "https://example.com/titled",
+      "https://example.com/wrapped",
+      "https://en.wikipedia.org/wiki/Soup_(food)",
+    ]);
+  });
+
+  it("skips lines without a url", async () => {
+    urlsPath = await writeUrlsFile(
+      "My favorite recipes\nhttps://example.com/good\nPancakes",
+    );
+
+    await urlsImportJobHandler(job, queueItem);
+
+    expect(clippedUrls()).toEqual(["https://example.com/good"]);
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(args.failedCount).toBe(0);
+    expect(args.failedUrls).toEqual([]);
+  });
+
+  it("does not count lines without a url toward the url limit", async () => {
+    const lines = Array.from({ length: 60 }, (_, index) => [
+      `Recipe ${index}`,
+      `https://example.com/${index}`,
+    ]).flat();
+    urlsPath = await writeUrlsFile(lines.join("\n"));
+
+    await urlsImportJobHandler(job, queueItem);
+
+    expect(clippedUrls()).toHaveLength(60);
+    expect(importJobFinishCommon).toHaveBeenCalledTimes(1);
+  });
+
+  it("clips up to three urls at a time and keeps the input order", async () => {
+    const urls = Array.from(
+      { length: 7 },
+      (_, index) => `https://example.com/${index}`,
+    );
+    urlsPath = await writeUrlsFile(urls.join("\n"));
+
+    let active = 0;
+    let maxActive = 0;
+    clipUrl.mockImplementation(async (url: string) => {
+      active++;
+      maxActive = Math.max(maxActive, active);
+      const delay = url.endsWith("/0") ? 30 : 5;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      active--;
+      return {
+        recipe: {
+          title: url,
+          url,
+          ingredients: "1 cup flour",
+          instructions: "Mix and bake.",
+        },
+        labels: [],
+        images: [],
+      };
+    });
+
+    await urlsImportJobHandler(job, queueItem);
+
+    expect(maxActive).toBe(3);
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(
+      args.standardizedRecipeImportInput.map(
+        (entry: { recipe: { url: string } }) => entry.recipe.url,
+      ),
+    ).toEqual(urls);
   });
 
   it("skips a clip result with neither ingredients nor instructions", async () => {

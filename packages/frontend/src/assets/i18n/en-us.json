@@ -1782,6 +1782,7 @@
   "pages.import.filePicker.file": "{{fileName}} Selected",
   "pages.import.filePicker.noFile": "Choose {{ acceptableFiletypes }} file",
   "pages.import.fileTypeWarning": "Warning! This filetype does not end with: {{ acceptableFiletypes }}. It may not work.",
+  "pages.import.goToCreateRecipePage": "Go to Create Recipe Page",
   "pages.import.defaultLabel": "Import on {{dateStamp}}",
 
   "pages.importJsonLD.tabTitle": "Import from JSON-LD - RecipeSage",
@@ -1838,6 +1839,7 @@
   "pages.importTextfiles.tabTitle": "Import from Notes & Documents - RecipeSage",
   "pages.importTextfiles.title": "Import Recipes from Notes & Documents",
   "pages.importTextfiles.description": "This will import a set of notes or documents compressed within a zip file (ends in .zip) into your RecipeSage account. You can use this to import recipes exported from notes apps such as Apple Notes, Google Keep (via Google Takeout), Obsidian, Notion, Joplin, Bear, Logseq, and Simplenote, or from word processors such as Microsoft Word and Google Docs. Supported formats inside the zip: .txt, .rtf, .odt, .docx, .md, .markdown, .html, .htm, .org. Folders inside the zip are supported. Each document must contain a single recipe, so only include notes that are recipes. The zip may contain up to 500 documents (a mix of these formats is supported). Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+  "pages.importTextfiles.singleDocument": "You selected a single document. This page only imports many documents at once, packed into a zip file. To turn one document into a recipe, use the Create Recipe page instead.",
 
   "pages.importEnex.tabTitle": "Import from Evernote - RecipeSage",
   "pages.importEnex.title": "Import Recipes from Evernote (enex) File",
@@ -1856,10 +1858,12 @@
   "pages.importPDFs.tabTitle": "Import from PDFs - RecipeSage",
   "pages.importPDFs.title": "Import Recipes from PDF files",
   "pages.importPDFs.description": "This will import a set of PDF files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+  "pages.importPDFs.singlePdf": "You selected a single PDF. This page only imports many PDFs at once, packed into a zip file. To turn one PDF into a recipe, use the Create Recipe page instead.",
 
   "pages.importImages.tabTitle": "Import from Images - RecipeSage",
   "pages.importImages.title": "Import Recipes from image files",
   "pages.importImages.description": "This will import a set of image files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+  "pages.importImages.singleImage": "You selected a single photo. This page only imports many photos at once, packed into a zip file. To turn one photo into a recipe, use the Create Recipe page instead.",
 
   "offlineMode.prompt.header": "Slow connection detected",
   "offlineMode.prompt.message": "Your connection looks like it's slow. Enable offline mode to instantly browse the recipes saved on this device. This choice lasts until you close the app, and you can turn it off anytime on the settings page.",

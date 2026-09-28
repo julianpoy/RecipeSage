@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
+import { PendingShareService } from "../../../services/pending-share.service";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -45,6 +46,7 @@ export class ImportPDFsPage {
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
   private navCtrl = inject(NavController);
+  private pendingShareService = inject(PendingShareService);
 
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
@@ -81,8 +83,21 @@ export class ImportPDFsPage {
     return !this.file.name.toLowerCase().endsWith(".zip");
   }
 
-  async submit() {
+  isSinglePdf() {
+    if (!this.file) return false;
+    if (this.file.type === "application/pdf") return true;
+    return this.file.name.toLowerCase().endsWith(".pdf");
+  }
+
+  async createRecipeFromPdf() {
     if (!this.file) return;
+
+    this.pendingShareService.set({ kind: "document", file: this.file });
+    await this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath("new"));
+  }
+
+  async submit() {
+    if (!this.file || this.isSinglePdf()) return;
 
     const response = await this.importService.importPDFs(
       this.file,

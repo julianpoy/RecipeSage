@@ -58,7 +58,14 @@
               }
             </ion-button>
 
-            @if (showFileTypeWarning()) {
+            @if (isSingleDocument()) {
+              <div>
+                <p>{{ "pages.importTextfiles.singleDocument" | translate }}</p>
+                <ion-button (click)="createRecipeFromDocument()">
+                  {{ "pages.import.goToCreateRecipePage" | translate }}
+                </ion-button>
+              </div>
+            } @else if (showFileTypeWarning()) {
               <div>
                 <p>
                   {{
@@ -81,7 +88,12 @@
 
       <ion-item
         lines="none"
-        [disabled]="!file || progress !== undefined || isFileTooLarge()"
+        [disabled]="
+          !file ||
+          progress !== undefined ||
+          isFileTooLarge() ||
+          isSingleDocument()
+        "
       >
         <ion-label>
           {{ "pages.import.step" | translate: { number: 2 } }}

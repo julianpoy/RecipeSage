@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
@@ -25,8 +25,19 @@ const { csvImportJobHandler } = await import("./csvImportJobHandler");
 
 const UTF8_BOM = Buffer.from([0xef, 0xbb, 0xbf]);
 
+const temporaryDirectories: string[] = [];
+
+afterEach(async () => {
+  await Promise.all(
+    temporaryDirectories
+      .splice(0)
+      .map((directory) => rm(directory, { recursive: true, force: true })),
+  );
+});
+
 const writeCsv = async (body: string, prefix = Buffer.alloc(0)) => {
   const dir = await mkdtemp(path.join(tmpdir(), "csvverify-"));
+  temporaryDirectories.push(dir);
   const filePath = path.join(dir, "test.csv");
   await writeFile(
     filePath,

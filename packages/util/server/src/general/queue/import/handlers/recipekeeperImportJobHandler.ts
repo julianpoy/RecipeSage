@@ -6,6 +6,9 @@ import { cleanLabelTitle } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readFile, stat, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
+import { listImportFiles } from "./shared/listImportFiles";
+import { findShallowestImportFile } from "./shared/findShallowestImportFile";
+import path from "path";
 import * as cheerio from "cheerio";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { ImportBadFormatError } from "../../../jobs/jobErrors";
@@ -30,13 +33,19 @@ export async function recipekeeperImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const indexHtmlPath = extractPath + "/recipes.html";
-  try {
-    await stat(indexHtmlPath);
-  } catch (_e) {
+  const fileNames = await listImportFiles(extractPath);
+  const indexHtmlFileName = findShallowestImportFile(
+    fileNames,
+    (fileName) => path.basename(fileName) === "recipes.html",
+  );
+  if (!indexHtmlFileName) {
     throw new ImportBadFormatError();
   }
-  const recipeHtml = await readFile(indexHtmlPath, "utf-8");
+  const rootPath = path.join(extractPath, path.dirname(indexHtmlFileName));
+  const recipeHtml = await readFile(
+    path.join(extractPath, indexHtmlFileName),
+    "utf-8",
+  );
 
   const $ = cheerio.load(recipeHtml);
   const domList = $(".recipe-details").toArray();
@@ -157,7 +166,7 @@ export async function recipekeeperImportJobHandler(
           .get()
           .filter(Boolean),
       ),
-    ].map((src) => extractPath + "/" + src);
+    ].map((src) => rootPath + "/" + src);
 
     const imagePaths: string[] = [];
     for (const imagePath of unconfirmedImagePaths) {

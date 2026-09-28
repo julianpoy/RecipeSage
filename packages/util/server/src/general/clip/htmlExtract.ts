@@ -59,11 +59,22 @@ export interface PageText {
   ogImage?: string;
 }
 
+const normalizeText = (value: string) =>
+  value
+    .split("\n")
+    .map((line) => line.replace(/[ \t\u00a0]+/g, " ").trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
+
+const collapseWhitespace = (value: string) => value.replace(/\s+/g, " ").trim();
+
 export const extractPageText = (html: string): PageText => {
   const skipStack: string[] = [];
   const parts: string[] = [];
   let ogImage: string | undefined;
   let twitterImage: string | undefined;
+  let ogTitle: string | undefined;
+  let ogDescription: string | undefined;
 
   const parser = new Parser(
     {
@@ -78,6 +89,9 @@ export const extractPageText = (html: string): PageText => {
             if (key === "og:image" && !ogImage) ogImage = content;
             if (key === "twitter:image" && !twitterImage)
               twitterImage = content;
+            if (key === "og:title" && !ogTitle) ogTitle = content;
+            if (key === "og:description" && !ogDescription)
+              ogDescription = content;
           }
         }
       },
@@ -98,11 +112,19 @@ export const extractPageText = (html: string): PageText => {
   parser.write(html);
   parser.end();
 
-  const text = parts
-    .join("")
-    .split("\n")
-    .map((line) => line.replace(/[ \t\u00a0]+/g, " ").trim())
-    .filter((line) => line.length > 0)
+  const bodyText = normalizeText(parts.join(""));
+  const collapsedBodyText = collapseWhitespace(bodyText);
+
+  const metaText = [ogTitle, ogDescription]
+    .map((value) => normalizeText(value || ""))
+    .filter(
+      (value) =>
+        value.length > 0 &&
+        !collapsedBodyText.includes(collapseWhitespace(value)),
+    );
+
+  const text = [...new Set(metaText), bodyText]
+    .filter((value) => value.length > 0)
     .join("\n");
 
   return { text, ogImage: ogImage || twitterImage };

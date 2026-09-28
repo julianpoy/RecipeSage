@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
@@ -198,11 +198,20 @@ describe("pdfs import failure handling", () => {
 });
 
 describe("urls import failure handling", () => {
-  it("skips and counts a url that cannot be clipped, without failing the job", async () => {
-    const urlsFile = path.join(
-      await mkdtemp(path.join(tmpdir(), "urls-")),
-      "urls.txt",
+  const temporaryDirectories: string[] = [];
+
+  afterEach(async () => {
+    await Promise.all(
+      temporaryDirectories
+        .splice(0)
+        .map((directory) => rm(directory, { recursive: true, force: true })),
     );
+  });
+
+  it("skips and counts a url that cannot be clipped, without failing the job", async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), "urls-"));
+    temporaryDirectories.push(dir);
+    const urlsFile = path.join(dir, "urls.txt");
     await writeFile(
       urlsFile,
       "https://example.com/good\nhttps://example.com/bad",

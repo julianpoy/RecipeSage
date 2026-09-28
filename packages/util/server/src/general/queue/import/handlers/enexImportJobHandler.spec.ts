@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mkdtemp, writeFile } from "fs/promises";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mkdtemp, writeFile, rm } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
@@ -45,8 +45,19 @@ const makeImageResource = (index: number) =>
     "base64",
   )}</data><mime>image/png</mime></resource>`;
 
+const temporaryDirectories: string[] = [];
+
+afterEach(async () => {
+  await Promise.all(
+    temporaryDirectories
+      .splice(0)
+      .map((directory) => rm(directory, { recursive: true, force: true })),
+  );
+});
+
 const buildEnex = async (notes: string[]) => {
   const dir = await mkdtemp(path.join(tmpdir(), "enexverify-"));
+  temporaryDirectories.push(dir);
   const filePath = path.join(dir, "test.enex");
   await writeFile(
     filePath,

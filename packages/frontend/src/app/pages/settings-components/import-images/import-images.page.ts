@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
+import { PendingShareService } from "../../../services/pending-share.service";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -19,6 +20,17 @@ import {
 } from "@ionic/angular/standalone";
 
 const MAX_FILE_SIZE_MB = 3000;
+
+const IMAGE_FILE_EXTENSIONS = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".heic",
+  ".heif",
+  ".avif",
+];
 
 @Component({
   standalone: true,
@@ -45,6 +57,7 @@ export class ImportImagesPage {
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
   private navCtrl = inject(NavController);
+  private pendingShareService = inject(PendingShareService);
 
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
@@ -81,8 +94,24 @@ export class ImportImagesPage {
     return !this.file.name.toLowerCase().endsWith(".zip");
   }
 
-  async submit() {
+  isSingleImage() {
+    if (!this.file) return false;
+    if (this.file.type.startsWith("image/")) return true;
+    const fileName = this.file.name.toLowerCase();
+    return IMAGE_FILE_EXTENSIONS.some((extension) =>
+      fileName.endsWith(extension),
+    );
+  }
+
+  async createRecipeFromImage() {
     if (!this.file) return;
+
+    this.pendingShareService.set({ kind: "images", files: [this.file] });
+    await this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath("new"));
+  }
+
+  async submit() {
+    if (!this.file || this.isSingleImage()) return;
 
     const response = await this.importService.importImages(
       this.file,

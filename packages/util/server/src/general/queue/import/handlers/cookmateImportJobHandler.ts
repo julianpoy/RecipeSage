@@ -6,8 +6,11 @@ import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
 import { cleanLabelTitle } from "@recipesage/util/shared";
 import { downloadS3ToTemp } from "./shared/s3Download";
-import { readdir, readFile, stat, mkdtempDisposable } from "fs/promises";
+import { readFile, stat, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
+import { listImportFiles } from "./shared/listImportFiles";
+import { findShallowestImportFile } from "./shared/findShallowestImportFile";
+import path from "path";
 import { xmlNodeToArray } from "./shared/xmlNodeToArray";
 import xmljs from "xml-js";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
@@ -33,14 +36,18 @@ export async function cookmateImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
+  const fileNames = await listImportFiles(extractPath);
 
-  const filename = fileNames.find((filename) => filename.endsWith(".xml"));
+  const filename = findShallowestImportFile(fileNames, (fileName) =>
+    fileName.endsWith(".xml"),
+  );
   if (!filename) {
     throw new ImportBadFormatError();
   }
 
-  const xml = await readFile(extractPath + "/" + filename, "utf8");
+  const rootPath = path.join(extractPath, path.dirname(filename));
+
+  const xml = await readFile(path.join(extractPath, filename), "utf8");
 
   let data;
   try {
@@ -92,10 +99,10 @@ export async function cookmateImportJobHandler(
       .map((trimmedPath) => basePath + "/" + trimmedPath);
 
     const pathsOnDisk = [];
-    for (const path of paths) {
+    for (const imagePath of paths) {
       try {
-        await stat(path);
-        pathsOnDisk.push(path);
+        await stat(imagePath);
+        pathsOnDisk.push(imagePath);
       } catch (_e) {
         // Do nothing, image does not exist in backup
       }
@@ -131,13 +138,10 @@ export async function cookmateImportJobHandler(
       labels: [...grabLabelTitles(cookmateRecipe.category), ...importLabels],
       images: [
         ...(await grabImagePaths(
-          extractPath + "/images",
+          rootPath + "/images",
           cookmateRecipe.imagepath,
         )),
-        ...(await grabImagePaths(
-          extractPath + "/images",
-          cookmateRecipe.image,
-        )),
+        ...(await grabImagePaths(rootPath + "/images", cookmateRecipe.image)),
       ],
     });
 

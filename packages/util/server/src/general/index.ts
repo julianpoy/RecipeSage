@@ -15,6 +15,7 @@ export * from "./email/sendPasswordResetEmail";
 export * from "./jobs/getJobResultCode";
 export * from "./jobs/importJobFinishCommon";
 export * from "./jobs/importJobSetupCommon";
+export * from "./jobs/markJobFailed";
 
 export * from "./metrics";
 

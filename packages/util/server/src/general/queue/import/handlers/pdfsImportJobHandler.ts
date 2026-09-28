@@ -5,8 +5,9 @@ import { importJobFinishCommon } from "../../../index";
 import { pdfToRecipe } from "../../../../ml/index";
 import { downloadS3ToTemp } from "./shared/s3Download";
 import { readSideCarImages } from "./shared/sideCarImages";
-import { readdir, readFile, mkdtempDisposable } from "fs/promises";
+import { readFile, mkdtempDisposable } from "fs/promises";
 import { safeExtractZip } from "../../../safeExtractZip";
+import { listImportFiles } from "./shared/listImportFiles";
 import path from "path";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
@@ -37,7 +38,7 @@ export async function pdfsImportJobHandler(
   const extractPath = extractDir.path;
   await safeExtractZip(zipPath, extractPath);
 
-  const fileNames = await readdir(extractPath);
+  const fileNames = await listImportFiles(extractPath);
 
   const pdfFileNames = fileNames.filter(
     (fileName) => path.extname(fileName).toLowerCase() === ".pdf",
@@ -63,7 +64,7 @@ export async function pdfsImportJobHandler(
 
       const recipePDF = await readFile(filePath);
 
-      const images = await readSideCarImages(extractPath, fileName);
+      const images = await readSideCarImages(path.dirname(filePath), fileName);
 
       const recipe = await pdfToRecipe(recipePDF);
       if (!recipe) {
