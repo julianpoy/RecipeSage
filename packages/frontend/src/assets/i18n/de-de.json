@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Bewertung ausblenden",
     "pages.share.byEmbed.nutrition": "Nährwertangaben ausblenden",
     "pages.share.byEmbed.linkedRecipes": "Verknüpfte Rezepte ausblenden",
-    "pages.share.byEmbed.lastMadeAt": "Datum der letzten Zubereitung anzeigen"
+    "pages.share.byEmbed.lastMadeAt": "Datum der letzten Zubereitung anzeigen",
+    "pages.serverSettings.webBase.label": "Web-URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Die Adresse, über die Sie RecipeSage in einem Webbrowser öffnen. Von Ihnen geteilte Links verwenden diese Adresse.",
+    "pages.serverSettings.webBase.invalid": "Bitte geben Sie eine gültige HTTP(S)-URL ohne Pfad ein, z. B. https://example.com. Fügen Sie /app nicht ein.",
+    "pages.import.goToCreateRecipePage": "Zur Seite „Rezept erstellen“",
+    "pages.importTextfiles.singleDocument": "Sie haben ein einzelnes Dokument ausgewählt. Auf dieser Seite können nur mehrere Dokumente gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Um ein einzelnes Dokument in ein Rezept umzuwandeln, verwenden Sie stattdessen die Seite „Rezept erstellen“.",
+    "pages.importPDFs.singlePdf": "Sie haben eine einzelne PDF-Datei ausgewählt. Auf dieser Seite können nur mehrere PDF-Dateien gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Um eine einzelne PDF-Datei in ein Rezept umzuwandeln, verwenden Sie stattdessen die Seite „Rezept erstellen“.",
+    "pages.importImages.singleImage": "Sie haben ein einzelnes Foto ausgewählt. Auf dieser Seite können nur mehrere Fotos gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Um ein einzelnes Foto in ein Rezept umzuwandeln, verwenden Sie stattdessen die Seite „Rezept erstellen“."
 }

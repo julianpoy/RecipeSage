@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "隐藏评分",
     "pages.share.byEmbed.nutrition": "隐藏营养信息",
     "pages.share.byEmbed.linkedRecipes": "隐藏关联食谱",
-    "pages.share.byEmbed.lastMadeAt": "显示上次制作日期"
+    "pages.share.byEmbed.lastMadeAt": "显示上次制作日期",
+    "pages.serverSettings.webBase.label": "Web URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "您用于在网页浏览器中打开 RecipeSage 的地址。您分享的链接将使用此地址。",
+    "pages.serverSettings.webBase.invalid": "请输入不含路径的有效 http(s) URL，例如 https://example.com。请勿包含 /app。",
+    "pages.import.goToCreateRecipePage": "前往创建食谱页面",
+    "pages.importTextfiles.singleDocument": "您选择了单个文档。此页面仅可一次导入多个打包在 ZIP 文件中的文档。要将单个文档转换为食谱，请改用“创建食谱”页面。",
+    "pages.importPDFs.singlePdf": "您选择了单个 PDF。此页面仅可一次导入多个打包在 ZIP 文件中的 PDF。要将单个 PDF 转换为食谱，请改用“创建食谱”页面。",
+    "pages.importImages.singleImage": "您选择了单张照片。此页面仅可一次导入多张打包在 ZIP 文件中的照片。要将单张照片转换为食谱，请改用“创建食谱”页面。"
 }

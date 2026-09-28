@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Приховати оцінку",
     "pages.share.byEmbed.nutrition": "Приховати поживну цінність",
     "pages.share.byEmbed.linkedRecipes": "Приховати пов’язані рецепти",
-    "pages.share.byEmbed.lastMadeAt": "Показати дату останнього приготування"
+    "pages.share.byEmbed.lastMadeAt": "Показати дату останнього приготування",
+    "pages.serverSettings.webBase.label": "URL вебсайту",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Адреса, яку ви використовуєте для відкриття RecipeSage у веббраузері. Посилання, якими ви ділитеся, використовуватимуть цю адресу.",
+    "pages.serverSettings.webBase.invalid": "Введіть дійсну URL-адресу http(s) без шляху, наприклад https://example.com. Не вказуйте /app.",
+    "pages.import.goToCreateRecipePage": "Перейти на сторінку створення рецепта",
+    "pages.importTextfiles.singleDocument": "Ви вибрали один документ. На цій сторінці можна імпортувати лише багато документів одночасно, упакованих в архів zip. Щоб перетворити один документ на рецепт, скористайтеся натомість сторінкою створення рецепта.",
+    "pages.importPDFs.singlePdf": "Ви вибрали один PDF-файл. На цій сторінці можна імпортувати лише багато PDF-файлів одночасно, упакованих в архів zip. Щоб перетворити один PDF-файл на рецепт, скористайтеся натомість сторінкою створення рецепта.",
+    "pages.importImages.singleImage": "Ви вибрали одне фото. На цій сторінці можна імпортувати лише багато фото одночасно, упакованих в архів zip. Щоб перетворити одне фото на рецепт, скористайтеся натомість сторінкою створення рецепта."
 }

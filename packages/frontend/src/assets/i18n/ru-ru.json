@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Скрыть рейтинг",
     "pages.share.byEmbed.nutrition": "Скрыть пищевую ценность",
     "pages.share.byEmbed.linkedRecipes": "Скрыть связанные рецепты",
-    "pages.share.byEmbed.lastMadeAt": "Показывать дату последнего приготовления"
+    "pages.share.byEmbed.lastMadeAt": "Показывать дату последнего приготовления",
+    "pages.serverSettings.webBase.label": "URL-адрес вебсервиса",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Адрес, который вы используете для открытия RecipeSage в веб-браузере. В общих ссылках будет использоваться этот адрес.",
+    "pages.serverSettings.webBase.invalid": "Введите корректный URL-адрес http(s) без пути, например https://example.com. Не включайте /app.",
+    "pages.import.goToCreateRecipePage": "Перейти на страницу создания рецепта",
+    "pages.importTextfiles.singleDocument": "Вы выбрали один документ. На этой странице можно одновременно импортировать только несколько документов, упакованных в ZIP-архив. Чтобы преобразовать один документ в рецепт, воспользуйтесь страницей создания рецепта.",
+    "pages.importPDFs.singlePdf": "Вы выбрали один PDF-файл. На этой странице можно одновременно импортировать только несколько PDF-файлов, упакованных в ZIP-архив. Чтобы преобразовать один PDF-файл в рецепт, воспользуйтесь страницей создания рецепта.",
+    "pages.importImages.singleImage": "Вы выбрали одну фотографию. На этой странице можно одновременно импортировать только несколько фотографий, упакованных в ZIP-архив. Чтобы преобразовать одну фотографию в рецепт, воспользуйтесь страницей создания рецепта."
 }

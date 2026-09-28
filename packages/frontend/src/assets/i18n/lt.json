@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Slėpti įvertinimą",
     "pages.share.byEmbed.nutrition": "Slėpti maistinę vertę",
     "pages.share.byEmbed.linkedRecipes": "Slėpti susietus receptus",
-    "pages.share.byEmbed.lastMadeAt": "Rodyti paskutinio gaminimo datą"
+    "pages.share.byEmbed.lastMadeAt": "Rodyti paskutinio gaminimo datą",
+    "pages.serverSettings.webBase.label": "Žiniatinklio URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Adresas, kurį naudojate atidarydami „RecipeSage“ žiniatinklio naršyklėje. Bendrinamos nuorodos naudos šį adresą.",
+    "pages.serverSettings.webBase.invalid": "Įveskite galiojantį http(s) URL be kelio, pavyzdžiui, https://example.com. Neįtraukite /app.",
+    "pages.import.goToCreateRecipePage": "Eiti į recepto kūrimo puslapį",
+    "pages.importTextfiles.singleDocument": "Pasirinkote vieną dokumentą. Šiame puslapyje vienu metu importuojama tik daug dokumentų, supakuotų į ZIP archyvą. Norėdami paversti vieną dokumentą receptu, naudokite recepto kūrimo puslapį.",
+    "pages.importPDFs.singlePdf": "Pasirinkote vieną PDF failą. Šiame puslapyje vienu metu importuojama tik daug PDF failų, supakuotų į ZIP archyvą. Norėdami paversti vieną PDF failą receptu, naudokite recepto kūrimo puslapį.",
+    "pages.importImages.singleImage": "Pasirinkote vieną nuotrauką. Šiame puslapyje vienu metu importuojama tik daug nuotraukų, supakuotų į ZIP archyvą. Norėdami paversti vieną nuotrauką receptu, naudokite recepto kūrimo puslapį."
 }

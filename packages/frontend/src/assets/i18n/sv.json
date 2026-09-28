@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Dölj betyg",
     "pages.share.byEmbed.nutrition": "Dölj näringsinformation",
     "pages.share.byEmbed.linkedRecipes": "Dölj länkade recept",
-    "pages.share.byEmbed.lastMadeAt": "Visa datum för senaste tillagning"
+    "pages.share.byEmbed.lastMadeAt": "Visa datum för senaste tillagning",
+    "pages.serverSettings.webBase.label": "Webb-URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Adressen du använder för att öppna RecipeSage i en webbläsare. Länkar du delar kommer att använda denna adress.",
+    "pages.serverSettings.webBase.invalid": "Ange en giltig http(s)-webbadress utan sökväg, till exempel https://example.com. Inkludera inte /app.",
+    "pages.import.goToCreateRecipePage": "Gå till sidan Skapa recept",
+    "pages.importTextfiles.singleDocument": "Du har valt ett enskilt dokument. Den här sidan importerar endast flera dokument samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra ett dokument till ett recept.",
+    "pages.importPDFs.singlePdf": "Du har valt en enskild PDF. Den här sidan importerar endast flera PDF-filer samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra en PDF till ett recept.",
+    "pages.importImages.singleImage": "Du har valt ett enskilt foto. Den här sidan importerar endast flera foton samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra ett foto till ett recept."
 }

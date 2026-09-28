@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "評価を非表示",
     "pages.share.byEmbed.nutrition": "栄養情報を非表示",
     "pages.share.byEmbed.linkedRecipes": "リンクされたレシピを非表示",
-    "pages.share.byEmbed.lastMadeAt": "最終調理日を表示"
+    "pages.share.byEmbed.lastMadeAt": "最終調理日を表示",
+    "pages.serverSettings.webBase.label": "Web URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "ウェブブラウザでRecipeSageを開く際に使用するアドレスです。共有するリンクにはこのアドレスが使用されます。",
+    "pages.serverSettings.webBase.invalid": "https://example.com のように、パスを含まない有効な http(s) URL を入力してください。/app は含めないでください。",
+    "pages.import.goToCreateRecipePage": "レシピ作成ページに移動",
+    "pages.importTextfiles.singleDocument": "単一の文書を選択しました。このページでは、zipファイルにまとめられた複数の文書のみを一度にインポートできます。1つの文書をレシピにするには、代わりにレシピ作成ページを使用してください。",
+    "pages.importPDFs.singlePdf": "単一のPDFを選択しました。このページでは、zipファイルにまとめられた複数のPDFのみを一度にインポートできます。1つのPDFをレシピにするには、代わりにレシピ作成ページを使用してください。",
+    "pages.importImages.singleImage": "単一の写真を選択しました。このページでは、zipファイルにまとめられた複数の写真のみを一度にインポートできます。1枚の写真をレシピにするには、代わりにレシピ作成ページを使用してください。"
 }

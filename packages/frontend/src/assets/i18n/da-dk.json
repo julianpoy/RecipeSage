@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Skjul bedømmelse",
     "pages.share.byEmbed.nutrition": "Skjul næringsindhold",
     "pages.share.byEmbed.linkedRecipes": "Skjul sammenkædede opskrifter",
-    "pages.share.byEmbed.lastMadeAt": "Vis dato for seneste tilberedning"
+    "pages.share.byEmbed.lastMadeAt": "Vis dato for seneste tilberedning",
+    "pages.serverSettings.webBase.label": "Web-URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Den adresse, du bruger til at åbne RecipeSage i en webbrowser. Links, du deler, vil bruge denne adresse.",
+    "pages.serverSettings.webBase.invalid": "Angiv en gyldig http(s)-URL uden en sti, f.eks. https://example.com. Medtag ikke /app.",
+    "pages.import.goToCreateRecipePage": "Gå til siden Opret opskrift",
+    "pages.importTextfiles.singleDocument": "Du har valgt et enkelt dokument. Denne side importerer kun mange dokumenter på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne ét dokument til en opskrift.",
+    "pages.importPDFs.singlePdf": "Du har valgt én PDF. Denne side importerer kun mange PDF'er på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne én PDF til en opskrift.",
+    "pages.importImages.singleImage": "Du har valgt ét foto. Denne side importerer kun mange fotos på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne ét foto til en opskrift."
 }

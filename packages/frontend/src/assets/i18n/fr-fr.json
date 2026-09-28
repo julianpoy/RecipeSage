@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Masquer l’évaluation",
     "pages.share.byEmbed.nutrition": "Masquer les informations nutritionnelles",
     "pages.share.byEmbed.linkedRecipes": "Masquer les recettes liées",
-    "pages.share.byEmbed.lastMadeAt": "Afficher la date de dernière préparation"
+    "pages.share.byEmbed.lastMadeAt": "Afficher la date de dernière préparation",
+    "pages.serverSettings.webBase.label": "URL web",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "L’adresse que vous utilisez pour ouvrir RecipeSage dans un navigateur web. Les liens que vous partagez utiliseront cette adresse.",
+    "pages.serverSettings.webBase.invalid": "Veuillez saisir une URL http(s) valide sans chemin, telle que https://example.com. N’incluez pas /app.",
+    "pages.import.goToCreateRecipePage": "Accéder à la page Créer une recette",
+    "pages.importTextfiles.singleDocument": "Vous avez sélectionné un seul document. Cette page permet uniquement d’importer plusieurs documents à la fois, regroupés dans un fichier ZIP. Pour transformer un document en recette, utilisez plutôt la page Créer une recette.",
+    "pages.importPDFs.singlePdf": "Vous avez sélectionné un seul PDF. Cette page permet uniquement d’importer plusieurs PDF à la fois, regroupés dans un fichier ZIP. Pour transformer un PDF en recette, utilisez plutôt la page Créer une recette.",
+    "pages.importImages.singleImage": "Vous avez sélectionné une seule photo. Cette page permet uniquement d’importer plusieurs photos à la fois, regroupées dans un fichier ZIP. Pour transformer une photo en recette, utilisez plutôt la page Créer une recette."
 }
