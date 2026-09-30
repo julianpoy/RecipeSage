@@ -4,7 +4,9 @@ export const NUTRITION_FILTER_KEYS = [
   "calories",
   "protein",
   "totalCarbs",
+  "dietaryFiber",
   "totalFat",
+  "saturatedFat",
   "sodium",
 ] as const satisfies readonly (keyof NutritionFilter)[];
 
