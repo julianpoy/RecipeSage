@@ -41,7 +41,7 @@
     "@angular/core": "21.2.20",
     "@angular/forms": "21.2.1",
     "@angular/platform-browser": "21.2.1",
-    "@angular/router": "21.2.1",
+    "@angular/router": "21.2.24",
     "@apple/app-store-server-library": "^3.1.0",
     "@aws-sdk/client-s3": "^3.1136.0",
     "@aws-sdk/client-ses": "^3.1136.0",
