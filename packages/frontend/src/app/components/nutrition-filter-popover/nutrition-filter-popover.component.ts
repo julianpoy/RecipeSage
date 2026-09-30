@@ -17,7 +17,7 @@ import {
   IonLabel,
 } from "@ionic/angular/standalone";
 
-type MacroKey = 
+type MacroKey =
   | "calories"
   | "protein"
   | "totalCarbs"
