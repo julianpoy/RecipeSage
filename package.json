@@ -91,7 +91,7 @@
     "bullmq": "^5.78.1",
     "cheerio": "^1.1.2",
     "commander": "15.0.0",
-    "compression": "^1.8.1",
+    "compression": "^1.8.2",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.48.0",
     "cors": "^2.8.6",
