@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "מעבר לדף יצירת מתכון",
     "pages.importTextfiles.singleDocument": "נבחר מסמך יחיד. דף זה מייבא מסמכים רבים בלבד בבת אחת, כשהם ארוזים בקובץ ZIP. כדי להפוך מסמך יחיד למתכון, יש להשתמש בדף יצירת מתכון במקום זאת.",
     "pages.importPDFs.singlePdf": "נבחר קובץ PDF יחיד. דף זה מייבא קובצי PDF רבים בלבד בבת אחת, כשהם ארוזים בקובץ ZIP. כדי להפוך קובץ PDF יחיד למתכון, יש להשתמש בדף יצירת מתכון במקום זאת.",
-    "pages.importImages.singleImage": "נבחרה תמונה יחידה. דף זה מייבא תמונות רבות בלבד בבת אחת, כשהן ארוזות בקובץ ZIP. כדי להפוך תמונה יחידה למתכון, יש להשתמש בדף יצירת מתכון במקום זאת."
+    "pages.importImages.singleImage": "נבחרה תמונה יחידה. דף זה מייבא תמונות רבות בלבד בבת אחת, כשהן ארוזות בקובץ ZIP. כדי להפוך תמונה יחידה למתכון, יש להשתמש בדף יצירת מתכון במקום זאת.",
+    "components.nutritionFilterPopover.dietaryFiber": "סיבים תזונתיים (גרם)",
+    "components.nutritionFilterPopover.saturatedFat": "שומן רווי (גרם)"
 }

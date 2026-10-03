@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Gå till sidan Skapa recept",
     "pages.importTextfiles.singleDocument": "Du har valt ett enskilt dokument. Den här sidan importerar endast flera dokument samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra ett dokument till ett recept.",
     "pages.importPDFs.singlePdf": "Du har valt en enskild PDF. Den här sidan importerar endast flera PDF-filer samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra en PDF till ett recept.",
-    "pages.importImages.singleImage": "Du har valt ett enskilt foto. Den här sidan importerar endast flera foton samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra ett foto till ett recept."
+    "pages.importImages.singleImage": "Du har valt ett enskilt foto. Den här sidan importerar endast flera foton samtidigt, paketerade i en zip-fil. Använd i stället sidan Skapa recept för att göra ett foto till ett recept.",
+    "components.nutritionFilterPopover.dietaryFiber": "Fiber (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Mättat fett (g)"
 }

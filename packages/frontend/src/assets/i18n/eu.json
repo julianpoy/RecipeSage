@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Joan Errezeta sortzeko orrira",
     "pages.importTextfiles.singleDocument": "Dokumentu bakarra hautatu duzu. Orrialde honek hainbat dokumentu soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. Dokumentu bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria.",
     "pages.importPDFs.singlePdf": "PDF bakarra hautatu duzu. Orrialde honek hainbat PDF soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. PDF bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria.",
-    "pages.importImages.singleImage": "Argazki bakarra hautatu duzu. Orrialde honek hainbat argazki soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. Argazki bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria."
+    "pages.importImages.singleImage": "Argazki bakarra hautatu duzu. Orrialde honek hainbat argazki soilik inportatzen ditu aldi berean, zip fitxategi batean bilduta. Argazki bakar bat errezeta bihurtzeko, erabili Errezeta sortzeko orria.",
+    "components.nutritionFilterPopover.dietaryFiber": "Zuntza (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Gantz saturatuak (g)"
 }

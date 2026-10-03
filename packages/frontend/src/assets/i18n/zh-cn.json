@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "前往创建食谱页面",
     "pages.importTextfiles.singleDocument": "您选择了单个文档。此页面仅可一次导入多个打包在 ZIP 文件中的文档。要将单个文档转换为食谱，请改用“创建食谱”页面。",
     "pages.importPDFs.singlePdf": "您选择了单个 PDF。此页面仅可一次导入多个打包在 ZIP 文件中的 PDF。要将单个 PDF 转换为食谱，请改用“创建食谱”页面。",
-    "pages.importImages.singleImage": "您选择了单张照片。此页面仅可一次导入多张打包在 ZIP 文件中的照片。要将单张照片转换为食谱，请改用“创建食谱”页面。"
+    "pages.importImages.singleImage": "您选择了单张照片。此页面仅可一次导入多张打包在 ZIP 文件中的照片。要将单张照片转换为食谱，请改用“创建食谱”页面。",
+    "components.nutritionFilterPopover.dietaryFiber": "膳食纤维（克）",
+    "components.nutritionFilterPopover.saturatedFat": "饱和脂肪（克）"
 }

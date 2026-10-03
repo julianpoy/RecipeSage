@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Zur Seite \"Rezept erstellen\"",
     "pages.importTextfiles.singleDocument": "Du hast ein einzelnes Dokument ausgewählt. Auf dieser Seite können nur mehrere Dokumente gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Ein einzelnes Dokument kannst du auf der Seite \"Rezept erstellen\" in ein Rezept umwandeln.",
     "pages.importPDFs.singlePdf": "Du hast eine einzelne PDF-Datei ausgewählt. Auf dieser Seite können nur mehrere PDF-Dateien gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Eine einzelne PDF-Datei kannst du auf der Seite \"Rezept erstellen\" in ein Rezept umwandeln.",
-    "pages.importImages.singleImage": "Du hast ein einzelnes Foto ausgewählt. Auf dieser Seite können nur mehrere Fotos gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Ein einzelnes Foto kannst du auf der Seite \"Rezept erstellen\" in ein Rezept umwandeln."
+    "pages.importImages.singleImage": "Du hast ein einzelnes Foto ausgewählt. Auf dieser Seite können nur mehrere Fotos gleichzeitig importiert werden, die in einer ZIP-Datei verpackt sind. Ein einzelnes Foto kannst du auf der Seite \"Rezept erstellen\" in ein Rezept umwandeln.",
+    "components.nutritionFilterPopover.dietaryFiber": "Ballaststoffe (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Gesättigte Fettsäuren (g)"
 }

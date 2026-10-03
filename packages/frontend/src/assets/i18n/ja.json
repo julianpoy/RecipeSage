@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "レシピ作成ページに移動",
     "pages.importTextfiles.singleDocument": "単一の文書を選択しました。このページでは、zipファイルにまとめられた複数の文書のみを一度にインポートできます。1つの文書をレシピにするには、代わりにレシピ作成ページを使用してください。",
     "pages.importPDFs.singlePdf": "単一のPDFを選択しました。このページでは、zipファイルにまとめられた複数のPDFのみを一度にインポートできます。1つのPDFをレシピにするには、代わりにレシピ作成ページを使用してください。",
-    "pages.importImages.singleImage": "単一の写真を選択しました。このページでは、zipファイルにまとめられた複数の写真のみを一度にインポートできます。1枚の写真をレシピにするには、代わりにレシピ作成ページを使用してください。"
+    "pages.importImages.singleImage": "単一の写真を選択しました。このページでは、zipファイルにまとめられた複数の写真のみを一度にインポートできます。1枚の写真をレシピにするには、代わりにレシピ作成ページを使用してください。",
+    "components.nutritionFilterPopover.dietaryFiber": "食物繊維（g）",
+    "components.nutritionFilterPopover.saturatedFat": "飽和脂肪（g）"
 }

@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Gå til siden for å opprette oppskrifter",
     "pages.importTextfiles.singleDocument": "Du har valgt ett enkelt dokument. Denne siden importerer bare flere dokumenter om gangen, pakket i en zip-fil. For å gjøre ett dokument om til en oppskrift, bruk siden for å opprette oppskrifter i stedet.",
     "pages.importPDFs.singlePdf": "Du har valgt én enkelt PDF. Denne siden importerer bare flere PDF-er om gangen, pakket i en zip-fil. For å gjøre én PDF om til en oppskrift, bruk siden for å opprette oppskrifter i stedet.",
-    "pages.importImages.singleImage": "Du har valgt ett enkelt bilde. Denne siden importerer bare flere bilder om gangen, pakket i en zip-fil. For å gjøre ett bilde om til en oppskrift, bruk siden for å opprette oppskrifter i stedet."
+    "pages.importImages.singleImage": "Du har valgt ett enkelt bilde. Denne siden importerer bare flere bilder om gangen, pakket i en zip-fil. For å gjøre ett bilde om til en oppskrift, bruk siden for å opprette oppskrifter i stedet.",
+    "components.nutritionFilterPopover.dietaryFiber": "Fiber (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Mettet fett (g)"
 }

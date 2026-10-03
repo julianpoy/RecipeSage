@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Ga naar de pagina Recept maken",
     "pages.importTextfiles.singleDocument": "U hebt één document geselecteerd. Op deze pagina kunnen alleen meerdere documenten tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één document in een recept om te zetten.",
     "pages.importPDFs.singlePdf": "U hebt één pdf geselecteerd. Op deze pagina kunnen alleen meerdere pdf's tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één pdf in een recept om te zetten.",
-    "pages.importImages.singleImage": "U hebt één foto geselecteerd. Op deze pagina kunnen alleen meerdere foto's tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één foto in een recept om te zetten."
+    "pages.importImages.singleImage": "U hebt één foto geselecteerd. Op deze pagina kunnen alleen meerdere foto's tegelijk worden geïmporteerd, verpakt in een zipbestand. Gebruik in plaats daarvan de pagina Recept maken om één foto in een recept om te zetten.",
+    "components.nutritionFilterPopover.dietaryFiber": "Vezels (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Verzadigd vet (g)"
 }

@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Tarif Oluşturma Sayfasına Git",
     "pages.importTextfiles.singleDocument": "Tek bir belge seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok belgeyi aynı anda içe aktarır. Tek bir belgeyi tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın.",
     "pages.importPDFs.singlePdf": "Tek bir PDF seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok PDF'yi aynı anda içe aktarır. Tek bir PDF'yi tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın.",
-    "pages.importImages.singleImage": "Tek bir fotoğraf seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok fotoğrafı aynı anda içe aktarır. Tek bir fotoğrafı tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın."
+    "pages.importImages.singleImage": "Tek bir fotoğraf seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok fotoğrafı aynı anda içe aktarır. Tek bir fotoğrafı tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın.",
+    "components.nutritionFilterPopover.dietaryFiber": "Lif (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Doymuş Yağ (g)"
 }

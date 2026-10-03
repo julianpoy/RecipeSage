@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Siirry reseptin luontisivulle",
     "pages.importTextfiles.singleDocument": "Valitsit yhden asiakirjan. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja asiakirjoja. Jos haluat muuttaa yhden asiakirjan reseptiksi, käytä sen sijaan reseptin luontisivua.",
     "pages.importPDFs.singlePdf": "Valitsit yhden PDF-tiedoston. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja PDF-tiedostoja. Jos haluat muuttaa yhden PDF-tiedoston reseptiksi, käytä sen sijaan reseptin luontisivua.",
-    "pages.importImages.singleImage": "Valitsit yhden valokuvan. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja valokuvia. Jos haluat muuttaa yhden valokuvan reseptiksi, käytä sen sijaan reseptin luontisivua."
+    "pages.importImages.singleImage": "Valitsit yhden valokuvan. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja valokuvia. Jos haluat muuttaa yhden valokuvan reseptiksi, käytä sen sijaan reseptin luontisivua.",
+    "components.nutritionFilterPopover.dietaryFiber": "Kuitu (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Tyydyttynyt rasva (g)"
 }
