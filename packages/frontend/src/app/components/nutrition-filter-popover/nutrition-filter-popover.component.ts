@@ -17,7 +17,14 @@ import {
   IonLabel,
 } from "@ionic/angular/standalone";
 
-type MacroKey = "calories" | "protein" | "totalCarbs" | "totalFat" | "sodium";
+type MacroKey =
+  | "calories"
+  | "protein"
+  | "totalCarbs"
+  | "dietaryFiber"
+  | "totalFat"
+  | "saturatedFat"
+  | "sodium";
 
 interface MacroDef {
   key: MacroKey;
@@ -31,7 +38,15 @@ const MACROS: MacroDef[] = [
     key: "totalCarbs",
     labelKey: "components.nutritionFilterPopover.totalCarbs",
   },
+  {
+    key: "dietaryFiber",
+    labelKey: "components.nutritionFilterPopover.dietaryFiber",
+  },
   { key: "totalFat", labelKey: "components.nutritionFilterPopover.totalFat" },
+  {
+    key: "saturatedFat",
+    labelKey: "components.nutritionFilterPopover.saturatedFat",
+  },
   { key: "sodium", labelKey: "components.nutritionFilterPopover.sodium" },
 ];
 
@@ -71,7 +86,9 @@ export class NutritionFilterPopoverComponent {
     calories: { min: null, max: null, matchMissing: false },
     protein: { min: null, max: null, matchMissing: false },
     totalCarbs: { min: null, max: null, matchMissing: false },
+    dietaryFiber: { min: null, max: null, matchMissing: false },
     totalFat: { min: null, max: null, matchMissing: false },
+    saturatedFat: { min: null, max: null, matchMissing: false },
     sodium: { min: null, max: null, matchMissing: false },
   };
 

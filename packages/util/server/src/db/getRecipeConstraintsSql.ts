@@ -94,8 +94,16 @@ export const getRecipeConstraintsSql = async (
     Prisma.sql`"Recipes"."nutritionTotalCarbs"`,
   );
   addNutritionFilter(
+    nutritionFilter?.dietaryFiber,
+    Prisma.sql`"Recipes"."nutritionDietaryFiber"`,
+  );
+  addNutritionFilter(
     nutritionFilter?.totalFat,
     Prisma.sql`"Recipes"."nutritionTotalFat"`,
+  );
+  addNutritionFilter(
+    nutritionFilter?.saturatedFat,
+    Prisma.sql`"Recipes"."nutritionSaturatedFat"`,
   );
   addNutritionFilter(
     nutritionFilter?.sodium,

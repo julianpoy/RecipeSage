@@ -10,7 +10,9 @@ export const nutritionFilterSchema = z.object({
   calories: nutritionRangeSchema.optional(),
   protein: nutritionRangeSchema.optional(),
   totalCarbs: nutritionRangeSchema.optional(),
+  dietaryFiber: nutritionRangeSchema.optional(),
   totalFat: nutritionRangeSchema.optional(),
+  saturatedFat: nutritionRangeSchema.optional(),
   sodium: nutritionRangeSchema.optional(),
 });
 

@@ -474,42 +474,72 @@ describe("getRecipeConstraintsWhere", () => {
         nutritionCalories: 400,
         nutritionProtein: 20,
         nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
         nutritionSodium: 400,
       });
       await createRecipe("protein-out", {
         nutritionCalories: 400,
         nutritionProtein: 900,
         nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
         nutritionSodium: 400,
       });
       await createRecipe("calories-out", {
         nutritionCalories: 9000,
         nutritionProtein: 20,
         nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
         nutritionSodium: 400,
       });
       await createRecipe("carbs-out", {
         nutritionCalories: 400,
         nutritionProtein: 20,
         nutritionTotalCarbs: 900,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
+        nutritionSodium: 400,
+      });
+      await createRecipe("fiber-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 900,
+        nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
         nutritionSodium: 400,
       });
       await createRecipe("fat-out", {
         nutritionCalories: 400,
         nutritionProtein: 20,
         nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 900,
+        nutritionSaturatedFat: 3,
+        nutritionSodium: 400,
+      });
+      await createRecipe("saturated-fat-out", {
+        nutritionCalories: 400,
+        nutritionProtein: 20,
+        nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
+        nutritionTotalFat: 10,
+        nutritionSaturatedFat: 900,
         nutritionSodium: 400,
       });
       await createRecipe("sodium-out", {
         nutritionCalories: 400,
         nutritionProtein: 20,
         nutritionTotalCarbs: 30,
+        nutritionDietaryFiber: 5,
         nutritionTotalFat: 10,
+        nutritionSaturatedFat: 3,
         nutritionSodium: 9000,
       });
 
@@ -518,7 +548,9 @@ describe("getRecipeConstraintsWhere", () => {
           calories: { min: 10, max: 800 },
           protein: { min: 10, max: 50 },
           totalCarbs: { min: 10, max: 50 },
+          dietaryFiber: { min: 1, max: 20 },
           totalFat: { min: 1, max: 50 },
+          saturatedFat: { min: 1, max: 10 },
           sodium: { min: 100, max: 500 },
         },
       });
@@ -528,7 +560,9 @@ describe("getRecipeConstraintsWhere", () => {
     it("matches missing values on every supported nutrition column", async () => {
       const missing = await createRecipe("missing");
       await createRecipe("carbs-present", { nutritionTotalCarbs: 30 });
+      await createRecipe("fiber-present", { nutritionDietaryFiber: 5 });
       await createRecipe("fat-present", { nutritionTotalFat: 10 });
+      await createRecipe("saturated-fat-present", { nutritionSaturatedFat: 3 });
       await createRecipe("sodium-present", { nutritionSodium: 400 });
       await createRecipe("protein-present", { nutritionProtein: 20 });
       await createRecipe("calories-present", { nutritionCalories: 500 });
@@ -538,7 +572,9 @@ describe("getRecipeConstraintsWhere", () => {
           calories: { matchMissing: true },
           protein: { matchMissing: true },
           totalCarbs: { matchMissing: true },
+          dietaryFiber: { matchMissing: true },
           totalFat: { matchMissing: true },
+          saturatedFat: { matchMissing: true },
           sodium: { matchMissing: true },
         },
       });
