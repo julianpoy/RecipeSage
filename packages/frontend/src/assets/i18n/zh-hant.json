@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "前往建立食譜頁面",
     "pages.importTextfiles.singleDocument": "您選取了單一文件。此頁面僅能一次匯入多個已封裝為 ZIP 檔案的文件。若要將單一文件轉換為食譜，請改用「建立食譜」頁面。",
     "pages.importPDFs.singlePdf": "您選取了單一 PDF。此頁面僅能一次匯入多個已封裝為 ZIP 檔案的 PDF。若要將單一 PDF 轉換為食譜，請改用「建立食譜」頁面。",
-    "pages.importImages.singleImage": "您選取了單一相片。此頁面僅能一次匯入多張已封裝為 ZIP 檔案的相片。若要將單一相片轉換為食譜，請改用「建立食譜」頁面。"
+    "pages.importImages.singleImage": "您選取了單一相片。此頁面僅能一次匯入多張已封裝為 ZIP 檔案的相片。若要將單一相片轉換為食譜，請改用「建立食譜」頁面。",
+    "components.nutritionFilterPopover.dietaryFiber": "膳食纖維（克）",
+    "components.nutritionFilterPopover.saturatedFat": "飽和脂肪（克）"
 }

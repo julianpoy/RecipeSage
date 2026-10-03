@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Gå til siden Opret opskrift",
     "pages.importTextfiles.singleDocument": "Du har valgt et enkelt dokument. Denne side importerer kun mange dokumenter på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne ét dokument til en opskrift.",
     "pages.importPDFs.singlePdf": "Du har valgt én PDF. Denne side importerer kun mange PDF'er på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne én PDF til en opskrift.",
-    "pages.importImages.singleImage": "Du har valgt ét foto. Denne side importerer kun mange fotos på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne ét foto til en opskrift."
+    "pages.importImages.singleImage": "Du har valgt ét foto. Denne side importerer kun mange fotos på én gang, pakket i en zip-fil. Brug i stedet siden Opret opskrift for at omdanne ét foto til en opskrift.",
+    "components.nutritionFilterPopover.dietaryFiber": "Kostfibre (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Mættet fedt (g)"
 }

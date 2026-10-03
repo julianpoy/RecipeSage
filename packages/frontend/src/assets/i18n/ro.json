@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Accesați pagina Creare rețetă",
     "pages.importTextfiles.singleDocument": "Ați selectat un singur document. Această pagină importă doar mai multe documente simultan, arhivate într-un fișier ZIP. Pentru a transforma un document într-o rețetă, utilizați în schimb pagina Creare rețetă.",
     "pages.importPDFs.singlePdf": "Ați selectat un singur fișier PDF. Această pagină importă doar mai multe fișiere PDF simultan, arhivate într-un fișier ZIP. Pentru a transforma un fișier PDF într-o rețetă, utilizați în schimb pagina Creare rețetă.",
-    "pages.importImages.singleImage": "Ați selectat o singură fotografie. Această pagină importă doar mai multe fotografii simultan, arhivate într-un fișier ZIP. Pentru a transforma o fotografie într-o rețetă, utilizați în schimb pagina Creare rețetă."
+    "pages.importImages.singleImage": "Ați selectat o singură fotografie. Această pagină importă doar mai multe fotografii simultan, arhivate într-un fișier ZIP. Pentru a transforma o fotografie într-o rețetă, utilizați în schimb pagina Creare rețetă.",
+    "components.nutritionFilterPopover.dietaryFiber": "Fibre (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Grăsimi saturate (g)"
 }

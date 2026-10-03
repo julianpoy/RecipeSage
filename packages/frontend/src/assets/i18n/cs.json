@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Přejít na stránku Vytvořit recept",
     "pages.importTextfiles.singleDocument": "Vybrali jste jeden dokument. Tato stránka umožňuje najednou importovat pouze více dokumentů zabalených v souboru ZIP. Chcete-li z jednoho dokumentu vytvořit recept, použijte místo toho stránku Vytvořit recept.",
     "pages.importPDFs.singlePdf": "Vybrali jste jeden soubor PDF. Tato stránka umožňuje najednou importovat pouze více souborů PDF zabalených v souboru ZIP. Chcete-li z jednoho souboru PDF vytvořit recept, použijte místo toho stránku Vytvořit recept.",
-    "pages.importImages.singleImage": "Vybrali jste jednu fotografii. Tato stránka umožňuje najednou importovat pouze více fotografií zabalených v souboru ZIP. Chcete-li z jedné fotografie vytvořit recept, použijte místo toho stránku Vytvořit recept."
+    "pages.importImages.singleImage": "Vybrali jste jednu fotografii. Tato stránka umožňuje najednou importovat pouze více fotografií zabalených v souboru ZIP. Chcete-li z jedné fotografie vytvořit recept, použijte místo toho stránku Vytvořit recept.",
+    "components.nutritionFilterPopover.dietaryFiber": "Vláknina (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Nasycené tuky (g)"
 }

@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Ir a la página Crear receta",
     "pages.importTextfiles.singleDocument": "Seleccionó un solo documento. Esta página solo importa varios documentos a la vez, empaquetados en un archivo ZIP. Para convertir un documento en una receta, use la página Crear receta.",
     "pages.importPDFs.singlePdf": "Seleccionó un solo PDF. Esta página solo importa varios PDF a la vez, empaquetados en un archivo ZIP. Para convertir un PDF en una receta, use la página Crear receta.",
-    "pages.importImages.singleImage": "Seleccionó una sola foto. Esta página solo importa varias fotos a la vez, empaquetadas en un archivo ZIP. Para convertir una foto en una receta, use la página Crear receta."
+    "pages.importImages.singleImage": "Seleccionó una sola foto. Esta página solo importa varias fotos a la vez, empaquetadas en un archivo ZIP. Para convertir una foto en una receta, use la página Crear receta.",
+    "components.nutritionFilterPopover.dietaryFiber": "Fibra (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Grasa saturada (g)"
 }

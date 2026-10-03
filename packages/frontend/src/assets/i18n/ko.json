@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "레시피 만들기 페이지로 이동",
     "pages.importTextfiles.singleDocument": "문서 한 개를 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 문서만 한 번에 가져올 수 있습니다. 문서 한 개를 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오.",
     "pages.importPDFs.singlePdf": "PDF 한 개를 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 PDF만 한 번에 가져올 수 있습니다. PDF 한 개를 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오.",
-    "pages.importImages.singleImage": "사진 한 장을 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 사진만 한 번에 가져올 수 있습니다. 사진 한 장을 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오."
+    "pages.importImages.singleImage": "사진 한 장을 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 사진만 한 번에 가져올 수 있습니다. 사진 한 장을 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오.",
+    "components.nutritionFilterPopover.dietaryFiber": "식이섬유 (g)",
+    "components.nutritionFilterPopover.saturatedFat": "포화지방 (g)"
 }

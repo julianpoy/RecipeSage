@@ -2530,5 +2530,7 @@
     "pages.import.goToCreateRecipePage": "Przejdź do strony tworzenia przepisu",
     "pages.importTextfiles.singleDocument": "Wybrano pojedynczy dokument. Ta strona importuje jednocześnie tylko wiele dokumentów spakowanych w pliku ZIP. Aby przekształcić jeden dokument w przepis, użyj zamiast tego strony tworzenia przepisu.",
     "pages.importPDFs.singlePdf": "Wybrano pojedynczy plik PDF. Ta strona importuje jednocześnie tylko wiele plików PDF spakowanych w pliku ZIP. Aby przekształcić jeden plik PDF w przepis, użyj zamiast tego strony tworzenia przepisu.",
-    "pages.importImages.singleImage": "Wybrano pojedyncze zdjęcie. Ta strona importuje jednocześnie tylko wiele zdjęć spakowanych w pliku ZIP. Aby przekształcić jedno zdjęcie w przepis, użyj zamiast tego strony tworzenia przepisu."
+    "pages.importImages.singleImage": "Wybrano pojedyncze zdjęcie. Ta strona importuje jednocześnie tylko wiele zdjęć spakowanych w pliku ZIP. Aby przekształcić jedno zdjęcie w przepis, użyj zamiast tego strony tworzenia przepisu.",
+    "components.nutritionFilterPopover.dietaryFiber": "Błonnik (g)",
+    "components.nutritionFilterPopover.saturatedFat": "Tłuszcze nasycone (g)"
 }
