@@ -1,6 +1,7 @@
 import { authenticatedProcedure } from "../../trpc";
 import { prisma } from "@recipesage/prisma";
 import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
+import { revokeAppleAuthTokens } from "@recipesage/util/server/general";
 import { z } from "zod";
 
 export const deleteUser = authenticatedProcedure
@@ -15,6 +16,12 @@ export const deleteUser = authenticatedProcedure
   })
   .output(z.string())
   .mutation(async ({ ctx }): Promise<string> => {
+    const appleAuthTokens = await prisma.appleAuthToken.findMany({
+      where: {
+        userId: ctx.session.userId,
+      },
+    });
+
     const purgeFromStorage = await prisma.$transaction(
       async (tx) => {
         await tx.recipe.deleteMany({
@@ -50,6 +57,8 @@ export const deleteUser = authenticatedProcedure
         timeout: 60000,
       },
     );
+
+    await revokeAppleAuthTokens(appleAuthTokens);
 
     await purgeFromStorage();
 

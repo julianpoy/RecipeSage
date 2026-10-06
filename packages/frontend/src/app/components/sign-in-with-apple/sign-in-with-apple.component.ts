@@ -188,7 +188,13 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
       const name = [result.givenName, result.familyName]
         .filter((part): part is string => !!part)
         .join(" ");
-      await this.afterIdentityToken(identityToken, nonce, name || undefined);
+      await this.afterIdentityToken({
+        identityToken,
+        nonce,
+        name: name || undefined,
+        authorizationCode: result.authorizationCode,
+        redirectUri: undefined,
+      });
     } catch (error) {
       if (this.isUserCancellation(error)) return;
       await this.presentSignInFailed();
@@ -200,11 +206,13 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
       const data = await getAppleRef()?.auth.signIn();
       const identityToken = data?.authorization?.id_token;
       if (!identityToken) return;
-      await this.afterIdentityToken(
+      await this.afterIdentityToken({
         identityToken,
-        undefined,
-        this.extractName(data?.user),
-      );
+        nonce: undefined,
+        name: this.extractName(data?.user),
+        authorizationCode: data?.authorization?.code,
+        redirectUri: self.location.origin,
+      });
     } catch (error) {
       if (this.isUserCancellation(error)) return;
       await this.presentSignInFailed();
@@ -236,16 +244,16 @@ export class SignInWithAppleComponent implements OnInit, OnDestroy {
     });
   }
 
-  private async afterIdentityToken(
-    identityToken: string,
-    nonce: string | undefined,
-    name: string | undefined,
-  ) {
+  private async afterIdentityToken(args: {
+    identityToken: string;
+    nonce: string | undefined;
+    name: string | undefined;
+    authorizationCode: string | undefined;
+    redirectUri: string | undefined;
+  }) {
     const session = await this.serverActionsService.users.signInWithApple(
       {
-        identityToken,
-        nonce,
-        name,
+        ...args,
         allowRegistration: this.allowRegistration,
       },
       {

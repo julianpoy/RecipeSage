@@ -2,18 +2,26 @@ import { prisma } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import { anonymousTrpc } from "../../testutils";
 
-const { verifyIdTokenMock } = vi.hoisted(() => ({
+const { verifyIdTokenMock, getAuthorizationTokenMock } = vi.hoisted(() => ({
   verifyIdTokenMock: vi.fn(),
+  getAuthorizationTokenMock: vi.fn(),
 }));
 
 vi.mock("apple-signin-auth", () => ({
   default: {
     verifyIdToken: verifyIdTokenMock,
+    getAuthorizationToken: getAuthorizationTokenMock,
+    getClientSecret: () => "test-client-secret",
   },
 }));
 
 const setVerifiedEmail = (email: string) => {
-  verifyIdTokenMock.mockResolvedValue({ email, email_verified: true });
+  verifyIdTokenMock.mockResolvedValue({
+    email,
+    email_verified: true,
+    sub: "apple-user-id",
+    aud: "com.recipesage.ios",
+  });
 };
 
 describe("signInWithApple", () => {
@@ -21,6 +29,7 @@ describe("signInWithApple", () => {
 
   beforeEach(() => {
     verifyIdTokenMock.mockReset();
+    getAuthorizationTokenMock.mockReset();
   });
 
   afterEach(async () => {
@@ -151,6 +160,86 @@ describe("signInWithApple", () => {
         where: { email },
       });
       expect(user).toBeNull();
+    });
+  });
+
+  describe("apple auth token", () => {
+    test("stores the refresh token when an authorization code is provided", async () => {
+      const email = faker.internet.email().toLowerCase();
+      createdEmails.push(email);
+      setVerifiedEmail(email);
+      getAuthorizationTokenMock.mockResolvedValue({
+        id_token: "exchanged-token",
+        refresh_token: "test-refresh-token",
+      });
+
+      const response = await anonymousTrpc.users.signInWithApple({
+        identityToken: "valid-token",
+        authorizationCode: "test-authorization-code",
+      });
+
+      expect(getAuthorizationTokenMock).toHaveBeenCalledWith(
+        "test-authorization-code",
+        expect.objectContaining({
+          clientID: "com.recipesage.ios",
+          redirectUri: "",
+        }),
+      );
+
+      const appleAuthToken = await prisma.appleAuthToken.findFirst({
+        where: { userId: response.userId },
+      });
+      expect(appleAuthToken?.clientId).toEqual("com.recipesage.ios");
+      expect(appleAuthToken?.appleUserId).toEqual("apple-user-id");
+      expect(appleAuthToken?.refreshToken).toEqual("test-refresh-token");
+    });
+
+    test("does not store the refresh token when the exchanged token belongs to a different user", async () => {
+      const email = faker.internet.email().toLowerCase();
+      createdEmails.push(email);
+      verifyIdTokenMock
+        .mockResolvedValueOnce({
+          email,
+          email_verified: true,
+          sub: "apple-user-id",
+          aud: "com.recipesage.ios",
+        })
+        .mockResolvedValueOnce({
+          sub: "other-apple-user-id",
+          aud: "com.recipesage.ios",
+        });
+      getAuthorizationTokenMock.mockResolvedValue({
+        id_token: "exchanged-token",
+        refresh_token: "test-refresh-token",
+      });
+
+      const response = await anonymousTrpc.users.signInWithApple({
+        identityToken: "valid-token",
+        authorizationCode: "test-authorization-code",
+      });
+
+      const appleAuthToken = await prisma.appleAuthToken.findFirst({
+        where: { userId: response.userId },
+      });
+      expect(appleAuthToken).toBeNull();
+    });
+
+    test("still signs in when the authorization code exchange fails", async () => {
+      const email = faker.internet.email().toLowerCase();
+      createdEmails.push(email);
+      setVerifiedEmail(email);
+      getAuthorizationTokenMock.mockResolvedValue({ error: "invalid_grant" });
+
+      const response = await anonymousTrpc.users.signInWithApple({
+        identityToken: "valid-token",
+        authorizationCode: "test-authorization-code",
+      });
+
+      expect(response.email).toEqual(email);
+      const appleAuthToken = await prisma.appleAuthToken.findFirst({
+        where: { userId: response.userId },
+      });
+      expect(appleAuthToken).toBeNull();
     });
   });
 

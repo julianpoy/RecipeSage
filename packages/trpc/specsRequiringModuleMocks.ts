@@ -4,4 +4,5 @@ export const SPECS_REQUIRING_MODULE_MOCKS = [
   "src/procedures/users/forgotPassword.spec.ts",
   "src/procedures/users/signInWithGoogle.spec.ts",
   "src/procedures/users/signInWithApple.spec.ts",
+  "src/procedures/users/deleteUser.spec.ts",
 ];

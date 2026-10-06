@@ -10,6 +10,20 @@ datasource db {
   provider = "postgresql"
 }
 
+model AppleAuthToken {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  clientId     String   @db.VarChar(255)
+  appleUserId  String   @db.VarChar(255)
+  refreshToken String   @db.Text
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, clientId])
+  @@map("AppleAuthTokens")
+}
+
 model FCMToken {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
@@ -667,6 +681,7 @@ model User {
   discoverRecipeRatings     DiscoverRecipeRating[]
   discoverRecipeSaves       DiscoverRecipeSave[]
   discoverRecipeReports     DiscoverRecipeReport[]
+  appleAuthTokens           AppleAuthToken[]
 
   @@map("Users")
 }

@@ -3,12 +3,15 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import crypto from "node:crypto";
 import { TRPCError } from "@trpc/server";
+import * as Sentry from "@sentry/node";
 import {
   SessionType,
   generateSession,
   config,
   metrics,
   REDIRECT_APPLE_AUTH_CODE_HMAC_PREFIX,
+  decryptRedirectAppleRefreshToken,
+  saveAppleAuthToken,
 } from "@recipesage/util/server/general";
 
 const authCodePayloadSchema = z.object({
@@ -16,6 +19,8 @@ const authCodePayloadSchema = z.object({
   name: z.string(),
   allowRegistration: z.boolean(),
   codeChallenge: z.string(),
+  appleUserId: z.string().optional(),
+  encryptedAppleRefreshToken: z.string().optional(),
   exp: z.number(),
 });
 
@@ -157,6 +162,26 @@ export const signInWithRedirectApple = publicProcedure
         lastLogin: new Date(),
       },
     });
+
+    const servicesId = config.apple.signIn.servicesId;
+    if (
+      servicesId &&
+      payload.appleUserId &&
+      payload.encryptedAppleRefreshToken
+    ) {
+      try {
+        await saveAppleAuthToken({
+          userId: user.id,
+          clientId: servicesId,
+          appleUserId: payload.appleUserId,
+          refreshToken: decryptRedirectAppleRefreshToken(
+            payload.encryptedAppleRefreshToken,
+          ),
+        });
+      } catch (e) {
+        Sentry.captureException(e);
+      }
+    }
 
     const session = await generateSession(user.id, SessionType.User);
 
