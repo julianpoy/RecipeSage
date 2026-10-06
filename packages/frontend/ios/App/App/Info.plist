@@ -39,8 +39,6 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>To take photos of your recipes</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>To record audio with video</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To pick recipe photos from your library</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
