@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title> {{ "pages.blockedUsers.title" | translate }} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-wrapper">
+    @if (loading) {
+      <null-state>
+        <ion-spinner virtualSlot="header"></ion-spinner>
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.blockedUsers.loading" | translate }}</p>
+        </ion-label>
+      </null-state>
+    }
+
+    @if (blockedUsers && !blockedUsers.length) {
+      <null-state>
+        <ion-icon
+          name="ban-outline"
+          class="big-icon"
+          virtualSlot="header"
+        ></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>{{ "pages.blockedUsers.nullState" | translate }}</p>
+        </ion-label>
+      </null-state>
+    }
+
+    @if (blockedUsers?.length) {
+      <ion-list>
+        @for (blockedUser of blockedUsers; track blockedUser.id) {
+          <ion-item
+            [button]="canOpenProfile(blockedUser)"
+            (click)="openProfile(blockedUser)"
+          >
+            <ion-avatar slot="start">
+              @if (!blockedUser.profileImages.length) {
+                <img src="assets/avatar.svg" />
+              }
+              @if (blockedUser.profileImages.length) {
+                <img
+                  [src]="
+                    blockedUser.profileImages[0].image.location
+                      | resolveStorageLocation
+                  "
+                />
+              }
+            </ion-avatar>
+            <ion-label>{{ blockedUser.name }}</ion-label>
+            <ion-button
+              slot="end"
+              (click)="$event.stopPropagation(); unblockUser(blockedUser)"
+            >
+              {{ "pages.blockedUsers.unblock" | translate }}
+            </ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  </div>
+</ion-content>

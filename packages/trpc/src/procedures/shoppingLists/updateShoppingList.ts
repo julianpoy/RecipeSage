@@ -9,6 +9,7 @@ import { TRPCError } from "@trpc/server";
 import {
   ShoppingListAccessLevel,
   getAccessToShoppingList,
+  getIsBlockBetweenUsers,
 } from "@recipesage/util/server/db";
 import type { Prisma } from "@recipesage/prisma";
 import {
@@ -58,18 +59,24 @@ export const updateShoppingList = authenticatedProcedure
       | Prisma.ShoppingListCollaboratorUncheckedUpdateManyWithoutShoppingListNestedInput
       | undefined = undefined;
     if (input.collaboratorUserIds) {
-      const collaboratorUsers = await prisma.user.findMany({
-        where: {
-          id: {
-            in: input.collaboratorUserIds,
+      const [collaboratorUsers, isBlockBetweenUsers] = await Promise.all([
+        prisma.user.findMany({
+          where: {
+            id: {
+              in: input.collaboratorUserIds,
+            },
           },
-        },
-        select: {
-          id: true,
-        },
-      });
+          select: {
+            id: true,
+          },
+        }),
+        getIsBlockBetweenUsers(ctx.session.userId, input.collaboratorUserIds),
+      ]);
 
-      if (collaboratorUsers.length < input.collaboratorUserIds.length) {
+      if (
+        collaboratorUsers.length < input.collaboratorUserIds.length ||
+        isBlockBetweenUsers
+      ) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message:

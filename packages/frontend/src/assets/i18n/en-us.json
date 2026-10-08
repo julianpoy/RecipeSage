@@ -745,6 +745,8 @@
   "pages.messageThread.sending": "Sending...",
   "pages.messageThread.sent": "Sent!",
   "pages.messageThread.messagePlaceholder": "Message...",
+  "pages.messageThread.blockedNotice": "You blocked {{name}}. Unblock them to send messages.",
+  "pages.messageThread.unblock": "Unblock",
 
   "pages.messages.tabTitle": "Messages - RecipeSage",
   "pages.messages.title": "Messages",
@@ -2159,6 +2161,13 @@
   "pages.people.setup.header": "Profile Not Setup",
   "pages.people.setup.message": "You'll need to setup your profile before you can go adding friends.",
   "pages.people.setup.confirm": "Setup",
+  "pages.people.blockedUsers": "Blocked Users",
+
+  "pages.blockedUsers.tabTitle": "Blocked Users - RecipeSage",
+  "pages.blockedUsers.title": "Blocked Users",
+  "pages.blockedUsers.loading": "Loading...",
+  "pages.blockedUsers.nullState": "You have not blocked anyone.",
+  "pages.blockedUsers.unblock": "Unblock",
 
   "pages.discover.tabTitle": "Discover Recipes - RecipeSage",
   "pages.discover.title": "Discover",
@@ -2301,6 +2310,11 @@
   "pages.profile.setup.message": "To add this user as a friend, you need to setup your profile.",
   "pages.profile.setup.confirm": "Setup",
   "pages.profile.alreadyRequested": "It looks like you already have a friendship in progress. Please try again.",
+  "pages.profile.unblock": "Unblock",
+
+  "pages.userActionsPopover.report": "Report User",
+  "pages.userActionsPopover.block": "Block User",
+  "pages.userActionsPopover.unblock": "Unblock User",
 
   "pages.shareProfileModal.title": "Share {{name}}'s Profile",
   "pages.shareProfileModal.close": "Close",
@@ -2524,6 +2538,18 @@
 
   "components.signInWithGoogle.button": "Sign in with Google",
   "components.signInWithGoogle.interrupted": "Google sign in was interrupted. Please try again.",
+
+  "services.blockAndReportUser.report.header": "Report {{name}}?",
+  "services.blockAndReportUser.report.message": "This user will be flagged for moderator review. Report users who send abusive, offensive, or unwanted messages or content.",
+  "services.blockAndReportUser.report.reasonPlaceholder": "Please explain why you are reporting this user",
+  "services.blockAndReportUser.report.reasonTooShort": "Please enter at least 5 characters explaining why you are reporting this user.",
+  "services.blockAndReportUser.report.confirm": "Report",
+  "services.blockAndReportUser.report.success": "Thanks for reporting. This user will be reviewed.",
+  "services.blockAndReportUser.block.header": "Block {{name}}?",
+  "services.blockAndReportUser.block.message": "{{name}} will not be able to send you messages, send you friend requests, or add you to shopping lists or meal plans. Your friendship with {{name}} will be removed, and you will be removed from each other's shopping lists and meal plans. {{name}} will not be told that you blocked them.",
+  "services.blockAndReportUser.block.confirm": "Block",
+  "services.blockAndReportUser.block.success": "{{name}} is now blocked",
+  "services.blockAndReportUser.unblock.success": "{{name}} is now unblocked",
 
   "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
   "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",

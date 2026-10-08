@@ -8,6 +8,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
   convertPrismaMessageToMessageSummary,
+  getIsBlockBetweenUsers,
   shareRecipeToUser,
 } from "@recipesage/util/server/db";
 import { dispatchMessageNotification } from "@recipesage/util/server/general";
@@ -38,7 +39,7 @@ export const createMessage = authenticatedProcedure
       });
     }
 
-    const [recipient, sender] = await Promise.all([
+    const [recipient, sender, isBlockBetweenUsers] = await Promise.all([
       prisma.user.findUnique({
         where: {
           id: input.to,
@@ -64,9 +65,10 @@ export const createMessage = authenticatedProcedure
           handle: true,
         },
       }),
+      getIsBlockBetweenUsers(ctx.session.userId, [input.to]),
     ]);
 
-    if (!recipient) {
+    if (!recipient || isBlockBetweenUsers) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Could not find user under that ID.",

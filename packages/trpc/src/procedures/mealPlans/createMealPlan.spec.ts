@@ -36,5 +36,43 @@ describe("createMealPlan", () => {
         "One or more of the collaborators you specified are not valid",
       );
     });
+
+    test("throws when the caller has blocked a collaborator", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user.id, blockedUserId: user2.id },
+      });
+
+      await expect(
+        trpc.mealPlans.createMealPlan({
+          title: "Protein",
+          collaboratorUserIds: [user2.id],
+        }),
+      ).rejects.toThrow(
+        "One or more of the collaborators you specified are not valid",
+      );
+    });
+
+    test("throws when a collaborator has blocked the caller", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user2.id, blockedUserId: user.id },
+      });
+
+      await expect(
+        trpc.mealPlans.createMealPlan({
+          title: "Protein",
+          collaboratorUserIds: [user2.id],
+        }),
+      ).rejects.toThrow(
+        "One or more of the collaborators you specified are not valid",
+      );
+    });
   });
 });

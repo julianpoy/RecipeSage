@@ -32,6 +32,14 @@
           <ion-badge slot="end">{{ inboxCount }}</ion-badge>
         }
       </ion-item>
+      @if (showBlockedUsersItem) {
+        <ion-item button (click)="goToBlockedUsers()">
+          <ion-avatar slot="start" class="icon-avatar">
+            <ion-icon name="ban-outline"></ion-icon>
+          </ion-avatar>
+          <ion-label>{{ "pages.people.blockedUsers" | translate }}</ion-label>
+        </ion-item>
+      }
       @if (me()?.enableProfile) {
         <ion-item button (click)="editProfile()">
           <ion-avatar slot="start">

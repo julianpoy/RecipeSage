@@ -304,6 +304,15 @@ export const appRoutes: Routes = [
     title: "pages.myProfile.tabTitle",
   },
   {
+    path: RouteMap.BlockedUsersPage.path,
+    loadComponent: () =>
+      import("./pages/social/blocked-users/blocked-users.page").then(
+        (m) => m.BlockedUsersPage,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.blockedUsers.tabTitle",
+  },
+  {
     path: RouteMap.ProfilePage.path,
     loadComponent: () =>
       import("./pages/social/profile/profile.page").then((m) => m.ProfilePage),
