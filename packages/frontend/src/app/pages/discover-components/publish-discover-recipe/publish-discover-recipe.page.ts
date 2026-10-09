@@ -13,6 +13,7 @@ import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { UnsavedChangesService } from "../../../services/unsaved-changes.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { ThirdPartyAiConsentService } from "../../../services/third-party-ai-consent.service";
 import type {
   RouterInputs,
   RouterOutputs,
@@ -198,6 +199,7 @@ export class PublishDiscoverRecipePage {
   private loadingService = inject(LoadingService);
   private unsavedChangesService = inject(UnsavedChangesService);
   private serverActionsService = inject(ServerActionsService);
+  private thirdPartyAiConsentService = inject(ThirdPartyAiConsentService);
 
   languageOptions: DiscoverLanguageOption[] = [];
 
@@ -524,6 +526,8 @@ export class PublishDiscoverRecipePage {
   }
 
   async autofillNutritionFromText() {
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
+
     const header = await this.translate
       .get("pages.editRecipe.nutritionAutofill.header")
       .toPromise();

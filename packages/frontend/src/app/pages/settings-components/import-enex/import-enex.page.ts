@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
+import { ThirdPartyAiConsentService } from "../../../services/third-party-ai-consent.service";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -41,6 +42,7 @@ const MAX_FILE_SIZE_MB = 3000;
 })
 export class ImportEnexPage {
   private importService = inject(ImportService);
+  private thirdPartyAiConsentService = inject(ThirdPartyAiConsentService);
   private utilService = inject(UtilService);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
@@ -83,6 +85,7 @@ export class ImportEnexPage {
 
   async submit() {
     if (!this.file) return;
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
 
     const response = await this.importService.importEnex(
       this.file,

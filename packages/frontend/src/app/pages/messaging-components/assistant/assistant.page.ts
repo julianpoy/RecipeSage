@@ -9,6 +9,7 @@ import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { ThirdPartyAiConsentService } from "../../../services/third-party-ai-consent.service";
 import type {
   AssistantMessageSummary,
   RecipeSummaryLite,
@@ -72,6 +73,7 @@ export class AssistantPage {
   private loadingService = inject(LoadingService);
   private utilService = inject(UtilService);
   private serverActionsService = inject(ServerActionsService);
+  private thirdPartyAiConsentService = inject(ThirdPartyAiConsentService);
 
   defaultBackHref: string = RouteMap.ToolsPage.getPath();
 
@@ -266,6 +268,7 @@ export class AssistantPage {
     }
 
     if (this.processing || !pendingMessage) return;
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
 
     this.processing = true;
 

@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
+import { ThirdPartyAiConsentService } from "../../../services/third-party-ai-consent.service";
 import { PendingShareService } from "../../../services/pending-share.service";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
@@ -54,6 +55,7 @@ const DOCUMENT_FILE_EXTENSIONS = [
 })
 export class ImportTextfilesPage {
   private importService = inject(ImportService);
+  private thirdPartyAiConsentService = inject(ThirdPartyAiConsentService);
   private utilService = inject(UtilService);
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
@@ -112,6 +114,7 @@ export class ImportTextfilesPage {
 
   async submit() {
     if (!this.file || this.isSingleDocument()) return;
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
 
     const response = await this.importService.importTextfiles(
       this.file,

@@ -2562,6 +2562,12 @@
   "services.quickTutorial.nativePrintView.header": "Print-Friendly View Available",
   "services.quickTutorial.nativePrintView.message": "For a better printing experience use the native print option supported by this page via the options menu in the top corner.",
 
+  "services.thirdPartyAiConsent.header": "Allow AI processing?",
+  "services.thirdPartyAiConsent.message": "This feature sends the text, messages, photos, or files you provide to third-party AI services through OpenRouter so that they can be processed. Nothing is sent unless you allow it.",
+  "services.thirdPartyAiConsent.privacyPolicy": "Privacy Policy",
+  "services.thirdPartyAiConsent.deny": "Don't Allow",
+  "services.thirdPartyAiConsent.allow": "Allow",
+
   "services.util.justNow": "just now",
   "services.util.today": "today",
 
