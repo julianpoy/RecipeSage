@@ -65,16 +65,16 @@ const bookmarklet =
       <h2>{t("pages.downloadAndInstall.android.title")}</h2>
     </div>
     <p class="instruction-header">
-      {t("pages.downloadAndInstall.android.instructionHeader")}
+      {t("pages.downloadAndInstall.android.description")}
     </p>
-    <ol>
-      <li>{t("pages.downloadAndInstall.android.step.1")}</li>
-      <li>
-        {t("pages.downloadAndInstall.android.step.2")}
-        <span class="icon-hint" aria-label={t("pages.downloadAndInstall.icon.menuDots")}>⋮</span>
-      </li>
-      <li>{t("pages.downloadAndInstall.android.step.3")}</li>
-    </ol>
+    <p class="store-links">
+      <a
+        class="store-link"
+        href="https://play.google.com/store/apps/details?id=com.recipesage.app"
+        target="_blank"
+        rel="noopener">{t("pages.downloadAndInstall.android.install")}</a
+      >
+    </p>
   </section>
 
   <section class="platform">
@@ -228,8 +228,8 @@ const bookmarklet =
           title={t("pages.downloadAndInstall.bookmark.linkTitle")}
           >{t("pages.downloadAndInstall.bookmark.instructions")}</a
         >
-        {t("pages.downloadAndInstall.bookmark.usage")}
       </p>
+      <p>{t("pages.downloadAndInstall.bookmark.usage")}</p>
     </div>
   </section>
 </article>
