@@ -49,7 +49,7 @@
     "@aws-sdk/s3-request-presigner": "^3.1140.0",
     "@capacitor-community/keep-awake": "8.0.1",
     "@capacitor-firebase/messaging": "8.4.0",
-    "@capacitor/android": "8.5.0",
+    "@capacitor/android": "8.5.1",
     "@capacitor/app": "^8.1.1",
     "@capacitor/browser": "^8.0.4",
     "@capacitor/camera": "^8.2.3",
