@@ -105,9 +105,19 @@ export const getRecipeConstraintsWhere = async (
     () => ({ nutritionTotalCarbs: null }),
   );
   addNutritionFilter(
+    nutritionFilter?.dietaryFiber,
+    (gtelte) => ({ nutritionDietaryFiber: gtelte }),
+    () => ({ nutritionDietaryFiber: null }),
+  );
+  addNutritionFilter(
     nutritionFilter?.totalFat,
     (gtelte) => ({ nutritionTotalFat: gtelte }),
     () => ({ nutritionTotalFat: null }),
+  );
+  addNutritionFilter(
+    nutritionFilter?.saturatedFat,
+    (gtelte) => ({ nutritionSaturatedFat: gtelte }),
+    () => ({ nutritionSaturatedFat: null }),
   );
   addNutritionFilter(
     nutritionFilter?.sodium,

@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Puanı Gizle",
     "pages.share.byEmbed.nutrition": "Besin Değerlerini Gizle",
     "pages.share.byEmbed.linkedRecipes": "Bağlantılı Tarifleri Gizle",
-    "pages.share.byEmbed.lastMadeAt": "Son Hazırlanma Tarihini Göster"
+    "pages.share.byEmbed.lastMadeAt": "Son Hazırlanma Tarihini Göster",
+    "pages.serverSettings.webBase.label": "Web URL'si",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "RecipeSage'i web tarayıcısında açmak için kullandığınız adres. Paylaştığınız bağlantılar bu adresi kullanacaktır.",
+    "pages.serverSettings.webBase.invalid": "Lütfen https://example.com gibi, yol içermeyen geçerli bir http(s) URL'si girin. /app eklemeyin.",
+    "pages.import.goToCreateRecipePage": "Tarif Oluşturma Sayfasına Git",
+    "pages.importTextfiles.singleDocument": "Tek bir belge seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok belgeyi aynı anda içe aktarır. Tek bir belgeyi tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın.",
+    "pages.importPDFs.singlePdf": "Tek bir PDF seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok PDF'yi aynı anda içe aktarır. Tek bir PDF'yi tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın.",
+    "pages.importImages.singleImage": "Tek bir fotoğraf seçtiniz. Bu sayfa yalnızca zip dosyası içinde paketlenmiş birçok fotoğrafı aynı anda içe aktarır. Tek bir fotoğrafı tarife dönüştürmek için bunun yerine Tarif Oluşturma sayfasını kullanın."
 }

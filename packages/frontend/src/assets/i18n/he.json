@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "הסתר דירוג",
     "pages.share.byEmbed.nutrition": "הסתר מידע תזונתי",
     "pages.share.byEmbed.linkedRecipes": "הסתר מתכונים מקושרים",
-    "pages.share.byEmbed.lastMadeAt": "הצג את תאריך ההכנה האחרון"
+    "pages.share.byEmbed.lastMadeAt": "הצג את תאריך ההכנה האחרון",
+    "pages.serverSettings.webBase.label": "כתובת URL של האתר",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "הכתובת שבה אתה משתמש כדי לפתוח את RecipeSage בדפדפן אינטרנט. הקישורים שתשתף ישתמשו בכתובת זו.",
+    "pages.serverSettings.webBase.invalid": "נא להזין כתובת URL חוקית מסוג http(s) ללא נתיב, כגון https://example.com. אין לכלול את ‎/app.",
+    "pages.import.goToCreateRecipePage": "מעבר לדף יצירת מתכון",
+    "pages.importTextfiles.singleDocument": "נבחר מסמך יחיד. דף זה מייבא מסמכים רבים בלבד בבת אחת, כשהם ארוזים בקובץ ZIP. כדי להפוך מסמך יחיד למתכון, יש להשתמש בדף יצירת מתכון במקום זאת.",
+    "pages.importPDFs.singlePdf": "נבחר קובץ PDF יחיד. דף זה מייבא קובצי PDF רבים בלבד בבת אחת, כשהם ארוזים בקובץ ZIP. כדי להפוך קובץ PDF יחיד למתכון, יש להשתמש בדף יצירת מתכון במקום זאת.",
+    "pages.importImages.singleImage": "נבחרה תמונה יחידה. דף זה מייבא תמונות רבות בלבד בבת אחת, כשהן ארוזות בקובץ ZIP. כדי להפוך תמונה יחידה למתכון, יש להשתמש בדף יצירת מתכון במקום זאת."
 }

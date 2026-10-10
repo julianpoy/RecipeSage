@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Piilota arvostelu",
     "pages.share.byEmbed.nutrition": "Piilota ravintosisältö",
     "pages.share.byEmbed.linkedRecipes": "Piilota linkitetyt reseptit",
-    "pages.share.byEmbed.lastMadeAt": "Näytä viimeisin valmistuspäivä"
+    "pages.share.byEmbed.lastMadeAt": "Näytä viimeisin valmistuspäivä",
+    "pages.serverSettings.webBase.label": "Verkko-osoite",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Osoite, jota käytät avataksesi RecipeSagen verkkoselaimessa. Jakamasi linkit käyttävät tätä osoitetta.",
+    "pages.serverSettings.webBase.invalid": "Anna kelvollinen http(s)-URL ilman polkua, esimerkiksi https://example.com. Älä sisällytä osoitteeseen /app.",
+    "pages.import.goToCreateRecipePage": "Siirry reseptin luontisivulle",
+    "pages.importTextfiles.singleDocument": "Valitsit yhden asiakirjan. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja asiakirjoja. Jos haluat muuttaa yhden asiakirjan reseptiksi, käytä sen sijaan reseptin luontisivua.",
+    "pages.importPDFs.singlePdf": "Valitsit yhden PDF-tiedoston. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja PDF-tiedostoja. Jos haluat muuttaa yhden PDF-tiedoston reseptiksi, käytä sen sijaan reseptin luontisivua.",
+    "pages.importImages.singleImage": "Valitsit yhden valokuvan. Tällä sivulla voi tuoda kerralla vain useita ZIP-tiedostoon pakattuja valokuvia. Jos haluat muuttaa yhden valokuvan reseptiksi, käytä sen sijaan reseptin luontisivua."
 }

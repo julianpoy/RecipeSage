@@ -72,7 +72,7 @@ services:
       - ./packages:/app/packages
     ports:
       - "4321:4321"
-    command: pnpm exec nx dev www
+    command: pnpm exec nx dev www -- --ignore-lock
     environment:
       - ENVIRONMENT=development
     stop_grace_period: 1s

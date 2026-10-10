@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Skjul vurdering",
     "pages.share.byEmbed.nutrition": "Skjul næringsinnhold",
     "pages.share.byEmbed.linkedRecipes": "Skjul lenkede oppskrifter",
-    "pages.share.byEmbed.lastMadeAt": "Vis dato for sist laget"
+    "pages.share.byEmbed.lastMadeAt": "Vis dato for sist laget",
+    "pages.serverSettings.webBase.label": "Nett-URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Adressen du bruker for å åpne RecipeSage i en nettleser. Lenker du deler, vil bruke denne adressen.",
+    "pages.serverSettings.webBase.invalid": "Angi en gyldig http(s)-URL uten en sti, for eksempel https://example.com. Ikke ta med /app.",
+    "pages.import.goToCreateRecipePage": "Gå til siden for å opprette oppskrifter",
+    "pages.importTextfiles.singleDocument": "Du har valgt ett enkelt dokument. Denne siden importerer bare flere dokumenter om gangen, pakket i en zip-fil. For å gjøre ett dokument om til en oppskrift, bruk siden for å opprette oppskrifter i stedet.",
+    "pages.importPDFs.singlePdf": "Du har valgt én enkelt PDF. Denne siden importerer bare flere PDF-er om gangen, pakket i en zip-fil. For å gjøre én PDF om til en oppskrift, bruk siden for å opprette oppskrifter i stedet.",
+    "pages.importImages.singleImage": "Du har valgt ett enkelt bilde. Denne siden importerer bare flere bilder om gangen, pakket i en zip-fil. For å gjøre ett bilde om til en oppskrift, bruk siden for å opprette oppskrifter i stedet."
 }

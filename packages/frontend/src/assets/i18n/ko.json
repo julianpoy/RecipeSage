@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.linkedRecipes": "연결된 레시피 숨기기",
     "pages.share.byEmbed.lastMadeAt": "마지막으로 만든 날짜 표시",
     "pages.recipeDetails.ratingValue": "5점 만점에 {{rating}}점",
-    "pages.recipeDetails.recipeSageUrl": "RecipeSage URL"
+    "pages.recipeDetails.recipeSageUrl": "RecipeSage URL",
+    "pages.serverSettings.webBase.label": "웹 URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "웹 브라우저에서 RecipeSage를 열 때 사용하는 주소입니다. 공유하는 링크에는 이 주소가 사용됩니다.",
+    "pages.serverSettings.webBase.invalid": "https://example.com과 같이 경로가 없는 유효한 http(s) URL을 입력해 주세요. /app은 포함하지 마세요.",
+    "pages.import.goToCreateRecipePage": "레시피 만들기 페이지로 이동",
+    "pages.importTextfiles.singleDocument": "문서 한 개를 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 문서만 한 번에 가져올 수 있습니다. 문서 한 개를 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오.",
+    "pages.importPDFs.singlePdf": "PDF 한 개를 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 PDF만 한 번에 가져올 수 있습니다. PDF 한 개를 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오.",
+    "pages.importImages.singleImage": "사진 한 장을 선택했습니다. 이 페이지에서는 zip 파일에 압축된 여러 사진만 한 번에 가져올 수 있습니다. 사진 한 장을 레시피로 만들려면 대신 레시피 만들기 페이지를 사용하십시오."
 }

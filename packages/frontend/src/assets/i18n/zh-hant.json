@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "隱藏評分",
     "pages.share.byEmbed.nutrition": "隱藏營養資訊",
     "pages.share.byEmbed.linkedRecipes": "隱藏連結的食譜",
-    "pages.share.byEmbed.lastMadeAt": "顯示上次製作日期"
+    "pages.share.byEmbed.lastMadeAt": "顯示上次製作日期",
+    "pages.serverSettings.webBase.label": "Web URL",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "您用於在網頁瀏覽器中開啟 RecipeSage 的網址。您分享的連結將使用此網址。",
+    "pages.serverSettings.webBase.invalid": "請輸入有效且不含路徑的 http(s) URL，例如 https://example.com。請勿包含 /app。",
+    "pages.import.goToCreateRecipePage": "前往建立食譜頁面",
+    "pages.importTextfiles.singleDocument": "您選取了單一文件。此頁面僅能一次匯入多個已封裝為 ZIP 檔案的文件。若要將單一文件轉換為食譜，請改用「建立食譜」頁面。",
+    "pages.importPDFs.singlePdf": "您選取了單一 PDF。此頁面僅能一次匯入多個已封裝為 ZIP 檔案的 PDF。若要將單一 PDF 轉換為食譜，請改用「建立食譜」頁面。",
+    "pages.importImages.singleImage": "您選取了單一相片。此頁面僅能一次匯入多張已封裝為 ZIP 檔案的相片。若要將單一相片轉換為食譜，請改用「建立食譜」頁面。"
 }

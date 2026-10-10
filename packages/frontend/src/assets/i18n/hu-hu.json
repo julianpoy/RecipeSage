@@ -2522,5 +2522,13 @@
     "pages.share.byEmbed.rating": "Értékelés elrejtése",
     "pages.share.byEmbed.nutrition": "Tápérték elrejtése",
     "pages.share.byEmbed.linkedRecipes": "Hivatkozott receptek elrejtése",
-    "pages.share.byEmbed.lastMadeAt": "Legutóbbi elkészítés dátumának megjelenítése"
+    "pages.share.byEmbed.lastMadeAt": "Legutóbbi elkészítés dátumának megjelenítése",
+    "pages.serverSettings.webBase.label": "Webes URL-cím",
+    "pages.serverSettings.webBase.placeholder": "https://example.com",
+    "pages.serverSettings.webBase.helper": "Az a cím, amelyet a RecipeSage webböngészőben való megnyitásához használ. A megosztott hivatkozások ezt a címet fogják használni.",
+    "pages.serverSettings.webBase.invalid": "Adjon meg egy érvényes, elérési út nélküli http(s) URL-t, például: https://example.com. Ne adja meg az /app részt.",
+    "pages.import.goToCreateRecipePage": "Ugrás a Recept létrehozása oldalra",
+    "pages.importTextfiles.singleDocument": "Egyetlen dokumentumot választott ki. Ezen az oldalon csak egyszerre több, ZIP-fájlba csomagolt dokumentum importálható. Egyetlen dokumentum receptté alakításához használja inkább a Recept létrehozása oldalt.",
+    "pages.importPDFs.singlePdf": "Egyetlen PDF-fájlt választott ki. Ezen az oldalon csak egyszerre több, ZIP-fájlba csomagolt PDF-fájl importálható. Egyetlen PDF-fájl receptté alakításához használja inkább a Recept létrehozása oldalt.",
+    "pages.importImages.singleImage": "Egyetlen fényképet választott ki. Ezen az oldalon csak egyszerre több, ZIP-fájlba csomagolt fénykép importálható. Egyetlen fénykép receptté alakításához használja inkább a Recept létrehozása oldalt."
 }
