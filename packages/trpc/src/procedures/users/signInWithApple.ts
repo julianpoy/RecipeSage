@@ -3,11 +3,14 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import appleSignin from "apple-signin-auth";
 import { TRPCError } from "@trpc/server";
+import * as Sentry from "@sentry/node";
 import {
   SessionType,
   generateSession,
   config,
   metrics,
+  getAppleClientSecret,
+  saveAppleAuthToken,
 } from "@recipesage/util/server/general";
 
 export const signInWithApple = publicProcedure
@@ -31,6 +34,8 @@ export const signInWithApple = publicProcedure
       identityToken: z.string(),
       nonce: z.string().optional(),
       name: z.string().optional(),
+      authorizationCode: z.string().optional(),
+      redirectUri: z.string().optional(),
       allowRegistration: z.boolean().default(true),
     }),
   )
@@ -103,6 +108,43 @@ export const signInWithApple = publicProcedure
         lastLogin: new Date(),
       },
     });
+
+    if (input.authorizationCode) {
+      try {
+        const tokens = await appleSignin.getAuthorizationToken(
+          input.authorizationCode,
+          {
+            clientID: payload.aud,
+            redirectUri: input.redirectUri || "",
+            clientSecret: getAppleClientSecret(payload.aud),
+          },
+        );
+        if (!tokens.id_token || !tokens.refresh_token) {
+          throw new Error("Apple authorization code exchange failed");
+        }
+
+        const exchangedPayload = await appleSignin.verifyIdToken(
+          tokens.id_token,
+          {
+            audience: payload.aud,
+          },
+        );
+        if (exchangedPayload.sub !== payload.sub) {
+          throw new Error(
+            "Apple authorization code belongs to a different user",
+          );
+        }
+
+        await saveAppleAuthToken({
+          userId: user.id,
+          clientId: payload.aud,
+          appleUserId: payload.sub,
+          refreshToken: tokens.refresh_token,
+        });
+      } catch (e) {
+        Sentry.captureException(e);
+      }
+    }
 
     const session = await generateSession(user.id, SessionType.User);
 

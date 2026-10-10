@@ -5,6 +5,7 @@ export * from "./convertPrismaMessages";
 export * from "./convertPrismaProfileItems";
 export * from "./getFriendshipIds";
 export * from "./getFriendshipUserProfiles";
+export * from "./getIsBlockBetweenUsers";
 export * from "./recipeConstraints";
 export * from "./getRecipeConstraintsWhere";
 export * from "./getRecipeConstraintsSql";

@@ -303,4 +303,48 @@ export class UsersActionsService extends ActionsBase {
       errorHandlers,
     );
   }
+
+  getMyBlockedUsers(
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["getMyBlockedUsers"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.getMyBlockedUsers.query(),
+      errorHandlers,
+    );
+  }
+
+  blockUser(
+    input: RouterInputs["users"]["blockUser"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["blockUser"] | undefined> {
+    return this.executeMutation(
+      () => this.trpc.users.blockUser.mutate(input),
+      () => {
+        void this.syncService.syncMyFriends();
+        void this.syncService.syncShoppingLists();
+        void this.syncService.syncMealPlans();
+      },
+      errorHandlers,
+    );
+  }
+
+  unblockUser(
+    input: RouterInputs["users"]["unblockUser"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["unblockUser"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.unblockUser.mutate(input),
+      errorHandlers,
+    );
+  }
+
+  reportUser(
+    input: RouterInputs["users"]["reportUser"],
+    errorHandlers?: ErrorHandlers,
+  ): Promise<RouterOutputs["users"]["reportUser"] | undefined> {
+    return this.passThrough(
+      () => this.trpc.users.reportUser.mutate(input),
+      errorHandlers,
+    );
+  }
 }

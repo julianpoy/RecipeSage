@@ -6,6 +6,8 @@ import { defineHandler } from "../../defineHandler";
 import { BadRequestError, InternalServerError } from "../../errors";
 import {
   config,
+  encryptRedirectAppleRefreshToken,
+  getAppleClientSecret,
   REDIRECT_APPLE_AUTH_CODE_HMAC_PREFIX,
 } from "@recipesage/util/server/general";
 
@@ -91,23 +93,18 @@ export const redirectAppleCallbackHandler = defineHandler(
     const redirectUri = `${config.api.publicUrl}/auth/redirect-apple/callback`;
 
     let idToken: string;
+    let refreshToken: string | undefined;
     try {
-      const clientSecret = appleSignin.getClientSecret({
-        clientID: servicesId,
-        teamID: teamId,
-        keyIdentifier: keyId,
-        privateKey,
-      });
-
       const tokens = await appleSignin.getAuthorizationToken(code, {
         clientID: servicesId,
         redirectUri,
-        clientSecret,
+        clientSecret: getAppleClientSecret(servicesId),
       });
       if (!tokens.id_token) {
         throw new BadRequestError("No ID token received from Apple");
       }
       idToken = tokens.id_token;
+      refreshToken = tokens.refresh_token;
     } catch (e) {
       if (e instanceof BadRequestError) throw e;
       throw new BadRequestError("Failed to exchange authorization code");
@@ -142,6 +139,10 @@ export const redirectAppleCallbackHandler = defineHandler(
         name,
         allowRegistration: parsedState.allowRegistration,
         codeChallenge: parsedState.codeChallenge,
+        appleUserId: payload.sub,
+        encryptedAppleRefreshToken: refreshToken
+          ? encryptRedirectAppleRefreshToken(refreshToken)
+          : undefined,
         exp: Date.now() + AUTH_CODE_VALIDITY_MS,
       }),
     ).toString("base64url");

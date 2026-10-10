@@ -6,7 +6,7 @@ import {
   inject,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController, PopoverController } from "@ionic/angular/standalone";
 
 import { linkifyStr } from "../../../utils/linkify";
 import type { MessageSummary } from "@recipesage/prisma";
@@ -17,6 +17,11 @@ import { EventName, EventService } from "../../../services/event.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { BlockAndReportUserService } from "../../../services/block-and-report-user.service";
+import {
+  UserActionsPopoverPage,
+  UserActionsPopoverAction,
+} from "../../social/user-actions-popover/user-actions-popover.page";
 import {
   IonHeader,
   IonToolbar,
@@ -32,7 +37,7 @@ import {
   IonFooter,
   IonTextarea,
 } from "@ionic/angular/standalone";
-import { refreshOutline, sendOutline } from "ionicons/icons";
+import { optionsOutline, refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 interface MessageParsedDetails {
@@ -79,6 +84,8 @@ export class MessageThreadPage {
   private websocketService = inject(WebsocketService);
   private utilService = inject(UtilService);
   private serverActionsService = inject(ServerActionsService);
+  private popoverCtrl = inject(PopoverController);
+  private blockAndReportUserService = inject(BlockAndReportUserService);
 
   defaultBackHref: string = RouteMap.MessagesPage.getPath();
 
@@ -94,11 +101,12 @@ export class MessageThreadPage {
   pendingMessage = "";
   messagePlaceholder = "";
   reloading = false;
+  isBlockedByMe = false;
 
   selectedChatIdx = -1;
 
   constructor() {
-    addIcons({ refreshOutline, sendOutline });
+    addIcons({ optionsOutline, refreshOutline, sendOutline });
     this.applyRouteParams();
   }
 
@@ -117,9 +125,13 @@ export class MessageThreadPage {
       this.applyRouteParams();
       this.messages = [];
       this.parsedBodyById.clear();
+      this.otherUserName = "";
+      this.isBlockedByMe = false;
     }
 
     if (!this.otherUserId) return;
+
+    this.loadIsBlockedByMe();
 
     this.translate
       .get("pages.messageThread.messagePlaceholder")
@@ -222,6 +234,64 @@ export class MessageThreadPage {
 
     this.scrollToBottom(!isInitialLoad, true);
   };
+
+  private async loadIsBlockedByMe() {
+    const blockedUsers =
+      await this.serverActionsService.users.getMyBlockedUsers();
+    if (!blockedUsers) return;
+
+    this.isBlockedByMe = blockedUsers.some(
+      (blockedUser) => blockedUser.id === this.otherUserId,
+    );
+  }
+
+  async presentPopover(event: Event) {
+    if (!this.otherUserName) return;
+
+    const popover = await this.popoverCtrl.create({
+      component: UserActionsPopoverPage,
+      componentProps: {
+        isBlockedByMe: this.isBlockedByMe,
+      },
+      event,
+    });
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss<{
+      action?: UserActionsPopoverAction;
+    }>();
+    if (!data || !data.action) return;
+
+    switch (data.action) {
+      case "report":
+        return this.blockAndReportUserService.reportUser(this.getOtherUser());
+      case "block":
+        return this.block();
+      case "unblock":
+        return this.unblock();
+    }
+  }
+
+  private getOtherUser() {
+    return {
+      id: this.otherUserId,
+      name: this.otherUserName,
+    };
+  }
+
+  async block() {
+    const blocked = await this.blockAndReportUserService.blockUser(
+      this.getOtherUser(),
+    );
+    if (blocked) this.isBlockedByMe = true;
+  }
+
+  async unblock() {
+    const unblocked = await this.blockAndReportUserService.unblockUser(
+      this.getOtherUser(),
+    );
+    if (unblocked) this.isBlockedByMe = false;
+  }
 
   private buildParsedDetails(
     message: MessageSummary,

@@ -81,5 +81,44 @@ describe("createMessage", () => {
         }),
       ).rejects.toThrow("Could not find user under that ID.");
     });
+
+    test("throws when the recipient has blocked the sender", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user2.id, blockedUserId: user.id },
+      });
+
+      await expect(
+        trpc.messages.createMessage({
+          to: user2.id,
+          body: "Hello",
+        }),
+      ).rejects.toThrow("Could not find user under that ID.");
+
+      const messages = await prisma.message.findMany({
+        where: { fromUserId: user.id, toUserId: user2.id },
+      });
+      expect(messages).toHaveLength(0);
+    });
+
+    test("throws when the sender has blocked the recipient", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user.id, blockedUserId: user2.id },
+      });
+
+      await expect(
+        trpc.messages.createMessage({
+          to: user2.id,
+          body: "Hello",
+        }),
+      ).rejects.toThrow("Could not find user under that ID.");
+    });
   });
 });

@@ -63,22 +63,40 @@ export const getThreads = authenticatedProcedure
       message.fromUserId === userId ? message.toUserId : message.fromUserId,
     );
 
-    const partners = await prisma.user.findMany({
-      where: {
-        id: {
-          in: partnerIds,
+    const [partners, userBlocks] = await Promise.all([
+      prisma.user.findMany({
+        where: {
+          id: {
+            in: partnerIds,
+          },
         },
-      },
-      ...userPublic,
-    });
+        ...userPublic,
+      }),
+      prisma.userBlock.findMany({
+        where: {
+          blockerUserId: userId,
+          blockedUserId: {
+            in: partnerIds,
+          },
+        },
+        select: {
+          blockedUserId: true,
+        },
+      }),
+    ]);
     const partnersById = new Map(
       partners.map((partner) => [partner.id, partner]),
+    );
+    const blockedUserIds = new Set(
+      userBlocks.map((userBlock) => userBlock.blockedUserId),
     );
 
     const threads: MessageThreadDTO[] = [];
     for (const message of messages) {
       const partnerId =
         message.fromUserId === userId ? message.toUserId : message.fromUserId;
+      if (blockedUserIds.has(partnerId)) continue;
+
       const otherUser = partnersById.get(partnerId);
       if (!otherUser) continue;
 

@@ -6,6 +6,11 @@ export * from "./auth/validatePasswordHash";
 export * from "./auth/sanitizeUserEmail";
 export * from "./auth/redirectGoogleAuthCode";
 export * from "./auth/redirectAppleAuthCode";
+export * from "./auth/getAppleClientSecret";
+export * from "./auth/encryptRedirectAppleRefreshToken";
+export * from "./auth/decryptRedirectAppleRefreshToken";
+export * from "./auth/saveAppleAuthToken";
+export * from "./auth/revokeAppleAuthTokens";
 
 export * from "./categorize/getShoppingListItemCategories";
 export * from "./categorize/getShoppingListItemGroupTitles";

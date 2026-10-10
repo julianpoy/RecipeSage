@@ -5,6 +5,7 @@ import {
   AlertController,
   NavController,
   ModalController,
+  PopoverController,
 } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -18,6 +19,11 @@ import { ImageViewerComponent } from "../../../modals/image-viewer/image-viewer.
 import { NewMessageModalPage } from "../../messaging-components/new-message-modal/new-message-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 import { AuthPage } from "../../auth/auth.page";
+import {
+  UserActionsPopoverPage,
+  UserActionsPopoverAction,
+} from "../user-actions-popover/user-actions-popover.page";
+import { BlockAndReportUserService } from "../../../services/block-and-report-user.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";
@@ -49,6 +55,7 @@ import {
   folderOutline,
   keyOutline,
   mailOutline,
+  optionsOutline,
   pricetagOutline,
   shareSocialOutline,
 } from "ionicons/icons";
@@ -92,6 +99,8 @@ export class ProfilePage {
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
   featureFlagService = inject(FeatureFlagService);
+  popoverCtrl = inject(PopoverController);
+  blockAndReportUserService = inject(BlockAndReportUserService);
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   isSelfHost = IS_SELFHOST;
@@ -105,6 +114,7 @@ export class ProfilePage {
     [];
   incomingFriendship = false;
   outgoingFriendship = false;
+  isBlockedByMe = false;
 
   private meQuery = this.serverActionsService.users.getMe({ 401: () => {} });
   me = this.meQuery.value;
@@ -116,6 +126,7 @@ export class ProfilePage {
       folderOutline,
       keyOutline,
       mailOutline,
+      optionsOutline,
       pricetagOutline,
       shareSocialOutline,
     });
@@ -168,6 +179,7 @@ export class ProfilePage {
       this.profileItems = [];
       this.incomingFriendship = false;
       this.outgoingFriendship = false;
+      this.isBlockedByMe = false;
     }
 
     if (!this.handle) return;
@@ -193,12 +205,15 @@ export class ProfilePage {
     }
 
     const loggedIn = this.isLoggedIn();
-    const [items, friends, publishedRecipes] = await Promise.all([
+    const [items, friends, blockedUsers, publishedRecipes] = await Promise.all([
       this.serverActionsService.users.getVisibleUserProfileItems({
         userId: profileResponse.id,
       }),
       loggedIn
         ? this.serverActionsService.users.getMyFriends()
+        : Promise.resolve(undefined),
+      loggedIn
+        ? this.serverActionsService.users.getMyBlockedUsers()
         : Promise.resolve(undefined),
       this.enableDiscover
         ? this.serverActionsService.discover.getDiscoverRecipesByAuthor({
@@ -212,6 +227,9 @@ export class ProfilePage {
     this.profile = profileResponse;
     this.profileItems = items ?? [];
     this.publishedRecipes = publishedRecipes?.recipes ?? [];
+    this.isBlockedByMe = !!blockedUsers?.some(
+      (blockedUser) => blockedUser.id === profileResponse.id,
+    );
 
     this.incomingFriendship = false;
     this.outgoingFriendship = false;
@@ -339,6 +357,51 @@ export class ProfilePage {
     tst.present();
 
     this.load();
+  }
+
+  async presentPopover(event: Event) {
+    if (!this.profile) return;
+
+    const popover = await this.popoverCtrl.create({
+      component: UserActionsPopoverPage,
+      componentProps: {
+        isBlockedByMe: this.isBlockedByMe,
+      },
+      event,
+    });
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss<{
+      action?: UserActionsPopoverAction;
+    }>();
+    if (!data || !data.action) return;
+
+    switch (data.action) {
+      case "report":
+        return this.blockAndReportUserService.reportUser(this.profile);
+      case "block":
+        return this.block();
+      case "unblock":
+        return this.unblock();
+    }
+  }
+
+  async block() {
+    if (!this.profile) return;
+
+    const blocked = await this.blockAndReportUserService.blockUser(
+      this.profile,
+    );
+    if (blocked) this.load();
+  }
+
+  async unblock() {
+    if (!this.profile) return;
+
+    const unblocked = await this.blockAndReportUserService.unblockUser(
+      this.profile,
+    );
+    if (unblocked) this.load();
   }
 
   async shareProfile() {

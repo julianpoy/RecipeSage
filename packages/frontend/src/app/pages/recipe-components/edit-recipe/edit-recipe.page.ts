@@ -54,6 +54,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 import { MlService } from "../../../services/ml.service";
+import { ThirdPartyAiConsentService } from "../../../services/third-party-ai-consent.service";
 import {
   PendingShareService,
   type PendingShare,
@@ -134,6 +135,7 @@ export class EditRecipePage {
   private popoverCtrl = inject(PopoverController);
   private serverActionsService = inject(ServerActionsService);
   private mlService = inject(MlService);
+  private thirdPartyAiConsentService = inject(ThirdPartyAiConsentService);
   private pendingShareService = inject(PendingShareService);
   private unsavedChangesService = inject(UnsavedChangesService);
   private events = inject(EventService);
@@ -380,6 +382,13 @@ export class EditRecipePage {
   private async handleIncomingShare() {
     const pending = this.pendingShareService.consume();
     if (!pending) return;
+
+    if (
+      pending.kind !== "url" &&
+      !(await this.thirdPartyAiConsentService.ensureConsent())
+    ) {
+      return;
+    }
 
     if (
       this.hasRecipeContent() ||
@@ -778,6 +787,8 @@ export class EditRecipePage {
   }
 
   async autofillNutritionFromText() {
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
+
     const header = await this.translate
       .get("pages.editRecipe.nutritionAutofill.header")
       .toPromise();
@@ -1318,7 +1329,9 @@ export class EditRecipePage {
   isClipDocumentModalOpen = false;
   clipDocumentIncludeNutrition = false;
 
-  scanDocument() {
+  async scanDocument() {
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
+
     this.clipDocumentIncludeNutrition = false;
     this.isClipDocumentModalOpen = true;
   }
@@ -1425,6 +1438,8 @@ export class EditRecipePage {
   }
 
   async scanImage() {
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
+
     const MAX_IMAGES_SCAN = 3;
 
     const capturedPhotos: Photo[] = [];
@@ -1556,7 +1571,9 @@ export class EditRecipePage {
   clipTextInput = "";
   clipTextIncludeNutrition = false;
 
-  clipFromText() {
+  async clipFromText() {
+    if (!(await this.thirdPartyAiConsentService.ensureConsent())) return;
+
     this.clipTextInput = "";
     this.clipTextIncludeNutrition = false;
     this.isClipTextModalOpen = true;

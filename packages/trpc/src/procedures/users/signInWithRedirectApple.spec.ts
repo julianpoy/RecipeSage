@@ -2,7 +2,10 @@ import { prisma } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import crypto from "node:crypto";
 import { anonymousTrpc } from "../../testutils";
-import { REDIRECT_APPLE_AUTH_CODE_HMAC_PREFIX } from "@recipesage/util/server/general";
+import {
+  REDIRECT_APPLE_AUTH_CODE_HMAC_PREFIX,
+  encryptRedirectAppleRefreshToken,
+} from "@recipesage/util/server/general";
 
 const TEST_SECRET = "test-apple-private-key";
 const TEST_VERIFIER = "test-pkce-verifier";
@@ -17,6 +20,8 @@ const makeCode = (
     allowRegistration: boolean;
     exp: number;
     codeChallenge?: string;
+    appleUserId?: string;
+    encryptedAppleRefreshToken?: string;
   },
   secret = TEST_SECRET,
 ) => {
@@ -112,6 +117,32 @@ describe("signInWithRedirectApple", () => {
       });
 
       expect(response.email).toEqual(lower);
+    });
+
+    test("stores the decrypted Apple refresh token for the user", async () => {
+      const email = faker.internet.email().toLowerCase();
+      createdEmails.push(email);
+
+      const response = await anonymousTrpc.users.signInWithRedirectApple({
+        code: makeCode({
+          email,
+          name: "Test",
+          allowRegistration: true,
+          exp: Date.now() + 60_000,
+          codeChallenge: challengeFor(TEST_VERIFIER),
+          appleUserId: "apple-user-id",
+          encryptedAppleRefreshToken:
+            encryptRedirectAppleRefreshToken("test-refresh-token"),
+        }),
+        codeVerifier: TEST_VERIFIER,
+      });
+
+      const appleAuthToken = await prisma.appleAuthToken.findFirst({
+        where: { userId: response.userId },
+      });
+      expect(appleAuthToken?.clientId).toEqual("com.recipesage.service");
+      expect(appleAuthToken?.appleUserId).toEqual("apple-user-id");
+      expect(appleAuthToken?.refreshToken).toEqual("test-refresh-token");
     });
   });
 

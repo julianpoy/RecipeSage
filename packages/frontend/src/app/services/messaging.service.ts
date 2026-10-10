@@ -207,7 +207,10 @@ export class MessagingService {
       }
     }
 
-    if (!localStorage.getItem("notificationExplainationShown")) {
+    if (
+      Capacitor.getPlatform() !== "ios" &&
+      !localStorage.getItem("notificationExplainationShown")
+    ) {
       localStorage.setItem("notificationExplainationShown", "true");
 
       const header = await this.translate

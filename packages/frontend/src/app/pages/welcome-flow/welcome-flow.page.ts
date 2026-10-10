@@ -15,6 +15,7 @@ import {
   restaurantOutline,
   downloadOutline,
   createOutline,
+  arrowForwardOutline,
 } from "ionicons/icons";
 
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -47,7 +48,12 @@ export class WelcomeFlowPage {
   creating = false;
 
   constructor() {
-    addIcons({ restaurantOutline, downloadOutline, createOutline });
+    addIcons({
+      restaurantOutline,
+      downloadOutline,
+      createOutline,
+      arrowForwardOutline,
+    });
   }
 
   startBlank() {

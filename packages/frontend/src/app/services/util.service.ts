@@ -250,6 +250,12 @@ export const RouteMap = {
     },
     path: "people",
   },
+  BlockedUsersPage: {
+    getPath() {
+      return `people/blocked-users`;
+    },
+    path: "people/blocked-users",
+  },
   ExportPage: {
     getPath() {
       return `/settings/export`;

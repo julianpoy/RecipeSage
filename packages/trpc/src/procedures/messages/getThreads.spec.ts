@@ -46,6 +46,21 @@ describe("getThreads", () => {
       }
     });
 
+    test("hides threads with users that the caller has blocked", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await trpc.messages.createMessage({ to: user2.id, body: "Hello" });
+      await prisma.userBlock.create({
+        data: { blockerUserId: user.id, blockedUserId: user2.id },
+      });
+
+      const threads = await trpc.messages.getThreads();
+
+      expect(threads).toEqual([]);
+    });
+
     test("returns an empty array when there are no messages", async ({
       trpc,
     }) => {

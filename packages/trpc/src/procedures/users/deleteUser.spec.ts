@@ -5,7 +5,75 @@ import {
 } from "@recipesage/util/server/general";
 import { test, anonymousTrpc } from "../../testutils";
 
+const { revokeAuthorizationTokenMock } = vi.hoisted(() => ({
+  revokeAuthorizationTokenMock: vi.fn(),
+}));
+
+vi.mock("apple-signin-auth", () => ({
+  default: {
+    revokeAuthorizationToken: revokeAuthorizationTokenMock,
+    getClientSecret: () => "test-client-secret",
+  },
+}));
+
 describe("deleteUser", () => {
+  beforeEach(() => {
+    revokeAuthorizationTokenMock.mockReset();
+  });
+
+  describe("apple auth token", () => {
+    test("revokes the caller's Apple refresh tokens", async ({
+      trpc,
+      user,
+    }) => {
+      revokeAuthorizationTokenMock.mockResolvedValue("");
+      await prisma.appleAuthToken.create({
+        data: {
+          userId: user.id,
+          clientId: "com.recipesage.ios",
+          appleUserId: "apple-user-id",
+          refreshToken: "test-refresh-token",
+        },
+      });
+
+      await trpc.users.deleteUser();
+
+      expect(revokeAuthorizationTokenMock).toHaveBeenCalledWith(
+        "test-refresh-token",
+        expect.objectContaining({
+          clientID: "com.recipesage.ios",
+          tokenTypeHint: "refresh_token",
+        }),
+      );
+      const appleAuthToken = await prisma.appleAuthToken.findFirst({
+        where: { userId: user.id },
+      });
+      expect(appleAuthToken).toBeNull();
+    });
+
+    test("deletes the account when the revoke fails", async ({
+      trpc,
+      user,
+    }) => {
+      revokeAuthorizationTokenMock.mockRejectedValue(new Error("failed"));
+      await prisma.appleAuthToken.create({
+        data: {
+          userId: user.id,
+          clientId: "com.recipesage.ios",
+          appleUserId: "apple-user-id",
+          refreshToken: "test-refresh-token",
+        },
+      });
+
+      await trpc.users.deleteUser();
+
+      const deleted = await prisma.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(deleted).toBeNull();
+    });
+  });
+
   describe("success", () => {
     test("deletes the caller's account", async ({ trpc, user }) => {
       const response = await trpc.users.deleteUser();

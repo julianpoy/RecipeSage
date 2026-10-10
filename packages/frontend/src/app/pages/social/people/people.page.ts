@@ -38,6 +38,7 @@ import {
 } from "@ionic/angular/standalone";
 import {
   addOutline,
+  banOutline,
   chatbubblesOutline,
   mailOutline,
   peopleOutline,
@@ -78,6 +79,7 @@ export class PeoplePage {
   constructor() {
     addIcons({
       addOutline,
+      banOutline,
       chatbubblesOutline,
       mailOutline,
       peopleOutline,
@@ -103,6 +105,7 @@ export class PeoplePage {
 
   friendships?: RouterOutputs["users"]["getMyFriends"];
   inboxCount?: number;
+  showBlockedUsersItem = false;
 
   ionViewWillEnter() {
     this.load();
@@ -119,6 +122,15 @@ export class PeoplePage {
     });
 
     this.loadInboxCount();
+    this.loadShowBlockedUsersItem();
+  }
+
+  async loadShowBlockedUsersItem() {
+    const blockedUsers =
+      await this.serverActionsService.users.getMyBlockedUsers({
+        "*": () => {},
+      });
+    this.showBlockedUsersItem = !blockedUsers || blockedUsers.length > 0;
   }
 
   async loadInboxCount() {
@@ -135,6 +147,10 @@ export class PeoplePage {
 
   goToInbox() {
     this.navCtrl.navigateForward(RouteMap.HomePage.getPath("inbox"));
+  }
+
+  goToBlockedUsers() {
+    this.navCtrl.navigateForward(RouteMap.BlockedUsersPage.getPath());
   }
 
   async findProfile() {

@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, signal } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { Capacitor } from "@capacitor/core";
 import {
   IonHeader,
   IonToolbar,
@@ -42,6 +43,7 @@ import {
   clearInstallPrompt,
   getInstallPrompt,
 } from "../../../utils/pwaInstallPrompt";
+import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 
 @Component({
   standalone: true,
@@ -61,12 +63,14 @@ import {
     IonLabel,
     IonAccordion,
     IonAccordionGroup,
+    CopyWithWebshareComponent,
   ],
 })
 export class DownloadAndInstallPage {
   private destroyRef = inject(DestroyRef);
 
-  isDesktopApp = IS_DESKTOP;
+  isNativeOrDesktopApp = Capacitor.isNativePlatform() || IS_DESKTOP;
+  downloadPageUrl = "https://recipesage.com/download";
   platforms = DESKTOP_PLATFORMS;
   downloads = DESKTOP_DOWNLOADS;
   recommendedDownloads = DESKTOP_RECOMMENDED_DOWNLOADS;

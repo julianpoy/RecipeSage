@@ -2,6 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { getIsBlockBetweenUsers } from "@recipesage/util/server/db";
 
 export const createFriendship = authenticatedProcedure
   .meta({
@@ -28,15 +29,18 @@ export const createFriendship = authenticatedProcedure
       });
     }
 
-    const targetUser = await prisma.user.findUnique({
-      where: {
-        id: input.friendId,
-      },
-      select: {
-        id: true,
-      },
-    });
-    if (!targetUser) {
+    const [targetUser, isBlockBetweenUsers] = await Promise.all([
+      prisma.user.findUnique({
+        where: {
+          id: input.friendId,
+        },
+        select: {
+          id: true,
+        },
+      }),
+      getIsBlockBetweenUsers(ctx.session.userId, [input.friendId]),
+    ]);
+    if (!targetUser || isBlockBetweenUsers) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "No user found with that id",

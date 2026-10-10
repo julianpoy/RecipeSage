@@ -9,6 +9,7 @@ import { TRPCError } from "@trpc/server";
 import {
   MealPlanAccessLevel,
   getAccessToMealPlan,
+  getIsBlockBetweenUsers,
 } from "@recipesage/util/server/db";
 import {
   MEAL_PLAN_CUSTOM_MEAL_OPTIONS_LENGTH_LIMIT,
@@ -54,18 +55,24 @@ export const updateMealPlan = authenticatedProcedure
     }
 
     if (input.collaboratorUserIds !== undefined) {
-      const collaboratorUsers = await prisma.user.findMany({
-        where: {
-          id: {
-            in: input.collaboratorUserIds,
+      const [collaboratorUsers, isBlockBetweenUsers] = await Promise.all([
+        prisma.user.findMany({
+          where: {
+            id: {
+              in: input.collaboratorUserIds,
+            },
           },
-        },
-        select: {
-          id: true,
-        },
-      });
+          select: {
+            id: true,
+          },
+        }),
+        getIsBlockBetweenUsers(ctx.session.userId, input.collaboratorUserIds),
+      ]);
 
-      if (collaboratorUsers.length < input.collaboratorUserIds.length) {
+      if (
+        collaboratorUsers.length < input.collaboratorUserIds.length ||
+        isBlockBetweenUsers
+      ) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message:

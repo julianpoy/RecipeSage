@@ -69,6 +69,39 @@ describe("createFriendship", () => {
       ).rejects.toThrow("No user found with that id");
     });
 
+    test("throws when the caller has blocked the target user", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user.id, blockedUserId: user2.id },
+      });
+
+      await expect(
+        trpc.users.createFriendship({ friendId: user2.id }),
+      ).rejects.toThrow("No user found with that id");
+    });
+
+    test("throws when the target user has blocked the caller", async ({
+      trpc,
+      user,
+      user2,
+    }) => {
+      await prisma.userBlock.create({
+        data: { blockerUserId: user2.id, blockedUserId: user.id },
+      });
+
+      await expect(
+        trpc.users.createFriendship({ friendId: user2.id }),
+      ).rejects.toThrow("No user found with that id");
+
+      const friendship = await prisma.friendship.findFirst({
+        where: { userId: user.id, friendId: user2.id },
+      });
+      expect(friendship).toBeNull();
+    });
+
     test("throws when the caller is not logged in", async ({ user2 }) => {
       await expect(
         anonymousTrpc.users.createFriendship({ friendId: user2.id }),
