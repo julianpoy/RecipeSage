@@ -38,9 +38,11 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
+      - "8081:8081"
     command: nginx -g 'daemon off;'
     depends_on:
       - frontend
+      - frontend-react
       - www
       - backend
       - pushpin
@@ -62,6 +64,20 @@ services:
       core:
         soft: 0
         hard: 0
+    stop_grace_period: 1s
+  frontend-react:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./packages:/app/packages
+    ports:
+      - "8101:8101"
+    command: pnpm exec nx start frontend-react
+    environment:
+      - ENVIRONMENT=development
+      - APP_VERSION=development
     stop_grace_period: 1s
   www:
     restart: on-failure

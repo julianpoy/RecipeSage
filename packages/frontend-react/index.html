@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>RecipeSage</title>
+
+    <base href="%BASE_URL%" />
+
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="msapplication-config" content="assets/icon/browserconfig.xml" />
+
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="preconnect" href="https://static.recipesage.com" crossorigin />
+    <link rel="dns-prefetch" href="https://static.recipesage.com" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/icon/favicon-16x16.png"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/icon/apple-touch-icon.png"
+    />
+    <link
+      rel="mask-icon"
+      href="assets/icon/safari-pinned-tab.svg"
+      color="#353b48"
+    />
+    <link rel="shortcut icon" href="assets/icon/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#353b48" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#353b48" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <script>
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        window.deferredInstallPrompt = e;
+      });
+
+      if ("serviceWorker" in navigator && !window.electronAPI) {
+        navigator.serviceWorker
+          .register("/service-worker.js", {
+            scope: "/",
+            updateViaCache: "none",
+          })
+          .then((registration) => {
+            window.swRegistration = registration;
+            if (window.onSWRegistration) window.onSWRegistration.call(null);
+          })
+          .catch((err) => console.error("Error", err));
+
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          function () {
+            // Recovery if we have a SW in a frozen state
+            if (!window.appLoaded) {
+              setTimeout(function () {
+                if (!window.appLoaded) {
+                  window.location.reload(true);
+                }
+              }, 2000);
+            }
+          },
+        );
+      }
+    </script>
+
+    <script>
+      window.version = "development";
+    </script>
+
+    <script>
+      (function () {
+        let storedTheme = "default";
+        try {
+          // Backwards compat
+          storedTheme = localStorage.getItem("theme") || storedTheme;
+
+          storedTheme =
+            JSON.parse(localStorage.getItem("preferences"))["global.theme"] ||
+            storedTheme;
+        } catch (e) {}
+        switch (storedTheme) {
+          case "black":
+          case "dark":
+          case "midnight":
+          case "light":
+            document.documentElement.classList.add("theme-" + storedTheme);
+            break;
+          default:
+            document.documentElement.classList.add("theme-default");
+            break;
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <noscript>
+      <h1>You don't have javascript enabled.</h1>
+      <p>This application requires javascript.</p>
+    </noscript>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

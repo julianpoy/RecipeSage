@@ -2,6 +2,10 @@ import { Publisher, WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip/node";
 import { config, Environment } from "./config";
 import { metrics } from "./metrics";
+import {
+  WSBroadcastEventType,
+  type WSBroadcastEventData,
+} from "@recipesage/util/shared";
 
 const fetchWithoutContentLength: typeof fetch = (input, init) => {
   const headers = new Headers(init?.headers);
@@ -27,44 +31,7 @@ export const serveGrip = new ServeGrip({
   ),
 });
 
-export enum WSBroadcastEventType {
-  MealPlanUpdated = "mealplan:updated",
-  ShoppingListUpdated = "shoppinglist:updated",
-  JobUpdated = "job:updated",
-  MessageReceived = "messages:new",
-}
-
-type MessageUser = {
-  id: string;
-  name: string | null;
-  handle: string | null;
-};
-
-export type WSBroadcastEventData = {
-  [WSBroadcastEventType.MealPlanUpdated]: {
-    reference: string;
-    mealPlanId: string;
-  };
-  [WSBroadcastEventType.ShoppingListUpdated]: {
-    reference: string;
-    shoppingListId: string;
-  };
-  [WSBroadcastEventType.JobUpdated]: {
-    jobId: string;
-  };
-  [WSBroadcastEventType.MessageReceived]: {
-    id: string;
-    body: string;
-    otherUser: MessageUser;
-    fromUser: MessageUser;
-    toUser: MessageUser;
-    recipe?: {
-      id: string;
-      title: string;
-      images: { location: string }[];
-    };
-  };
-};
+export { WSBroadcastEventType, type WSBroadcastEventData };
 
 export const broadcastWSEvent = async function <T extends WSBroadcastEventType>(
   channel: string,

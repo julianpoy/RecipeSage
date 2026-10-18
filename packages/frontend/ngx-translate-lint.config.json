@@ -5,7 +5,22 @@
     "misprint": "warning",
     "maxWarning": "0",
     "misprintCoefficient": "0.9",
-    "ignoredKeys": [],
+    "ignoredKeys": [
+      "generic.menu",
+      "generic.loading",
+      "generic.previous",
+      "generic.next",
+      "components.cookingToolbar.clearLabel",
+      "components.multiImageUpload.remove",
+      "components.multiImageUpload.moveEarlier",
+      "components.multiImageUpload.moveLater",
+      "components.colorPicker.noColor",
+      "generic.share",
+      "generic.copy",
+      "generic.reorder",
+      "pages.mealPlanMealOrderModal.chooseColor",
+      "pages.home.search.clear"
+    ],
     "ignoredMisprintKeys": [],
     "ast": {
       "isNgsTranslateImported": "error"

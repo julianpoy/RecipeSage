@@ -1,0 +1,74 @@
+{
+  "name": "frontend-react",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/frontend-react/src",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend-react",
+        "commands": [
+          "tsx build-service-worker.ts --watch",
+          "tsx build-service-worker.ts && vite --host 0.0.0.0 --port 8101"
+        ],
+        "parallel": true
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["util-shared:build"],
+      "options": {
+        "cwd": "packages/frontend-react",
+        "commands": [
+          "vite build --mode production",
+          "tsx build-service-worker.ts",
+          "workbox injectManifest",
+          "tsx upload-sourcemaps.ts"
+        ],
+        "parallel": false
+      }
+    },
+    "build:selfhost": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend-react",
+        "commands": [
+          "vite build --mode selfhost",
+          "tsx build-service-worker.ts",
+          "workbox injectManifest"
+        ],
+        "parallel": false
+      }
+    },
+    "build:desktop": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["util-shared:build"],
+      "options": {
+        "cwd": "packages/frontend-react",
+        "command": "vite build --mode desktop"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend-react",
+        "command": "tsc --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "maxWarnings": 0,
+        "lintFilePatterns": ["packages/frontend-react/src"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/frontend-react"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+www/
+node_modules/
+coverage/
+src/service-worker.js
+src/service-worker.js.LICENSE.txt

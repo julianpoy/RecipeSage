@@ -1,0 +1,314 @@
+import { useEffect } from "react";
+import { getRouteApi } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import { IS_SELFHOST } from "../../../environments/environment";
+import { PageHeader } from "../../../components/layout/PageHeader";
+import { PageContent } from "../../../components/layout/PageContent";
+import { BackButton } from "../../../components/layout/BackButton";
+
+const routeApi = getRouteApi("/legal");
+
+const LINK_CLASSES = "text-primary underline-offset-4 hover:underline";
+
+export const LegalPage = () => {
+  const { t } = useTranslation();
+  const { scrollTo } = routeApi.useSearch();
+
+  useEffect(() => {
+    if (scrollTo !== "sharing") return;
+
+    const timeout = setTimeout(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    });
+    return () => clearTimeout(timeout);
+  }, [scrollTo]);
+
+  return (
+    <>
+      <PageHeader
+        start={<BackButton fallback={{ to: "/about" }} />}
+        title={t("pages.legal.title")}
+      />
+      <PageContent>
+        <div className="mx-auto max-w-page [&_h4]:mt-6 [&_h4]:mb-4 [&_h4]:text-base [&_h4]:font-bold">
+          {IS_SELFHOST && (
+            <div className="mb-12">
+              <h1 className="my-5 text-2xl font-medium">
+                Note: Some parts of this page apply to software hosted at
+                RecipeSage.com.
+              </h1>
+              Keep in mind that all RecipeSage images, branding, naming, code,
+              etc. are not licensed for commercial or non-personal use. If you
+              would like to use RecipeSage or any of it's associated materials
+              for commercial or non-personal use, please feel free to contact
+              me.
+              <br />
+              You can also self host your own personal, non-commercial copy
+              based on the configurations provided at{" "}
+              <a
+                href="https://github.com/julianpoy/recipesage-selfhost"
+                target="_blank"
+                rel="noreferrer noopener"
+                className={LINK_CLASSES}
+              >
+                https://github.com/julianpoy/recipesage-selfhost
+              </a>{" "}
+              Again, this is a self hosted version of the site, so RecipeSage
+              official may not be able to back some of the commitments below in
+              regards to the self hosted version. RecipeSage expects that all
+              self hosted instances follow the guidelines below, but RecipeSage
+              cannot be held responsible for self hosted versions.
+              <br />
+              Additionally, all terms from the self host license at{" "}
+              <a
+                href="https://github.com/julianpoy/recipesage-selfhost"
+                target="_blank"
+                rel="noreferrer noopener"
+                className={LINK_CLASSES}
+              >
+                https://github.com/julianpoy/recipesage-selfhost
+              </a>{" "}
+              apply to users &amp; self host server owners.
+            </div>
+          )}
+
+          <p>
+            Here you'll find a summary of the legal agreements and disclaimers.
+            I've done my best to find a fair terms of service online.
+            <br />
+            Please let me know if you have questions or issues about any of
+            this.
+            <br />I apologize for the legal jargon.
+          </p>
+
+          <h4 className="pt-4">RecipeSage Terms of Service</h4>
+          <p>
+            <b>1. Terms</b>
+            <br />
+            By accessing or using RecipeSage, including the website at
+            https://recipesage.com and the RecipeSage apps, you are agreeing to
+            be bound by these terms of service, all applicable laws and
+            regulations, and agree that you are responsible for compliance with
+            any applicable local laws. If you do not agree with any of these
+            terms, you are prohibited from using or accessing RecipeSage.
+            <br />
+            <br />
+            <b>2. Use License</b>
+            <br />
+            Software is provided for personal use only. If you'd like to use
+            RecipeSage for commercial purposes, please send me an email and we
+            can discuss a commercial license.
+            <br />
+            <br />
+            <b>3. User Content and Conduct</b>
+            <br />
+            You agree not to post, share, publish, or send content that is
+            harassing, threatening, sexually explicit, or illegal, and not to
+            use RecipeSage to harass or abuse other users. Offending content
+            will be removed, and the associated accounts may be removed as well
+            at our discression.
+            <br />
+            <br />
+            <b>4. Disclaimer</b>
+            <br />
+            Software is provided on an "AS IS" basis, without warranty of any
+            kind, including without limitation the warranties of
+            merchantability, fitness for a particular purpose and
+            non-infringement. The entire risk as to the quality and performance
+            of the Software is borne by you. Should the Software prove
+            defective, you and not the vendor assume the entire cost of any
+            service and repair. <br />
+            In no event shall the creators, contributors, or providers be liable
+            for any direct, indirect, incidental, special, exemplary, or
+            consequential damages (including, but not limited to, procurement of
+            substitute goods or services; loss of use, data, or profits; or
+            business interruption) however caused and on any theory of
+            liability, whether in contract, strict liability, or tort (including
+            negligence or otherwise) arising in any way out of the use of the
+            Software, even if advised of the possibility of such damage.
+            <br />
+            Contributions (or any form of payment) does not guarantee service,
+            or represent any agreement or contract. Perks and features unlocked
+            or granted by contributions (or any form of payment) are not
+            guaranteed, and may change at any time without warning.
+            <br />
+            <br />
+            <b>5. Limitations</b>
+            <br />
+            In no event shall RecipeSage or its suppliers be liable for any
+            damages (including, without limitation, damages for loss of data or
+            profit, or due to business interruption), even if RecipeSage or a
+            RecipeSage authorized representative has been notified orally or in
+            writing of the possibility of such damage. Because some
+            jurisdictions do not allow limitations on implied warranties, or
+            limitations of liability for consequential or incidental damages,
+            these limitations may not apply to you.
+            <br />
+            <br />
+            <b>6. Accuracy of materials</b>
+            <br />
+            The materials appearing on RecipeSage's website could include
+            technical, typographical, or photographic errors.
+            <br />
+            <br />
+            <b>7. Links</b>
+            <br />
+            RecipeSage has not reviewed all of the sites linked to its website
+            and is not responsible for the contents of any such linked site. The
+            inclusion of any link does not imply endorsement by RecipeSage of
+            the site. Use of any such linked website is at the user's own risk.
+            <br />
+            <br />
+            <b>8. Modifications</b>
+            <br />
+            RecipeSage may revise these terms of service at any time without
+            notice. By continuing to use the software you are agreeing to be
+            bound by the then current version of these terms of service.
+            <br />
+            <br />
+            <b>9. Governing Law</b>
+            <br />
+            These terms and conditions are governed by and construed in
+            accordance with the laws of California and you irrevocably submit to
+            the exclusive jurisdiction of the courts in that State or location.
+          </p>
+
+          <h4 className="pt-4">RecipeSage Privacy Policy</h4>
+          <p>
+            Your privacy is important! It is RecipeSage's policy to respect your
+            privacy regarding any information we store from you across the
+            software.
+            <br />
+            <br />
+            We only ask for personal information when we truly need it to
+            provide a service to you. We collect it by fair and lawful means,
+            with your knowledge and consent. We also let you know why we’re
+            collecting it and how it will be used.
+            <br />
+            <br />
+            We only retain collected information for as long as necessary to
+            provide you with your requested service. What data we store, we’ll
+            protect within commercially acceptable means to prevent loss and
+            theft, as well as unauthorised access, disclosure, copying, use or
+            modification.
+            <br />
+            <br />
+            We don’t share any personally identifying information publicly or
+            with third-parties, except when required to by law, or as described
+            below for AI features.
+            <br />
+            <br />
+            Some features use third-party AI services. These are: creating a
+            recipe from text, photos, PDFs, or documents, filling in nutrition
+            information, importing text files, images, PDFs, or Evernote files,
+            and the cooking assistant. When you use one of these features, the
+            content you provide for it (such as text, messages, photos, or
+            files) is sent to OpenRouter, which passes it to an AI provider so
+            that it can be processed. Recipes that you publish to Discover are
+            also checked by these AI services to keep Discover safe. When a
+            website can't be read directly while saving a recipe from a link,
+            the content of that link may also be processed by these AI services.
+            <br />
+            <br />
+            We use Matomo to understand how the software is used, such as which
+            features people use/don't use, or what features don't work
+            correctly. Matomo runs on our own servers rather than a third-party
+            analytics service, it does not set any cookies, and visitor IP
+            addresses are anonymised. None of this data is ever shared with
+            anyone else or used for advertising in any way.
+            <br />
+            <br />
+            Our website may link to external sites that are not operated by us.
+            Please be aware that we have no control over the content and
+            practices of these sites, and cannot accept responsibility or
+            liability for their respective privacy policies.
+            <br />
+            <br />
+            You are free to refuse our request for your personal information,
+            with the understanding that we may be unable to provide you with
+            some of your desired services.
+            <br />
+            <br />
+            The contributor-only feature that specifies "unlimited" messages is
+            subject to protections against abuse. Currently, we consider more
+            than 1440 messages per day as abuse. (there are 1440 minutes in a
+            day, allowing for an effective rate of 1 message per minute).
+            <br />
+            <br />
+            Your continued use of our website will be regarded as acceptance of
+            our practices around privacy and personal information. If you have
+            any questions about how we handle user data and personal
+            information, feel free to contact us.
+            <br />
+            <br />
+            RecipeSage may revise this privacy policy at any time without
+            notice. By continuing to use the software you are agreeing to be
+            bound by the then current version of the privacy policy.
+            <br />
+            <br />
+          </p>
+
+          <h4>RecipeSage Sharing Policy</h4>
+          <p>
+            RecipeSage has several wonderful sharing features that allow you to
+            share &amp; collaborate with other users.
+            <br />
+            This can however, lead to some users abusing that functionality.
+            <br />
+            <br />
+            By using these sharing features, you agree that you will only upload
+            &amp; share content that you have the license to, including (but not
+            limited to): any text content of the recipe, images, notes, and
+            title.
+            <br />
+            Recipes are often very similar to eachother, and we know that it can
+            be a fine line here. We expect that you as the user will follow fair
+            use laws, and will do your best not to use RecipeSage to share
+            copyrighted content that you don't have the rights to.
+            <br />
+            <br />
+            <b>The most important part</b> - If we're notified by a copyright
+            holder of copyrighted content present publicly, for example on your
+            profile, we will need to take action. We'll always notify you if
+            this is the case. Our actions may include (but are not limited to):
+            removing the copyrighted content from your public profile or
+            disabling your public profile temporarily.
+            <br />
+            Please keep these rules in mind when you use the public sharing
+            features, and begin sharing content with your friends.
+            <br />
+            <br />
+            <b>Publishing to Discover</b> - When you publish a recipe to
+            Discover, you grant RecipeSage a worldwide, royalty-free,
+            non-exclusive license to host, store, reproduce, modify, publicly
+            display, and distribute that recipe, and to sublicense these rights
+            to other users so that they may save and adapt their own copies. You
+            retain ownership of your content. If you unpublish a recipe,
+            RecipeSage will stop distributing it going forward, though copies
+            that other users have already saved remain theirs.
+          </p>
+
+          <h4 className="pt-4">RecipeSage Refund Policy</h4>
+          <p>
+            You're welcome to request a refund by contacting me via email. You
+            may request a refund for contributions made within the past month.
+            Exceptions to this timeframe may be considered in compliance with
+            local laws, which will dictate the applicable refund period. Refund
+            requests will be reviewed on a case-by-case basis, and approval for
+            refunds outside the standard period will be contingent upon
+            adherence to relevant legal requirements. Contact me for any refund
+            inquiries.
+          </p>
+
+          <p className="mt-8 mb-8">
+            These terms last updated and effective as of the 8th of October
+            2026.
+          </p>
+        </div>
+      </PageContent>
+    </>
+  );
+};

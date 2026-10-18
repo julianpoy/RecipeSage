@@ -27,3 +27,4 @@ export * from "./getLanguageDirection";
 export * from "./discoverCategories";
 export * from "./desktopDownloads";
 export * from "./matomo";
+export * from "./WSBroadcastEventType";

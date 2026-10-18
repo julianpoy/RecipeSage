@@ -1,0 +1,18 @@
+import dedent from "ts-dedent";
+
+export const DEBUG_DUMP_PUBLIC_KEY = dedent`
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAln7iOxydk5dV4ffhqnhi
+2OIqPX4mDKB++vkm0R8Px1VzZVDp0J0ArK3MiCHGPEvnsUKKvS0u7nFDjOaVJz3l
+oJMEfM7+9Pu3g6MJM8yimbJGnyfN1d6QN/EiEMpLmKHvdRAqgK0eQE6aBujVwxMn
+eeXHsfuz6pedfm9KUGi4Db37LiawcKlgc5TN0SLwFUsOLTHxk8+ahkikSS1LiX7n
+iAzz8ro5B3gOcLGAxce8GeXkR3OQ+SEu3W6WanRZyJdDhS4FlzZ9zyz9ZVezojfr
+TKC/Jxi0+n0jT9a0z8A2Ep1ZFxwOxpKdABB/O/8vZFmffz8pvH+ZUKIhLnE7hB0z
+nrEMpp5BkTfcT+baBkUudTkYbLXH72N4pfzKTlbsMJVAOukz0LhCtqZoObEsPdp0
+bt4cvzdiGDn7vyJSB+NJmeG8uySIK8pjF1FSW+qBFls3mmKKfLhx+6TAEeyXq5j5
+A155kizJ5rSFqs2FTOJTdc85e9RhW1EZyZtmAEmzSpDhei2KnewZmwP7rvKoJw2w
+0PUsORXMI9tEzNUfuWLyu6FSgqgFdc8iQ/qCkshDkYBIX6G1HojjZvhaeufYiAnG
+4kxgkT+9JzmZGvP1Zuls/7gvZs4UDEbXDBMDEpe2QJ7T3e9yriXXqSsdV4Qr1v/S
+jybz2s62prGUKtsP2UaoTlcCAwEAAQ==
+-----END PUBLIC KEY-----
+`;
