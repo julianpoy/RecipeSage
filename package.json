@@ -132,7 +132,7 @@
     "pug": "^3.0.3",
     "rate-limiter-flexible": "^11.2.0",
     "request-filtering-agent": "3.2.1",
-    "sanitize-html": "^2.18.0",
+    "sanitize-html": "^2.18.1",
     "semver": "7.8.5",
     "sharp": "^0.35.5",
     "showdown": "^2.1.0",
