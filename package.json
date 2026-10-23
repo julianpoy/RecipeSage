@@ -31,7 +31,12 @@
       "prisma",
       "protobufjs",
       "sharp"
-    ]
+    ],
+    "overrides": {
+      "proxy-addr": "^2.0.8",
+      "websocket-driver": "^0.7.5",
+      "shell-quote": "^1.8.4"
+    }
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.63",
@@ -159,7 +164,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.2102.1",
-    "@angular-devkit/build-angular": "21.2.1",
+    "@angular-devkit/build-angular": "21.2.28",
     "@angular-devkit/core": "21.2.1",
     "@angular-devkit/schematics": "21.2.1",
     "@angular-eslint/builder": "21.3.0",
@@ -167,7 +172,7 @@
     "@angular-eslint/eslint-plugin-template": "21.3.0",
     "@angular-eslint/schematics": "21.3.0",
     "@angular-eslint/template-parser": "21.3.0",
-    "@angular/cli": "21.2.1",
+    "@angular/cli": "21.2.28",
     "@angular/compiler": "21.2.20",
     "@angular/compiler-cli": "21.2.1",
     "@angular/language-service": "21.2.1",
