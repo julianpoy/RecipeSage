@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -14,7 +14,7 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addIcons } from "ionicons";
 import {
   basketOutline,

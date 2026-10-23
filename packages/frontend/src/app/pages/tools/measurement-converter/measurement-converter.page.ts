@@ -8,7 +8,7 @@ import {
   NavController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   INGREDIENT_DENSITIES,
@@ -70,7 +70,7 @@ import {
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 type Mode = "ingredients" | "count" | "temperature";
 

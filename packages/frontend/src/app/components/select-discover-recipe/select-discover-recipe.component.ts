@@ -18,7 +18,7 @@ import {
   IonSearchbar,
   IonSpinner,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { folderOpenOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

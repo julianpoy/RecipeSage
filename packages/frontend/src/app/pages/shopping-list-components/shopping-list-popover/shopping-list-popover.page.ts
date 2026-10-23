@@ -9,7 +9,7 @@ import {
   NavController,
   PopoverController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -38,7 +38,7 @@ import {
   IonToggle,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   banOutline,
   pencilOutline,

@@ -8,7 +8,7 @@ import {
   ModalController,
   AlertController,
   ToggleCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
@@ -31,7 +31,7 @@ import {
   IonToggle,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

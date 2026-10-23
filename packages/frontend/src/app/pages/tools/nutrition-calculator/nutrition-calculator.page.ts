@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { NavController, ModalController } from "@ionic/angular/standalone";
+import { NavController, ModalController } from "@ionic/angular";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
 import {
   addOutline,
@@ -48,7 +48,7 @@ import {
   IonSegmentButton,
   IonNote,
   IonBadge,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 const RECIPE_PAGE_SIZE = 200;
 const FETCH_CHUNK_SIZE = 100;

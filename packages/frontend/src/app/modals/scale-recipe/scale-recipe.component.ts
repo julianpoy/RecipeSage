@@ -18,7 +18,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import fractionjs from "fraction.js";
 import { System } from "@recipesage/unitz-ts";
 import {

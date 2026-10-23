@@ -9,7 +9,7 @@ import {
   AlertController,
   ModalController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { isHandleValid } from "@recipesage/util/shared";
@@ -53,7 +53,7 @@ import {
   IonAvatar,
   IonFooter,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   arrowForwardOutline,

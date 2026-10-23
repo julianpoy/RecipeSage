@@ -11,7 +11,7 @@ import {
   PopoverController,
   LoadingController,
   type AccordionGroupChangeEventDetail,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   Camera,
@@ -83,7 +83,7 @@ import {
   IonLabel,
   IonBadge,
   IonAvatar,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   cameraOutline,
   closeOutline,

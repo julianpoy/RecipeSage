@@ -4,16 +4,11 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import { PopoverController } from "@ionic/angular";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
-import {
-  IonList,
-  IonListHeader,
-  IonButton,
-  IonIcon,
-} from "@ionic/angular/standalone";
+import { IonList, IonListHeader, IonButton, IonIcon } from "@ionic/angular";
 import { imageOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

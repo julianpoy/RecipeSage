@@ -3,7 +3,7 @@ import {
   NavController,
   ModalController,
   type ItemReorderEventDetail,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
 import {
@@ -38,7 +38,7 @@ import {
   IonIcon,
   IonSpinner,
   IonText,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 

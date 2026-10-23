@@ -4,10 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import {
-  ModalController,
-  type CheckboxCustomEvent,
-} from "@ionic/angular/standalone";
+import { ModalController, type CheckboxCustomEvent } from "@ionic/angular";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -24,7 +21,7 @@ import {
   IonList,
   IonCheckbox,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, pinOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

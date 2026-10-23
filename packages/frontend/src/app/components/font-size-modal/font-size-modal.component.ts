@@ -6,7 +6,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { PreferencesService } from "../../services/preferences.service";
 import {
   GlobalPreferenceKey,
@@ -26,7 +26,7 @@ import {
   IonFooter,
   IonButton,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,

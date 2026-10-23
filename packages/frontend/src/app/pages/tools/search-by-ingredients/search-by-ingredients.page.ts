@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import {
   IonHeader,
   IonToolbar,
@@ -13,7 +13,7 @@ import {
   IonToggle,
   IonSpinner,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addIcons } from "ionicons";
 import {
   basketOutline,

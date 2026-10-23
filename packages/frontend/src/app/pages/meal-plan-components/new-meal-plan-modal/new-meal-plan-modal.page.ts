@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { NavController, ModalController } from "@ionic/angular/standalone";
+import { NavController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "../../../services/loading.service";
 import { RouteMap } from "../../../services/util.service";
@@ -19,7 +19,7 @@ import {
   IonItem,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

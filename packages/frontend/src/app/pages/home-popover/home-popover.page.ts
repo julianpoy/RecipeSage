@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ToastController, PopoverController } from "@ionic/angular/standalone";
+import { ToastController, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UtilService } from "../../services/util.service";
@@ -24,7 +24,7 @@ import {
   IonToggle,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

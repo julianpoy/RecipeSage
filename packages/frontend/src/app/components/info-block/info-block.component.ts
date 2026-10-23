@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
-import { IonIcon } from "@ionic/angular/standalone";
+import { IonIcon } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonIcon, IonLabel, IonItem } from "@ionic/angular/standalone";
+import { IonIcon, IonLabel, IonItem } from "@ionic/angular";
 import {
   chatboxEllipsesOutline,
   logoFacebook,

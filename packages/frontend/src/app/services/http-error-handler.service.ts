@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { ModalController, AlertController } from "@ionic/angular/standalone";
+import { ModalController, AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";

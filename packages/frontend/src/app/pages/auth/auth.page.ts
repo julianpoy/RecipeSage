@@ -9,7 +9,7 @@ import {
   NavController,
   AlertController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../environments/environment";
@@ -40,7 +40,7 @@ import {
   IonTitle,
   IonContent,
   IonList,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

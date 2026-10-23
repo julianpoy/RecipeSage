@@ -8,7 +8,7 @@ import {
   AlertController,
   NavController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -37,7 +37,7 @@ import {
   IonFooter,
   IonTextarea,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

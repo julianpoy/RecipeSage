@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
 
@@ -40,7 +40,7 @@ import {
   IonIcon,
   IonBadge,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { arrowForwardOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

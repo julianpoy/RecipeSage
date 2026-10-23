@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { NavController, ModalController } from "@ionic/angular/standalone";
+import { NavController, ModalController } from "@ionic/angular";
 
 import { WebsocketService } from "../../../services/websocket.service";
 import { LoadingService } from "../../../services/loading.service";
@@ -27,7 +27,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addOutline, calendarOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

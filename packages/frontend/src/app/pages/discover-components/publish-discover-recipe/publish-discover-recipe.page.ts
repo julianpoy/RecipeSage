@@ -5,7 +5,7 @@ import {
   AlertController,
   ToastController,
   type AccordionGroupChangeEventDetail,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { ImageSummary } from "@recipesage/prisma";
 
@@ -47,7 +47,7 @@ import {
   IonAccordion,
   IonAvatar,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeCircleOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

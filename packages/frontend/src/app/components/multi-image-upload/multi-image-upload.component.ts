@@ -6,7 +6,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { AlertController, ToastController } from "@ionic/angular/standalone";
+import { AlertController, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -16,7 +16,7 @@ import { LoadingService } from "../../services/loading.service";
 import { CapabilitiesService } from "../../services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import type { ImageSummary } from "@recipesage/prisma";
-import { IonIcon } from "@ionic/angular/standalone";
+import { IonIcon } from "@ionic/angular";
 import {
   caretBack,
   caretForward,

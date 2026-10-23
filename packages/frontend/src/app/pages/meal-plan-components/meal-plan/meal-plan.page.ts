@@ -14,7 +14,7 @@ import {
   PopoverController,
   AlertController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -60,7 +60,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   calendarOutline,

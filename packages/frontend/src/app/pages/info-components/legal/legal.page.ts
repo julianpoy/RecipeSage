@@ -19,7 +19,7 @@ import {
   IonBackButton,
   IonTitle,
   IonContent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,

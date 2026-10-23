@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonIcon, IonItem, IonInput } from "@ionic/angular/standalone";
+import { IonIcon, IonItem, IonInput } from "@ionic/angular";
 import { banOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

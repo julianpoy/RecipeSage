@@ -13,7 +13,7 @@ import {
   IonLabel,
   IonSearchbar,
   IonItem,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   banOutline,

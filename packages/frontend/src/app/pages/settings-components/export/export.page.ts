@@ -21,7 +21,7 @@ import {
   IonProgressBar,
   IonButton,
   IonList,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { cloudDownloadOutline, documentOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";

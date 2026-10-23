@@ -8,7 +8,7 @@ import {
   ModalController,
   ToastController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import type { ShoppingListSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -29,7 +29,7 @@ import {
   IonInput,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

@@ -17,7 +17,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, checkmarkOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

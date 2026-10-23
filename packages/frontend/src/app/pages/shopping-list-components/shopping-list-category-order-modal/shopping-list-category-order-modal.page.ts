@@ -4,7 +4,7 @@ import {
   Input,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -20,7 +20,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, saveOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

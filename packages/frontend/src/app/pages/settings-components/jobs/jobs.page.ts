@@ -21,7 +21,7 @@ import {
   IonButton,
   IonList,
   IonText,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   bookOutline,
   cloudDownloadOutline,

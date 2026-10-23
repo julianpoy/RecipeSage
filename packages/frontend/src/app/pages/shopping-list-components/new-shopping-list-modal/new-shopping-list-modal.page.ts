@@ -8,7 +8,7 @@ import {
   ModalController,
   ToastController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { LoadingService } from "../../../services/loading.service";
 import { MessagingService } from "../../../services/messaging.service";
@@ -27,7 +27,7 @@ import {
   IonContent,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

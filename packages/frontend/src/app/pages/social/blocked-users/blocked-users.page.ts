@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 
 import { ServerActionsService } from "../../../services/server-actions.service";
 import type { RouterOutputs } from "../../../services/server-actions/actions-base";
@@ -22,7 +22,7 @@ import {
   IonAvatar,
   IonList,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { banOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

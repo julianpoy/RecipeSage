@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import { AlertController, NavController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -9,7 +9,7 @@ import {
   PinnedRecipe,
 } from "../../services/cooking-toolbar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonIcon, IonRippleEffect } from "@ionic/angular/standalone";
+import { IonIcon, IonRippleEffect } from "@ionic/angular";
 import { closeOutline, pinOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

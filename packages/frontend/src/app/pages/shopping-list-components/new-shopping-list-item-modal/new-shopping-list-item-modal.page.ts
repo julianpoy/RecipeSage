@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
@@ -24,7 +24,7 @@ import {
   IonSegmentButton,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

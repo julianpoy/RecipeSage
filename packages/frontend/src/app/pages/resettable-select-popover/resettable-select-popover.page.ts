@@ -6,7 +6,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import { PopoverController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonHeader,
@@ -16,7 +16,7 @@ import {
   IonItem,
   IonCheckbox,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 export interface ResettableSelectOption {
   title: string;

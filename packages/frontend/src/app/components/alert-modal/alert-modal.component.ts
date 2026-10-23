@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonModal } from "@ionic/angular/standalone";
+import { IonModal } from "@ionic/angular";
 
 @Component({
   standalone: true,

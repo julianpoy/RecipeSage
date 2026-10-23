@@ -21,7 +21,7 @@ import {
   IonList,
   IonListHeader,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   SHOPPING_LIST_CATEGORY_I18N,
   SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,

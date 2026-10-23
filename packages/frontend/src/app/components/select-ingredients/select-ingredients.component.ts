@@ -6,7 +6,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import {
@@ -25,7 +25,7 @@ import {
 } from "@recipesage/util/shared";
 import { System } from "@recipesage/unitz-ts";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
+import { IonItem, IonCheckbox } from "@ionic/angular";
 
 @Component({
   standalone: true,

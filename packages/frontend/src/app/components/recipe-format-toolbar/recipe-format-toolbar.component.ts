@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton, IonIcon } from "@ionic/angular/standalone";
+import { IonButton, IonIcon } from "@ionic/angular";
 import { addIcons } from "ionicons";
 import { TextAreaComponent } from "../forms/text-area/text-area.component";
 

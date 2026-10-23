@@ -5,7 +5,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -24,7 +24,7 @@ import {
   IonItem,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   closeOutline,
   logoFacebook,

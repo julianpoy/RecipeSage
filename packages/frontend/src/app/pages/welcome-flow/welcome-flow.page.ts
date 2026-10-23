@@ -9,7 +9,7 @@ import {
   IonRippleEffect,
   IonSpinner,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addIcons } from "ionicons";
 import {
   restaurantOutline,

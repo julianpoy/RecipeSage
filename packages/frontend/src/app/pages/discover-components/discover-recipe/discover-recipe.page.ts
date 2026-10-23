@@ -7,7 +7,7 @@ import {
   ToastController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
@@ -65,7 +65,7 @@ import {
   IonButton,
   IonChip,
   IonAvatar,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   bookOutline,
   bookmarkOutline,

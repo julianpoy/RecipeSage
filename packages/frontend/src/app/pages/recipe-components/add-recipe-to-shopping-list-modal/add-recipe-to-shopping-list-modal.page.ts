@@ -12,7 +12,7 @@ import {
   ToastController,
   ModalController,
   AlertController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -40,7 +40,7 @@ import {
   IonSelectOption,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

@@ -19,7 +19,7 @@ import {
   IonCheckbox,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretDown, caretUp } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

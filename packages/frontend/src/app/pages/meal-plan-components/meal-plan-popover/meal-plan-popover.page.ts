@@ -9,7 +9,7 @@ import {
   ModalController,
   AlertController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -34,7 +34,7 @@ import {
   IonSelectOption,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   cartOutline,
   copyOutline,

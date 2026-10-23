@@ -12,7 +12,7 @@ import {
   ModalController,
   NavController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   parseIngredients,
@@ -58,7 +58,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonChip,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import type { RecipeSummary } from "@recipesage/prisma";
 

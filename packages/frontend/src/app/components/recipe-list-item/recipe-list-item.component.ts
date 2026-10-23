@@ -5,7 +5,7 @@ import {
   Output,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { IonBadge } from "@ionic/angular/standalone";
+import { IonBadge } from "@ionic/angular";
 import type { RecipeSummaryLite } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { RatingComponent } from "../rating/rating.component";

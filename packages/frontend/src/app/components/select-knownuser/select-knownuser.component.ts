@@ -18,7 +18,7 @@ import {
   IonAvatar,
   IonRadio,
   type RadioGroupCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,

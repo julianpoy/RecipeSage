@@ -10,7 +10,7 @@ import {
   NavController,
   AlertController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
 import { LoadingService } from "../../services/loading.service";
@@ -58,7 +58,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   closeOutline,

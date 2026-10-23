@@ -5,7 +5,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 import {
@@ -17,7 +17,7 @@ import {
   IonButton,
   IonIcon,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

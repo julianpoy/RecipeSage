@@ -5,7 +5,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -36,7 +36,7 @@ import {
   IonIcon,
   IonInput,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   heartOutline,
   keyOutline,

@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import { PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   DISCOVER_CATEGORIES,
@@ -29,7 +29,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretDownSharp } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

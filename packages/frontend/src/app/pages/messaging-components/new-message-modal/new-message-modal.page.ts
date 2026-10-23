@@ -8,7 +8,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -28,7 +28,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

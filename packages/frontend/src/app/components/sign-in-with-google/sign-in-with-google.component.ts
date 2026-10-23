@@ -17,7 +17,7 @@ import {
 } from "@recipesage/frontend/src/environments/environment";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton, ToastController } from "@ionic/angular/standalone";
+import { IonButton, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { getElectronAPI, getIsElectron } from "../../utils/electron";
 import { serverConfig } from "../../utils/serverConfig";

@@ -12,7 +12,7 @@ import {
   IonLabel,
   IonSegment,
   IonSegmentButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { serverOutline, warningOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { TranslateService } from "@ngx-translate/core";

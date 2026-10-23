@@ -8,7 +8,7 @@ import {
   NavController,
   AlertController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import {
@@ -63,7 +63,7 @@ import {
   IonToggle,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   brushOutline,
   bugOutline,

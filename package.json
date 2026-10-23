@@ -66,7 +66,7 @@
     "@fanoutio/serve-grip": "^4.2.0",
     "@google-cloud/vision": "^6.2.0",
     "@googleapis/androidpublisher": "^42.2.0",
-    "@ionic/angular": "^8.8.18",
+    "@ionic/angular": "^9.0.9",
     "@mindlib-capacitor/send-intent": "^8.0.6",
     "@ngx-loading-bar/core": "^7.0.1",
     "@ngx-translate/core": "^18.0.0",

@@ -19,7 +19,7 @@ import {
   IonLabel,
   IonAccordion,
   IonAccordionGroup,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   chevronForwardOutline,
   cloudDownloadOutline,

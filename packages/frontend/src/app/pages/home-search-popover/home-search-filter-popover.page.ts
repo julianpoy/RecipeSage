@@ -5,7 +5,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { IonSelect, PopoverController } from "@ionic/angular/standalone";
+import { IonSelect, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { PreferencesService } from "../../services/preferences.service";
@@ -29,7 +29,7 @@ import {
   IonIcon,
   IonToggle,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretDownSharp, funnelOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

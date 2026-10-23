@@ -6,7 +6,7 @@ import {
   NavController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -48,7 +48,7 @@ import {
   IonFooter,
   IonButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   bookmarksOutline,
   compassOutline,

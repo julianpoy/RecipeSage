@@ -28,7 +28,7 @@ import {
   IonRadio,
   IonNote,
   IonToggle,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 const WEEKDAY_LABELS = [
   { weekday: 0, label: "components.recurrenceEditor.weekdayShort.sun" },

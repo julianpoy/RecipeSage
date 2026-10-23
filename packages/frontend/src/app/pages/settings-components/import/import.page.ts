@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import * as Sentry from "@sentry/browser";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
@@ -20,7 +20,7 @@ import {
   IonProgressBar,
   IonButton,
   IonList,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { cloudUploadOutline, fileTrayFullOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import { PopoverController } from "@ionic/angular";
 
 import { UtilService } from "../../../services/util.service";
 import {
@@ -20,7 +20,7 @@ import {
   IonItem,
   IonToggle,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,

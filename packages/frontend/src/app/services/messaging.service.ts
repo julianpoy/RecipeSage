@@ -12,7 +12,7 @@ import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 import { Injectable, NgZone, inject } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { AlertController } from "@ionic/angular/standalone";
+import { AlertController } from "@ionic/angular";
 
 import { ServerActionsService } from "./server-actions.service";
 import { EventName, EventService } from "./event.service";

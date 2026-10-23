@@ -10,7 +10,7 @@ import {
   IonItem,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   MeasurementConverterPreferenceKey,
   VOLUME_UNITS,

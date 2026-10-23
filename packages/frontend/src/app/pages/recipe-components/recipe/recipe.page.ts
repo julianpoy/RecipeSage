@@ -6,7 +6,7 @@ import {
   ToastController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -68,7 +68,7 @@ import {
   IonCol,
   IonAvatar,
   IonChip,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   bookOutline,
   calendarOutline,

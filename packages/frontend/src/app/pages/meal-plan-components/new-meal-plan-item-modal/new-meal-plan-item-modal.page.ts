@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import dayjs from "dayjs";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
@@ -35,7 +35,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

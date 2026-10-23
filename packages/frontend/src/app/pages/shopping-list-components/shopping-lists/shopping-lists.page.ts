@@ -8,7 +8,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { WebsocketService } from "../../../services/websocket.service";
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -36,7 +36,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   banOutline,

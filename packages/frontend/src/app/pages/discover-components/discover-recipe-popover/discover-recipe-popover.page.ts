@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import { PopoverController } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
@@ -19,7 +19,7 @@ import {
   IonToggle,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   createOutline,
   eyeOutline,

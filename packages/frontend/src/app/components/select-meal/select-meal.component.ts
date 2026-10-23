@@ -16,7 +16,7 @@ import {
   getOrderedMeals,
   getMealDisplayNames,
 } from "@recipesage/util/shared";
-import { IonItem, IonSelect, IonSelectOption } from "@ionic/angular/standalone";
+import { IonItem, IonSelect, IonSelectOption } from "@ionic/angular";
 
 const LAST_USED_MEAL_VAR = "lastUsedMeal";
 

@@ -31,7 +31,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretBack, caretForward } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

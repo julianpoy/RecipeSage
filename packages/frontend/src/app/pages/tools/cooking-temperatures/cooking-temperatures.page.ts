@@ -32,7 +32,7 @@ import {
   IonNote,
   IonIcon,
   IonChip,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";

@@ -4,12 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import {
-  PopoverController,
-  IonList,
-  IonButton,
-  IonIcon,
-} from "@ionic/angular/standalone";
+import { PopoverController, IonList, IonButton, IonIcon } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { banOutline, flagOutline } from "ionicons/icons";

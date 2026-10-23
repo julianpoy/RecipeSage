@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import type { MealPlanSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -24,7 +24,7 @@ import {
   IonInput,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

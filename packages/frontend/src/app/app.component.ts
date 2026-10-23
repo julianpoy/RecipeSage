@@ -19,7 +19,7 @@ import {
   ToastController,
   AlertController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import {
   ENABLE_ANALYTICS,
@@ -79,7 +79,7 @@ import {
   IonBadge,
   IonFooter,
   IonRouterOutlet,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   bookOutline,

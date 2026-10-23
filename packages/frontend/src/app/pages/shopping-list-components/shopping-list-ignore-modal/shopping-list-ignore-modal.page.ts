@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
@@ -16,7 +16,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, saveOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

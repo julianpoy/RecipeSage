@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -12,7 +12,7 @@ import type {
   ProfileItemVisibility,
   RecipeSummary,
 } from "@recipesage/prisma";
-import { type RadioGroupCustomEvent } from "@ionic/angular/standalone";
+import { type RadioGroupCustomEvent } from "@ionic/angular";
 import {
   IonHeader,
   IonToolbar,
@@ -27,7 +27,7 @@ import {
   IonRadio,
   IonInput,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   checkmarkOutline,
   closeOutline,

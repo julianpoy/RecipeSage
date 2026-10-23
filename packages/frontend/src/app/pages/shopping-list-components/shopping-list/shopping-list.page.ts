@@ -12,7 +12,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -54,7 +54,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   arrowUndoOutline,

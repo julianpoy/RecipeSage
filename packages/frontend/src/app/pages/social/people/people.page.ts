@@ -4,7 +4,7 @@ import {
   AlertController,
   NavController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -35,7 +35,7 @@ import {
   IonFabButton,
   IonSpinner,
   IonBadge,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   banOutline,

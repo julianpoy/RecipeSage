@@ -8,7 +8,7 @@ import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic, RecipeSummary } from "@recipesage/prisma";
@@ -41,7 +41,7 @@ import {
   IonInput,
   IonFooter,
   type SegmentCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   calendarOutline,
   closeOutline,

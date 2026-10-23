@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -26,7 +26,7 @@ import {
   IonContent,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, printOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

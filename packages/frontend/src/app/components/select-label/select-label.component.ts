@@ -10,12 +10,7 @@ import { LoadingService } from "../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { LabelSummary } from "@recipesage/prisma";
-import {
-  IonItem,
-  IonIcon,
-  IonLabel,
-  IonSearchbar,
-} from "@ionic/angular/standalone";
+import { IonItem, IonIcon, IonLabel, IonSearchbar } from "@ionic/angular";
 import { folderOpenOutline, pricetagOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

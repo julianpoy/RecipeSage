@@ -7,7 +7,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController, PopoverController } from "@ionic/angular/standalone";
+import { NavController, PopoverController } from "@ionic/angular";
 
 import { linkifyStr } from "../../../utils/linkify";
 import type { MessageSummary } from "@recipesage/prisma";
@@ -37,7 +37,7 @@ import {
   IonLabel,
   IonFooter,
   IonTextarea,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { optionsOutline, refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

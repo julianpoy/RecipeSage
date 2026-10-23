@@ -8,7 +8,7 @@ import {
   IonButton,
   IonIcon,
   IonContent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import type { RecipeSummary } from "@recipesage/prisma";
 import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";

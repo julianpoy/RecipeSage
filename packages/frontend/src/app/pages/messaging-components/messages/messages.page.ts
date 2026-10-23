@@ -3,7 +3,7 @@ import {
   NavController,
   ToastController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import type { MessageThreadDTO } from "@recipesage/prisma";
 import { MessagingService } from "../../../services/messaging.service";
@@ -30,7 +30,7 @@ import {
   IonFabButton,
   IonFooter,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addOutline, chatboxOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 

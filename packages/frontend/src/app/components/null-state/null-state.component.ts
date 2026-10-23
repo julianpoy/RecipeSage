@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonGrid, IonRow } from "@ionic/angular/standalone";
+import { IonGrid, IonRow } from "@ionic/angular";
 
 @Component({
   standalone: true,

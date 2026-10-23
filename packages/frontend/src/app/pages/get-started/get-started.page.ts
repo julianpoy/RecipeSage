@@ -6,7 +6,7 @@ import {
   IonMenuButton,
   IonContent,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { AuthType, RouteMap } from "../../services/util.service";
