@@ -13,6 +13,8 @@ import { Capabilities } from "@recipesage/util/shared";
 import { Converter } from "showdown";
 import { generateText, ModelMessage } from "ai";
 import { aiProvider } from "./vercel";
+import { AI_REQUEST_TIMEOUT_MS } from "./AI_REQUEST_TIMEOUT_MS";
+import { createLLMResultRecorder } from "./createLLMResultRecorder";
 import { config } from "../general/config";
 import type { InputJsonValue } from "@prisma/client/runtime/client";
 import { convertPrismaAssistantMessageSummariesToAssistantMessageSummaries } from "../db/convertPrismaAssistantMessageSummaries";
@@ -123,18 +125,25 @@ export class Assistant {
 
     const context = [...(await this.getChatContext(userId)), userMessage];
 
+    const model = useLowQualityModel
+      ? config.ai.model.assistantLow
+      : config.ai.model.assistant;
+    const resultRecorder = createLLMResultRecorder("assistant", model);
+
     const response = await generateText({
       system: this.systemPrompt,
-      model: aiProvider(
-        useLowQualityModel
-          ? config.ai.model.assistantLow
-          : config.ai.model.assistant,
-      ),
+      model: aiProvider(model, { disableReasoning: true }),
       messages: context,
+      timeout: AI_REQUEST_TIMEOUT_MS,
       tools: {
         createRecipe: initCreateAssistantRecipeTool(),
       },
+      onStepEnd: resultRecorder.onStepEnd,
+    }).catch((err: unknown) => {
+      resultRecorder.record("error");
+      throw err;
     });
+    resultRecorder.record("ok");
 
     if (response.totalUsage.totalTokens !== undefined) {
       metrics.llmTokensConsumed.observe(

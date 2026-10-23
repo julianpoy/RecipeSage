@@ -4,6 +4,7 @@ import { metrics } from "../general";
 import { config } from "../general/config";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
+import { AI_REQUEST_TIMEOUT_MS } from "./AI_REQUEST_TIMEOUT_MS";
 import { withLLMRetryOptional } from "./withLLMRetryOptional";
 
 export enum TextToRecipeInputType {
@@ -71,15 +72,18 @@ export const textToRecipe = async (
 
   const llmResponse = await withLLMRetryOptional(
     "text_to_recipe",
-    async (temperature) => {
+    models[inputType],
+    async (temperature, onStepEnd) => {
       const response = await generateText({
         system: systemPrompts[inputType],
-        model: aiProvider(models[inputType]),
+        model: aiProvider(models[inputType], { disableReasoning: true }),
         temperature,
+        timeout: AI_REQUEST_TIMEOUT_MS,
         prompt: prompts[inputType] + text,
         output: Output.object({
           schema: ocrFormatRecipeModelSchema,
         }),
+        onStepEnd,
       });
 
       if (response.totalUsage.totalTokens !== undefined) {
@@ -93,6 +97,7 @@ export const textToRecipe = async (
 
       return response.output;
     },
+    (output) => !output.ingredients?.trim() && !output.instructions?.trim(),
   );
 
   if (!llmResponse) return;

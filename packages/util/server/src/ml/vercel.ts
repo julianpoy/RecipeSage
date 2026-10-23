@@ -2,13 +2,29 @@ import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import type { LanguageModel, Tool } from "ai";
+import {
+  createGateway,
+  wrapLanguageModel,
+  type LanguageModel,
+  type LanguageModelMiddleware,
+  type Tool,
+} from "ai";
 import { config } from "../general/config";
+
+const reasoningMiddleware = (
+  disableReasoning: boolean | undefined,
+): LanguageModelMiddleware => ({
+  transformParams: async ({ params }) => ({
+    ...params,
+    reasoning: disableReasoning ? "none" : params.reasoning,
+  }),
+});
 
 export const aiProvider: (
   modelId: string,
   options?: {
     requireParameters?: boolean;
+    disableReasoning?: boolean;
   },
 ) => LanguageModel = (() => {
   const commonConfig = {
@@ -19,24 +35,44 @@ export const aiProvider: (
     case "openrouter": {
       const provider = createOpenRouter(commonConfig);
       return (modelId, options) =>
-        provider(
-          modelId,
-          options?.requireParameters
-            ? { provider: { require_parameters: true } }
-            : undefined,
-        );
+        provider(modelId, {
+          provider: {
+            require_parameters: options?.requireParameters,
+          },
+          reasoning: options?.disableReasoning ? { effort: "none" } : undefined,
+        });
+    }
+    case "vercel": {
+      const provider = createGateway(commonConfig);
+      return (modelId, options) =>
+        wrapLanguageModel({
+          model: provider(modelId),
+          middleware: reasoningMiddleware(options?.disableReasoning),
+        });
     }
     case "google": {
       const provider = createGoogleGenerativeAI(commonConfig);
-      return (modelId) => provider(modelId);
+      return (modelId, options) =>
+        wrapLanguageModel({
+          model: provider(modelId),
+          middleware: reasoningMiddleware(options?.disableReasoning),
+        });
     }
     case "openai": {
       const provider = createOpenAI(commonConfig);
-      return (modelId) => provider(modelId);
+      return (modelId, options) =>
+        wrapLanguageModel({
+          model: provider(modelId),
+          middleware: reasoningMiddleware(options?.disableReasoning),
+        });
     }
     case "anthropic": {
       const provider = createAnthropic(commonConfig);
-      return (modelId) => provider(modelId);
+      return (modelId, options) =>
+        wrapLanguageModel({
+          model: provider(modelId),
+          middleware: reasoningMiddleware(options?.disableReasoning),
+        });
     }
     default: {
       throw new Error(`Unsupported AI provider: ${config.ai.provider}`);
@@ -47,6 +83,11 @@ export const aiProvider: (
 export const aiProviderNativeTools: { web_search: Tool | undefined } = (() => {
   switch (config.ai.provider) {
     case "openrouter": {
+      return {
+        web_search: undefined,
+      };
+    }
+    case "vercel": {
       return {
         web_search: undefined,
       };
