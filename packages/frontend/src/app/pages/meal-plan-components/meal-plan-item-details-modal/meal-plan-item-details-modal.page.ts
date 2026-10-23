@@ -1,9 +1,14 @@
-import { Input, Component, inject } from "@angular/core";
+import {
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   AlertController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -33,7 +38,7 @@ import {
   IonFooter,
   IonList,
   IonItemGroup,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   calendarOutline,
   cartOutline,
@@ -52,6 +57,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan-item-details-modal",
   templateUrl: "meal-plan-item-details-modal.page.html",
   styleUrls: ["meal-plan-item-details-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

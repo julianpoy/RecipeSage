@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
   IonChip,
@@ -7,7 +13,7 @@ import {
   IonLabel,
   IonSearchbar,
   IonItem,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   banOutline,
@@ -30,6 +36,7 @@ export interface SelectableItem {
   selector: "select-multiple-items",
   templateUrl: "select-multiple-items.component.html",
   styleUrls: ["./select-multiple-items.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonChip,

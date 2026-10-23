@@ -3,10 +3,12 @@ import { withLLMRetry, type LLMRetryCategory } from "./withLLMRetry";
 
 export async function withLLMRetryOptional<T>(
   category: LLMRetryCategory,
-  fn: (temperature: number) => Promise<T>,
+  model: string,
+  fn: Parameters<typeof withLLMRetry<T>>[2],
+  isEmpty?: (result: T) => boolean,
 ): Promise<T | undefined> {
   try {
-    return await withLLMRetry(category, fn);
+    return await withLLMRetry(category, model, fn, isEmpty);
   } catch (err) {
     if (NoOutputGeneratedError.isInstance(err)) return undefined;
     throw err;

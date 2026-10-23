@@ -1,6 +1,11 @@
-import { Input, Component, inject } from "@angular/core";
+import {
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import dayjs from "dayjs";
-import { ModalController } from "@ionic/angular/standalone";
+import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
@@ -32,7 +37,7 @@ import {
   IonList,
   IonItemGroup,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -51,6 +56,7 @@ export interface MealPlanItemDraft {
   selector: "page-new-meal-plan-item-modal",
   templateUrl: "new-meal-plan-item-modal.page.html",
   styleUrls: ["new-meal-plan-item-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMealComponent,

@@ -1,9 +1,14 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic, RecipeSummary } from "@recipesage/prisma";
@@ -38,7 +43,7 @@ import {
   IonItemGroup,
   IonNote,
   type SegmentCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   calendarOutline,
   closeOutline,
@@ -61,6 +66,7 @@ import { serverConfig } from "../../utils/serverConfig";
   selector: "page-share-modal",
   templateUrl: "share-modal.page.html",
   styleUrls: ["share-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectUserKnownUserComponent,

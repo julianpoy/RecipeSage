@@ -1,11 +1,16 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   IonList,
   IonListHeader,
   IonItem,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   MeasurementConverterPreferenceKey,
   VOLUME_UNITS,
@@ -20,6 +25,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   selector: "page-measurement-converter-popover",
   templateUrl: "measurement-converter-popover.page.html",
   styleUrls: ["measurement-converter-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

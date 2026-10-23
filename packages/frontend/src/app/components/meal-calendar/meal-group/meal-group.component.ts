@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   DEFAULT_MEALS,
   DEFAULT_MEAL_I18N,
@@ -13,6 +19,7 @@ import { CalendarItemComponent } from "../calendar-item/calendar-item.component"
   selector: "meal-group",
   templateUrl: "meal-group.component.html",
   styleUrls: ["./meal-group.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, CalendarItemComponent],
 })
 export class MealGroupComponent {

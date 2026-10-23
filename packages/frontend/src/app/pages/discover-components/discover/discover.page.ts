@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController, PopoverController } from "@ionic/angular/standalone";
+import { NavController, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 import {
@@ -41,7 +41,7 @@ import {
   IonSearchbar,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { searchOutline, optionsOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -58,6 +58,7 @@ const TILE_PADD = 20;
   selector: "page-discover",
   templateUrl: "discover.page.html",
   styleUrls: ["discover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,

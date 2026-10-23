@@ -1,5 +1,11 @@
-import { Component, EffectRef, effect, inject } from "@angular/core";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import {
+  Component,
+  EffectRef,
+  effect,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -33,13 +39,14 @@ import {
   IonNote,
   IonInput,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "page-account",
   templateUrl: "account.page.html",
   styleUrls: ["account.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

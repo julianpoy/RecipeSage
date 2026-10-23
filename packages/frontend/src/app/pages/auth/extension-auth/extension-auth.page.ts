@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import {
   IonHeader,
   IonToolbar,
@@ -8,7 +8,7 @@ import {
   IonContent,
   IonList,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import type { SessionDTO } from "@recipesage/prisma";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -47,6 +47,7 @@ function isOfficialRedirectUri(value: string): boolean {
   selector: "page-extension-auth",
   templateUrl: "./extension-auth.page.html",
   styleUrls: ["./extension-auth.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,

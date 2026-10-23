@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
@@ -8,7 +13,7 @@ import {
   IonItem,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 export type DiscoverSortBy = "trending" | "newest" | "topRated" | "mostSaved";
 
@@ -20,6 +25,7 @@ export interface DiscoverPopoverResult {
   standalone: true,
   selector: "page-discover-popover",
   templateUrl: "discover-popover.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

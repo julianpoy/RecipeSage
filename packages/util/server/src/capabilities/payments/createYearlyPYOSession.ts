@@ -1,3 +1,4 @@
+import type Stripe from "stripe";
 import { config } from "../../general";
 import { stripe } from "./stripe";
 
@@ -7,7 +8,7 @@ export async function createYearlyPYOSession(args: {
   successUrl: string;
   cancelUrl: string;
   currency?: string;
-}) {
+}): Promise<Stripe.Response<Stripe.Checkout.Session>> {
   const currency = args.currency || "usd";
   let lookupKey = `pyo-yearly-${args.amount}`;
 

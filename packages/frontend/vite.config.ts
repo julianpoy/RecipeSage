@@ -10,5 +10,8 @@ export default defineConfig({
     include: ["src/**/*.{test,spec}.ts"],
     reporters: ["default"],
     passWithNoTests: true,
+    coverage: {
+      reportsDirectory: "../../coverage/packages/frontend",
+    },
   },
 });

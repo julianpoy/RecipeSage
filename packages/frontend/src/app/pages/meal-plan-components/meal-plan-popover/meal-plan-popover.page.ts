@@ -1,10 +1,15 @@
-import { Component, inject, Input } from "@angular/core";
+import {
+  Component,
+  inject,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   AlertController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -29,7 +34,7 @@ import {
   IonSelectOption,
   IonLabel,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   cartOutline,
   copyOutline,
@@ -48,6 +53,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan-popover",
   templateUrl: "meal-plan-popover.page.html",
   styleUrls: ["meal-plan-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

@@ -10,7 +10,10 @@
     </ion-buttons>
 
     <ion-title>
-      {{ "pages.profile.title" | translate: { name: profile?.name } }}
+      {{
+        "pages.profile.title"
+          | translate: { name: $safeNavigationMigration(profile?.name) }
+      }}
     </ion-title>
 
     @if (isLoggedIn() && profile && !isMyProfile()) {
@@ -54,8 +57,9 @@
           >
             <img
               src="{{
-                profile.profileImages.at(0)?.image?.location
-                  | resolveStorageLocation
+                $safeNavigationMigration(
+                  profile.profileImages.at(0)?.image?.location
+                ) | resolveStorageLocation
               }}"
             />
           </ion-thumbnail>
@@ -107,8 +111,9 @@
                     <ion-avatar slot="start">
                       <img
                         [src]="
-                          item.recipe?.recipeImages?.at(0)?.image?.location
-                            | resolveStorageLocation
+                          $safeNavigationMigration(
+                            item.recipe?.recipeImages?.at(0)?.image?.location
+                          ) | resolveStorageLocation
                         "
                       />
                     </ion-avatar>

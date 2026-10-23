@@ -1,3 +1,4 @@
+import type Stripe from "stripe";
 import { config } from "../../general";
 import { stripe } from "./stripe";
 
@@ -7,7 +8,7 @@ export async function createSinglePYOSession(args: {
   successUrl: string;
   cancelUrl: string;
   currency?: string;
-}) {
+}): Promise<Stripe.Response<Stripe.Checkout.Session>> {
   const lookupKey = `pyo-single-${args.amount}`;
 
   let price = (

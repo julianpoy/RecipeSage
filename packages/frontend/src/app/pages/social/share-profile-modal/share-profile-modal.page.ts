@@ -1,5 +1,11 @@
-import { Component, Input, type OnInit, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  type OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -18,7 +24,7 @@ import {
   IonItem,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   closeOutline,
   logoFacebook,
@@ -34,6 +40,7 @@ import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
   selector: "page-share-profile-modal",
   templateUrl: "share-profile-modal.page.html",
   styleUrls: ["share-profile-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     CopyWithWebshareComponent,

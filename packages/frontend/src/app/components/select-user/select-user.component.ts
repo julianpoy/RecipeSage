@@ -5,6 +5,7 @@ import {
   Input,
   inject,
   type OnInit,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { LoadingService } from "../../services/loading.service";
@@ -19,7 +20,7 @@ import {
   IonSpinner,
   IonIcon,
   type SearchbarCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { folderOpenOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -30,6 +31,7 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   selector: "select-user",
   templateUrl: "select-user.component.html",
   styleUrls: ["./select-user.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonItem,

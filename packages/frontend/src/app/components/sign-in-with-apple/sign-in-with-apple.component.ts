@@ -6,6 +6,7 @@ import {
   type OnInit,
   type OnDestroy,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ServerActionsService } from "../../services/server-actions.service";
 import {
@@ -14,7 +15,7 @@ import {
 } from "@recipesage/frontend/src/environments/environment";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton, IonIcon, ToastController } from "@ionic/angular/standalone";
+import { IonButton, IonIcon, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
 import { logoApple } from "ionicons/icons";
@@ -37,6 +38,7 @@ const PKCE_VERIFIER_STORAGE_KEY = "appleSignInPkceVerifier";
   selector: "sign-in-with-apple",
   templateUrl: "sign-in-with-apple.component.html",
   styleUrls: ["./sign-in-with-apple.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonButton, IonIcon],
 })
 export class SignInWithAppleComponent implements OnInit, OnDestroy {

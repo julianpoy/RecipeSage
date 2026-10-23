@@ -1,10 +1,15 @@
-import { Component, inject, effect } from "@angular/core";
+import {
+  Component,
+  inject,
+  effect,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ToastController,
   AlertController,
   ModalController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { isHandleValid } from "@recipesage/util/shared";
@@ -48,7 +53,7 @@ import {
   IonAvatar,
   IonFooter,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   arrowForwardOutline,
@@ -78,6 +83,7 @@ interface ProfileForm {
   selector: "page-my-profile",
   templateUrl: "my-profile.page.html",
   styleUrls: ["my-profile.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

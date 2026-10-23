@@ -5,6 +5,7 @@ import {
   Input,
   ViewChild,
   forwardRef,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
@@ -15,6 +16,7 @@ let nextId = 0;
   selector: "text-area",
   templateUrl: "text-area.component.html",
   styleUrls: ["text-area.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

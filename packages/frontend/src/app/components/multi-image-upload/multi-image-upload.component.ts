@@ -1,5 +1,12 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { AlertController, ToastController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { AlertController, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -9,7 +16,7 @@ import { LoadingService } from "../../services/loading.service";
 import { CapabilitiesService } from "../../services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import type { ImageSummary } from "@recipesage/prisma";
-import { IonIcon } from "@ionic/angular/standalone";
+import { IonIcon } from "@ionic/angular";
 import {
   chevronBack,
   chevronForward,
@@ -24,6 +31,7 @@ import { addIcons } from "ionicons";
   selector: "multi-image-upload",
   templateUrl: "multi-image-upload.component.html",
   styleUrls: ["./multi-image-upload.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon],
 })
 export class MultiImageUploadComponent {

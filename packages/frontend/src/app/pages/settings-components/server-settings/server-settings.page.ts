@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -12,7 +12,7 @@ import {
   IonLabel,
   IonSegment,
   IonSegmentButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { serverOutline, warningOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { TranslateService } from "@ngx-translate/core";
@@ -55,6 +55,7 @@ interface ServerTarget {
   selector: "page-server-settings",
   templateUrl: "server-settings.page.html",
   styleUrls: ["server-settings.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

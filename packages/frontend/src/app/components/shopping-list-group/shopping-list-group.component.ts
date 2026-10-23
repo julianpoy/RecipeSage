@@ -1,16 +1,17 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import type {
   ShoppingListItemSummary,
   ShoppingListSummary,
 } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ShoppingListItemComponent } from "../shopping-list-item/shopping-list-item.component";
-import {
-  IonItem,
-  IonCheckbox,
-  IonButton,
-  IonIcon,
-} from "@ionic/angular/standalone";
+import { IonItem, IonCheckbox, IonButton, IonIcon } from "@ionic/angular";
 import { chevronDown, chevronForward } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -19,6 +20,7 @@ import { addIcons } from "ionicons";
   selector: "shopping-list-group",
   templateUrl: "shopping-list-group.component.html",
   styleUrls: ["./shopping-list-group.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     ShoppingListItemComponent,

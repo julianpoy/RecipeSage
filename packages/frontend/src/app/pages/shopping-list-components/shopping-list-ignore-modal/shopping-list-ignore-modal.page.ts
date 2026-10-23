@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
@@ -16,7 +16,7 @@ import {
   IonLabel,
   IonNote,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, saveOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -25,6 +25,7 @@ import { addIcons } from "ionicons";
   selector: "page-shopping-list-ignore-modal",
   templateUrl: "shopping-list-ignore-modal.page.html",
   styleUrls: ["shopping-list-ignore-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextAreaComponent,

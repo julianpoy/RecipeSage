@@ -6,11 +6,9 @@ import {
   type OnInit,
   QueryList,
   ViewChildren,
+  ChangeDetectionStrategy,
 } from "@angular/core";
-import {
-  type ItemReorderEventDetail,
-  ModalController,
-} from "@ionic/angular/standalone";
+import { type ItemReorderEventDetail, ModalController } from "@ionic/angular";
 import {
   DEFAULT_MEALS,
   DEFAULT_MEAL_COLORS,
@@ -35,7 +33,7 @@ import {
   IonReorder,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   checkmarkOutline,
   closeOutline,
@@ -54,6 +52,7 @@ interface MealOptionEntry {
   selector: "page-meal-plan-meal-order-modal",
   templateUrl: "meal-plan-meal-order-modal.page.html",
   styleUrls: ["meal-plan-meal-order-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     ColorPickerComponent,

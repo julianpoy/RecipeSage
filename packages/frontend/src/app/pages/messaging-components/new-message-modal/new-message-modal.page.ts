@@ -1,9 +1,14 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -23,7 +28,7 @@ import {
   IonLabel,
   IonNote,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -32,6 +37,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-message-modal",
   templateUrl: "new-message-modal.page.html",
   styleUrls: ["new-message-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextAreaComponent,

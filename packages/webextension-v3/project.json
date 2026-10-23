@@ -31,12 +31,6 @@
         "cwd": "packages/webextension-v3",
         "command": "tsc --project tsconfig.app.json --noEmit"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "maxWarnings": 0
-      }
     }
   }
 }

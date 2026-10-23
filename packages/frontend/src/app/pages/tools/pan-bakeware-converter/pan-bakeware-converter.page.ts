@@ -1,4 +1,10 @@
-import { Component, inject, ViewChild, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  ViewChild,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Capacitor } from "@capacitor/core";
 import { Clipboard } from "@capacitor/clipboard";
@@ -6,7 +12,7 @@ import {
   ModalController,
   NavController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   parseIngredients,
@@ -52,7 +58,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonChip,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import type { RecipeSummary } from "@recipesage/prisma";
 
@@ -262,6 +268,7 @@ const SHAPE_OPTIONS: ShapeOption[] = [
   selector: "page-pan-bakeware-converter",
   templateUrl: "pan-bakeware-converter.page.html",
   styleUrls: ["pan-bakeware-converter.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     FormsModule,

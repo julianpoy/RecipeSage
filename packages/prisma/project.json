@@ -17,12 +17,6 @@
         "cwd": "packages/prisma",
         "command": "tsc --noEmit"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "maxWarnings": 0
-      }
     }
   }
 }

@@ -32,6 +32,20 @@ if (!IS_SELFHOST) {
     dsn: "https://aaf472dea32adeb2a30335c9781361ed@o158500.ingest.us.sentry.io/4510138104741888",
     transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
     tracesSampleRate: SENTRY_SAMPLE_RATE,
+    dataCollection: {
+      userInfo: false,
+      cookies: false,
+      httpHeaders: {
+        request: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+        response: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+      },
+      httpBodies: [],
+      urlQueryParams: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+      genAI: { inputs: false, outputs: false },
+      databaseQueryData: false,
+      queues: false,
+      graphQL: { document: false, variables: false },
+    },
     beforeSend(event, hint) {
       if (checkSuppressedError(hint.originalException)) return null;
       return event;

@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { NavListService, type NavPage } from "../../services/nav-list.service";
 import {
@@ -17,13 +17,14 @@ import {
   IonLabel,
   IonIcon,
   IonBadge,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "page-more",
   templateUrl: "more.page.html",
   styleUrls: ["more.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

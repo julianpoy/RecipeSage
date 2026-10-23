@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   DISCOVER_CATEGORIES,
@@ -24,7 +29,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretDownSharp, chevronExpandOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -45,6 +50,7 @@ export interface DiscoverFilterResult {
   selector: "page-discover-filter-popover",
   templateUrl: "discover-filter-popover.page.html",
   styleUrls: ["discover-filter-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

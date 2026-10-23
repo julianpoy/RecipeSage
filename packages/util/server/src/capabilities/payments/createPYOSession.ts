@@ -1,3 +1,4 @@
+import type Stripe from "stripe";
 import { createMonthlyPYOSession } from "./createMonthlyPYOSession";
 import { createYearlyPYOSession } from "./createYearlyPYOSession";
 import { createSinglePYOSession } from "./createSinglePYOSession";
@@ -9,7 +10,7 @@ export function createPYOSession(args: {
   successUrl: string;
   cancelUrl: string;
   currency?: string;
-}) {
+}): Promise<Stripe.Response<Stripe.Checkout.Session>> {
   if (args.frequency === "monthly") {
     return createMonthlyPYOSession(args);
   } else if (args.frequency === "yearly") {

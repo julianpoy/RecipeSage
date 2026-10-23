@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 import type { MealPlanSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -21,7 +26,7 @@ import {
   IonList,
   IonItemGroup,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -30,6 +35,7 @@ import { addIcons } from "ionicons";
   selector: "page-update-meal-plan-modal",
   templateUrl: "update-meal-plan-modal.page.html",
   styleUrls: ["update-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,

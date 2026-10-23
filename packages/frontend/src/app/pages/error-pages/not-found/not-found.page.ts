@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -13,7 +13,7 @@ import {
   IonContent,
   IonIcon,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { compassOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -22,6 +22,7 @@ import { addIcons } from "ionicons";
   selector: "page-not-found",
   templateUrl: "not-found.page.html",
   styleUrls: ["not-found.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

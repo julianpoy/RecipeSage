@@ -1,9 +1,14 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   ToastController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import type { ShoppingListSummary } from "@recipesage/prisma";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -23,7 +28,7 @@ import {
   IonContent,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -32,6 +37,7 @@ import { addIcons } from "ionicons";
   selector: "page-update-shopping-list-modal",
   templateUrl: "update-shopping-list-modal.page.html",
   styleUrls: ["update-shopping-list-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,

@@ -163,6 +163,12 @@ export const metrics = {
     labelNames: ["category", "reason"],
   }),
 
+  llmResult: new client.Counter({
+    name: "llm_result",
+    help: "The outcome of an LLM call attempt and the upstream provider that served it. Outcome is ok, empty, error, or a retry reason. Some empty results are expected, so compare the empty and failure rates between providers to find one that is returning bad output",
+    labelNames: ["category", "model", "provider", "outcome"],
+  }),
+
   llmTokensConsumed: new client.Histogram({
     name: "llm_tokens_consumed",
     help: "Every time a request hits the app",

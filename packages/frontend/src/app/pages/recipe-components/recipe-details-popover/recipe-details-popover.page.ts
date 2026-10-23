@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { WakeLockService } from "../../../services/wakelock.service";
@@ -17,7 +22,7 @@ import {
   IonIcon,
   IonToggle,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   calendarOutline,
   cloudDownloadOutline,
@@ -56,6 +61,7 @@ export type RecipeDetailsPopoverActionTypes =
   selector: "page-recipe-details-popover",
   templateUrl: "recipe-details-popover.page.html",
   styleUrls: ["recipe-details-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

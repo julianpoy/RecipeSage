@@ -5,18 +5,19 @@ import {
   Output,
   type AfterViewInit,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../services/loading.service";
 import { MessagingService } from "../../services/messaging.service";
-import { ToastController, ModalController } from "@ionic/angular/standalone";
+import { ToastController, ModalController } from "@ionic/angular";
 import { UtilService } from "../../services/util.service";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../select-user/select-user.component";
-import { IonIcon } from "@ionic/angular/standalone";
+import { IonIcon } from "@ionic/angular";
 import { trashOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -25,6 +26,7 @@ import { addIcons } from "ionicons";
   selector: "select-collaborators",
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, SelectUserComponent, IonIcon],
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {

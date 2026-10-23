@@ -5,7 +5,7 @@ import {
   SupportedFontSize,
   SupportedLanguages,
 } from "@recipesage/util/shared";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import dayjs from "dayjs";
 import { serverConfig, PUBLIC_WEB_ORIGIN } from "../utils/serverConfig";
 import { getIsElectron } from "../utils/electron";

@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   IonHeader,
@@ -16,7 +22,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import fractionjs from "fraction.js";
 import { System } from "@recipesage/unitz-ts";
 import {
@@ -47,6 +53,7 @@ interface AnchorOption extends AnchorMeasurement {
   selector: "scale-recipe",
   templateUrl: "scale-recipe.component.html",
   styleUrls: ["scale-recipe.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

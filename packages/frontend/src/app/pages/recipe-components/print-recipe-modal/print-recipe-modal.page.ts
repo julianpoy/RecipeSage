@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
@@ -21,7 +26,7 @@ import {
   IonContent,
   IonFooter,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, printOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -37,6 +42,7 @@ export interface PrintOption {
   selector: "page-print-recipe-modal",
   templateUrl: "print-recipe-modal.page.html",
   styleUrls: ["print-recipe-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RecipePreviewComponent,

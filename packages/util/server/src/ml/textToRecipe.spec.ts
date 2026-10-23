@@ -14,6 +14,7 @@ vi.mock("ai", async (importOriginal) => {
 });
 
 import { TextToRecipeInputType, textToRecipe } from "./textToRecipe";
+import { metrics } from "../general/metrics";
 
 const SAMPLE_TEXT = "A long enough block of recipe text";
 
@@ -53,6 +54,32 @@ describe("textToRecipe", () => {
 
     expect(result?.recipe.title).toBe("Pancakes");
     expect(generateTextMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("records an empty result when the recipe has no ingredients and no instructions", async () => {
+    const resultSpy = vi.spyOn(metrics.llmResult, "inc");
+
+    generateTextMock.mockResolvedValueOnce({
+      output: { title: "Pancakes", ingredients: "  ", instructions: null },
+      totalUsage: { totalTokens: 10 },
+    });
+    await textToRecipe(SAMPLE_TEXT, TextToRecipeInputType.Text);
+
+    expect(resultSpy).toHaveBeenLastCalledWith(
+      expect.objectContaining({ category: "text_to_recipe", outcome: "empty" }),
+    );
+
+    generateTextMock.mockResolvedValueOnce({
+      output: { title: "Pancakes", ingredients: "2 eggs", instructions: null },
+      totalUsage: { totalTokens: 10 },
+    });
+    await textToRecipe(SAMPLE_TEXT, TextToRecipeInputType.Text);
+
+    expect(resultSpy).toHaveBeenLastCalledWith(
+      expect.objectContaining({ category: "text_to_recipe", outcome: "ok" }),
+    );
+
+    resultSpy.mockRestore();
   });
 
   it("propagates non-retryable errors", async () => {

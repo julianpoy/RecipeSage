@@ -2,6 +2,7 @@ import { ocrFormatRecipeModelSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
+import { AI_REQUEST_TIMEOUT_MS } from "./AI_REQUEST_TIMEOUT_MS";
 import { config } from "../general/config";
 import { metrics } from "../general/metrics";
 import { withLLMRetryOptional } from "./withLLMRetryOptional";
@@ -27,12 +28,14 @@ export const visionToRecipe = async (
 ) => {
   const llmResponse = await withLLMRetryOptional(
     "vision_to_recipe",
-    async (temperature) => {
+    config.ai.model.vision,
+    async (temperature, onStepEnd) => {
       const response = await generateText({
         system:
           "You are a data processor utility. Do not summarize or add information, just format and process into the correct shape. Do not insert your own editorial voice, just clean the text and get it into the correct shape. Leave fields that are not present blank. A header can be denoted in the ingredients, instructions, or notes by prefixing the line with a # sign.",
-        model: aiProvider(config.ai.model.vision),
+        model: aiProvider(config.ai.model.vision, { disableReasoning: true }),
         temperature,
+        timeout: AI_REQUEST_TIMEOUT_MS,
         messages: [
           {
             role: "user",
@@ -54,6 +57,7 @@ export const visionToRecipe = async (
         output: Output.object({
           schema: ocrFormatRecipeModelSchema,
         }),
+        onStepEnd,
       });
 
       if (response.totalUsage.totalTokens !== undefined) {
@@ -67,6 +71,7 @@ export const visionToRecipe = async (
 
       return response.output;
     },
+    (output) => !output.ingredients?.trim() && !output.instructions?.trim(),
   );
 
   if (!llmResponse) return;

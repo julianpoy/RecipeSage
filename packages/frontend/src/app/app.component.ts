@@ -1,4 +1,10 @@
-import { Component, inject, NgZone, ViewChild } from "@angular/core";
+import {
+  Component,
+  inject,
+  NgZone,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
@@ -13,7 +19,7 @@ import {
   ToastController,
   AlertController,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import {
   ENABLE_ANALYTICS,
@@ -72,7 +78,7 @@ import {
   IonBadge,
   IonFooter,
   IonRouterOutlet,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   bookOutline,
@@ -95,6 +101,7 @@ import { addIcons } from "ionicons";
   standalone: true,
   selector: "app-root",
   templateUrl: "app.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     CookingToolbarComponent,

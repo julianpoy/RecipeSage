@@ -1,4 +1,10 @@
-import { Component, computed, effect, inject } from "@angular/core";
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -6,7 +12,7 @@ import {
   ModalController,
   PopoverController,
   AlertController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -50,7 +56,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   arrowUndoOutline,
@@ -69,6 +75,7 @@ const categoryTitlesToi18n = SHOPPING_LIST_CATEGORY_I18N;
   selector: "page-shopping-list",
   templateUrl: "shopping-list.page.html",
   styleUrls: ["shopping-list.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     ShoppingListItemComponent,

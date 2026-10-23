@@ -1,8 +1,8 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
@@ -18,13 +18,14 @@ import {
   IonList,
   IonItemGroup,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "page-import-urls",
   templateUrl: "import-urls.page.html",
   styleUrls: ["import-urls.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextAreaComponent,

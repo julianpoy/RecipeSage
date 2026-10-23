@@ -1,8 +1,10 @@
-import { Input, Component, inject } from "@angular/core";
 import {
-  ModalController,
-  type CheckboxCustomEvent,
-} from "@ionic/angular/standalone";
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController, type CheckboxCustomEvent } from "@ionic/angular";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -20,7 +22,7 @@ import {
   IonItemGroup,
   IonCheckbox,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, pinOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -29,6 +31,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan-bulk-pin-modal",
   templateUrl: "meal-plan-bulk-pin-modal.page.html",
   styleUrls: ["meal-plan-bulk-pin-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

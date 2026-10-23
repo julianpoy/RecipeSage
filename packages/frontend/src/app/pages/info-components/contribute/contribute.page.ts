@@ -1,6 +1,11 @@
-import { Component, computed, inject } from "@angular/core";
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Router } from "@angular/router";
-import { AlertController, NavController } from "@ionic/angular/standalone";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
 
@@ -35,7 +40,7 @@ import {
   IonIcon,
   IonBadge,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { arrowForwardOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -50,6 +55,7 @@ const GOOGLE_MANAGE_URL = "https://play.google.com/store/account/subscriptions";
   selector: "page-contribute",
   templateUrl: "contribute.page.html",
   styleUrls: ["contribute.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TosClickwrapAgreementComponent,

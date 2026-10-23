@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import type { NutritionFilter, NutritionRange } from "@recipesage/prisma";
 import {
@@ -15,7 +20,7 @@ import {
   IonFooter,
   IonButton,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 type MacroKey =
   | "calories"
@@ -61,6 +66,7 @@ interface MacroRowState {
   selector: "nutrition-filter-popover",
   templateUrl: "nutrition-filter-popover.component.html",
   styleUrls: ["./nutrition-filter-popover.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

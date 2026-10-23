@@ -5,6 +5,7 @@ import {
   EventEmitter,
   inject,
   ViewChild,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { UtilService } from "../../services/util.service";
@@ -20,7 +21,7 @@ import {
   IonList,
   IonListHeader,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   SHOPPING_LIST_CATEGORY_I18N,
   SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
@@ -43,6 +44,7 @@ import { TextInputComponent } from "../forms/text-input/text-input.component";
   selector: "shopping-list-item",
   templateUrl: "shopping-list-item.component.html",
   styleUrls: ["./shopping-list-item.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     AlertModalComponent,

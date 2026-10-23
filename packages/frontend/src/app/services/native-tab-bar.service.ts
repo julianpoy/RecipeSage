@@ -1,6 +1,6 @@
 import { Injectable, NgZone, inject, signal } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import {
   NativeNavigation,
   type NativeNavigationTabbarOptions,

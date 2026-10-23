@@ -1,6 +1,11 @@
 import { MealPlanService } from "../../../services/meal-plan.service";
-import { Component, Input, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 import {
@@ -12,7 +17,7 @@ import {
   IonButton,
   IonIcon,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -21,6 +26,7 @@ import { addIcons } from "ionicons";
   selector: "page-ical-meal-plan-modal",
   templateUrl: "ical-meal-plan-modal.page.html",
   styleUrls: ["ical-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     CopyWithWebshareComponent,

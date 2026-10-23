@@ -1,9 +1,14 @@
-import { Component, OnDestroy, inject } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   AlertController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import {
@@ -60,7 +65,7 @@ import {
   IonToggle,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   brushOutline,
   bugOutline,
@@ -90,6 +95,7 @@ import { addIcons } from "ionicons";
   selector: "page-settings",
   templateUrl: "settings.page.html",
   styleUrls: ["settings.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

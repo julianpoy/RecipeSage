@@ -8,6 +8,7 @@ import {
   type AfterViewInit,
   type OnDestroy,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ServerActionsService } from "../../services/server-actions.service";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@recipesage/frontend/src/environments/environment";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton, ToastController } from "@ionic/angular/standalone";
+import { IonButton, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { getElectronAPI, getIsElectron } from "../../utils/electron";
 import { serverConfig } from "../../utils/serverConfig";
@@ -36,6 +37,7 @@ const PKCE_VERIFIER_STORAGE_KEY = "googleSignInPkceVerifier";
   selector: "sign-in-with-google",
   templateUrl: "sign-in-with-google.component.html",
   styleUrls: ["./sign-in-with-google.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonButton],
 })
 export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {

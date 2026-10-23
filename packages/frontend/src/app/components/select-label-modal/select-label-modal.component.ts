@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   ModalController,
   IonHeader,
@@ -8,7 +8,7 @@ import {
   IonButton,
   IonIcon,
   IonContent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import type { LabelSummary } from "@recipesage/prisma";
 import { closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -20,6 +20,7 @@ import { SelectLabelComponent } from "../select-label/select-label.component";
   standalone: true,
   selector: "select-label-modal",
   templateUrl: "select-label-modal.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

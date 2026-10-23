@@ -1,9 +1,14 @@
-import { AfterViewInit, Component, Input } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import { Clipboard } from "@capacitor/clipboard";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonButton, IonIcon } from "@ionic/angular/standalone";
+import { IonButton, IonIcon } from "@ionic/angular";
 import { copyOutline, shareOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -12,6 +17,7 @@ import { addIcons } from "ionicons";
   selector: "copy-with-webshare",
   templateUrl: "copy-with-webshare.component.html",
   styleUrls: ["./copy-with-webshare.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonButton, IonIcon],
 })
 export class CopyWithWebshareComponent implements AfterViewInit {

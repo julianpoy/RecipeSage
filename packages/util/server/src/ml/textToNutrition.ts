@@ -2,6 +2,7 @@ import { z } from "zod";
 import { metrics } from "../general";
 import { generateText, Output } from "ai";
 import { aiProvider } from "./vercel";
+import { AI_REQUEST_TIMEOUT_MS } from "./AI_REQUEST_TIMEOUT_MS";
 import { config } from "../general/config";
 import { withLLMRetryOptional } from "./withLLMRetryOptional";
 import { aiStructuredModel } from "./aiStructuredModel";
@@ -74,20 +75,24 @@ export const textToNutrition = async (
 
   const llmResponse = await withLLMRetryOptional(
     "text_to_nutrition",
-    async (temperature) => {
+    config.ai.model.nutrition,
+    async (temperature, onStepEnd) => {
       const response = await generateText({
         system:
           "You are a nutrition data extraction utility. Extract nutrition information from the provided text. Only extract values that are explicitly stated in the text. If a value is not present, return null for that field. Do not estimate or calculate values that are not provided. All values should be per serving.",
         model: aiProvider(config.ai.model.nutrition, {
           requireParameters: true,
+          disableReasoning: true,
         }),
         temperature,
+        timeout: AI_REQUEST_TIMEOUT_MS,
         prompt:
           "Extract the nutrition information from this text. Only include values that are explicitly mentioned. Return null for any values not found in the text.\n\n" +
           text,
         output: Output.object({
           schema: nutritionModelSchema,
         }),
+        onStepEnd,
       });
 
       if (response.totalUsage.totalTokens !== undefined) {

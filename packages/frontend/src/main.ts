@@ -19,7 +19,7 @@ import {
   IonicRouteStrategy,
   isPlatform,
   provideIonicAngular,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { RouteReuseStrategy } from "@angular/router";
 import {
   iosTransitionAnimation,

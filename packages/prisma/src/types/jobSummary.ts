@@ -106,9 +106,7 @@ export type CookbookJobSummary = JobSummaryBase & {
 };
 
 export type JobSummary =
-  | ImportJobSummary
-  | ExportJobSummary
-  | CookbookJobSummary;
+  ImportJobSummary | ExportJobSummary | CookbookJobSummary;
 
 export const prismaJobSummaryToJobSummary = (
   _jobSummary: Prisma.JobGetPayload<typeof jobSummary>,

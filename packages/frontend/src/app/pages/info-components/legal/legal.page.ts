@@ -4,6 +4,7 @@ import {
   ElementRef,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
@@ -18,13 +19,14 @@ import {
   IonBackButton,
   IonTitle,
   IonContent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "page-legal",
   templateUrl: "legal.page.html",
   styleUrls: ["legal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

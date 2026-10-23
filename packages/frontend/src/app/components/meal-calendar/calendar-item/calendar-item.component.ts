@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
@@ -7,6 +7,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   selector: "calendar-item",
   templateUrl: "calendar-item.component.html",
   styleUrls: ["./calendar-item.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS],
 })
 export class CalendarItemComponent {

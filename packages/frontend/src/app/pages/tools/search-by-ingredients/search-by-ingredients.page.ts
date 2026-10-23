@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { NavController } from "@ionic/angular/standalone";
+import { NavController } from "@ionic/angular";
 import {
   IonHeader,
   IonToolbar,
@@ -13,7 +13,7 @@ import {
   IonToggle,
   IonSpinner,
   IonButton,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addIcons } from "ionicons";
 import {
   basketOutline,
@@ -45,6 +45,7 @@ type IngredientSearchResult =
   selector: "page-search-by-ingredients",
   templateUrl: "search-by-ingredients.page.html",
   styleUrls: ["search-by-ingredients.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     FormsModule,

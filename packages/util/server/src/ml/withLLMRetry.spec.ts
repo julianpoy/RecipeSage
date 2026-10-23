@@ -37,7 +37,7 @@ const makeNoObjectError = () =>
 describe("withLLMRetry", () => {
   it("returns the result on first success without retrying", async () => {
     const fn = vi.fn().mockResolvedValue("ok");
-    const result = await withLLMRetry("text_to_recipe", fn);
+    const result = await withLLMRetry("text_to_recipe", "fake-model", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -48,7 +48,7 @@ describe("withLLMRetry", () => {
       .mockRejectedValueOnce(makeNoObjectError())
       .mockRejectedValueOnce(makeNoObjectError())
       .mockResolvedValue("ok");
-    const result = await withLLMRetry("text_to_recipe", fn);
+    const result = await withLLMRetry("text_to_recipe", "fake-model", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(3);
   });
@@ -60,14 +60,18 @@ describe("withLLMRetry", () => {
       .mockRejectedValueOnce(makeNoObjectError())
       .mockRejectedValueOnce(makeNoObjectError())
       .mockRejectedValueOnce(finalError);
-    await expect(withLLMRetry("text_to_recipe", fn)).rejects.toBe(finalError);
+    await expect(withLLMRetry("text_to_recipe", "fake-model", fn)).rejects.toBe(
+      finalError,
+    );
     expect(fn).toHaveBeenCalledTimes(3);
   });
 
   it("rethrows an unrecognized error immediately without retrying", async () => {
     const other = new Error("nope");
     const fn = vi.fn().mockRejectedValue(other);
-    await expect(withLLMRetry("text_to_recipe", fn)).rejects.toBe(other);
+    await expect(withLLMRetry("text_to_recipe", "fake-model", fn)).rejects.toBe(
+      other,
+    );
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
@@ -78,7 +82,7 @@ describe("withLLMRetry", () => {
         new JSONParseError({ text: "not json", cause: new Error("bad") }),
       )
       .mockResolvedValue("ok");
-    const result = await withLLMRetry("text_to_recipe", fn);
+    const result = await withLLMRetry("text_to_recipe", "fake-model", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(2);
   });
@@ -90,7 +94,7 @@ describe("withLLMRetry", () => {
         TypeValidationError.wrap({ value: {}, cause: new Error("bad shape") }),
       )
       .mockResolvedValue("ok");
-    const result = await withLLMRetry("text_to_recipe", fn);
+    const result = await withLLMRetry("text_to_recipe", "fake-model", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(2);
   });
@@ -100,7 +104,7 @@ describe("withLLMRetry", () => {
       .fn()
       .mockRejectedValueOnce(new NoOutputGeneratedError())
       .mockResolvedValue("ok");
-    const result = await withLLMRetry("text_to_recipe", fn);
+    const result = await withLLMRetry("text_to_recipe", "fake-model", fn);
     expect(result).toBe("ok");
     expect(fn).toHaveBeenCalledTimes(2);
   });
@@ -110,7 +114,9 @@ describe("withLLMRetry", () => {
     const exhaustedSpy = vi.spyOn(metrics.llmRetryExhausted, "inc");
 
     const fn = vi.fn().mockRejectedValue(new NoOutputGeneratedError());
-    await expect(withLLMRetry("text_to_nutrition", fn)).rejects.toBeDefined();
+    await expect(
+      withLLMRetry("text_to_nutrition", "fake-model", fn),
+    ).rejects.toBeDefined();
 
     expect(fn).toHaveBeenCalledTimes(3);
     expect(attemptSpy).toHaveBeenCalledWith({
@@ -134,7 +140,9 @@ describe("withLLMRetry", () => {
       statusCode: 429,
     });
     const fn = vi.fn().mockRejectedValue(apiError);
-    await expect(withLLMRetry("text_to_recipe", fn)).rejects.toBe(apiError);
+    await expect(withLLMRetry("text_to_recipe", "fake-model", fn)).rejects.toBe(
+      apiError,
+    );
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
@@ -146,7 +154,7 @@ describe("withLLMRetry", () => {
       .fn()
       .mockRejectedValueOnce(makeNoObjectError())
       .mockResolvedValue("ok");
-    await withLLMRetry("text_to_recipe", recovering);
+    await withLLMRetry("text_to_recipe", "fake-model", recovering);
 
     expect(attemptSpy).toHaveBeenCalledTimes(1);
     expect(attemptSpy).toHaveBeenCalledWith({
@@ -159,7 +167,7 @@ describe("withLLMRetry", () => {
 
     const failing = vi.fn().mockRejectedValue(makeNoObjectError());
     await expect(
-      withLLMRetry("vision_to_recipe", failing),
+      withLLMRetry("vision_to_recipe", "fake-model", failing),
     ).rejects.toBeDefined();
 
     expect(attemptSpy).toHaveBeenCalledTimes(2);
@@ -178,7 +186,9 @@ describe("withLLMRetry", () => {
     const exhaustedSpy = vi.spyOn(metrics.llmRetryExhausted, "inc");
 
     const fn = vi.fn().mockRejectedValue(new Error("socket hang up"));
-    await expect(withLLMRetry("text_to_recipe", fn)).rejects.toBeDefined();
+    await expect(
+      withLLMRetry("text_to_recipe", "fake-model", fn),
+    ).rejects.toBeDefined();
 
     expect(attemptSpy).not.toHaveBeenCalled();
     expect(exhaustedSpy).not.toHaveBeenCalled();
@@ -193,10 +203,10 @@ describe("withLLMRetry", () => {
       .mockRejectedValueOnce(makeNoObjectError())
       .mockRejectedValueOnce(makeNoObjectError())
       .mockResolvedValue("ok");
-    await withLLMRetry("text_to_recipe", fn);
-    expect(fn).toHaveBeenNthCalledWith(1, 0);
-    expect(fn).toHaveBeenNthCalledWith(2, 0.3);
-    expect(fn).toHaveBeenNthCalledWith(3, 0.6);
+    await withLLMRetry("text_to_recipe", "fake-model", fn);
+    expect(fn).toHaveBeenNthCalledWith(1, 0, expect.any(Function));
+    expect(fn).toHaveBeenNthCalledWith(2, 0.3, expect.any(Function));
+    expect(fn).toHaveBeenNthCalledWith(3, 0.6, expect.any(Function));
   });
 
   it("waits ~400ms between attempts", async () => {
@@ -205,9 +215,75 @@ describe("withLLMRetry", () => {
       .mockRejectedValueOnce(makeNoObjectError())
       .mockResolvedValue("ok");
     const start = Date.now();
-    await withLLMRetry("text_to_recipe", fn);
+    await withLLMRetry("text_to_recipe", "fake-model", fn);
     const elapsed = Date.now() - start;
     expect(elapsed).toBeGreaterThanOrEqual(380);
     expect(elapsed).toBeLessThan(800);
+  });
+
+  it("records each attempt outcome with the provider that served it", async () => {
+    const resultSpy = vi.spyOn(metrics.llmResult, "inc");
+
+    let attempt = 0;
+    await withLLMRetry("text_to_recipe", "fake-model", async (_, onStepEnd) => {
+      attempt++;
+      if (attempt === 1) {
+        onStepEnd({ providerMetadata: { openrouter: { provider: "Relace" } } });
+        throw makeNoObjectError();
+      }
+      onStepEnd({
+        providerMetadata: { openrouter: { provider: "Fireworks" } },
+      });
+      return "ok";
+    });
+
+    expect(resultSpy).toHaveBeenNthCalledWith(1, {
+      category: "text_to_recipe",
+      model: "fake-model",
+      provider: "relace",
+      outcome: "no_object",
+    });
+    expect(resultSpy).toHaveBeenNthCalledWith(2, {
+      category: "text_to_recipe",
+      model: "fake-model",
+      provider: "fireworks",
+      outcome: "ok",
+    });
+
+    resultSpy.mockRestore();
+  });
+
+  it("records an empty outcome when isEmpty matches the result", async () => {
+    const resultSpy = vi.spyOn(metrics.llmResult, "inc");
+
+    await withLLMRetry(
+      "text_to_recipe",
+      "fake-model",
+      async () => "",
+      (result) => !result,
+    );
+
+    expect(resultSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ provider: "unknown", outcome: "empty" }),
+    );
+
+    resultSpy.mockRestore();
+  });
+
+  it("records an error outcome for errors that are not retried", async () => {
+    const resultSpy = vi.spyOn(metrics.llmResult, "inc");
+
+    await expect(
+      withLLMRetry("text_to_recipe", "fake-model", async () => {
+        throw new Error("socket hang up");
+      }),
+    ).rejects.toBeDefined();
+
+    expect(resultSpy).toHaveBeenCalledTimes(1);
+    expect(resultSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ provider: "unknown", outcome: "error" }),
+    );
+
+    resultSpy.mockRestore();
   });
 });
