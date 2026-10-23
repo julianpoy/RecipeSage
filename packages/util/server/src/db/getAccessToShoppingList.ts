@@ -15,8 +15,7 @@ type AccessResultType =
     }
   | {
       level:
-        | ShoppingListAccessLevel.Owner
-        | ShoppingListAccessLevel.Collaborator;
+        ShoppingListAccessLevel.Owner | ShoppingListAccessLevel.Collaborator;
       ownerId: string;
       collaboratorIds: string[];
       subscriberIds: string[];

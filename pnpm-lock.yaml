@@ -616,7 +616,7 @@ importers:
         specifier: 24.0.0
         version: 24.0.0(@swc-node/register@1.12.1(@swc/core@1.16.18(@swc/helpers@0.5.23))(@swc/types@0.1.28)(typescript@6.0.3))(@swc/core@1.16.18(@swc/helpers@0.5.23))
       prettier:
-        specifier: ^3.8.4
+        specifier: ^3.9.10
         version: 3.9.10
       supertest:
         specifier: 7.2.2

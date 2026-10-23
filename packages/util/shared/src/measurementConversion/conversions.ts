@@ -23,12 +23,7 @@ export type VolumeUnit =
   | "imperialFluidOunce";
 
 export type WeightUnit =
-  | "gram"
-  | "kilogram"
-  | "ounce"
-  | "pound"
-  | "milligram"
-  | "stone";
+  "gram" | "kilogram" | "ounce" | "pound" | "milligram" | "stone";
 
 export const VOLUME_UNITS_COMMON: VolumeUnit[] = [
   "cup",

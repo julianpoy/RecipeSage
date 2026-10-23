@@ -14,5 +14,4 @@ export interface DiscoverModerationJobQueueItem {
 }
 
 export type JobQueueItem =
-  | StandardJobQueueItem
-  | DiscoverModerationJobQueueItem;
+  StandardJobQueueItem | DiscoverModerationJobQueueItem;
