@@ -88,7 +88,7 @@ services:
     volumes:
       - ./packages:/app/packages
       - ./.credentials:/app/.credentials
-    command: node_modules/nx/bin/nx.js serve backend
+    command: node_modules/nx/dist/bin/nx.js serve backend
     environment:
       <<: *common-env
     env_file:
@@ -104,7 +104,7 @@ services:
     volumes:
       - ./packages:/app/packages
       - ./.credentials:/app/.credentials
-    command: node_modules/nx/bin/nx.js serve queue-worker
+    command: node_modules/nx/dist/bin/nx.js serve queue-worker
     environment:
       <<: *common-env
       NODE_OPTIONS: --max-old-space-size=2000
