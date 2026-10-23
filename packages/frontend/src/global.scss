@@ -14,95 +14,93 @@
 
 @import "print.scss";
 
-@supports (overflow-anchor: auto) {
-  @include meta.load-css(
-    "@rdlabo/ionic-theme-ios27/src/styles/default-variables.scss"
-  );
-  @include meta.load-css(
-    "@rdlabo/ionic-theme-ios27/src/styles/ionic-theme-ios27.scss"
-  );
-  @include meta.load-css(
-    "@rdlabo/ionic-theme-ios27/src/styles/ionic-theme-ios27-dark-class.scss"
-  );
-  @include meta.load-css(
-    "@rdlabo/ionic-theme-ios27/src/styles/md-remove-ios-class-effect.scss"
-  );
+@include meta.load-css(
+  "@rdlabo/ionic-theme-ios27/src/styles/default-variables.scss"
+);
+@include meta.load-css(
+  "@rdlabo/ionic-theme-ios27/src/styles/ionic-theme-ios27.scss"
+);
+@include meta.load-css(
+  "@rdlabo/ionic-theme-ios27/src/styles/ionic-theme-ios27-dark-class.scss"
+);
+@include meta.load-css(
+  "@rdlabo/ionic-theme-ios27/src/styles/md-remove-ios-class-effect.scss"
+);
 
-  .ion-page > ion-header.ios ion-toolbar.ion-color-nav {
-    --ion-color-nav: var(--ion-background-color);
-    --ion-color-nav-rgb: var(--ion-background-color-rgb);
-    --ion-color-nav-contrast: var(--ion-text-color);
-    --ion-color-nav-contrast-rgb: var(--ion-text-color-rgb);
-    --ion-color-nav-shade: var(--ion-background-shade-color);
-    --ion-color-nav-tint: var(--ion-background-tint-color);
+.ion-page > ion-header.ios ion-toolbar.ion-color-nav {
+  --ion-color-nav: var(--ion-background-color);
+  --ion-color-nav-rgb: var(--ion-background-color-rgb);
+  --ion-color-nav-contrast: var(--ion-text-color);
+  --ion-color-nav-contrast-rgb: var(--ion-text-color-rgb);
+  --ion-color-nav-shade: var(--ion-background-shade-color);
+  --ion-color-nav-tint: var(--ion-background-tint-color);
+}
+
+ion-menu.ios {
+  --ios-theme-menu-background-rgb: var(--ion-background-color-rgb);
+}
+
+ion-searchbar.ios .searchbar-clear-button .searchbar-clear-icon {
+  vertical-align: top;
+}
+
+ion-popover.ios {
+  ion-content {
+    --background: transparent;
   }
 
-  ion-menu.ios {
-    --ios-theme-menu-background-rgb: var(--ion-background-color-rgb);
+  ion-list {
+    padding-block: 6px 12px;
+    background: transparent;
   }
 
-  ion-searchbar.ios .searchbar-clear-button .searchbar-clear-icon {
-    vertical-align: top;
+  ion-list-header {
+    min-height: 24px;
+    padding-top: 6px;
+    padding-inline-start: 20px;
   }
 
-  ion-popover.ios {
-    ion-content {
-      --background: transparent;
-    }
-
-    ion-list {
-      padding-block: 6px 12px;
-      background: transparent;
-    }
-
-    ion-list-header {
-      min-height: 24px;
-      padding-top: 6px;
-      padding-inline-start: 20px;
-    }
-
-    ion-item {
-      --background: transparent;
-      --padding-start: 20px;
-      --inner-padding-end: 12px;
-    }
-
-    ion-list > ion-item:last-child,
-    ion-list > :last-child > ion-item:last-child {
-      --border-width: 0;
-      --inner-border-width: 0;
-    }
+  ion-item {
+    --background: transparent;
+    --padding-start: 20px;
+    --inner-padding-end: 12px;
   }
 
-  ion-fab.ios ion-fab-button.ion-color {
-    --box-shadow:
-      inset 0 1px 2px
-        rgba(
-          var(
-            --ios-theme-glass-border-color-rgb,
-            var(--ios26-glass-border-color-rgb)
-          ),
-          0.25
+  ion-list > ion-item:last-child,
+  ion-list > :last-child > ion-item:last-child {
+    --border-width: 0;
+    --inner-border-width: 0;
+  }
+}
+
+ion-fab.ios ion-fab-button.ion-color {
+  --box-shadow:
+    inset 0 1px 2px
+      rgba(
+        var(
+          --ios-theme-glass-border-color-rgb,
+          var(--ios26-glass-border-color-rgb)
         ),
-      inset 0 -1px 2px
-        rgba(
-          var(
-            --ios-theme-glass-border-color-rgb,
-            var(--ios26-glass-border-color-rgb)
-          ),
-          0.3
+        0.25
+      ),
+    inset 0 -1px 2px
+      rgba(
+        var(
+          --ios-theme-glass-border-color-rgb,
+          var(--ios26-glass-border-color-rgb)
         ),
-      0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.22),
-      0 0.5px 1px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08);
+        0.3
+      ),
+    0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.22),
+    0 0.5px 1px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08);
 
-    &::part(native) {
-      border-color: transparent;
-    }
+  &::part(native) {
+    border-color: transparent;
   }
+}
 
-  ion-alert.ios .alert-tappable.ion-focused {
-    background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08);
-  }
+ion-alert.ios .alert-tappable.ion-focused {
+  background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08);
 }
 
 ion-popover ion-list-header {

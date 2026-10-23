@@ -15,11 +15,7 @@ import {
   TitleStrategy,
   withPreloading,
 } from "@angular/router";
-import {
-  IonicRouteStrategy,
-  isPlatform,
-  provideIonicAngular,
-} from "@ionic/angular";
+import { IonicRouteStrategy, provideIonicAngular } from "@ionic/angular";
 import { RouteReuseStrategy } from "@angular/router";
 import {
   iosTransitionAnimation,
@@ -29,6 +25,7 @@ import {
 import { mdTransitionAnimation } from "@rdlabo/ionic-theme-md3";
 
 import { AppComponent } from "./app/app.component";
+import { USE_IOS_MODE } from "./app/utils/useIOSMode";
 import { appRoutes } from "./app/app.routes";
 
 import { provideTranslate } from "./app/providers/translate.provider";
@@ -47,8 +44,7 @@ if (environment.production) {
 }
 
 const getThemeAnimations = () => {
-  if (!isPlatform("ios")) return { navAnimation: mdTransitionAnimation };
-  if (!CSS.supports("overflow-anchor: auto")) return {};
+  if (!USE_IOS_MODE) return { navAnimation: mdTransitionAnimation };
 
   return {
     navAnimation: iosTransitionAnimation,
@@ -62,7 +58,11 @@ bootstrapApplication(AppComponent, {
     provideZoneChangeDetection(),
     provideRouter(appRoutes, withPreloading(PreloadAllModules)),
     { provide: TitleStrategy, useClass: CustomTitleStrategy },
-    provideIonicAngular({ ...getThemeAnimations(), backButtonText: "" }),
+    provideIonicAngular({
+      mode: USE_IOS_MODE ? "ios" : "md",
+      ...getThemeAnimations(),
+      backButtonText: "",
+    }),
     provideTranslate(),
     provideLoadingBar(),
     {
