@@ -26,6 +26,6 @@
     "@electron-forge/plugin-auto-unpack-natives": "^8.0.1",
     "@electron-forge/plugin-vite": "^8.0.1",
     "@reforged/maker-appimage": "^6.0.0",
-    "electron": "^44.4.3"
+    "electron": "^45.0.0"
   }
 }
