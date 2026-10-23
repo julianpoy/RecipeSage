@@ -1,6 +1,6 @@
-import he from "he";
+import { decode } from "he";
 import { sanitizeRemoveHtmlFromString } from "./sanitizeRemoveHtmlFromString";
 
 export const sanitizeRemoveHtmlToPlainText = (input: string): string => {
-  return he.decode(sanitizeRemoveHtmlFromString(input));
+  return decode(sanitizeRemoveHtmlFromString(input));
 };
