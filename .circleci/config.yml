@@ -24,7 +24,7 @@ jobs:
   build_and_test:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -109,7 +109,7 @@ jobs:
   push_backend:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - setup_remote_docker:
@@ -127,7 +127,7 @@ jobs:
   push_backend_selfhost_amd64:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - setup_remote_docker:
@@ -179,7 +179,7 @@ jobs:
   push_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - aws-cli/setup
@@ -228,7 +228,7 @@ jobs:
   push_www:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - aws-cli/setup
@@ -259,7 +259,7 @@ jobs:
   build_frontend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - install-dependencies
@@ -282,7 +282,7 @@ jobs:
   push_frontend_selfhost_amd64:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - attach_workspace:
@@ -338,7 +338,7 @@ jobs:
   build_desktop_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - install-dependencies
@@ -360,7 +360,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "24.13"
+          node-version: "24.22"
       - run:
           name: enable-corepack
           command: sudo corepack enable
@@ -443,7 +443,7 @@ jobs:
   desktop_linux:
     resource_class: medium+
     docker:
-      - image: cimg/node:24.13
+      - image: cimg/node:24.22
     steps:
       - checkout
       - install-dependencies
@@ -485,8 +485,8 @@ jobs:
       - run:
           name: install-node
           command: |
-            nvm install 24.13
-            nvm use 24.13
+            nvm install 24.22
+            nvm use 24.22
       - run:
           name: enable-corepack
           command: corepack enable
@@ -557,7 +557,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "24.13"
+          node-version: "24.22"
       - run:
           name: enable-corepack
           command: sudo corepack enable

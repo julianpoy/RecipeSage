@@ -9,7 +9,7 @@
   "private": true,
   "packageManager": "pnpm@10.33.1",
   "engines": {
-    "node": "24.13.x"
+    "node": "24.22.x"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
