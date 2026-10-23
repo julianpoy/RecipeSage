@@ -87,7 +87,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/backend"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/backend"
       }
     }
   }

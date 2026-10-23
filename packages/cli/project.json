@@ -80,7 +80,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/cli"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/cli"
       }
     }
   }

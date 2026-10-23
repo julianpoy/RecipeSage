@@ -55,7 +55,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/trpc"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/trpc"
       }
     }
   }

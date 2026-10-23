@@ -53,7 +53,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../../coverage/packages/util/shared"
+        "reportsDirectory": "{projectRoot}/../../../coverage/packages/util/shared"
       }
     }
   }

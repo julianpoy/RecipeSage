@@ -77,7 +77,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/frontend"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/frontend"
       }
     }
   }
