@@ -23,6 +23,7 @@
   @if (!selectedUser) {
     <div>
       <ion-searchbar
+        clearIcon="close-outline"
         (ionInput)="onSearchInputChange($event)"
         [value]="searchText"
         placeholder="{{ 'components.selectUser.placeholder' | translate }}"

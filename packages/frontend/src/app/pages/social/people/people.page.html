@@ -1,63 +1,71 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
     <ion-title> {{ "pages.people.title" | translate }} </ion-title>
+
+    @if (isNativeIOS) {
+      <ion-buttons slot="end">
+        <ion-button (click)="findProfile()">
+          <ion-icon name="search-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
     @if (isSelfHost) {
       <selfhost-warning-item></selfhost-warning-item>
     }
 
-    <br />
-
-    <ion-list>
-      <ion-item button (click)="goToMessages()">
-        <ion-avatar slot="start" class="icon-avatar">
-          <ion-icon name="chatbubbles-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label>{{ "pages.app.nav.messages" | translate }}</ion-label>
-      </ion-item>
-      <ion-item button (click)="goToInbox()">
-        <ion-avatar slot="start" class="icon-avatar">
-          <ion-icon name="mail-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label>{{ "pages.app.nav.inbox" | translate }}</ion-label>
-        @if (inboxCount) {
-          <ion-badge slot="end">{{ inboxCount }}</ion-badge>
-        }
-      </ion-item>
-      @if (showBlockedUsersItem) {
-        <ion-item button (click)="goToBlockedUsers()">
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item button (click)="goToMessages()">
           <ion-avatar slot="start" class="icon-avatar">
-            <ion-icon name="ban-outline"></ion-icon>
+            <ion-icon name="chatbubbles-outline"></ion-icon>
           </ion-avatar>
-          <ion-label>{{ "pages.people.blockedUsers" | translate }}</ion-label>
+          <ion-label>{{ "pages.app.nav.messages" | translate }}</ion-label>
         </ion-item>
-      }
-      @if (me()?.enableProfile) {
-        <ion-item button (click)="editProfile()">
-          <ion-avatar slot="start">
-            @if (!me()?.profileImages?.length) {
-              <img src="assets/avatar.svg" />
-            }
-            @if (me()?.profileImages?.length) {
-              <img
-                [src]="
-                  me()?.profileImages?.at(0)?.image?.location
-                    | resolveStorageLocation
-                "
-              />
-            }
+        <ion-item button (click)="goToInbox()">
+          <ion-avatar slot="start" class="icon-avatar">
+            <ion-icon name="mail-outline"></ion-icon>
           </ion-avatar>
-          <ion-label> {{ "pages.people.edit" | translate }} </ion-label>
+          <ion-label>{{ "pages.app.nav.inbox" | translate }}</ion-label>
+          @if (inboxCount) {
+            <ion-badge slot="end">{{ inboxCount }}</ion-badge>
+          }
         </ion-item>
-      }
+        @if (showBlockedUsersItem) {
+          <ion-item button (click)="goToBlockedUsers()">
+            <ion-avatar slot="start" class="icon-avatar">
+              <ion-icon name="ban-outline"></ion-icon>
+            </ion-avatar>
+            <ion-label>{{ "pages.people.blockedUsers" | translate }}</ion-label>
+          </ion-item>
+        }
+        @if (me()?.enableProfile) {
+          <ion-item button (click)="editProfile()">
+            <ion-avatar slot="start">
+              @if (!me()?.profileImages?.length) {
+                <img src="assets/avatar.svg" />
+              }
+              @if (me()?.profileImages?.length) {
+                <img
+                  [src]="
+                    me()?.profileImages?.at(0)?.image?.location
+                      | resolveStorageLocation
+                  "
+                />
+              }
+            </ion-avatar>
+            <ion-label> {{ "pages.people.edit" | translate }} </ion-label>
+          </ion-item>
+        }
+      </ion-item-group>
     </ion-list>
 
     <br />
@@ -220,9 +228,11 @@
       </ion-list>
     }
   </div>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="findProfile()" color="primary">
-      <ion-icon name="search-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  @if (!isNativeIOS) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="findProfile()" color="primary">
+        <ion-icon name="search-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
 </ion-content>

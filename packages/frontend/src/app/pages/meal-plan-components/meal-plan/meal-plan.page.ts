@@ -42,6 +42,7 @@ import { ServerActionsService } from "../../../services/server-actions.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import {
   IonHeader,
   IonToolbar,
@@ -111,6 +112,8 @@ export class MealPlanPage {
   private toastCtrl = inject(ToastController);
   private titleService = inject(Title);
   private utilService = inject(UtilService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
 

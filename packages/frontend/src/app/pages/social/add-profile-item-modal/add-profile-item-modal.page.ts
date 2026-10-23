@@ -5,6 +5,7 @@ import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectLabelComponent } from "../../../components/select-label/select-label.component";
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import type {
   LabelSummary,
   ProfileItemSummary,
@@ -21,20 +22,19 @@ import {
   IonButton,
   IonIcon,
   IonContent,
+  IonList,
+  IonItemGroup,
   IonItem,
   IonLabel,
   IonRadioGroup,
   IonRadio,
-  IonInput,
   IonFooter,
 } from "@ionic/angular/standalone";
 import {
   checkmarkOutline,
   closeOutline,
-  documentTextOutline,
   eyeOutline,
   folderOpenOutline,
-  pricetagOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -47,6 +47,7 @@ import { addIcons } from "ionicons";
     ...SHARED_UI_IMPORTS,
     SelectLabelComponent,
     SelectRecipeComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -54,11 +55,12 @@ import { addIcons } from "ionicons";
     IonButton,
     IonIcon,
     IonContent,
+    IonList,
+    IonItemGroup,
     IonItem,
     IonLabel,
     IonRadioGroup,
     IonRadio,
-    IonInput,
     IonFooter,
   ],
 })
@@ -67,10 +69,8 @@ export class AddProfileItemModalPage {
     addIcons({
       checkmarkOutline,
       closeOutline,
-      documentTextOutline,
       eyeOutline,
       folderOpenOutline,
-      pricetagOutline,
     });
   }
 

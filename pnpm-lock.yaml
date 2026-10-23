@@ -89,9 +89,15 @@ importers:
       '@capawesome/capacitor-file-picker':
         specifier: ^8.0.4
         version: 8.0.4(@capacitor/core@8.5.0)
+      '@capgo/capacitor-native-navigation':
+        specifier: ^8.13.2
+        version: 8.13.2(@capacitor/core@8.5.0)
       '@capgo/native-purchases':
         specifier: ^8.7.0
         version: 8.7.0(@capacitor/core@8.5.0)
+      '@erkamyaman/capacitor-foldable':
+        specifier: ^8.4.1
+        version: 8.4.1(@capacitor/core@8.5.0)
       '@fanoutio/grip':
         specifier: ^4.4.0
         version: 4.4.0
@@ -134,6 +140,12 @@ importers:
       '@prisma/instrumentation':
         specifier: ^7.10.1
         version: 7.10.1(@opentelemetry/api@1.9.1)
+      '@rdlabo/ionic-theme-ios27':
+        specifier: 2.0.2
+        version: 2.0.2(@capacitor/core@8.5.0)(@ionic/core@8.8.18)
+      '@rdlabo/ionic-theme-md3':
+        specifier: ^9.1.3
+        version: 9.1.3(@ionic/core@8.8.18)
       '@recipesage/unitz-ts':
         specifier: ^1.0.2
         version: 1.0.2
@@ -2153,6 +2165,12 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
+  '@capgo/capacitor-native-navigation@8.13.2':
+    resolution: {integrity: sha512-IjUdmSEdM/aNkIak4HUq5nNg8AFK8f060d3+y0F5DbuZ2/zAAfaKMGr806jznJ2OC5y+yfJlq6yi5JXAjJlH3w==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
   '@capgo/native-purchases@8.7.0':
     resolution: {integrity: sha512-sfnV5rZZOeUx/a/IVFX98HdEQX8f7/h9/oLyeo23QuTRnltVb6PxJhvmBOqIl02R7Pp5BaafNIEStvcacxLgnA==}
     peerDependencies:
@@ -2412,6 +2430,11 @@ packages:
 
   '@emnapi/wasi-threads@2.0.1':
     resolution: {integrity: sha512-9DsSk+o5NBX0CCJT8s0EROGSGxjR/tKu6aBTaVyq+SjAEQH4XcdcRxPBRzsBLizTTJ49MJjF+jgu3qnO9GLQcQ==}
+
+  '@erkamyaman/capacitor-foldable@8.4.1':
+    resolution: {integrity: sha512-mFJCVeqDFx9V0L/zlGA+eVSVqqb4tcpf9etDlw6bNRk8NwWtg5KmH9gj+2lJ737nU4wfhpzM263wVMfFc91nag==}
+    peerDependencies:
+      '@capacitor/core': ^8.0.0
 
   '@esbuild/aix-ppc64@0.27.3':
     resolution: {integrity: sha512-9fJMTNFTWZMh5qwrBItuziu834eOCUcEqymSH7pY+zoMVEZg3gcPuBNxH1EvfVYe9h0x/Ptw8KBzv7qxb7l8dg==}
@@ -5039,6 +5062,46 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
+        optional: true
+
+  '@rdlabo/capacitor-native-ui@2.0.2':
+    resolution: {integrity: sha512-m67fdWXtyqZTw5+nADyR/Qz3CE8N060HmnXNE+jl4nr8+Bqy+hjQco+07z+gv/pn2+f+Q2mNk8OA3UHjMZP3Sw==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0 <9'
+      '@ionic/core': '>=8.8.1 <10'
+    peerDependenciesMeta:
+      '@capacitor/core':
+        optional: true
+      '@ionic/core':
+        optional: true
+
+  '@rdlabo/ionic-theme-ios27@2.0.2':
+    resolution: {integrity: sha512-qky9eHZ8WXwHB0SqfEK6V0cfow5BpBUjJpYa7BMsOvauBlMQ6d7tejwYJ76maMFXEms02OrHYtIlgiAkR1D3EQ==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0 <9'
+      '@ionic/core': '>=8.8.1 <10'
+    peerDependenciesMeta:
+      '@capacitor/core':
+        optional: true
+
+  '@rdlabo/ionic-theme-md3@9.1.3':
+    resolution: {integrity: sha512-DJheNiKS3Yg/I11tNaMN3JqkrhDBRbVa5yKpCX5jomKUz+gZoUSa2vj/GbDQNDs9sgvVjMuDP+zCu0nTh2OcGw==}
+    peerDependencies:
+      '@ionic/core': '>=8.8.0 <10'
+
+  '@rdlabo/ionic-theme-utils@0.1.2':
+    resolution: {integrity: sha512-Z62SkE0IbSuKgGxj50hHBjS+6WZvcGGjiAr1ZAODumZxh5wFerMYDdfdWcn6vEeqjcu0M2lW/xW3NP3NyIzaaw==}
+    hasBin: true
+    peerDependencies:
+      '@ionic/core': '>=8.8.1 <10'
+
+  '@rdlabo/ionic-theme-utils@0.1.5':
+    resolution: {integrity: sha512-LTf+GQ3S786xF1R6ITs9PtfDfSZxPcWJqzIzk046X9dvwgS+9+cCmdA5ENXYbo2Xbdv4KnxS/LKvm4fPL9THGQ==}
+    hasBin: true
+    peerDependencies:
+      '@ionic/core': '>=8.8.1 <10'
+    peerDependenciesMeta:
+      '@ionic/core':
         optional: true
 
   '@recipesage/unitz-ts@1.0.2':
@@ -9669,6 +9732,9 @@ packages:
 
   ionicons@8.0.13:
     resolution: {integrity: sha512-2QQVyG2P4wszne79jemMjWYLp0DBbDhr4/yFroPCxvPP1wtMxgdIV3l5n+XZ5E9mgoXU79w7yTWpm2XzJsISxQ==}
+
+  ionicons@8.1.0:
+    resolution: {integrity: sha512-XSM2gYWTXxSYTwjmKWAoy4yR7AbAFDjpc5ZIivAiGXskM0fe5CdMPfs6InQRUcrYtVb2WZ/0HQ1/jeh3JW78SA==}
 
   ioredis@5.10.1:
     resolution: {integrity: sha512-HuEDBTI70aYdx1v6U97SbNx9F1+svQKBDo30o0b9fw055LMepzpOOd0Ccg9Q6tbqmBSJaMuY0fB7yw9/vjBYCA==}
@@ -17076,6 +17142,10 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.5.0
 
+  '@capgo/capacitor-native-navigation@8.13.2(@capacitor/core@8.5.0)':
+    dependencies:
+      '@capacitor/core': 8.5.0
+
   '@capgo/native-purchases@8.7.0(@capacitor/core@8.5.0)':
     dependencies:
       '@capacitor/core': 8.5.0
@@ -17637,6 +17707,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.5.0)':
+    dependencies:
+      '@capacitor/core': 8.5.0
 
   '@esbuild/aix-ppc64@0.27.3':
     optional: true
@@ -20263,6 +20337,36 @@ snapshots:
       react: 19.2.5
     optionalDependencies:
       '@types/react': 19.3.0
+
+  '@rdlabo/capacitor-native-ui@2.0.2(@capacitor/core@8.5.0)(@ionic/core@8.8.18)':
+    dependencies:
+      '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@8.8.18)
+    optionalDependencies:
+      '@capacitor/core': 8.5.0
+      '@ionic/core': 8.8.18
+
+  '@rdlabo/ionic-theme-ios27@2.0.2(@capacitor/core@8.5.0)(@ionic/core@8.8.18)':
+    dependencies:
+      '@ionic/core': 8.8.18
+      '@rdlabo/capacitor-native-ui': 2.0.2(@capacitor/core@8.5.0)(@ionic/core@8.8.18)
+      '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@8.8.18)
+      '@stencil/core': 4.43.5
+      ionicons: 8.1.0
+    optionalDependencies:
+      '@capacitor/core': 8.5.0
+
+  '@rdlabo/ionic-theme-md3@9.1.3(@ionic/core@8.8.18)':
+    dependencies:
+      '@ionic/core': 8.8.18
+      '@rdlabo/ionic-theme-utils': 0.1.2(@ionic/core@8.8.18)
+
+  '@rdlabo/ionic-theme-utils@0.1.2(@ionic/core@8.8.18)':
+    dependencies:
+      '@ionic/core': 8.8.18
+
+  '@rdlabo/ionic-theme-utils@0.1.5(@ionic/core@8.8.18)':
+    optionalDependencies:
+      '@ionic/core': 8.8.18
 
   '@recipesage/unitz-ts@1.0.2': {}
 
@@ -25651,6 +25755,10 @@ snapshots:
   ionicons@8.0.13:
     dependencies:
       '@stencil/core': 4.43.4
+
+  ionicons@8.1.0:
+    dependencies:
+      '@stencil/core': 4.43.5
 
   ioredis@5.10.1:
     dependencies:

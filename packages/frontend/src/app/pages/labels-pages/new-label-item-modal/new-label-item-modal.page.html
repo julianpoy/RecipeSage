@@ -30,30 +30,33 @@
 </ion-header>
 
 @if (!type) {
-  <ion-content class="ion-padding">
-    <ion-item button (click)="type = 'label'">
-      <ion-icon name="pricetag-outline" slot="start"></ion-icon>
-      <ion-label>
-        {{ "pages.newLabelItemModal.label" | translate }}
-        <p class="ion-text-wrap">
-          {{ "pages.newLabelItemModal.labelDescription" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-item button (click)="type = 'group'">
-      <ion-icon name="pricetags-outline" slot="start"></ion-icon>
-      <ion-label>
-        {{ "pages.newLabelItemModal.group" | translate }}
-        <p class="ion-text-wrap">
-          {{ "pages.newLabelItemModal.groupDescription" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
+  <ion-content class="ion-padding grouped-content">
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item button (click)="type = 'label'">
+          <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.newLabelItemModal.label" | translate }}
+            <p class="ion-text-wrap">
+              {{ "pages.newLabelItemModal.labelDescription" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item button (click)="type = 'group'">
+          <ion-icon name="pricetags-outline" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.newLabelItemModal.group" | translate }}
+            <p class="ion-text-wrap">
+              {{ "pages.newLabelItemModal.groupDescription" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   </ion-content>
 }
 @if (type === "label") {
-  <ion-content class="ion-padding">
-    <br />
+  <ion-content class="ion-padding grouped-content">
     <text-input
       label="{{ 'pages.newLabelItemModal.labelTitleInput' | translate }}"
       placeholder="{{
@@ -67,8 +70,7 @@
   </ion-content>
 }
 @if (type === "group") {
-  <ion-content class="ion-padding">
-    <br />
+  <ion-content class="ion-padding grouped-content">
     <text-input
       label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
       placeholder="{{
@@ -79,29 +81,27 @@
       }}"
       [(ngModel)]="title"
     ></text-input>
-    <br />
-    <br />
-    <ion-item lines="none">
-      <ion-toggle
-        [checked]="warnWhenNotPresent"
-        (ionChange)="warnToggle($event)"
-      >
-        {{ "pages.manageLabelGroupModal.warn" | translate }}
-        <ion-label>
-          <p class="ion-text-wrap">
-            {{ "pages.manageLabelGroupModal.warnDescription" | translate }}
-          </p>
-        </ion-label>
-      </ion-toggle>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>
-        {{ "pages.manageLabelGroupModal.labels" | translate }}
-        <p class="ion-text-wrap">
-          {{ "pages.manageLabelGroupModal.labelsHint" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item>
+          <ion-toggle
+            [checked]="warnWhenNotPresent"
+            (ionChange)="warnToggle($event)"
+          >
+            {{ "pages.manageLabelGroupModal.warn" | translate }}
+            <ion-label>
+              <p class="ion-text-wrap">
+                {{ "pages.manageLabelGroupModal.warnDescription" | translate }}
+              </p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+    <h6>{{ "pages.manageLabelGroupModal.labels" | translate }}</h6>
+    <ion-note>
+      {{ "pages.manageLabelGroupModal.labelsHint" | translate }}
+    </ion-note>
     <select-multiple-items
       [items]="mapLabelsToSelectableItems(ungroupedLabels)"
       (selectedItemsChange)="selectedLabelsChange($event)"

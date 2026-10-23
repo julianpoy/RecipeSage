@@ -95,66 +95,63 @@
     {{ "pages.shoppingListPopover.actions.title" | translate }}
   </ion-list-header>
 
-  <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
+  <ion-item (click)="print()" button [detail]="false">
     <ion-icon name="print-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingListPopover.print" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.shoppingListPopover.print" | translate }}
+    </ion-label>
+  </ion-item>
 
-  <ion-button
-    (click)="showIgnoreModal()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+  <ion-item (click)="showIgnoreModal()" button [detail]="false">
     <ion-icon name="ban-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingLists.editIgnore" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.shoppingLists.editIgnore" | translate }}
+    </ion-label>
+  </ion-item>
 
-  <ion-button
+  <ion-item
     [disabled]="!isOwner"
     (click)="updateList()"
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="pencil-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingListPopover.update" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.shoppingListPopover.update" | translate }}
+    </ion-label>
+  </ion-item>
 
-  <ion-button
+  <ion-item
     [disabled]="!isOwner"
     (click)="showCategoryOrderModal()"
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingListPopover.categoryOrder" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.shoppingListPopover.categoryOrder" | translate }}
+    </ion-label>
+  </ion-item>
 
   <ion-list-header>
     {{ "pages.shoppingListPopover.dangerZone.title" | translate }}
   </ion-list-header>
 
-  <ion-button
-    (click)="removeAllItems()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="remove-circle-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingListPopover.removeAll" | translate }}
-  </ion-button>
+  <ion-item (click)="removeAllItems()" button [detail]="false">
+    <ion-icon
+      color="danger"
+      name="remove-circle-outline"
+      slot="start"
+    ></ion-icon>
+    <ion-label color="danger">
+      {{ "pages.shoppingListPopover.removeAll" | translate }}
+    </ion-label>
+  </ion-item>
 
-  <ion-button
-    (click)="deleteList()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
-    {{ "pages.shoppingListPopover.delete" | translate }}
-  </ion-button>
+  <ion-item (click)="deleteList()" button [detail]="false">
+    <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+    <ion-label color="danger">
+      {{ "pages.shoppingListPopover.delete" | translate }}
+    </ion-label>
+  </ion-item>
 </ion-list>

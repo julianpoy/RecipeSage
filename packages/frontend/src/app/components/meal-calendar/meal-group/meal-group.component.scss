@@ -1,9 +1,11 @@
 .group {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .meal-title {
-  font-weight: bold;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ion-color-medium);
 }
 
 calendar-item {
@@ -11,15 +13,14 @@ calendar-item {
   margin-top: 6px;
   margin-bottom: 6px;
 
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-
-  background-color: var(--ion-background-tint-color);
-  border-radius: 4px;
-  padding: 8px;
+  background-color: var(--rs-subtle-surface-color);
+  border-radius: 12px;
+  padding: 10px 12px;
   border-inline-start: 4px solid var(--ion-text-color);
+  cursor: pointer;
 
   &:hover {
-    background-color: var(--ion-background-tint-active-color);
+    background-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.09);
   }
 
   &.dragging {

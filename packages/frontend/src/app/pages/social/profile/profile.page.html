@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       @if (!isLoggedIn()) {
@@ -183,7 +183,7 @@
 </ion-content>
 
 @if (profile && !isMyProfile()) {
-  <ion-footer>
+  <ion-footer class="ion-no-border">
     @if (isLoggedIn()) {
       <ion-toolbar class="ion-padding-horizontal">
         <div class="page-wrapper">

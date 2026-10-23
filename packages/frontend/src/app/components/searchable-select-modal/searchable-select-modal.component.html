@@ -12,8 +12,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <ion-searchbar
+    clearIcon="close-outline"
     [(ngModel)]="searchText"
     [placeholder]="
       searchPlaceholder ||

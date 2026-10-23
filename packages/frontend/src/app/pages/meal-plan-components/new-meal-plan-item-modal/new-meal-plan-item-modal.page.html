@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding grouped-content">
   <div>
     <ion-segment [(ngModel)]="inputType" value="recipe">
       <ion-segment-button value="recipe">
@@ -35,24 +35,20 @@
     @switch (inputType) {
       @case ("manualEntry") {
         <div>
-          <ion-item>
-            <ion-input
-              label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
-              labelPlacement="stacked"
-              [(ngModel)]="title"
-              type="text"
-              autocapitalize="on"
-              autocomplete="on"
-              autocorrect="on"
-              spellcheck="true"
-              [maxlength]="titleMaxLength"
-            ></ion-input>
-          </ion-item>
+          <br />
+          <text-input
+            label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
+            [(ngModel)]="title"
+            type="text"
+            autocapitalize="on"
+            autocorrect="on"
+            [maxlength]="titleMaxLength"
+          ></text-input>
         </div>
       }
       @case ("recipe") {
         <div>
-          <br /><br />
+          <br />
           <select-recipe
             [(selectedRecipe)]="recipe"
             [includeAllFriends]="includeAllFriends"
@@ -62,47 +58,44 @@
     }
   </div>
 
-  <br /><br />
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item>
+        <ion-label>
+          {{ "pages.newMealPlanItemModal.date" | translate }}
+        </ion-label>
+        <input
+          class="rs-date"
+          type="date"
+          autofill="true"
+          [value]="scheduledDate"
+          (change)="scheduledDateChange($event)"
+        />
+      </ion-item>
 
-  <ion-item>
-    <ion-label> {{ "pages.newMealPlanItemModal.date" | translate }} </ion-label>
-    <input
-      class="rs-date"
-      type="date"
-      autofill="true"
-      [value]="scheduledDate"
-      (change)="scheduledDateChange($event)"
-    />
-  </ion-item>
+      @if (!isEditing) {
+        <recurrence-editor
+          [baseDate]="scheduledDate"
+          (ruleChange)="recurrenceChange($event)"
+          (ruleValidChange)="recurrenceValidChange($event)"
+        ></recurrence-editor>
+      }
 
-  @if (!isEditing) {
-    <recurrence-editor
-      [baseDate]="scheduledDate"
-      (ruleChange)="recurrenceChange($event)"
-      (ruleValidChange)="recurrenceValidChange($event)"
-    ></recurrence-editor>
-  }
+      <select-meal
+        [meal]="meal || ''"
+        [customMealOptions]="customMealOptions"
+        (mealChange)="meal = $event"
+      ></select-meal>
+    </ion-item-group>
+  </ion-list>
 
-  <br /><br />
-
-  <select-meal
-    [meal]="meal || ''"
-    [customMealOptions]="customMealOptions"
-    (mealChange)="meal = $event"
-  ></select-meal>
-
-  <br /><br />
-
-  <ion-item>
-    <ion-textarea
-      label="{{ 'pages.newMealPlanItemModal.notes' | translate }}"
-      labelPlacement="stacked"
-      [(ngModel)]="notes"
-      autoGrow="true"
-      rows="3"
-      [maxlength]="notesMaxLength"
-    ></ion-textarea>
-  </ion-item>
+  <text-area
+    label="{{ 'pages.newMealPlanItemModal.notes' | translate }}"
+    [(ngModel)]="notes"
+    [autoGrow]="true"
+    [rows]="3"
+    [maxlength]="notesMaxLength"
+  ></text-area>
 </ion-content>
 
 <ion-footer class="ion-padding">

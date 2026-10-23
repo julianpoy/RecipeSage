@@ -2,9 +2,10 @@
   position: absolute;
   bottom: 0;
   inset-inline: 0;
-  height: 60px;
+  box-sizing: border-box;
+  height: calc(60px + var(--ion-safe-area-bottom, 0px));
 
-  padding: 0 10px;
+  padding: 0 10px var(--ion-safe-area-bottom, 0px);
 
   display: flex;
   align-items: center;

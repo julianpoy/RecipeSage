@@ -11,19 +11,14 @@
 </ion-header>
 
 @if (loaded) {
-  <ion-content class="ion-padding">
-    <ion-item>
-      <ion-input
-        label="{{ 'pages.updateShoppingList.listTitle' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="listTitle"
-        type="text"
-        autocapitalize="on"
-        autocomplete="on"
-        autocorrect="on"
-        spellcheck="true"
-      ></ion-input>
-    </ion-item>
+  <ion-content class="ion-padding grouped-content">
+    <text-input
+      label="{{ 'pages.updateShoppingList.listTitle' | translate }}"
+      [(ngModel)]="listTitle"
+      type="text"
+      autocapitalize="on"
+      autocorrect="on"
+    ></text-input>
     <br /><br />
     <select-collaborators
       [selectedCollaboratorIds]="selectedCollaboratorIds"

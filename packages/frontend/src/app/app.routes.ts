@@ -354,6 +354,13 @@ export const appRoutes: Routes = [
     title: "pages.tools.tabTitle",
   },
   {
+    path: RouteMap.MorePage.path,
+    loadComponent: () =>
+      import("./pages/more/more.page").then((m) => m.MorePage),
+    canDeactivate: [UnsavedChangesGuardService],
+    title: "pages.more.tabTitle",
+  },
+  {
     path: RouteMap.CookbookGeneratorPage.path,
     loadComponent: () =>
       import("./pages/tools/cookbook-generator/cookbook-generator.page").then(

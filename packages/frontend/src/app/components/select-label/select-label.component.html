@@ -16,6 +16,7 @@
   @if (!selectedLabel) {
     <div>
       <ion-searchbar
+        clearIcon="close-outline"
         (ionInput)="onSearchInputChange($event)"
         placeholder="{{ 'components.selectLabel.search' | translate }}"
         autocomplete="off"

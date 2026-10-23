@@ -25,7 +25,7 @@ import {
   IonSelectOption,
   IonToggle,
 } from "@ionic/angular/standalone";
-import { caretDownSharp } from "ionicons/icons";
+import { caretDownSharp, chevronExpandOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 export type DiscoverPhotoFilter = "optional" | "required" | "none";
@@ -71,7 +71,7 @@ export class DiscoverFilterPopoverPage {
   @Input() photo: DiscoverPhotoFilter = "optional";
 
   constructor() {
-    addIcons({ caretDownSharp });
+    addIcons({ caretDownSharp, chevronExpandOutline });
   }
 
   dismiss(refreshSearch?: boolean) {

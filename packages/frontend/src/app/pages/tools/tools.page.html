@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -8,65 +8,67 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
-    <ion-list>
-      <ion-item (click)="goToCookbookGenerator()" button detail>
-        <ion-icon name="book-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.cookbook.title" | translate }}
-          <p>{{ "pages.tools.cookbook.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToNutritionCalculator()" button detail>
-        <ion-icon name="fitness-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.nutritionCalculator.title" | translate }}
-          <p>{{ "pages.tools.nutritionCalculator.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToSearchByIngredients()" button detail>
-        <ion-icon name="basket-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.searchByIngredients.title" | translate }}
-          <p>{{ "pages.tools.searchByIngredients.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToMeasurementConverter()" button detail>
-        <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.measurementConverter.title" | translate }}
-          <p>{{ "pages.tools.measurementConverter.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToCookingTemperatures()" button detail>
-        <ion-icon name="thermometer-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.cookingTemperatures.title" | translate }}
-          <p>{{ "pages.tools.cookingTemperatures.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToPanBakewareConverter()" button detail>
-        <ion-icon name="resize-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.panBakewareConverter.title" | translate }}
-          <p>{{ "pages.tools.panBakewareConverter.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToAssistant()" button detail>
-        <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.assistant.title" | translate }}
-          <p>{{ "pages.tools.assistant.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item (click)="goToUserGuide()" button detail>
-        <ion-icon name="help-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          {{ "pages.about.links.userGuide" | translate }}
-          <p>{{ "pages.tools.userGuide.subtitle" | translate }}</p>
-        </ion-label>
-      </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item (click)="goToCookbookGenerator()" button detail>
+          <ion-icon name="book-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.cookbook.title" | translate }}
+            <p>{{ "pages.tools.cookbook.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToNutritionCalculator()" button detail>
+          <ion-icon name="fitness-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.nutritionCalculator.title" | translate }}
+            <p>{{ "pages.tools.nutritionCalculator.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToSearchByIngredients()" button detail>
+          <ion-icon name="basket-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.searchByIngredients.title" | translate }}
+            <p>{{ "pages.tools.searchByIngredients.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToMeasurementConverter()" button detail>
+          <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.measurementConverter.title" | translate }}
+            <p>{{ "pages.tools.measurementConverter.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToCookingTemperatures()" button detail>
+          <ion-icon name="thermometer-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.cookingTemperatures.title" | translate }}
+            <p>{{ "pages.tools.cookingTemperatures.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToPanBakewareConverter()" button detail>
+          <ion-icon name="resize-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.panBakewareConverter.title" | translate }}
+            <p>{{ "pages.tools.panBakewareConverter.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToAssistant()" button detail>
+          <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.assistant.title" | translate }}
+            <p>{{ "pages.tools.assistant.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="goToUserGuide()" button detail>
+          <ion-icon name="help-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            {{ "pages.about.links.userGuide" | translate }}
+            <p>{{ "pages.tools.userGuide.subtitle" | translate }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
     </ion-list>
   </div>
 </ion-content>

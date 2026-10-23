@@ -20,7 +20,7 @@ import {
   IonIcon,
   type SearchbarCustomEvent,
 } from "@ionic/angular/standalone";
-import { folderOpenOutline } from "ionicons/icons";
+import { folderOpenOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
@@ -42,7 +42,7 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
 })
 export class SelectUserComponent implements OnInit {
   constructor() {
-    addIcons({ folderOpenOutline });
+    addIcons({ folderOpenOutline, closeOutline });
   }
 
   private serverActionsService = inject(ServerActionsService);

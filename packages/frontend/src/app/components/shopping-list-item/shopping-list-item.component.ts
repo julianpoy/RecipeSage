@@ -109,6 +109,10 @@ export class ShoppingListItemComponent {
   @Input({
     required: false,
   })
+  indented?: boolean;
+  @Input({
+    required: false,
+  })
   otherShoppingLists?: ShoppingListSummary[];
   @Output() completeToggle = new EventEmitter<null>();
   @Output() recategorize = new EventEmitter<string>();

@@ -20,75 +20,59 @@
     "pages.recipeDetailsPopover.actions" | translate
   }}</ion-list-header>
 
-  <ion-button
+  <ion-item
     (click)="
       cookingToolbarService.isPinned(recipeId)
         ? closeWithAction('unpin')
         : closeWithAction('pin')
     "
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="pin-outline" slot="start"></ion-icon>
-    @if (cookingToolbarService.isPinned(recipeId)) {
-      {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }}
-    } @else {
-      {{ "pages.recipeDetailsPopover.pinRecipe" | translate }}
-    }
-  </ion-button>
+    <ion-label>
+      @if (cookingToolbarService.isPinned(recipeId)) {
+        {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }}
+      } @else {
+        {{ "pages.recipeDetailsPopover.pinRecipe" | translate }}
+      }
+    </ion-label>
+  </ion-item>
 
-  <ion-button
-    (click)="closeWithAction('enterCookMode')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+  <ion-item (click)="closeWithAction('enterCookMode')" button [detail]="false">
     <ion-icon name="restaurant-outline" slot="start"></ion-icon>
-    {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
+    </ion-label>
+  </ion-item>
 
-  <ion-button
-    (click)="closeWithAction('share')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+  <ion-item (click)="closeWithAction('share')" button [detail]="false">
     <ion-icon name="share-outline" slot="start"></ion-icon>
-    {{ "pages.recipeDetailsPopover.share" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.recipeDetailsPopover.share" | translate }}
+    </ion-label>
+  </ion-item>
 
   @if (isAuthor) {
-    <ion-button
-      (click)="closeWithAction('edit')"
-      expand="block"
-      size="small"
-      class="ion-margin"
-    >
+    <ion-item (click)="closeWithAction('edit')" button [detail]="false">
       <ion-icon name="create-outline" slot="start"></ion-icon>
-      {{ "pages.discoverRecipe.edit" | translate }}
-    </ion-button>
+      <ion-label>
+        {{ "pages.discoverRecipe.edit" | translate }}
+      </ion-label>
+    </ion-item>
 
-    <ion-button
-      (click)="closeWithAction('unpublish')"
-      expand="block"
-      size="small"
-      color="danger"
-      class="ion-margin"
-    >
-      <ion-icon name="trash-outline" slot="start"></ion-icon>
-      {{ "pages.discoverRecipe.unpublish" | translate }}
-    </ion-button>
+    <ion-item (click)="closeWithAction('unpublish')" button [detail]="false">
+      <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+      <ion-label color="danger">
+        {{ "pages.discoverRecipe.unpublish" | translate }}
+      </ion-label>
+    </ion-item>
   } @else {
-    <ion-button
-      (click)="closeWithAction('report')"
-      expand="block"
-      size="small"
-      color="danger"
-      class="ion-margin"
-    >
-      <ion-icon name="flag-outline" slot="start"></ion-icon>
-      {{ "pages.discoverRecipe.report" | translate }}
-    </ion-button>
+    <ion-item (click)="closeWithAction('report')" button [detail]="false">
+      <ion-icon color="danger" name="flag-outline" slot="start"></ion-icon>
+      <ion-label color="danger">
+        {{ "pages.discoverRecipe.report" | translate }}
+      </ion-label>
+    </ion-item>
   }
 </ion-list>

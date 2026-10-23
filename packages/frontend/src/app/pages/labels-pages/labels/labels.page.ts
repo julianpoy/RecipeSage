@@ -19,6 +19,7 @@ import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { NewLabelItemModalPage } from "../new-label-item-modal/new-label-item-modal.page";
 import { ManageLabelGroupModalPage } from "../manage-label-group-modal/manage-label-group-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import {
   IonHeader,
@@ -31,6 +32,9 @@ import {
   IonContent,
   IonSearchbar,
   IonList,
+  IonListHeader,
+  IonItemGroup,
+  IonNote,
   IonItem,
   IonLabel,
   IonBadge,
@@ -68,6 +72,9 @@ import { addIcons } from "ionicons";
     IonContent,
     IonSearchbar,
     IonList,
+    IonListHeader,
+    IonItemGroup,
+    IonNote,
     IonItem,
     IonLabel,
     IonBadge,
@@ -99,6 +106,8 @@ export class LabelsPage {
   private utilService = inject(UtilService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ManageLabelsPreferenceKey;

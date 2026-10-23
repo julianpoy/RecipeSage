@@ -4,6 +4,7 @@ import { ModalController } from "@ionic/angular/standalone";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import {
   IonHeader,
   IonToolbar,
@@ -12,9 +13,8 @@ import {
   IonButton,
   IonIcon,
   IonContent,
-  IonItem,
   IonLabel,
-  IonTextarea,
+  IonNote,
   IonFooter,
 } from "@ionic/angular/standalone";
 import { closeOutline, saveOutline } from "ionicons/icons";
@@ -27,6 +27,7 @@ import { addIcons } from "ionicons";
   styleUrls: ["shopping-list-ignore-modal.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -34,9 +35,8 @@ import { addIcons } from "ionicons";
     IonButton,
     IonIcon,
     IonContent,
-    IonItem,
     IonLabel,
-    IonTextarea,
+    IonNote,
     IonFooter,
   ],
 })

@@ -2,7 +2,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  padding-inline: 16px 8px;
+  background: var(--ion-item-background, transparent);
 }
 
 .meal-entry-item {
@@ -25,7 +26,8 @@
 }
 
 .color-picker-container {
-  padding: 8px 0 12px 36px;
+  padding: 8px 0 12px 52px;
+  background: var(--ion-item-background, transparent);
 }
 
 ion-content {

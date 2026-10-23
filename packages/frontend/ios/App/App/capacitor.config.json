@@ -23,6 +23,10 @@
     "SplashScreenPlugin",
     "AppleSignInPlugin",
     "FilePickerPlugin",
+    "NativeNavigationPlugin",
+    "NativePurchasesPlugin",
+    "FoldableBridgeViewController",
+    "FoldablePlugin",
     "SendIntentPlugin"
   ]
 }

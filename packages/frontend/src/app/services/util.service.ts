@@ -280,6 +280,12 @@ export const RouteMap = {
     },
     path: "tools",
   },
+  MorePage: {
+    getPath() {
+      return `/more`;
+    },
+    path: "more",
+  },
   CookbookGeneratorPage: {
     getPath() {
       return `/tools/cookbook`;
@@ -483,10 +489,17 @@ export class UtilService {
 
   memoizedFormattedDates: Map<string, string> = new Map();
 
+  private appTheme = AppTheme.Default;
+  private prefersDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
   constructor() {
     setInterval(() => {
       this.memoizedFormattedDates.clear();
     }, 1000 * 60);
+
+    this.prefersDarkQuery.addEventListener("change", () => {
+      this.updateIonPalette();
+    });
   }
 
   getCurrentLocale(): string {
@@ -552,6 +565,19 @@ export class UtilService {
   setAppTheme(theme: AppTheme) {
     const bodyClasses = document.body.className.replace(/theme-\S*/, "");
     document.body.className = `${bodyClasses} theme-${theme}`;
+
+    this.appTheme = theme;
+    this.updateIonPalette();
+  }
+
+  private updateIonPalette() {
+    const isDark =
+      this.appTheme === AppTheme.Dark ||
+      this.appTheme === AppTheme.Black ||
+      this.appTheme === AppTheme.Midnight ||
+      (this.appTheme === AppTheme.Default && this.prefersDarkQuery.matches);
+
+    document.documentElement.classList.toggle("ion-palette-dark", isDark);
   }
 
   getToken(): string | null {

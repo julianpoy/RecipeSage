@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -10,89 +10,101 @@
       <ion-button id="popover-trigger">
         <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
+
+      @if (isNativeIOS) {
+        <ion-button (click)="newShoppingList()">
+          <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
     <ion-popover trigger="popover-trigger" triggerAction="click">
       <ng-template>
-        <ion-content class="ion-padding">
-          <ion-list-header>
-            {{ "generic.options" | translate }}
-          </ion-list-header>
-
-          <ion-button
-            (click)="showIgnoreModal()"
-            expand="block"
-            size="small"
-            class="ion-margin"
-          >
-            <ion-icon name="ban-outline" slot="start"></ion-icon>
-            {{ "pages.shoppingLists.editIgnore" | translate }}
-          </ion-button>
+        <ion-content>
+          <ion-list>
+            <ion-list-header>
+              {{ "generic.options" | translate }}
+            </ion-list-header>
+            <ion-item button [detail]="false" (click)="showIgnoreModal()">
+              <ion-icon name="ban-outline" slot="start"></ion-icon>
+              <ion-label>
+                {{ "pages.shoppingLists.editIgnore" | translate }}
+              </ion-label>
+            </ion-item>
+          </ion-list>
         </ion-content>
       </ng-template>
     </ion-popover>
 
-    <ion-list>
-      @for (shoppingList of shoppingLists(); track shoppingList) {
-        <ion-item
-          button
-          class="ion-text-wrap"
-          (click)="openShoppingList(shoppingList.id)"
-        >
-          <ion-icon name="list-outline" slot="start"></ion-icon>
-          <ion-label>
-            <h2>{{ shoppingList.title }}</h2>
-            <p>
-              {{
-                "pages.shoppingLists.created"
-                  | translate
-                    : { date: formatItemCreationDate(shoppingList.createdAt) }
-              }}
-            </p>
-            @if (shoppingList.collaboratorUsers.length > 0) {
-              <p>
-                {{ "pages.shoppingLists.collaboration" | translate }}
-                @for (
-                  collaboratorUser of shoppingList.collaboratorUsers;
-                  track collaboratorUser;
-                  let isLast = $last
-                ) {
-                  <span>
-                    @if (me()?.id !== collaboratorUser.user.id) {
+    <ion-list inset="true">
+      @if (shoppingLists()?.length) {
+        <ion-item-group>
+          @for (shoppingList of shoppingLists(); track shoppingList) {
+            <ion-item
+              button
+              class="ion-text-wrap"
+              (click)="openShoppingList(shoppingList.id)"
+            >
+              <ion-icon name="list-outline" slot="start"></ion-icon>
+              <ion-label>
+                <h2>{{ shoppingList.title }}</h2>
+                <p>
+                  {{
+                    "pages.shoppingLists.created"
+                      | translate
+                        : {
+                            date: formatItemCreationDate(
+                              shoppingList.createdAt
+                            ),
+                          }
+                  }}
+                </p>
+                @if (shoppingList.collaboratorUsers.length > 0) {
+                  <p>
+                    {{ "pages.shoppingLists.collaboration" | translate }}
+                    @for (
+                      collaboratorUser of shoppingList.collaboratorUsers;
+                      track collaboratorUser;
+                      let isLast = $last
+                    ) {
                       <span>
-                        {{ collaboratorUser.user.name }}
-                        @if (!isLast || me()?.id !== shoppingList.userId) {
-                          <span>,</span>
+                        @if (me()?.id !== collaboratorUser.user.id) {
+                          <span>
+                            {{ collaboratorUser.user.name }}
+                            @if (!isLast || me()?.id !== shoppingList.userId) {
+                              <span>,</span>
+                            }
+                          </span>
                         }
                       </span>
                     }
-                  </span>
+                    @if (me()?.id !== shoppingList.userId) {
+                      <span> {{ shoppingList.user.name }} </span>
+                    }
+                  </p>
                 }
-                @if (me()?.id !== shoppingList.userId) {
-                  <span> {{ shoppingList.user.name }} </span>
-                }
-              </p>
-            }
-            <p>
-              @if (me()?.id !== shoppingList.userId) {
-                <span>
-                  {{
-                    "pages.shoppingLists.createdBy"
-                      | translate: { name: shoppingList.user.name }
-                  }}
-                </span>
-              }
-              @if (me()?.id === shoppingList.userId) {
-                <span> {{ "pages.shoppingLists.owner" | translate }} </span>
-              }
-            </p>
-          </ion-label>
-          <ion-badge slot="end">{{ shoppingList._count.items }}</ion-badge>
-        </ion-item>
+                <p>
+                  @if (me()?.id !== shoppingList.userId) {
+                    <span>
+                      {{
+                        "pages.shoppingLists.createdBy"
+                          | translate: { name: shoppingList.user.name }
+                      }}
+                    </span>
+                  }
+                  @if (me()?.id === shoppingList.userId) {
+                    <span> {{ "pages.shoppingLists.owner" | translate }} </span>
+                  }
+                </p>
+              </ion-label>
+              <ion-badge slot="end">{{ shoppingList._count.items }}</ion-badge>
+            </ion-item>
+          }
+        </ion-item-group>
       }
       @if (shoppingLists() === undefined) {
         <null-state>
@@ -119,9 +131,11 @@
       }
     </ion-list>
   </div>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="newShoppingList()" color="primary">
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  @if (!isNativeIOS) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="newShoppingList()" color="primary">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
 </ion-content>

@@ -11,6 +11,7 @@ import {
   waterOutline,
   warningOutline,
   flameOutline,
+  closeOutline,
 } from "ionicons/icons";
 import {
   IonHeader,
@@ -97,6 +98,7 @@ export class CookingTemperaturesPage implements OnInit {
       waterOutline,
       warningOutline,
       flameOutline,
+      closeOutline,
     });
 
     const rebuild = () => {

@@ -3,10 +3,12 @@
 
 @mixin blackModeVars() {
   --rs-match-color: var(--ion-color-primary);
-  --rs-list-stripe-color: var(--ion-color-dark-shade);
+  --rs-grouped-background-color: #000000;
+  --rs-grouped-item-background-color: #1c1c1e;
+  --rs-subtle-surface-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.05);
   --ion-border-color: var(--ion-color-dark-shade);
   --ion-background-color: #000000;
-  --ion-background-color-rgb: rgb(0, 0, 0);
+  --ion-background-color-rgb: 0, 0, 0;
   --ion-background-shade-color: var(--ion-color-dark-shade);
   --ion-background-tint-color: var(--ion-color-dark-tint);
   --ion-background-tint-active-color: var(--ion-color-dark-tint-active);
@@ -48,7 +50,9 @@
 
 @mixin darkModeVars() {
   --rs-match-color: var(--ion-color-primary);
-  --rs-list-stripe-color: #101010;
+  --rs-grouped-background-color: #121212;
+  --rs-grouped-item-background-color: #1f1f1f;
+  --rs-subtle-surface-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.05);
   --ion-border-color: #2c2c2c;
   --ion-background-color: #121212;
   --ion-background-color-rgb: 18, 18, 18;
@@ -92,7 +96,9 @@
 
 @mixin midnightModeVars() {
   --rs-match-color: var(--ion-color-primary);
-  --rs-list-stripe-color: var(--ion-color-dark-shade);
+  --rs-grouped-background-color: var(--ion-color-dark-shade);
+  --rs-grouped-item-background-color: var(--ion-color-dark-tint);
+  --rs-subtle-surface-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.05);
   --ion-border-color: var(--ion-color-dark-shade);
   --ion-background-color: var(--ion-color-dark);
   --ion-background-color-rgb: var(--ion-color-dark-rgb);
@@ -128,10 +134,12 @@
 
 @mixin lightModeVars() {
   --rs-match-color: #0077b8;
-  --rs-list-stripe-color: #f4f4f4;
+  --rs-grouped-background-color: #f2f2f7;
+  --rs-grouped-item-background-color: #ffffff;
+  --rs-subtle-surface-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.05);
   --ion-border-color: rgba(0, 0, 0, 0.13);
   --ion-background-color: #ffffff;
-  --ion-background-color-rgb: rgb(255, 255, 255);
+  --ion-background-color-rgb: 255, 255, 255;
   --ion-background-shade-color: var(--ion-color-light-shade);
   --ion-background-tint-color: var(--ion-color-light-tint);
   --ion-background-tint-active-color: var(--ion-color-light-tint-active);

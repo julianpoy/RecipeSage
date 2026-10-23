@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -12,11 +12,17 @@
       <ion-button (click)="presentPopover($event)">
         <ion-icon name="options-outline" slot="icon-only"></ion-icon>
       </ion-button>
+
+      @if (isNativeIOS) {
+        <ion-button (click)="newMealPlanItem()">
+          <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <br />
   @if (!allMealPlanItems()) {
     <null-state>
@@ -168,9 +174,11 @@
 
   <br /><br /><br /><br />
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="newMealPlanItem()" color="primary">
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  @if (!isNativeIOS) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="newMealPlanItem()" color="primary">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
 </ion-content>

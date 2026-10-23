@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding grouped-content">
   @if (!selectedMealPlan) {
     <p>{{ "pages.addRecipeToMealPlanModal.instructions1" | translate }}</p>
   }
@@ -20,23 +20,29 @@
     <p>{{ "pages.addRecipeToMealPlanModal.loading" | translate }}</p>
   }
   @if (mealPlans && mealPlans.length > 0) {
-    <ion-item>
-      <ion-select
-        label="{{
-          'pages.addRecipeToMealPlanModal.selectDestination' | translate
-        }}"
-        [(ngModel)]="selectedMealPlan"
-        (ngModelChange)="selectedMealPlan && loadMealPlan(selectedMealPlan.id)"
-        okText="{{ 'generic.ok' | translate }}"
-        cancelText="{{ 'generic.cancel' | translate }}"
-      >
-        @for (mealPlan of mealPlans; track mealPlan) {
-          <ion-select-option [value]="mealPlan">{{
-            mealPlan.title
-          }}</ion-select-option>
-        }
-      </ion-select>
-    </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item>
+          <ion-select
+            label="{{
+              'pages.addRecipeToMealPlanModal.selectDestination' | translate
+            }}"
+            [(ngModel)]="selectedMealPlan"
+            (ngModelChange)="
+              selectedMealPlan && loadMealPlan(selectedMealPlan.id)
+            "
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            @for (mealPlan of mealPlans; track mealPlan) {
+              <ion-select-option [value]="mealPlan">{{
+                mealPlan.title
+              }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   }
   @if (mealPlans && mealPlans.length === 0) {
     <div (click)="createMealPlan()">
@@ -59,25 +65,26 @@
         (selectedDaysChange)="selectedDays = $event"
       ></meal-calendar>
     </div>
-    <ion-item>
-      <ion-textarea
-        label="{{ 'pages.newMealPlanItemModal.notes' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="notes"
-        autoGrow="true"
-        rows="2"
-        [maxlength]="notesMaxLength"
-      ></ion-textarea>
-    </ion-item>
+    <text-area
+      label="{{ 'pages.newMealPlanItemModal.notes' | translate }}"
+      [(ngModel)]="notes"
+      [autoGrow]="true"
+      [rows]="2"
+      [maxlength]="notesMaxLength"
+    ></text-area>
   }
 </ion-content>
 
 <ion-footer>
-  <div class="ion-padding-bottom ion-padding-horizontal">
-    <select-meal
-      [customMealOptions]="selectedMealPlan?.customMealOptions ?? null"
-      (mealChange)="meal = $event"
-    ></select-meal>
+  <div class="ion-padding-bottom ion-padding-horizontal grouped-content">
+    <ion-list inset="true">
+      <ion-item-group>
+        <select-meal
+          [customMealOptions]="selectedMealPlan?.customMealOptions ?? null"
+          (mealChange)="meal = $event"
+        ></select-meal>
+      </ion-item-group>
+    </ion-list>
     <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
       <ion-icon name="calendar-outline" slot="start"></ion-icon>
       <ion-label>

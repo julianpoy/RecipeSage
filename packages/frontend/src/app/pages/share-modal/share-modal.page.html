@@ -10,23 +10,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item lines="none">
-      @if (recipe.recipeImages && recipe.recipeImages.length > 0) {
-        <ion-avatar slot="start">
-          <img
-            src="{{
-              recipe.recipeImages[0].image.location | resolveStorageLocation
-            }}"
-          />
-        </ion-avatar>
-      }
-      <ion-label>
-        <h2>{{ recipe.title }}</h2>
-        <p class="ion-text-wrap">{{ "pages.share.description" | translate }}</p>
-      </ion-label>
-    </ion-item>
+<ion-content class="grouped-content">
+  <div>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item>
+          @if (recipe.recipeImages && recipe.recipeImages.length > 0) {
+            <ion-avatar slot="start">
+              <img
+                src="{{
+                  recipe.recipeImages[0].image.location | resolveStorageLocation
+                }}"
+              />
+            </ion-avatar>
+          }
+          <ion-label>
+            <h2>{{ recipe.title }}</h2>
+            <p class="ion-text-wrap">
+              {{ "pages.share.description" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
 
     <div class="share-method-container">
       <ion-segment (ionChange)="shareMethodChanged($event)" value="account">
@@ -61,148 +67,157 @@
                   [url]="recipePreviewURL"
                   [description]="'pages.share.embedPreview' | translate"
                 ></recipe-preview>
-                <ion-item>
-                  <ion-icon name="image-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.titleImage"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.image" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon
-                    name="swap-horizontal-outline"
-                    slot="start"
-                  ></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.verticalInstrIng"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.columns" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="print-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.showPrintButton"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.print" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="link-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.hideSource"
-                    (ngModelChange)="
-                      embedConfig.hideSourceURL = embedConfig.hideSource;
-                      updateEmbed(true)
-                    "
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.sources" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon
-                    name="document-text-outline"
-                    slot="start"
-                  ></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.hideNotes"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.notes" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="star-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.hideRating"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.rating" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="fitness-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.hideNutrition"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.nutrition" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="git-network-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.hideLinkedRecipes"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.linkedRecipes" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
-                <ion-item>
-                  <ion-icon name="calendar-outline" slot="start"></ion-icon>
-                  <ion-toggle
-                    [(ngModel)]="embedConfig.showLastMade"
-                    (ngModelChange)="updateEmbed(true)"
-                  >
-                    <div class="ion-text-wrap">
-                      {{ "pages.share.byEmbed.lastMadeAt" | translate }}
-                    </div>
-                  </ion-toggle>
-                </ion-item>
+                <ion-list inset="true">
+                  <ion-item-group>
+                    <ion-item>
+                      <ion-icon name="image-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.titleImage"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.image" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon
+                        name="swap-horizontal-outline"
+                        slot="start"
+                      ></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.verticalInstrIng"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.columns" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon name="print-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.showPrintButton"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.print" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon name="link-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.hideSource"
+                        (ngModelChange)="
+                          embedConfig.hideSourceURL = embedConfig.hideSource;
+                          updateEmbed(true)
+                        "
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.sources" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon
+                        name="document-text-outline"
+                        slot="start"
+                      ></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.hideNotes"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.notes" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon name="star-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.hideRating"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.rating" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon name="fitness-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.hideNutrition"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.nutrition" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon
+                        name="git-network-outline"
+                        slot="start"
+                      ></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.hideLinkedRecipes"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.linkedRecipes" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                      <ion-toggle
+                        [(ngModel)]="embedConfig.showLastMade"
+                        (ngModelChange)="updateEmbed(true)"
+                      >
+                        <div class="ion-text-wrap">
+                          {{ "pages.share.byEmbed.lastMadeAt" | translate }}
+                        </div>
+                      </ion-toggle>
+                    </ion-item>
+                  </ion-item-group>
+                </ion-list>
               </div>
             }
-            <ion-item>
-              <ion-icon name="resize-outline" slot="start"></ion-icon>
-              <ion-input
+            <div class="embed-size">
+              <text-input
                 label="{{ 'pages.share.byEmbed.height' | translate }}"
                 type="number"
+                inputmode="numeric"
                 [(ngModel)]="embedHeight"
                 (ngModelChange)="updateEmbed()"
-              ></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon name="resize-outline" slot="start"></ion-icon>
-              <ion-input
+              ></text-input>
+              <text-input
                 label="{{ 'pages.share.byEmbed.width' | translate }}"
                 type="number"
+                inputmode="numeric"
                 [(ngModel)]="embedWidth"
                 (ngModelChange)="updateEmbed()"
-              ></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon name="code-working-outline" slot="start"></ion-icon>
-              <ion-toggle
-                [(ngModel)]="enableJSONLD"
-                (ngModelChange)="updateEmbed()"
-              >
-                <div class="ion-text-wrap">
-                  {{ "pages.share.byEmbed.jsonLD" | translate }}
-                </div>
-              </ion-toggle>
-            </ion-item>
-            <ion-item lines="none">
+              ></text-input>
+            </div>
+            <ion-list inset="true">
+              <ion-item-group>
+                <ion-item>
+                  <ion-icon name="code-working-outline" slot="start"></ion-icon>
+                  <ion-toggle
+                    [(ngModel)]="enableJSONLD"
+                    (ngModelChange)="updateEmbed()"
+                  >
+                    <div class="ion-text-wrap">
+                      {{ "pages.share.byEmbed.jsonLD" | translate }}
+                    </div>
+                  </ion-toggle>
+                </ion-item>
+              </ion-item-group>
+            </ion-list>
+            <ion-note class="embed-copy">
               {{ "pages.share.byEmbed.copy" | translate }}
-            </ion-item>
+            </ion-note>
             <copy-with-webshare
               [disableWebshare]="true"
               [copyText]="recipeEmbedCode || ''"
@@ -211,11 +226,9 @@
         }
         @case ("account") {
           <div class="ion-padding">
-            <ion-item lines="none">
-              <ion-label class="ion-text-wrap">
-                <p>{{ "pages.share.byAccount.description" | translate }}</p>
-              </ion-label>
-            </ion-item>
+            <ion-note>
+              {{ "pages.share.byAccount.description" | translate }}
+            </ion-note>
             <select-user-knownuser
               [selectedUser]="selectedUser"
               (selectedUserChange)="selectUser($event)"
@@ -224,7 +237,7 @@
         }
       }
     </div>
-  </ion-list>
+  </div>
 </ion-content>
 
 <ion-footer class="ion-padding">

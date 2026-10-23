@@ -6,7 +6,8 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
   IonList,
   IonListHeader,
-  IonButton,
+  IonItem,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular/standalone";
 import { imageOutline } from "ionicons/icons";
@@ -17,7 +18,14 @@ import { addIcons } from "ionicons";
   selector: "page-edit-recipe-popover",
   templateUrl: "edit-recipe-popover.page.html",
   styleUrls: ["edit-recipe-popover.page.scss"],
-  imports: [...SHARED_UI_IMPORTS, IonList, IonListHeader, IonButton, IonIcon],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    IonList,
+    IonListHeader,
+    IonItem,
+    IonLabel,
+    IonIcon,
+  ],
 })
 export class EditRecipePopoverPage {
   constructor() {

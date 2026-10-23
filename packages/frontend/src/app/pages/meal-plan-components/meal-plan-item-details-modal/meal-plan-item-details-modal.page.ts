@@ -31,6 +31,8 @@ import {
   IonAvatar,
   IonLabel,
   IonFooter,
+  IonList,
+  IonItemGroup,
 } from "@ionic/angular/standalone";
 import {
   calendarOutline,
@@ -63,6 +65,8 @@ import { addIcons } from "ionicons";
     IonAvatar,
     IonLabel,
     IonFooter,
+    IonList,
+    IonItemGroup,
   ],
 })
 export class MealPlanItemDetailsModalPage {

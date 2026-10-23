@@ -18,7 +18,7 @@
         <button (click)="onCancel()">
           {{ cancelLabel || ("generic.cancel" | translate) }}
         </button>
-        <button (click)="confirmed.emit()">
+        <button class="alert-modal-confirm" (click)="confirmed.emit()">
           {{ confirmLabel || ("generic.okay" | translate) }}
         </button>
       </div>

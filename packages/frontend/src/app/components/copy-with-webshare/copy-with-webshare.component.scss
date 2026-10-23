@@ -1,3 +1,14 @@
+.instructions {
+  margin: 0 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ion-color-step-600);
+}
+
+:host-context(.grouped-content) .codeBlock {
+  background-color: var(--rs-grouped-item-background-color);
+}
+
 .codeBlock {
   display: flex;
   align-items: center;

@@ -29,4 +29,8 @@
 .share-icon-container {
   display: flex;
   justify-content: center;
+
+  ion-item {
+    --background: transparent;
+  }
 }

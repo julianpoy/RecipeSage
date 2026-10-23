@@ -31,7 +31,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/angular/standalone";
-import { caretBack, caretForward } from "ionicons/icons";
+import { chevronBack, chevronForward } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -126,7 +126,7 @@ export class MealCalendarComponent implements OnDestroy {
   }
 
   constructor() {
-    addIcons({ caretBack, caretForward });
+    addIcons({ chevronBack, chevronForward });
     setTimeout(() => {
       this.mealsByDateChange.emit(this.mealsByDate);
       this.selectedDaysChange.emit(this.selectedDays);

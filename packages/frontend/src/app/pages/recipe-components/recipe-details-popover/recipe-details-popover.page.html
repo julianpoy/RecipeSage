@@ -24,34 +24,34 @@
     {{ "pages.recipeDetailsPopover.actions" | translate }}
   </ion-list-header>
 
-  <ion-button
+  <ion-item
     (click)="
       cookingToolbarService.isPinned(recipe.id)
         ? closeWithAction('unpin')
         : closeWithAction('pin')
     "
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="pin-outline" slot="start"></ion-icon>
-    @if (cookingToolbarService.isPinned(recipe.id)) {
-      <span> {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }} </span>
-    }
-    @if (!cookingToolbarService.isPinned(recipe.id)) {
-      <span> {{ "pages.recipeDetailsPopover.pinRecipe" | translate }} </span>
-    }
-  </ion-button>
+    <ion-label>
+      @if (cookingToolbarService.isPinned(recipe.id)) {
+        <span>
+          {{ "pages.recipeDetailsPopover.unPinRecipe" | translate }}
+        </span>
+      }
+      @if (!cookingToolbarService.isPinned(recipe.id)) {
+        <span> {{ "pages.recipeDetailsPopover.pinRecipe" | translate }} </span>
+      }
+    </ion-label>
+  </ion-item>
 
-  <ion-button
-    (click)="closeWithAction('enterCookMode')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+  <ion-item (click)="closeWithAction('enterCookMode')" button [detail]="false">
     <ion-icon name="restaurant-outline" slot="start"></ion-icon>
-    {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.recipeDetailsPopover.enterCookMode" | translate }}
+    </ion-label>
+  </ion-item>
 
   @if (recipe.userId === me?.id && recipe.folder === "inbox") {
     <div>
@@ -62,28 +62,21 @@
           </p>
         </ion-label>
       </ion-item>
-      <ion-button
-        (click)="closeWithAction('moveToMain')"
-        expand="block"
-        size="small"
-        class="ion-margin"
-      >
+      <ion-item (click)="closeWithAction('moveToMain')" button [detail]="false">
         <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-        {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
-      </ion-button>
+        <ion-label>
+          {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
+        </ion-label>
+      </ion-item>
       <ion-list-header>
         {{ "pages.recipeDetailsPopover.dangerZone" | translate }}
       </ion-list-header>
-      <ion-button
-        (click)="closeWithAction('delete')"
-        expand="block"
-        size="small"
-        class="ion-margin"
-        color="danger"
-      >
-        <ion-icon name="trash-outline" slot="start"></ion-icon>
-        {{ "pages.recipeDetailsPopover.delete" | translate }}
-      </ion-button>
+      <ion-item (click)="closeWithAction('delete')" button [detail]="false">
+        <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+        <ion-label color="danger">
+          {{ "pages.recipeDetailsPopover.delete" | translate }}
+        </ion-label>
+      </ion-item>
     </div>
   }
   @if (recipe.userId !== me?.id && isLoggedIn) {
@@ -95,15 +88,12 @@
           </p>
         </ion-label>
       </ion-item>
-      <ion-button
-        (click)="closeWithAction('clone')"
-        expand="block"
-        size="small"
-        class="ion-margin"
-      >
+      <ion-item (click)="closeWithAction('clone')" button [detail]="false">
         <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-        {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
-      </ion-button>
+        <ion-label>
+          {{ "pages.recipeDetails.saveToMyRecipes" | translate }}
+        </ion-label>
+      </ion-item>
     </div>
   }
   @if (recipe.userId !== me?.id && !isLoggedIn) {
@@ -115,111 +105,100 @@
           </p>
         </ion-label>
       </ion-item>
-      <ion-button
+      <ion-item
         (click)="closeWithAction('authAndClone')"
-        expand="block"
-        size="small"
-        class="ion-margin"
+        button
+        [detail]="false"
       >
         <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-        {{ "pages.recipeDetails.registerOrLoginToSave" | translate }}
-      </ion-button>
+        <ion-label>
+          {{ "pages.recipeDetails.registerOrLoginToSave" | translate }}
+        </ion-label>
+      </ion-item>
     </div>
   }
   @if (recipe.folder === "main") {
     <div>
       @if (isLoggedIn) {
-        <ion-button
+        <ion-item
           (click)="closeWithAction('addToShoppingList')"
-          expand="block"
-          size="small"
-          class="ion-margin"
+          button
+          [detail]="false"
         >
           <ion-icon name="list-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.addToShoppingList" | translate }}
-        </ion-button>
-        <ion-button
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.addToShoppingList" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item
           (click)="closeWithAction('addToMealPlan')"
-          expand="block"
-          size="small"
-          class="ion-margin"
+          button
+          [detail]="false"
         >
           <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.addToMealPlan" | translate }}
-        </ion-button>
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.addToMealPlan" | translate }}
+          </ion-label>
+        </ion-item>
       }
       @if (recipe.userId === me?.id) {
-        <ion-button
-          (click)="closeWithAction('share')"
-          expand="block"
-          size="small"
-          class="ion-margin"
-        >
+        <ion-item (click)="closeWithAction('share')" button [detail]="false">
           <ion-icon name="share-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.share" | translate }}
-        </ion-button>
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.share" | translate }}
+          </ion-label>
+        </ion-item>
         @if (enableDiscover) {
-          <ion-button
+          <ion-item
             (click)="closeWithAction('publishToDiscover')"
-            expand="block"
-            size="small"
-            class="ion-margin"
+            button
+            [detail]="false"
           >
             <ion-icon name="compass-outline" slot="start"></ion-icon>
-            {{ "pages.recipeDetails.publishToDiscover" | translate }}
-          </ion-button>
+            <ion-label>
+              {{ "pages.recipeDetails.publishToDiscover" | translate }}
+            </ion-label>
+          </ion-item>
         }
       }
-      <ion-button
-        (click)="closeWithAction('print')"
-        expand="block"
-        size="small"
-        class="ion-margin"
-      >
+      <ion-item (click)="closeWithAction('print')" button [detail]="false">
         <ion-icon name="print-outline" slot="start"></ion-icon>
-        {{ "pages.recipeDetailsPopover.print" | translate }}
-      </ion-button>
+        <ion-label>
+          {{ "pages.recipeDetailsPopover.print" | translate }}
+        </ion-label>
+      </ion-item>
       @if (recipe.userId === me?.id) {
-        <ion-button
-          (click)="closeWithAction('edit')"
-          expand="block"
-          size="small"
-          class="ion-margin"
-        >
+        <ion-item (click)="closeWithAction('edit')" button [detail]="false">
           <ion-icon name="create-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.edit" | translate }}
-        </ion-button>
-        <ion-button
-          (click)="closeWithAction('clone')"
-          expand="block"
-          size="small"
-          class="ion-margin"
-        >
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.edit" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item (click)="closeWithAction('clone')" button [detail]="false">
           <ion-icon name="copy-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.makeACopy" | translate }}
-        </ion-button>
-        <ion-button
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.makeACopy" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item
           (click)="closeWithAction('setLastMadeToday')"
-          expand="block"
-          size="small"
-          class="ion-margin"
+          button
+          [detail]="false"
         >
           <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.setLastMadeToday" | translate }}
-        </ion-button>
+          <ion-label>
+            {{ "pages.recipeDetailsPopover.setLastMadeToday" | translate }}
+          </ion-label>
+        </ion-item>
         <ion-list-header>
           {{ "pages.recipeDetailsPopover.dangerZone" | translate }}
         </ion-list-header>
-        <ion-button
-          (click)="closeWithAction('delete')"
-          expand="block"
-          size="small"
-          color="danger"
-          class="ion-margin"
-        >
-          <ion-icon name="trash-outline" slot="start"></ion-icon>
-          {{ "pages.recipeDetailsPopover.delete" | translate }}
-        </ion-button>
+        <ion-item (click)="closeWithAction('delete')" button [detail]="false">
+          <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+          <ion-label color="danger">
+            {{ "pages.recipeDetailsPopover.delete" | translate }}
+          </ion-label>
+        </ion-item>
       }
     </div>
   }

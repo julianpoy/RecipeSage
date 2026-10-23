@@ -20,10 +20,21 @@
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 1;
-    grid-row-end: 7;
+    grid-row-end: 2;
   }
 
-  ion-item {
+  ion-list {
     grid-column-start: 2;
   }
+}
+
+.embed-copy {
+  margin: 0 16px;
+}
+
+.embed-size {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0 16px;
 }

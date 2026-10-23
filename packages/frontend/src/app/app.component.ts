@@ -21,7 +21,10 @@ import {
   IS_SELFHOST,
 } from "../environments/environment";
 
-import { UtilService, RouteMap, AuthType } from "./services/util.service";
+import { UtilService, RouteMap } from "./services/util.service";
+import { NavListService, type NavPage } from "./services/nav-list.service";
+import { NativeTabBarService } from "./services/native-tab-bar.service";
+import { IS_NATIVE_IOS } from "./utils/isNativeIOS";
 import { MessagingService } from "./services/messaging.service";
 import { WebsocketService } from "./services/websocket.service";
 import { PreferencesService } from "./services/preferences.service";
@@ -37,10 +40,6 @@ import {
 } from "@recipesage/util/shared";
 import { CookingToolbarService } from "./services/cooking-toolbar.service";
 import { EventName, EventService } from "./services/event.service";
-import {
-  FeatureFlagKeys,
-  FeatureFlagService,
-} from "./services/feature-flag.service";
 import { Title } from "@angular/platform-browser";
 import { TRPCService } from "./services/trpc.service";
 import { ServerActionsService } from "./services/server-actions.service";
@@ -92,13 +91,6 @@ import {
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
-interface NavPage {
-  id: string;
-  title: string;
-  icon: string;
-  url: string;
-}
-
 @Component({
   standalone: true,
   selector: "app-root",
@@ -142,7 +134,8 @@ export class AppComponent {
   private websocketService = inject(WebsocketService);
   private preferencesService = inject(PreferencesService);
   private offlineModeService = inject(OfflineModeService);
-  private featureFlagService = inject(FeatureFlagService);
+  private navListService = inject(NavListService);
+  private nativeTabBarService = inject(NativeTabBarService);
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
   private versionCheckService = inject(VersionCheckService);
@@ -161,13 +154,17 @@ export class AppComponent {
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
   enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
 
-  navList?: { id: string; title: string; icon: string; url: string }[];
+  navList?: NavPage[];
 
   inboxCount?: number;
   friendRequestCount?: number;
 
   get peopleBadgeCount(): number {
     return (this.inboxCount || 0) + (this.friendRequestCount || 0);
+  }
+
+  get useNativeTabBar(): boolean {
+    return IS_NATIVE_IOS && !!this.isLoggedIn;
   }
 
   version: number = (window as any).version;
@@ -215,6 +212,10 @@ export class AppComponent {
     const fontSize =
       this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
     this.utilService.setFontSize(fontSize);
+
+    this.utilService.setAppTheme(
+      this.preferencesService.preferences[GlobalPreferenceKey.Theme],
+    );
 
     if (ENABLE_ANALYTICS) {
       this.initAnalytics();
@@ -346,6 +347,7 @@ export class AppComponent {
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
+      this.updateNativeTabBar();
       this.loadInboxCount();
       this.loadFriendRequestCount();
     });
@@ -408,228 +410,14 @@ export class AppComponent {
   }
 
   async updateNavList() {
-    this.navList = await this.generateNavList();
+    this.navList = await this.navListService.generateNavList();
   }
 
-  async generateNavList() {
-    const login = await this.translate.get("pages.app.nav.login").toPromise();
-    const register = await this.translate
-      .get("pages.app.nav.register")
-      .toPromise();
-    const download = await this.translate
-      .get("pages.app.nav.download")
-      .toPromise();
-    const contribute = await this.translate
-      .get("pages.app.nav.contribute")
-      .toPromise();
-    const about = await this.translate.get("pages.app.nav.about").toPromise();
-
-    const home = await this.translate.get("pages.app.nav.home").toPromise();
-    const labels = await this.translate.get("pages.app.nav.labels").toPromise();
-    const people = await this.translate.get("pages.app.nav.people").toPromise();
-    const discover = await this.translate
-      .get("pages.app.nav.discover")
-      .toPromise();
-    const newrecipe = await this.translate
-      .get("pages.app.nav.newrecipe")
-      .toPromise();
-    const shopping = await this.translate
-      .get("pages.app.nav.shopping")
-      .toPromise();
-    const meals = await this.translate.get("pages.app.nav.meals").toPromise();
-    const tools = await this.translate.get("pages.app.nav.tools").toPromise();
-    const settings = await this.translate
-      .get("pages.app.nav.settings")
-      .toPromise();
-
-    const enableInstallInstructions =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableInstallInstructions];
-    const enableContribution =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
-    const enableDiscover =
-      this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover];
-    const loggedOutPages = [
-      [
-        true,
-        {
-          id: "login",
-          title: login,
-          icon: "log-in-outline",
-          url: RouteMap.AuthPage.getPath(AuthType.Login),
-        },
-      ],
-      [
-        true,
-        {
-          id: "register",
-          title: register,
-          icon: "leaf-outline",
-          url: RouteMap.AuthPage.getPath(AuthType.Register),
-        },
-      ],
-      [
-        enableDiscover,
-        {
-          id: "discover",
-          title: discover,
-          icon: "compass-outline",
-          url: RouteMap.DiscoverPage.getPath(),
-        },
-      ],
-      [
-        enableInstallInstructions,
-        {
-          id: "download",
-          title: download,
-          icon: "cloud-download-outline",
-          url: RouteMap.DownloadAndInstallPage.getPath(),
-        },
-      ],
-      [
-        enableContribution,
-        {
-          id: "contribute",
-          title: contribute,
-          icon: "heart-outline",
-          url: RouteMap.ContributePage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "settings",
-          title: settings,
-          icon: "settings-outline",
-          url: RouteMap.SettingsPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "about",
-          title: about,
-          icon: "help-buoy-outline",
-          url: RouteMap.AboutPage.getPath(),
-        },
-      ],
-    ] as [boolean, NavPage][];
-
-    const loggedInPages = [
-      [
-        true,
-        {
-          id: "home",
-          title: home,
-          icon: "book-outline",
-          url: RouteMap.HomePage.getPath("main"),
-        },
-      ],
-      [
-        true,
-        {
-          id: "newrecipe",
-          title: newrecipe,
-          icon: "add-outline",
-          url: RouteMap.EditRecipePage.getPath("new"),
-        },
-      ],
-      [
-        true,
-        {
-          id: "shopping",
-          title: shopping,
-          icon: "cart-outline",
-          url: RouteMap.ShoppingListsPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "meals",
-          title: meals,
-          icon: "calendar-outline",
-          url: RouteMap.MealPlansPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "people",
-          title: people,
-          icon: "people-outline",
-          url: RouteMap.PeoplePage.getPath(),
-        },
-      ],
-      [
-        enableDiscover,
-        {
-          id: "discover",
-          title: discover,
-          icon: "compass-outline",
-          url: RouteMap.DiscoverPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "tools",
-          title: tools,
-          icon: "construct-outline",
-          url: RouteMap.ToolsPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "labels",
-          title: labels,
-          icon: "pricetag-outline",
-          url: RouteMap.LabelsPage.getPath(),
-        },
-      ],
-      [
-        enableInstallInstructions,
-        {
-          id: "download",
-          title: download,
-          icon: "cloud-download-outline",
-          url: RouteMap.DownloadAndInstallPage.getPath(),
-        },
-      ],
-      [
-        enableContribution,
-        {
-          id: "contribute",
-          title: contribute,
-          icon: "heart-outline",
-          url: RouteMap.ContributePage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "settings",
-          title: settings,
-          icon: "settings-outline",
-          url: RouteMap.SettingsPage.getPath(),
-        },
-      ],
-      [
-        true,
-        {
-          id: "about",
-          title: about,
-          icon: "help-buoy-outline",
-          url: RouteMap.AboutPage.getPath(),
-        },
-      ],
-    ] as [boolean, NavPage][];
-
-    const pages = this.utilService.isLoggedIn()
-      ? loggedInPages
-      : loggedOutPages;
-
-    return pages.filter((page) => page[0]).map((page) => page[1]);
+  updateNativeTabBar() {
+    this.nativeTabBarService.setVisible(
+      this.useNativeTabBar && !this.inCookMode,
+    );
+    this.nativeTabBarService.setMoreTabBadgeCount(this.peopleBadgeCount);
   }
 
   async loadInboxCount() {
@@ -641,6 +429,7 @@ export class AppComponent {
     if (!response) return;
 
     this.inboxCount = response.count;
+    this.updateNativeTabBar();
   }
 
   async loadFriendRequestCount() {
@@ -652,6 +441,7 @@ export class AppComponent {
     if (!response) return;
 
     this.friendRequestCount = response.incomingRequests?.length || undefined;
+    this.updateNativeTabBar();
   }
 
   updateMenuSwipe() {
@@ -695,6 +485,7 @@ export class AppComponent {
 
     this.deepLinkService.init();
     this.shareReceiverService.init();
+    this.nativeTabBarService.init();
 
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "visible") return;
@@ -712,6 +503,9 @@ export class AppComponent {
       this.updateNavList();
 
       this.inCookMode = event.url.split("?")[0].endsWith("/cook");
+
+      this.updateNativeTabBar();
+      this.nativeTabBarService.setSelectedFromUrl(event.urlAfterRedirects);
 
       this.checkBrowserCompatibility();
 

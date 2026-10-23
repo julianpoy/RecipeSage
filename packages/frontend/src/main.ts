@@ -17,9 +17,16 @@ import {
 } from "@angular/router";
 import {
   IonicRouteStrategy,
+  isPlatform,
   provideIonicAngular,
 } from "@ionic/angular/standalone";
 import { RouteReuseStrategy } from "@angular/router";
+import {
+  iosTransitionAnimation,
+  popoverEnterAnimation,
+  popoverLeaveAnimation,
+} from "@rdlabo/ionic-theme-ios27";
+import { mdTransitionAnimation } from "@rdlabo/ionic-theme-md3";
 
 import { AppComponent } from "./app/app.component";
 import { appRoutes } from "./app/app.routes";
@@ -39,12 +46,23 @@ if (environment.production) {
   enableProdMode();
 }
 
+const getThemeAnimations = () => {
+  if (!isPlatform("ios")) return { navAnimation: mdTransitionAnimation };
+  if (!CSS.supports("overflow-anchor: auto")) return {};
+
+  return {
+    navAnimation: iosTransitionAnimation,
+    popoverEnter: popoverEnterAnimation,
+    popoverLeave: popoverLeaveAnimation,
+  };
+};
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection(),
     provideRouter(appRoutes, withPreloading(PreloadAllModules)),
     { provide: TitleStrategy, useClass: CustomTitleStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({ ...getThemeAnimations(), backButtonText: "" }),
     provideTranslate(),
     provideLoadingBar(),
     {

@@ -13,6 +13,7 @@ import {
   SelectMultipleItemsComponent,
 } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -22,7 +23,9 @@ import {
   IonIcon,
   IonContent,
   IonItem,
-  IonInput,
+  IonList,
+  IonItemGroup,
+  IonNote,
   IonToggle,
   IonLabel,
   IonFooter,
@@ -37,6 +40,7 @@ import { addIcons } from "ionicons";
   styleUrls: ["manage-label-group-modal.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextInputComponent,
     SelectMultipleItemsComponent,
     IonHeader,
     IonToolbar,
@@ -46,7 +50,9 @@ import { addIcons } from "ionicons";
     IonIcon,
     IonContent,
     IonItem,
-    IonInput,
+    IonList,
+    IonItemGroup,
+    IonNote,
     IonToggle,
     IonLabel,
     IonFooter,

@@ -16,7 +16,6 @@ import {
   IonItem,
   IonIcon,
   IonToggle,
-  IonButton,
   IonLabel,
 } from "@ionic/angular/standalone";
 import {
@@ -64,7 +63,6 @@ export type RecipeDetailsPopoverActionTypes =
     IonItem,
     IonIcon,
     IonToggle,
-    IonButton,
     IonLabel,
   ],
 })

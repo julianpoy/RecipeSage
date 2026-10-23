@@ -1,7 +1,6 @@
 :host {
   --hero-text: #ffffff;
   --hero-scrim: rgba(0, 0, 0, 0.78);
-  --btn-primary-bg: #5e8b56;
   --btn-border: rgba(255, 255, 255, 0.7);
 }
 
@@ -107,30 +106,24 @@ ion-content {
 .actions {
   position: sticky;
   bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   padding: 32px 24px calc(20px + var(--ion-safe-area-bottom, 0px));
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.8) 55%
-  );
 
   ion-button {
-    --border-radius: 6px;
-    --background: var(--btn-primary-bg);
-    --color: var(--hero-text);
-    --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    width: 100%;
     max-width: 400px;
-    margin: 0 auto;
+    margin: 0;
     font-weight: 600;
     text-transform: none;
   }
 
   ion-button[fill="outline"] {
-    --background: transparent;
     --border-color: var(--btn-border);
     --border-width: 1px;
-    --box-shadow: none;
-    margin-top: 12px;
+    --color: var(--hero-text);
   }
 }

@@ -17,6 +17,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonItemGroup,
   IonCheckbox,
   IonFooter,
 } from "@ionic/angular/standalone";
@@ -40,6 +41,7 @@ import { addIcons } from "ionicons";
     IonItem,
     IonLabel,
     IonList,
+    IonItemGroup,
     IonCheckbox,
     IonFooter,
   ],

@@ -24,7 +24,8 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonFooter,
+  IonList,
+  IonItemGroup,
 } from "@ionic/angular/standalone";
 import {
   closeOutline,
@@ -54,7 +55,8 @@ import { addIcons } from "ionicons";
     IonContent,
     IonItem,
     IonLabel,
-    IonFooter,
+    IonList,
+    IonItemGroup,
   ],
 })
 export class ManageLabelModalPage {

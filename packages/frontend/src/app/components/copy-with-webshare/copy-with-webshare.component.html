@@ -1,17 +1,13 @@
 <div>
   <br />
-  <ion-item lines="none">
-    <ion-label class="ion-text-wrap">
-      <p>
-        {{ "components.copyWithWebshare.instructions" | translate }}
-        @if (!hasWebShareAPI) {
-          <span>
-            {{ "components.copyWithWebshare.shareIcon" | translate }}
-          </span>
-        }
-      </p>
-    </ion-label>
-  </ion-item>
+  <p class="instructions">
+    {{ "components.copyWithWebshare.instructions" | translate }}
+    @if (!hasWebShareAPI) {
+      <span>
+        {{ "components.copyWithWebshare.shareIcon" | translate }}
+      </span>
+    }
+  </p>
   <div class="codeBlock">
     <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
       {{ copyText }}

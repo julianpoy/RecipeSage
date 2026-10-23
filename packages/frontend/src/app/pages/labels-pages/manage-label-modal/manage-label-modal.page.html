@@ -12,71 +12,79 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item lines="none">
-    <ion-icon name="pricetag-outline" slot="start"></ion-icon>
-    <ion-label>
-      <h2 class="ion-text-capitalize">{{ label.title }}</h2>
-      <p>
-        <span>
-          {{
-            "pages.manageLabelModal.recipeCount"
-              | translate: { count: label._count.recipeLabels }
-          }}
-        </span>
-        <br />
-        @if (label.labelGroup) {
-          <span>
-            {{
-              "pages.manageLabelModal.group"
-                | translate: { title: label.labelGroup.title }
-            }}
-          </span>
-        }
-        @if (!label.labelGroup) {
-          <span> {{ "pages.manageLabelModal.noGroup" | translate }} </span>
-        }
-        <br />
-        <span>
-          {{
-            "pages.manageLabelModal.createdAt"
-              | translate: { dateString: createdAt }
-          }}
-        </span>
-        <br />
-      </p>
-    </ion-label>
-  </ion-item>
+<ion-content class="ion-padding grouped-content">
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item>
+        <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h2 class="ion-text-capitalize">{{ label.title }}</h2>
+          <p>
+            <span>
+              {{
+                "pages.manageLabelModal.recipeCount"
+                  | translate: { count: label._count.recipeLabels }
+              }}
+            </span>
+            <br />
+            @if (label.labelGroup) {
+              <span>
+                {{
+                  "pages.manageLabelModal.group"
+                    | translate: { title: label.labelGroup.title }
+                }}
+              </span>
+            }
+            @if (!label.labelGroup) {
+              <span> {{ "pages.manageLabelModal.noGroup" | translate }} </span>
+            }
+            <br />
+            <span>
+              {{
+                "pages.manageLabelModal.createdAt"
+                  | translate: { dateString: createdAt }
+              }}
+            </span>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item button [detail]="false" (click)="view()">
+        <ion-icon name="folder-open-outline" slot="start"></ion-icon>
+        <ion-label>{{ "pages.manageLabelModal.view" | translate }}</ion-label>
+      </ion-item>
+      <ion-item button [detail]="false" (click)="rename()">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        <ion-label>{{ "pages.manageLabelModal.rename" | translate }}</ion-label>
+      </ion-item>
+      <ion-item button [detail]="false" (click)="merge()">
+        <ion-icon name="git-network-outline" slot="start"></ion-icon>
+        <ion-label>{{ "pages.manageLabelModal.merge" | translate }}</ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item button [detail]="false" (click)="delete()">
+        <ion-icon name="trash-outline" color="danger" slot="start"></ion-icon>
+        <ion-label color="danger">
+          {{ "pages.manageLabelModal.delete" | translate }}
+        </ion-label>
+      </ion-item>
+      <ion-item button [detail]="false" (click)="deleteWithRecipes()">
+        <ion-icon name="trash-outline" color="danger" slot="start"></ion-icon>
+        <ion-label color="danger">
+          {{ "pages.manageLabelModal.deleteWithRecipes" | translate }}
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
-
-<ion-footer class="ion-padding">
-  <ion-button expand="block" (click)="view()">
-    <ion-icon name="folder-open-outline" slot="start"></ion-icon>
-    <ion-label>{{ "pages.manageLabelModal.view" | translate }}</ion-label>
-  </ion-button>
-
-  <ion-button expand="block" (click)="rename()">
-    <ion-icon name="create-outline" slot="start"></ion-icon>
-    <ion-label>{{ "pages.manageLabelModal.rename" | translate }}</ion-label>
-  </ion-button>
-
-  <ion-button expand="block" (click)="merge()">
-    <ion-icon name="git-network-outline" slot="start"></ion-icon>
-    <ion-label>{{ "pages.manageLabelModal.merge" | translate }}</ion-label>
-  </ion-button>
-
-  <ion-button expand="block" color="danger" (click)="delete()">
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
-    <ion-label>{{ "pages.manageLabelModal.delete" | translate }}</ion-label>
-  </ion-button>
-
-  <ion-button expand="block" color="danger" (click)="deleteWithRecipes()">
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
-    <ion-label>{{
-      "pages.manageLabelModal.deleteWithRecipes" | translate
-    }}</ion-label>
-  </ion-button>
-</ion-footer>
 
 <alert-modal
   [(isOpen)]="isRenameModalOpen"

@@ -4,9 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <br />
-  {{ "pages.icalMealPlanModal.description" | translate }}
+<ion-content class="ion-padding grouped-content">
+  <p class="ion-no-margin">
+    {{ "pages.icalMealPlanModal.description" | translate }}
+  </p>
 
   <copy-with-webshare
     [webshareURL]="icalURL"

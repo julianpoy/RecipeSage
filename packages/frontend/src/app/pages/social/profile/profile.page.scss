@@ -67,3 +67,8 @@
   width: 40px;
   margin-right: 16px;
 }
+
+ion-footer ion-toolbar {
+  --background: var(--ion-background-color);
+  --border-width: 0;
+}

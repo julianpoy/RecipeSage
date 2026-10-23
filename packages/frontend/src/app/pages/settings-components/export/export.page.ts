@@ -21,6 +21,9 @@ import {
   IonProgressBar,
   IonButton,
   IonList,
+  IonListHeader,
+  IonItemGroup,
+  IonNote,
 } from "@ionic/angular/standalone";
 import { cloudDownloadOutline, documentOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -70,6 +73,9 @@ const JOB_POLL_INTERVAL_MS = 60_000;
     IonProgressBar,
     IonButton,
     IonList,
+    IonListHeader,
+    IonItemGroup,
+    IonNote,
   ],
 })
 export class ExportPage {

@@ -6,6 +6,7 @@ import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "../../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -15,7 +16,8 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonInput,
+  IonList,
+  IonItemGroup,
   IonButton,
 } from "@ionic/angular/standalone";
 
@@ -26,6 +28,7 @@ import {
   styleUrls: ["import-pepperplate.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -34,7 +37,8 @@ import {
     IonContent,
     IonItem,
     IonLabel,
-    IonInput,
+    IonList,
+    IonItemGroup,
     IonButton,
   ],
 })

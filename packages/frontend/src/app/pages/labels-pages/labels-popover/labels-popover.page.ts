@@ -14,7 +14,7 @@ import {
   IonListHeader,
   IonItem,
   IonToggle,
-  IonButton,
+  IonLabel,
 } from "@ionic/angular/standalone";
 
 @Component({
@@ -28,7 +28,7 @@ import {
     IonListHeader,
     IonItem,
     IonToggle,
-    IonButton,
+    IonLabel,
   ],
 })
 export class LabelsPopoverPage {

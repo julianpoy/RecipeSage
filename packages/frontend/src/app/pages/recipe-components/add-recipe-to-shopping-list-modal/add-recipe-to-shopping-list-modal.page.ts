@@ -39,6 +39,8 @@ import {
   IonSelectOption,
   IonLabel,
   IonFooter,
+  IonList,
+  IonItemGroup,
 } from "@ionic/angular/standalone";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -63,6 +65,8 @@ import { addIcons } from "ionicons";
     IonSelectOption,
     IonLabel,
     IonFooter,
+    IonList,
+    IonItemGroup,
   ],
 })
 export class AddRecipeToShoppingListModalPage {

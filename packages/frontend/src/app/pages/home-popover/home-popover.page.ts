@@ -17,7 +17,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
-  IonButton,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular/standalone";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
@@ -36,7 +36,7 @@ import { addIcons } from "ionicons";
     IonSelect,
     IonSelectOption,
     IonToggle,
-    IonButton,
+    IonLabel,
     IonIcon,
   ],
 })

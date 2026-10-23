@@ -2,7 +2,8 @@ import { Component, Input, inject } from "@angular/core";
 import {
   PopoverController,
   IonList,
-  IonButton,
+  IonItem,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular/standalone";
 
@@ -17,7 +18,7 @@ export type UserActionsPopoverAction = "report" | "block" | "unblock";
   selector: "page-user-actions-popover",
   templateUrl: "user-actions-popover.page.html",
   styleUrls: ["user-actions-popover.page.scss"],
-  imports: [...SHARED_UI_IMPORTS, IonList, IonButton, IonIcon],
+  imports: [...SHARED_UI_IMPORTS, IonList, IonItem, IonLabel, IonIcon],
 })
 export class UserActionsPopoverPage {
   private popoverCtrl = inject(PopoverController);

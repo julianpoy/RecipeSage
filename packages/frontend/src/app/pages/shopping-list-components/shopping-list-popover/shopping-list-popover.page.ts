@@ -31,7 +31,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
-  IonButton,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular/standalone";
 import {
@@ -57,7 +57,7 @@ import { addIcons } from "ionicons";
     IonSelect,
     IonSelectOption,
     IonToggle,
-    IonButton,
+    IonLabel,
     IonIcon,
   ],
 })

@@ -6,8 +6,12 @@ import {
   IonTitle,
   IonContent,
   IonItem,
-  IonLabel,
+  IonButtons,
   IonButton,
+  IonIcon,
+  IonList,
+  IonItemGroup,
+  IonNote,
   IonInput,
   IonSelect,
   IonSelectOption,
@@ -28,6 +32,8 @@ import {
   formatQuantity,
 } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { closeOutline } from "ionicons/icons";
+import { addIcons } from "ionicons";
 
 export type UnitSystem = "original" | "metric" | "imperial";
 
@@ -48,8 +54,12 @@ interface AnchorOption extends AnchorMeasurement {
     IonTitle,
     IonContent,
     IonItem,
-    IonLabel,
+    IonButtons,
     IonButton,
+    IonIcon,
+    IonList,
+    IonItemGroup,
+    IonNote,
     IonInput,
     IonSelect,
     IonSelectOption,
@@ -73,6 +83,10 @@ export class ScaleRecipeComponent implements OnInit {
   anchorQtyInput: string = "";
 
   readonly presets = ["1/2", "1", "2", "3", "4"];
+
+  constructor() {
+    addIcons({ closeOutline });
+  }
 
   ngOnInit() {
     this.scale = applyDecimalNotation(this.scale, this.decimalNotationMode);
@@ -221,6 +235,19 @@ export class ScaleRecipeComponent implements OnInit {
     return this.anchorOptions.find(
       (candidate) => candidate.index === this.anchorIndex,
     );
+  }
+
+  anchorQtyLabel(anchor: AnchorOption) {
+    if (anchor.unit) {
+      return {
+        key: "components.scaleRecipe.anchorQty",
+        params: { unit: anchor.unit, originalQty: anchor.qtyText },
+      };
+    }
+    return {
+      key: "components.scaleRecipe.anchorQtyNoUnit",
+      params: { originalQty: anchor.qtyText },
+    };
   }
 
   private sanitizedScale(): string {

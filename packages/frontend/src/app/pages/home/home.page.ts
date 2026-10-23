@@ -33,6 +33,7 @@ import type {
 import { countActiveNutritionRanges } from "../../utils/nutritionFilter";
 import { maybeRequestPersistentStorage } from "../../utils/persistentStorage";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../utils/isNativeIOS";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { NullStateComponent } from "../../components/null-state/null-state.component";
 import { RecipeListItemComponent } from "../../components/recipe-list-item/recipe-list-item.component";
@@ -114,6 +115,8 @@ export class HomePage implements OnDestroy {
   private serverActionsService = inject(ServerActionsService);
   private utilService = inject(UtilService);
   private cookingToolbarService = inject(CookingToolbarService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   aboutHref: string = RouteMap.AboutPage.getPath();

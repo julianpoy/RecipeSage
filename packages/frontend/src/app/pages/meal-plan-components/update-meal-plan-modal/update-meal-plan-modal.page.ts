@@ -6,6 +6,7 @@ import { LoadingService } from "../../../services/loading.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import { MealPlanMealOrderModalPage } from "../meal-plan-meal-order-modal/meal-plan-meal-order-modal.page";
 import {
   IonHeader,
@@ -16,8 +17,9 @@ import {
   IonIcon,
   IonContent,
   IonItem,
-  IonInput,
   IonLabel,
+  IonList,
+  IonItemGroup,
   IonFooter,
 } from "@ionic/angular/standalone";
 import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
@@ -31,6 +33,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -39,8 +42,9 @@ import { addIcons } from "ionicons";
     IonIcon,
     IonContent,
     IonItem,
-    IonInput,
     IonLabel,
+    IonList,
+    IonItemGroup,
     IonFooter,
   ],
 })

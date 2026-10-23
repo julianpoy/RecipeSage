@@ -6,6 +6,8 @@ import { SelectMealComponent } from "../../../components/select-meal/select-meal
 import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecurrenceEditorComponent } from "../../../components/recurrence-editor/recurrence-editor.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import type { RecipeSummary } from "@recipesage/prisma";
 import {
   MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT,
@@ -26,9 +28,9 @@ import {
   IonSegment,
   IonSegmentButton,
   IonItem,
-  IonInput,
   IonLabel,
-  IonTextarea,
+  IonList,
+  IonItemGroup,
   IonFooter,
 } from "@ionic/angular/standalone";
 import { calendarOutline, closeOutline } from "ionicons/icons";
@@ -54,6 +56,8 @@ export interface MealPlanItemDraft {
     SelectMealComponent,
     SelectRecipeComponent,
     RecurrenceEditorComponent,
+    TextInputComponent,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -64,9 +68,9 @@ export interface MealPlanItemDraft {
     IonSegment,
     IonSegmentButton,
     IonItem,
-    IonInput,
     IonLabel,
-    IonTextarea,
+    IonList,
+    IonItemGroup,
     IonFooter,
   ],
 })

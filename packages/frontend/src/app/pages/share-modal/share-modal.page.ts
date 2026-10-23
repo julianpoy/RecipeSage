@@ -17,6 +17,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserKnownUserComponent } from "../../components/select-user-knownuser/select-user-knownuser.component";
 import { CopyWithWebshareComponent } from "../../components/copy-with-webshare/copy-with-webshare.component";
 import { RecipePreviewComponent } from "../../components/recipe-preview/recipe-preview.component";
+import { TextInputComponent } from "../../components/forms/text-input/text-input.component";
 import { getShareLinkOrigin } from "../../utils/serverConfig";
 import {
   IonHeader,
@@ -33,8 +34,9 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToggle,
-  IonInput,
   IonFooter,
+  IonItemGroup,
+  IonNote,
   type SegmentCustomEvent,
 } from "@ionic/angular/standalone";
 import {
@@ -47,7 +49,6 @@ import {
   imageOutline,
   linkOutline,
   printOutline,
-  resizeOutline,
   sendOutline,
   starOutline,
   swapHorizontalOutline,
@@ -65,6 +66,7 @@ import { serverConfig } from "../../utils/serverConfig";
     SelectUserKnownUserComponent,
     CopyWithWebshareComponent,
     RecipePreviewComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -79,8 +81,9 @@ import { serverConfig } from "../../utils/serverConfig";
     IonSegment,
     IonSegmentButton,
     IonToggle,
-    IonInput,
     IonFooter,
+    IonItemGroup,
+    IonNote,
   ],
 })
 export class ShareModalPage {
@@ -104,8 +107,8 @@ export class ShareModalPage {
   recipeURL?: string;
 
   enableJSONLD = true;
-  embedHeight = 800;
-  embedWidth = 600;
+  embedHeight = "800";
+  embedWidth = "600";
   embedConfig: RecipeTemplateModifiers = {
     verticalInstrIng: false,
     titleImage: true,
@@ -133,7 +136,6 @@ export class ShareModalPage {
       imageOutline,
       linkOutline,
       printOutline,
-      resizeOutline,
       sendOutline,
       starOutline,
       swapHorizontalOutline,
