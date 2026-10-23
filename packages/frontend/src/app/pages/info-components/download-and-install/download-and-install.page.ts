@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, signal } from "@angular/core";
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { Capacitor } from "@capacitor/core";
 import {
@@ -50,6 +56,7 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
   selector: "page-download-and-install",
   templateUrl: "download-and-install.page.html",
   styleUrls: ["download-and-install.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

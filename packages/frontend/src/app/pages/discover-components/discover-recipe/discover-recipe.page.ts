@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import {
@@ -86,6 +86,7 @@ type DiscoverRecipeDetail = RouterOutputs["discover"]["getDiscoverRecipe"];
   selector: "page-discover-recipe",
   templateUrl: "discover-recipe.page.html",
   styleUrls: ["discover-recipe.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,

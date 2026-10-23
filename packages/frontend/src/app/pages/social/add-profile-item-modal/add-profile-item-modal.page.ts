@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 
 import { RouteMap } from "../../../services/util.service";
@@ -43,6 +43,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-profile-item-modal",
   templateUrl: "add-profile-item-modal.page.html",
   styleUrls: ["add-profile-item-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectLabelComponent,

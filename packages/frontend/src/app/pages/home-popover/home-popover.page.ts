@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ToastController, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -28,6 +33,7 @@ import { addIcons } from "ionicons";
   selector: "page-home-popover",
   templateUrl: "home-popover.page.html",
   styleUrls: ["home-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -23,6 +23,7 @@ import {
   selector: "page-import-urls",
   templateUrl: "import-urls.page.html",
   styleUrls: ["import-urls.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

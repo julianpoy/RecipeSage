@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   IonHeader,
@@ -29,6 +34,7 @@ export interface SearchableSelectOption {
   selector: "searchable-select-modal",
   templateUrl: "searchable-select-modal.component.html",
   styleUrls: ["./searchable-select-modal.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

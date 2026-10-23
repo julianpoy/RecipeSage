@@ -1,4 +1,9 @@
-import { Component, computed, inject } from "@angular/core";
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
@@ -50,6 +55,7 @@ const GOOGLE_MANAGE_URL = "https://play.google.com/store/account/subscriptions";
   selector: "page-contribute",
   templateUrl: "contribute.page.html",
   styleUrls: ["contribute.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TosClickwrapAgreementComponent,

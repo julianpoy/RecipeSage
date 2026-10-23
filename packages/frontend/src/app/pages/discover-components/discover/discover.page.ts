@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
@@ -58,6 +58,7 @@ const TILE_PADD = 20;
   selector: "page-discover",
   templateUrl: "discover.page.html",
   styleUrls: ["discover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,

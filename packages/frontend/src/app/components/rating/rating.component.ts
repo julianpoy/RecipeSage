@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon } from "@ionic/angular/standalone";
 import { star, starOutline } from "ionicons/icons";
@@ -9,6 +15,7 @@ import { addIcons } from "ionicons";
   selector: "rating",
   templateUrl: "rating.component.html",
   styleUrls: ["./rating.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon],
 })
 export class RatingComponent {

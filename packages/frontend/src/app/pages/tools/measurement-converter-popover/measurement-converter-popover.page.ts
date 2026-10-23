@@ -1,4 +1,9 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   IonList,
   IonListHeader,
@@ -20,6 +25,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   selector: "page-measurement-converter-popover",
   templateUrl: "measurement-converter-popover.page.html",
   styleUrls: ["measurement-converter-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

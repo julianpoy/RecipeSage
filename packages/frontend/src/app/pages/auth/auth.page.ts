@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   NavController,
@@ -44,6 +49,7 @@ import { addIcons } from "ionicons";
   selector: "page-auth",
   templateUrl: "auth.page.html",
   styleUrls: ["auth.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SignInWithGoogleComponent,

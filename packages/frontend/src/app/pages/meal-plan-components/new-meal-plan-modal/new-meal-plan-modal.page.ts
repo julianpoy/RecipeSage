@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -28,6 +28,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-meal-plan-modal",
   templateUrl: "new-meal-plan-modal.page.html",
   styleUrls: ["new-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,

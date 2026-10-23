@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { NavController } from "@ionic/angular/standalone";
 
 import { RouteMap } from "../../../services/util.service";
@@ -22,6 +22,7 @@ import { addIcons } from "ionicons";
   selector: "page-not-found",
   templateUrl: "not-found.page.html",
   styleUrls: ["not-found.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

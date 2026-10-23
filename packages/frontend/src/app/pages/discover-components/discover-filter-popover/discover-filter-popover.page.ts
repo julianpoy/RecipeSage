@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import {
@@ -45,6 +50,7 @@ export interface DiscoverFilterResult {
   selector: "page-discover-filter-popover",
   templateUrl: "discover-filter-popover.page.html",
   styleUrls: ["discover-filter-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

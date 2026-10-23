@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectKnownUserComponent } from "../select-knownuser/select-knownuser.component";
@@ -9,6 +15,7 @@ import { SelectUserComponent } from "../select-user/select-user.component";
   selector: "select-user-knownuser",
   templateUrl: "select-user-knownuser.component.html",
   styleUrls: ["./select-user-knownuser.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectKnownUserComponent,

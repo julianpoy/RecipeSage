@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -163,6 +163,7 @@ const emptyForm = (): PublishRecipeForm => ({
   selector: "page-publish-discover-recipe",
   templateUrl: "publish-discover-recipe.page.html",
   styleUrls: ["publish-discover-recipe.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,

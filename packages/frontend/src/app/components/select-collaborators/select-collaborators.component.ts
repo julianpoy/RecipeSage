@@ -5,6 +5,7 @@ import {
   Output,
   type AfterViewInit,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -25,6 +26,7 @@ import { addIcons } from "ionicons";
   selector: "select-collaborators",
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, SelectUserComponent, IonIcon],
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {

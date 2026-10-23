@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   AlertController,
   NavController,
@@ -49,6 +54,7 @@ import { addIcons } from "ionicons";
   selector: "page-shopping-list-popover",
   templateUrl: "shopping-list-popover.page.html",
   styleUrls: ["shopping-list-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

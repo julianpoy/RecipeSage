@@ -5,6 +5,7 @@ import {
   Input,
   inject,
   type OnInit,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { LoadingService } from "../../services/loading.service";
@@ -30,6 +31,7 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   selector: "select-user",
   templateUrl: "select-user.component.html",
   styleUrls: ["./select-user.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonItem,

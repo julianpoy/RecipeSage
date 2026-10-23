@@ -1,4 +1,9 @@
-import { Component, computed, inject } from "@angular/core";
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -46,6 +51,7 @@ import { addIcons } from "ionicons";
   selector: "page-shopping-lists",
   templateUrl: "shopping-lists.page.html",
   styleUrls: ["shopping-lists.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

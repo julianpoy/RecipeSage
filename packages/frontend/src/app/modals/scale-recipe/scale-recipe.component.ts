@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   IonHeader,
@@ -41,6 +47,7 @@ interface AnchorOption extends AnchorMeasurement {
   selector: "scale-recipe",
   templateUrl: "scale-recipe.component.html",
   styleUrls: ["scale-recipe.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

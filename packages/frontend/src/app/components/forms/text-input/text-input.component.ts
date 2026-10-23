@@ -1,4 +1,9 @@
-import { Component, Input, forwardRef } from "@angular/core";
+import {
+  Component,
+  Input,
+  forwardRef,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 let nextId = 0;
@@ -8,6 +13,7 @@ let nextId = 0;
   selector: "text-input",
   templateUrl: "text-input.component.html",
   styleUrls: ["text-input.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

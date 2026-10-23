@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import dayjs from "dayjs";
 import {
@@ -99,6 +99,7 @@ import { addIcons } from "ionicons";
   selector: "page-edit-recipe",
   templateUrl: "edit-recipe.page.html",
   styleUrls: ["edit-recipe.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMultipleItemsComponent,

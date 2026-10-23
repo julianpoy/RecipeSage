@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -39,6 +39,7 @@ import { addIcons } from "ionicons";
   selector: "page-messages",
   templateUrl: "messages.page.html",
   styleUrls: ["messages.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

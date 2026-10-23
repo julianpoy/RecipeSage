@@ -4,6 +4,7 @@ import {
   ElementRef,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
@@ -25,6 +26,7 @@ import {
   selector: "page-legal",
   templateUrl: "legal.page.html",
   styleUrls: ["legal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

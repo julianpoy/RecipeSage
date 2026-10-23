@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { NavController } from "@ionic/angular/standalone";
 import * as Sentry from "@sentry/browser";
 
@@ -76,6 +76,7 @@ type ImportFormat =
   selector: "page-import",
   templateUrl: "import.page.html",
   styleUrls: ["import.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

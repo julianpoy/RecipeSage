@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
@@ -37,6 +42,7 @@ export interface PrintOption {
   selector: "page-print-recipe-modal",
   templateUrl: "print-recipe-modal.page.html",
   styleUrls: ["print-recipe-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RecipePreviewComponent,

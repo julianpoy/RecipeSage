@@ -1,4 +1,9 @@
-import { Input, Component, inject } from "@angular/core";
+import {
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   type CheckboxCustomEvent,
@@ -28,6 +33,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan-bulk-pin-modal",
   templateUrl: "meal-plan-bulk-pin-modal.page.html",
   styleUrls: ["meal-plan-bulk-pin-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

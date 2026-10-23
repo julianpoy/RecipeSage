@@ -7,6 +7,7 @@ import {
   type OnInit,
   type SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -24,6 +25,7 @@ const LAST_USED_MEAL_VAR = "lastUsedMeal";
   selector: "select-meal",
   templateUrl: "select-meal.component.html",
   styleUrls: ["./select-meal.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonItem, IonSelect, IonSelectOption],
 })
 export class SelectMealComponent implements OnInit, OnChanges {

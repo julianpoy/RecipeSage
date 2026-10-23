@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { NavController } from "@ionic/angular/standalone";
 
 import { RouteMap } from "../../services/util.service";
@@ -32,6 +32,7 @@ import {
   selector: "page-tools",
   templateUrl: "tools.page.html",
   styleUrls: ["tools.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

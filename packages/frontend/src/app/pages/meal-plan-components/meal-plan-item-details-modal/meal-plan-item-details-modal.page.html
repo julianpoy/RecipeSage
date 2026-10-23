@@ -18,8 +18,9 @@
       <ion-avatar slot="start">
         <img
           src="{{
-            mealItem.recipe?.recipeImages?.at(0)?.image?.location
-              | resolveStorageLocation
+            $safeNavigationMigration(
+              mealItem.recipe?.recipeImages?.at(0)?.image?.location
+            ) | resolveStorageLocation
           }}"
         />
       </ion-avatar>

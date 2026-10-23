@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonModal } from "@ionic/angular/standalone";
@@ -13,6 +14,7 @@ import { IonModal } from "@ionic/angular/standalone";
   standalone: true,
   selector: "alert-modal",
   templateUrl: "alert-modal.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonModal],
 })
 export class AlertModalComponent {

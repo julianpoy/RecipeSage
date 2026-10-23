@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -95,6 +95,7 @@ import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
   selector: "page-recipe",
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,

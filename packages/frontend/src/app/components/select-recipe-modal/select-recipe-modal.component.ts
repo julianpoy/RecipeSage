@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   ModalController,
   IonHeader,
@@ -20,6 +20,7 @@ import { SelectRecipeComponent } from "../select-recipe/select-recipe.component"
   standalone: true,
   selector: "select-recipe-modal",
   templateUrl: "select-recipe-modal.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

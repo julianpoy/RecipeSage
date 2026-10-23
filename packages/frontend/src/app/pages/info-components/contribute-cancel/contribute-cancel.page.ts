@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap } from "../../../services/util.service";
 import { CapabilitiesService } from "../../../services/capabilities.service";
@@ -18,6 +18,7 @@ import {
   selector: "page-contribute-cancel",
   templateUrl: "contribute-cancel.page.html",
   styleUrls: ["contribute-cancel.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,

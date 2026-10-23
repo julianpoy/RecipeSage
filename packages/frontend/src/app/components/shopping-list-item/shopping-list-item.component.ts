@@ -5,6 +5,7 @@ import {
   EventEmitter,
   inject,
   ViewChild,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { UtilService } from "../../services/util.service";
@@ -43,6 +44,7 @@ import { TextInputComponent } from "../forms/text-input/text-input.component";
   selector: "shopping-list-item",
   templateUrl: "shopping-list-item.component.html",
   styleUrls: ["./shopping-list-item.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     AlertModalComponent,

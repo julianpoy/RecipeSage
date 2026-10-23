@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { AlertController, NavController } from "@ionic/angular/standalone";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
@@ -18,6 +18,7 @@ import { addIcons } from "ionicons";
   selector: "cooking-toolbar",
   templateUrl: "cooking-toolbar.component.html",
   styleUrls: ["./cooking-toolbar.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon, IonRippleEffect],
 })
 export class CookingToolbarComponent {

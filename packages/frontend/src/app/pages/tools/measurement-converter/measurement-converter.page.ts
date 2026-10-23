@@ -1,4 +1,9 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -102,6 +107,7 @@ const SHORT_UNIT_KEYS: Record<string, string> = {
   selector: "page-measurement-converter",
   templateUrl: "measurement-converter.page.html",
   styleUrls: ["measurement-converter.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

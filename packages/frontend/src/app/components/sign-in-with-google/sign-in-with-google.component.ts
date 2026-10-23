@@ -8,6 +8,7 @@ import {
   type AfterViewInit,
   type OnDestroy,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ServerActionsService } from "../../services/server-actions.service";
 import {
@@ -36,6 +37,7 @@ const PKCE_VERIFIER_STORAGE_KEY = "googleSignInPkceVerifier";
   selector: "sign-in-with-google",
   templateUrl: "sign-in-with-google.component.html",
   styleUrls: ["./sign-in-with-google.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonButton],
 })
 export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {

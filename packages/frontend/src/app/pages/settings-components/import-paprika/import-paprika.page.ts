@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -25,6 +25,7 @@ const MAX_FILE_SIZE_MB = 3000;
   selector: "page-import-paprika",
   templateUrl: "import-paprika.page.html",
   styleUrls: ["import-paprika.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

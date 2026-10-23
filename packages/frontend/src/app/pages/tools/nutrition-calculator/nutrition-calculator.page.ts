@@ -1,4 +1,10 @@
-import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnDestroy,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular/standalone";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
@@ -143,6 +149,7 @@ type DisplayMode = "total" | "perServing";
   selector: "page-nutrition-calculator",
   templateUrl: "nutrition-calculator.page.html",
   styleUrls: ["nutrition-calculator.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

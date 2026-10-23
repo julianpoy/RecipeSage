@@ -1,4 +1,9 @@
-import { Input, Component, inject } from "@angular/core";
+import {
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -50,6 +55,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan-item-details-modal",
   templateUrl: "meal-plan-item-details-modal.page.html",
   styleUrls: ["meal-plan-item-details-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { AlertController, ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 import { Capacitor } from "@capacitor/core";
@@ -23,6 +30,7 @@ import { addIcons } from "ionicons";
   selector: "multi-image-upload",
   templateUrl: "multi-image-upload.component.html",
   styleUrls: ["./multi-image-upload.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon],
 })
 export class MultiImageUploadComponent {

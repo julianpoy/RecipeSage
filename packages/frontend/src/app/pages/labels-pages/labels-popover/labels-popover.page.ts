@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 
 import { UtilService } from "../../../services/util.service";
@@ -22,6 +27,7 @@ import {
   selector: "page-labels-popover",
   templateUrl: "labels-popover.page.html",
   styleUrls: ["labels-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

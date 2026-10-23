@@ -1,4 +1,9 @@
-import { Component, inject, OnDestroy } from "@angular/core";
+import {
+  Component,
+  inject,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import {
@@ -76,6 +81,7 @@ const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
   selector: "page-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,
@@ -524,9 +530,7 @@ export class HomePage implements OnDestroy {
     const result = await this.serverActionsService.recipes.getRecipes({
       folder: this.folder,
       orderBy: sortPreference.replace("-", "") as
-        | "title"
-        | "createdAt"
-        | "updatedAt",
+        "title" | "createdAt" | "updatedAt",
       orderDirection: sortPreference.startsWith("-") ? "desc" : "asc",
       offset,
       limit: this.fetchPerPage,

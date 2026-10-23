@@ -5,6 +5,7 @@ import {
   EventEmitter,
   inject,
   type OnDestroy,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -39,6 +40,7 @@ import { addIcons } from "ionicons";
   selector: "meal-calendar",
   templateUrl: "meal-calendar.component.html",
   styleUrls: ["./meal-calendar.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealGroupComponent,

@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import type { JobSummary } from "@recipesage/prisma";
@@ -42,6 +42,7 @@ const JOB_POLL_INTERVAL_MS = 60_000;
   selector: "page-jobs",
   templateUrl: "jobs.page.html",
   styleUrls: ["jobs.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

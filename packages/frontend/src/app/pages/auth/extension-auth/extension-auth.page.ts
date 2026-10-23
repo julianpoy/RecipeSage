@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController } from "@ionic/angular/standalone";
 import {
@@ -47,6 +47,7 @@ function isOfficialRedirectUri(value: string): boolean {
   selector: "page-extension-auth",
   templateUrl: "./extension-auth.page.html",
   styleUrls: ["./extension-auth.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,

@@ -1,4 +1,9 @@
-import { Component, inject, effect } from "@angular/core";
+import {
+  Component,
+  inject,
+  effect,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -78,6 +83,7 @@ interface ProfileForm {
   selector: "page-my-profile",
   templateUrl: "my-profile.page.html",
   styleUrls: ["my-profile.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

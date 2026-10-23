@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -55,6 +55,7 @@ interface ServerTarget {
   selector: "page-server-settings",
   templateUrl: "server-settings.page.html",
   styleUrls: ["server-settings.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

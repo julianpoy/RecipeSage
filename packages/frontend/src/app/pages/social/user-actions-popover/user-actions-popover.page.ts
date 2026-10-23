@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   PopoverController,
   IonList,
@@ -17,6 +22,7 @@ export type UserActionsPopoverAction = "report" | "block" | "unblock";
   selector: "page-user-actions-popover",
   templateUrl: "user-actions-popover.page.html",
   styleUrls: ["user-actions-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonList, IonButton, IonIcon],
 })
 export class UserActionsPopoverPage {

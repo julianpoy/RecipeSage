@@ -1,4 +1,9 @@
-import { Component, inject, Input } from "@angular/core";
+import {
+  Component,
+  inject,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   ToastController,
@@ -31,6 +36,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-shopping-list-modal",
   templateUrl: "new-shopping-list-modal.page.html",
   styleUrls: ["new-shopping-list-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,

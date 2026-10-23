@@ -5,6 +5,7 @@ import {
   Input,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { IonicSlides, ModalController } from "@ionic/angular/standalone";
 import { SwiperContainer } from "swiper/element";
@@ -39,6 +40,7 @@ import { addIcons } from "ionicons";
     IonIcon,
     IonContent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ImageViewerComponent {

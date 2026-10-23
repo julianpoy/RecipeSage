@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -32,6 +37,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-message-modal",
   templateUrl: "new-message-modal.page.html",
   styleUrls: ["new-message-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectUserComponent,

@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
@@ -7,6 +14,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   selector: "recipe-preview",
   templateUrl: "recipe-preview.component.html",
   styleUrls: ["./recipe-preview.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS],
 })
 export class RecipePreviewComponent {

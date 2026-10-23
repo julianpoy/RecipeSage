@@ -1,4 +1,9 @@
-import { Component, OnDestroy, inject } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   AlertController,
@@ -89,6 +94,7 @@ import { addIcons } from "ionicons";
   selector: "page-settings",
   templateUrl: "settings.page.html",
   styleUrls: ["settings.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

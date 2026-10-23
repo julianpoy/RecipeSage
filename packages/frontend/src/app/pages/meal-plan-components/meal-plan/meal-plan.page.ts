@@ -5,6 +5,7 @@ import {
   effect,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
@@ -74,6 +75,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan",
   templateUrl: "meal-plan.page.html",
   styleUrls: ["meal-plan.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealCalendarComponent,

@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { NavController } from "@ionic/angular/standalone";
 
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -31,6 +31,7 @@ import { addIcons } from "ionicons";
   selector: "page-blocked-users",
   templateUrl: "blocked-users.page.html",
   styleUrls: ["blocked-users.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

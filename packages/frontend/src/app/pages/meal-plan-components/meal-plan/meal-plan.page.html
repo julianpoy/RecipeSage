@@ -5,7 +5,10 @@
     </ion-buttons>
 
     <ion-title>
-      {{ "pages.mealPlan.title" | translate: { name: mealPlan()?.title } }}
+      {{
+        "pages.mealPlan.title"
+          | translate: { name: $safeNavigationMigration(mealPlan()?.title) }
+      }}
     </ion-title>
 
     <ion-buttons slot="end">

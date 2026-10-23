@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -41,6 +46,7 @@ import { addIcons } from "ionicons";
   selector: "page-manage-label-modal",
   templateUrl: "manage-label-modal.page.html",
   styleUrls: ["manage-label-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,

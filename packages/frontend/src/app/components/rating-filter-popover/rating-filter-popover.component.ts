@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { RatingComponent } from "../rating/rating.component";
@@ -20,6 +25,7 @@ import {
   selector: "rating-filter-popover",
   templateUrl: "rating-filter-popover.component.html",
   styleUrls: ["./rating-filter-popover.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,

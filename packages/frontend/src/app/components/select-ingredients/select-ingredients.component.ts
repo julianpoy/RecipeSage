@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -25,6 +32,7 @@ import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
   selector: "select-ingredients",
   templateUrl: "select-ingredients.component.html",
   styleUrls: ["./select-ingredients.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonItem, IonCheckbox],
 })
 export class SelectIngredientsComponent {

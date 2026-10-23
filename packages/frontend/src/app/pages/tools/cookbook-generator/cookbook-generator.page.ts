@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -55,6 +55,7 @@ interface CookbookRecipe {
   selector: "page-cookbook-generator",
   templateUrl: "cookbook-generator.page.html",
   styleUrls: ["cookbook-generator.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,

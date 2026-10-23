@@ -1,4 +1,9 @@
-import { Input, Component, inject } from "@angular/core";
+import {
+  Input,
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import dayjs from "dayjs";
 import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -49,6 +54,7 @@ export interface MealPlanItemDraft {
   selector: "page-new-meal-plan-item-modal",
   templateUrl: "new-meal-plan-item-modal.page.html",
   styleUrls: ["new-meal-plan-item-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMealComponent,

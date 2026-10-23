@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { PreferencesService } from "../../services/preferences.service";
 import {
@@ -26,6 +33,7 @@ import {
   selector: "font-size-modal",
   templateUrl: "font-size-modal.component.html",
   styleUrls: ["./font-size-modal.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

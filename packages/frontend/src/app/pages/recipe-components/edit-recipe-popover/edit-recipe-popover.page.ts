@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
@@ -17,6 +22,7 @@ import { addIcons } from "ionicons";
   selector: "page-edit-recipe-popover",
   templateUrl: "edit-recipe-popover.page.html",
   styleUrls: ["edit-recipe-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonList, IonListHeader, IonButton, IonIcon],
 })
 export class EditRecipePopoverPage {

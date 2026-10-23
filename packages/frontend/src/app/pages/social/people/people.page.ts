@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   ToastController,
   AlertController,
@@ -52,6 +52,7 @@ import { addIcons } from "ionicons";
   selector: "page-people",
   templateUrl: "people.page.html",
   styleUrls: ["people.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

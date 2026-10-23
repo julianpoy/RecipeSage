@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -38,6 +38,7 @@ const IMAGE_FILE_EXTENSIONS = [
   selector: "page-import-images",
   templateUrl: "import-images.page.html",
   styleUrls: ["import-images.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

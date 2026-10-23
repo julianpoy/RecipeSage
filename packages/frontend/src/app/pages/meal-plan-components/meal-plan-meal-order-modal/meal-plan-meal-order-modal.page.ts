@@ -6,6 +6,7 @@ import {
   type OnInit,
   QueryList,
   ViewChildren,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import {
   type ItemReorderEventDetail,
@@ -53,6 +54,7 @@ interface MealOptionEntry {
   selector: "page-meal-plan-meal-order-modal",
   templateUrl: "meal-plan-meal-order-modal.page.html",
   styleUrls: ["meal-plan-meal-order-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     ColorPickerComponent,

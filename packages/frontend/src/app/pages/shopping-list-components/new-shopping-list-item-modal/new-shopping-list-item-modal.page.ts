@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
@@ -33,6 +33,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-shopping-list-item-modal",
   templateUrl: "new-shopping-list-item-modal.page.html",
   styleUrls: ["new-shopping-list-item-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectIngredientsComponent,

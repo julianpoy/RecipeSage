@@ -4,6 +4,7 @@ import {
   ElementRef,
   ChangeDetectorRef,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, PopoverController } from "@ionic/angular/standalone";
@@ -57,6 +58,7 @@ interface ThreadMessage {
   selector: "page-message-thread",
   templateUrl: "message-thread.page.html",
   styleUrls: ["message-thread.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

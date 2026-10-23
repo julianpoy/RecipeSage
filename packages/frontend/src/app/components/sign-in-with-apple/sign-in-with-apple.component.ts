@@ -6,6 +6,7 @@ import {
   type OnInit,
   type OnDestroy,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ServerActionsService } from "../../services/server-actions.service";
 import {
@@ -37,6 +38,7 @@ const PKCE_VERIFIER_STORAGE_KEY = "appleSignInPkceVerifier";
   selector: "sign-in-with-apple",
   templateUrl: "sign-in-with-apple.component.html",
   styleUrls: ["./sign-in-with-apple.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonButton, IonIcon],
 })
 export class SignInWithAppleComponent implements OnInit, OnDestroy {

@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import type { MealPlanSummary } from "@recipesage/prisma";
 
@@ -28,6 +33,7 @@ import { addIcons } from "ionicons";
   selector: "page-update-meal-plan-modal",
   templateUrl: "update-meal-plan-modal.page.html",
   styleUrls: ["update-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,

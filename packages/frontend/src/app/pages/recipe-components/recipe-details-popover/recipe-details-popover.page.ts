@@ -1,4 +1,9 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { PopoverController } from "@ionic/angular/standalone";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
@@ -57,6 +62,7 @@ export type RecipeDetailsPopoverActionTypes =
   selector: "page-recipe-details-popover",
   templateUrl: "recipe-details-popover.page.html",
   styleUrls: ["recipe-details-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

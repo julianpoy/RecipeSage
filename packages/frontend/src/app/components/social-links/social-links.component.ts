@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonIcon, IonLabel, IonItem } from "@ionic/angular/standalone";
 import {
@@ -14,6 +14,7 @@ import { addIcons } from "ionicons";
   selector: "social-links",
   templateUrl: "social-links.component.html",
   styleUrls: ["./social-links.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon, IonLabel, IonItem],
 })
 export class SocialLinksComponent {

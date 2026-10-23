@@ -5,6 +5,7 @@ import {
   Input,
   effect,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import {
   NavController,
@@ -48,6 +49,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-recipe-to-shopping-list-modal",
   templateUrl: "add-recipe-to-shopping-list-modal.page.html",
   styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectIngredientsComponent,

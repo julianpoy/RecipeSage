@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   ToastController,
@@ -66,6 +66,7 @@ import { addIcons } from "ionicons";
   selector: "page-profile",
   templateUrl: "profile.page.html",
   styleUrls: ["profile.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

@@ -6,6 +6,7 @@ import {
   Output,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
@@ -44,6 +45,7 @@ const WEEKDAY_LABELS = [
   selector: "recurrence-editor",
   templateUrl: "./recurrence-editor.component.html",
   styleUrls: ["./recurrence-editor.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonItem,

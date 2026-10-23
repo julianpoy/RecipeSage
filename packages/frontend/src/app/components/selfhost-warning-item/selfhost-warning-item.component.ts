@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IonItem, IonLabel } from "@ionic/angular/standalone";
 
@@ -7,6 +7,7 @@ import { IonItem, IonLabel } from "@ionic/angular/standalone";
   selector: "selfhost-warning-item",
   templateUrl: "selfhost-warning-item.component.html",
   styleUrls: ["./selfhost-warning-item.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonItem, IonLabel],
 })
 export class SelfhostWarningItemComponent {

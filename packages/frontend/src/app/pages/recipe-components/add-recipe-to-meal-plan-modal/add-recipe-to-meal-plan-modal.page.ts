@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular/standalone";
 
@@ -43,6 +44,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-recipe-to-meal-plan-modal",
   templateUrl: "add-recipe-to-meal-plan-modal.page.html",
   styleUrls: ["add-recipe-to-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealCalendarComponent,

@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -32,6 +32,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-friend-modal",
   templateUrl: "add-friend-modal.page.html",
   styleUrls: ["add-friend-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectUserComponent,

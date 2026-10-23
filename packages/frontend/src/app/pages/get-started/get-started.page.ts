@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
   IonHeader,
   IonToolbar,
@@ -16,6 +16,7 @@ import { AuthType, RouteMap } from "../../services/util.service";
   selector: "page-get-started",
   templateUrl: "get-started.page.html",
   styleUrls: ["get-started.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

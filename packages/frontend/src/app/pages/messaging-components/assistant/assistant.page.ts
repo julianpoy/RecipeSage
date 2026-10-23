@@ -1,4 +1,9 @@
-import { Component, ViewChild, inject } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   AlertController,
   NavController,
@@ -41,6 +46,7 @@ import { addIcons } from "ionicons";
   selector: "page-assistant",
   templateUrl: "assistant.page.html",
   styleUrls: ["assistant.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,

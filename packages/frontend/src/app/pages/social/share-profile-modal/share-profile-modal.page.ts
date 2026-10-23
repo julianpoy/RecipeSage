@@ -1,4 +1,10 @@
-import { Component, Input, type OnInit, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  type OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ModalController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -34,6 +40,7 @@ import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
   selector: "page-share-profile-modal",
   templateUrl: "share-profile-modal.page.html",
   styleUrls: ["share-profile-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     CopyWithWebshareComponent,

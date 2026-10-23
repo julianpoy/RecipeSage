@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { ImportService } from "../../../services/import.service";
@@ -39,6 +39,7 @@ const DOCUMENT_FILE_EXTENSIONS = [
   selector: "page-import-textfiles",
   templateUrl: "import-textfiles.page.html",
   styleUrls: ["import-textfiles.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

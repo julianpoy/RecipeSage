@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 
 import type { MessageThreadDTO, UserPublic } from "@recipesage/prisma";
 import { ServerActionsService } from "../../services/server-actions.service";
@@ -18,6 +25,7 @@ import {
   selector: "select-knownuser",
   templateUrl: "select-knownuser.component.html",
   styleUrls: ["./select-knownuser.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,
