@@ -1,16 +1,23 @@
 import * as Sentry from "@sentry/node";
-import admin, { type ServiceAccount } from "firebase-admin";
+import {
+  type App,
+  type ServiceAccount,
+  cert,
+  getApp,
+  getApps,
+  initializeApp,
+} from "firebase-admin/app";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { IS_FIREBASE_AVAILABLE } from "./isFirebaseAvailable";
 import { config, Environment } from "./config";
 
-let initPromise: Promise<typeof admin | null> | undefined;
+let initPromise: Promise<App | null> | undefined;
 
-const init = async (): Promise<typeof admin | null> => {
+const init = async (): Promise<App | null> => {
   if (!IS_FIREBASE_AVAILABLE) return null;
 
-  if (admin.apps.length > 0) return admin;
+  if (getApps().length > 0) return getApp();
 
   try {
     const credentialsPath =
@@ -20,12 +27,10 @@ const init = async (): Promise<typeof admin | null> => {
       await readFile(credentialsPath, "utf-8"),
     );
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    return initializeApp({
+      credential: cert(serviceAccount),
       databaseURL: "https://chef-book.firebaseio.com",
     });
-
-    return admin;
   } catch (e) {
     if (
       config.environment !== Environment.Test &&
@@ -38,7 +43,7 @@ const init = async (): Promise<typeof admin | null> => {
   }
 };
 
-export const getFirebaseAdmin = (): Promise<typeof admin | null> => {
+export const getFirebaseAdmin = (): Promise<App | null> => {
   if (!initPromise) {
     initPromise = init();
   }

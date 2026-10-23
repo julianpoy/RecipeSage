@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/node";
-import { type MulticastMessage } from "firebase-admin/messaging";
+import { type MulticastMessage, getMessaging } from "firebase-admin/messaging";
 import { prisma } from "@recipesage/prisma";
 import { getFirebaseAdmin } from "./firebaseAdmin";
 
@@ -76,16 +76,16 @@ export const sendFCMMessages = async (
 ): Promise<void> => {
   if (!tokens.length) return;
 
-  const admin = await getFirebaseAdmin();
-  if (!admin) return;
+  const app = await getFirebaseAdmin();
+  if (!app) return;
 
   const invalidTokens: string[] = [];
 
   for (const tokenChunk of chunk(tokens, FCM_MULTICAST_TOKEN_LIMIT)) {
     try {
-      const response = await admin
-        .messaging()
-        .sendEachForMulticast(buildMessage(tokenChunk, data, notification));
+      const response = await getMessaging(app).sendEachForMulticast(
+        buildMessage(tokenChunk, data, notification),
+      );
 
       response.responses.forEach((sendResponse, index) => {
         if (sendResponse.success) return;
