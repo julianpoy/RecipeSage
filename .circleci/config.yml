@@ -410,7 +410,7 @@ jobs:
           name: collect-arm64-artifacts
           command: |
             mkdir -p desktop-artifacts/darwin/arm64
-            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-arm64.dmg
+            cp packages/desktop/out/make/dmg/arm64/*.dmg desktop-artifacts/RecipeSage-arm64.dmg
             cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/RecipeSage-darwin-arm64.zip
             cp packages/desktop/out/make/zip/darwin/arm64/RELEASES.json desktop-artifacts/darwin/arm64/
             cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/darwin/
@@ -426,7 +426,7 @@ jobs:
           name: collect-x64-artifacts
           command: |
             mkdir -p desktop-artifacts/darwin/x64
-            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-x64.dmg
+            cp packages/desktop/out/make/dmg/x64/*.dmg desktop-artifacts/RecipeSage-x64.dmg
             cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/RecipeSage-darwin-x64.zip
             cp packages/desktop/out/make/zip/darwin/x64/RELEASES.json desktop-artifacts/darwin/x64/
             cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/darwin/
