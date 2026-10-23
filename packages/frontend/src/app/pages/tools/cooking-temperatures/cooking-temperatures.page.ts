@@ -1,4 +1,9 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
@@ -27,7 +32,7 @@ import {
   IonNote,
   IonIcon,
   IonChip,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -59,6 +64,7 @@ interface DisplayGroup {
   selector: "page-cooking-temperatures",
   templateUrl: "cooking-temperatures.page.html",
   styleUrls: ["cooking-temperatures.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     FormsModule,

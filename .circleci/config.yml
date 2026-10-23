@@ -45,10 +45,10 @@ jobs:
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
           API_PUBLIC_BASE_URL: http://localhost:3000
-          FONTS_PATH: fonts
-          EXPRESS_VIEWS_PATH: packages/backend/src/views
-          FRONTEND_I18N_PATH: packages/frontend/src/assets/i18n
-          JOB_QUEUE_WORKER_PATH: dist/apps/queue-worker/worker.cjs
+          FONTS_PATH: /home/circleci/project/fonts
+          EXPRESS_VIEWS_PATH: /home/circleci/project/packages/backend/src/views
+          FRONTEND_I18N_PATH: /home/circleci/project/packages/frontend/src/assets/i18n
+          JOB_QUEUE_WORKER_PATH: /home/circleci/project/dist/apps/queue-worker/worker.cjs
       - image: postgres:16.1
         environment:
           POSTGRES_USER: chefbook
@@ -410,7 +410,7 @@ jobs:
           name: collect-arm64-artifacts
           command: |
             mkdir -p desktop-artifacts/darwin/arm64
-            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-arm64.dmg
+            cp packages/desktop/out/make/dmg/arm64/*.dmg desktop-artifacts/RecipeSage-arm64.dmg
             cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/RecipeSage-darwin-arm64.zip
             cp packages/desktop/out/make/zip/darwin/arm64/RELEASES.json desktop-artifacts/darwin/arm64/
             cp packages/desktop/out/make/zip/darwin/arm64/*.zip desktop-artifacts/darwin/
@@ -426,7 +426,7 @@ jobs:
           name: collect-x64-artifacts
           command: |
             mkdir -p desktop-artifacts/darwin/x64
-            cp packages/desktop/out/make/*.dmg desktop-artifacts/RecipeSage-x64.dmg
+            cp packages/desktop/out/make/dmg/x64/*.dmg desktop-artifacts/RecipeSage-x64.dmg
             cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/RecipeSage-darwin-x64.zip
             cp packages/desktop/out/make/zip/darwin/x64/RELEASES.json desktop-artifacts/darwin/x64/
             cp packages/desktop/out/make/zip/darwin/x64/*.zip desktop-artifacts/darwin/

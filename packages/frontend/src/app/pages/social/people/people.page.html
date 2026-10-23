@@ -49,8 +49,9 @@
             @if (me()?.profileImages?.length) {
               <img
                 [src]="
-                  me()?.profileImages?.at(0)?.image?.location
-                    | resolveStorageLocation
+                  $safeNavigationMigration(
+                    me()?.profileImages?.at(0)?.image?.location
+                  ) | resolveStorageLocation
                 "
               />
             }

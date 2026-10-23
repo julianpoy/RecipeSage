@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { AlertController } from "@ionic/angular/standalone";
+import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 interface QuickTutorialBlurb {

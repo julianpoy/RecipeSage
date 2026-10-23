@@ -1,9 +1,14 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ModalController,
   AlertController,
   ToggleCustomEvent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
@@ -26,7 +31,7 @@ import {
   IonLabel,
   IonToggle,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   arrowBackOutline,
   closeOutline,
@@ -40,6 +45,7 @@ import { addIcons } from "ionicons";
   selector: "page-new-label-item-modal",
   templateUrl: "new-label-item-modal.page.html",
   styleUrls: ["new-label-item-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectMultipleItemsComponent,

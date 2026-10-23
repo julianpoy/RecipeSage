@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -14,7 +14,7 @@ import {
   IonList,
   IonItem,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   archiveOutline,
   heartOutline,
@@ -30,6 +30,7 @@ import { addIcons } from "ionicons";
   selector: "page-about",
   templateUrl: "about.page.html",
   styleUrls: ["about.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SocialLinksComponent,

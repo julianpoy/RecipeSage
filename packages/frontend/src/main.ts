@@ -15,10 +15,7 @@ import {
   TitleStrategy,
   withPreloading,
 } from "@angular/router";
-import {
-  IonicRouteStrategy,
-  provideIonicAngular,
-} from "@ionic/angular/standalone";
+import { IonicRouteStrategy, provideIonicAngular } from "@ionic/angular";
 import { RouteReuseStrategy } from "@angular/router";
 
 import { AppComponent } from "./app/app.component";

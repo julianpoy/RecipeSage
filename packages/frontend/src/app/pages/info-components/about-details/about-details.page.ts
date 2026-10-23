@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { NavController } from "@ionic/angular/standalone";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
@@ -11,13 +11,14 @@ import {
   IonBackButton,
   IonTitle,
   IonContent,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "page-about-details",
   templateUrl: "about-details.page.html",
   styleUrls: ["about-details.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SocialLinksComponent,

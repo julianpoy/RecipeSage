@@ -1,5 +1,12 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import {
@@ -18,13 +25,14 @@ import {
 } from "@recipesage/util/shared";
 import { System } from "@recipesage/unitz-ts";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonItem, IonCheckbox } from "@ionic/angular/standalone";
+import { IonItem, IonCheckbox } from "@ionic/angular";
 
 @Component({
   standalone: true,
   selector: "select-ingredients",
   templateUrl: "select-ingredients.component.html",
   styleUrls: ["./select-ingredients.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonItem, IonCheckbox],
 })
 export class SelectIngredientsComponent {

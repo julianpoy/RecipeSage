@@ -1,5 +1,10 @@
-import { Component, computed, inject } from "@angular/core";
-import { NavController, ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { NavController, ModalController } from "@ionic/angular";
 
 import { WebsocketService } from "../../../services/websocket.service";
 import { LoadingService } from "../../../services/loading.service";
@@ -22,7 +27,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addOutline, calendarOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -31,6 +36,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plans",
   templateUrl: "meal-plans.page.html",
   styleUrls: ["meal-plans.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

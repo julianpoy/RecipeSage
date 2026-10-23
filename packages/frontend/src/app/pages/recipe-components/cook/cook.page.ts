@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController, ModalController } from "@ionic/angular/standalone";
+import { NavController, ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { linkifyHtml } from "../../../utils/linkify";
@@ -41,7 +41,7 @@ import {
   IonContent,
   IonSpinner,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { alertCircleOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
@@ -60,6 +60,7 @@ interface CookableRecipe {
   selector: "page-cook",
   templateUrl: "cook.page.html",
   styleUrls: ["cook.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

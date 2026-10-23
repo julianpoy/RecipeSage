@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { AlertController, ToastController } from "@ionic/angular/standalone";
+import { AlertController, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ServerActionsService } from "./server-actions.service";

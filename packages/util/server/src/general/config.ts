@@ -13,9 +13,7 @@ type RuntimeEnvironment = Exclude<
 >;
 
 type RequiredEnvironments =
-  | RuntimeEnvironment[]
-  | Environment.All
-  | Environment.AllRuntime;
+  RuntimeEnvironment[] | Environment.All | Environment.AllRuntime;
 
 const RUNTIME_ENVIRONMENTS: RuntimeEnvironment[] = [
   Environment.Prod,
@@ -31,7 +29,7 @@ const runtimeEnvironment: RuntimeEnvironment =
 
 const getEnvString = <
   T extends RequiredEnvironments,
-  R extends T extends Environment.All ? string : string | undefined,
+  R extends (T extends Environment.All ? string : string | undefined),
 >(
   name: string,
   requiredEnvironments: T,

@@ -1,4 +1,4 @@
-import he from "he";
+import { decode } from "he";
 import type { Result } from "htmlmetaparser";
 import type { StandardizedRecipeImportEntry } from "../../db";
 import { JsonLD, jsonLDToStandardizedRecipeImportEntry } from "../jsonLD";
@@ -8,8 +8,7 @@ import { recipeGroundingScore } from "./isRecipeGrounded";
 const NULL_CHAR = "\u0000";
 
 const cleanText = (value: string): string =>
-  he
-    .decode(value.replace(/<\/?[a-zA-Z][^>]*>/g, " "))
+  decode(value.replace(/<\/?[a-zA-Z][^>]*>/g, " "))
     .replaceAll(NULL_CHAR, "")
     .replace(/[^\S\n]+/g, " ")
     .trim();

@@ -34,10 +34,11 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
+      "inputs": ["default", "^default", "{workspaceRoot}/eslint.config.mjs"],
       "options": {
-        "maxWarnings": 0,
-        "lintFilePatterns": ["packages/www/src"]
+        "cwd": "packages/www",
+        "command": "eslint src --max-warnings 0"
       }
     }
   }

@@ -1,10 +1,10 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   ToastController,
   AlertController,
   NavController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -35,7 +35,7 @@ import {
   IonFabButton,
   IonSpinner,
   IonBadge,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   banOutline,
@@ -52,6 +52,7 @@ import { addIcons } from "ionicons";
   selector: "page-people",
   templateUrl: "people.page.html",
   styleUrls: ["people.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

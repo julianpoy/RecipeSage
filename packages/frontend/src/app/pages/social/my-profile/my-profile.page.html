@@ -224,8 +224,9 @@
                       <ion-avatar slot="start">
                         <img
                           [src]="
-                            item.recipe?.recipeImages?.at(0)?.image?.location
-                              | resolveStorageLocation
+                            $safeNavigationMigration(
+                              item.recipe?.recipeImages?.at(0)?.image?.location
+                            ) | resolveStorageLocation
                           "
                         />
                       </ion-avatar>

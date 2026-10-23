@@ -1,5 +1,10 @@
-import { Component, inject, Input } from "@angular/core";
-import { ModalController } from "@ionic/angular/standalone";
+import {
+  Component,
+  inject,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../../services/server-actions.service";
@@ -15,7 +20,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, saveOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -24,6 +29,7 @@ import { addIcons } from "ionicons";
   selector: "page-shopping-list-category-order-modal",
   templateUrl: "shopping-list-category-order-modal.page.html",
   styleUrls: ["shopping-list-category-order-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

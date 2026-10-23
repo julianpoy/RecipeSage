@@ -6,8 +6,9 @@ import {
   effect,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
-import { ToastController, ModalController } from "@ionic/angular/standalone";
+import { ToastController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "../../../services/loading.service";
 
@@ -34,7 +35,7 @@ import {
   IonLabel,
   IonTextarea,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { calendarOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -43,6 +44,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-recipe-to-meal-plan-modal",
   templateUrl: "add-recipe-to-meal-plan-modal.page.html",
   styleUrls: ["add-recipe-to-meal-plan-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealCalendarComponent,

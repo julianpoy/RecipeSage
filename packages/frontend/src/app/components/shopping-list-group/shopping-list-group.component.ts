@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import type {
   ShoppingListItemSummary,
   ShoppingListSummary,
@@ -13,7 +19,7 @@ import {
   IonCheckbox,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretDown, caretUp } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -22,6 +28,7 @@ import { addIcons } from "ionicons";
   selector: "shopping-list-group",
   templateUrl: "shopping-list-group.component.html",
   styleUrls: ["./shopping-list-group.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     ShoppingListItemComponent,

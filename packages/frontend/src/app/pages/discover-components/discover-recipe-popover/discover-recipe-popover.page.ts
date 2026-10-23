@@ -1,5 +1,10 @@
-import { Component, Input, inject } from "@angular/core";
-import { PopoverController } from "@ionic/angular/standalone";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
@@ -14,7 +19,7 @@ import {
   IonToggle,
   IonButton,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   createOutline,
   eyeOutline,
@@ -41,6 +46,7 @@ export type DiscoverRecipePopoverAction =
   selector: "page-discover-recipe-popover",
   templateUrl: "discover-recipe-popover.page.html",
   styleUrls: ["discover-recipe-popover.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonList,

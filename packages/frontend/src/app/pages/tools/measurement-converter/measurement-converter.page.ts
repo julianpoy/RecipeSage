@@ -1,9 +1,14 @@
-import { Component, inject, type OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  type OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import {
   INGREDIENT_DENSITIES,
@@ -65,7 +70,7 @@ import {
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 type Mode = "ingredients" | "count" | "temperature";
 
@@ -102,6 +107,7 @@ const SHORT_UNIT_KEYS: Record<string, string> = {
   selector: "page-measurement-converter",
   templateUrl: "measurement-converter.page.html",
   styleUrls: ["measurement-converter.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

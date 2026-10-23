@@ -1,10 +1,15 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   NavController,
   ModalController,
   AlertController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -25,7 +30,7 @@ import {
   IonItem,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   closeOutline,
   createOutline,
@@ -41,6 +46,7 @@ import { addIcons } from "ionicons";
   selector: "page-manage-label-modal",
   templateUrl: "manage-label-modal.page.html",
   styleUrls: ["manage-label-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,

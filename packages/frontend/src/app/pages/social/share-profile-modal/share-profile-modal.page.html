@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ "pages.shareProfileModal.title" | translate: { name: profile?.name } }}
+      {{
+        "pages.shareProfileModal.title"
+          | translate: { name: $safeNavigationMigration(profile?.name) }
+      }}
     </ion-title>
 
     <ion-buttons slot="end">

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   inject,
   type OnDestroy,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -30,7 +31,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { caretBack, caretForward } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -39,6 +40,7 @@ import { addIcons } from "ionicons";
   selector: "meal-calendar",
   templateUrl: "meal-calendar.component.html",
   styleUrls: ["./meal-calendar.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealGroupComponent,

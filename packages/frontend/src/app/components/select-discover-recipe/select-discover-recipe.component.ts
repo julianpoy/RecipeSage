@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { LoadingService } from "../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
@@ -11,7 +18,7 @@ import {
   IonSearchbar,
   IonSpinner,
   IonIcon,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { folderOpenOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -24,6 +31,7 @@ type DiscoverRecipeAuthor = DiscoverRecipeSummary["author"];
   selector: "select-discover-recipe",
   templateUrl: "./select-discover-recipe.component.html",
   styleUrls: ["./select-discover-recipe.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonItem,

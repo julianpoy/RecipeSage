@@ -1,9 +1,14 @@
-import { Component, ViewChild, inject } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   AlertController,
   NavController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
@@ -32,7 +37,7 @@ import {
   IonFooter,
   IonTextarea,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { refreshOutline, sendOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -41,6 +46,7 @@ import { addIcons } from "ionicons";
   selector: "page-assistant",
   templateUrl: "assistant.page.html",
   styleUrls: ["assistant.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     LogoIconComponent,

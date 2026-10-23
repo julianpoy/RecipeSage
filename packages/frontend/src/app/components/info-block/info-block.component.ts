@@ -1,5 +1,5 @@
-import { Component, Input } from "@angular/core";
-import { IonIcon } from "@ionic/angular/standalone";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import { IonIcon } from "@ionic/angular";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
@@ -7,6 +7,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
   selector: "info-block",
   templateUrl: "info-block.component.html",
   styleUrls: ["./info-block.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [...SHARED_UI_IMPORTS, IonIcon],
 })
 export class InfoBlockComponent {

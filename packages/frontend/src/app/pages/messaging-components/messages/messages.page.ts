@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   ToastController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 
 import type { MessageThreadDTO } from "@recipesage/prisma";
 import { MessagingService } from "../../../services/messaging.service";
@@ -30,7 +30,7 @@ import {
   IonFabButton,
   IonFooter,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addOutline, chatboxOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -39,6 +39,7 @@ import { addIcons } from "ionicons";
   selector: "page-messages",
   templateUrl: "messages.page.html",
   styleUrls: ["messages.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

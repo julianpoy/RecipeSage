@@ -23,11 +23,7 @@ export const isSignInResult = (value: unknown): value is SignInResult => {
 };
 
 export type BridgeErrorCode =
-  | "not-logged-in"
-  | "rate-limited"
-  | "missing-title"
-  | "too-large"
-  | "unknown";
+  "not-logged-in" | "rate-limited" | "missing-title" | "too-large" | "unknown";
 
 export interface BridgeError {
   code: BridgeErrorCode;
@@ -55,16 +51,13 @@ export interface FindRecipesByUrlRequest {
 }
 
 export type ClipRecipeResponse =
-  | { ok: true; data: ClipResult }
-  | { ok: false; error: BridgeError };
+  { ok: true; data: ClipResult } | { ok: false; error: BridgeError };
 
 export type SaveRecipeResponse =
-  | { ok: true; data: SaveRecipeResult }
-  | { ok: false; error: BridgeError };
+  { ok: true; data: SaveRecipeResult } | { ok: false; error: BridgeError };
 
 export type GetNutritionFromTextResponse =
-  | { ok: true; data: Nutrition }
-  | { ok: false; error: BridgeError };
+  { ok: true; data: Nutrition } | { ok: false; error: BridgeError };
 
 export type FindRecipesByUrlResponse =
   | { ok: true; data: FindRecipesByUrlResult }

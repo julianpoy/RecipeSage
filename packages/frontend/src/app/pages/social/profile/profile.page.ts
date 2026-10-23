@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   ToastController,
@@ -6,7 +6,7 @@ import {
   NavController,
   ModalController,
   PopoverController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -48,7 +48,7 @@ import {
   IonFooter,
   IonButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   bookmarksOutline,
   compassOutline,
@@ -66,6 +66,7 @@ import { addIcons } from "ionicons";
   selector: "page-profile",
   templateUrl: "profile.page.html",
   styleUrls: ["profile.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,

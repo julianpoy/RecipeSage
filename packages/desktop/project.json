@@ -13,7 +13,12 @@
     },
     "package": {
       "executor": "nx:run-commands",
-      "dependsOn": [{ "projects": ["frontend"], "target": "build:desktop" }],
+      "dependsOn": [
+        {
+          "projects": ["frontend"],
+          "target": "build:desktop"
+        }
+      ],
       "options": {
         "commands": [
           "rm -rf packages/desktop/renderer && cp -r packages/frontend/www packages/desktop/renderer",
@@ -37,14 +42,11 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
+      "inputs": ["default", "^default", "{workspaceRoot}/eslint.config.mjs"],
       "options": {
-        "maxWarnings": 0,
-        "lintFilePatterns": [
-          "packages/desktop/src",
-          "packages/desktop/forge.config.ts",
-          "packages/desktop/vite.config.ts"
-        ]
+        "cwd": "packages/desktop",
+        "command": "eslint src forge.config.ts vite.config.ts --max-warnings 0"
       }
     }
   }

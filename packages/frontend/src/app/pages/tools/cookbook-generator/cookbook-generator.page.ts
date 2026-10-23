@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   NavController,
   ModalController,
   type ItemReorderEventDetail,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { LabelSummary, RecipeSummary } from "@recipesage/prisma";
 import {
@@ -38,7 +38,7 @@ import {
   IonIcon,
   IonSpinner,
   IonText,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 
@@ -55,6 +55,7 @@ interface CookbookRecipe {
   selector: "page-cookbook-generator",
   templateUrl: "cookbook-generator.page.html",
   styleUrls: ["cookbook-generator.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     TextInputComponent,

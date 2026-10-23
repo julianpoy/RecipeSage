@@ -5,13 +5,14 @@ import {
   Input,
   effect,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import {
   NavController,
   ToastController,
   ModalController,
   AlertController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../../services/loading.service";
@@ -39,7 +40,7 @@ import {
   IonSelectOption,
   IonLabel,
   IonFooter,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, listOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -48,6 +49,7 @@ import { addIcons } from "ionicons";
   selector: "page-add-recipe-to-shopping-list-modal",
   templateUrl: "add-recipe-to-shopping-list-modal.page.html",
   styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectIngredientsComponent,

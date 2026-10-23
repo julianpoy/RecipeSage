@@ -1,11 +1,12 @@
 import * as Sentry from "@sentry/node";
+import type Stripe from "stripe";
 import { stripe } from "./stripe";
 import { config } from "../../general";
 
 export function validateStripeEvent(
   rawRequestBody: string | Buffer,
   stripeSignature: string | Buffer,
-) {
+): Stripe.Event {
   if (!config.stripe.webhookSecret) {
     console.warn("No Stripe webhook secret provided");
     Sentry.captureMessage("No Stripe webhook secret provided");

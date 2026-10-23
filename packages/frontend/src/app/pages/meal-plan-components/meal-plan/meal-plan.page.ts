@@ -5,6 +5,7 @@ import {
   effect,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
@@ -13,7 +14,7 @@ import {
   PopoverController,
   AlertController,
   ToastController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -59,7 +60,7 @@ import {
   IonFab,
   IonFabButton,
   IonSpinner,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import {
   addOutline,
   calendarOutline,
@@ -74,6 +75,7 @@ import { addIcons } from "ionicons";
   selector: "page-meal-plan",
   templateUrl: "meal-plan.page.html",
   styleUrls: ["meal-plan.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     MealCalendarComponent,

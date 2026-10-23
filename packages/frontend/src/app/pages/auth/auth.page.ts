@@ -1,10 +1,15 @@
-import { Component, Input, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   NavController,
   AlertController,
   ModalController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../environments/environment";
@@ -35,7 +40,7 @@ import {
   IonTitle,
   IonContent,
   IonList,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { closeOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -44,6 +49,7 @@ import { addIcons } from "ionicons";
   selector: "page-auth",
   templateUrl: "auth.page.html",
   styleUrls: ["auth.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     SignInWithGoogleComponent,

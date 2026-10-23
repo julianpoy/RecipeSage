@@ -161,8 +161,7 @@ export class SearchManager {
 
   getStoredFieldsForRecipeId(recipeId: string): StoredSearchFields | undefined {
     return this.miniSearch.getStoredFields(recipeId) as
-      | StoredSearchFields
-      | undefined;
+      StoredSearchFields | undefined;
   }
 
   onReady(): Promise<void> {

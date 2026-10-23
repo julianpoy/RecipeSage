@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
   IonHeader,
   IonToolbar,
@@ -9,7 +9,7 @@ import {
   IonRippleEffect,
   IonSpinner,
   NavController,
-} from "@ionic/angular/standalone";
+} from "@ionic/angular";
 import { addIcons } from "ionicons";
 import {
   restaurantOutline,
@@ -28,6 +28,7 @@ import { LoadingService } from "../../services/loading.service";
   selector: "page-welcome-flow",
   templateUrl: "welcome-flow.page.html",
   styleUrls: ["welcome-flow.page.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
     IonHeader,

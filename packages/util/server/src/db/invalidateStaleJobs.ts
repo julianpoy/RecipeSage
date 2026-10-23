@@ -23,7 +23,6 @@ const PENDING_QUEUE_STATES = [
   "prioritized",
   "delayed",
   "active",
-  "paused",
 ] as const;
 
 const getEnqueuedJobIds = async () => {

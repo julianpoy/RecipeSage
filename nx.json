@@ -8,31 +8,48 @@
   },
   "targetDefaults": {
     "build": {
-      "inputs": ["default", "^default", "sourcemap"],
+      "inputs": [
+        "default",
+        "^default",
+        "sourcemap",
+        "{workspaceRoot}/pnpm-workspace.yaml",
+        {
+          "json": "{workspaceRoot}/package.json",
+          "fields": [
+            "packageManager",
+            "pnpm.onlyBuiltDependencies",
+            "pnpm.neverBuiltDependencies",
+            "pnpm.allowBuilds",
+            "pnpm.supportedArchitectures",
+            "pnpm.patchedDependencies"
+          ]
+        },
+        {
+          "runtime": "node -e \"try{console.log('pnpm major '+require('child_process').execSync('pnpm --version',{stdio:['ignore','pipe','ignore']}).toString().trim().split('.')[0])}catch{console.log('pnpm major unavailable')}\""
+        }
+      ],
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist", "{projectRoot}/www"],
       "cache": true
     },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
-      "cache": true
-    },
+    "lint": [
+      {
+        "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
+        "cache": true
+      },
+      {
+        "filter": {
+          "plugin": "@nx/eslint/plugin"
+        },
+        "inputs": ["default", "^default", "{workspaceRoot}/eslint.config.mjs"],
+        "options": {
+          "max-warnings": 0
+        }
+      }
+    ],
     "typecheck": {
       "inputs": ["default", "^default"],
       "cache": true
-    },
-    "@nx/eslint:lint": {
-      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
-      "cache": true
-    },
-    "@nx/vite:build": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["default", "^default"]
-    },
-    "@nx/vitest:test": {
-      "cache": true,
-      "inputs": ["default", "^default"]
     }
   },
   "namedInputs": {
@@ -51,11 +68,45 @@
   },
   "neverConnectToCloud": true,
   "defaultBase": "master",
-  "s3": {
-    "region": "us-west-2",
-    "bucket": "recipesage-nx-cache",
-    "forcePathStyle": true,
-    "localMode": "no-cache",
-    "ciMode": "read-write"
-  }
+  "affected": {
+    "legacy": true
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "run",
+        "testTargetName": "test"
+      },
+      "include": [
+        "packages/backend/**/*",
+        "packages/cli/**/*",
+        "packages/express/**/*",
+        "packages/frontend/**/*",
+        "packages/queue-worker/**/*",
+        "packages/trpc/**/*",
+        "packages/util/server/**/*",
+        "packages/util/shared/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      },
+      "include": [
+        "packages/backend/**/*",
+        "packages/cli/**/*",
+        "packages/desktop/**/*",
+        "packages/express/**/*",
+        "packages/prisma/**/*",
+        "packages/queue-worker/**/*",
+        "packages/trpc/**/*",
+        "packages/util/server/**/*",
+        "packages/util/shared/**/*",
+        "packages/webextension-v3/**/*",
+        "packages/www/**/*"
+      ]
+    }
+  ]
 }
