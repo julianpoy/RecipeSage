@@ -108,51 +108,6 @@ h2.recipeTitle {
   font-weight: bold;
 }
 
-.ingredientsInstructionsGrid {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 0;
-
-  .ingredientsCol {
-    flex-shrink: 0;
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .instructionsCol {
-    min-width: 100%;
-    flex-grow: 1;
-
-    .instruction {
-      max-width: 900px;
-    }
-  }
-
-  @media (min-width: 576px) {
-    flex-wrap: nowrap;
-
-    .instructionsCol {
-      min-width: auto;
-    }
-
-    .ingredientsCol {
-      width: 215px;
-    }
-  }
-
-  @media (min-width: 1000px) {
-    .ingredientsCol {
-      width: 275px;
-    }
-  }
-
-  @media (min-width: 1200px) {
-    .ingredientsCol {
-      width: 325px;
-    }
-  }
-}
-
 .ingredients {
   .ingredient {
     &.header {
@@ -178,6 +133,7 @@ h2.recipeTitle {
 
 .instructions {
   .instruction {
+    max-width: 900px;
     margin-bottom: 15px;
 
     .sectionHeader {

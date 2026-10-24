@@ -27,6 +27,7 @@ import {
   OfflineModePromptOptions,
   PreferencesSync,
   RecipeDetailsPreferenceKey,
+  RecipeDetailsSmallScreenLayoutOptions,
   StartPageOptions,
   SupportedLanguages,
 } from "@recipesage/util/shared";
@@ -81,6 +82,7 @@ import {
   notificationsOutline,
   peopleOutline,
   personOutline,
+  phonePortraitOutline,
   restaurantOutline,
   serverOutline,
   syncOutline,
@@ -137,6 +139,7 @@ export class SettingsPage implements OnDestroy {
   preferenceKeys = GlobalPreferenceKey;
   offlineModePromptOptions = OfflineModePromptOptions;
   recipeDetailsPreferenceKeys = RecipeDetailsPreferenceKey;
+  smallScreenLayoutOptions = RecipeDetailsSmallScreenLayoutOptions;
   myRecipesPreferenceKeys = MyRecipesPreferenceKey;
   includeFriendsOptions = MyRecipesIncludeFriendsOptions;
 
@@ -175,6 +178,7 @@ export class SettingsPage implements OnDestroy {
       notificationsOutline,
       peopleOutline,
       personOutline,
+      phonePortraitOutline,
       restaurantOutline,
       serverOutline,
       syncOutline,

@@ -8,34 +8,9 @@ ion-title.ios {
   margin: 0 auto;
 }
 
-.ingredients-instructions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-.ingredients {
-  flex-shrink: 0;
-  width: 100%;
-}
-
-.instructions {
-  flex-grow: 1;
-  min-width: 100%;
-}
-
-@media (min-width: 768px) {
-  .ingredients-instructions {
-    flex-wrap: nowrap;
-  }
-
-  .ingredients {
-    width: 320px;
-  }
-
-  .instructions {
-    min-width: auto;
-  }
+ingredients-instructions-layout {
+  --ingredients-column-width: 320px;
+  --ingredients-instructions-gap: 24px;
 }
 
 .notes {

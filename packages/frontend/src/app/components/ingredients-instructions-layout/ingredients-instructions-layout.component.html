@@ -1,0 +1,47 @@
+<div
+  #layout
+  class="layout"
+  [ngClass]="{
+    twoColumn: isTwoColumn,
+    narrowTwoColumn: isTwoColumn && !isWideScreen,
+    tabsLayout: showTabs,
+  }"
+>
+  @if (showTabs) {
+    <ion-segment
+      class="tabs"
+      [(ngModel)]="activeTab"
+      (ngModelChange)="tabChanged()"
+    >
+      <ion-segment-button value="ingredients">
+        <ion-label>
+          {{ "pages.recipeDetails.ingredients" | translate }}
+        </ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="instructions">
+        <ion-label>
+          {{ "pages.recipeDetails.instructions" | translate }}
+        </ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  }
+  <div
+    #ingredientsCol
+    class="ingredientsCol"
+    [ngClass]="{ hidden: showTabs && activeTab !== 'ingredients' }"
+  >
+    <div class="columnHeader">
+      <ng-content select="[ingredientsHeader]"></ng-content>
+    </div>
+    <ng-content select="[ingredientsContent]"></ng-content>
+  </div>
+  <div
+    class="instructionsCol"
+    [ngClass]="{ hidden: showTabs && activeTab !== 'instructions' }"
+  >
+    <div class="columnHeader">
+      <ng-content select="[instructionsHeader]"></ng-content>
+    </div>
+    <ng-content select="[instructionsContent]"></ng-content>
+  </div>
+</div>

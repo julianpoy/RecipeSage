@@ -53,11 +53,11 @@
   }
   @if (recipe) {
     <div class="cook-wrapper">
-      <div class="ingredients-instructions">
-        <section class="ingredients">
-          <h2 class="section-title">
-            {{ "pages.recipeDetails.ingredients" | translate }}
-          </h2>
+      <ingredients-instructions-layout [wideScreenMinWidth]="768">
+        <h2 class="section-title" ingredientsHeader>
+          {{ "pages.recipeDetails.ingredients" | translate }}
+        </h2>
+        <div ingredientsContent>
           @for (
             ingredient of ingredients;
             track ingredient;
@@ -78,12 +78,12 @@
           @if (!ingredients || ingredients.length === 0) {
             <p>{{ "pages.recipeDetails.noIngredients" | translate }}</p>
           }
-        </section>
+        </div>
 
-        <section class="instructions">
-          <h2 class="section-title">
-            {{ "pages.recipeDetails.instructions" | translate }}
-          </h2>
+        <h2 class="section-title" instructionsHeader>
+          {{ "pages.recipeDetails.instructions" | translate }}
+        </h2>
+        <div instructionsContent>
           @for (
             instruction of instructions;
             track instruction;
@@ -120,8 +120,8 @@
           @if (!instructions || instructions.length === 0) {
             <p>{{ "pages.recipeDetails.noInstructions" | translate }}</p>
           }
-        </section>
-      </div>
+        </div>
+      </ingredients-instructions-layout>
 
       @if (notes && notes.length > 0) {
         <section class="notes">

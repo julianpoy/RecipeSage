@@ -31,6 +31,7 @@ import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
+import { IngredientsInstructionsLayoutComponent } from "../../../components/ingredients-instructions-layout/ingredients-instructions-layout.component";
 import {
   IonHeader,
   IonToolbar,
@@ -64,6 +65,7 @@ interface CookableRecipe {
   imports: [
     ...SHARED_UI_IMPORTS,
     NullStateComponent,
+    IngredientsInstructionsLayoutComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
