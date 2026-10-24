@@ -174,13 +174,11 @@ ion-list.md:not(.list-inset) > ion-list-header.md {
 }
 
 ion-toolbar.md:not(.md3-disabled) {
-  ion-buttons[slot="start"],
-  ion-back-button[slot="start"] {
+  ion-buttons[slot="start"] {
     margin-inline-start: 4px;
   }
 
-  ion-buttons[slot="end"],
-  ion-back-button[slot="end"] {
+  ion-buttons[slot="end"] {
     margin-inline-end: 4px;
   }
 }
