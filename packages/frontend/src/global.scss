@@ -173,6 +173,16 @@ ion-list.md:not(.list-inset) > ion-list-header.md {
   padding-inline-start: calc(var(--ion-safe-area-left, 0px) + 16px);
 }
 
+ion-toolbar.md:not(.md3-disabled) {
+  ion-buttons[slot="start"] {
+    margin-inline-start: 4px;
+  }
+
+  ion-buttons[slot="end"] {
+    margin-inline-end: 4px;
+  }
+}
+
 :root {
   --ion-safe-area-top: var(
     --safe-area-inset-top,
