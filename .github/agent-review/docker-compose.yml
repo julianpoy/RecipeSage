@@ -1,0 +1,16 @@
+services:
+  backend:
+    environment:
+      STORAGE_TYPE: filesystem
+      FILESYSTEM_STORAGE_PATH: /rsdata
+    volumes:
+      - rsdata:/rsdata
+  queue-worker:
+    environment:
+      STORAGE_TYPE: filesystem
+      FILESYSTEM_STORAGE_PATH: /rsdata
+    volumes:
+      - rsdata:/rsdata
+
+volumes:
+  rsdata:

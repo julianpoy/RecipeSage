@@ -1,0 +1,122 @@
+name: Agent review
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: agent-review-${{ github.event.pull_request.number }}-${{ github.event.label.name }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'agent-review'
+    environment: rs-agent-review
+    timeout-minutes: 60
+    env:
+      MODEL: openrouter/deepseek/deepseek-v4.1-flash-1017
+      OPENCODE_VERSION: 1.19.4
+      PLAYWRIGHT_MCP_VERSION: 0.0.83
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      REVIEW_CONFIG_DIR: agent-review-config/.github/agent-review
+      COMPOSE_FILE: docker-compose.yml:agent-review-config/.github/agent-review/docker-compose.yml
+    steps:
+      - name: Check label permission
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: |
+          PERMISSION=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/$SENDER/permission" --jq .permission)
+          if [ "$PERMISSION" != "admin" ] && [ "$PERMISSION" != "write" ]; then
+            echo "$SENDER does not have write access to $GITHUB_REPOSITORY"
+            exit 1
+          fi
+
+      - name: Checkout pull request
+        uses: actions/checkout@v7
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Checkout review config
+        uses: actions/checkout@v7
+        with:
+          path: agent-review-config
+          sparse-checkout: .github/agent-review
+          persist-credentials: false
+
+      - name: Start stack
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          cp example.env .env
+          printf 'AI_API_KEY=%s\n' "$OPENROUTER_API_KEY" >> .env
+          docker compose build
+          docker compose run --rm --no-deps backend pnpm exec prisma generate
+          docker compose up -d
+
+      - name: Install opencode and Playwright MCP
+        run: |
+          npm install --prefix "$RUNNER_TEMP/agent-tools" "opencode-ai@$OPENCODE_VERSION" "@playwright/mcp@$PLAYWRIGHT_MCP_VERSION"
+          echo "$RUNNER_TEMP/agent-tools/node_modules/.bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/agent-tools/node_modules/.bin/playwright" install --with-deps firefox webkit
+
+      - name: Wait for stack
+        run: |
+          timeout 900 bash -c 'until curl -sf --max-time 30 http://localhost/api/ > /dev/null; do sleep 10; done'
+          docker compose exec -T backend pnpm exec prisma migrate deploy
+          docker compose exec -T backend sh -c 'pnpm exec nx run cli:build && node dist/apps/cli/main.cjs seed'
+          timeout 900 bash -c 'until curl -sf --max-time 30 http://localhost/app/ > /dev/null; do sleep 10; done'
+
+      - name: Write PR context
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p agent-review-output/screenshots
+          jq -r '"# " + .pull_request.title + "\n\n" + (.pull_request.body // "")' "$GITHUB_EVENT_PATH" > agent-review-output/pr.md
+          printf '\n## Commits\n\n' >> agent-review-output/pr.md
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message | "- " + gsub("\n"; "\n  ")' >> agent-review-output/pr.md
+
+      - name: Run agent
+        env:
+          OPENCODE_CONFIG: ${{ env.REVIEW_CONFIG_DIR }}/opencode.json
+          OPENCODE_DISABLE_PROJECT_CONFIG: "true"
+          OPENCODE_ENABLE_EXA: "true"
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+          S3_BUCKET: rs-review-images-public
+        run: |
+          export S3_PREFIX="pr-$PR_NUMBER/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          export S3_PUBLIC_URL="https://$S3_BUCKET.s3.$AWS_REGION.amazonaws.com/$S3_PREFIX"
+          opencode run --model "$MODEL" --auto "$(cat "$REVIEW_CONFIG_DIR/instructions.md")"
+
+      - name: Post review
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file agent-review-output/review.md
+
+      - name: Post failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "The agent review failed. The logs are at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+      - name: Collect stack logs
+        if: always()
+        run: |
+          mkdir -p agent-review-output
+          docker compose logs --no-color > agent-review-output/stack.log 2>&1 || true
+
+      - name: Upload output
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: agent-review-output
+          path: agent-review-output
