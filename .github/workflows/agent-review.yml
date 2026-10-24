@@ -22,9 +22,15 @@ jobs:
       OPENCODE_VERSION: 1.19.4
       PLAYWRIGHT_MCP_VERSION: 0.0.83
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       REVIEW_CONFIG_DIR: agent-review-config/.github/agent-review
       COMPOSE_FILE: docker-compose.yml:agent-review-config/.github/agent-review/docker-compose.yml
     steps:
+      - name: Remove label
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels/agent-review"
+
       - name: Check label permission
         env:
           GH_TOKEN: ${{ github.token }}
@@ -42,6 +48,14 @@ jobs:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
           fetch-depth: 2
           persist-credentials: false
+          allow-unsafe-pr-checkout: true
+
+      - name: Check pull request head
+        run: |
+          if [ "$(git rev-parse HEAD^2)" != "$HEAD_SHA" ]; then
+            echo "The pull request changed after the label was added. Add the label again."
+            exit 1
+          fi
 
       - name: Checkout review config
         uses: actions/checkout@v7
@@ -82,6 +96,22 @@ jobs:
           printf '\n## Commits\n\n' >> agent-review-output/pr.md
           gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message | "- " + gsub("\n"; "\n  ")' >> agent-review-output/pr.md
 
+      - name: Get previous review
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+            | jq -r '[.[][] | select(.user.login == "github-actions[bot]" and (.body | contains("<!-- agent-review head=")))] | last | .body // empty' \
+            > agent-review-output/previous-review.md
+          if [ ! -s agent-review-output/previous-review.md ]; then
+            rm agent-review-output/previous-review.md
+            exit 0
+          fi
+          PREVIOUS_HEAD_SHA=$(grep -o -E '<!-- agent-review head=[0-9a-f]{40} -->' agent-review-output/previous-review.md | grep -o -E '[0-9a-f]{40}' | tail -n 1)
+          if [ -n "$PREVIOUS_HEAD_SHA" ] && git fetch --no-tags --depth=1 origin "$PREVIOUS_HEAD_SHA"; then
+            echo "PREVIOUS_HEAD_SHA=$PREVIOUS_HEAD_SHA" >> "$GITHUB_ENV"
+          fi
+
       - name: Run agent
         env:
           OPENCODE_CONFIG: ${{ env.REVIEW_CONFIG_DIR }}/opencode.json
@@ -100,7 +130,9 @@ jobs:
       - name: Post review
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file agent-review-output/review.md
+        run: |
+          printf '\n<!-- agent-review head=%s -->\n' "$HEAD_SHA" >> agent-review-output/review.md
+          gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file agent-review-output/review.md
 
       - name: Post failure
         if: failure()
