@@ -404,6 +404,8 @@ export class MealPlanPage {
   }
 
   async presentPopover(event: Event) {
+    const viewTypeBefore = this.preferences[MealPlanPreferenceKey.ViewType];
+
     const popover = await this.popoverCtrl.create({
       component: MealPlanPopoverPage,
       componentProps: {
@@ -424,6 +426,9 @@ export class MealPlanPage {
     const { data } = await popover.onDidDismiss();
 
     if (data?.reload) {
+      if (this.preferences[MealPlanPreferenceKey.ViewType] !== viewTypeBefore) {
+        this.setSelectedDays([]);
+      }
       this.loadWithProgress();
       this.mealPlanCalendar?.generateCalendar();
     }
@@ -1069,8 +1074,9 @@ export class MealPlanPage {
 
     this.pastEntries = this.buildPastEntries();
 
-    this.selectedDays = [];
-    this.selectedDaysSet = new Set();
+    this.setSelectedDays(
+      this.selectedDays.filter((dateStr) => this.listItemsByDate.has(dateStr)),
+    );
   }
 
   private buildPastEntries() {

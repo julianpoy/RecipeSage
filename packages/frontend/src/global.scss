@@ -44,6 +44,14 @@ ion-searchbar.ios .searchbar-clear-button .searchbar-clear-icon {
   vertical-align: top;
 }
 
+ion-header ion-toolbar.ios ion-title {
+  padding-inline: 68px;
+}
+
+ion-header ion-toolbar.ios:has(ion-buttons > :nth-child(2)) ion-title {
+  padding-inline: 112px;
+}
+
 ion-popover.ios {
   ion-content {
     --background: transparent;
@@ -60,7 +68,7 @@ ion-popover.ios {
     padding-inline-start: 20px;
   }
 
-  ion-title {
+  ion-toolbar ion-title {
     padding-inline: 16px;
   }
 
@@ -69,10 +77,6 @@ ion-popover.ios {
     --padding-start: 20px;
     --inner-padding-end: 12px;
   }
-}
-
-ion-modal ion-toolbar.ios ion-title {
-  padding-inline: 68px;
 }
 
 ion-popover {

@@ -343,7 +343,9 @@ export class MealCalendarComponent implements OnDestroy {
   }
 
   dayMouseDown(event: any, day: Dayjs) {
-    this.dayDragInProgress = true;
+    this.dayDragInProgress = !(
+      event.target instanceof Element && event.target.closest("calendar-item")
+    );
     this.selectionIsDefault = false;
     if (event.shiftKey && this.dragAnchor) {
       this.selectedDays = this.getDaysBetween(this.dragAnchor, day);
@@ -376,7 +378,9 @@ export class MealCalendarComponent implements OnDestroy {
     return dateStamps;
   }
 
-  dayMouseOver(_: any, day: Dayjs) {
+  dayMouseOver(event: MouseEvent, day: Dayjs) {
+    if (!(event.buttons & 1)) this.dayDragInProgress = false;
+
     if (this.dayDragInProgress && this.dragAnchor) {
       this.selectedDays = this.getDaysBetween(this.dragAnchor, day);
     }

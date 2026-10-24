@@ -53,6 +53,8 @@ export class QuickTutorialService {
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
 
+  private presentingTutorials = new Set<QuickTutorialOptions>();
+
   private fetchSeenTutorials(): QuickTutorialOptions[] {
     try {
       const seenTutorials = localStorage.getItem(TUTORIAL_LOCALSTORAGE_KEY);
@@ -80,7 +82,11 @@ export class QuickTutorialService {
   async triggerQuickTutorial(quickTutorialKey: QuickTutorialOptions) {
     const seenTutorials = this.fetchSeenTutorials();
 
-    if (seenTutorials.indexOf(quickTutorialKey) < 0) {
+    if (
+      seenTutorials.indexOf(quickTutorialKey) < 0 &&
+      !this.presentingTutorials.has(quickTutorialKey)
+    ) {
+      this.presentingTutorials.add(quickTutorialKey);
       const tutorial = quickTutorialBlurbs[quickTutorialKey];
 
       const header = await this.translate.get(tutorial.header).toPromise();
@@ -98,6 +104,7 @@ export class QuickTutorialService {
       await tutorialAlert.onDidDismiss();
 
       this.markQuickTutorialAsSeen(quickTutorialKey);
+      this.presentingTutorials.delete(quickTutorialKey);
     }
   }
 }

@@ -521,7 +521,7 @@ export class ShoppingListPage {
   }
 
   removeRecipe(recipeId: string) {
-    this.removeItems(this.itemsByRecipeId[recipeId]);
+    this.removeItemsConfirm(this.itemsByRecipeId[recipeId]);
   }
 
   async removeItemsConfirm(items: ShoppingListItemSummary[]) {
