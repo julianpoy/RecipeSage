@@ -262,7 +262,8 @@ ion-icon.section-icon + ion-label.section-title p {
     --rs-field-bg: var(--rs-grouped-item-background-color);
   }
 
-  &.ion-padding ion-list.list-inset {
+  &.ion-padding ion-list.list-inset,
+  .ion-padding ion-list.list-inset {
     margin-inline: 0;
   }
 

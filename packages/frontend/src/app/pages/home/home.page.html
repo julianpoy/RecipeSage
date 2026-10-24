@@ -15,7 +15,10 @@
     </ion-buttons>
 
     @if (!userId && selectionMode) {
-      <ion-title class="selection-title">
+      <ion-title
+        class="selection-title"
+        [class.has-bulk-actions]="selectedRecipeIds.length > 0"
+      >
         {{
           "pages.home.title.selectionMode"
             | translate: { count: selectedRecipeIds.length }

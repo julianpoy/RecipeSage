@@ -632,7 +632,6 @@ export class HomePage implements OnDestroy {
       component: HomePopoverPage,
       componentProps: {
         guestMode: !!this.userId,
-        selectionMode: this.selectionMode,
       },
       event,
     });
@@ -640,12 +639,7 @@ export class HomePage implements OnDestroy {
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
 
-      if (typeof data.selectionMode === "boolean") {
-        this.selectionMode = data.selectionMode;
-        if (!this.selectionMode) {
-          this.clearSelectedRecipes();
-        }
-      }
+      if (data.selectionMode) this.selectionMode = true;
       if (data.refreshSearch) this.resetAndLoadRecipes();
     });
 

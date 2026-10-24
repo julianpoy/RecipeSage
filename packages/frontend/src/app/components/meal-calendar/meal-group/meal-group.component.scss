@@ -15,9 +15,14 @@ calendar-item {
 
   background-color: var(--rs-subtle-surface-color);
   border-radius: 12px;
-  padding: 10px 12px 10px 16px;
+  padding-block: 10px;
+  padding-inline: 16px 12px;
   box-shadow: inset 4px 0 0 var(--meal-color, var(--ion-text-color));
   cursor: pointer;
+
+  &:dir(rtl) {
+    box-shadow: inset -4px 0 0 var(--meal-color, var(--ion-text-color));
+  }
 
   &:hover {
     background-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.09);

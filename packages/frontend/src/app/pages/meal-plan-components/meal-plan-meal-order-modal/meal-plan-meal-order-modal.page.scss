@@ -5,8 +5,11 @@
   gap: 8px;
   padding-inline: 16px 8px;
   background: var(--ion-item-background, transparent);
+}
 
-  &:not(:last-child)::after {
+.meal-entry:not(:last-child):not(:has(+ .color-picker-container)),
+.color-picker-container:not(:last-child) {
+  &::after {
     content: "";
     position: absolute;
     inset-inline: 52px 0;
@@ -19,7 +22,11 @@
   }
 }
 
-ion-reorder-group.md > .meal-entry:not(:last-child)::after {
+ion-reorder-group.md
+  > :is(
+    .meal-entry:not(:has(+ .color-picker-container)),
+    .color-picker-container
+  ):not(:last-child)::after {
   inset-inline-start: 0;
   border-bottom: 2px solid var(--rs-grouped-background-color);
 }
@@ -34,16 +41,19 @@ ion-reorder-group.md > .meal-entry:not(:last-child)::after {
   min-width: 28px;
   border-radius: 50%;
   border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.16);
   cursor: pointer;
   padding: 0;
 
   &.no-color {
+    box-shadow: none;
     background: transparent !important;
     border: 2px dashed var(--ion-border-color, #d7d8da);
   }
 }
 
 .color-picker-container {
+  position: relative;
   padding: 8px 0 12px 52px;
   background: var(--ion-item-background, transparent);
 }

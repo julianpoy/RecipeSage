@@ -52,7 +52,23 @@
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script>
+      (() => {
+        const userAgent = navigator.userAgent;
+        const isIPadOS =
+          /Macintosh/.test(userAgent) && navigator.maxTouchPoints > 1;
+        const versionMatch = isIPadOS
+          ? userAgent.match(/Version\/(\d+)/)
+          : userAgent.match(/OS (\d+)_\d+.* like Mac OS X/);
+        const statusBarStyle = document.createElement("meta");
+        statusBarStyle.name = "apple-mobile-web-app-status-bar-style";
+        statusBarStyle.content =
+          versionMatch && parseInt(versionMatch[1], 10) >= 18
+            ? "black-translucent"
+            : "default";
+        document.head.appendChild(statusBarStyle);
+      })();
+    </script>
 
     <script>
       window.addEventListener("beforeinstallprompt", (e) => {

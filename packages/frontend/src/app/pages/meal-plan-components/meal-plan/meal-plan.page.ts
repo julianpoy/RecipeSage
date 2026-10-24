@@ -426,7 +426,11 @@ export class MealPlanPage {
     const { data } = await popover.onDidDismiss();
 
     if (data?.reload) {
-      if (this.preferences[MealPlanPreferenceKey.ViewType] !== viewTypeBefore) {
+      const viewTypeAfter = this.preferences[MealPlanPreferenceKey.ViewType];
+      if (
+        viewTypeAfter !== viewTypeBefore &&
+        viewTypeAfter === MealPlanViewTypeOptions.List
+      ) {
         this.setSelectedDays([]);
       }
       this.loadWithProgress();

@@ -275,7 +275,6 @@
   "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
   "pages.homepopover.options.sortBy.lastMadeNewest": "Last made (newest first)",
   "pages.homepopover.options.sortBy.lastMadeOldest": "Last made (oldest first)",
-  "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
   "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
   "pages.homepopover.labelShared": "Shared",

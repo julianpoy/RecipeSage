@@ -125,22 +125,10 @@
   </ion-item>
 
   @if (!guestMode) {
-    <ion-item (click)="toggleSelectionMode()" button [detail]="false">
-      <ion-icon
-        [name]="selectionMode ? 'close-outline' : 'checkmark-outline'"
-        slot="start"
-      ></ion-icon>
+    <ion-item (click)="enterSelectionMode()" button [detail]="false">
+      <ion-icon name="checkmark-outline" slot="start"></ion-icon>
       <ion-label>
-        @if (selectionMode) {
-          <span>
-            {{ "pages.homepopover.options.unselectAllRecipes" | translate }}
-          </span>
-        }
-        @if (!selectionMode) {
-          <span>
-            {{ "pages.homepopover.options.selectMultipleRecipes" | translate }}
-          </span>
-        }
+        {{ "pages.homepopover.options.selectMultipleRecipes" | translate }}
       </ion-label>
     </ion-item>
   }
