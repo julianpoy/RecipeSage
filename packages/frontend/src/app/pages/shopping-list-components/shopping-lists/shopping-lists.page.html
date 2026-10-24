@@ -22,14 +22,22 @@
 
 <ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
-    <ion-popover trigger="popover-trigger" triggerAction="click">
+    <ion-popover
+      #optionsPopover
+      trigger="popover-trigger"
+      triggerAction="click"
+    >
       <ng-template>
         <ion-content>
           <ion-list>
             <ion-list-header>
               {{ "generic.options" | translate }}
             </ion-list-header>
-            <ion-item button [detail]="false" (click)="showIgnoreModal()">
+            <ion-item
+              button
+              [detail]="false"
+              (click)="optionsPopover.dismiss(); showIgnoreModal()"
+            >
               <ion-icon name="ban-outline" slot="start"></ion-icon>
               <ion-label>
                 {{ "pages.shoppingLists.editIgnore" | translate }}

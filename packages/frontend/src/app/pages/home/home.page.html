@@ -15,7 +15,7 @@
     </ion-buttons>
 
     @if (!userId && selectionMode) {
-      <ion-title>
+      <ion-title class="selection-title">
         {{
           "pages.home.title.selectionMode"
             | translate: { count: selectedRecipeIds.length }
@@ -74,11 +74,13 @@
         </ion-button>
       }
 
-      <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
-      </ion-button>
+      @if (!selectionMode) {
+        <ion-button (click)="presentPopover($event)">
+          <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+        </ion-button>
+      }
 
-      @if (isNativeIOS && !userId && folder !== "inbox") {
+      @if (isNativeIOS && !selectionMode && !userId && folder !== "inbox") {
         <ion-button (click)="newRecipe()">
           <ion-icon slot="icon-only" name="add-outline"></ion-icon>
         </ion-button>

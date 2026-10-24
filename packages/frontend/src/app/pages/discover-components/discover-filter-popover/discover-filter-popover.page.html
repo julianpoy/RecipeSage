@@ -73,12 +73,14 @@
 
   <ion-item lines="full">
     <ion-select
-      label="{{ 'pages.discover.filters.minRatingCount' | translate }}"
       [(ngModel)]="minRatingCount"
       (ngModelChange)="onFilterChange()"
       okText="{{ 'generic.ok' | translate }}"
       cancelText="{{ 'generic.cancel' | translate }}"
     >
+      <div slot="label" class="ion-text-wrap">
+        {{ "pages.discover.filters.minRatingCount" | translate }}
+      </div>
       <ion-select-option [value]="0">{{
         "pages.discover.filters.minRatingCount.any" | translate
       }}</ion-select-option>

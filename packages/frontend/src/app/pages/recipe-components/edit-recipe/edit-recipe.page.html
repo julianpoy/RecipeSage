@@ -32,7 +32,7 @@
       </ion-button>
     }
     <ion-popover
-      trigger="autoclip-popover-trigger"
+      [trigger]="recipe.id ? undefined : 'autoclip-popover-trigger'"
       triggerAction="click"
       [isOpen]="isAutoclipPopoverOpen"
       (didPresent)="isAutoclipPopoverOpen = true"

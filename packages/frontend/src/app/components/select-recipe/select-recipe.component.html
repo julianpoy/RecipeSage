@@ -1,27 +1,33 @@
 <div>
   @if (selectedRecipe) {
-    <ion-item
-      class="selectedRecipe"
-      (click)="selectedRecipe = undefined"
-      button
-    >
-      @if (selectedRecipe.recipeImages.length) {
-        <ion-avatar slot="start">
-          <img [cachedSrc]="selectedRecipe.recipeImages[0].image.location" />
-        </ion-avatar>
-      }
-      @if (!selectedRecipe.recipeImages.length) {
-        <ion-avatar slot="start">
-          <img src="assets/imgs/logo_green_padded.png" />
-        </ion-avatar>
-      }
-      <ion-label>
-        <h2>{{ selectedRecipe.title }}</h2>
-        <p>
-          {{ "components.selectRecipe.change" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item
+          class="selectedRecipe"
+          (click)="selectedRecipe = undefined"
+          button
+        >
+          @if (selectedRecipe.recipeImages.length) {
+            <ion-avatar slot="start">
+              <img
+                [cachedSrc]="selectedRecipe.recipeImages[0].image.location"
+              />
+            </ion-avatar>
+          }
+          @if (!selectedRecipe.recipeImages.length) {
+            <ion-avatar slot="start">
+              <img src="assets/imgs/logo_green_padded.png" />
+            </ion-avatar>
+          }
+          <ion-label>
+            <h2>{{ selectedRecipe.title }}</h2>
+            <p>
+              {{ "components.selectRecipe.change" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   }
 
   @if (!selectedRecipe) {

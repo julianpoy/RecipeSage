@@ -16,6 +16,8 @@ import type {
 } from "@recipesage/prisma";
 import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 import {
+  IonList,
+  IonItemGroup,
   IonItem,
   IonAvatar,
   IonLabel,
@@ -35,6 +37,8 @@ import { addIcons } from "ionicons";
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
+    IonList,
+    IonItemGroup,
     IonItem,
     IonAvatar,
     IonLabel,

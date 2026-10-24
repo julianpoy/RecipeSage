@@ -22,6 +22,7 @@
 
   @if (!allSelected) {
     <ion-button
+      class="select-toggle"
       color="primary"
       (click)="selectAllRecipes()"
       size="small"
@@ -32,6 +33,7 @@
   }
   @if (allSelected) {
     <ion-button
+      class="select-toggle"
       color="primary"
       (click)="deselectAll()"
       size="small"

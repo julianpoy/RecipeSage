@@ -30,7 +30,9 @@
                 (ngModelChange)="toggleIngredient(i)"
                 checked="true"
               >
-                {{ ingredient.plaintextContent }}
+                <div class="ion-text-wrap">
+                  {{ ingredient.plaintextContent }}
+                </div>
               </ion-checkbox>
             </ion-item>
           }

@@ -15,7 +15,11 @@
 <ion-content class="ion-padding grouped-content">
   <ion-list inset="true">
     <ion-item-group>
-      <ion-item (click)="mealItem.recipe ? openRecipe($event) : null" button>
+      <ion-item
+        (click)="mealItem.recipe ? openRecipe($event) : null"
+        [button]="!!mealItem.recipe"
+        [detail]="!!mealItem.recipe"
+      >
         @if (mealItem.recipe?.recipeImages?.length) {
           <ion-avatar slot="start">
             <img

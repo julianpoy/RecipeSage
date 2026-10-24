@@ -13,6 +13,10 @@ ion-title.ios {
 
 ion-note.prompt {
   margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 ion-title.md {

@@ -6,7 +6,15 @@
 }
 
 :host-context(.grouped-content) .codeBlock {
+  margin-inline: 16px;
   background-color: var(--rs-grouped-item-background-color);
+}
+
+:host-context(.grouped-content.ion-padding) {
+  .instructions,
+  .codeBlock {
+    margin-inline: 0;
+  }
 }
 
 .codeBlock {

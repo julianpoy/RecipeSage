@@ -13,6 +13,8 @@ import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import {
+  IonList,
+  IonItemGroup,
   IonItem,
   IonAvatar,
   IonLabel,
@@ -34,6 +36,8 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
+    IonList,
+    IonItemGroup,
     IonItem,
     IonAvatar,
     IonLabel,

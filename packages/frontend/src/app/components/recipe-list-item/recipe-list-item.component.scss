@@ -61,6 +61,7 @@ ion-badge {
       }
 
       rating {
+        flex-shrink: 0;
         margin-inline-end: 10px;
       }
 

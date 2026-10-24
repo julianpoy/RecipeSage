@@ -13,6 +13,10 @@ ion-searchbar {
       font-size: 1rem;
     }
   }
+
+  input.searchbar-input::-webkit-search-cancel-button {
+    display: none;
+  }
 }
 
 ion-router-outlet.cookingToolbarOpen,
@@ -229,12 +233,23 @@ ion-icon.section-icon + ion-label.section-title p {
     > :is(ion-item-group, ion-reorder-group, ion-radio-group) {
     --ion-item-background: var(--rs-grouped-item-background-color);
 
-    > :not(ion-item):not(:last-child) ion-item.ios:last-child {
+    > :not(ion-item) ion-item.ios:not(.item-lines-none) {
       --inner-border-width: 0 0 0.55px 0;
     }
 
-    > :not(ion-item):not(:last-child) ion-item.md:last-child {
-      --inner-border-width: 0 0 1px 0;
+    > :not(ion-item) ion-item.md:not(.item-lines-inset):not(.item-lines-none) {
+      --border-radius: 4px;
+      --border-width: 0 0 2px 0;
+      --inner-border-width: 0;
+    }
+
+    > :not(ion-item):last-child > ion-item:last-child,
+    > :not(ion-item):last-child > :last-child > ion-item:last-child {
+      &.ios,
+      &.md {
+        --border-width: 0;
+        --inner-border-width: 0;
+      }
     }
 
     ion-item.md:not(.item-lines-inset):not(.item-lines-none) {
@@ -260,6 +275,14 @@ ion-icon.section-icon + ion-label.section-title p {
     font-size: 0.875rem;
     line-height: 1.4;
     color: var(--ion-color-step-600);
+  }
+
+  ion-list.list-inset:is(.ios, .md) {
+    > ion-list-header,
+    > ion-list-header ion-label:not(.ion-color),
+    > ion-note {
+      color: var(--ion-color-step-650);
+    }
   }
 
   &.ion-padding h6 {
@@ -298,6 +321,15 @@ ion-icon.section-icon + ion-label.section-title p {
   }
 }
 
+ion-item > ion-note[slot="end"] {
+  color: var(--ion-color-step-600);
+}
+
+ion-item.md > ion-note[slot="end"] {
+  align-self: center;
+  padding-block: 0;
+}
+
 ion-segment-button.md {
   text-transform: none;
   letter-spacing: normal;
@@ -321,7 +353,7 @@ ion-segment-button.md {
   }
 }
 
-ion-toast {
+ion-toast.md {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
   /* Override button color, must be done this way because they don't otherwise allow you to... */
@@ -403,8 +435,13 @@ ion-button.md {
 .scaleRecipeModal {
   --width: min(400px, calc(100% - 32px));
   --max-width: 400px;
-  --max-height: 560px;
+  --max-height: min(640px, calc(100% - 64px));
   --border-radius: 28px;
+}
+
+ion-modal.modal-default.show-modal ~ ion-modal.modal-default.scaleRecipeModal {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.4);
+  --box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
 }
 
 .nutritionFilterPopover {
@@ -569,6 +606,14 @@ ion-modal.alert-modal {
 
 ion-alert.md .alert-button {
   text-transform: none;
+}
+
+ion-alert .alert-tappable.ion-focused:not(:focus-visible) {
+  background: transparent;
+}
+
+ion-alert .alert-wrapper:focus-visible {
+  outline: none;
 }
 
 @media only screen and (min-width: $desktop-breakpoint) {

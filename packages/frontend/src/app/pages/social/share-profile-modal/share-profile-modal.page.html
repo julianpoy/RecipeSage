@@ -28,16 +28,16 @@
   }
 
   <div class="share-icon-container">
-    <ion-item lines="none" (click)="openFacebook()" button>
+    <ion-item lines="none" (click)="openFacebook()" button [detail]="false">
       <ion-icon name="logo-facebook"></ion-icon>
     </ion-item>
-    <ion-item lines="none" (click)="openTwitter()" button>
+    <ion-item lines="none" (click)="openTwitter()" button [detail]="false">
       <ion-icon name="logo-twitter"></ion-icon>
     </ion-item>
-    <ion-item lines="none" (click)="openPinterest()" button>
+    <ion-item lines="none" (click)="openPinterest()" button [detail]="false">
       <ion-icon name="logo-pinterest"></ion-icon>
     </ion-item>
-    <ion-item lines="none" (click)="openEmail()" button>
+    <ion-item lines="none" (click)="openEmail()" button [detail]="false">
       <ion-icon name="mail-outline"></ion-icon>
     </ion-item>
   </div>

@@ -9,6 +9,7 @@ import { NavController } from "@ionic/angular";
 import dayjs from "dayjs";
 import { serverConfig, PUBLIC_WEB_ORIGIN } from "../utils/serverConfig";
 import { getIsElectron } from "../utils/electron";
+import { USE_IOS_MODE } from "../utils/useIOSMode";
 import { Capacitor } from "@capacitor/core";
 
 export interface RecipeTemplateModifiers {
@@ -578,6 +579,19 @@ export class UtilService {
       (this.appTheme === AppTheme.Default && this.prefersDarkQuery.matches);
 
     document.documentElement.classList.toggle("ion-palette-dark", isDark);
+    this.updateThemeColor();
+  }
+
+  private updateThemeColor() {
+    if (!USE_IOS_MODE) return;
+
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const backgroundColor = getComputedStyle(document.body)
+      .getPropertyValue("--ion-background-color")
+      .trim();
+    if (themeColorMeta && backgroundColor) {
+      themeColorMeta.setAttribute("content", backgroundColor);
+    }
   }
 
   getToken(): string | null {

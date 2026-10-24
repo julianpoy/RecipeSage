@@ -17,9 +17,7 @@
         (dragstart)="dragStart($event, mealItem)"
         (dragend)="dragEnd($event, mealItem)"
         [ngClass]="{ dragging: mealItemsDragging[mealItem.id] }"
-        [style.border-left-color]="
-          getMealBorderColor(mealItem.meal.toLowerCase())
-        "
+        [style.--meal-color]="getMealBorderColor(mealItem.meal.toLowerCase())"
       ></calendar-item>
     }
   </div>

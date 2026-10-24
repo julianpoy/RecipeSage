@@ -60,14 +60,25 @@ ion-popover.ios {
     padding-inline-start: 20px;
   }
 
+  ion-title {
+    padding-inline: 16px;
+  }
+
   ion-item {
     --background: transparent;
     --padding-start: 20px;
     --inner-padding-end: 12px;
   }
+}
 
+ion-modal ion-toolbar.ios ion-title {
+  padding-inline: 68px;
+}
+
+ion-popover {
   ion-list > ion-item:last-child,
-  ion-list > :last-child > ion-item:last-child {
+  ion-list > :last-child > ion-item:last-child,
+  ion-list > ion-item:has(+ ion-list-header) {
     --border-width: 0;
     --inner-border-width: 0;
   }
@@ -101,6 +112,16 @@ ion-fab.ios ion-fab-button.ion-color {
 
 ion-alert.ios .alert-tappable.ion-focused {
   background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08);
+}
+
+ion-alert.ios:not(.ios-theme-disabled)
+  .alert-wrapper
+  :is(.alert-sub-title, .alert-message) {
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+}
+
+ion-list.ios ion-item.ion-focused {
+  --background-focused-opacity: 0.12;
 }
 
 ion-popover ion-list-header {
@@ -142,6 +163,10 @@ ion-list.list-inset:is(.ios, .md)
   ion-button[slot="end"]
   ion-icon[slot="icon-only"] {
   transform: none;
+}
+
+ion-list.md:not(.list-inset) > ion-list-header.md {
+  padding-inline-start: calc(var(--ion-safe-area-left, 0px) + 16px);
 }
 
 :root {

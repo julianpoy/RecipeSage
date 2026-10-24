@@ -5,6 +5,11 @@
   overflow-y: scroll;
 }
 
+ion-title.ios.selection-title {
+  position: relative;
+  padding-inline: 8px;
+}
+
 .search-container {
   min-height: 58px;
   display: grid;

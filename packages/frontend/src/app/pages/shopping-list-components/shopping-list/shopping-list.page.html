@@ -34,7 +34,10 @@
       ) {
         <div>
           @for (categoryTitle of categoryTitles; track categoryTitle) {
-            <ion-list inset="true">
+            <ion-list
+              inset="true"
+              [class.collapsed]="categoryTitleCollapsed[categoryTitle]"
+            >
               <ion-list-header
                 (click)="
                   categoryTitleCollapsed[categoryTitle] =
@@ -89,7 +92,8 @@
       }
       @if (
         !preferences[preferenceKeys.GroupCategories] &&
-        preferences[preferenceKeys.GroupSimilar]
+        preferences[preferenceKeys.GroupSimilar] &&
+        groupTitles.length
       ) {
         <ion-list inset="true">
           <ion-item-group>
@@ -125,7 +129,10 @@
       ) {
         <div>
           @for (categoryTitle of categoryTitles; track categoryTitle) {
-            <ion-list inset="true">
+            <ion-list
+              inset="true"
+              [class.collapsed]="categoryTitleCollapsed[categoryTitle]"
+            >
               <ion-list-header
                 (click)="
                   categoryTitleCollapsed[categoryTitle] =
@@ -188,7 +195,8 @@
       }
       @if (
         !preferences[preferenceKeys.GroupCategories] &&
-        !preferences[preferenceKeys.GroupSimilar]
+        !preferences[preferenceKeys.GroupSimilar] &&
+        items.length
       ) {
         <ion-list inset="true">
           <ion-item-group>
@@ -266,12 +274,13 @@
         </ion-list-header>
         <ion-item-group>
           @for (recipeId of recipeIds; track recipeId) {
-            <ion-item button>
-              <ion-label
-                (click)="
-                  openRecipe(itemsByRecipeId[recipeId][0].recipe!.id, $event)
-                "
-              >
+            <ion-item
+              button
+              (click)="
+                openRecipe(itemsByRecipeId[recipeId][0].recipe!.id, $event)
+              "
+            >
+              <ion-label>
                 {{ itemsByRecipeId[recipeId][0].recipe!.title }}
               </ion-label>
               <ion-button
@@ -281,7 +290,7 @@
                 [attr.aria-label]="
                   'pages.shoppingList.removeRecipe' | translate
                 "
-                (click)="removeRecipe(recipeId)"
+                (click)="$event.stopPropagation(); removeRecipe(recipeId)"
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>

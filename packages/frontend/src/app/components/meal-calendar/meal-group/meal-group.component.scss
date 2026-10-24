@@ -5,7 +5,7 @@
 .meal-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--ion-color-medium);
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.7);
 }
 
 calendar-item {
@@ -15,8 +15,8 @@ calendar-item {
 
   background-color: var(--rs-subtle-surface-color);
   border-radius: 12px;
-  padding: 10px 12px;
-  border-inline-start: 4px solid var(--ion-text-color);
+  padding: 10px 12px 10px 16px;
+  box-shadow: inset 4px 0 0 var(--meal-color, var(--ion-text-color));
   cursor: pointer;
 
   &:hover {
