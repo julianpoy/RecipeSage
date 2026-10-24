@@ -831,7 +831,6 @@
     "pages.homepopover.options.sortBy.updatedOldest": "Aktualizováno (nejstarší první)",
     "pages.homepopover.options.sortBy.lastMadeNewest": "Naposledy připraveno (nejnovější první)",
     "pages.homepopover.options.sortBy.lastMadeOldest": "Naposledy připraveno (nejstarší první)",
-    "pages.homepopover.options.unselectAllRecipes": "Zrušit výběr všech receptů",
     "pages.homepopover.options.selectMultipleRecipes": "Vybrat více receptů",
     "pages.homepopover.warning.optionsHidden": "Poznámka: některé možnosti jsou skryté, protože se jedná o sdílenou kolekci",
     "pages.homepopover.labelShared": "Sdílené",

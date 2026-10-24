@@ -182,7 +182,6 @@
     "pages.homepopover.options.sortBy.updatedOldest": "更新時間（最舊優先）",
     "pages.homepopover.options.sortBy.lastMadeNewest": "上次製作時間（最新優先）",
     "pages.homepopover.options.sortBy.lastMadeOldest": "上次製作時間（最舊優先）",
-    "pages.homepopover.options.unselectAllRecipes": "取消選取所有食譜",
     "pages.homepopover.options.selectMultipleRecipes": "選取多個食譜",
     "pages.homepopover.warning.optionsHidden": "注意：由於這是共享收藏集，部分選項已隱藏",
     "pages.homepopover.labelShared": "共享",

@@ -228,7 +228,6 @@
     "pages.homepopover.warning.optionsHidden": "Uwaga: niektóre opcje są ukryte, ponieważ jest to kolekcja współdzielona",
     "pages.homepopover.labelShared": "Udostępnione",
     "pages.homepopover.unlabeled": "Tylko bez etykiety",
-    "pages.homepopover.options.unselectAllRecipes": "Odznacz wszystkie przepisy",
     "pages.homepopover.labelSharedCollection": "Etykiety oznaczone jako \"Udostępnione\" należą do innych użytkowników",
     "pages.recipeDetails.share": "Udostępnij",
     "pages.recipeDetails.print": "Drukuj",

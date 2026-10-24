@@ -714,7 +714,6 @@
     "pages.notfound.error.message2": "Ellenőrizze, hogy helyesen írta-e be az URL-t.",
     "pages.homepopover.options.showImages": "Képek megjelenítése",
     "pages.homepopover.options.showRecipeDescription": "Leírás megjelenítése",
-    "pages.homepopover.options.unselectAllRecipes": "Törölje az Összes recept kijelölését",
     "pages.recipeDetails.noInstructions": "Nincsenek utasítások",
     "pages.recipeDetails.doesNotBelongToYou": "Ez a recept még nem a tiéd.",
     "pages.recipeDetails.delete.message": "Ezzel véglegesen törli a receptet a fiókjából. Ez a művelet visszafordíthatatlan.",

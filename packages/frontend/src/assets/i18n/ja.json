@@ -144,7 +144,6 @@
     "pages.homepopover.options.sortBy.createdNewest": "作成日（新しい順）",
     "pages.homepopover.options.sortBy.createdOldest": "作成日（古い順）",
     "pages.homepopover.options.sortBy.updatedOldest": "更新日（古い順）",
-    "pages.homepopover.options.unselectAllRecipes": "すべてのレシピの選択を解除",
     "pages.homepopover.options.selectMultipleRecipes": "複数のレシピを選択",
     "pages.homepopover.labelShared": "共有",
     "pages.homepopover.labelSharedCollection": "他のユーザーが所有するラベルには「共有」と表示されます",

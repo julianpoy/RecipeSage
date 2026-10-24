@@ -158,7 +158,6 @@
     "pages.homepopover.options.sortBy.createdOldest": "Luomispäivä (vanhin ensin)",
     "pages.homepopover.options.sortBy.updatedNewest": "Päivityspäivä (uusin ensin)",
     "pages.homepopover.options.sortBy.updatedOldest": "Päivityspäivä (vanhin ensin)",
-    "pages.homepopover.options.unselectAllRecipes": "Tyhjennä reseptivalinnat",
     "pages.homepopover.options.selectMultipleRecipes": "Valitse useita reseptejä",
     "pages.homepopover.warning.optionsHidden": "Huomio: jotkin vaihtoehdot on piilotettu, koska tämä on jaettu kokoelma",
     "pages.homepopover.labelShared": "Jaettu",

@@ -138,7 +138,6 @@
     "pages.homepopover.options.sortBy.createdOldest": "Erstellt (älteste zuerst)",
     "pages.homepopover.options.sortBy.updatedNewest": "Aktualisiert (neueste zuerst)",
     "pages.homepopover.options.sortBy.updatedOldest": "Aktualisiert (älteste zuerst)",
-    "pages.homepopover.options.unselectAllRecipes": "Rezeptauswahl aufheben",
     "pages.homepopover.options.selectMultipleRecipes": "Mehrere Rezepte auswählen",
     "pages.homepopover.warning.optionsHidden": "Hinweis: Einige Optionen sind ausgeblendet, da es sich um eine geteilte Sammlung handelt",
     "pages.homepopover.labelNull": "Du hast noch keine Labels. Du kannst Labels auf der Rezept-Detailseite erstellen.",
