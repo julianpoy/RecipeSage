@@ -138,7 +138,6 @@
     "pages.homepopover.options.sortBy.createdOldest": "Creado (los más antiguos primero)",
     "pages.homepopover.options.sortBy.updatedNewest": "Actualizado (los más nuevos primero)",
     "pages.homepopover.options.sortBy.updatedOldest": "Actualizado (los más antiguos primero)",
-    "pages.homepopover.options.unselectAllRecipes": "Deseleccionar todas las recetas",
     "pages.homepopover.options.selectMultipleRecipes": "Seleccionar varias recetas",
     "pages.homepopover.warning.optionsHidden": "Nota: algunas opciones están ocultas, ya que se trata de una colección compartida",
     "pages.homepopover.labelNull": "Aún no ha creado una etiqueta. Puede crear una a partir de los detalles de una receta.",

@@ -130,7 +130,6 @@
     "pages.home.exportSelected.processing.view": "Peržiūrėti ir atsisiųsti",
     "pages.homepopover.options.sortBy.title": "Pavadinimas",
     "pages.homepopover.options.sortBy.updatedOldest": "Atnaujinimo data (pirmiausia seniausi)",
-    "pages.homepopover.options.unselectAllRecipes": "Panaikinti visų receptų pasirinkimą",
     "pages.homepopover.options.selectMultipleRecipes": "Pasirinkti kelis receptus",
     "pages.downloadAndInstall.desktop.title": "Staliniai arba nešiojamieji įrenginiai",
     "pages.homepopover.warning.optionsHidden": "Pastaba: kai kurios parinktys yra paslėptos, nes tai yra bendrinama kolekcija",

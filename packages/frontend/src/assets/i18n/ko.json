@@ -182,7 +182,6 @@
     "pages.homepopover.options.sortBy.updatedOldest": "수정일(오래된 순)",
     "pages.homepopover.options.sortBy.lastMadeNewest": "마지막 조리일(최신순)",
     "pages.homepopover.options.sortBy.lastMadeOldest": "마지막 조리일(오래된 순)",
-    "pages.homepopover.options.unselectAllRecipes": "모든 레시피 선택 해제",
     "pages.homepopover.options.selectMultipleRecipes": "여러 레시피 선택",
     "pages.homepopover.warning.optionsHidden": "참고: 공유 컬렉션이므로 일부 옵션이 숨겨져 있습니다",
     "pages.homepopover.labelShared": "공유됨",

@@ -381,7 +381,6 @@
     "pages.homeSearchFilterPopover.includeFriends": "Afficher les recettes d'amis",
     "pages.homeSearchFilterPopover.optionsHidden": "Remarque : certaines options sont masquées, car il s'agit d'une collection partagée",
     "pages.homepopover.options.showImages": "Afficher les images",
-    "pages.homepopover.options.unselectAllRecipes": "Désélectionner toutes les recettes",
     "pages.recipeDetails.scaleStatus": "Ajustement des portions {{scale}}x (cliquer pour changer)",
     "pages.recipeDetails.requiresAccountToSave": "Créez un compte ou connectez-vous pour enregistrer cette recette dans votre collection.",
     "pages.recipeDetailsPopover.addToShoppingList": "Ajouter à la liste d'achats",

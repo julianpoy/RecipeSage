@@ -151,7 +151,6 @@
     "pages.homepopover.options.sortBy.createdOldest": "已创建(时间最久的)",
     "pages.homepopover.options.sortBy.updatedNewest": "已更新(时间最新的)",
     "pages.homepopover.options.sortBy.updatedOldest": "已更新(时间最久的)",
-    "pages.homepopover.options.unselectAllRecipes": "取消全选食谱",
     "pages.homepopover.options.selectMultipleRecipes": "多选",
     "pages.homepopover.warning.optionsHidden": "提示:共享的搜藏有一些隐藏选项",
     "pages.homepopover.labelShared": "已共享",

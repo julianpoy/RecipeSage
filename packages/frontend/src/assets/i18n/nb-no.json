@@ -182,7 +182,6 @@
     "pages.homepopover.options.sortBy.updatedOldest": "Oppdatert (eldste først)",
     "pages.homepopover.options.sortBy.lastMadeNewest": "Sist laget (nyeste først)",
     "pages.homepopover.options.sortBy.lastMadeOldest": "Sist laget (eldste først)",
-    "pages.homepopover.options.unselectAllRecipes": "Fjern markeringen av alle oppskrifter",
     "pages.homepopover.options.selectMultipleRecipes": "Velg flere oppskrifter",
     "pages.homepopover.warning.optionsHidden": "Merk: Noen alternativer er skjult, siden dette er en delt samling",
     "pages.homepopover.labelShared": "Delt",
