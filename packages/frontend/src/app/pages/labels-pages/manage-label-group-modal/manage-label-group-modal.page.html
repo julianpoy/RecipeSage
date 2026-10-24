@@ -12,44 +12,38 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item lines="none">
-    <ion-input
-      labelPlacement="stacked"
-      label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
-      placeholder="{{
-        'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate
-      }}"
-      helperText="{{
-        'pages.manageLabelGroupModal.groupTitleHint' | translate
-      }}"
-      (ionInput)="title = $event.detail.value || ''"
-      [value]="title"
-    ></ion-input>
-  </ion-item>
+<ion-content class="ion-padding grouped-content">
+  <text-input
+    label="{{ 'pages.manageLabelGroupModal.groupTitle' | translate }}"
+    placeholder="{{
+      'pages.manageLabelGroupModal.groupTitlePlaceholder' | translate
+    }}"
+    helperText="{{ 'pages.manageLabelGroupModal.groupTitleHint' | translate }}"
+    [(ngModel)]="title"
+  ></text-input>
 
-  <br />
-  <br />
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item>
+        <ion-toggle
+          [checked]="warnWhenNotPresent"
+          (ionChange)="warnToggle($event)"
+        >
+          {{ "pages.manageLabelGroupModal.warn" | translate }}
+          <ion-label>
+            <p class="ion-text-wrap">
+              {{ "pages.manageLabelGroupModal.warnDescription" | translate }}
+            </p>
+          </ion-label>
+        </ion-toggle>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
 
-  <ion-item lines="none">
-    <ion-toggle [checked]="warnWhenNotPresent" (ionChange)="warnToggle($event)">
-      {{ "pages.manageLabelGroupModal.warn" | translate }}
-      <ion-label>
-        <p class="ion-text-wrap">
-          {{ "pages.manageLabelGroupModal.warnDescription" | translate }}
-        </p>
-      </ion-label>
-    </ion-toggle>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label>
-      {{ "pages.manageLabelGroupModal.labels" | translate }}
-      <p class="ion-text-wrap">
-        {{ "pages.manageLabelGroupModal.labelsHint" | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
+  <h6>{{ "pages.manageLabelGroupModal.labels" | translate }}</h6>
+  <ion-note>{{
+    "pages.manageLabelGroupModal.labelsHint" | translate
+  }}</ion-note>
 
   <select-multiple-items
     [selectedItems]="mapLabelsToSelectableItems(selectedLabels)"

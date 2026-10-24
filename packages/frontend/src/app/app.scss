@@ -13,11 +13,16 @@ ion-searchbar {
       font-size: 1rem;
     }
   }
+
+  input.searchbar-input::-webkit-search-cancel-button {
+    display: none;
+  }
 }
 
 ion-router-outlet.cookingToolbarOpen,
 ion-menu.cookingToolbarOpen {
-  height: calc(100% - 60px);
+  --ion-safe-area-bottom: 0px;
+  height: calc(100% - 60px - var(--rs-safe-area-bottom, 0px));
 }
 
 .ion-checkbox-label,
@@ -197,15 +202,185 @@ ion-label[position="floating"] {
   cursor: pointer;
 }
 
-ion-toast {
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+ion-icon.section-icon {
+  font-size: 24px;
+  color: var(--ion-color-primary);
+  margin-inline-end: 12px;
+}
+
+ion-icon.section-icon + ion-label.section-title p {
+  color: var(--ion-text-color);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.grouped-content {
+  --background: var(--rs-grouped-background-color);
+
+  ion-list.list-inset
+    > :is(ion-item-group, ion-reorder-group, ion-radio-group) {
+    --ion-item-background: var(--rs-grouped-item-background-color);
+
+    > :not(ion-item) ion-item.ios:not(.item-lines-none) {
+      --inner-border-width: 0 0 0.55px 0;
+    }
+
+    > :not(ion-item) ion-item.md:not(.item-lines-inset):not(.item-lines-none) {
+      --border-radius: 4px;
+      --border-width: 0 0 2px 0;
+      --inner-border-width: 0;
+    }
+
+    > :not(ion-item):last-child > ion-item:last-child,
+    > :not(ion-item):last-child > :last-child > ion-item:last-child {
+      &.ios,
+      &.md {
+        --border-width: 0;
+        --inner-border-width: 0;
+      }
+    }
+
+    ion-item.md:not(.item-lines-inset):not(.item-lines-none) {
+      --border-color: var(--rs-grouped-background-color);
+    }
+  }
+
+  text-input,
+  text-area {
+    --rs-field-bg: var(--rs-grouped-item-background-color);
+  }
+
+  &.ion-padding ion-list.list-inset,
+  .ion-padding ion-list.list-inset {
+    margin-inline: 0;
+  }
+
+  ion-label a {
+    text-decoration: none;
+  }
+
+  ion-note:not(ion-list ion-note, ion-item ion-note) {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--ion-color-step-600);
+  }
+
+  ion-list.list-inset:is(.ios, .md) {
+    > ion-list-header,
+    > ion-list-header ion-label:not(.ion-color),
+    > ion-note {
+      color: var(--ion-color-step-650);
+    }
+  }
+
+  &.ion-padding h6 {
+    margin: 0 0 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ion-color-step-650);
+  }
+
+  &.ion-padding ion-searchbar.md {
+    padding-inline: 0;
+  }
+
+  &.ion-padding ion-searchbar.ios {
+    width: calc(100% + 16px);
+    margin-inline: -8px;
+  }
+}
+
+.ion-page:has(> ion-content.grouped-content) {
+  > ion-header:has(ion-toolbar:not(.ion-color)) {
+    background: var(--rs-grouped-background-color);
+  }
+
+  > ion-header ion-toolbar:not(.ion-color) {
+    --background: var(--rs-grouped-background-color);
+  }
+
+  > ion-footer {
+    background: var(--rs-grouped-background-color);
+
+    ion-list.list-inset {
+      margin: 0 0 12px;
+    }
+  }
+}
+
+ion-item > ion-note[slot="end"] {
+  color: var(--ion-color-step-600);
+}
+
+ion-item.md > ion-note[slot="end"] {
+  align-self: center;
+  padding-block: 0;
+}
+
+ion-segment-button.md {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.results-list {
+  margin-top: 4px;
+  border-radius: 16px;
+  background: var(--rs-grouped-item-background-color);
+  box-shadow:
+    0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.16);
+
+  ion-item {
+    --background: transparent;
+  }
+
+  ion-item:last-child {
+    --border-width: 0;
+    --inner-border-width: 0;
+  }
+}
+
+ion-toast.md {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
   /* Override button color, must be done this way because they don't otherwise allow you to... */
   --ion-color-step-100: var(--ion-color-light);
 }
 
+ion-toast.md::part(button) {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 ion-button.button-outline {
   --border-width: 1px;
+}
+
+ion-button.button-solid.button-disabled {
+  --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.12);
+  --color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.38);
+  --ion-color-base: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.12);
+  --ion-color-contrast: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.38);
+  opacity: 1;
+}
+
+ion-button.md {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .split-pane-visible > .split-pane-side {
@@ -259,8 +434,15 @@ ion-button.button-outline {
 }
 
 .scaleRecipeModal {
+  --width: min(400px, calc(100% - 32px));
   --max-width: 400px;
-  --max-height: 500px;
+  --max-height: min(640px, calc(100% - 64px));
+  --border-radius: 28px;
+}
+
+ion-modal.modal-default.show-modal ~ ion-modal.modal-default.scaleRecipeModal {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.4);
+  --box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
 }
 
 .nutritionFilterPopover {
@@ -292,23 +474,23 @@ ion-modal.alert-modal {
       --ion-overlay-background-color,
       var(--ion-background-color, #fff)
     );
-    border-radius: 13px;
+    border-radius: 24px;
     box-shadow:
-      0 11px 15px -7px rgba(0, 0, 0, 0.2),
-      0 24px 38px 3px rgba(0, 0, 0, 0.14),
-      0 9px 46px 8px rgba(0, 0, 0, 0.12);
+      0 1px 3px rgba(0, 0, 0, 0.3),
+      0 4px 8px 3px rgba(0, 0, 0, 0.15);
 
     h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
+      margin: 0 0 16px;
+      font-size: 20px;
       font-weight: 500;
+      line-height: 28px;
     }
 
     > p {
       margin: 0 0 16px;
       font-size: 14px;
-      color: var(--ion-text-color);
-      opacity: 0.7;
+      line-height: 20px;
+      color: var(--ion-color-step-600, var(--ion-text-color));
     }
 
     text-input,
@@ -334,22 +516,105 @@ ion-modal.alert-modal {
     .alert-modal-buttons {
       display: flex;
       justify-content: flex-end;
+      gap: 8px;
       margin-top: 16px;
-      margin-inline-end: -16px;
-      margin-bottom: -16px;
+      margin-inline-end: -12px;
+      margin-bottom: -8px;
 
       button {
         background: transparent;
         border: none;
+        border-radius: 20px;
         color: var(--ion-color-primary);
         font-size: 14px;
         font-weight: 500;
-        padding: 8px 12px;
+        padding: 10px 12px;
         cursor: pointer;
-        text-transform: uppercase;
       }
     }
   }
+
+  &.ios .alert-modal-inner {
+    padding: 22px 16px 16px;
+    background: rgba(
+      var(
+        --ios-theme-glass-background-rgb,
+        var(
+          --ios26-glass-background-rgb,
+          var(--ion-background-color-rgb, 255, 255, 255)
+        )
+      ),
+      0.67
+    );
+    border: 0.5px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.18);
+    border-radius: 36px;
+    box-shadow:
+      inset 0 0.5px 1px
+        rgba(
+          var(
+            --ios-theme-glass-border-color-rgb,
+            var(--ios26-glass-border-color-rgb, 255, 255, 255)
+          ),
+          0.6
+        ),
+      0 12px 32px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    h2 {
+      margin: 0 14px 8px;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.21;
+    }
+
+    > p {
+      margin: 0 14px 16px;
+      font-size: 15px;
+      line-height: 1.19;
+    }
+
+    text-input,
+    text-area {
+      margin-inline: 4px;
+    }
+
+    .alert-modal-buttons {
+      justify-content: stretch;
+      margin: 16px 0 0;
+
+      button {
+        flex: 1;
+        min-height: 48px;
+        padding: 12px;
+        border-radius: 24px;
+        background: var(
+          --ion-background-color-step-200,
+          var(--ion-color-step-200, #cccccc)
+        );
+        color: var(--ion-text-color, #000);
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      button.alert-modal-confirm {
+        background: var(--ion-color-primary);
+        color: var(--ion-color-primary-contrast);
+      }
+    }
+  }
+}
+
+ion-alert.md .alert-button {
+  text-transform: none;
+}
+
+ion-alert .alert-tappable.ion-focused:not(:focus-visible) {
+  background: transparent;
+}
+
+ion-alert .alert-wrapper:focus-visible {
+  outline: none;
 }
 
 @media only screen and (min-width: $desktop-breakpoint) {

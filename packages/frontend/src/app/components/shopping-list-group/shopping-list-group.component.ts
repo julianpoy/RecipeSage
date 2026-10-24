@@ -11,16 +11,8 @@ import type {
 } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ShoppingListItemComponent } from "../shopping-list-item/shopping-list-item.component";
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonItem,
-  IonCheckbox,
-  IonButton,
-  IonIcon,
-} from "@ionic/angular";
-import { caretDown, caretUp } from "ionicons/icons";
+import { IonItem, IonCheckbox, IonButton, IonIcon } from "@ionic/angular";
+import { chevronDown, chevronForward } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -32,9 +24,6 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     ShoppingListItemComponent,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonItem,
     IonCheckbox,
     IonButton,
@@ -88,6 +77,6 @@ export class ShoppingListGroupComponent {
   >();
 
   constructor() {
-    addIcons({ caretDown, caretUp });
+    addIcons({ chevronDown, chevronForward });
   }
 }

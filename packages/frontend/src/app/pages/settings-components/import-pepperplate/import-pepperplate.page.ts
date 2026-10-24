@@ -6,6 +6,7 @@ import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "../../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -15,7 +16,8 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonInput,
+  IonList,
+  IonItemGroup,
   IonButton,
 } from "@ionic/angular";
 
@@ -27,6 +29,7 @@ import {
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -35,7 +38,8 @@ import {
     IonContent,
     IonItem,
     IonLabel,
-    IonInput,
+    IonList,
+    IonItemGroup,
     IonButton,
   ],
 })

@@ -19,7 +19,7 @@ import {
   IonSpinner,
   IonIcon,
 } from "@ionic/angular";
-import { folderOpenOutline } from "ionicons/icons";
+import { folderOpenOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 type DiscoverRecipeSummary =
@@ -63,7 +63,7 @@ export class SelectDiscoverRecipeComponent {
   lastQueryWasId = false;
 
   constructor() {
-    addIcons({ folderOpenOutline });
+    addIcons({ folderOpenOutline, closeOutline });
   }
 
   private extractDiscoverRecipeId(text: string): string | null {

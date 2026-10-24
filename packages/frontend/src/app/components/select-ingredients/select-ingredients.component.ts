@@ -25,7 +25,7 @@ import {
 } from "@recipesage/util/shared";
 import { System } from "@recipesage/unitz-ts";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonItem, IonCheckbox } from "@ionic/angular";
+import { IonItem, IonCheckbox, IonList, IonItemGroup } from "@ionic/angular";
 
 @Component({
   standalone: true,
@@ -33,7 +33,7 @@ import { IonItem, IonCheckbox } from "@ionic/angular";
   templateUrl: "select-ingredients.component.html",
   styleUrls: ["./select-ingredients.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, IonItem, IonCheckbox],
+  imports: [...SHARED_UI_IMPORTS, IonItem, IonCheckbox, IonList, IonItemGroup],
 })
 export class SelectIngredientsComponent {
   private modalCtrl = inject(ModalController);

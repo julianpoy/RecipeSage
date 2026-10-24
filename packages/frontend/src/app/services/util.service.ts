@@ -9,6 +9,7 @@ import { NavController } from "@ionic/angular";
 import dayjs from "dayjs";
 import { serverConfig, PUBLIC_WEB_ORIGIN } from "../utils/serverConfig";
 import { getIsElectron } from "../utils/electron";
+import { USE_IOS_MODE } from "../utils/useIOSMode";
 import { Capacitor } from "@capacitor/core";
 
 export interface RecipeTemplateModifiers {
@@ -280,6 +281,12 @@ export const RouteMap = {
     },
     path: "tools",
   },
+  MorePage: {
+    getPath() {
+      return `/more`;
+    },
+    path: "more",
+  },
   CookbookGeneratorPage: {
     getPath() {
       return `/tools/cookbook`;
@@ -483,10 +490,17 @@ export class UtilService {
 
   memoizedFormattedDates: Map<string, string> = new Map();
 
+  private appTheme = AppTheme.Default;
+  private prefersDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
   constructor() {
     setInterval(() => {
       this.memoizedFormattedDates.clear();
     }, 1000 * 60);
+
+    this.prefersDarkQuery.addEventListener("change", () => {
+      this.updateIonPalette();
+    });
   }
 
   getCurrentLocale(): string {
@@ -552,6 +566,32 @@ export class UtilService {
   setAppTheme(theme: AppTheme) {
     const bodyClasses = document.body.className.replace(/theme-\S*/, "");
     document.body.className = `${bodyClasses} theme-${theme}`;
+
+    this.appTheme = theme;
+    this.updateIonPalette();
+  }
+
+  private updateIonPalette() {
+    const isDark =
+      this.appTheme === AppTheme.Dark ||
+      this.appTheme === AppTheme.Black ||
+      this.appTheme === AppTheme.Midnight ||
+      (this.appTheme === AppTheme.Default && this.prefersDarkQuery.matches);
+
+    document.documentElement.classList.toggle("ion-palette-dark", isDark);
+    this.updateThemeColor();
+  }
+
+  private updateThemeColor() {
+    if (!USE_IOS_MODE) return;
+
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const backgroundColor = getComputedStyle(document.body)
+      .getPropertyValue("--ion-background-color")
+      .trim();
+    if (themeColorMeta && backgroundColor) {
+      themeColorMeta.setAttribute("content", backgroundColor);
+    }
   }
 
   getToken(): string | null {

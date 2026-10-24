@@ -21,6 +21,7 @@ import { MEAL_PLAN_ITEMS_NOTES_LENGTH_LIMIT } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { MealCalendarComponent } from "../../../components/meal-calendar/meal-calendar.component";
 import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
+import { TextAreaComponent } from "../../../components/forms/text-area/text-area.component";
 import {
   IonHeader,
   IonToolbar,
@@ -33,7 +34,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonLabel,
-  IonTextarea,
+  IonList,
+  IonItemGroup,
   IonFooter,
 } from "@ionic/angular";
 import { calendarOutline, closeOutline } from "ionicons/icons";
@@ -49,6 +51,7 @@ import { addIcons } from "ionicons";
     ...SHARED_UI_IMPORTS,
     MealCalendarComponent,
     SelectMealComponent,
+    TextAreaComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -60,7 +63,8 @@ import { addIcons } from "ionicons";
     IonSelect,
     IonSelectOption,
     IonLabel,
-    IonTextarea,
+    IonList,
+    IonItemGroup,
     IonFooter,
   ],
 })

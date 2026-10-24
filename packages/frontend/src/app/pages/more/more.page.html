@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="nav">
+    <ion-title>{{ "pages.more.title" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="grouped-content">
+  <div class="page-wrapper">
+    <ion-list inset="true">
+      <ion-item-group>
+        @for (p of navList; track p.id) {
+          <ion-item
+            [routerDirection]="'root'"
+            [routerLink]="[p.url]"
+            [replaceUrl]="true"
+            detail
+          >
+            <ion-icon slot="start" [name]="p.icon"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              {{ p.title }}
+            </ion-label>
+            @if (p.id === "people" && moreTabBadgeCount()) {
+              <ion-badge slot="end">{{ moreTabBadgeCount() }}</ion-badge>
+            }
+          </ion-item>
+        }
+      </ion-item-group>
+    </ion-list>
+  </div>
+</ion-content>

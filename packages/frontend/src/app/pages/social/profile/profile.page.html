@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       @if (!isLoggedIn()) {
@@ -72,11 +72,21 @@
             <h5 class="handle">&commat;{{ profile.handle }}</h5>
           </ion-item>
           <div class="profile-icon-buttons">
-            <ion-item lines="none" (click)="shareProfile()" button>
+            <ion-item
+              lines="none"
+              (click)="shareProfile()"
+              button
+              [detail]="false"
+            >
               <ion-icon name="share-social-outline"></ion-icon>
             </ion-item>
             @if (isLoggedIn() && !isMyProfile() && !isBlockedByMe) {
-              <ion-item lines="none" (click)="sendMessage()" button>
+              <ion-item
+                lines="none"
+                (click)="sendMessage()"
+                button
+                [detail]="false"
+              >
                 <ion-icon name="mail-outline"></ion-icon>
               </ion-item>
             }
@@ -188,7 +198,7 @@
 </ion-content>
 
 @if (profile && !isMyProfile()) {
-  <ion-footer>
+  <ion-footer class="ion-no-border">
     @if (isLoggedIn()) {
       <ion-toolbar class="ion-padding-horizontal">
         <div class="page-wrapper">

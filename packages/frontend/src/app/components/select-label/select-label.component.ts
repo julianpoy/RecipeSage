@@ -10,8 +10,19 @@ import { LoadingService } from "../../services/loading.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { LabelSummary } from "@recipesage/prisma";
-import { IonItem, IonIcon, IonLabel, IonSearchbar } from "@ionic/angular";
-import { folderOpenOutline, pricetagOutline } from "ionicons/icons";
+import {
+  IonList,
+  IonItemGroup,
+  IonItem,
+  IonIcon,
+  IonLabel,
+  IonSearchbar,
+} from "@ionic/angular";
+import {
+  folderOpenOutline,
+  pricetagOutline,
+  closeOutline,
+} from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -20,7 +31,15 @@ import { addIcons } from "ionicons";
   templateUrl: "select-label.component.html",
   styleUrls: ["./select-label.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, IonItem, IonIcon, IonLabel, IonSearchbar],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    IonList,
+    IonItemGroup,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonSearchbar,
+  ],
 })
 export class SelectLabelComponent {
   private loadingService = inject(LoadingService);
@@ -45,7 +64,7 @@ export class SelectLabelComponent {
   results: LabelSummary[] = [];
 
   constructor() {
-    addIcons({ folderOpenOutline, pricetagOutline });
+    addIcons({ folderOpenOutline, pricetagOutline, closeOutline });
     this.load();
   }
 

@@ -27,10 +27,11 @@ h2.recipeTitle {
 }
 
 .meta {
-  border-top: 1px solid var(--ion-border-color);
-  border-bottom: 1px solid var(--ion-border-color);
   margin-top: 15px;
   margin-bottom: 15px;
+  padding: 6px 8px;
+  border-radius: 16px;
+  background: var(--rs-subtle-surface-color);
 
   ion-col {
     padding: 5px;

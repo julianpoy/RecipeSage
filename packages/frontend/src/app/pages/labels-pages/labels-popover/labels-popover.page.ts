@@ -19,7 +19,7 @@ import {
   IonListHeader,
   IonItem,
   IonToggle,
-  IonButton,
+  IonLabel,
 } from "@ionic/angular";
 
 @Component({
@@ -34,7 +34,7 @@ import {
     IonListHeader,
     IonItem,
     IonToggle,
-    IonButton,
+    IonLabel,
   ],
 })
 export class LabelsPopoverPage {

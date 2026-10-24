@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding grouped-content">
   <p>
     {{ "pages.addRecipeToShoppingListModal.selectDestination" | translate }}
   </p>
@@ -28,20 +28,26 @@
     <p>{{ "pages.addRecipeToShoppingListModal.loading" | translate }}</p>
   }
   @if (shoppingLists && shoppingLists.length > 0) {
-    <ion-item>
-      <ion-select
-        label="{{
-          'pages.addRecipeToShoppingListModal.destination' | translate
-        }}"
-        [(ngModel)]="destinationShoppingList"
-        okText="{{ 'generic.ok' | translate }}"
-        cancelText="{{ 'generic.cancel' | translate }}"
-      >
-        @for (list of shoppingLists; track list) {
-          <ion-select-option [value]="list">{{ list.title }}</ion-select-option>
-        }
-      </ion-select>
-    </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item>
+          <ion-select
+            label="{{
+              'pages.addRecipeToShoppingListModal.destination' | translate
+            }}"
+            [(ngModel)]="destinationShoppingList"
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            @for (list of shoppingLists; track list) {
+              <ion-select-option [value]="list">{{
+                list.title
+              }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   }
   @if (shoppingLists && shoppingLists.length === 0) {
     <div (click)="createShoppingList()">

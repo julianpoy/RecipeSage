@@ -19,67 +19,53 @@
   ></shopping-list-item>
 }
 @if (group.items.length > 1) {
-  <div>
-    <ion-grid class="ion-no-padding">
-      <ion-row class="ion-align-items-center">
-        <ion-col class="ion-no-padding">
-          <ion-item class="groupedItem">
-            <ion-checkbox
-              labelPlacement="end"
-              justify="start"
-              [(ngModel)]="group.items[0].completed"
-              (ngModelChange)="completeToggle.emit(group.items)"
-            >
-              <div class="ion-text-wrap" dir="auto">
-                {{ group.title }}
-              </div>
-            </ion-checkbox>
-          </ion-item>
-        </ion-col>
-        <ion-col size="auto">
-          <ion-button
-            (click)="
-              groupTitleExpanded[categoryTitle + group.title] =
-                !groupTitleExpanded[categoryTitle + group.title]
-            "
-            fill="clear"
-            color="medium"
-          >
-            @if (groupTitleExpanded[categoryTitle + group.title]) {
-              <ion-icon name="caret-down"></ion-icon>
-            }
-            @if (!groupTitleExpanded[categoryTitle + group.title]) {
-              <ion-icon name="caret-up"></ion-icon>
-            }
-          </ion-button>
-        </ion-col>
-      </ion-row>
+  <ion-item class="groupedItem">
+    <ion-checkbox
+      labelPlacement="end"
+      justify="start"
+      [(ngModel)]="group.items[0].completed"
+      (ngModelChange)="completeToggle.emit(group.items)"
+    >
+      <div class="ion-checkbox-label ion-text-wrap" dir="auto">
+        {{ group.title }}
+      </div>
+    </ion-checkbox>
+    <ion-button
+      slot="end"
+      fill="clear"
+      color="medium"
+      (click)="
+        groupTitleExpanded[categoryTitle + group.title] =
+          !groupTitleExpanded[categoryTitle + group.title]
+      "
+    >
       @if (groupTitleExpanded[categoryTitle + group.title]) {
-        <ion-row class="indented-item">
-          <ion-col size="12">
-            @for (item of group.items; track item.id) {
-              <shopping-list-item
-                [id]="item.id"
-                [title]="item.title"
-                [completed]="item.completed"
-                [recipeTitle]="
-                  (showRecipeTitle && item.recipe?.title) || undefined
-                "
-                [createdAt]="(showAddedOn && item.createdAt) || undefined"
-                [ownerName]="(showAddedBy && item.user.name) || undefined"
-                [hideDeleteOption]="hideDeleteOption"
-                [otherShoppingLists]="otherShoppingLists"
-                (completeToggle)="completeToggle.emit([item])"
-                (recategorize)="recategorize.emit([[item], $event])"
-                (titleUpdate)="titleUpdate.emit([[item], $event])"
-                (deleteClick)="deleteClick.emit([item])"
-                (moveToList)="moveToList.emit([[item], $event])"
-                (copyToList)="copyToList.emit([[item], $event])"
-              ></shopping-list-item>
-            }
-          </ion-col>
-        </ion-row>
+        <ion-icon slot="icon-only" name="chevron-down"></ion-icon>
       }
-    </ion-grid>
-  </div>
+      @if (!groupTitleExpanded[categoryTitle + group.title]) {
+        <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+      }
+    </ion-button>
+  </ion-item>
+  @if (groupTitleExpanded[categoryTitle + group.title]) {
+    @for (item of group.items; track item.id) {
+      <shopping-list-item
+        [id]="item.id"
+        [title]="item.title"
+        [completed]="item.completed"
+        [recipeTitle]="(showRecipeTitle && item.recipe?.title) || undefined"
+        [createdAt]="(showAddedOn && item.createdAt) || undefined"
+        [ownerName]="(showAddedBy && item.user.name) || undefined"
+        [hideDeleteOption]="hideDeleteOption"
+        [otherShoppingLists]="otherShoppingLists"
+        [indented]="true"
+        (completeToggle)="completeToggle.emit([item])"
+        (recategorize)="recategorize.emit([[item], $event])"
+        (titleUpdate)="titleUpdate.emit([[item], $event])"
+        (deleteClick)="deleteClick.emit([item])"
+        (moveToList)="moveToList.emit([[item], $event])"
+        (copyToList)="copyToList.emit([[item], $event])"
+      ></shopping-list-item>
+    }
+  }
 }

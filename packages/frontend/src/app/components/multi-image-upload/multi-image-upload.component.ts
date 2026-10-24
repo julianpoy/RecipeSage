@@ -18,8 +18,9 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import type { ImageSummary } from "@recipesage/prisma";
 import { IonIcon } from "@ionic/angular";
 import {
-  caretBack,
-  caretForward,
+  chevronBack,
+  chevronForward,
+  imageOutline,
   informationCircleOutline,
   removeCircleOutline,
 } from "ionicons/icons";
@@ -36,8 +37,9 @@ import { addIcons } from "ionicons";
 export class MultiImageUploadComponent {
   constructor() {
     addIcons({
-      caretBack,
-      caretForward,
+      chevronBack,
+      chevronForward,
+      imageOutline,
       informationCircleOutline,
       removeCircleOutline,
     });

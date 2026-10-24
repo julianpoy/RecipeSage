@@ -1,20 +1,17 @@
 @import "../../../theme/shared-variables.scss";
 
-.homegrid {
-  display: grid;
-  grid-template-rows: 58px auto;
+.infinite-scrolling-container {
   height: 100%;
+  overflow-y: scroll;
+}
 
-  &.no-search {
-    grid-template-rows: auto;
-  }
-
-  .infinite-scrolling-container {
-    overflow-y: scroll;
-  }
+ion-title.ios.selection-title.has-bulk-actions {
+  position: relative;
+  padding-inline: 8px;
 }
 
 .search-container {
+  min-height: 58px;
   display: grid;
   grid-template-columns: auto min-content;
   align-items: center;
@@ -28,24 +25,19 @@
   a {
     color: var(--ion-text-color);
     padding: 6px 12px;
-    border: 1px solid;
-    border-color: var(--ion-border-color);
-    border-radius: 20px;
+    border-radius: 999px;
     margin: 2px 4px;
     cursor: pointer;
-    transition: box-shadow 0.1s ease-in-out;
+    font-size: 0.875rem;
+    background-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.06);
 
     &:hover {
-      background-color: var(
-        --ion-item-background-hover,
-        rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04)
-      ); /* Pulled from ion-item button hover */
+      background-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.1);
     }
 
     &.selected {
-      border-color: var(--ion-color-primary);
       background-color: var(--ion-color-primary);
-      color: var(--ion-color-light);
+      color: var(--ion-color-primary-contrast);
     }
   }
 }
@@ -54,7 +46,8 @@ ion-badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  padding: 4px 8px;
 
   max-width: 90px;
   text-overflow: ellipsis;
@@ -111,9 +104,11 @@ ion-badge {
     position: relative;
     width: var(--tile-width);
     height: calc(var(--image-size) + var(--content-height));
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.25);
+    box-shadow:
+      0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08),
+      0 4px 16px rgba(0, 0, 0, 0.06);
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 20px;
     overflow: hidden;
     background-color: var(--ion-card-background);
 
@@ -141,9 +136,17 @@ ion-badge {
     }
 
     img {
+      display: block;
       width: var(--image-size);
       height: var(--image-size);
       object-fit: cover;
+      background-color: var(--rs-subtle-surface-color);
+
+      &.no-image {
+        box-sizing: border-box;
+        padding: 25%;
+        object-fit: contain;
+      }
     }
 
     .recipe-card-content {
@@ -161,7 +164,7 @@ ion-badge {
         margin-top: 2px;
         margin-bottom: 2px;
         font-size: 1rem;
-        font-weight: normal;
+        font-weight: 600;
 
         /* white-space: nowrap; */
         /* overflow: hidden; */
@@ -182,7 +185,13 @@ ion-badge {
         margin: 0;
         margin-top: 2px;
         margin-bottom: 2px;
-        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.6);
+
+        &.labels {
+          display: block;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
 
       rating {

@@ -19,6 +19,7 @@
   }
   @if ((!recipe.recipeImages || !recipe.recipeImages.length) && showImage) {
     <img
+      class="placeholder"
       loading="lazy"
       decoding="async"
       alt=""
@@ -52,18 +53,15 @@
         recipe.recipeLabels && recipe.recipeLabels.length > 0 && showLabels
       ) {
         <p dir="auto">
-          {{ "pages.home.recipe.labels" | translate }}
+          <span class="screen-reader-only">{{
+            "pages.home.recipe.labels" | translate
+          }}</span>
           @for (
             recipeLabel of recipe.recipeLabels;
             track recipeLabel.label.title;
-            let idx = $index
+            let last = $last
           ) {
-            <span
-              >{{ recipeLabel.label.title }}
-              @if (idx + 1 < recipe.recipeLabels.length) {
-                <span>,&nbsp;</span>
-              }
-            </span>
+            <span>{{ recipeLabel.label.title + (last ? "" : ", ") }}</span>
           }
         </p>
       }

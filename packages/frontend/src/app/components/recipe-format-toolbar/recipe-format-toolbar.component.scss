@@ -16,7 +16,7 @@
   overflow-x: auto;
 }
 
-ion-button {
+.format-buttons ion-button.button-small {
   --padding-start: 0;
   --padding-end: 0;
   width: 26px;
@@ -24,12 +24,16 @@ ion-button {
   min-width: 26px;
   margin: 0;
   color: var(--ion-text-color);
-}
 
-.icon {
-  width: 15.4px;
-  height: 15.4px;
-  font-size: 15.4px;
+  &::part(native) {
+    height: 26px;
+  }
+
+  .icon {
+    width: 15.4px;
+    height: 15.4px;
+    font-size: 15.4px;
+  }
 }
 
 .format-help {

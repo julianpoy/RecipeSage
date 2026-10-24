@@ -18,6 +18,8 @@ import {
   IonContent,
   IonItem,
   IonLabel,
+  IonList,
+  IonItemGroup,
   IonFooter,
 } from "@ionic/angular";
 import { closeOutline, listOutline, reorderThreeOutline } from "ionicons/icons";
@@ -42,6 +44,8 @@ import { addIcons } from "ionicons";
     IonContent,
     IonItem,
     IonLabel,
+    IonList,
+    IonItemGroup,
     IonFooter,
   ],
 })

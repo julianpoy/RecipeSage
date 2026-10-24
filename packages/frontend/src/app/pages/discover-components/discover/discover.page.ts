@@ -42,7 +42,7 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/angular";
-import { searchOutline, optionsOutline } from "ionicons/icons";
+import { searchOutline, optionsOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 type DiscoverRecipeSummary =
@@ -143,7 +143,7 @@ export class DiscoverPage {
   });
 
   constructor() {
-    addIcons({ searchOutline, optionsOutline });
+    addIcons({ searchOutline, optionsOutline, closeOutline });
     this.languageOptions = getDiscoverLanguageOptions(
       this.utilService.getCurrentLocale(),
     );

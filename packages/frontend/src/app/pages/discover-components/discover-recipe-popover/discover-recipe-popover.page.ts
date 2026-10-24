@@ -17,7 +17,6 @@ import {
   IonItem,
   IonLabel,
   IonToggle,
-  IonButton,
   IonIcon,
 } from "@ionic/angular";
 import {
@@ -54,7 +53,6 @@ export type DiscoverRecipePopoverAction =
     IonItem,
     IonLabel,
     IonToggle,
-    IonButton,
     IonIcon,
   ],
 })

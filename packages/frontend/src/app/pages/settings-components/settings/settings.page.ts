@@ -48,6 +48,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { DebugStoreService } from "../../../services/debugStore.service";
 import { DEBUG_DUMP_PUBLIC_KEY } from "../../../utils/localDb/DEBUG_DUMP_PUBLIC_KEY";
 import { downloadBlobpartsAsFile } from "../../../utils/downloadBlobpartsAsFile";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import {
   IonHeader,
   IonToolbar,
@@ -57,6 +58,7 @@ import {
   IonContent,
   IonList,
   IonListHeader,
+  IonItemGroup,
   IonItem,
   IonIcon,
   IonLabel,
@@ -67,7 +69,6 @@ import {
 import {
   brushOutline,
   bugOutline,
-  caretDownSharp,
   closeOutline,
   cloudDownloadOutline,
   cloudOfflineOutline,
@@ -105,6 +106,7 @@ import { addIcons } from "ionicons";
     IonContent,
     IonList,
     IonListHeader,
+    IonItemGroup,
     IonItem,
     IonIcon,
     IonLabel,
@@ -161,7 +163,6 @@ export class SettingsPage implements OnDestroy {
     addIcons({
       brushOutline,
       bugOutline,
-      caretDownSharp,
       closeOutline,
       cloudDownloadOutline,
       cloudOfflineOutline,
@@ -182,7 +183,7 @@ export class SettingsPage implements OnDestroy {
       trashBinOutline,
     });
     try {
-      this.showSplitPaneOption = screen.width >= 1200;
+      this.showSplitPaneOption = !IS_NATIVE_IOS && screen.width >= 1200;
     } catch (e) {
       console.error("Could not get screen width", e);
     }

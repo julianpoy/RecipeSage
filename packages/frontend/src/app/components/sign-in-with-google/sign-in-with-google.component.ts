@@ -241,7 +241,7 @@ export class SignInWithGoogleComponent implements AfterViewInit, OnDestroy {
       this.googleButtonContainer.nativeElement,
       {
         type: "standard",
-        shape: "rectangular",
+        shape: "pill",
         theme: "filled_black",
         text: "continue_with",
         size: "large",

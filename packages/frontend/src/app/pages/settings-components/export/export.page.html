@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -8,18 +8,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
     @if (exportJobs.length) {
-      <div>
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            {{ "pages.export.jobs" | translate }}
-            <p>{{ "pages.export.jobs.subtitle" | translate }}<br /></p>
-          </ion-label>
-        </ion-item>
-        @for (exportJob of exportJobs.slice(0, showJobs); track exportJob) {
-          <div>
+      <ion-list inset="true">
+        <ion-list-header>
+          <ion-label>{{ "pages.export.jobs" | translate }}</ion-label>
+        </ion-list-header>
+        <ion-item-group>
+          @for (exportJob of exportJobs.slice(0, showJobs); track exportJob) {
             <ion-item
               (click)="downloadJob(exportJob)"
               target="_blank"
@@ -73,31 +70,22 @@
                 </p>
               </ion-label>
             </ion-item>
-          </div>
-        }
-        @if (exportJobs.length > showJobs) {
-          <ion-item lines="none">
-            <ion-button (click)="showMoreJobs()" fill="clear">
-              {{ "generic.showMore" | translate }}
-            </ion-button>
-          </ion-item>
-        }
-      </div>
+          }
+          @if (exportJobs.length > showJobs) {
+            <ion-item lines="none">
+              <ion-button (click)="showMoreJobs()" fill="clear">
+                {{ "generic.showMore" | translate }}
+              </ion-button>
+            </ion-item>
+          }
+        </ion-item-group>
+        <ion-note>{{ "pages.export.jobs.subtitle" | translate }}</ion-note>
+      </ion-list>
     }
     @if (!getRunningJob() || true) {
-      <div>
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            <br />
-            <p>{{ "pages.export.description1" | translate }}</p>
-            <br />
-            <p>
-              {{ "pages.export.description2" | translate }}<br />
-              {{ "pages.export.description3" | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-list>
+      <ion-list inset="true">
+        <ion-note>{{ "pages.export.description1" | translate }}</ion-note>
+        <ion-item-group>
           <ion-item (click)="exportAsJSONLD()" detail button>
             <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
             <ion-label> {{ "pages.export.jsonld" | translate }} </ion-label>
@@ -110,8 +98,12 @@
             <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
             <ion-label> {{ "pages.export.pdf" | translate }} </ion-label>
           </ion-item>
-        </ion-list>
-      </div>
+        </ion-item-group>
+        <ion-note>
+          {{ "pages.export.description2" | translate }}<br />
+          {{ "pages.export.description3" | translate }}
+        </ion-note>
+      </ion-list>
     }
   </div>
 </ion-content>

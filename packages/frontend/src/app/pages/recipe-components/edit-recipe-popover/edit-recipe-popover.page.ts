@@ -8,7 +8,13 @@ import { PopoverController } from "@ionic/angular";
 import { PreferencesService } from "../../../services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
-import { IonList, IonListHeader, IonButton, IonIcon } from "@ionic/angular";
+import {
+  IonList,
+  IonListHeader,
+  IonItem,
+  IonLabel,
+  IonIcon,
+} from "@ionic/angular";
 import { imageOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -18,7 +24,14 @@ import { addIcons } from "ionicons";
   templateUrl: "edit-recipe-popover.page.html",
   styleUrls: ["edit-recipe-popover.page.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, IonList, IonListHeader, IonButton, IonIcon],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    IonList,
+    IonListHeader,
+    IonItem,
+    IonLabel,
+    IonIcon,
+  ],
 })
 export class EditRecipePopoverPage {
   constructor() {

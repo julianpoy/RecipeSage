@@ -1,35 +1,24 @@
 <ion-list no-border>
-  <ion-button
-    (click)="closeWithAction('report')"
-    expand="block"
-    size="small"
-    color="danger"
-    class="ion-margin"
-  >
-    <ion-icon name="flag-outline" slot="start"></ion-icon>
-    {{ "pages.userActionsPopover.report" | translate }}
-  </ion-button>
+  <ion-item (click)="closeWithAction('report')" button [detail]="false">
+    <ion-icon color="danger" name="flag-outline" slot="start"></ion-icon>
+    <ion-label color="danger">
+      {{ "pages.userActionsPopover.report" | translate }}
+    </ion-label>
+  </ion-item>
 
   @if (isBlockedByMe) {
-    <ion-button
-      (click)="closeWithAction('unblock')"
-      expand="block"
-      size="small"
-      class="ion-margin"
-    >
+    <ion-item (click)="closeWithAction('unblock')" button [detail]="false">
       <ion-icon name="ban-outline" slot="start"></ion-icon>
-      {{ "pages.userActionsPopover.unblock" | translate }}
-    </ion-button>
+      <ion-label>
+        {{ "pages.userActionsPopover.unblock" | translate }}
+      </ion-label>
+    </ion-item>
   } @else {
-    <ion-button
-      (click)="closeWithAction('block')"
-      expand="block"
-      size="small"
-      color="danger"
-      class="ion-margin"
-    >
-      <ion-icon name="ban-outline" slot="start"></ion-icon>
-      {{ "pages.userActionsPopover.block" | translate }}
-    </ion-button>
+    <ion-item (click)="closeWithAction('block')" button [detail]="false">
+      <ion-icon color="danger" name="ban-outline" slot="start"></ion-icon>
+      <ion-label color="danger">
+        {{ "pages.userActionsPopover.block" | translate }}
+      </ion-label>
+    </ion-item>
   }
 </ion-list>

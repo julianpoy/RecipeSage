@@ -2,6 +2,10 @@ ion-list {
   min-width: 260px;
 }
 
+ion-select::part(label) {
+  max-width: 150px;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }

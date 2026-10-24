@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       @if (!selectionMode) {
@@ -33,11 +33,17 @@
       <ion-button (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="options-outline"></ion-icon>
       </ion-button>
+
+      @if (isNativeIOS) {
+        <ion-button (click)="new()">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content #contentContainer>
+<ion-content [fullscreen]="true" class="grouped-content" #contentContainer>
   <div class="page-wrapper">
     @if (loading) {
       <null-state>
@@ -50,6 +56,7 @@
 
     @if (!loading) {
       <ion-searchbar
+        clearIcon="close-outline"
         [(ngModel)]="searchText"
         (ionInput)="onSearchInput()"
         [placeholder]="'pages.labels.searchPlaceholder' | translate"
@@ -76,23 +83,15 @@
     }
 
     @if (!loading && (!searchText || filteredLabels.length)) {
-      <ion-list>
-        <ion-item>
+      <ion-list inset="true">
+        <ion-list-header>
           <ion-label>
-            <h1>
-              {{
-                "pages.labels.label.sectionTitle"
-                  | translate: { count: labels.length }
-              }}
-            </h1>
-            <p class="ion-text-wrap">
-              {{
-                "pages.labels.label.sectionDescription"
-                  | translate: { count: labels.length }
-              }}
-            </p>
+            {{
+              "pages.labels.label.sectionTitle"
+                | translate: { count: labels.length }
+            }}
           </ion-label>
-        </ion-item>
+        </ion-list-header>
         @if (!labels.length) {
           <null-state>
             <ion-icon
@@ -107,76 +106,88 @@
               </p>
             </ion-label>
           </null-state>
-        }
-        @for (label of filteredLabels; track labelTrackBy($index, label)) {
-          <ion-item
-            (click)="selectionMode ? selectLabel(label) : manageLabel(label)"
-            button
-            class="ion-margin-start"
-          >
-            <ion-icon name="pricetag-outline" slot="start"></ion-icon>
-            <ion-label>
-              {{ label.title }}
-              <p>
-                {{
-                  "pages.labels.label.recipeCount"
-                    | translate: { count: label._count.recipeLabels }
-                }}
-                @if (label.labelGroup) {
-                  <span>
+        } @else {
+          <ion-item-group>
+            @for (label of filteredLabels; track labelTrackBy($index, label)) {
+              <ion-item
+                (click)="
+                  selectionMode ? selectLabel(label) : manageLabel(label)
+                "
+                button
+              >
+                <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+                <ion-label>
+                  {{ label.title }}
+                  <p>
                     {{
-                      "pages.labels.label.group"
-                        | translate: { title: label.labelGroup.title }
+                      "pages.labels.label.recipeCount"
+                        | translate: { count: label._count.recipeLabels }
                     }}
-                  </span>
+                    @if (label.labelGroup) {
+                      <span>
+                        {{
+                          "pages.labels.label.group"
+                            | translate: { title: label.labelGroup.title }
+                        }}
+                      </span>
+                    }
+                    @if (!label.labelGroup) {
+                      <span>
+                        {{ "pages.labels.label.noGroup" | translate }}
+                      </span>
+                    }
+                    @if (preferences[preferenceKeys.ShowCreatedAt]) {
+                      <span>
+                        {{
+                          "pages.labels.label.createdAt"
+                            | translate
+                              : { dateString: formatDate(label.createdAt) }
+                        }}
+                      </span>
+                    }
+                  </p>
+                </ion-label>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  (click)="$event.stopPropagation(); manageLabel(label)"
+                >
+                  <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  (click)="$event.stopPropagation(); browseLabelRecipes(label)"
+                >
+                  <ion-icon
+                    name="folder-open-outline"
+                    slot="icon-only"
+                  ></ion-icon>
+                </ion-button>
+                @if (selectedLabelIds.indexOf(label.id) > -1) {
+                  <ion-badge slot="end">
+                    {{ "pages.labels.label.selected" | translate }}
+                  </ion-badge>
                 }
-                @if (!label.labelGroup) {
-                  <span> {{ "pages.labels.label.noGroup" | translate }} </span>
-                }
-                @if (preferences[preferenceKeys.ShowCreatedAt]) {
-                  <span>
-                    {{
-                      "pages.labels.label.createdAt"
-                        | translate: { dateString: formatDate(label.createdAt) }
-                    }}
-                  </span>
-                }
-              </p>
-            </ion-label>
-            <ion-button
-              slot="end"
-              (click)="$event.stopPropagation(); manageLabel(label)"
-            >
-              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-button
-              slot="end"
-              (click)="$event.stopPropagation(); browseLabelRecipes(label)"
-            >
-              <ion-icon name="folder-open-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-            @if (selectedLabelIds.indexOf(label.id) > -1) {
-              <ion-badge slot="end">
-                {{ "pages.labels.label.selected" | translate }}
-              </ion-badge>
+              </ion-item>
             }
-          </ion-item>
+          </ion-item-group>
         }
+        <ion-note>
+          {{
+            "pages.labels.label.sectionDescription"
+              | translate: { count: labels.length }
+          }}
+        </ion-note>
       </ion-list>
     }
     @if (!loading && (!searchText || filteredLabelGroups.length)) {
-      <ion-list>
-        <ion-item>
+      <ion-list inset="true">
+        <ion-list-header>
           <ion-label>
-            <h1>{{ "pages.labels.group.sectionTitle" | translate }}</h1>
-            <p class="ion-text-wrap">
-              {{
-                "pages.labels.group.sectionDescription"
-                  | translate: { count: labelGroups.length }
-              }}
-            </p>
+            {{ "pages.labels.group.sectionTitle" | translate }}
           </ion-label>
-        </ion-item>
+        </ion-list-header>
         @if (!labelGroups.length) {
           <null-state>
             <ion-icon
@@ -191,43 +202,51 @@
               </p>
             </ion-label>
           </null-state>
-        }
-        @for (
-          labelGroup of filteredLabelGroups;
-          track labelGroupTrackBy($index, labelGroup)
-        ) {
-          <ion-item
-            (click)="manageLabelGroup(labelGroup)"
-            button
-            class="ion-margin-start"
-          >
-            <ion-icon name="pricetags-outline" slot="start"></ion-icon>
-            <ion-label>
-              {{ labelGroup.title }}
-              <p>
-                {{
-                  "pages.labels.group.labelCount"
-                    | translate: { count: labelGroup.labels.length }
-                }}
-                @if (preferences[preferenceKeys.ShowCreatedAt]) {
-                  <span>
+        } @else {
+          <ion-item-group>
+            @for (
+              labelGroup of filteredLabelGroups;
+              track labelGroupTrackBy($index, labelGroup)
+            ) {
+              <ion-item (click)="manageLabelGroup(labelGroup)" button>
+                <ion-icon name="pricetags-outline" slot="start"></ion-icon>
+                <ion-label>
+                  {{ labelGroup.title }}
+                  <p>
                     {{
-                      "pages.labels.group.createdAt"
-                        | translate
-                          : { dateString: formatDate(labelGroup.createdAt) }
+                      "pages.labels.group.labelCount"
+                        | translate: { count: labelGroup.labels.length }
                     }}
-                  </span>
-                }
-              </p>
-            </ion-label>
-            <ion-button
-              slot="end"
-              (click)="$event.stopPropagation(); manageLabelGroup(labelGroup)"
-            >
-              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-          </ion-item>
+                    @if (preferences[preferenceKeys.ShowCreatedAt]) {
+                      <span>
+                        {{
+                          "pages.labels.group.createdAt"
+                            | translate
+                              : { dateString: formatDate(labelGroup.createdAt) }
+                        }}
+                      </span>
+                    }
+                  </p>
+                </ion-label>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  (click)="
+                    $event.stopPropagation(); manageLabelGroup(labelGroup)
+                  "
+                >
+                  <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-item>
+            }
+          </ion-item-group>
         }
+        <ion-note>
+          {{
+            "pages.labels.group.sectionDescription"
+              | translate: { count: labelGroups.length }
+          }}
+        </ion-note>
       </ion-list>
     }
 
@@ -236,9 +255,11 @@
     <br />
     <br />
   </div>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="new()" color="primary">
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  @if (!isNativeIOS) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="new()" color="primary">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
 </ion-content>

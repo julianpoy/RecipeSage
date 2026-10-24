@@ -51,92 +51,82 @@
   <ion-list-header>
     {{ "pages.mealPlanPopover.actions.title" | translate }}
   </ion-list-header>
-  <ion-button
-    (click)="pinRecipes()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+  <ion-item (click)="pinRecipes()" button [detail]="false">
     <ion-icon name="pin-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.pinRecipesOpen" | translate }}
-  </ion-button>
-  <ion-button
-    (click)="bulkAddToShoppingList()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.pinRecipesOpen" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item (click)="bulkAddToShoppingList()" button [detail]="false">
     <ion-icon name="cart-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.addToShoppingList" | translate }}
-  </ion-button>
-  <ion-button
-    (click)="calculateNutrition()"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.addToShoppingList" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item (click)="calculateNutrition()" button [detail]="false">
     <ion-icon name="nutrition-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.calculateNutrition" | translate }}
-  </ion-button>
-  <ion-button
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.calculateNutrition" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item
     (click)="copySelected()"
     [disabled]="preferences[preferenceKeys.ViewType] === viewTypeOptions.List"
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="copy-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.copyDays" | translate }}
-  </ion-button>
-  <ion-button
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.copyDays" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item
     (click)="moveSelected()"
     [disabled]="preferences[preferenceKeys.ViewType] === viewTypeOptions.List"
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="cut-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.moveDays" | translate }}
-  </ion-button>
-  <ion-button
-    (click)="deleteSelected()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.deleteDays" | translate }}
-  </ion-button>
-  <ion-button
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.moveDays" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item (click)="deleteSelected()" button [detail]="false">
+    <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+    <ion-label color="danger">
+      {{ "pages.mealPlanPopover.actions.deleteDays" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item
     (click)="updateMealPlan()"
     [disabled]="!isOwner"
-    expand="block"
-    size="small"
-    class="ion-margin"
+    button
+    [detail]="false"
   >
     <ion-icon name="pencil-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.update" | translate }}
-  </ion-button>
-  <ion-button (click)="ical()" expand="block" size="small" class="ion-margin">
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.update" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item (click)="ical()" button [detail]="false">
     <ion-icon name="share-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.ical" | translate }}
-  </ion-button>
-  <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.ical" | translate }}
+    </ion-label>
+  </ion-item>
+  <ion-item (click)="print()" button [detail]="false">
     <ion-icon name="print-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.actions.print" | translate }}
-  </ion-button>
+    <ion-label>
+      {{ "pages.mealPlanPopover.actions.print" | translate }}
+    </ion-label>
+  </ion-item>
   <ion-list-header>
     {{ "pages.mealPlanPopover.dangerZone.title" | translate }}
   </ion-list-header>
-  <ion-button
-    (click)="deleteMealPlan()"
-    color="danger"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
-    {{ "pages.mealPlanPopover.dangerZone.delete" | translate }}
-  </ion-button>
+  <ion-item (click)="deleteMealPlan()" button [detail]="false">
+    <ion-icon color="danger" name="trash-outline" slot="start"></ion-icon>
+    <ion-label color="danger">
+      {{ "pages.mealPlanPopover.dangerZone.delete" | translate }}
+    </ion-label>
+  </ion-item>
 </ion-list>

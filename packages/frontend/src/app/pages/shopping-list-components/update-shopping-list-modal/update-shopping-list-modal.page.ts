@@ -17,6 +17,7 @@ import { UtilService } from "../../../services/util.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
+import { TextInputComponent } from "../../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
   IonToolbar,
@@ -25,8 +26,6 @@ import {
   IonButton,
   IonIcon,
   IonContent,
-  IonItem,
-  IonInput,
   IonFooter,
   IonLabel,
 } from "@ionic/angular";
@@ -42,6 +41,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     SelectCollaboratorsComponent,
+    TextInputComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -49,8 +49,6 @@ import { addIcons } from "ionicons";
     IonButton,
     IonIcon,
     IonContent,
-    IonItem,
-    IonInput,
     IonFooter,
     IonLabel,
   ],

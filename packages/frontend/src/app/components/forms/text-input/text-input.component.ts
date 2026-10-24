@@ -37,6 +37,7 @@ export class TextInputComponent implements ControlValueAccessor {
   @Input() maxlength?: number;
   @Input() autocapitalize = "off";
   @Input() autocorrect = "off";
+  @Input() autocomplete?: string;
   @Input() spellcheck = true;
 
   readonly inputId = `rs-text-input-${nextId++}`;

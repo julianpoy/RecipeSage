@@ -12,23 +12,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item class="ion-no-padding">
-    <ion-label class="ion-text-wrap">
-      {{ "pages.shoppingListIgnoreModal.description" | translate }}
-      <p>{{ "pages.shoppingListIgnoreModal.instructions" | translate }}</p>
-      <p>{{ "pages.shoppingListIgnoreModal.scopeNote" | translate }}</p>
-    </ion-label>
-  </ion-item>
+<ion-content class="ion-padding grouped-content">
+  <p class="ion-no-margin">
+    {{ "pages.shoppingListIgnoreModal.description" | translate }}
+  </p>
+  <p>
+    <ion-note>
+      {{ "pages.shoppingListIgnoreModal.instructions" | translate }}
+    </ion-note>
+  </p>
+  <p>
+    <ion-note>
+      {{ "pages.shoppingListIgnoreModal.scopeNote" | translate }}
+    </ion-note>
+  </p>
 
-  <ion-textarea
+  <text-area
     label="{{ 'pages.shoppingListIgnoreModal.label' | translate }}"
-    labelPlacement="stacked"
     placeholder="{{ 'pages.shoppingListIgnoreModal.placeholder' | translate }}"
     [(ngModel)]="ignoreItemTitles"
-    rows="8"
-    auto-grow="true"
-  ></ion-textarea>
+    [rows]="8"
+    [autoGrow]="true"
+  ></text-area>
 </ion-content>
 
 <ion-footer class="ion-padding">

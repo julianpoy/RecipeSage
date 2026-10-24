@@ -12,18 +12,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item lines="none">
-    <ion-label>
-      {{ "pages.mealPlanBulkPinModal.instructions1" | translate }}<br />
-      {{ "pages.mealPlanBulkPinModal.instructions2" | translate }}<br />
-    </ion-label>
-  </ion-item>
+<ion-content class="ion-padding grouped-content">
+  <p class="ion-no-margin">
+    {{ "pages.mealPlanBulkPinModal.instructions1" | translate }}<br />
+    {{ "pages.mealPlanBulkPinModal.instructions2" | translate }}
+  </p>
 
   <br />
 
   @if (!allSelected) {
     <ion-button
+      class="select-toggle"
       color="primary"
       (click)="selectAllRecipes()"
       size="small"
@@ -34,6 +33,7 @@
   }
   @if (allSelected) {
     <ion-button
+      class="select-toggle"
       color="primary"
       (click)="deselectAll()"
       size="small"
@@ -42,31 +42,35 @@
       {{ "pages.mealPlanBulkPinModal.deselectAll" | translate }}
     </ion-button>
   }
-  <ion-list>
-    @for (mealItem of mealItems; track mealItem) {
-      <ion-item>
-        <ion-checkbox
-          labelPlacement="end"
-          justify="start"
-          [disabled]="!mealItem.recipe?.id"
-          [checked]="
-            mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]
-          "
-          (ionChange)="
-            mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)
-          "
-        >
-          <div class="ion-checkbox-label">
-            {{ mealItem.recipe?.title || mealItem.title }}
-            @if (!mealItem.recipe?.id) {
-              <p>
-                {{ "pages.mealPlanBulkPinModal.notLinkedToRecipe" | translate }}
-              </p>
-            }
-          </div>
-        </ion-checkbox>
-      </ion-item>
-    }
+  <ion-list inset="true">
+    <ion-item-group>
+      @for (mealItem of mealItems; track mealItem) {
+        <ion-item>
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [disabled]="!mealItem.recipe?.id"
+            [checked]="
+              mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]
+            "
+            (ionChange)="
+              mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)
+            "
+          >
+            <div class="ion-checkbox-label">
+              {{ mealItem.recipe?.title || mealItem.title }}
+              @if (!mealItem.recipe?.id) {
+                <p>
+                  {{
+                    "pages.mealPlanBulkPinModal.notLinkedToRecipe" | translate
+                  }}
+                </p>
+              }
+            </div>
+          </ion-checkbox>
+        </ion-item>
+      }
+    </ion-item-group>
   </ion-list>
 </ion-content>
 

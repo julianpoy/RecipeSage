@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding grouped-content">
   <select-recipe
     [enableSelectedState]="false"
     (selectedRecipeChange)="onSelect($event)"

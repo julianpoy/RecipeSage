@@ -32,7 +32,7 @@ import {
   IonItem,
   IonSelect,
   IonSelectOption,
-  IonButton,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular";
 import {
@@ -61,7 +61,7 @@ import { addIcons } from "ionicons";
     IonItem,
     IonSelect,
     IonSelectOption,
-    IonButton,
+    IonLabel,
     IonIcon,
   ],
 })

@@ -1,4 +1,41 @@
-<ion-item class="shopping-list-item">
+<alert-modal
+  [(isOpen)]="isEditTitleModalOpen"
+  header="{{ 'components.shoppingListItem.editTitle.header' | translate }}"
+  (confirmed)="submitEditTitle()"
+>
+  <ng-template>
+    <text-input
+      [(ngModel)]="editTitleInput"
+      [maxlength]="titleLengthLimit"
+      placeholder="{{
+        'components.shoppingListItem.editTitle.placeholder' | translate
+      }}"
+      autocapitalize="on"
+    ></text-input>
+  </ng-template>
+</alert-modal>
+
+<alert-modal
+  [(isOpen)]="isCustomCategoryModalOpen"
+  header="{{ 'components.shoppingListItem.customCategory.title' | translate }}"
+  message="{{
+    'components.shoppingListItem.customCategory.message' | translate
+  }}"
+  confirmLabel="{{ 'generic.save' | translate }}"
+  (confirmed)="submitCustomCategory()"
+>
+  <ng-template>
+    <text-input
+      [(ngModel)]="customCategoryInput"
+      placeholder="{{
+        'components.shoppingListItem.customCategory.placeholder' | translate
+      }}"
+      autocapitalize="on"
+    ></text-input>
+  </ng-template>
+</alert-modal>
+
+<ion-item class="shopping-list-item" [class.indented]="indented">
   <ion-checkbox
     labelPlacement="end"
     justify="start"
@@ -186,40 +223,3 @@
     </ng-template>
   </ion-popover>
 </ion-item>
-
-<alert-modal
-  [(isOpen)]="isEditTitleModalOpen"
-  header="{{ 'components.shoppingListItem.editTitle.header' | translate }}"
-  (confirmed)="submitEditTitle()"
->
-  <ng-template>
-    <text-input
-      [(ngModel)]="editTitleInput"
-      [maxlength]="titleLengthLimit"
-      placeholder="{{
-        'components.shoppingListItem.editTitle.placeholder' | translate
-      }}"
-      autocapitalize="on"
-    ></text-input>
-  </ng-template>
-</alert-modal>
-
-<alert-modal
-  [(isOpen)]="isCustomCategoryModalOpen"
-  header="{{ 'components.shoppingListItem.customCategory.title' | translate }}"
-  message="{{
-    'components.shoppingListItem.customCategory.message' | translate
-  }}"
-  confirmLabel="{{ 'generic.save' | translate }}"
-  (confirmed)="submitCustomCategory()"
->
-  <ng-template>
-    <text-input
-      [(ngModel)]="customCategoryInput"
-      placeholder="{{
-        'components.shoppingListItem.customCategory.placeholder' | translate
-      }}"
-      autocapitalize="on"
-    ></text-input>
-  </ng-template>
-</alert-modal>

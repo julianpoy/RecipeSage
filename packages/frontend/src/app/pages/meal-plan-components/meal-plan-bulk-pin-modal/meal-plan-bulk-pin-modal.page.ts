@@ -19,6 +19,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonItemGroup,
   IonCheckbox,
   IonFooter,
 } from "@ionic/angular";
@@ -43,6 +44,7 @@ import { addIcons } from "ionicons";
     IonItem,
     IonLabel,
     IonList,
+    IonItemGroup,
     IonCheckbox,
     IonFooter,
   ],

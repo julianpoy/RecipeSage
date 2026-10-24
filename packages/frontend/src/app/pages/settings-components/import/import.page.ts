@@ -20,6 +20,9 @@ import {
   IonProgressBar,
   IonButton,
   IonList,
+  IonListHeader,
+  IonItemGroup,
+  IonNote,
 } from "@ionic/angular";
 import { cloudUploadOutline, fileTrayFullOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -91,6 +94,9 @@ type ImportFormat =
     IonProgressBar,
     IonButton,
     IonList,
+    IonListHeader,
+    IonItemGroup,
+    IonNote,
   ],
 })
 export class ImportPage {

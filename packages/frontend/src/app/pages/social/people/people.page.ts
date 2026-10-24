@@ -15,6 +15,7 @@ import { LoadingService } from "../../../services/loading.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { AddFriendModalPage } from "../add-friend-modal/add-friend-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";
 import {
@@ -30,7 +31,8 @@ import {
   IonItem,
   IonAvatar,
   IonList,
-  IonItemDivider,
+  IonItemGroup,
+  IonListHeader,
   IonFab,
   IonFabButton,
   IonSpinner,
@@ -69,7 +71,8 @@ import { addIcons } from "ionicons";
     IonItem,
     IonAvatar,
     IonList,
-    IonItemDivider,
+    IonItemGroup,
+    IonListHeader,
     IonFab,
     IonFabButton,
     IonSpinner,
@@ -97,6 +100,8 @@ export class PeoplePage {
   utilService = inject(UtilService);
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   isSelfHost = IS_SELFHOST;

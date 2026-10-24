@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -8,18 +8,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
     @if (importJobs.length) {
-      <div>
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            {{ "pages.import.jobs" | translate }}
-            <p>{{ "pages.import.jobs.subtitle" | translate }}<br /></p>
-          </ion-label>
-        </ion-item>
-        @for (importJob of importJobs.slice(0, showJobs); track importJob) {
-          <div>
+      <ion-list inset="true">
+        <ion-list-header>
+          <ion-label>{{ "pages.import.jobs" | translate }}</ion-label>
+        </ion-list-header>
+        <ion-item-group>
+          @for (importJob of importJobs.slice(0, showJobs); track importJob) {
             <ion-item
               [button]="getImportJobPath(importJob)"
               (click)="goToImportPath(importJob)"
@@ -121,33 +118,30 @@
                 </p>
               </ion-label>
             </ion-item>
-          </div>
-        }
-        @if (importJobs.length > showJobs) {
-          <ion-item lines="none">
-            <ion-button (click)="showMoreJobs()" fill="clear">
-              {{ "generic.showMore" | translate }}
-            </ion-button>
-          </ion-item>
-        }
-      </div>
+          }
+          @if (importJobs.length > showJobs) {
+            <ion-item lines="none">
+              <ion-button (click)="showMoreJobs()" fill="clear">
+                {{ "generic.showMore" | translate }}
+              </ion-button>
+            </ion-item>
+          }
+        </ion-item-group>
+        <ion-note>{{ "pages.import.jobs.subtitle" | translate }}</ion-note>
+      </ion-list>
     }
     @if (!getRunningJob()) {
-      <div class="ion-margin-top">
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap">
-            <p>
-              {{ "pages.import.description" | translate }}<br />
-              <a
-                href="https://docs.recipesage.com/docs/tutorials/settings/import/"
-                target="_blank"
-                rel="noopener"
-                >{{ "pages.import.viewDocumentation" | translate }}</a
-              >
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-list>
+      <ion-list inset="true">
+        <ion-note>
+          {{ "pages.import.description" | translate }}<br />
+          <a
+            href="https://docs.recipesage.com/docs/tutorials/settings/import/"
+            target="_blank"
+            rel="noopener"
+            >{{ "pages.import.viewDocumentation" | translate }}</a
+          >
+        </ion-note>
+        <ion-item-group>
           <ion-item (click)="startImport('jsonld')" detail button>
             <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">
@@ -239,8 +233,8 @@
               {{ "pages.import.livingCookbook" | translate }}
             </ion-label>
           </ion-item>
-        </ion-list>
-      </div>
+        </ion-item-group>
+      </ion-list>
     }
 
     <br />

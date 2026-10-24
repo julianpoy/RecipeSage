@@ -1,27 +1,19 @@
-.category-container {
-  margin-bottom: 8px;
+ion-list.collapsed {
+  margin-bottom: 0;
+}
+
+ion-item > ion-button.ios[slot="end"] {
+  min-width: 44px;
+  height: 44px;
+  margin-block: 0;
 }
 
 ion-list-header {
   cursor: pointer;
 
-  ion-label {
-    font-size: 1.25rem;
-    font-weight: 500;
-  }
-
   ion-icon {
     vertical-align: middle;
     margin-left: 8px;
-  }
-}
-
-.shopping-list-item:nth-child(odd) {
-  background: var(--rs-list-stripe-color);
-
-  shopping-list-item,
-  ion-item.groupedItem {
-    --background: var(--rs-list-stripe-color);
   }
 }
 

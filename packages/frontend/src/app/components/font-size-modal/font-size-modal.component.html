@@ -6,11 +6,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
+<ion-content class="grouped-content">
+  <ion-list inset="true">
     <ion-radio-group [value]="fontSize" (ionChange)="onFontSizeChanged($event)">
       @for (fontSizeOption of fontSizeOptions; track fontSizeOption) {
-        <ion-item lines="none">
+        <ion-item>
           <ion-radio
             labelPlacement="end"
             justify="start"

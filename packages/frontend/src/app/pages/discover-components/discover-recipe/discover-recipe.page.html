@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding">
   @if (notFound) {
     <div class="not-found">
       <p>{{ "pages.discoverRecipe.notFound" | translate }}</p>
@@ -139,7 +139,11 @@
       <div class="ingredientsInstructionsGrid">
         <div class="ingredientsCol">
           <ion-item lines="none">
-            <ion-icon name="book-outline" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="book-outline"
+              slot="start"
+              class="section-icon"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.ingredients" | translate }}</p>
             </ion-label>
@@ -178,7 +182,11 @@
         </div>
         <div class="instructionsCol">
           <ion-item lines="none">
-            <ion-icon name="list-outline" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="list-outline"
+              slot="start"
+              class="section-icon"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.instructions" | translate }}</p>
             </ion-label>
@@ -223,7 +231,7 @@
             <ion-icon
               name="document-text-outline"
               slot="start"
-              size="large"
+              class="section-icon"
             ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.notes" | translate }}</p>
@@ -250,7 +258,7 @@
             <ion-icon
               name="fitness-outline"
               slot="start"
-              size="large"
+              class="section-icon"
             ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.recipeDetails.nutrition" | translate }}</p>
@@ -554,7 +562,7 @@
             <ion-icon
               name="pricetag-outline"
               slot="start"
-              size="large"
+              class="section-icon"
             ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.discoverRecipe.categories" | translate }}</p>
@@ -580,7 +588,11 @@
         <br />
         <div class="linked-recipes">
           <ion-item lines="none">
-            <ion-icon name="link-outline" slot="start" size="large"></ion-icon>
+            <ion-icon
+              name="link-outline"
+              slot="start"
+              class="section-icon"
+            ></ion-icon>
             <ion-label class="section-title">
               <p>{{ "pages.discoverRecipe.linkedRecipes" | translate }}</p>
             </ion-label>

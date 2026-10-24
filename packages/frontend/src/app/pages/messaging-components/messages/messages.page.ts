@@ -14,11 +14,13 @@ import { EventService } from "../../../services/event.service";
 import { UtilService, RouteMap } from "../../../services/util.service";
 import { NewMessageModalPage } from "../new-message-modal/new-message-modal.page";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import {
   IonHeader,
   IonToolbar,
   IonButtons,
+  IonButton,
   IonMenuButton,
   IonTitle,
   IonContent,
@@ -46,6 +48,7 @@ import { addIcons } from "ionicons";
     IonHeader,
     IonToolbar,
     IonButtons,
+    IonButton,
     IonMenuButton,
     IonTitle,
     IonContent,
@@ -69,6 +72,8 @@ export class MessagesPage {
   websocketService = inject(WebsocketService);
   messagingService = inject(MessagingService);
   serverActionsService = inject(ServerActionsService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   loading = true;
 

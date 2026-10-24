@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" #content>
+<ion-content [fullscreen]="true" class="ion-padding" #content>
   <div class="page-wrapper">
     @if (isSelfHost) {
       <div>

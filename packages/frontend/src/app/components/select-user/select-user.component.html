@@ -1,29 +1,34 @@
 <div>
   @if (selectedUser) {
-    <ion-item class="selectedUser" (click)="clearSelectedUser()" button>
-      <ion-avatar slot="start">
-        <img
-          [src]="
-            ($safeNavigationMigration(
-              getFirstProfileImage(selectedUser)?.image?.location
-            ) | resolveStorageLocation) || 'assets/avatar.svg'
-          "
-        />
-      </ion-avatar>
-      <ion-label>
-        <h2>
-          {{ selectedUser.name }}
-        </h2>
-        <p>
-          {{ "components.selectUser.change" | translate }}
-        </p>
-      </ion-label>
-    </ion-item>
+    <ion-list inset="true">
+      <ion-item-group>
+        <ion-item class="selectedUser" (click)="clearSelectedUser()" button>
+          <ion-avatar slot="start">
+            <img
+              [src]="
+                ($safeNavigationMigration(
+                  getFirstProfileImage(selectedUser)?.image?.location
+                ) | resolveStorageLocation) || 'assets/avatar.svg'
+              "
+            />
+          </ion-avatar>
+          <ion-label>
+            <h2>
+              {{ selectedUser.name }}
+            </h2>
+            <p>
+              {{ "components.selectUser.change" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   }
 
   @if (!selectedUser) {
     <div>
       <ion-searchbar
+        clearIcon="close-outline"
         (ionInput)="onSearchInputChange($event)"
         [value]="searchText"
         placeholder="{{ 'components.selectUser.placeholder' | translate }}"

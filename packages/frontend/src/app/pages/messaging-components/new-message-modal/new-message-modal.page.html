@@ -10,31 +10,26 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding grouped-content">
   <select-user
     (selectedUserChange)="onSelectedUserChange($event)"
     [selectedUser]="recipientInfo"
   ></select-user>
   @if (!recipientId) {
-    <ion-item>
-      <ion-label>
-        <p>{{ "pages.newMessageModal.input.target" | translate }}</p>
-      </ion-label>
-    </ion-item>
+    <ion-note>{{ "pages.newMessageModal.input.target" | translate }}</ion-note>
   }
 
   <br /><br />
 
-  <ion-item>
-    <ion-textarea
-      [(ngModel)]="message"
-      label="{{ 'pages.newMessageModal.compose' | translate }}"
-      labelPlacement="stacked"
-      placeholder="{{
-        'pages.newMessageModal.input.messagePlaceholder' | translate
-      }}"
-    ></ion-textarea>
-  </ion-item>
+  <text-area
+    [(ngModel)]="message"
+    label="{{ 'pages.newMessageModal.compose' | translate }}"
+    placeholder="{{
+      'pages.newMessageModal.input.messagePlaceholder' | translate
+    }}"
+    autocapitalize="on"
+    autocorrect="on"
+  ></text-area>
 </ion-content>
 
 <ion-footer class="ion-padding">

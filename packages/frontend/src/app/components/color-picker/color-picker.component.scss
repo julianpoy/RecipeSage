@@ -9,6 +9,7 @@
   height: 32px;
   border-radius: 50%;
   border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.16);
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -21,7 +22,7 @@
 }
 
 .no-color-option {
-  background: var(--ion-background-color);
+  background: transparent;
   border-color: var(--ion-border-color, #d7d8da);
 
   ion-icon {

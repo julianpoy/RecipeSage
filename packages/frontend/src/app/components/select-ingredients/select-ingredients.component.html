@@ -4,31 +4,40 @@
       <p>
         {{ "components.selectIngredients.title" | translate }}
       </p>
-      <ion-item>
-        <ion-checkbox
-          labelPlacement="end"
-          justify="start"
-          [(ngModel)]="allSelected"
-          (ngModelChange)="resetAll()"
-          checked="true"
-        >
-          {{ "components.selectIngredients.toggleAll" | translate }}
-        </ion-checkbox>
-      </ion-item>
-      @for (ingredient of scaledIngredients; track ingredient; let i = $index) {
-        <ion-item>
-          <ion-checkbox
-            labelPlacement="end"
-            justify="start"
-            [(ngModel)]="ingredientBinders[i]"
-            (ngModelChange)="toggleIngredient(i)"
-            checked="true"
-          >
-            {{ ingredient.plaintextContent }}
-          </ion-checkbox>
-        </ion-item>
-      }
-      <br />
+      <ion-list inset="true">
+        <ion-item-group>
+          <ion-item>
+            <ion-checkbox
+              labelPlacement="end"
+              justify="start"
+              [(ngModel)]="allSelected"
+              (ngModelChange)="resetAll()"
+              checked="true"
+            >
+              {{ "components.selectIngredients.toggleAll" | translate }}
+            </ion-checkbox>
+          </ion-item>
+          @for (
+            ingredient of scaledIngredients;
+            track ingredient;
+            let i = $index
+          ) {
+            <ion-item>
+              <ion-checkbox
+                labelPlacement="end"
+                justify="start"
+                [(ngModel)]="ingredientBinders[i]"
+                (ngModelChange)="toggleIngredient(i)"
+                checked="true"
+              >
+                <div class="ion-text-wrap">
+                  {{ ingredient.plaintextContent }}
+                </div>
+              </ion-checkbox>
+            </ion-item>
+          }
+        </ion-item-group>
+      </ion-list>
       <a class="scale" (click)="changeScale()">
         {{
           "components.selectIngredients.scale"

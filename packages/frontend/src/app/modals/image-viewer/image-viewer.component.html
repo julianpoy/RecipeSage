@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
+<ion-content [fullscreen]="true" [forceOverscroll]="false" color="dark">
   @if (slideNum > 0) {
     <ion-icon
       (click)="slidePrev()"

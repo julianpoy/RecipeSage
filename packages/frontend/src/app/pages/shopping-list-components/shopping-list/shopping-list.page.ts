@@ -30,6 +30,7 @@ import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/ne
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import { ShoppingListItemComponent } from "../../../components/shopping-list-item/shopping-list-item.component";
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
@@ -49,6 +50,7 @@ import {
   IonContent,
   IonList,
   IonListHeader,
+  IonItemGroup,
   IonLabel,
   IonItem,
   IonFab,
@@ -58,9 +60,9 @@ import {
 import {
   addOutline,
   arrowUndoOutline,
-  caretDown,
-  caretUp,
   cartOutline,
+  chevronDown,
+  chevronForward,
   optionsOutline,
   trashOutline,
 } from "ionicons/icons";
@@ -89,6 +91,7 @@ const categoryTitlesToi18n = SHOPPING_LIST_CATEGORY_I18N;
     IonContent,
     IonList,
     IonListHeader,
+    IonItemGroup,
     IonLabel,
     IonItem,
     IonFab,
@@ -110,6 +113,8 @@ export class ShoppingListPage {
   popoverCtrl = inject(PopoverController);
   route = inject(ActivatedRoute);
   private titleService = inject(Title);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
 
@@ -174,9 +179,9 @@ export class ShoppingListPage {
     addIcons({
       addOutline,
       arrowUndoOutline,
-      caretDown,
-      caretUp,
       cartOutline,
+      chevronDown,
+      chevronForward,
       optionsOutline,
       trashOutline,
     });
@@ -516,7 +521,7 @@ export class ShoppingListPage {
   }
 
   removeRecipe(recipeId: string) {
-    this.removeItems(this.itemsByRecipeId[recipeId]);
+    this.removeItemsConfirm(this.itemsByRecipeId[recipeId]);
   }
 
   async removeItemsConfirm(items: ShoppingListItemSummary[]) {

@@ -20,6 +20,7 @@ import {
   folderOpenOutline,
   pricetagOutline,
   trashOutline,
+  closeOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -54,6 +55,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
       folderOpenOutline,
       pricetagOutline,
       trashOutline,
+      closeOutline,
     });
   }
 

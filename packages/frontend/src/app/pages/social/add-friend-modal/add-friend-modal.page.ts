@@ -20,8 +20,8 @@ import {
   IonButton,
   IonIcon,
   IonContent,
-  IonItem,
   IonLabel,
+  IonNote,
   IonFooter,
 } from "@ionic/angular";
 import { closeOutline, openOutline, sendOutline } from "ionicons/icons";
@@ -43,8 +43,8 @@ import { addIcons } from "ionicons";
     IonButton,
     IonIcon,
     IonContent,
-    IonItem,
     IonLabel,
+    IonNote,
     IonFooter,
   ],
 })

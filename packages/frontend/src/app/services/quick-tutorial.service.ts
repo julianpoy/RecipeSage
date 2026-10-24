@@ -53,6 +53,8 @@ export class QuickTutorialService {
   private alertCtrl = inject(AlertController);
   private translate = inject(TranslateService);
 
+  private presentingTutorials = new Set<QuickTutorialOptions>();
+
   private fetchSeenTutorials(): QuickTutorialOptions[] {
     try {
       const seenTutorials = localStorage.getItem(TUTORIAL_LOCALSTORAGE_KEY);
@@ -80,24 +82,32 @@ export class QuickTutorialService {
   async triggerQuickTutorial(quickTutorialKey: QuickTutorialOptions) {
     const seenTutorials = this.fetchSeenTutorials();
 
-    if (seenTutorials.indexOf(quickTutorialKey) < 0) {
+    if (
+      seenTutorials.indexOf(quickTutorialKey) < 0 &&
+      !this.presentingTutorials.has(quickTutorialKey)
+    ) {
+      this.presentingTutorials.add(quickTutorialKey);
       const tutorial = quickTutorialBlurbs[quickTutorialKey];
 
-      const header = await this.translate.get(tutorial.header).toPromise();
-      const message = await this.translate.get(tutorial.message).toPromise();
-      const okay = await this.translate.get("generic.okay").toPromise();
+      try {
+        const header = await this.translate.get(tutorial.header).toPromise();
+        const message = await this.translate.get(tutorial.message).toPromise();
+        const okay = await this.translate.get("generic.okay").toPromise();
 
-      const tutorialAlert = await this.alertCtrl.create({
-        header,
-        message,
-        buttons: [okay],
-      });
+        const tutorialAlert = await this.alertCtrl.create({
+          header,
+          message,
+          buttons: [okay],
+        });
 
-      await tutorialAlert.present();
+        await tutorialAlert.present();
 
-      await tutorialAlert.onDidDismiss();
+        await tutorialAlert.onDidDismiss();
 
-      this.markQuickTutorialAsSeen(quickTutorialKey);
+        this.markQuickTutorialAsSeen(quickTutorialKey);
+      } finally {
+        this.presentingTutorials.delete(quickTutorialKey);
+      }
     }
   }
 }

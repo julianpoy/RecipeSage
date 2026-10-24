@@ -1,20 +1,24 @@
-.preset-options {
-  padding-inline-start: 16px;
+ion-title.ios {
+  position: static;
+  padding-inline: 20px 8px;
+}
 
-  p {
-    font-size: 0.75rem;
-    margin-bottom: 4px;
-  }
+.preset-options {
+  padding-inline: 12px;
 
   ion-button {
     min-width: 40px;
   }
 }
 
-.anchor-qty-item {
-  margin-inline-start: 32px;
+ion-note.prompt {
+  margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
-.unit-system-item {
-  margin-top: 16px;
+ion-title.md {
+  font-size: 1rem;
 }

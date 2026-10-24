@@ -9,6 +9,6 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding grouped-content">
   <select-label (selectedLabelChange)="onSelect($event)"></select-label>
 </ion-content>

@@ -16,6 +16,8 @@ import type {
 } from "@recipesage/prisma";
 import { SEARCH_TERM_LENGTH_LIMIT } from "@recipesage/util/shared";
 import {
+  IonList,
+  IonItemGroup,
   IonItem,
   IonAvatar,
   IonLabel,
@@ -24,7 +26,7 @@ import {
   IonSpinner,
   IonIcon,
 } from "@ionic/angular";
-import { folderOpenOutline } from "ionicons/icons";
+import { folderOpenOutline, closeOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
 @Component({
@@ -35,6 +37,8 @@ import { addIcons } from "ionicons";
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ...SHARED_UI_IMPORTS,
+    IonList,
+    IonItemGroup,
     IonItem,
     IonAvatar,
     IonLabel,
@@ -82,7 +86,7 @@ export class SelectRecipeComponent {
   recipes: RecipeSummaryLite[] = [];
 
   constructor() {
-    addIcons({ folderOpenOutline });
+    addIcons({ folderOpenOutline, closeOutline });
     this.fetchFriends();
   }
 

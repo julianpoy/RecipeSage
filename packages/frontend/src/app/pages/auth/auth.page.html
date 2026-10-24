@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     @if (isInModal) {
       <ion-buttons slot="start">
@@ -26,7 +26,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding">
   <div class="auth-container">
     <ion-list>
       <div class="auth-entry">

@@ -31,6 +31,9 @@ import {
   IonLabel,
   IonToggle,
   IonFooter,
+  IonList,
+  IonItemGroup,
+  IonNote,
 } from "@ionic/angular";
 import {
   arrowBackOutline,
@@ -61,6 +64,9 @@ import { addIcons } from "ionicons";
     IonLabel,
     IonToggle,
     IonFooter,
+    IonList,
+    IonItemGroup,
+    IonNote,
   ],
 })
 export class NewLabelItemModalPage {

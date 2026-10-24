@@ -1,3 +1,9 @@
-ion-item {
-  --background: var(--background);
+ion-item.indented {
+  --padding-start: 52px;
+}
+
+ion-item > ion-button.ios[slot="end"] {
+  min-width: 44px;
+  height: 44px;
+  margin-block: 0;
 }

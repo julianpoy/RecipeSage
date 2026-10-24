@@ -3,116 +3,143 @@
     <ion-title>
       {{ "components.scaleRecipe.title" | translate }}
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="close()"
+        [attr.aria-label]="'components.scaleRecipe.cancel' | translate"
+      >
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="preset-options">
-    <p>
+<ion-content class="grouped-content">
+  <ion-list inset="true">
+    <ion-note class="prompt">
       {{ "components.scaleRecipe.click" | translate }}
-    </p>
+    </ion-note>
+    <div class="preset-options">
+      @for (preset of presets; track preset) {
+        <ion-button size="small" mode="ios" (click)="setPresetScale(preset)">
+          {{
+            "components.scaleRecipe.presetMultiplier"
+              | translate: { value: preset }
+          }}
+        </ion-button>
+      }
+    </div>
 
-    @for (preset of presets; track preset) {
-      <ion-button size="small" mode="ios" (click)="setPresetScale(preset)">
-        {{
-          "components.scaleRecipe.presetMultiplier"
-            | translate: { value: preset }
-        }}
-      </ion-button>
-    }
-  </div>
-
-  <ion-item>
-    <ion-input
-      label="{{ 'components.scaleRecipe.manual' | translate }}"
-      labelPlacement="stacked"
-      [(ngModel)]="scale"
-      (ionInput)="onScaleInput()"
-    ></ion-input>
-  </ion-item>
-
-  @if (originalServings !== null) {
-    <ion-item>
-      <ion-input
-        label="{{
-          'components.scaleRecipe.servingsLabel'
-            | translate: { originalServings: originalServings }
-        }}"
-        labelPlacement="stacked"
-        [(ngModel)]="servingsInput"
-        (ionInput)="onServingsInput()"
-      ></ion-input>
-    </ion-item>
-  }
-
-  @if (anchorOptions.length > 0) {
-    <ion-item>
-      <ion-select
-        label="{{ 'components.scaleRecipe.anchorLabel' | translate }}"
-        labelPlacement="stacked"
-        interface="popover"
-        placeholder="{{
-          'components.scaleRecipe.anchorPlaceholder' | translate
-        }}"
-        dir="auto"
-        [ngModel]="anchorIndex"
-        (ngModelChange)="onAnchorIngredientChange($event)"
-      >
-        @for (option of anchorOptions; track option.index) {
-          <ion-select-option [value]="option.index" class="autoTextDirection">
-            {{ option.label }}
-          </ion-select-option>
-        }
-      </ion-select>
-    </ion-item>
-    @if (selectedAnchor(); as anchor) {
-      <ion-item class="anchor-qty-item">
+    <ion-note class="prompt">
+      {{ "components.scaleRecipe.manual" | translate }}
+    </ion-note>
+    <ion-item-group>
+      <ion-item>
         <ion-input
-          [label]="
-            anchor.unit
-              ? ('components.scaleRecipe.anchorQty'
-                | translate: { unit: anchor.unit, originalQty: anchor.qtyText })
-              : ('components.scaleRecipe.anchorQtyNoUnit'
-                | translate: { originalQty: anchor.qtyText })
-          "
-          labelPlacement="stacked"
-          [(ngModel)]="anchorQtyInput"
-          (ionInput)="onAnchorQtyInput()"
+          [attr.aria-label]="'components.scaleRecipe.manual' | translate"
+          [(ngModel)]="scale"
+          (ionInput)="onScaleInput()"
         ></ion-input>
       </ion-item>
-    }
-  }
+    </ion-item-group>
 
-  <ion-item class="unit-system-item">
-    <ion-select
-      [(ngModel)]="unitSystem"
-      (ionChange)="onUnitSystemChange()"
-      label="{{ 'components.scaleRecipe.systemLabel' | translate }}"
-      labelPlacement="stacked"
-      interface="popover"
-    >
-      <ion-select-option value="original">
-        {{ "components.scaleRecipe.system.original" | translate }}
-      </ion-select-option>
-      <ion-select-option value="metric">
-        {{ "components.scaleRecipe.system.metric" | translate }}
-      </ion-select-option>
-      <ion-select-option value="imperial">
-        {{ "components.scaleRecipe.system.imperial" | translate }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+    @if (originalServings !== null) {
+      <ion-note class="prompt">
+        {{
+          "components.scaleRecipe.servingsLabel"
+            | translate: { originalServings: originalServings }
+        }}
+      </ion-note>
+      <ion-item-group>
+        <ion-item>
+          <ion-input
+            [attr.aria-label]="
+              'components.scaleRecipe.servingsLabel'
+                | translate: { originalServings: originalServings }
+            "
+            [(ngModel)]="servingsInput"
+            (ionInput)="onServingsInput()"
+          ></ion-input>
+        </ion-item>
+      </ion-item-group>
+    }
+
+    @if (anchorOptions.length > 0) {
+      <ion-note class="prompt">
+        {{ "components.scaleRecipe.anchorLabel" | translate }}
+      </ion-note>
+      <ion-item-group>
+        <ion-item>
+          <ion-select
+            [attr.aria-label]="'components.scaleRecipe.anchorLabel' | translate"
+            interface="popover"
+            placeholder="{{
+              'components.scaleRecipe.anchorPlaceholder' | translate
+            }}"
+            dir="auto"
+            [ngModel]="anchorIndex"
+            (ngModelChange)="onAnchorIngredientChange($event)"
+          >
+            @for (option of anchorOptions; track option.index) {
+              <ion-select-option
+                [value]="option.index"
+                class="autoTextDirection"
+              >
+                {{ option.label }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        @if (selectedAnchor(); as anchor) {
+          <ion-item>
+            <ion-input
+              [attr.aria-label]="
+                anchorQtyLabel(anchor).key
+                  | translate: anchorQtyLabel(anchor).params
+              "
+              [(ngModel)]="anchorQtyInput"
+              (ionInput)="onAnchorQtyInput()"
+            ></ion-input>
+          </ion-item>
+        }
+      </ion-item-group>
+      @if (selectedAnchor(); as anchor) {
+        <ion-note>
+          {{
+            anchorQtyLabel(anchor).key
+              | translate: anchorQtyLabel(anchor).params
+          }}
+        </ion-note>
+      }
+    }
+  </ion-list>
+
+  <ion-list inset="true">
+    <ion-item-group>
+      <ion-item>
+        <ion-select
+          [(ngModel)]="unitSystem"
+          (ionChange)="onUnitSystemChange()"
+          label="{{ 'components.scaleRecipe.systemLabel' | translate }}"
+          interface="popover"
+        >
+          <ion-select-option value="original">
+            {{ "components.scaleRecipe.system.original" | translate }}
+          </ion-select-option>
+          <ion-select-option value="metric">
+            {{ "components.scaleRecipe.system.metric" | translate }}
+          </ion-select-option>
+          <ion-select-option value="imperial">
+            {{ "components.scaleRecipe.system.imperial" | translate }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
 
-<ion-footer>
-  <ion-button (click)="close()" fill="clear" class="ion-float-end">
-    <ion-label>
-      {{ "components.scaleRecipe.cancel" | translate }}
-    </ion-label>
-  </ion-button>
-  <ion-button (click)="apply()" fill="clear" class="ion-float-end">
-    <ion-label>
-      {{ "components.scaleRecipe.apply" | translate }}
-    </ion-label>
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="apply()">
+    {{ "components.scaleRecipe.apply" | translate }}
   </ion-button>
 </ion-footer>

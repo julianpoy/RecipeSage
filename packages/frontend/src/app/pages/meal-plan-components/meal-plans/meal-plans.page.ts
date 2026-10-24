@@ -12,11 +12,13 @@ import { UtilService, RouteMap } from "../../../services/util.service";
 import { NewMealPlanModalPage } from "../new-meal-plan-modal/new-meal-plan-modal.page";
 import { ServerActionsService } from "../../../services/server-actions.service";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { IS_NATIVE_IOS } from "../../../utils/isNativeIOS";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
 import {
   IonHeader,
   IonToolbar,
   IonButtons,
+  IonButton,
   IonMenuButton,
   IonTitle,
   IonContent,
@@ -43,6 +45,7 @@ import { addIcons } from "ionicons";
     IonHeader,
     IonToolbar,
     IonButtons,
+    IonButton,
     IonMenuButton,
     IonTitle,
     IonContent,
@@ -66,6 +69,8 @@ export class MealPlansPage {
   private websocketService = inject(WebsocketService);
   private loadingService = inject(LoadingService);
   private utilService = inject(UtilService);
+
+  isNativeIOS = IS_NATIVE_IOS;
 
   private meQuery = this.serverActionsService.users.getMe();
   me = this.meQuery.value;

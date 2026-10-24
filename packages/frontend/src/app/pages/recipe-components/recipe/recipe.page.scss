@@ -3,6 +3,15 @@
 .page-wrapper {
   max-width: 1250px;
   margin: 0 auto;
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }
+
+  > .ion-padding {
+    padding-inline: 0;
+  }
 }
 
 @media only screen and (max-width: $desktop-breakpoint) {
@@ -18,12 +27,13 @@
 }
 
 ion-thumbnail {
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
+  --border-radius: 16px;
+  border-radius: 16px;
+  background-color: var(--rs-subtle-surface-color);
+  box-shadow:
+    0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-
-  img {
-    border-radius: 4px;
-  }
 }
 
 .pre {
@@ -160,10 +170,11 @@ h2.recipeTitle {
 }
 
 .meta {
-  border-top: 1px solid var(--ion-border-color);
-  border-bottom: 1px solid var(--ion-border-color);
   margin-top: 15px;
   margin-bottom: 15px;
+  padding: 6px 8px;
+  border-radius: 16px;
+  background: var(--rs-subtle-surface-color);
 
   ion-col {
     padding: 5px;
@@ -254,5 +265,52 @@ h2.recipeTitle {
 
   &.inlineImage--xlarge figcaption {
     max-width: 840px;
+  }
+}
+
+.action-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 16px;
+
+  @media only screen and (min-width: $desktop-breakpoint) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+.action-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 76px;
+  padding: 10px 4px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  color: var(--ion-color-primary);
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 24px;
+  }
+
+  &:active {
+    background: rgba(var(--ion-color-primary-rgb), 0.2);
+  }
+}
+
+.action-tile-danger {
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+  color: var(--ion-color-danger);
+
+  &:active {
+    background: rgba(var(--ion-color-danger-rgb), 0.2);
   }
 }

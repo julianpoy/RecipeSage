@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -8,283 +8,273 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
-    <ion-list>
+    <ion-list inset="true">
       <ion-list-header>
-        {{ "pages.settings.section1.title" | translate }}
-      </ion-list-header>
-      <ion-item lines="inset" (click)="goToImport()" button>
-        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.import" | translate }} </ion-label>
-      </ion-item>
-      <ion-item lines="inset" (click)="goToExport()" button>
-        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.export" | translate }} </ion-label>
-      </ion-item>
-      <ion-item lines="inset" (click)="goToJobs()" button>
-        <ion-icon name="list-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.jobs" | translate }} </ion-label>
-      </ion-item>
-      <ion-item lines="inset" (click)="exportDebugStore()" button>
-        <ion-icon name="bug-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.debugDump" | translate }} </ion-label>
-      </ion-item>
-      <ion-item lines="inset" (click)="goToAccount()" button>
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.account" | translate }} </ion-label>
-      </ion-item>
-      <ion-item [disabled]="!isLoggedIn" (click)="logout()" button>
-        <ion-icon slot="start" name="log-out-outline"></ion-icon>
-        <ion-label> {{ "pages.settings.logout" | translate }} </ion-label>
-      </ion-item>
-      <ion-list-header>
-        {{ "pages.settings.section2.title" | translate }}
-      </ion-list-header>
-      <ion-item lines="inset" (click)="triggerSync()" button>
-        <ion-icon name="sync-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.sync" | translate }} </ion-label>
-      </ion-item>
-
-      <ion-item lines="inset">
-        <ion-icon name="cloud-offline-outline" slot="start"></ion-icon>
-        <ion-toggle
-          [(ngModel)]="offlineModeEnabled"
-          (ngModelChange)="offlineModeChanged()"
-        >
-          <div class="ion-text-wrap">
-            {{ "pages.settings.offlineMode.enable" | translate }}
-          </div>
-        </ion-toggle>
-      </ion-item>
-
-      <ion-item lines="inset">
-        <ion-icon name="notifications-outline" slot="start"></ion-icon>
-        <ion-select
-          [(ngModel)]="preferences[preferenceKeys.OfflineModePrompt]"
-          (ngModelChange)="savePreferences()"
-          label="{{ 'pages.settings.offlineMode.prompt' | translate }}"
-          okText="{{ 'generic.ok' | translate }}"
-          cancelText="{{ 'generic.cancel' | translate }}"
-        >
-          <ion-select-option [value]="offlineModePromptOptions.Ask">
-            {{ "pages.settings.offlineMode.prompt.ask" | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="offlineModePromptOptions.Never">
-            {{ "pages.settings.offlineMode.prompt.never" | translate }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-
-      <ion-item lines="inset" (click)="resetCompletion()" button>
-        <ion-icon name="trash-bin-outline" slot="start"></ion-icon>
         <ion-label>
-          {{ "pages.settings.resetCompletion" | translate }}
+          {{ "pages.settings.section1.title" | translate }}
         </ion-label>
-      </ion-item>
+      </ion-list-header>
+      <ion-item-group>
+        <ion-item (click)="goToImport()" button>
+          <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.import" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="goToExport()" button>
+          <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.export" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="goToJobs()" button>
+          <ion-icon name="list-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.jobs" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="exportDebugStore()" button>
+          <ion-icon name="bug-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.debugDump" | translate }} </ion-label>
+        </ion-item>
+        <ion-item (click)="goToAccount()" button>
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.account" | translate }} </ion-label>
+        </ion-item>
+        <ion-item [disabled]="!isLoggedIn" (click)="logout()" button>
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          <ion-label> {{ "pages.settings.logout" | translate }} </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+    <ion-list inset="true">
+      <ion-list-header>
+        <ion-label>
+          {{ "pages.settings.section2.title" | translate }}
+        </ion-label>
+      </ion-list-header>
+      <ion-item-group>
+        <ion-item (click)="triggerSync()" button>
+          <ion-icon name="sync-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.sync" | translate }} </ion-label>
+        </ion-item>
 
-      @if (showSplitPaneOption) {
-        <ion-item lines="inset">
-          <ion-icon name="tablet-landscape-outline" slot="start"></ion-icon>
+        <ion-item>
+          <ion-icon name="cloud-offline-outline" slot="start"></ion-icon>
           <ion-toggle
-            [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
-            (ngModelChange)="toggleSplitPane(); savePreferences()"
+            [(ngModel)]="offlineModeEnabled"
+            (ngModelChange)="offlineModeChanged()"
           >
             <div class="ion-text-wrap">
-              {{ "pages.settings.splitPane" | translate }}
+              {{ "pages.settings.offlineMode.enable" | translate }}
             </div>
           </ion-toggle>
         </ion-item>
-      }
-      <ion-item lines="inset">
-        <ion-icon name="home-outline" slot="start"></ion-icon>
-        <ion-select
-          [(ngModel)]="preferences[preferenceKeys.StartPage]"
-          (ngModelChange)="startPageChanged()"
-          label="{{ 'pages.settings.startPage' | translate }}"
-          okText="{{ 'generic.ok' | translate }}"
-          cancelText="{{ 'generic.cancel' | translate }}"
-        >
-          <ion-select-option [value]="startPageOptions.MyRecipes">
-            {{ "pages.settings.startPage.myRecipes" | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="startPageOptions.ManageLabels">
-            {{ "pages.settings.startPage.manageLabels" | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="startPageOptions.MealPlans">
-            {{ "pages.settings.startPage.mealPlans" | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="startPageOptions.ShoppingLists">
-            {{ "pages.settings.startPage.shoppingLists" | translate }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      @if (isLoggedIn) {
-        <ion-item lines="inset">
-          <ion-icon name="people-outline" slot="start"></ion-icon>
+
+        <ion-item>
+          <ion-icon name="notifications-outline" slot="start"></ion-icon>
           <ion-select
-            [(ngModel)]="preferences[myRecipesPreferenceKeys.IncludeFriends]"
+            [(ngModel)]="preferences[preferenceKeys.OfflineModePrompt]"
             (ngModelChange)="savePreferences()"
-            label="{{
-              'pages.homeSearchFilterPopover.includeFriends' | translate
-            }}"
+            label="{{ 'pages.settings.offlineMode.prompt' | translate }}"
             okText="{{ 'generic.ok' | translate }}"
             cancelText="{{ 'generic.cancel' | translate }}"
           >
-            <ion-select-option [value]="includeFriendsOptions.Yes">
-              {{
-                "pages.homeSearchFilterPopover.includeFriends.yes" | translate
-              }}
+            <ion-select-option [value]="offlineModePromptOptions.Ask">
+              {{ "pages.settings.offlineMode.prompt.ask" | translate }}
             </ion-select-option>
-            <ion-select-option [value]="includeFriendsOptions.Search">
-              {{
-                "pages.homeSearchFilterPopover.includeFriends.search"
-                  | translate
-              }}
-            </ion-select-option>
-            <ion-select-option [value]="includeFriendsOptions.Browse">
-              {{
-                "pages.homeSearchFilterPopover.includeFriends.browse"
-                  | translate
-              }}
-            </ion-select-option>
-            <ion-select-option [value]="includeFriendsOptions.No">
-              {{
-                "pages.homeSearchFilterPopover.includeFriends.no" | translate
-              }}
+            <ion-select-option [value]="offlineModePromptOptions.Never">
+              {{ "pages.settings.offlineMode.prompt.never" | translate }}
             </ion-select-option>
           </ion-select>
         </ion-item>
-      }
-      <ion-item lines="inset">
-        <ion-icon name="brush-outline" slot="start"></ion-icon>
-        <ion-select
-          [(ngModel)]="preferences[preferenceKeys.Theme]"
-          (ngModelChange)="appThemeChanged()"
-          label="{{ 'pages.settings.theme' | translate }}"
-          okText="{{ 'generic.ok' | translate }}"
-          cancelText="{{ 'generic.cancel' | translate }}"
-        >
-          <ion-select-option value="default">
-            {{ "pages.settings.theme.default" | translate }}
-          </ion-select-option>
-          <ion-select-option value="light">
-            {{ "pages.settings.theme.light" | translate }}
-          </ion-select-option>
-          <ion-select-option value="midnight">
-            {{ "pages.settings.theme.midnight" | translate }}
-          </ion-select-option>
-          <ion-select-option value="dark">
-            {{ "pages.settings.theme.dark" | translate }}
-          </ion-select-option>
-          <ion-select-option value="black">
-            {{ "pages.settings.theme.black" | translate }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-item lines="inset">
-        <ion-icon name="language-outline" slot="start"></ion-icon>
-        <ion-select
-          [interfaceOptions]="languageSelectInterfaceOptions"
-          [(ngModel)]="language"
-          (ngModelChange)="languageChanged()"
-        >
-          <ion-label slot="label" class="ion-text-wrap">
-            {{ "pages.settings.language" | translate }}
-          </ion-label>
 
-          <ion-select-option value="navigator">
-            {{ "pages.settings.language.default" | translate }}
-          </ion-select-option>
-          @for (languageOption of languageOptions; track languageOption) {
-            <ion-select-option [value]="languageOption[0]">
-              {{ languageOption[1] }}
-            </ion-select-option>
-          }
-        </ion-select>
-      </ion-item>
-      <ion-item
-        lines="inset"
-        href="https://weblate.recipesage.com"
-        target="_blank"
-        detail
-      >
-        <ion-icon name="language-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">
-          <p>{{ "pages.settings.language.contribute" | translate }}</p>
-        </ion-label>
-      </ion-item>
-
-      <ion-item
-        lines="inset"
-        class="cursor-pointer"
-        (click)="showFontSizePopover()"
-        button
-        detail="false"
-      >
-        <ion-icon name="text-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.fontSize" | translate }} </ion-label>
-        <ion-icon
-          name="caret-down-sharp"
-          size="small"
-          slot="end"
-          class="custom-select-icon"
-        ></ion-icon>
-      </ion-item>
-      <ion-item
-        lines="inset"
-        class="cursor-pointer"
-        (click)="showCookModeFontSizePopover()"
-        button
-        detail="false"
-      >
-        <ion-icon name="restaurant-outline" slot="start"></ion-icon>
-        <ion-label>
-          {{ "pages.settings.cookModeFontSize" | translate }}
-        </ion-label>
-        <ion-icon
-          name="caret-down-sharp"
-          size="small"
-          slot="end"
-          class="custom-select-icon"
-        ></ion-icon>
-      </ion-item>
-      <ion-item lines="inset">
-        <ion-icon name="fitness-outline" slot="start"></ion-icon>
-        <ion-toggle
-          [(ngModel)]="
-            preferences[recipeDetailsPreferenceKeys.AutoExpandNutrition]
-          "
-          (ngModelChange)="savePreferences()"
-        >
-          <div class="ion-text-wrap">
-            {{ "pages.settings.autoExpandNutrition" | translate }}
-          </div>
-        </ion-toggle>
-      </ion-item>
-      <ion-item lines="inset">
-        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-        <ion-toggle
-          [checked]="preferences[preferenceKeys.PreferencesSync] === 'enabled'"
-          (ionChange)="togglePreferencesSync($event)"
-        >
-          <div class="ion-text-wrap">
-            {{ "pages.settings.preferencesSync" | translate }}
-          </div>
-        </ion-toggle>
-      </ion-item>
-      <ion-item lines="inset" (click)="resetPreferences()" button>
-        <ion-icon name="close-outline" slot="start"></ion-icon>
-        <ion-label> {{ "pages.settings.reset" | translate }} </ion-label>
-      </ion-item>
-      @if (showServerSettings) {
-        <ion-item lines="inset" (click)="goToServerSettings()" button>
-          <ion-icon name="server-outline" slot="start"></ion-icon>
+        <ion-item (click)="resetCompletion()" button>
+          <ion-icon name="trash-bin-outline" slot="start"></ion-icon>
           <ion-label>
-            {{ "pages.settings.serverSettings" | translate }}
+            {{ "pages.settings.resetCompletion" | translate }}
           </ion-label>
         </ion-item>
-      }
+
+        @if (showSplitPaneOption) {
+          <ion-item>
+            <ion-icon name="tablet-landscape-outline" slot="start"></ion-icon>
+            <ion-toggle
+              [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
+              (ngModelChange)="toggleSplitPane(); savePreferences()"
+            >
+              <div class="ion-text-wrap">
+                {{ "pages.settings.splitPane" | translate }}
+              </div>
+            </ion-toggle>
+          </ion-item>
+        }
+        <ion-item>
+          <ion-icon name="home-outline" slot="start"></ion-icon>
+          <ion-select
+            [(ngModel)]="preferences[preferenceKeys.StartPage]"
+            (ngModelChange)="startPageChanged()"
+            label="{{ 'pages.settings.startPage' | translate }}"
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            <ion-select-option [value]="startPageOptions.MyRecipes">
+              {{ "pages.settings.startPage.myRecipes" | translate }}
+            </ion-select-option>
+            <ion-select-option [value]="startPageOptions.ManageLabels">
+              {{ "pages.settings.startPage.manageLabels" | translate }}
+            </ion-select-option>
+            <ion-select-option [value]="startPageOptions.MealPlans">
+              {{ "pages.settings.startPage.mealPlans" | translate }}
+            </ion-select-option>
+            <ion-select-option [value]="startPageOptions.ShoppingLists">
+              {{ "pages.settings.startPage.shoppingLists" | translate }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        @if (isLoggedIn) {
+          <ion-item>
+            <ion-icon name="people-outline" slot="start"></ion-icon>
+            <ion-select
+              [(ngModel)]="preferences[myRecipesPreferenceKeys.IncludeFriends]"
+              (ngModelChange)="savePreferences()"
+              label="{{
+                'pages.homeSearchFilterPopover.includeFriends' | translate
+              }}"
+              okText="{{ 'generic.ok' | translate }}"
+              cancelText="{{ 'generic.cancel' | translate }}"
+            >
+              <ion-select-option [value]="includeFriendsOptions.Yes">
+                {{
+                  "pages.homeSearchFilterPopover.includeFriends.yes" | translate
+                }}
+              </ion-select-option>
+              <ion-select-option [value]="includeFriendsOptions.Search">
+                {{
+                  "pages.homeSearchFilterPopover.includeFriends.search"
+                    | translate
+                }}
+              </ion-select-option>
+              <ion-select-option [value]="includeFriendsOptions.Browse">
+                {{
+                  "pages.homeSearchFilterPopover.includeFriends.browse"
+                    | translate
+                }}
+              </ion-select-option>
+              <ion-select-option [value]="includeFriendsOptions.No">
+                {{
+                  "pages.homeSearchFilterPopover.includeFriends.no" | translate
+                }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        }
+        <ion-item>
+          <ion-icon name="brush-outline" slot="start"></ion-icon>
+          <ion-select
+            [(ngModel)]="preferences[preferenceKeys.Theme]"
+            (ngModelChange)="appThemeChanged()"
+            label="{{ 'pages.settings.theme' | translate }}"
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            <ion-select-option value="default">
+              {{ "pages.settings.theme.default" | translate }}
+            </ion-select-option>
+            <ion-select-option value="light">
+              {{ "pages.settings.theme.light" | translate }}
+            </ion-select-option>
+            <ion-select-option value="midnight">
+              {{ "pages.settings.theme.midnight" | translate }}
+            </ion-select-option>
+            <ion-select-option value="dark">
+              {{ "pages.settings.theme.dark" | translate }}
+            </ion-select-option>
+            <ion-select-option value="black">
+              {{ "pages.settings.theme.black" | translate }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="language-outline" slot="start"></ion-icon>
+          <ion-select
+            [interfaceOptions]="languageSelectInterfaceOptions"
+            [(ngModel)]="language"
+            (ngModelChange)="languageChanged()"
+            label="{{ 'pages.settings.language' | translate }}"
+          >
+            <ion-select-option value="navigator">
+              {{ "pages.settings.language.default" | translate }}
+            </ion-select-option>
+            @for (languageOption of languageOptions; track languageOption) {
+              <ion-select-option [value]="languageOption[0]">
+                {{ languageOption[1] }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        <ion-item href="https://weblate.recipesage.com" target="_blank" detail>
+          <ion-icon name="language-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>{{ "pages.settings.language.contribute" | translate }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item
+          class="cursor-pointer"
+          (click)="showFontSizePopover()"
+          button
+          detail
+        >
+          <ion-icon name="text-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.fontSize" | translate }} </ion-label>
+        </ion-item>
+        <ion-item
+          class="cursor-pointer"
+          (click)="showCookModeFontSizePopover()"
+          button
+          detail
+        >
+          <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+          <ion-label>
+            {{ "pages.settings.cookModeFontSize" | translate }}
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="fitness-outline" slot="start"></ion-icon>
+          <ion-toggle
+            [(ngModel)]="
+              preferences[recipeDetailsPreferenceKeys.AutoExpandNutrition]
+            "
+            (ngModelChange)="savePreferences()"
+          >
+            <div class="ion-text-wrap">
+              {{ "pages.settings.autoExpandNutrition" | translate }}
+            </div>
+          </ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+          <ion-toggle
+            [checked]="
+              preferences[preferenceKeys.PreferencesSync] === 'enabled'
+            "
+            (ionChange)="togglePreferencesSync($event)"
+          >
+            <div class="ion-text-wrap">
+              {{ "pages.settings.preferencesSync" | translate }}
+            </div>
+          </ion-toggle>
+        </ion-item>
+        <ion-item (click)="resetPreferences()" button>
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          <ion-label> {{ "pages.settings.reset" | translate }} </ion-label>
+        </ion-item>
+        @if (showServerSettings) {
+          <ion-item (click)="goToServerSettings()" button>
+            <ion-icon name="server-outline" slot="start"></ion-icon>
+            <ion-label>
+              {{ "pages.settings.serverSettings" | translate }}
+            </ion-label>
+          </ion-item>
+        }
+      </ion-item-group>
     </ion-list>
   </div>
 </ion-content>

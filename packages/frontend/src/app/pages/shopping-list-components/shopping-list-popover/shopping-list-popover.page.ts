@@ -36,7 +36,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
-  IonButton,
+  IonLabel,
   IonIcon,
 } from "@ionic/angular";
 import {
@@ -63,7 +63,7 @@ import { addIcons } from "ionicons";
     IonSelect,
     IonSelectOption,
     IonToggle,
-    IonButton,
+    IonLabel,
     IonIcon,
   ],
 })
@@ -260,20 +260,16 @@ export class ShoppingListPopoverPage {
       },
     });
 
-    await modal.present();
-    await modal.onDidDismiss();
-
     this.dismiss();
+    await modal.present();
   }
 
   async showIgnoreModal() {
     const modal = await this.modalCtrl.create({
       component: ShoppingListIgnoreModalPage,
     });
-    await modal.present();
-    await modal.onDidDismiss();
-
     this.dismiss();
+    await modal.present();
   }
 
   async showCategoryOrderModal() {
@@ -284,9 +280,7 @@ export class ShoppingListPopoverPage {
         categoryOrder: this.shoppingList.categoryOrder || undefined,
       },
     });
-    await modal.present();
-    await modal.onDidDismiss();
-
     this.dismiss();
+    await modal.present();
   }
 }

@@ -10,16 +10,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding grouped-content">
   <select-user
     (selectedUserChange)="onSelectedUserChange($event)"
     [suggestKnownUsers]="false"
   ></select-user>
-  <ion-item>
-    <ion-label>
-      <p>{{ "pages.addFriendModal.profileWarning" | translate }}</p>
-    </ion-label>
-  </ion-item>
+  <ion-note>{{ "pages.addFriendModal.profileWarning" | translate }}</ion-note>
 </ion-content>
 
 <ion-footer class="ion-padding">

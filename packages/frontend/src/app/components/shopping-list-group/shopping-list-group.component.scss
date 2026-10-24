@@ -1,8 +1,5 @@
-ion-item,
-shopping-list-item {
-  --background: var(--background);
-}
-
-.indented-item {
-  margin-inline-start: 40px;
+ion-item > ion-button.ios[slot="end"] {
+  min-width: 44px;
+  height: 44px;
+  margin-block: 0;
 }
