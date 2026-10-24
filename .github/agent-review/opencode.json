@@ -1,0 +1,44 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "mcp": {
+    "servers": {
+      "playwright-chrome": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "chrome",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/chrome"
+        ]
+      },
+      "playwright-firefox": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "firefox",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/firefox"
+        ]
+      },
+      "playwright-webkit": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "webkit",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/webkit"
+        ]
+      }
+    }
+  }
+}
