@@ -37,7 +37,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "80:80"
+      - "${RS_HTTP_PORT:-80}:80"
     command: nginx -g 'daemon off;'
     depends_on:
       - frontend
@@ -52,8 +52,6 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
-    ports:
-      - "8100:8100"
     command: pnpm exec nx start frontend
     environment:
       - ENVIRONMENT=development
@@ -70,8 +68,6 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
-    ports:
-      - "4321:4321"
     command: pnpm exec nx dev www -- --ignore-lock
     environment:
       - ENVIRONMENT=development
@@ -133,7 +129,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - "${RS_POSTGRES_PORT:-5432}:5432"
     environment:
       - POSTGRES_DB=recipesage_dev
       - POSTGRES_USER=recipesage_dev
