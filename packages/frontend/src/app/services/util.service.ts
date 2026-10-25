@@ -68,7 +68,7 @@ export const RouteMap = {
   },
   LabelsPage: {
     getPath() {
-      return `labels`;
+      return `/labels`;
     },
     path: "labels",
   },
@@ -236,25 +236,25 @@ export const RouteMap = {
   },
   MyProfilePage: {
     getPath() {
-      return `people/my-profile`;
+      return `/people/my-profile`;
     },
     path: "people/my-profile",
   },
   ProfilePage: {
     getPath(handle: string) {
-      return `people/${handle}`;
+      return `/people/${handle}`;
     },
     path: "people/:handle",
   },
   PeoplePage: {
     getPath() {
-      return `people`;
+      return `/people`;
     },
     path: "people",
   },
   BlockedUsersPage: {
     getPath() {
-      return `people/blocked-users`;
+      return `/people/blocked-users`;
     },
     path: "people/blocked-users",
   },

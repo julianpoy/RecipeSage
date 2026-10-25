@@ -22,7 +22,7 @@ ion-searchbar {
 ion-router-outlet.cookingToolbarOpen,
 ion-menu.cookingToolbarOpen {
   --ion-safe-area-bottom: 0px;
-  height: calc(100% - 60px - var(--rs-safe-area-bottom, 0px));
+  height: calc(100% - 60px - var(--rs-cooking-toolbar-bottom-space, 0px));
 }
 
 .ion-checkbox-label,
