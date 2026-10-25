@@ -742,7 +742,6 @@
   "pages.assistant.messageSize": "Your message is too long. Please send a shorter message.",
 
   "pages.messageThread.tabTitle": "Conversation - RecipeSage",
-  "pages.messageThread.title": "Conversation with {{name}}",
   "pages.messageThread.clickToOpen": "Click to open",
   "pages.messageThread.recipeDeleted": "Recipe deleted",
   "pages.messageThread.yourRecipeDeleted": "Your copy of this recipe no longer exists",
