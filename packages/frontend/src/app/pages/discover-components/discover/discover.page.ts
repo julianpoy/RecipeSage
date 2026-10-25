@@ -56,6 +56,7 @@ const PAGE_SIZE = 40;
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
+const RESIZE_DEBOUNCE_MS = 150;
 
 @Component({
   standalone: true,
@@ -183,16 +184,15 @@ export class DiscoverPage {
       [
         EventName.ApplicationSplitPaneChanged,
         EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
       ],
-      this.updateTileColCount,
+      this.updateLayout,
     );
+    this.updateLayout();
 
     if (!this.hasEntered || categoriesParamChanged) {
       this.hasEntered = true;
-      this.computeTileColCount();
       this.reload();
-    } else {
-      this.updateTileColCount();
     }
   }
 
@@ -202,25 +202,23 @@ export class DiscoverPage {
       [
         EventName.ApplicationSplitPaneChanged,
         EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
       ],
-      this.updateTileColCount,
+      this.updateLayout,
     );
-    if (this.resizeFrame !== null) {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = null;
-    }
+    clearTimeout(this.resizeTimeout);
   }
 
-  private resizeFrame: number | null = null;
+  private resizeTimeout: NodeJS.Timeout | undefined;
   private onWindowResize = () => {
-    if (this.resizeFrame !== null) return;
-    this.resizeFrame = requestAnimationFrame(() => {
-      this.resizeFrame = null;
-      this.updateTileColCount();
-    });
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(this.updateLayout, RESIZE_DEBOUNCE_MS);
   };
 
-  private computeTileColCount(): boolean {
+  private layoutPageWidth?: number;
+  private layoutFontSize?: string;
+
+  updateLayout = () => {
     const isSidebarEnabled =
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const isSidebarOpen = window.innerWidth >= 1200;
@@ -234,24 +232,27 @@ export class DiscoverPage {
       Math.floor(pageWidth / (TILE_WIDTH + TILE_PADD)),
       minimumColumnCount,
     );
-    if (tileColCount !== this.tileColCount) {
-      this.tileColCount = tileColCount;
-      return true;
+    const fontSize = getComputedStyle(document.documentElement).fontSize;
+
+    if (
+      tileColCount === this.tileColCount &&
+      pageWidth === this.layoutPageWidth &&
+      fontSize === this.layoutFontSize
+    ) {
+      return;
     }
-    return false;
-  }
 
-  updateTileColCount = () => {
     const previousTileColCount = this.tileColCount;
-    if (!this.computeTileColCount()) return;
+    this.tileColCount = tileColCount;
+    this.layoutPageWidth = pageWidth;
+    this.layoutFontSize = fontSize;
 
-    if (this.preferences[MyRecipesPreferenceKey.ViewType] !== "tiles") return;
-
-    const firstVisibleRecipeIndex =
-      (this.datasource.adapter.firstVisible.$index ?? 0) * previousTileColCount;
-    this.datasource.settings!.startIndex = Math.floor(
-      firstVisibleRecipeIndex / this.tileColCount,
-    );
+    const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
+    const isTiled =
+      this.preferences[MyRecipesPreferenceKey.ViewType] === "tiles";
+    this.datasource.settings!.startIndex = isTiled
+      ? Math.floor((firstVisibleIndex * previousTileColCount) / tileColCount)
+      : firstVisibleIndex;
     this.datasource.adapter.reset();
   };
 

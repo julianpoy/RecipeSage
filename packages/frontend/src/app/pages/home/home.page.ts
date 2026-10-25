@@ -77,6 +77,7 @@ import { addIcons } from "ionicons";
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
+const RESIZE_DEBOUNCE_MS = 150;
 
 @Component({
   standalone: true,
@@ -273,10 +274,11 @@ export class HomePage implements OnDestroy {
       [
         EventName.ApplicationSplitPaneChanged,
         EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
       ],
-      this.updateTileColCount,
+      this.updateLayout,
     );
-    this.updateTileColCount();
+    this.updateLayout();
 
     this.clearSelectedRecipes();
 
@@ -317,22 +319,17 @@ export class HomePage implements OnDestroy {
       [
         EventName.ApplicationSplitPaneChanged,
         EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
       ],
-      this.updateTileColCount,
+      this.updateLayout,
     );
-    if (this.resizeFrame !== null) {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = null;
-    }
+    clearTimeout(this.resizeTimeout);
   }
 
-  private resizeFrame: number | null = null;
+  private resizeTimeout: NodeJS.Timeout | undefined;
   private onWindowResize = () => {
-    if (this.resizeFrame !== null) return;
-    this.resizeFrame = requestAnimationFrame(() => {
-      this.resizeFrame = null;
-      this.updateTileColCount();
-    });
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(this.updateLayout, RESIZE_DEBOUNCE_MS);
   };
 
   onWSEvent = (data: Record<string, string>) => {
@@ -391,7 +388,10 @@ export class HomePage implements OnDestroy {
     }
   }
 
-  updateTileColCount = () => {
+  private layoutPageWidth?: number;
+  private layoutFontSize?: string;
+
+  updateLayout = () => {
     const isSidebarEnabled =
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const isSidebarOpen = window.innerWidth >= 1200;
@@ -407,10 +407,20 @@ export class HomePage implements OnDestroy {
       minimumColumnCount,
     );
 
-    if (tileColCount === this.tileColCount) return;
+    const fontSize = getComputedStyle(document.documentElement).fontSize;
+
+    if (
+      tileColCount === this.tileColCount &&
+      homePageWidth === this.layoutPageWidth &&
+      fontSize === this.layoutFontSize
+    ) {
+      return;
+    }
 
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
+    this.layoutPageWidth = homePageWidth;
+    this.layoutFontSize = fontSize;
 
     const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
     const isTiled =
