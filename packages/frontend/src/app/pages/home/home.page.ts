@@ -412,13 +412,12 @@ export class HomePage implements OnDestroy {
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
 
-    if (this.preferences[MyRecipesPreferenceKey.ViewType] !== "tiles") return;
-
-    const firstVisibleRecipeIndex =
-      (this.datasource.adapter.firstVisible.$index ?? 0) * previousTileColCount;
-    this.datasource.settings!.startIndex = Math.floor(
-      firstVisibleRecipeIndex / tileColCount,
-    );
+    const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
+    const isTiled =
+      this.preferences[MyRecipesPreferenceKey.ViewType] === "tiles";
+    this.datasource.settings!.startIndex = isTiled
+      ? Math.floor((firstVisibleIndex * previousTileColCount) / tileColCount)
+      : firstVisibleIndex;
     this.datasource.adapter.reset();
   };
 
