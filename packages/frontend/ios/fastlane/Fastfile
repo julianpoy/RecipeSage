@@ -1,15 +1,21 @@
 default_platform(:ios)
 
+def marketing_version(tag)
+  version = tag.sub(/^v/, "")[/\A\d+(\.\d+){0,2}/]
+  UI.user_error!("#{tag} does not start with a numeric version") if version.nil?
+  version
+end
+
 def build_version_name
   tag = ENV["CIRCLE_TAG"]
-  return tag.sub(/^v/, "") if tag && !tag.strip.empty?
+  return marketing_version(tag) if tag && !tag.strip.empty?
   "0.0.0-dev"
 end
 
 def release_version_name
   tag = ENV["CIRCLE_TAG"]
   UI.user_error!("CIRCLE_TAG is required for a release upload") if tag.nil? || tag.strip.empty?
-  tag.sub(/^v/, "")
+  marketing_version(tag)
 end
 
 def resolved_build_number
