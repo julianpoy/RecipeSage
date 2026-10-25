@@ -8,22 +8,20 @@
   }"
 >
   @if (showTabs) {
-    <ion-segment
-      class="tabs"
-      [(ngModel)]="activeTab"
-      (ngModelChange)="tabChanged()"
-    >
-      <ion-segment-button value="ingredients">
-        <ion-label>
-          {{ "pages.recipeDetails.ingredients" | translate }}
-        </ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="instructions">
-        <ion-label>
-          {{ "pages.recipeDetails.instructions" | translate }}
-        </ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <div class="tabs">
+      <ion-segment [(ngModel)]="activeTab" (ngModelChange)="tabChanged()">
+        <ion-segment-button value="ingredients">
+          <ion-label>
+            {{ "pages.recipeDetails.ingredients" | translate }}
+          </ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="instructions">
+          <ion-label>
+            {{ "pages.recipeDetails.instructions" | translate }}
+          </ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
   }
   <div
     #ingredientsCol
