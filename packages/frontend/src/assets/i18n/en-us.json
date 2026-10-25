@@ -614,7 +614,6 @@
   "pages.manageLabelModal.merge.placeholder": "Target label name",
 
   "pages.mealPlan.tabTitle": "Meal Plan - RecipeSage",
-  "pages.mealPlan.title": "Meal Plan - {{name}}",
   "pages.mealPlan.loading": "Loading meal plan...",
   "pages.mealPlan.noLongerAvailable": "This meal plan is no longer available.",
   "pages.mealPlan.list.empty": "No meals are scheduled. Press the + button to add one.",
@@ -2008,7 +2007,6 @@
   "pages.updateShoppingList.updateAndShare": "Update and Share",
 
   "pages.shoppingList.tabTitle": "Shopping List",
-  "pages.shoppingList.title": "Shopping List - {{title}}",
   "pages.shoppingList.loading": "Loading shopping list...",
   "pages.shoppingList.noLongerAvailable": "This shopping list is no longer available.",
   "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
