@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      @if (!selectionMode) {
+      @if (!selectionMode && !showBack) {
         <ion-menu-button></ion-menu-button>
+      }
+      @if (!selectionMode && showBack) {
+        <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
       }
       @if (selectionMode) {
         <ion-button (click)="clearSelectedLabels()">

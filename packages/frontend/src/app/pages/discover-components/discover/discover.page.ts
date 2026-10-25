@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NavController, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { Datasource, UiScrollModule } from "ngx-ui-scroll";
@@ -36,6 +36,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonSearchbar,
@@ -67,6 +68,7 @@ const TILE_PADD = 20;
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonSearchbar,
@@ -76,6 +78,7 @@ const TILE_PADD = 20;
 })
 export class DiscoverPage {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private navCtrl = inject(NavController);
   private popoverCtrl = inject(PopoverController);
   private translate = inject(TranslateService);
@@ -86,6 +89,9 @@ export class DiscoverPage {
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
+
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
 
   languageOptions: DiscoverLanguageOption[] = [];
 
@@ -150,6 +156,10 @@ export class DiscoverPage {
     this.selectedLanguages = getDefaultDiscoverLanguages(
       this.utilService.getCurrentLocale(),
     );
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
   }
 
   ionViewWillEnter() {

@@ -455,6 +455,12 @@ export class AppComponent {
     this.menuSwipeEnabled = !this.routerOutlet?.canGoBack();
   }
 
+  updateNativeTabSelection() {
+    if (this.routerOutlet?.canGoBack()) return;
+
+    this.nativeTabBarService.setSelectedFromUrl(this.router.url);
+  }
+
   private lastBackPressAt = 0;
 
   initNativeShell() {
@@ -512,7 +518,6 @@ export class AppComponent {
       this.inCookMode = event.url.split("?")[0].endsWith("/cook");
 
       this.updateNativeTabBar();
-      this.nativeTabBarService.setSelectedFromUrl(event.urlAfterRedirects);
 
       this.checkBrowserCompatibility();
 

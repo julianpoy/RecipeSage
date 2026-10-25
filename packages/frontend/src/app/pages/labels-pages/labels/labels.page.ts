@@ -1,4 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   AlertController,
   PopoverController,
@@ -26,6 +27,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonButton,
   IonIcon,
   IonTitle,
@@ -67,6 +69,7 @@ import { addIcons } from "ionicons";
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonButton,
     IonIcon,
     IonTitle,
@@ -96,9 +99,14 @@ export class LabelsPage {
       pricetagsOutline,
       trashOutline,
     });
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
   }
 
   private navCtrl = inject(NavController);
+  private router = inject(Router);
   private translate = inject(TranslateService);
   private popoverCtrl = inject(PopoverController);
   private loadingService = inject(LoadingService);
@@ -109,6 +117,9 @@ export class LabelsPage {
   private serverActionsService = inject(ServerActionsService);
 
   isNativeIOS = IS_NATIVE_IOS;
+
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ManageLabelsPreferenceKey;

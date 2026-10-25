@@ -1,4 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { Router } from "@angular/router";
 import { NavController } from "@ionic/angular";
 
 import { RouteMap } from "../../../services/util.service";
@@ -9,6 +10,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonList,
@@ -41,6 +43,7 @@ import { addIcons } from "ionicons";
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonList,
@@ -61,9 +64,17 @@ export class AboutPage {
       personOutline,
       sendOutline,
     });
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
   }
 
   navCtrl = inject(NavController);
+  router = inject(Router);
+
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
 
   goToAboutDetails() {
     this.navCtrl.navigateForward(RouteMap.AboutDetailsPage.getPath());

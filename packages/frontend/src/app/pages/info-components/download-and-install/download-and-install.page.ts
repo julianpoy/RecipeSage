@@ -5,6 +5,7 @@ import {
   signal,
   ChangeDetectionStrategy,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { Capacitor } from "@capacitor/core";
 import {
@@ -12,6 +13,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonItem,
@@ -50,6 +52,7 @@ import {
   getInstallPrompt,
 } from "../../../utils/pwaInstallPrompt";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
+import { RouteMap } from "../../../services/util.service";
 
 @Component({
   standalone: true,
@@ -63,6 +66,7 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonItem,
@@ -75,6 +79,10 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
 })
 export class DownloadAndInstallPage {
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
+
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
 
   isNativeOrDesktopApp = Capacitor.isNativePlatform() || IS_DESKTOP;
   downloadPageUrl = "https://recipesage.com/download";
@@ -108,6 +116,10 @@ export class DownloadAndInstallPage {
       logoWindows,
       shareOutline,
     });
+
+    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
 
     const onInstallPrompt = () => this.pwaPromptAvailable.set(true);
     window.addEventListener("beforeinstallprompt", onInstallPrompt);

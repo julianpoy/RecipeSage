@@ -73,7 +73,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
-      (stackDidChange)="updateMenuSwipe()"
+      (stackDidChange)="updateMenuSwipe(); updateNativeTabSelection()"
       [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0,
