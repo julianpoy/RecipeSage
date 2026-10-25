@@ -1,6 +1,7 @@
 .discover-page {
   height: 100%;
   overflow-y: scroll;
+  container-type: inline-size;
 }
 
 .search-container {
@@ -34,11 +35,15 @@
 }
 
 .recipe-group {
+  --tile-width: 200px;
+
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
+  justify-content: space-around;
   padding: 10px;
+
+  @container (min-width: 375px) and (max-width: 439px) {
+    --tile-width: min(200px, calc((100cqw - 32px) / 2));
+  }
 
   &.single-col .recipe-card {
     width: 100%;
@@ -46,7 +51,7 @@
 }
 
 .recipe-card {
-  width: 200px;
+  width: var(--tile-width);
   --paragraph-line-height: 1.188rem;
   --content-padding-leeway: 1.5rem;
   --image-height: 190px;
@@ -116,6 +121,12 @@
   .rating-line {
     height: var(--rating-height);
     overflow: hidden;
+    flex-wrap: wrap;
+    row-gap: 0;
+
+    span {
+      white-space: nowrap;
+    }
   }
 }
 

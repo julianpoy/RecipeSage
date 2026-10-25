@@ -13,6 +13,8 @@ import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { EventName, EventService } from "../../../services/event.service";
+import { NativeTabBarService } from "../../../services/native-tab-bar.service";
 import type { RouterOutputs } from "../../../services/server-actions/actions-base";
 import {
   getDiscoverLanguageOptions,
@@ -53,6 +55,7 @@ type DiscoverRecipeAuthor = DiscoverRecipeSummary["author"];
 const PAGE_SIZE = 40;
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
+const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
 
 @Component({
   standalone: true,
@@ -86,6 +89,8 @@ export class DiscoverPage {
   private loadingService = inject(LoadingService);
   private preferencesService = inject(PreferencesService);
   private serverActionsService = inject(ServerActionsService);
+  private events = inject(EventService);
+  private nativeTabBarService = inject(NativeTabBarService);
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -174,6 +179,13 @@ export class DiscoverPage {
     }
 
     window.addEventListener("resize", this.updateTileColCount);
+    this.events.subscribe(
+      [
+        EventName.ApplicationSplitPaneChanged,
+        EventName.ApplicationVerticalBarsChanged,
+      ],
+      this.updateTileColCount,
+    );
 
     if (!this.hasEntered || categoriesParamChanged) {
       this.hasEntered = true;
@@ -186,6 +198,13 @@ export class DiscoverPage {
 
   ionViewWillLeave() {
     window.removeEventListener("resize", this.updateTileColCount);
+    this.events.unsubscribe(
+      [
+        EventName.ApplicationSplitPaneChanged,
+        EventName.ApplicationVerticalBarsChanged,
+      ],
+      this.updateTileColCount,
+    );
   }
 
   private computeTileColCount(): boolean {
@@ -193,10 +212,14 @@ export class DiscoverPage {
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const isSidebarOpen = window.innerWidth >= 1200;
     const sidebarWidth = isSidebarEnabled && isSidebarOpen ? 300 : 0;
-    const pageWidth = window.innerWidth - sidebarWidth;
+    const pageWidth =
+      window.innerWidth -
+      sidebarWidth -
+      this.nativeTabBarService.getVerticalBarInset();
+    const minimumColumnCount = pageWidth >= MOBILE_TWO_COLUMN_MIN_WIDTH ? 2 : 1;
     const tileColCount = Math.max(
       Math.floor(pageWidth / (TILE_WIDTH + TILE_PADD)),
-      1,
+      minimumColumnCount,
     );
     if (tileColCount !== this.tileColCount) {
       this.tileColCount = tileColCount;

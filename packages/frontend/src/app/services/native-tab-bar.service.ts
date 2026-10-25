@@ -17,6 +17,7 @@ import {
 } from "@rdlabo/ionic-theme-ios27";
 
 import { RouteMap } from "./util.service";
+import { EventName, EventService } from "./event.service";
 import { IS_NATIVE_IOS } from "../utils/isNativeIOS";
 
 const NATIVE_TABS = [
@@ -86,12 +87,14 @@ export class NativeTabBarService {
   private navCtrl = inject(NavController);
   private ngZone = inject(NgZone);
   private translate = inject(TranslateService);
+  private events = inject(EventService);
 
   private visible = false;
   private selectedId = NATIVE_TABS[0].id;
   readonly moreTabBadgeCount = signal<number | undefined>(undefined);
   private openOverlayCount = 0;
   private verticalBarsLayout: VerticalBarsLayout = { edge: null };
+  private verticalBarInset = 0;
   private lastTabbarOptions?: string;
 
   init() {
@@ -159,7 +162,7 @@ export class NativeTabBarService {
 
   private async initFoldable() {
     await Foldable.addListener("barPlacementChange", (placement) =>
-      this.setBarPlacement(placement),
+      this.ngZone.run(() => this.setBarPlacement(placement)),
     );
     await Foldable.addListener("foldStateChange", (fold) =>
       this.applyFoldState(fold),
@@ -179,10 +182,22 @@ export class NativeTabBarService {
     if (root) applyFoldStateClasses(root, fold);
   }
 
+  getVerticalBarInset() {
+    return this.verticalBarInset;
+  }
+
   private render() {
-    setVerticalBarsLayout(
-      this.visible ? this.verticalBarsLayout : { edge: null },
-    );
+    const verticalBarsLayout: VerticalBarsLayout = this.visible
+      ? this.verticalBarsLayout
+      : { edge: null };
+    setVerticalBarsLayout(verticalBarsLayout);
+
+    const verticalBarInset =
+      verticalBarsLayout.edge === null ? 0 : (verticalBarsLayout.inset ?? 0);
+    if (verticalBarInset !== this.verticalBarInset) {
+      this.verticalBarInset = verticalBarInset;
+      this.events.publish(EventName.ApplicationVerticalBarsChanged);
+    }
 
     const coversOverlays =
       this.verticalBarsLayout.edge === null && !isPlatform("ipad");
