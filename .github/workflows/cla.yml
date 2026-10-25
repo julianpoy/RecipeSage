@@ -1,0 +1,55 @@
+name: CLA
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request_target' ||
+      (github.event.issue.pull_request && github.event.comment.user.type != 'Bot' &&
+      (contains(github.event.comment.body, 'I have read the RecipeSage CLA') || contains(github.event.comment.body, 'recheck')))
+    concurrency:
+      group: cla
+      queue: max
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+      CLA_URL: https://gist.github.com/julianpoy/05f5d37e6c1e09225db56e0da44248f0/daa1e2a46d756a72ff8e61500f52b1fa216d0f29
+      CLA_VERSION: daa1e2a46d756a72ff8e61500f52b1fa216d0f29
+      CLA_SIGN_PHRASE: I have read the RecipeSage CLA and I hereby sign it
+      CLA_EXEMPT_LOGINS: julianpoy,recipesage-weblate
+      CLA_EXEMPT_COMMITTER_LOGINS: recipesage-weblate
+      CLA_SIGNATURES_REPO: RecipeSage/cla
+      CLA_SIGNATURES_PATH: signatures.json
+    steps:
+      - name: Checkout CLA script
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/cla
+          persist-credentials: false
+
+      - name: Check CLA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CLA_SIGNATURES_TOKEN: ${{ secrets.CLA_SIGNATURES_TOKEN }}
+        run: bash .github/cla/check.sh
+
+      - name: Post failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HEAD_SHA=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .head.sha)
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" \
+            -f state=error \
+            -f context=license/cla \
+            -f description="The CLA check failed to run." \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
