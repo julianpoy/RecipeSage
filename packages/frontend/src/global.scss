@@ -245,6 +245,18 @@ ion-content:not(:where(ion-menu *, ion-popover *)) {
   }
 }
 
+.ion-page:not(:has(ion-footer))
+  ion-content.ios:not(.ios-theme-disabled, .ios26-disabled).content-fullscreen
+  .ion-content-scroll-host {
+  padding-bottom: calc(
+    60px +
+      var(
+        --ios-theme-floating-safe-area-bottom,
+        var(--ios26-floating-safe-area-bottom)
+      )
+  );
+}
+
 ion-app.ios-theme-vertical-bars {
   --rs-cooking-toolbar-bottom-space: max(
     0px,
