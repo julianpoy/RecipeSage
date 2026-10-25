@@ -157,7 +157,9 @@ export class PeoplePage {
   }
 
   goToMessages() {
-    this.navCtrl.navigateForward(RouteMap.MessagesPage.getPath());
+    this.navCtrl.navigateForward(RouteMap.MessagesPage.getPath(), {
+      state: { showBack: true },
+    });
   }
 
   goToInbox() {
