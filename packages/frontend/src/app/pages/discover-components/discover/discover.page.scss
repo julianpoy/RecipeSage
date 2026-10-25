@@ -1,7 +1,6 @@
 .discover-page {
   height: 100%;
   overflow-y: scroll;
-  container-type: inline-size;
 }
 
 .search-container {
@@ -55,12 +54,6 @@
   display: flex;
   justify-content: space-around;
   padding: 10px;
-
-  @container (max-width: 439px) {
-    &:not(.single-col) {
-      --tile-width: min(200px, calc((100cqw - 32px) / 2));
-    }
-  }
 
   &.single-col .recipe-card {
     width: 100%;

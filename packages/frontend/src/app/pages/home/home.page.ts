@@ -42,6 +42,7 @@ import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { IS_NATIVE_IOS } from "../../utils/isNativeIOS";
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { NullStateComponent } from "../../components/null-state/null-state.component";
+import { getScrollbarWidth } from "../../utils/getScrollbarWidth";
 import { RecipeListItemComponent } from "../../components/recipe-list-item/recipe-list-item.component";
 import { RatingComponent } from "../../components/rating/rating.component";
 import {
@@ -77,6 +78,7 @@ import { addIcons } from "ionicons";
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
+const TWO_COLUMN_TILE_GUTTER = 32;
 const RESIZE_DEBOUNCE_MS = 150;
 
 @Component({
@@ -170,6 +172,7 @@ export class HomePage implements OnDestroy {
   nutritionFilter: NutritionFilter = {};
 
   tileColCount: number = 1;
+  tileWidth = TILE_WIDTH;
 
   datasource = new Datasource<RecipeSummaryLite>({
     get: async (index: number, count: number) => {
@@ -407,10 +410,21 @@ export class HomePage implements OnDestroy {
       minimumColumnCount,
     );
 
+    const tileWidth =
+      tileColCount === 2
+        ? Math.min(
+            TILE_WIDTH,
+            Math.floor(
+              (homePageWidth - getScrollbarWidth() - TWO_COLUMN_TILE_GUTTER) /
+                2,
+            ),
+          )
+        : TILE_WIDTH;
     const fontSize = getComputedStyle(document.documentElement).fontSize;
 
     if (
       tileColCount === this.tileColCount &&
+      tileWidth === this.tileWidth &&
       homePageWidth === this.lastLayoutPageWidth &&
       fontSize === this.lastLayoutFontSize
     ) {
@@ -419,6 +433,7 @@ export class HomePage implements OnDestroy {
 
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
+    this.tileWidth = tileWidth;
     this.lastLayoutPageWidth = homePageWidth;
     this.lastLayoutFontSize = fontSize;
 
