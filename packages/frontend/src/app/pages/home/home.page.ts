@@ -272,7 +272,7 @@ export class HomePage implements OnDestroy {
     this.events.subscribe(
       [
         EventName.ApplicationSplitPaneChanged,
-        EventName.ApplicationVerticalBarsChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
       ],
       this.updateTileColCount,
     );
@@ -316,7 +316,7 @@ export class HomePage implements OnDestroy {
     this.events.unsubscribe(
       [
         EventName.ApplicationSplitPaneChanged,
-        EventName.ApplicationVerticalBarsChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
       ],
       this.updateTileColCount,
     );

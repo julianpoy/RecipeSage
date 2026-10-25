@@ -196,7 +196,7 @@ export class NativeTabBarService {
       verticalBarsLayout.edge === null ? 0 : (verticalBarsLayout.inset ?? 0);
     if (verticalBarInset !== this.verticalBarInset) {
       this.verticalBarInset = verticalBarInset;
-      this.events.publish(EventName.ApplicationVerticalBarsChanged);
+      this.events.publish(EventName.ApplicationVerticalBarInsetChanged);
     }
 
     const coversOverlays =

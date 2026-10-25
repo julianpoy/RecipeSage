@@ -182,7 +182,7 @@ export class DiscoverPage {
     this.events.subscribe(
       [
         EventName.ApplicationSplitPaneChanged,
-        EventName.ApplicationVerticalBarsChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
       ],
       this.updateTileColCount,
     );
@@ -201,7 +201,7 @@ export class DiscoverPage {
     this.events.unsubscribe(
       [
         EventName.ApplicationSplitPaneChanged,
-        EventName.ApplicationVerticalBarsChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
       ],
       this.updateTileColCount,
     );
