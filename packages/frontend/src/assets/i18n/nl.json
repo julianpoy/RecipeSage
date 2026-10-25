@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Meer",
     "pages.more.tabTitle": "Meer - RecipeSage",
     "pages.more.title": "Meer",
-    "pages.app.tabs.recipes": "Recept"
+    "pages.app.tabs.recipes": "Recept",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Onder elkaar",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Naast elkaar",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Tabbladen",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Indeling op kleine schermen",
+    "pages.settings.recipeSmallScreenLayout": "Receptindeling op kleine schermen"
 }

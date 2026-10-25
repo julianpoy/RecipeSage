@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "更多",
     "pages.more.tabTitle": "更多 - RecipeSage",
     "pages.more.title": "更多",
-    "pages.app.tabs.recipes": "食譜"
+    "pages.app.tabs.recipes": "食譜",
+    "pages.recipeDetails.smallScreenLayout.stacked": "堆疊",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "並排",
+    "pages.recipeDetails.smallScreenLayout.tabs": "分頁",
+    "pages.recipeDetailsPopover.smallScreenLayout": "小螢幕上的版面配置",
+    "pages.settings.recipeSmallScreenLayout": "小螢幕上的食譜版面配置"
 }

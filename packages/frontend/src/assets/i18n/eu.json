@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Gehiago",
     "pages.more.tabTitle": "Gehiago - RecipeSage",
     "pages.more.title": "Gehiago",
-    "pages.app.tabs.recipes": "Errezetak"
+    "pages.app.tabs.recipes": "Errezetak",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Pilatuta",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Elkarren alboan",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Fitxak",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Diseinua pantaila txikietan",
+    "pages.settings.recipeSmallScreenLayout": "Errezetaren diseinua pantaila txikietan"
 }

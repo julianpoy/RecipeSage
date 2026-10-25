@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "더보기",
     "pages.more.tabTitle": "더보기 - RecipeSage",
     "pages.more.title": "더보기",
-    "pages.app.tabs.recipes": "레시피"
+    "pages.app.tabs.recipes": "레시피",
+    "pages.recipeDetails.smallScreenLayout.stacked": "세로로 쌓기",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "나란히 배치",
+    "pages.recipeDetails.smallScreenLayout.tabs": "탭",
+    "pages.recipeDetailsPopover.smallScreenLayout": "작은 화면에서의 레이아웃",
+    "pages.settings.recipeSmallScreenLayout": "작은 화면에서의 레시피 레이아웃"
 }

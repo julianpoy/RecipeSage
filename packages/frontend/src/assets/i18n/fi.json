@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Lisää",
     "pages.more.tabTitle": "Lisää - RecipeSage",
     "pages.more.title": "Lisää",
-    "pages.app.tabs.recipes": "Resepti"
+    "pages.app.tabs.recipes": "Resepti",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Päällekkäin",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Vierekkäin",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Välilehdet",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Asettelu pienillä näytöillä",
+    "pages.settings.recipeSmallScreenLayout": "Reseptin asettelu pienillä näytöillä"
 }

@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Mere",
     "pages.more.tabTitle": "Mere - RecipeSage",
     "pages.more.title": "Mere",
-    "pages.app.tabs.recipes": "Opskrifter"
+    "pages.app.tabs.recipes": "Opskrifter",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Stablet",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Side om side",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Faner",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Layout på små skærme",
+    "pages.settings.recipeSmallScreenLayout": "Opskriftslayout på små skærme"
 }

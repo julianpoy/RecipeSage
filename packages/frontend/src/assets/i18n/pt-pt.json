@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Mais",
     "pages.more.tabTitle": "Mais - RecipeSage",
     "pages.more.title": "Mais",
-    "pages.app.tabs.recipes": "Receita"
+    "pages.app.tabs.recipes": "Receita",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Empilhado",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Lado a lado",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Separadores",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Disposição em ecrãs pequenos",
+    "pages.settings.recipeSmallScreenLayout": "Disposição da receita em ecrãs pequenos"
 }

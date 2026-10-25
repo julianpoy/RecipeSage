@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "עוד",
     "pages.more.tabTitle": "עוד - RecipeSage",
     "pages.more.title": "עוד",
-    "pages.app.tabs.recipes": "מתכונים"
+    "pages.app.tabs.recipes": "מתכונים",
+    "pages.recipeDetails.smallScreenLayout.stacked": "מוערם",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "זה לצד זה",
+    "pages.recipeDetails.smallScreenLayout.tabs": "לשוניות",
+    "pages.recipeDetailsPopover.smallScreenLayout": "פריסה במסכים קטנים",
+    "pages.settings.recipeSmallScreenLayout": "פריסת מתכון במסכים קטנים"
 }

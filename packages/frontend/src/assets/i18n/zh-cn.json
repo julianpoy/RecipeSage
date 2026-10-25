@@ -2563,5 +2563,10 @@
     "pages.app.tabs.tools": "工具",
     "pages.app.tabs.more": "更多",
     "pages.more.tabTitle": "更多 - RecipeSage",
-    "pages.more.title": "更多"
+    "pages.more.title": "更多",
+    "pages.recipeDetails.smallScreenLayout.stacked": "堆叠",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "并排",
+    "pages.recipeDetails.smallScreenLayout.tabs": "选项卡",
+    "pages.recipeDetailsPopover.smallScreenLayout": "小屏幕上的布局",
+    "pages.settings.recipeSmallScreenLayout": "小屏幕上的食谱布局"
 }

@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Daha Fazla",
     "pages.more.tabTitle": "Daha Fazla - RecipeSage",
     "pages.more.title": "Daha fazla",
-    "pages.app.tabs.recipes": "Tarif"
+    "pages.app.tabs.recipes": "Tarif",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Alt Alta",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Yan Yana",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Sekmeler",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Küçük Ekranlarda Düzen",
+    "pages.settings.recipeSmallScreenLayout": "Küçük Ekranlarda Tarif Düzeni"
 }

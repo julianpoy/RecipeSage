@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Más",
     "pages.more.tabTitle": "Más - RecipeSage",
     "pages.more.title": "Más",
-    "pages.app.tabs.recipes": "Recetas"
+    "pages.app.tabs.recipes": "Recetas",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Apilado",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Lado a lado",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Pestañas",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Diseño en pantallas pequeñas",
+    "pages.settings.recipeSmallScreenLayout": "Diseño de recetas en pantallas pequeñas"
 }

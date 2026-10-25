@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Mehr",
     "pages.more.tabTitle": "Mehr – RecipeSage",
     "pages.more.title": "Mehr",
-    "pages.app.tabs.recipes": "Rezepte"
+    "pages.app.tabs.recipes": "Rezepte",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Untereinander",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Nebeneinander",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Registerkarten",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Layout auf kleinen Bildschirmen",
+    "pages.settings.recipeSmallScreenLayout": "Rezeptlayout auf kleinen Bildschirmen"
 }

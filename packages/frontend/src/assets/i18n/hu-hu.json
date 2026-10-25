@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Továbbiak",
     "pages.more.tabTitle": "Továbbiak - RecipeSage",
     "pages.more.title": "Továbbiak",
-    "pages.app.tabs.recipes": "Receptek"
+    "pages.app.tabs.recipes": "Receptek",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Egymás alatt",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Egymás mellett",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Lapok",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Elrendezés kis képernyőkön",
+    "pages.settings.recipeSmallScreenLayout": "Receptelrendezés kis képernyőkön"
 }
