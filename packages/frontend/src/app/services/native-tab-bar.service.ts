@@ -210,9 +210,9 @@ export class NativeTabBarService {
 
     if (this.verticalBarInset === 0) return safeAreaLeft + safeAreaRight;
 
-    const isRtl = document.documentElement.dir === "rtl";
-    const isVerticalBarOnLeft =
-      (this.verticalBarsLayout.edge === "leading") !== isRtl;
+    const isVerticalBarOnLeft = !!document
+      .querySelector("ion-app")
+      ?.classList.contains("ios-theme-vertical-bars-left");
     return (
       this.verticalBarInset +
       (isVerticalBarOnLeft ? safeAreaRight : safeAreaLeft)

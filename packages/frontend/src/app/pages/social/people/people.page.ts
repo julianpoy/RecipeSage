@@ -94,7 +94,7 @@ export class PeoplePage {
       searchOutline,
     });
 
-    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
     }
   }

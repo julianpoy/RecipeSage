@@ -388,8 +388,8 @@ export class HomePage implements OnDestroy {
     }
   }
 
-  private layoutPageWidth?: number;
-  private layoutFontSize?: string;
+  private lastLayoutPageWidth?: number;
+  private lastLayoutFontSize?: string;
 
   updateLayout = () => {
     const isSidebarEnabled =
@@ -411,16 +411,16 @@ export class HomePage implements OnDestroy {
 
     if (
       tileColCount === this.tileColCount &&
-      homePageWidth === this.layoutPageWidth &&
-      fontSize === this.layoutFontSize
+      homePageWidth === this.lastLayoutPageWidth &&
+      fontSize === this.lastLayoutFontSize
     ) {
       return;
     }
 
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
-    this.layoutPageWidth = homePageWidth;
-    this.layoutFontSize = fontSize;
+    this.lastLayoutPageWidth = homePageWidth;
+    this.lastLayoutFontSize = fontSize;
 
     const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
     const isTiled =

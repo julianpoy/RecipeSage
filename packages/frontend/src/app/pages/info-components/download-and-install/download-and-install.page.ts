@@ -117,7 +117,7 @@ export class DownloadAndInstallPage {
       shareOutline,
     });
 
-    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
     }
 

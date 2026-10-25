@@ -170,7 +170,7 @@ export class SettingsPage implements OnDestroy {
   defaultBackHref: string = RouteMap.MorePage.getPath();
 
   constructor() {
-    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
     }
 

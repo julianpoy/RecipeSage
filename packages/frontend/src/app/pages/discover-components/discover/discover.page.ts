@@ -163,7 +163,7 @@ export class DiscoverPage {
       this.utilService.getCurrentLocale(),
     );
 
-    if (this.router.getCurrentNavigation()?.extras.state?.showBack) {
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
     }
   }
@@ -215,8 +215,8 @@ export class DiscoverPage {
     this.resizeTimeout = setTimeout(this.updateLayout, RESIZE_DEBOUNCE_MS);
   };
 
-  private layoutPageWidth?: number;
-  private layoutFontSize?: string;
+  private lastLayoutPageWidth?: number;
+  private lastLayoutFontSize?: string;
 
   updateLayout = () => {
     const isSidebarEnabled =
@@ -236,16 +236,16 @@ export class DiscoverPage {
 
     if (
       tileColCount === this.tileColCount &&
-      pageWidth === this.layoutPageWidth &&
-      fontSize === this.layoutFontSize
+      pageWidth === this.lastLayoutPageWidth &&
+      fontSize === this.lastLayoutFontSize
     ) {
       return;
     }
 
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
-    this.layoutPageWidth = pageWidth;
-    this.layoutFontSize = fontSize;
+    this.lastLayoutPageWidth = pageWidth;
+    this.lastLayoutFontSize = fontSize;
 
     const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
     const isTiled =
