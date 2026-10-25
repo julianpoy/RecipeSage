@@ -10,9 +10,9 @@
       <ion-item-group>
         @for (p of navList; track p.id) {
           <ion-item
-            [routerDirection]="'root'"
+            [routerDirection]="'forward'"
             [routerLink]="[p.url]"
-            [replaceUrl]="true"
+            [state]="{ showBack: true }"
             detail
           >
             <ion-icon slot="start" [name]="p.icon"></ion-icon>

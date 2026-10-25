@@ -13,6 +13,8 @@ export enum EventName {
   ApplicationMultitaskingResumed = "application:multitasking:resumed",
   ApplicationLanguageChanged = "application:language:changed",
   ApplicationSplitPaneChanged = "application:splitpane:changed",
+  ApplicationVerticalBarInsetChanged = "application:verticalbarinset:changed",
+  ApplicationFontSizeChanged = "application:fontsize:changed",
   ApplicationOfflineModeChanged = "application:offlinemode:changed",
   Auth = "auth",
   CapabilitiesUpdated = "capabilities:updated",

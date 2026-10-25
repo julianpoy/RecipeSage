@@ -16,66 +16,70 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="grouped-content">
   <div class="page-wrapper">
-    <ion-list>
-      @for (mealPlan of mealPlans(); track mealPlan) {
-        <ion-item
-          button
-          class="ion-text-wrap"
-          (click)="openMealPlan(mealPlan.id)"
-        >
-          <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          <ion-label>
-            <h2>{{ mealPlan.title }}</h2>
-            <p>
-              {{
-                "pages.mealPlans.metadata.createdOn"
-                  | translate
-                    : { date: formatItemCreationDate(mealPlan.createdAt) }
-              }}
-            </p>
-            @if (mealPlan.collaboratorUsers.length > 0) {
-              <p>
-                {{ "pages.mealPlans.metadata.collaborators" | translate }}
-                @for (
-                  collaboratorUser of mealPlan.collaboratorUsers;
-                  track collaboratorUser;
-                  let isLast = $last
-                ) {
-                  <span>
-                    @if (me()?.id !== collaboratorUser.user.id) {
+    <ion-list inset="true">
+      @if (mealPlans()?.length) {
+        <ion-item-group>
+          @for (mealPlan of mealPlans(); track mealPlan) {
+            <ion-item
+              button
+              class="ion-text-wrap"
+              (click)="openMealPlan(mealPlan.id)"
+            >
+              <ion-icon name="calendar-outline" slot="start"></ion-icon>
+              <ion-label>
+                <h2>{{ mealPlan.title }}</h2>
+                <p>
+                  {{
+                    "pages.mealPlans.metadata.createdOn"
+                      | translate
+                        : { date: formatItemCreationDate(mealPlan.createdAt) }
+                  }}
+                </p>
+                @if (mealPlan.collaboratorUsers.length > 0) {
+                  <p>
+                    {{ "pages.mealPlans.metadata.collaborators" | translate }}
+                    @for (
+                      collaboratorUser of mealPlan.collaboratorUsers;
+                      track collaboratorUser;
+                      let isLast = $last
+                    ) {
                       <span>
-                        {{ collaboratorUser.user.name }}
-                        @if (!isLast || me()?.id !== mealPlan.user.id) {
-                          <span>,</span>
+                        @if (me()?.id !== collaboratorUser.user.id) {
+                          <span>
+                            {{ collaboratorUser.user.name }}
+                            @if (!isLast || me()?.id !== mealPlan.user.id) {
+                              <span>,</span>
+                            }
+                          </span>
                         }
                       </span>
                     }
-                  </span>
+                    @if (me()?.id !== mealPlan.user.id) {
+                      <span> {{ mealPlan.user.name }} </span>
+                    }
+                  </p>
                 }
-                @if (me()?.id !== mealPlan.user.id) {
-                  <span> {{ mealPlan.user.name }} </span>
-                }
-              </p>
-            }
-            <p>
-              @if (me()?.id !== mealPlan.user.id) {
-                <span>
-                  {{
-                    "pages.mealPlans.metadata.createdBy"
-                      | translate: { name: mealPlan.user.name }
-                  }}
-                </span>
-              }
-              @if (me()?.id === mealPlan.user.id) {
-                <span>
-                  {{ "pages.mealPlans.metadata.youOwn" | translate }}
-                </span>
-              }
-            </p>
-          </ion-label>
-        </ion-item>
+                <p>
+                  @if (me()?.id !== mealPlan.user.id) {
+                    <span>
+                      {{
+                        "pages.mealPlans.metadata.createdBy"
+                          | translate: { name: mealPlan.user.name }
+                      }}
+                    </span>
+                  }
+                  @if (me()?.id === mealPlan.user.id) {
+                    <span>
+                      {{ "pages.mealPlans.metadata.youOwn" | translate }}
+                    </span>
+                  }
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-item-group>
       }
       @if (mealPlans() === undefined) {
         <null-state>

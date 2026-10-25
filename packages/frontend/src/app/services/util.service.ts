@@ -11,6 +11,7 @@ import { serverConfig, PUBLIC_WEB_ORIGIN } from "../utils/serverConfig";
 import { getIsElectron } from "../utils/electron";
 import { USE_IOS_MODE } from "../utils/useIOSMode";
 import { Capacitor } from "@capacitor/core";
+import { EventName, EventService } from "./event.service";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -487,6 +488,7 @@ const rtlLanguages = [SupportedLanguages.HE, SupportedLanguages.AR_SA];
 })
 export class UtilService {
   private translate = inject(TranslateService);
+  private events = inject(EventService);
 
   memoizedFormattedDates: Map<string, string> = new Map();
 
@@ -560,7 +562,10 @@ export class UtilService {
   }
 
   setFontSize(fontSize: SupportedFontSize) {
+    if (window.document.documentElement.style.fontSize === fontSize) return;
+
     window.document.documentElement.style.fontSize = fontSize;
+    this.events.publish(EventName.ApplicationFontSizeChanged);
   }
 
   setAppTheme(theme: AppTheme) {

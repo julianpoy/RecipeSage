@@ -61,7 +61,7 @@
     "@capacitor/splash-screen": "8.0.2",
     "@capawesome/capacitor-apple-sign-in": "^0.1.3",
     "@capawesome/capacitor-file-picker": "^8.0.4",
-    "@capgo/capacitor-native-navigation": "^8.13.2",
+    "@capgo/capacitor-native-navigation": "^8.14.0",
     "@capgo/native-purchases": "^8.7.0",
     "@erkamyaman/capacitor-foldable": "^8.4.1",
     "@fanoutio/grip": "^4.4.0",

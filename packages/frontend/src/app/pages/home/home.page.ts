@@ -29,6 +29,7 @@ import { HomePopoverPage } from "../home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "../home-search-popover/home-search-filter-popover.page";
 import { ServerActionsService } from "../../services/server-actions.service";
 import { CookingToolbarService } from "../../services/cooking-toolbar.service";
+import { NativeTabBarService } from "../../services/native-tab-bar.service";
 import type {
   LabelSummary,
   NutritionFilter,
@@ -76,6 +77,7 @@ import { addIcons } from "ionicons";
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
+const RESIZE_DEBOUNCE_MS = 150;
 
 @Component({
   standalone: true,
@@ -121,6 +123,7 @@ export class HomePage implements OnDestroy {
   private serverActionsService = inject(ServerActionsService);
   private utilService = inject(UtilService);
   private cookingToolbarService = inject(CookingToolbarService);
+  private nativeTabBarService = inject(NativeTabBarService);
 
   isNativeIOS = IS_NATIVE_IOS;
 
@@ -268,10 +271,14 @@ export class HomePage implements OnDestroy {
   ionViewWillEnter() {
     window.addEventListener("resize", this.onWindowResize);
     this.events.subscribe(
-      EventName.ApplicationSplitPaneChanged,
-      this.updateTileColCount,
+      [
+        EventName.ApplicationSplitPaneChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
+      ],
+      this.updateLayout,
     );
-    this.updateTileColCount();
+    this.updateLayout();
 
     this.clearSelectedRecipes();
 
@@ -309,22 +316,20 @@ export class HomePage implements OnDestroy {
   ionViewWillLeave() {
     window.removeEventListener("resize", this.onWindowResize);
     this.events.unsubscribe(
-      EventName.ApplicationSplitPaneChanged,
-      this.updateTileColCount,
+      [
+        EventName.ApplicationSplitPaneChanged,
+        EventName.ApplicationVerticalBarInsetChanged,
+        EventName.ApplicationFontSizeChanged,
+      ],
+      this.updateLayout,
     );
-    if (this.resizeFrame !== null) {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = null;
-    }
+    clearTimeout(this.resizeTimeout);
   }
 
-  private resizeFrame: number | null = null;
+  private resizeTimeout: NodeJS.Timeout | undefined;
   private onWindowResize = () => {
-    if (this.resizeFrame !== null) return;
-    this.resizeFrame = requestAnimationFrame(() => {
-      this.resizeFrame = null;
-      this.updateTileColCount();
-    });
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(this.updateLayout, RESIZE_DEBOUNCE_MS);
   };
 
   onWSEvent = (data: Record<string, string>) => {
@@ -383,12 +388,18 @@ export class HomePage implements OnDestroy {
     }
   }
 
-  updateTileColCount = () => {
+  private lastLayoutPageWidth?: number;
+  private lastLayoutFontSize?: string;
+
+  updateLayout = () => {
     const isSidebarEnabled =
       this.preferences[GlobalPreferenceKey.EnableSplitPane];
     const isSidebarOpen = window.innerWidth >= 1200;
     const sidebarWidth = isSidebarEnabled && isSidebarOpen ? 300 : 0;
-    const homePageWidth = window.innerWidth - sidebarWidth;
+    const homePageWidth =
+      window.innerWidth -
+      sidebarWidth -
+      this.nativeTabBarService.getHorizontalContentInset();
     const minimumColumnCount =
       homePageWidth >= MOBILE_TWO_COLUMN_MIN_WIDTH ? 2 : 1;
     const tileColCount = Math.max(
@@ -396,13 +407,28 @@ export class HomePage implements OnDestroy {
       minimumColumnCount,
     );
 
-    if (tileColCount !== this.tileColCount) {
-      this.tileColCount = tileColCount;
+    const fontSize = getComputedStyle(document.documentElement).fontSize;
 
-      // We set to zero since we don't know what the relative position would be now
-      this.datasource.settings!.startIndex = 0;
-      this.datasource.adapter.reset();
+    if (
+      tileColCount === this.tileColCount &&
+      homePageWidth === this.lastLayoutPageWidth &&
+      fontSize === this.lastLayoutFontSize
+    ) {
+      return;
     }
+
+    const previousTileColCount = this.tileColCount;
+    this.tileColCount = tileColCount;
+    this.lastLayoutPageWidth = homePageWidth;
+    this.lastLayoutFontSize = fontSize;
+
+    const firstVisibleIndex = this.datasource.adapter.firstVisible.$index ?? 0;
+    const isTiled =
+      this.preferences[MyRecipesPreferenceKey.ViewType] === "tiles";
+    this.datasource.settings!.startIndex = isTiled
+      ? Math.floor((firstVisibleIndex * previousTileColCount) / tileColCount)
+      : firstVisibleIndex;
+    this.datasource.adapter.reset();
   };
 
   async fetchMoreRecipes(target: number) {

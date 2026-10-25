@@ -107,7 +107,7 @@
       <br />
 
       @if (isLoggedIn() && !isAuthor()) {
-        <div class="discover-action-row rate-block">
+        <div class="rate-block">
           <span class="rate-label">{{
             "pages.discoverRecipe.rateThis" | translate
           }}</span>
@@ -120,7 +120,7 @@
       }
 
       @if (!isAuthor()) {
-        <div class="discover-action-row actions">
+        <div class="actions">
           @if (isLoggedIn()) {
             <ion-button (click)="save()" [disabled]="saving">
               <ion-icon name="bookmark-outline" slot="start"></ion-icon>
@@ -637,7 +637,7 @@
       }
 
       @if (recipe.modifiedAt) {
-        <p class="discover-action-row modified">
+        <p class="modified">
           {{
             "pages.discoverRecipe.modified"
               | translate: { date: formatDate(recipe.modifiedAt) }

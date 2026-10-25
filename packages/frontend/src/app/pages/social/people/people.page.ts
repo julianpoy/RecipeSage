@@ -1,4 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   ToastController,
   AlertController,
@@ -23,6 +24,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonIcon,
@@ -63,6 +65,7 @@ import { addIcons } from "ionicons";
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonIcon,
@@ -90,9 +93,14 @@ export class PeoplePage {
       personCircleOutline,
       searchOutline,
     });
+
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
   }
 
   navCtrl = inject(NavController);
+  router = inject(Router);
   translate = inject(TranslateService);
   toastCtrl = inject(ToastController);
   alertCtrl = inject(AlertController);
@@ -103,7 +111,8 @@ export class PeoplePage {
 
   isNativeIOS = IS_NATIVE_IOS;
 
-  defaultBackHref: string = RouteMap.SettingsPage.getPath();
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
   isSelfHost = IS_SELFHOST;
 
   private meQuery = this.serverActionsService.users.getMe();

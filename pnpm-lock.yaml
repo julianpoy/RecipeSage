@@ -90,8 +90,8 @@ importers:
         specifier: ^8.0.4
         version: 8.1.1(@capacitor/core@8.5.0)
       '@capgo/capacitor-native-navigation':
-        specifier: ^8.13.2
-        version: 8.13.2(@capacitor/core@8.5.0)
+        specifier: ^8.14.0
+        version: 8.14.0(@capacitor/core@8.5.0)
       '@capgo/native-purchases':
         specifier: ^8.7.0
         version: 8.9.6(@capacitor/core@8.5.0)
@@ -2328,8 +2328,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capgo/capacitor-native-navigation@8.13.2':
-    resolution: {integrity: sha512-IjUdmSEdM/aNkIak4HUq5nNg8AFK8f060d3+y0F5DbuZ2/zAAfaKMGr806jznJ2OC5y+yfJlq6yi5JXAjJlH3w==}
+  '@capgo/capacitor-native-navigation@8.14.0':
+    resolution: {integrity: sha512-U/U4LsvnHJwa4kMFnQP/5LuvZ6xCUbFwE1KZqQz30bf/rSqJFUG0Gth3Kajh4an/W66oy3knxVTSkIqxpLcwxA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
@@ -14798,7 +14798,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.5.0
 
-  '@capgo/capacitor-native-navigation@8.13.2(@capacitor/core@8.5.0)':
+  '@capgo/capacitor-native-navigation@8.14.0(@capacitor/core@8.5.0)':
     dependencies:
       '@capacitor/core': 8.5.0
 

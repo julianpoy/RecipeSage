@@ -4,6 +4,11 @@
   max-width: 1250px;
   margin: 0 auto;
   padding-bottom: 25vh;
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }
 }
 
 .not-found {
@@ -13,12 +18,13 @@
 }
 
 ion-thumbnail {
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
+  --border-radius: 16px;
+  border-radius: 16px;
+  background-color: var(--rs-subtle-surface-color);
+  box-shadow:
+    0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-
-  img {
-    border-radius: 4px;
-  }
 }
 
 h2.recipeTitle {
@@ -57,11 +63,6 @@ h2.recipeTitle {
   a {
     cursor: pointer;
   }
-}
-
-.discover-action-row {
-  padding-inline-start: 16px;
-  padding-inline-end: 16px;
 }
 
 .rate-block {

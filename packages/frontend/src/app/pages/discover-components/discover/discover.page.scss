@@ -1,3 +1,9 @@
+.discover-page {
+  height: 100%;
+  overflow-y: scroll;
+  container-type: inline-size;
+}
+
 .search-container {
   display: flex;
   align-items: center;
@@ -17,10 +23,25 @@
   font-size: 0.8125rem;
   line-height: 1.25;
   color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.7);
+  flex-wrap: wrap;
+  row-gap: 0;
 
   rating {
     font-size: 16px;
     line-height: 14px;
+    flex-shrink: 0;
+  }
+
+  span {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:last-child {
+      flex-basis: 100%;
+    }
   }
 }
 
@@ -29,11 +50,17 @@
 }
 
 .recipe-group {
+  --tile-width: 200px;
+
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
+  justify-content: space-around;
   padding: 10px;
+
+  @container (max-width: 439px) {
+    &:not(.single-col) {
+      --tile-width: min(200px, calc((100cqw - 32px) / 2));
+    }
+  }
 
   &.single-col .recipe-card {
     width: 100%;
@@ -41,10 +68,10 @@
 }
 
 .recipe-card {
-  width: 200px;
+  width: var(--tile-width);
   --paragraph-line-height: 1.188rem;
   --content-padding-leeway: 1.5rem;
-  --image-height: 190px;
+  --image-size: var(--tile-width);
   --title-height: var(--paragraph-line-height);
   --description-height: calc(var(--paragraph-line-height) * 2);
   --author-height: var(--paragraph-line-height);
@@ -56,27 +83,42 @@
   );
 
   min-width: 0;
-  height: calc(var(--image-height) + var(--content-height));
+  height: calc(var(--image-size) + var(--content-height));
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 20px;
   overflow: hidden;
-  background: var(--ion-item-background);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  background-color: var(--ion-card-background);
+  box-shadow:
+    0 0 0 0.5px rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    background-color: var(--ion-card-background-hover);
+  }
 
   img {
     width: 100%;
-    height: var(--image-height);
+    height: var(--image-size);
     object-fit: cover;
     display: block;
+    background-color: var(--rs-subtle-surface-color);
+
+    &.no-image {
+      box-sizing: border-box;
+      padding: 25%;
+      object-fit: contain;
+    }
   }
 
   .recipe-card-content {
-    padding: 8px 10px 10px;
+    padding: 5px;
+    padding-inline-start: 12px;
 
     h2 {
       margin: 0 0 4px;
       height: var(--title-height);
       font-size: 1rem;
+      font-weight: 600;
       line-height: var(--paragraph-line-height);
       white-space: nowrap;
       overflow: hidden;
@@ -87,6 +129,7 @@
       margin: 0 0 4px;
       font-size: 0.875rem;
       line-height: var(--paragraph-line-height);
+      color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.6);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -103,7 +146,6 @@
       &.author {
         height: var(--author-height);
         font-style: italic;
-        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.75);
       }
     }
   }
@@ -116,7 +158,7 @@
 
 .recipe-item {
   --paragraph-line-height: 1.188rem;
-  --content-padding-leeway: 1rem;
+  --content-padding-leeway: 1.5rem;
   --title-height: var(--paragraph-line-height);
   --description-height: calc(var(--paragraph-line-height) * 2);
   --author-height: var(--paragraph-line-height);
@@ -128,38 +170,51 @@
   );
 
   display: block;
-  border-bottom: 1px solid var(--ion-border-color);
 
   .recipe-item-clickable {
     display: grid;
-    grid-template-columns: 80px auto;
-    gap: 12px;
-    align-items: start;
+    grid-template-columns: 80px minmax(0, 1fr);
     height: var(--item-height);
     overflow: hidden;
-    padding: 8px 12px;
+    padding-inline-start: 16px;
     cursor: pointer;
   }
 
   &:hover {
-    background-color: var(--ion-background-tint-color);
+    background-color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04);
   }
 
   img {
     width: 80px;
     height: 80px;
+    margin-block: 8px;
     object-fit: cover;
-    border-radius: 4px;
-    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    background-color: var(--rs-subtle-surface-color);
+
+    &.no-image {
+      box-sizing: border-box;
+      padding: 22%;
+      object-fit: contain;
+    }
   }
 
   .recipe-item-content {
     min-width: 0;
+    margin-inline-start: 14px;
+    padding-block: 8px;
+    padding-inline-end: 16px;
+    border-bottom: 0.5px solid;
+    border-color: var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
 
     h2 {
       margin: 0 0 2px;
       height: var(--title-height);
       font-size: 1rem;
+      font-weight: 600;
       line-height: var(--paragraph-line-height);
       white-space: nowrap;
       overflow: hidden;
@@ -170,6 +225,7 @@
       margin: 0 0 2px;
       font-size: 0.875rem;
       line-height: var(--paragraph-line-height);
+      color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.6);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -186,7 +242,6 @@
       &.author {
         height: var(--author-height);
         font-style: italic;
-        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.75);
       }
     }
   }

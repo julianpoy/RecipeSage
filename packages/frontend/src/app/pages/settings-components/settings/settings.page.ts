@@ -4,6 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   NavController,
   AlertController,
@@ -55,6 +56,7 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonBackButton,
   IonTitle,
   IonContent,
   IonList,
@@ -104,6 +106,7 @@ import { addIcons } from "ionicons";
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    IonBackButton,
     IonTitle,
     IonContent,
     IonList,
@@ -120,6 +123,7 @@ import { addIcons } from "ionicons";
 export class SettingsPage implements OnDestroy {
   private events = inject(EventService);
   private navCtrl = inject(NavController);
+  private router = inject(Router);
   private translate = inject(TranslateService);
   private alertCtrl = inject(AlertController);
   private modalCtrl = inject(ModalController);
@@ -162,7 +166,14 @@ export class SettingsPage implements OnDestroy {
   startPageOptions = StartPageOptions;
   isLoggedIn: boolean = false;
 
+  showBack = false;
+  defaultBackHref: string = RouteMap.MorePage.getPath();
+
   constructor() {
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
+
     addIcons({
       brushOutline,
       bugOutline,
