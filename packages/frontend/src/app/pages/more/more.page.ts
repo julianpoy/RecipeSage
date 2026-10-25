@@ -53,7 +53,8 @@ export class MorePage {
   async updateNavList() {
     const navList = await this.navListService.generateNavList();
     this.navList = navList.filter(
-      (page) => !NATIVE_TAB_NAV_IDS.includes(page.id),
+      (page) =>
+        !NATIVE_TAB_NAV_IDS.includes(page.id) && page.id !== "newrecipe",
     );
   }
 }
