@@ -1,6 +1,6 @@
 import { Injectable, NgZone, inject, signal } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { NavController } from "@ionic/angular";
+import { NavController, isPlatform } from "@ionic/angular";
 import {
   NativeNavigation,
   type NativeNavigationTabbarOptions,
@@ -184,15 +184,13 @@ export class NativeTabBarService {
       this.visible ? this.verticalBarsLayout : { edge: null },
     );
 
-    const coversOverlays = this.verticalBarsLayout.edge === null;
+    const coversOverlays =
+      this.verticalBarsLayout.edge === null && !isPlatform("ipad");
     const options: NativeNavigationTabbarOptions = {
       hidden: !this.visible || (coversOverlays && this.openOverlayCount > 0),
       animated: true,
       selectedId: this.selectedId,
       labelVisibilityMode: "labeled",
-      style: {
-        placement: "sidebar",
-      },
       tabs: NATIVE_TABS.map((tab) => ({
         id: tab.id,
         title: this.translate.instant(tab.titleKey),
