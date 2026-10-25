@@ -112,7 +112,7 @@ export class ShareProfileModalPage implements OnInit {
       return this.translate.instant(
         "pages.shareProfileModal.errorLoadingProfileUrl",
       );
-    return `${getShareLinkOrigin()}/app/${RouteMap.ProfilePage.getPath(
+    return `${getShareLinkOrigin()}/app${RouteMap.ProfilePage.getPath(
       `@${this.profile.handle}`,
     )}`;
   }
