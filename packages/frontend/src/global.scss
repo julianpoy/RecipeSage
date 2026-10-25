@@ -206,6 +206,13 @@ ion-toolbar.md:not(.md3-disabled) {
   --ion-safe-area-right: var(--rs-safe-area-right);
 }
 
+:root.native-tab-bar-off {
+  --rs-safe-area-bottom: var(
+    --safe-area-inset-bottom,
+    env(safe-area-inset-bottom, 0px)
+  );
+}
+
 @property --rs-safe-area-left {
   syntax: "<length>";
   inherits: true;
