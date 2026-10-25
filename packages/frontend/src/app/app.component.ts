@@ -156,6 +156,7 @@ export class AppComponent {
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
   inCookMode = false;
+  inConversation = false;
   menuSwipeEnabled = true;
 
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
@@ -422,7 +423,7 @@ export class AppComponent {
 
   updateNativeTabBar() {
     this.nativeTabBarService.setVisible(
-      this.useNativeTabBar && !this.inCookMode,
+      this.useNativeTabBar && !this.inCookMode && !this.inConversation,
     );
     this.nativeTabBarService.setMoreTabBadgeCount(this.peopleBadgeCount);
   }
@@ -515,7 +516,11 @@ export class AppComponent {
       this.updateIsLoggedIn();
       this.updateNavList();
 
-      this.inCookMode = event.url.split("?")[0].endsWith("/cook");
+      const currentPath = event.url.split("?")[0];
+      this.inCookMode = currentPath.endsWith("/cook");
+      this.inConversation =
+        currentPath === RouteMap.AssistantPage.getPath() ||
+        currentPath.startsWith(`${RouteMap.MessagesPage.getPath()}/`);
 
       this.updateNativeTabBar();
 
