@@ -178,7 +178,7 @@ export class DiscoverPage {
         .filter((category) => category.length > 0);
     }
 
-    window.addEventListener("resize", this.updateTileColCount);
+    window.addEventListener("resize", this.onWindowResize);
     this.events.subscribe(
       [
         EventName.ApplicationSplitPaneChanged,
@@ -197,7 +197,7 @@ export class DiscoverPage {
   }
 
   ionViewWillLeave() {
-    window.removeEventListener("resize", this.updateTileColCount);
+    window.removeEventListener("resize", this.onWindowResize);
     this.events.unsubscribe(
       [
         EventName.ApplicationSplitPaneChanged,
@@ -205,7 +205,20 @@ export class DiscoverPage {
       ],
       this.updateTileColCount,
     );
+    if (this.resizeFrame !== null) {
+      cancelAnimationFrame(this.resizeFrame);
+      this.resizeFrame = null;
+    }
   }
+
+  private resizeFrame: number | null = null;
+  private onWindowResize = () => {
+    if (this.resizeFrame !== null) return;
+    this.resizeFrame = requestAnimationFrame(() => {
+      this.resizeFrame = null;
+      this.updateTileColCount();
+    });
+  };
 
   private computeTileColCount(): boolean {
     const isSidebarEnabled =
