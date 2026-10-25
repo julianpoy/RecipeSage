@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Περισσότερα",
     "pages.more.tabTitle": "Περισσότερα - RecipeSage",
     "pages.more.title": "Περισσότερα",
-    "pages.app.tabs.recipes": "Συνταγές"
+    "pages.app.tabs.recipes": "Συνταγές",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Σε στοίβα",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Δίπλα-δίπλα",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Καρτέλες",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Διάταξη σε μικρές οθόνες",
+    "pages.settings.recipeSmallScreenLayout": "Διάταξη συνταγής σε μικρές οθόνες"
 }

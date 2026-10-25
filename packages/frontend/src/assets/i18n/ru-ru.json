@@ -2563,5 +2563,10 @@
     "pages.more.title": "Подробнее",
     "pages.app.tabs.tools": "Инструменты",
     "pages.app.tabs.more": "Ещё",
-    "pages.app.tabs.recipes": "Рецепт"
+    "pages.app.tabs.recipes": "Рецепт",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Вертикально",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Рядом",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Вкладки",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Макет на небольших экранах",
+    "pages.settings.recipeSmallScreenLayout": "Макет рецепта на небольших экранах"
 }

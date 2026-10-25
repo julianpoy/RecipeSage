@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Daugiau",
     "pages.more.tabTitle": "Daugiau - RecipeSage",
     "pages.more.title": "Daugiau",
-    "pages.app.tabs.recipes": "Receptas"
+    "pages.app.tabs.recipes": "Receptas",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Vienas po kitu",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Vienas šalia kito",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Kortelės",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Išdėstymas mažuose ekranuose",
+    "pages.settings.recipeSmallScreenLayout": "Recepto išdėstymas mažuose ekranuose"
 }

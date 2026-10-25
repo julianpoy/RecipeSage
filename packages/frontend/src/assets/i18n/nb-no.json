@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Mer",
     "pages.more.tabTitle": "Mer - RecipeSage",
     "pages.more.title": "Mer",
-    "pages.app.tabs.recipes": "Oppskrifter"
+    "pages.app.tabs.recipes": "Oppskrifter",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Stablet",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Side om side",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Faner",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Oppsett på små skjermer",
+    "pages.settings.recipeSmallScreenLayout": "Oppskriftsoppsett på små skjermer"
 }

@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Altro",
     "pages.more.tabTitle": "Altro - RecipeSage",
     "pages.more.title": "Altro",
-    "pages.app.tabs.recipes": "Ricette"
+    "pages.app.tabs.recipes": "Ricette",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Impilato",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Affiancato",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Schede",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Layout su schermi piccoli",
+    "pages.settings.recipeSmallScreenLayout": "Layout della ricetta su schermi piccoli"
 }

@@ -2563,5 +2563,10 @@
     "pages.app.tabs.tools": "Інструменти",
     "pages.app.tabs.more": "Ще",
     "pages.more.tabTitle": "Ще — RecipeSage",
-    "pages.more.title": "Більше"
+    "pages.more.title": "Більше",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Вертикально",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Поруч",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Вкладки",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Макет на малих екранах",
+    "pages.settings.recipeSmallScreenLayout": "Макет рецепта на малих екранах"
 }

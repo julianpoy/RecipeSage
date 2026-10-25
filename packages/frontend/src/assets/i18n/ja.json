@@ -2563,5 +2563,10 @@
     "pages.more.title": "詳細",
     "pages.app.tabs.tools": "ツール",
     "pages.app.tabs.more": "その他",
-    "pages.app.tabs.recipes": "レシピ"
+    "pages.app.tabs.recipes": "レシピ",
+    "pages.recipeDetails.smallScreenLayout.stacked": "縦並び",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "横並び",
+    "pages.recipeDetails.smallScreenLayout.tabs": "タブ",
+    "pages.recipeDetailsPopover.smallScreenLayout": "小さい画面でのレイアウト",
+    "pages.settings.recipeSmallScreenLayout": "小さい画面でのレシピレイアウト"
 }

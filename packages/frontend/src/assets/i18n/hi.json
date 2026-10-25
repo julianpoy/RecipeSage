@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "और",
     "pages.more.tabTitle": "और - RecipeSage",
     "pages.more.title": "अधिक",
-    "pages.app.tabs.recipes": "व्यंजन-विधियाँ"
+    "pages.app.tabs.recipes": "व्यंजन-विधियाँ",
+    "pages.recipeDetails.smallScreenLayout.stacked": "एक के ऊपर एक",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "साथ-साथ",
+    "pages.recipeDetails.smallScreenLayout.tabs": "टैब",
+    "pages.recipeDetailsPopover.smallScreenLayout": "छोटी स्क्रीन पर लेआउट",
+    "pages.settings.recipeSmallScreenLayout": "छोटी स्क्रीन पर रेसिपी लेआउट"
 }

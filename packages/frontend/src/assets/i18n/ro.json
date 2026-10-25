@@ -2563,5 +2563,10 @@
     "pages.more.title": "Mai multe",
     "pages.app.tabs.tools": "Instrumente",
     "pages.app.tabs.more": "Mai multe",
-    "pages.app.tabs.recipes": "Rețetă"
+    "pages.app.tabs.recipes": "Rețetă",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Suprapus",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Alăturat",
+    "pages.recipeDetails.smallScreenLayout.tabs": "File",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Aspect pe ecrane mici",
+    "pages.settings.recipeSmallScreenLayout": "Aspectul rețetei pe ecrane mici"
 }

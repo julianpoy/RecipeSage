@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "Více",
     "pages.more.tabTitle": "Více - RecipeSage",
     "pages.more.title": "Více",
-    "pages.app.tabs.recipes": "Recepty"
+    "pages.app.tabs.recipes": "Recepty",
+    "pages.recipeDetails.smallScreenLayout.stacked": "Pod sebou",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "Vedle sebe",
+    "pages.recipeDetails.smallScreenLayout.tabs": "Karty",
+    "pages.recipeDetailsPopover.smallScreenLayout": "Rozvržení na malých obrazovkách",
+    "pages.settings.recipeSmallScreenLayout": "Rozvržení receptu na malých obrazovkách"
 }

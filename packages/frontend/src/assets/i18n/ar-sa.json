@@ -2563,5 +2563,10 @@
     "pages.app.tabs.more": "المزيد",
     "pages.more.tabTitle": "المزيد - RecipeSage",
     "pages.more.title": "المزيد",
-    "pages.app.tabs.recipes": "الوصفات"
+    "pages.app.tabs.recipes": "الوصفات",
+    "pages.recipeDetails.smallScreenLayout.stacked": "متراص",
+    "pages.recipeDetails.smallScreenLayout.sideBySide": "جنبًا إلى جنب",
+    "pages.recipeDetails.smallScreenLayout.tabs": "علامات تبويب",
+    "pages.recipeDetailsPopover.smallScreenLayout": "التخطيط على الشاشات الصغيرة",
+    "pages.settings.recipeSmallScreenLayout": "تخطيط الوصفة على الشاشات الصغيرة"
 }
