@@ -6,6 +6,7 @@ export default defineConfig({
   base: "/",
   trailingSlash: "ignore",
   outDir: "./dist",
+  cacheDir: "../../node_modules/.cache/astro-www",
   server: {
     host: true,
   },
