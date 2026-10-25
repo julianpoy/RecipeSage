@@ -174,11 +174,13 @@ export class DiscoverPage {
     }
 
     window.addEventListener("resize", this.updateTileColCount);
-    const tileColCountChanged = this.computeTileColCount();
 
-    if (!this.hasEntered || categoriesParamChanged || tileColCountChanged) {
+    if (!this.hasEntered || categoriesParamChanged) {
       this.hasEntered = true;
+      this.computeTileColCount();
       this.reload();
+    } else {
+      this.updateTileColCount();
     }
   }
 
@@ -204,9 +206,17 @@ export class DiscoverPage {
   }
 
   updateTileColCount = () => {
-    if (this.computeTileColCount()) {
-      this.reload();
-    }
+    const previousTileColCount = this.tileColCount;
+    if (!this.computeTileColCount()) return;
+
+    if (this.preferences[MyRecipesPreferenceKey.ViewType] !== "tiles") return;
+
+    const firstVisibleRecipeIndex =
+      (this.datasource.adapter.firstVisible.$index ?? 0) * previousTileColCount;
+    this.datasource.settings!.startIndex = Math.floor(
+      firstVisibleRecipeIndex / this.tileColCount,
+    );
+    this.datasource.adapter.reset();
   };
 
   authorDisplay(author: DiscoverRecipeAuthor) {

@@ -396,13 +396,19 @@ export class HomePage implements OnDestroy {
       minimumColumnCount,
     );
 
-    if (tileColCount !== this.tileColCount) {
-      this.tileColCount = tileColCount;
+    if (tileColCount === this.tileColCount) return;
 
-      // We set to zero since we don't know what the relative position would be now
-      this.datasource.settings!.startIndex = 0;
-      this.datasource.adapter.reset();
-    }
+    const previousTileColCount = this.tileColCount;
+    this.tileColCount = tileColCount;
+
+    if (this.preferences[MyRecipesPreferenceKey.ViewType] !== "tiles") return;
+
+    const firstVisibleRecipeIndex =
+      (this.datasource.adapter.firstVisible.$index ?? 0) * previousTileColCount;
+    this.datasource.settings!.startIndex = Math.floor(
+      firstVisibleRecipeIndex / tileColCount,
+    );
+    this.datasource.adapter.reset();
   };
 
   async fetchMoreRecipes(target: number) {
