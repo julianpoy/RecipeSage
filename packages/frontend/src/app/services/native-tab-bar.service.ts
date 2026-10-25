@@ -168,11 +168,30 @@ export class NativeTabBarService {
       this.applyFoldState(fold),
     );
 
+    window.addEventListener("resize", this.refreshBarPlacement);
+
     this.setBarPlacement(await Foldable.getBarPlacement());
     this.applyFoldState(await Foldable.getFoldState());
   }
 
+  private refreshBarPlacement = () => {
+    Foldable.getBarPlacement()
+      .then((placement) =>
+        this.ngZone.run(() => this.setBarPlacement(placement)),
+      )
+      .catch((e) => {
+        console.error("Failed to read bar placement", e);
+      });
+  };
+
   private setBarPlacement({ verticalBarEdge, inset }: BarPlacement) {
+    if (
+      verticalBarEdge === this.verticalBarsLayout.edge &&
+      inset === this.verticalBarsLayout.inset
+    ) {
+      return;
+    }
+
     this.verticalBarsLayout = { edge: verticalBarEdge, inset };
     this.render();
   }
