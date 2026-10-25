@@ -96,6 +96,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
   };
 
+  private syncedPreferenceValues: Record<string, string> = {};
+
   constructor() {
     this.load();
   }
@@ -117,9 +119,35 @@ export class PreferencesService {
 
     // Do not sync remote preferences if not logged in
     if (!localStorage.getItem("token")) return;
-    this.serverActionsService.users.updatePreferences(this.preferences, {
-      "*": () => {},
-    });
+
+    const preferenceValues = this.getSerializedPreferenceValues();
+    const changedPreferences = Object.fromEntries(
+      Object.entries(this.preferences).filter(
+        ([key]) => preferenceValues[key] !== this.syncedPreferenceValues[key],
+      ),
+    );
+    if (!Object.keys(changedPreferences).length) return;
+
+    this.serverActionsService.users
+      .updatePreferences(changedPreferences, {
+        "*": () => {},
+      })
+      .then((response) => {
+        if (!response) return;
+
+        for (const key of Object.keys(changedPreferences)) {
+          this.syncedPreferenceValues[key] = preferenceValues[key];
+        }
+      });
+  }
+
+  private getSerializedPreferenceValues() {
+    return Object.fromEntries(
+      Object.entries(this.preferences).map(([key, value]) => [
+        key,
+        JSON.stringify(value),
+      ]),
+    );
   }
 
   /**
@@ -172,6 +200,8 @@ export class PreferencesService {
       console.error(e);
     }
 
+    this.syncedPreferenceValues = this.getSerializedPreferenceValues();
+
     if (
       this.preferences[GlobalPreferenceKey.PreferencesSync] !==
       PreferencesSync.Enabled
@@ -194,6 +224,7 @@ export class PreferencesService {
           const previousTheme = this.preferences["global.theme"];
           const previousSplitPane = this.preferences["global.enableSplitPane"];
           Object.assign(this.preferences, filteredPreferences);
+          this.syncedPreferenceValues = this.getSerializedPreferenceValues();
 
           this.save(true);
 
