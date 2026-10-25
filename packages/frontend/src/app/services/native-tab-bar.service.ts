@@ -182,8 +182,22 @@ export class NativeTabBarService {
     if (root) applyFoldStateClasses(root, fold);
   }
 
-  getVerticalBarInset() {
-    return this.verticalBarInset;
+  getHorizontalContentInset() {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const safeAreaLeft =
+      parseFloat(rootStyle.getPropertyValue("--rs-safe-area-left")) || 0;
+    const safeAreaRight =
+      parseFloat(rootStyle.getPropertyValue("--rs-safe-area-right")) || 0;
+
+    if (this.verticalBarInset === 0) return safeAreaLeft + safeAreaRight;
+
+    const isRtl = document.documentElement.dir === "rtl";
+    const isVerticalBarOnLeft =
+      (this.verticalBarsLayout.edge === "leading") !== isRtl;
+    return (
+      this.verticalBarInset +
+      (isVerticalBarOnLeft ? safeAreaRight : safeAreaLeft)
+    );
   }
 
   private render() {

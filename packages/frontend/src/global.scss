@@ -193,14 +193,56 @@ ion-toolbar.md:not(.md3-disabled) {
     var(--cap-native-navigation-bottom, 0px)
   );
   --ion-safe-area-bottom: var(--rs-safe-area-bottom);
-  --ion-safe-area-left: var(
+  --rs-safe-area-left: var(
     --safe-area-inset-left,
     env(safe-area-inset-left, 0px)
   );
-  --ion-safe-area-right: var(
+  --rs-safe-area-right: var(
     --safe-area-inset-right,
     env(safe-area-inset-right, 0px)
   );
+  --ion-safe-area-left: var(--rs-safe-area-left);
+  --ion-safe-area-right: var(--rs-safe-area-right);
+}
+
+@property --rs-safe-area-left {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --rs-safe-area-right {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+ion-content:not(:where(ion-menu *, ion-popover *)) {
+  --ion-safe-area-left: 0px;
+  --ion-safe-area-right: 0px;
+
+  &::part(scroll) {
+    padding-left: calc(var(--padding-start, 0px) + var(--rs-safe-area-left));
+    padding-right: calc(var(--padding-end, 0px) + var(--rs-safe-area-right));
+  }
+
+  &:dir(rtl)::part(scroll) {
+    padding-left: calc(var(--padding-end, 0px) + var(--rs-safe-area-left));
+    padding-right: calc(var(--padding-start, 0px) + var(--rs-safe-area-right));
+  }
+
+  ion-fab {
+    --ion-safe-area-left: var(--rs-safe-area-left);
+    --ion-safe-area-right: var(--rs-safe-area-right);
+  }
+}
+
+ion-app.ios-theme-vertical-bars:not(.ios-theme-vertical-bars-left) {
+  --ios-theme-vertical-bars-safe-area-left: var(--rs-safe-area-left);
+}
+
+ion-app.ios-theme-vertical-bars.ios-theme-vertical-bars-left {
+  --ios-theme-vertical-bars-safe-area-right: var(--rs-safe-area-right);
 }
 
 ion-fab[vertical="bottom"] {

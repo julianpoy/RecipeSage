@@ -399,7 +399,7 @@ export class HomePage implements OnDestroy {
     const homePageWidth =
       window.innerWidth -
       sidebarWidth -
-      this.nativeTabBarService.getVerticalBarInset();
+      this.nativeTabBarService.getHorizontalContentInset();
     const minimumColumnCount =
       homePageWidth >= MOBILE_TWO_COLUMN_MIN_WIDTH ? 2 : 1;
     const tileColCount = Math.max(

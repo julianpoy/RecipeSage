@@ -226,7 +226,7 @@ export class DiscoverPage {
     const pageWidth =
       window.innerWidth -
       sidebarWidth -
-      this.nativeTabBarService.getVerticalBarInset();
+      this.nativeTabBarService.getHorizontalContentInset();
     const minimumColumnCount = pageWidth >= MOBILE_TWO_COLUMN_MIN_WIDTH ? 2 : 1;
     const tileColCount = Math.max(
       Math.floor(pageWidth / (TILE_WIDTH + TILE_PADD)),
