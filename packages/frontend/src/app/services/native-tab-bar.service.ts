@@ -190,6 +190,9 @@ export class NativeTabBarService {
       animated: true,
       selectedId: this.selectedId,
       labelVisibilityMode: "labeled",
+      style: {
+        placement: "sidebar",
+      },
       tabs: NATIVE_TABS.map((tab) => ({
         id: tab.id,
         title: this.translate.instant(tab.titleKey),
