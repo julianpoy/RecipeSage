@@ -41,8 +41,10 @@
   justify-content: space-around;
   padding: 10px;
 
-  @container (min-width: 375px) and (max-width: 439px) {
-    --tile-width: min(200px, calc((100cqw - 32px) / 2));
+  @container (max-width: 439px) {
+    &:not(.single-col) {
+      --tile-width: min(200px, calc((100cqw - 32px) / 2));
+    }
   }
 
   &.single-col .recipe-card {
