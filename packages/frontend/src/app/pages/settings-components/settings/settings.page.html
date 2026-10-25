@@ -250,6 +250,31 @@
           </ion-toggle>
         </ion-item>
         <ion-item>
+          <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+          <ion-select
+            [(ngModel)]="
+              preferences[recipeDetailsPreferenceKeys.SmallScreenLayout]
+            "
+            (ngModelChange)="savePreferences()"
+            label="{{ 'pages.settings.recipeSmallScreenLayout' | translate }}"
+            labelPlacement="stacked"
+            okText="{{ 'generic.ok' | translate }}"
+            cancelText="{{ 'generic.cancel' | translate }}"
+          >
+            <ion-select-option [value]="smallScreenLayoutOptions.Stacked">
+              {{ "pages.recipeDetails.smallScreenLayout.stacked" | translate }}
+            </ion-select-option>
+            <ion-select-option [value]="smallScreenLayoutOptions.SideBySide">
+              {{
+                "pages.recipeDetails.smallScreenLayout.sideBySide" | translate
+              }}
+            </ion-select-option>
+            <ion-select-option [value]="smallScreenLayoutOptions.Tabs">
+              {{ "pages.recipeDetails.smallScreenLayout.tabs" | translate }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
           <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
           <ion-toggle
             [checked]="

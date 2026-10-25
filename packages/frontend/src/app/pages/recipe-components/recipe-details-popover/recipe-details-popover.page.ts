@@ -6,7 +6,10 @@ import {
 } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { PreferencesService } from "../../../services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
+import {
+  RecipeDetailsPreferenceKey,
+  RecipeDetailsSmallScreenLayoutOptions,
+} from "@recipesage/util/shared";
 import { WakeLockService } from "../../../services/wakelock.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
@@ -22,6 +25,8 @@ import {
   IonIcon,
   IonToggle,
   IonLabel,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/angular";
 import {
   calendarOutline,
@@ -31,6 +36,7 @@ import {
   createOutline,
   eyeOutline,
   listOutline,
+  phonePortraitOutline,
   pinOutline,
   printOutline,
   restaurantOutline,
@@ -70,6 +76,8 @@ export type RecipeDetailsPopoverActionTypes =
     IonIcon,
     IonToggle,
     IonLabel,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class RecipeDetailsPopoverPage {
@@ -91,9 +99,11 @@ export class RecipeDetailsPopoverPage {
     required: true,
   })
   isLoggedIn!: boolean;
+  @Input() isSmallScreen = false;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;
+  smallScreenLayoutOptions = RecipeDetailsSmallScreenLayoutOptions;
   enableDiscover =
     this.featureFlagService.flags[FeatureFlagKeys.EnableDiscover];
 
@@ -108,6 +118,7 @@ export class RecipeDetailsPopoverPage {
       createOutline,
       eyeOutline,
       listOutline,
+      phonePortraitOutline,
       pinOutline,
       printOutline,
       restaurantOutline,

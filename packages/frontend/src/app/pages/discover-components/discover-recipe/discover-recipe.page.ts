@@ -1,4 +1,9 @@
-import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import {
@@ -48,6 +53,7 @@ import { linkifyHtml } from "../../../utils/linkify";
 import { getShareLinkOrigin } from "../../../utils/serverConfig";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
+import { IngredientsInstructionsLayoutComponent } from "../../../components/ingredients-instructions-layout/ingredients-instructions-layout.component";
 import {
   IonHeader,
   IonToolbar,
@@ -90,6 +96,7 @@ type DiscoverRecipeDetail = RouterOutputs["discover"]["getDiscoverRecipe"];
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,
+    IngredientsInstructionsLayoutComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -127,6 +134,9 @@ export class DiscoverRecipePage {
   private serverActionsService = inject(ServerActionsService);
   cookingToolbarService = inject(CookingToolbarService);
   utilService = inject(UtilService);
+
+  @ViewChild(IngredientsInstructionsLayoutComponent)
+  ingredientsInstructionsLayout?: IngredientsInstructionsLayoutComponent;
 
   defaultBackHref = RouteMap.DiscoverPage.getPath();
   categoryLabelKeys = DISCOVER_CATEGORY_LABEL_KEYS;
@@ -173,6 +183,8 @@ export class DiscoverRecipePage {
       componentProps: {
         recipeId: this.recipe.id,
         isAuthor: this.isAuthor(),
+        isSmallScreen:
+          this.ingredientsInstructionsLayout?.isWideScreen === false,
       },
       event,
     });

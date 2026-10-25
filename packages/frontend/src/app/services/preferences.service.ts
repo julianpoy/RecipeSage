@@ -16,6 +16,7 @@ import {
   OfflineModePromptOptions,
   PreferencesSync,
   RecipeDetailsPreferenceKey,
+  RecipeDetailsSmallScreenLayoutOptions,
   ShoppingListPreferenceKey,
   ShoppingListSortOptions,
   StartPageOptions,
@@ -68,6 +69,8 @@ export class PreferencesService {
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: false,
+    [RecipeDetailsPreferenceKey.SmallScreenLayout]:
+      RecipeDetailsSmallScreenLayoutOptions.Stacked,
 
     [CookModePreferenceKey.FontSize]: SupportedFontSize.PX20,
 

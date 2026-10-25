@@ -1,4 +1,9 @@
-import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -51,6 +56,7 @@ import { ServerActionsService } from "../../../services/server-actions.service";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
+import { IngredientsInstructionsLayoutComponent } from "../../../components/ingredients-instructions-layout/ingredients-instructions-layout.component";
 import {
   IonHeader,
   IonToolbar,
@@ -99,6 +105,7 @@ import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
   imports: [
     ...SHARED_UI_IMPORTS,
     RatingComponent,
+    IngredientsInstructionsLayoutComponent,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -136,6 +143,9 @@ export class RecipePage {
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
   private titleService = inject(Title);
+
+  @ViewChild(IngredientsInstructionsLayoutComponent)
+  ingredientsInstructionsLayout?: IngredientsInstructionsLayoutComponent;
 
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
@@ -377,6 +387,8 @@ export class RecipePage {
         recipe: this.recipe,
         me: this.me(),
         isLoggedIn: this.isLoggedIn,
+        isSmallScreen:
+          this.ingredientsInstructionsLayout?.isWideScreen === false,
       },
       event,
     });

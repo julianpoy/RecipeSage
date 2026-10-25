@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ingredients-instructions-gap, 0);
+}
+
+.ingredientsCol,
+.instructionsCol {
+  width: 100%;
+  min-width: 0;
+}
+
+.ingredientsCol {
+  flex-shrink: 0;
+}
+
+.instructionsCol {
+  flex-grow: 1;
+}
+
+.twoColumn {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+
+  .ingredientsCol {
+    position: sticky;
+    top: var(--sticky-top, 0px);
+    width: var(--ingredients-column-width, 215px);
+
+    @media (min-width: 1000px) {
+      width: var(--ingredients-column-width, 275px);
+    }
+
+    @media (min-width: 1200px) {
+      width: var(--ingredients-column-width, 325px);
+    }
+  }
+
+  .instructionsCol {
+    width: auto;
+  }
+}
+
+.narrowTwoColumn {
+  overflow-wrap: break-word;
+  hyphens: auto;
+
+  .ingredientsCol {
+    width: 40%;
+  }
+}
+
+.tabs {
+  position: sticky;
+  top: calc(-1 * var(--padding-top, 0px));
+  z-index: 2;
+  --background: var(--ion-background-color, #fff);
+}
+
+.tabsLayout .columnHeader {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}
