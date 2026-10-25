@@ -124,8 +124,20 @@
     flex-wrap: wrap;
     row-gap: 0;
 
+    rating {
+      flex-shrink: 0;
+    }
+
     span {
+      flex: 1 1 0;
+      min-width: 0;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:last-child {
+        flex-basis: 100%;
+      }
     }
   }
 }
