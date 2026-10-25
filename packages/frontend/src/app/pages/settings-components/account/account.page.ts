@@ -1,6 +1,7 @@
 import {
   Component,
   EffectRef,
+  Signal,
   effect,
   inject,
   ChangeDetectionStrategy,
@@ -18,6 +19,7 @@ import {
 import { CapabilitiesService } from "../../../services/capabilities.service";
 import { getQueryParam } from "../../../utils/queryParams";
 import { ServerActionsService } from "../../../services/server-actions.service";
+import { RefreshableSignal } from "../../../services/server-actions/actions-base";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@recipesage/trpc";
 
@@ -78,8 +80,8 @@ export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   contributePath: string = RouteMap.ContributePage.getPath();
 
-  private meQuery = this.serverActionsService.users.getMe();
-  me = this.meQuery.value;
+  private meQuery: RefreshableSignal<RouterOutputs["users"]["getMe"]>;
+  me: Signal<RouterOutputs["users"]["getMe"] | undefined>;
 
   myStats: RouterOutputs["users"]["getMyStats"] | null = null;
 
@@ -106,6 +108,9 @@ export class AccountPage {
     addIcons({ heartOutline, keyOutline, statsChartOutline, warningOutline });
     const resetToken = getQueryParam("token");
     if (resetToken) localStorage.setItem("token", resetToken);
+
+    this.meQuery = this.serverActionsService.users.getMe();
+    this.me = this.meQuery.value;
 
     const loading = this.loadingService.start();
 
