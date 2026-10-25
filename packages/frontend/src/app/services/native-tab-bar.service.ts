@@ -224,6 +224,10 @@ export class NativeTabBarService {
       ? this.verticalBarsLayout
       : { edge: null };
     setVerticalBarsLayout(verticalBarsLayout);
+    document.documentElement.classList.toggle(
+      "native-tab-bar-off",
+      !this.visible,
+    );
 
     const verticalBarInset =
       verticalBarsLayout.edge === null ? 0 : (verticalBarsLayout.inset ?? 0);

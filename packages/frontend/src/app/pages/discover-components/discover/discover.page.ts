@@ -21,6 +21,7 @@ import {
   getDefaultDiscoverLanguages,
   DiscoverLanguageOption,
 } from "../../../utils/discoverLanguages";
+import { getScrollbarWidth } from "../../../utils/getScrollbarWidth";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { RatingComponent } from "../../../components/rating/rating.component";
 import {
@@ -56,6 +57,7 @@ const PAGE_SIZE = 40;
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
+const TWO_COLUMN_TILE_GUTTER = 32;
 const RESIZE_DEBOUNCE_MS = 150;
 
 @Component({
@@ -118,6 +120,7 @@ export class DiscoverPage {
   private hasEntered = false;
   private categoriesParam: string | null = null;
   tileColCount = 1;
+  tileWidth = TILE_WIDTH;
 
   datasource = new Datasource<DiscoverRecipeSummary>({
     get: async (index: number, count: number) => {
@@ -232,10 +235,20 @@ export class DiscoverPage {
       Math.floor(pageWidth / (TILE_WIDTH + TILE_PADD)),
       minimumColumnCount,
     );
+    const tileWidth =
+      tileColCount === 2
+        ? Math.min(
+            TILE_WIDTH,
+            Math.floor(
+              (pageWidth - getScrollbarWidth() - TWO_COLUMN_TILE_GUTTER) / 2,
+            ),
+          )
+        : TILE_WIDTH;
     const fontSize = getComputedStyle(document.documentElement).fontSize;
 
     if (
       tileColCount === this.tileColCount &&
+      tileWidth === this.tileWidth &&
       pageWidth === this.lastLayoutPageWidth &&
       fontSize === this.lastLayoutFontSize
     ) {
@@ -244,6 +257,7 @@ export class DiscoverPage {
 
     const previousTileColCount = this.tileColCount;
     this.tileColCount = tileColCount;
+    this.tileWidth = tileWidth;
     this.lastLayoutPageWidth = pageWidth;
     this.lastLayoutFontSize = fontSize;
 

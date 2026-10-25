@@ -56,9 +56,10 @@
 
 .tabs {
   position: sticky;
+  width: 100%;
   top: calc(-1 * var(--padding-top, 0px));
   z-index: 2;
-  --background: var(--ion-background-color, #fff);
+  background: var(--ion-background-color, #fff);
 }
 
 .tabsLayout .columnHeader {

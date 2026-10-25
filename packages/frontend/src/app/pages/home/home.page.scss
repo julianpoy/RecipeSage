@@ -3,7 +3,6 @@
 .infinite-scrolling-container {
   height: 100%;
   overflow-y: scroll;
-  container-type: inline-size;
 }
 
 ion-title.ios.selection-title.has-bulk-actions {
@@ -65,16 +64,6 @@ ion-badge {
   display: flex;
   justify-content: space-around;
   padding: 10px;
-
-  // Keep this bound aligned with the existing 440px two-column threshold in
-  // home.page.ts.
-  @container (max-width: 439px) {
-    &:not(.single-col) {
-      // Reserve the row's 20px padding plus 12px of slack between the tiles.
-      --tile-width: min(200px, calc((100cqw - 32px) / 2));
-      flex-wrap: nowrap;
-    }
-  }
 
   &.single-col .recipe-card {
     width: 100%;
