@@ -3,10 +3,14 @@
   bottom: 0;
   inset-inline: 0;
   box-sizing: border-box;
-  height: calc(60px + var(--ion-safe-area-bottom, 0px));
+  height: calc(60px + var(--rs-cooking-toolbar-bottom-space, 0px));
 
   padding: 0 calc(10px + var(--ion-safe-area-right, 0px))
-    var(--ion-safe-area-bottom, 0px) calc(10px + var(--ion-safe-area-left, 0px));
+    var(--rs-cooking-toolbar-bottom-space, 0px)
+    calc(10px + var(--ion-safe-area-left, 0px));
+  transition:
+    height 200ms ease,
+    padding-bottom 200ms ease;
 
   display: flex;
   align-items: center;
