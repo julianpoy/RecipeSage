@@ -1,41 +1,60 @@
-<ion-header>
-  <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <!-- <ion-title>Title</ion-title> -->
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" [forceOverscroll]="false" [scrollY]="false">
+  <div class="backdrop"></div>
 
-<ion-content [fullscreen]="true" [forceOverscroll]="false" color="dark">
-  @if (slideNum > 0) {
-    <ion-icon
-      (click)="slidePrev()"
-      name="arrow-back-outline"
-      class="back"
-    ></ion-icon>
-  }
-  <swiper-container
-    #swiperContainer
-    [modules]="swiperModules"
-    pagination="true"
-    centeredSlides="true"
-  >
-    @for (imageUrl of imageUrls; track imageUrl) {
-      <swiper-slide>
-        <div class="image-container">
-          <img [src]="imageUrl | resolveStorageLocation" />
-        </div>
-      </swiper-slide>
+  <div class="viewer" #viewer>
+    <swiper-container
+      #swiperContainer
+      [modules]="swiperModules"
+      zoom="true"
+      centeredSlides="true"
+    >
+      @for (imageUrl of imageUrls; track imageUrl) {
+        <swiper-slide>
+          <div class="swiper-zoom-container">
+            <img [src]="imageUrl | resolveStorageLocation" />
+          </div>
+        </swiper-slide>
+      }
+    </swiper-container>
+  </div>
+
+  <div class="controls">
+    <button
+      type="button"
+      class="control-button close"
+      [attr.aria-label]="'generic.close' | translate"
+      (click)="dismiss()"
+    >
+      <ion-icon name="close"></ion-icon>
+    </button>
+
+    @if (imageUrls.length > 1) {
+      @if (slideNum() > 0) {
+        <button
+          type="button"
+          class="control-button previous"
+          [attr.aria-label]="'components.imageViewer.previous' | translate"
+          (click)="slidePrev()"
+        >
+          <ion-icon name="chevron-back"></ion-icon>
+        </button>
+      }
+      @if (slideNum() < imageUrls.length - 1) {
+        <button
+          type="button"
+          class="control-button next"
+          [attr.aria-label]="'components.imageViewer.next' | translate"
+          (click)="slideNext()"
+        >
+          <ion-icon name="chevron-forward"></ion-icon>
+        </button>
+      }
+
+      <div class="page-dots" aria-hidden="true">
+        @for (imageUrl of imageUrls; track imageUrl; let i = $index) {
+          <span class="page-dot" [class.active]="i === slideNum()"></span>
+        }
+      </div>
     }
-  </swiper-container>
-  @if (slideNum < imageUrls.length - 1) {
-    <ion-icon
-      (click)="slideNext()"
-      name="arrow-forward-outline"
-      class="forward"
-    ></ion-icon>
-  }
+  </div>
 </ion-content>

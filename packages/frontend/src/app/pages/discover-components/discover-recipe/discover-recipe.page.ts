@@ -618,6 +618,7 @@ export class DiscoverRecipePage {
 
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
+      cssClass: "imageViewerModal",
       componentProps: {
         imageUrls: this.recipe.discoverRecipeImages.map(
           (discoverRecipeImage) => discoverRecipeImage.image.location,

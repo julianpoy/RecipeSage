@@ -2514,6 +2514,9 @@
   "components.nutritionFilterPopover.apply": "Apply",
   "components.nutritionFilterPopover.reset": "Reset",
 
+  "components.imageViewer.previous": "Previous image",
+  "components.imageViewer.next": "Next image",
+
   "components.scaleRecipe.title": "Scale & Convert Recipe",
   "components.scaleRecipe.click": "Click to multiply the recipe scale",
   "components.scaleRecipe.presetMultiplier": "{{value}}x",
