@@ -2,7 +2,7 @@
   --drag-progress: 0;
 }
 
-:host(.settling) {
+:host(.animate-drag-reset) {
   .viewer,
   .backdrop,
   .controls {
@@ -86,11 +86,11 @@ ion-content {
 }
 
 .previous {
-  left: calc(var(--rs-safe-area-left, 0px) + 16px);
+  inset-inline-start: calc(var(--rs-safe-area-left, 0px) + 16px);
 }
 
 .next {
-  right: calc(var(--rs-safe-area-right, 0px) + 16px);
+  inset-inline-end: calc(var(--rs-safe-area-right, 0px) + 16px);
 }
 
 .page-dots {

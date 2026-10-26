@@ -80,7 +80,10 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
       canStart: () => (this.getSwiperInstance()?.zoom.scale ?? 1) <= 1,
       onMove: ({ deltaY }) => this.setDragOffset(deltaY, false),
       onEnd: ({ deltaY, velocityY }) => {
-        if (deltaY > DISMISS_DISTANCE || velocityY > DISMISS_VELOCITY) {
+        if (
+          deltaY > DISMISS_DISTANCE ||
+          (deltaY > 0 && velocityY > DISMISS_VELOCITY)
+        ) {
           this.dismiss();
           return;
         }
@@ -102,7 +105,7 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     viewer.style.transform = offset ? `translateY(${offset}px)` : "";
 
     const host = this.elementRef.nativeElement;
-    host.classList.toggle("settling", animate);
+    host.classList.toggle("animate-drag-reset", animate);
     host.style.setProperty(
       "--drag-progress",
       String(Math.min(Math.abs(offset) / DRAG_PROGRESS_DISTANCE, 1)),
