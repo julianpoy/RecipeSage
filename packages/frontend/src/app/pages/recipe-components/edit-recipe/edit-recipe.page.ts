@@ -147,6 +147,7 @@ export class EditRecipePage {
   private preferencesService = inject(PreferencesService);
 
   saving = false;
+  imageUploading = false;
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
   nutritionAccordionValue: string | null = this.preferencesService.preferences[

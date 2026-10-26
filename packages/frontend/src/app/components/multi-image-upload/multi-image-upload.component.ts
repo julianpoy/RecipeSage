@@ -16,7 +16,7 @@ import { LoadingService } from "../../services/loading.service";
 import { CapabilitiesService } from "../../services/capabilities.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import type { ImageSummary } from "@recipesage/prisma";
-import { IonIcon } from "@ionic/angular";
+import { IonIcon, IonSpinner } from "@ionic/angular";
 import {
   chevronBack,
   chevronForward,
@@ -32,7 +32,7 @@ import { addIcons } from "ionicons";
   templateUrl: "multi-image-upload.component.html",
   styleUrls: ["./multi-image-upload.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, IonIcon],
+  imports: [...SHARED_UI_IMPORTS, IonIcon, IonSpinner],
 })
 export class MultiImageUploadComponent {
   constructor() {
@@ -53,6 +53,9 @@ export class MultiImageUploadComponent {
   capabilitiesService = inject(CapabilitiesService);
 
   @Output() imageUpdate = new EventEmitter<ImageSummary[]>();
+  @Output() uploadingChange = new EventEmitter<boolean>();
+
+  pendingUploads: File[] = [];
 
   _images: ImageSummary[] = [];
   @Input()
@@ -108,7 +111,7 @@ export class MultiImageUploadComponent {
   private async uploadFiles(files: File[]) {
     if (!files.length) return;
 
-    if (this.images.length + files.length > 10) {
+    if (this.images.length + this.pendingUploads.length + files.length > 10) {
       const message = await this.translate
         .get("components.multiImageUpload.imageLimit")
         .toPromise();
@@ -127,6 +130,9 @@ export class MultiImageUploadComponent {
       return;
     }
 
+    this.pendingUploads = [...this.pendingUploads, ...files];
+    this.uploadingChange.emit(true);
+
     const loading = this.loadingService.start();
 
     const MAX_FILE_SIZE_MB = 39;
@@ -138,18 +144,23 @@ export class MultiImageUploadComponent {
 
       if (isOverMaxSize) {
         someUploadFailed = true;
-        continue;
+      } else {
+        const response = await this.imageService.create(file, {
+          415: () => {
+            someUploadFailed = true;
+            someUploadHadUnsupportedFormat = true;
+          },
+          "*": () => (someUploadFailed = true),
+        });
+        if (response.success) this.images.push(response.data);
       }
 
-      const response = await this.imageService.create(file, {
-        415: () => {
-          someUploadFailed = true;
-          someUploadHadUnsupportedFormat = true;
-        },
-        "*": () => (someUploadFailed = true),
-      });
-      if (response.success) this.images.push(response.data);
+      this.pendingUploads = this.pendingUploads.filter(
+        (pendingUpload) => pendingUpload !== file,
+      );
     }
+
+    this.uploadingChange.emit(this.pendingUploads.length > 0);
 
     if (someUploadFailed) {
       const messageKey = someUploadHadUnsupportedFormat
