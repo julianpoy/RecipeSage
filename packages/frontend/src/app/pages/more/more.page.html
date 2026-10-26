@@ -26,5 +26,26 @@
         }
       </ion-item-group>
     </ion-list>
+
+    <div class="app-info">
+      @if (isSelfHost) {
+        <p class="app-name">RecipeSage Self Hosted</p>
+      } @else {
+        <img
+          class="app-logo light-logo"
+          src="assets/recipesage-black-trimmed.png"
+          alt="RecipeSage"
+        />
+        <img
+          class="app-logo dark-logo"
+          src="assets/recipesage-white-trimmed.png"
+          alt="RecipeSage"
+        />
+      }
+      @if (appVersion) {
+        <p>{{ appVersion }}</p>
+      }
+      <a [routerLink]="[aboutDetailsHref]">Julian Poyourow</a>
+    </div>
   </div>
 </ion-content>

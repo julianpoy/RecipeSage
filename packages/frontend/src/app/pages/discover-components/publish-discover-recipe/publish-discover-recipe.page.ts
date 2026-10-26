@@ -210,6 +210,7 @@ export class PublishDiscoverRecipePage {
   defaultBackHref = RouteMap.DiscoverPage.getPath();
 
   saving = false;
+  imageUploading = false;
   agreedToTos = false;
   legalHref = RouteMap.LegalPage.getPath();
   nutritionAccordionValue: string | null = null;
@@ -664,6 +665,7 @@ export class PublishDiscoverRecipePage {
 
   canSubmit() {
     if (this.saving) return false;
+    if (this.imageUploading) return false;
     if (!this.form.title.trim()) return false;
     if (!this.isEditMode && !this.agreedToTos) return false;
     return true;

@@ -17,7 +17,7 @@ import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 import { SelectUserComponent } from "../select-user/select-user.component";
-import { IonIcon } from "@ionic/angular";
+import { IonChip, IonIcon, IonLabel } from "@ionic/angular";
 import { trashOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -27,7 +27,13 @@ import { addIcons } from "ionicons";
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, SelectUserComponent, IonIcon],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SelectUserComponent,
+    IonChip,
+    IonIcon,
+    IonLabel,
+  ],
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {
   constructor() {

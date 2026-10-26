@@ -297,9 +297,11 @@
   "pages.recipeDetails.noIngredients": "No Ingredients",
   "pages.recipeDetails.scaleStatus": "{{scale}}x scale",
   "pages.recipeDetails.instructions": "Instructions",
-  "pages.recipeDetails.smallScreenLayout.stacked": "Stacked",
-  "pages.recipeDetails.smallScreenLayout.sideBySide": "Side by Side",
-  "pages.recipeDetails.smallScreenLayout.tabs": "Tabs",
+  "pages.recipeDetails.layout.automatic": "Automatic",
+  "pages.recipeDetails.layout.stacked": "Stacked",
+  "pages.recipeDetails.layout.sideBySide": "Side by Side",
+  "pages.recipeDetails.layout.sideBySideEqualWidth": "Side by Side (Equal Width)",
+  "pages.recipeDetails.layout.tabs": "Tabs",
   "pages.recipeDetails.noInstructions": "No Instructions",
   "pages.recipeDetails.nutrition": "Nutrition (per serving)",
   "pages.recipeDetails.nutritionServingSize": "Serving Size",
@@ -357,7 +359,7 @@
 
   "pages.recipeDetailsPopover.options": "Options",
   "pages.recipeDetailsPopover.keepScreenOn": "Keep Screen On",
-  "pages.recipeDetailsPopover.smallScreenLayout": "Layout on Small Screens",
+  "pages.recipeDetailsPopover.layout": "Layout",
   "pages.recipeDetailsPopover.actions": "Actions",
   "pages.recipeDetailsPopover.addToShoppingList": "Add to Shopping List",
   "pages.recipeDetailsPopover.addToMealPlan": "Add to Meal Plan",
@@ -614,7 +616,6 @@
   "pages.manageLabelModal.merge.placeholder": "Target label name",
 
   "pages.mealPlan.tabTitle": "Meal Plan - RecipeSage",
-  "pages.mealPlan.title": "Meal Plan - {{name}}",
   "pages.mealPlan.loading": "Loading meal plan...",
   "pages.mealPlan.noLongerAvailable": "This meal plan is no longer available.",
   "pages.mealPlan.list.empty": "No meals are scheduled. Press the + button to add one.",
@@ -742,7 +743,6 @@
   "pages.assistant.messageSize": "Your message is too long. Please send a shorter message.",
 
   "pages.messageThread.tabTitle": "Conversation - RecipeSage",
-  "pages.messageThread.title": "Conversation with {{name}}",
   "pages.messageThread.clickToOpen": "Click to open",
   "pages.messageThread.recipeDeleted": "Recipe deleted",
   "pages.messageThread.yourRecipeDeleted": "Your copy of this recipe no longer exists",
@@ -890,7 +890,6 @@
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "Enter an image URL to be added to the recipe",
   "pages.editRecipe.addImage.placeholder": "Image URL",
-  "pages.editRecipe.addImage.downloading": "Downloading image...",
   "pages.editRecipe.addImage.invalidUrl": "Please enter a valid image URL",
   "pages.editRecipe.addImage.fetchFailed": "We could not download an image from that URL. It may have been moved or deleted, or the site may not allow downloads.",
 
@@ -1920,7 +1919,7 @@
   "pages.settings.fontSize": "Font Size",
   "pages.settings.cookModeFontSize": "Cook Mode Font Size",
   "pages.settings.autoExpandNutrition": "Auto-Expand Nutritional Information When Editing Recipes",
-  "pages.settings.recipeSmallScreenLayout": "Recipe Layout on Small Screens",
+  "pages.settings.recipeLayout": "Recipe Layout",
   "pages.settings.preferencesSync": "Sync Preferences Between Devices",
   "pages.settings.reset": "Reset All Preferences",
   "pages.settings.resetCompletion": "Reset Recipe Ingredient and Instruction Completion + Scale",
@@ -2009,7 +2008,6 @@
   "pages.updateShoppingList.updateAndShare": "Update and Share",
 
   "pages.shoppingList.tabTitle": "Shopping List",
-  "pages.shoppingList.title": "Shopping List - {{title}}",
   "pages.shoppingList.loading": "Loading shopping list...",
   "pages.shoppingList.noLongerAvailable": "This shopping list is no longer available.",
   "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
@@ -2516,6 +2514,9 @@
   "components.nutritionFilterPopover.matchMissingOnly": "Only recipes with no value",
   "components.nutritionFilterPopover.apply": "Apply",
   "components.nutritionFilterPopover.reset": "Reset",
+
+  "components.imageViewer.previous": "Previous image",
+  "components.imageViewer.next": "Next image",
 
   "components.scaleRecipe.title": "Scale & Convert Recipe",
   "components.scaleRecipe.click": "Click to multiply the recipe scale",

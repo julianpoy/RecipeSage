@@ -52,9 +52,18 @@
       </div>
     }
 
+    @for (pendingUpload of pendingUploads; track pendingUpload) {
+      <div class="recipe-image">
+        <div class="image-frame">
+          <ion-spinner></ion-spinner>
+        </div>
+      </div>
+    }
+
     @if (
-      images.length < 10 &&
-      (images.length === 0 || capabilitiesService.capabilities.multipleImages)
+      images.length + pendingUploads.length < 10 &&
+      (images.length + pendingUploads.length === 0 ||
+        capabilitiesService.capabilities.multipleImages)
     ) {
       <div class="recipe-image" (click)="filePicker()">
         <div class="image-frame add-image">

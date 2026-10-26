@@ -21,7 +21,13 @@
     </ion-note>
     <div class="preset-options">
       @for (preset of presets; track preset) {
-        <ion-button size="small" mode="ios" (click)="setPresetScale(preset)">
+        <ion-button
+          size="small"
+          mode="ios"
+          [fill]="isPresetSelected(preset) ? 'solid' : 'outline'"
+          [attr.aria-pressed]="isPresetSelected(preset)"
+          (click)="setPresetScale(preset)"
+        >
           {{
             "components.scaleRecipe.presetMultiplier"
               | translate: { value: preset }

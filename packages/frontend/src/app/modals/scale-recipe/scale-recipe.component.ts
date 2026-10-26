@@ -201,6 +201,10 @@ export class ScaleRecipeComponent implements OnInit {
     this.refreshAnchorQtyFromScale();
   }
 
+  isPresetSelected(preset: string) {
+    return this.toNumeric(this.scale) === this.toNumeric(preset);
+  }
+
   onScaleInput() {
     this.refreshServingsFromScale();
     this.refreshAnchorQtyFromScale();

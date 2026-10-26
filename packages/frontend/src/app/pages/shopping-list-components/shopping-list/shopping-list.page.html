@@ -4,12 +4,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>
-      {{
-        "pages.shoppingList.title"
-          | translate: { title: shoppingList()?.title || "" }
-      }}
-    </ion-title>
+    <ion-title>{{ shoppingList()?.title }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">

@@ -6,6 +6,9 @@ import {
   NativeTabBarService,
 } from "../../services/native-tab-bar.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { RouteMap } from "../../services/util.service";
+import { getAppVersion } from "../../utils/getAppVersion";
+import { IS_SELFHOST } from "../../../environments/environment";
 import {
   IonHeader,
   IonToolbar,
@@ -45,6 +48,10 @@ export class MorePage {
 
   navList: NavPage[] = [];
   moreTabBadgeCount = this.nativeTabBarService.moreTabBadgeCount;
+
+  isSelfHost = IS_SELFHOST;
+  appVersion = getAppVersion();
+  aboutDetailsHref = RouteMap.AboutDetailsPage.getPath();
 
   ionViewWillEnter() {
     void this.updateNavList();

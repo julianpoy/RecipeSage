@@ -260,6 +260,7 @@ export class ProfilePage {
 
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
+      cssClass: "imageViewerModal",
       componentProps: {
         imageUrls: this.profile.profileImages.map(
           (profileImage) => profileImage.image.location,

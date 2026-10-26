@@ -22,6 +22,7 @@
   <multi-image-upload
     [images]="images"
     (imageUpdate)="markAsDirty()"
+    (uploadingChange)="imageUploading = $event"
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
@@ -699,12 +700,20 @@
 
     <div class="ion-padding">
       @if (recipe.id) {
-        <ion-button expand="block" (click)="save()" [disabled]="saving">
+        <ion-button
+          expand="block"
+          (click)="save()"
+          [disabled]="saving || imageUploading"
+        >
           {{ "pages.editRecipe.save" | translate }}
         </ion-button>
       }
       @if (!recipe.id) {
-        <ion-button expand="block" (click)="save()" [disabled]="saving">
+        <ion-button
+          expand="block"
+          (click)="save()"
+          [disabled]="saving || imageUploading"
+        >
           {{ "pages.editRecipe.create" | translate }}
         </ion-button>
       }

@@ -1,4 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   NavController,
   ToastController,
@@ -21,6 +22,7 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
+  IonBackButton,
   IonMenuButton,
   IonTitle,
   IonContent,
@@ -49,6 +51,7 @@ import { addIcons } from "ionicons";
     IonToolbar,
     IonButtons,
     IonButton,
+    IonBackButton,
     IonMenuButton,
     IonTitle,
     IonContent,
@@ -64,6 +67,7 @@ import { addIcons } from "ionicons";
 })
 export class MessagesPage {
   navCtrl = inject(NavController);
+  router = inject(Router);
   events = inject(EventService);
   toastCtrl = inject(ToastController);
   modalCtrl = inject(ModalController);
@@ -75,6 +79,9 @@ export class MessagesPage {
 
   isNativeIOS = IS_NATIVE_IOS;
 
+  showBack = false;
+  defaultBackHref: string = RouteMap.PeoplePage.getPath();
+
   loading = true;
 
   threads: MessageThreadDTO[] = [];
@@ -82,6 +89,10 @@ export class MessagesPage {
   constructor() {
     addIcons({ addOutline, chatboxOutline });
     this.messagingService.requestNotifications();
+
+    if (this.router.currentNavigation()?.extras.state?.showBack) {
+      this.showBack = true;
+    }
   }
 
   ionViewWillEnter() {

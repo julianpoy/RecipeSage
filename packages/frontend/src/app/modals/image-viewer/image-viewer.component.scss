@@ -1,36 +1,182 @@
-ion-content {
-  swiper-container {
-    height: 100%;
-  }
+:host {
+  --drag-progress: 0;
+}
 
-  ion-icon {
-    cursor: pointer;
-    z-index: 2; // ion-slides is using z-index :( need this to raise above
-    font-size: 50px;
-    position: absolute;
-    top: 50%;
-    background: rgba(0, 0, 0, 0.75);
-    border-radius: 40px;
-    transform: translateY(-50%);
-  }
-
-  .back {
-    left: 5px;
-  }
-
-  .forward {
-    right: 5px;
+:host(.animate-drag-reset) {
+  .viewer,
+  .backdrop,
+  .controls {
+    transition:
+      transform 200ms ease-out,
+      opacity 200ms ease-out;
   }
 }
 
-.image-container {
+ion-content {
+  --background: transparent;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: calc(1 - var(--drag-progress));
+}
+
+.viewer {
+  position: absolute;
+  inset: 0;
+
+  swiper-container {
+    height: 100%;
+  }
+}
+
+.swiper-zoom-container {
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 
   img {
+    width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+}
+
+.controls {
+  opacity: calc(1 - var(--drag-progress) * 3);
+}
+
+.control-button {
+  position: absolute;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  background: rgba(40, 40, 40, 0.6);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+}
+
+.close {
+  top: calc(var(--ion-safe-area-top, 0px) + 12px);
+  inset-inline-start: calc(var(--rs-safe-area-left, 0px) + 16px);
+}
+
+.previous,
+.next {
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+
+  @media (hover: hover) and (pointer: fine) {
+    display: flex;
+  }
+}
+
+.previous {
+  inset-inline-start: calc(var(--rs-safe-area-left, 0px) + 16px);
+}
+
+.next {
+  inset-inline-end: calc(var(--rs-safe-area-right, 0px) + 16px);
+}
+
+.page-dots {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: calc(var(--ion-safe-area-bottom, 0px) + 16px);
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(40, 40, 40, 0.6);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.page-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: background-color 200ms ease;
+
+  &.active {
+    background: #fff;
+  }
+}
+
+ion-content.ios ion-ripple-effect {
+  display: none;
+}
+
+ion-content.md {
+  .controls::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    inset-inline: 0;
+    height: calc(var(--ion-safe-area-top, 0px) + 96px);
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
+
+  .control-button {
+    overflow: hidden;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .close {
+    top: calc(var(--ion-safe-area-top, 0px) + 8px);
+    inset-inline-start: calc(var(--rs-safe-area-left, 0px) + 4px);
+    width: 48px;
+    height: 48px;
+    background: transparent;
+  }
+
+  .previous,
+  .next {
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .page-dots {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    justify-content: center;
+    padding: 48px 0 calc(var(--ion-safe-area-bottom, 0px) + 24px);
+    border-radius: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .page-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.5);
+
+    &.active {
+      background: #fff;
+    }
   }
 }

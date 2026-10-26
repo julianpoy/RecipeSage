@@ -12,7 +12,7 @@ import {
 import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/angular";
 import {
   RecipeDetailsPreferenceKey,
-  RecipeDetailsSmallScreenLayoutOptions,
+  RecipeDetailsLayoutOptions,
 } from "@recipesage/util/shared";
 import { PreferencesService } from "../../services/preferences.service";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
@@ -51,25 +51,31 @@ export class IngredientsInstructionsLayoutComponent
     this.isWideScreen = event.matches;
   };
 
-  get smallScreenLayout() {
-    return this.preferencesService.preferences[
-      RecipeDetailsPreferenceKey.SmallScreenLayout
-    ];
+  get activeLayout() {
+    const layout =
+      this.preferencesService.preferences[RecipeDetailsPreferenceKey.Layout];
+    if (layout !== RecipeDetailsLayoutOptions.Automatic) return layout;
+
+    return this.isWideScreen
+      ? RecipeDetailsLayoutOptions.SideBySide
+      : RecipeDetailsLayoutOptions.Stacked;
   }
 
   get isTwoColumn() {
     return (
-      this.isWideScreen ||
-      this.smallScreenLayout ===
-        RecipeDetailsSmallScreenLayoutOptions.SideBySide
+      this.activeLayout === RecipeDetailsLayoutOptions.SideBySide ||
+      this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqualWidth
+    );
+  }
+
+  get isEqualWidthTwoColumn() {
+    return (
+      this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqualWidth
     );
   }
 
   get showTabs() {
-    return (
-      !this.isWideScreen &&
-      this.smallScreenLayout === RecipeDetailsSmallScreenLayoutOptions.Tabs
-    );
+    return this.activeLayout === RecipeDetailsLayoutOptions.Tabs;
   }
 
   ngOnInit() {

@@ -255,27 +255,33 @@
           </ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+          <ion-icon name="browsers-outline" slot="start"></ion-icon>
           <ion-select
-            [(ngModel)]="
-              preferences[recipeDetailsPreferenceKeys.SmallScreenLayout]
-            "
+            [(ngModel)]="preferences[recipeDetailsPreferenceKeys.Layout]"
             (ngModelChange)="savePreferences()"
-            label="{{ 'pages.settings.recipeSmallScreenLayout' | translate }}"
+            label="{{ 'pages.settings.recipeLayout' | translate }}"
             labelPlacement="stacked"
             okText="{{ 'generic.ok' | translate }}"
             cancelText="{{ 'generic.cancel' | translate }}"
           >
-            <ion-select-option [value]="smallScreenLayoutOptions.Stacked">
-              {{ "pages.recipeDetails.smallScreenLayout.stacked" | translate }}
+            <ion-select-option [value]="recipeLayoutOptions.Automatic">
+              {{ "pages.recipeDetails.layout.automatic" | translate }}
             </ion-select-option>
-            <ion-select-option [value]="smallScreenLayoutOptions.SideBySide">
+            <ion-select-option [value]="recipeLayoutOptions.Stacked">
+              {{ "pages.recipeDetails.layout.stacked" | translate }}
+            </ion-select-option>
+            <ion-select-option [value]="recipeLayoutOptions.SideBySide">
+              {{ "pages.recipeDetails.layout.sideBySide" | translate }}
+            </ion-select-option>
+            <ion-select-option
+              [value]="recipeLayoutOptions.SideBySideEqualWidth"
+            >
               {{
-                "pages.recipeDetails.smallScreenLayout.sideBySide" | translate
+                "pages.recipeDetails.layout.sideBySideEqualWidth" | translate
               }}
             </ion-select-option>
-            <ion-select-option [value]="smallScreenLayoutOptions.Tabs">
-              {{ "pages.recipeDetails.smallScreenLayout.tabs" | translate }}
+            <ion-select-option [value]="recipeLayoutOptions.Tabs">
+              {{ "pages.recipeDetails.layout.tabs" | translate }}
             </ion-select-option>
           </ion-select>
         </ion-item>

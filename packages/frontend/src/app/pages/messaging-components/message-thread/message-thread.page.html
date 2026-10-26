@@ -4,9 +4,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ "pages.messageThread.title" | translate: { name: otherUserName } }}
-    </ion-title>
+    <ion-title>{{ otherUserName }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button

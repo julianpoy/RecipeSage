@@ -2,3 +2,43 @@
   max-width: var(--page-max-width);
   margin: 0 auto;
 }
+
+.app-info {
+  padding: 16px 16px 24px;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--ion-color-step-600);
+
+  p {
+    margin: 0 0 4px;
+  }
+
+  .app-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  .app-logo {
+    height: 42px;
+    margin-bottom: 8px;
+  }
+
+  .dark-logo {
+    display: none;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+:host-context(.ion-palette-dark) .app-info {
+  .light-logo {
+    display: none;
+  }
+
+  .dark-logo {
+    display: inline;
+  }
+}
