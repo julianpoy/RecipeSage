@@ -1,9 +1,7 @@
 <ion-list no-border>
-  @if (wakeLockCapable || isSmallScreen) {
-    <ion-list-header>
-      {{ "pages.recipeDetailsPopover.options" | translate }}
-    </ion-list-header>
-  }
+  <ion-list-header>
+    {{ "pages.recipeDetailsPopover.options" | translate }}
+  </ion-list-header>
   @if (wakeLockCapable) {
     <ion-item lines="full">
       <ion-icon name="eye-outline" slot="start"></ion-icon>
@@ -17,29 +15,33 @@
       </ion-toggle>
     </ion-item>
   }
-  @if (isSmallScreen) {
-    <ion-item lines="full">
-      <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
-      <ion-select
-        label="{{ 'pages.recipeDetailsPopover.smallScreenLayout' | translate }}"
-        labelPlacement="stacked"
-        [(ngModel)]="preferences[preferenceKeys.SmallScreenLayout]"
-        (ngModelChange)="savePreferences()"
-        okText="{{ 'generic.ok' | translate }}"
-        cancelText="{{ 'generic.cancel' | translate }}"
-      >
-        <ion-select-option [value]="smallScreenLayoutOptions.Stacked">
-          {{ "pages.recipeDetails.smallScreenLayout.stacked" | translate }}
-        </ion-select-option>
-        <ion-select-option [value]="smallScreenLayoutOptions.SideBySide">
-          {{ "pages.recipeDetails.smallScreenLayout.sideBySide" | translate }}
-        </ion-select-option>
-        <ion-select-option [value]="smallScreenLayoutOptions.Tabs">
-          {{ "pages.recipeDetails.smallScreenLayout.tabs" | translate }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-  }
+  <ion-item lines="full">
+    <ion-icon name="browsers-outline" slot="start"></ion-icon>
+    <ion-select
+      label="{{ 'pages.recipeDetailsPopover.layout' | translate }}"
+      labelPlacement="stacked"
+      [(ngModel)]="preferences[preferenceKeys.Layout]"
+      (ngModelChange)="savePreferences()"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
+    >
+      <ion-select-option [value]="layoutOptions.Automatic">
+        {{ "pages.recipeDetails.layout.automatic" | translate }}
+      </ion-select-option>
+      <ion-select-option [value]="layoutOptions.Stacked">
+        {{ "pages.recipeDetails.layout.stacked" | translate }}
+      </ion-select-option>
+      <ion-select-option [value]="layoutOptions.SideBySide">
+        {{ "pages.recipeDetails.layout.sideBySide" | translate }}
+      </ion-select-option>
+      <ion-select-option [value]="layoutOptions.SideBySideEqual">
+        {{ "pages.recipeDetails.layout.sideBySideEqual" | translate }}
+      </ion-select-option>
+      <ion-select-option [value]="layoutOptions.Tabs">
+        {{ "pages.recipeDetails.layout.tabs" | translate }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
 
   <ion-list-header>{{
     "pages.recipeDetailsPopover.actions" | translate

@@ -16,7 +16,7 @@ import {
   OfflineModePromptOptions,
   PreferencesSync,
   RecipeDetailsPreferenceKey,
-  RecipeDetailsSmallScreenLayoutOptions,
+  RecipeDetailsLayoutOptions,
   ShoppingListPreferenceKey,
   ShoppingListSortOptions,
   StartPageOptions,
@@ -36,6 +36,7 @@ const LOCAL_ONLY_PREFERENCE_KEYS: (keyof AppPreferenceTypes)[] = [
   GlobalPreferenceKey.PreferencesSync,
   // We do not want to sync viewtype because it's different per-device based on screen size
   MyRecipesPreferenceKey.ViewType,
+  RecipeDetailsPreferenceKey.Layout,
 ];
 
 @Injectable({
@@ -76,8 +77,7 @@ export class PreferencesService {
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
     [RecipeDetailsPreferenceKey.AutoExpandNutrition]: false,
-    [RecipeDetailsPreferenceKey.SmallScreenLayout]:
-      RecipeDetailsSmallScreenLayoutOptions.Stacked,
+    [RecipeDetailsPreferenceKey.Layout]: RecipeDetailsLayoutOptions.Automatic,
 
     [CookModePreferenceKey.FontSize]: SupportedFontSize.PX20,
 

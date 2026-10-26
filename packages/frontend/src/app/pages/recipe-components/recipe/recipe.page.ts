@@ -1,9 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  inject,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -143,9 +138,6 @@ export class RecipePage {
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
   private titleService = inject(Title);
-
-  @ViewChild(IngredientsInstructionsLayoutComponent)
-  ingredientsInstructionsLayout?: IngredientsInstructionsLayoutComponent;
 
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
@@ -387,8 +379,6 @@ export class RecipePage {
         recipe: this.recipe,
         me: this.me(),
         isLoggedIn: this.isLoggedIn,
-        isSmallScreen:
-          this.ingredientsInstructionsLayout?.isWideScreen === false,
       },
       event,
     });

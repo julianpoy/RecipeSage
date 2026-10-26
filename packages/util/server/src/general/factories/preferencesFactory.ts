@@ -8,7 +8,7 @@ import {
   MyRecipesViewTypeOptions,
   OfflineModePromptOptions,
   PreferencesSync,
-  RecipeDetailsSmallScreenLayoutOptions,
+  RecipeDetailsLayoutOptions,
   ShoppingListSortOptions,
   StartPageOptions,
   SupportedFontSize,
@@ -39,8 +39,7 @@ export function preferencesFactory(): AppPreferenceTypes {
     "myRecipes.includeFriends": MyRecipesIncludeFriendsOptions.No,
     "recipeDetails.enableWakeLock": true,
     "recipeDetails.autoExpandNutrition": false,
-    "recipeDetails.smallScreenLayout":
-      RecipeDetailsSmallScreenLayoutOptions.Stacked,
+    "recipeDetails.layout": RecipeDetailsLayoutOptions.Automatic,
     "cookMode.fontSize": SupportedFontSize.PX20,
     "manageLabels.showCreatedAt": false,
     "measurementConverter.enabledUnits": [

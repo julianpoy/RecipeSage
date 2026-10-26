@@ -12,7 +12,7 @@ import { PreferencesService } from "../../../services/preferences.service";
 import { WakeLockService } from "../../../services/wakelock.service";
 import {
   RecipeDetailsPreferenceKey,
-  RecipeDetailsSmallScreenLayoutOptions,
+  RecipeDetailsLayoutOptions,
 } from "@recipesage/util/shared";
 import {
   IonList,
@@ -25,10 +25,10 @@ import {
   IonSelectOption,
 } from "@ionic/angular";
 import {
+  browsersOutline,
   createOutline,
   eyeOutline,
   flagOutline,
-  phonePortraitOutline,
   pinOutline,
   restaurantOutline,
   shareOutline,
@@ -72,20 +72,19 @@ export class DiscoverRecipePopoverPage {
 
   @Input({ required: true }) recipeId!: string;
   @Input() isAuthor = false;
-  @Input() isSmallScreen = false;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;
-  smallScreenLayoutOptions = RecipeDetailsSmallScreenLayoutOptions;
+  layoutOptions = RecipeDetailsLayoutOptions;
 
   wakeLockCapable: boolean;
 
   constructor() {
     addIcons({
+      browsersOutline,
       createOutline,
       eyeOutline,
       flagOutline,
-      phonePortraitOutline,
       pinOutline,
       restaurantOutline,
       shareOutline,

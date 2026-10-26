@@ -1,9 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  inject,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import {
@@ -135,9 +130,6 @@ export class DiscoverRecipePage {
   cookingToolbarService = inject(CookingToolbarService);
   utilService = inject(UtilService);
 
-  @ViewChild(IngredientsInstructionsLayoutComponent)
-  ingredientsInstructionsLayout?: IngredientsInstructionsLayoutComponent;
-
   defaultBackHref = RouteMap.DiscoverPage.getPath();
   categoryLabelKeys = DISCOVER_CATEGORY_LABEL_KEYS;
 
@@ -183,8 +175,6 @@ export class DiscoverRecipePage {
       componentProps: {
         recipeId: this.recipe.id,
         isAuthor: this.isAuthor(),
-        isSmallScreen:
-          this.ingredientsInstructionsLayout?.isWideScreen === false,
       },
       event,
     });
