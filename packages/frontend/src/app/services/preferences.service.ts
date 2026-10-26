@@ -31,6 +31,13 @@ import { EventName, EventService } from "./event.service";
 
 const PREFERENCE_LOCALSTORAGE_KEY = "preferences";
 
+const LOCAL_ONLY_PREFERENCE_KEYS: (keyof AppPreferenceTypes)[] = [
+  // We do not want to sync preferencesSync itself since that would cause issues with the user setting a local value to disable this feature
+  GlobalPreferenceKey.PreferencesSync,
+  // We do not want to sync viewtype because it's different per-device based on screen size
+  MyRecipesPreferenceKey.ViewType,
+];
+
 @Injectable({
   providedIn: "root",
 })
@@ -123,7 +130,10 @@ export class PreferencesService {
     const preferenceValues = this.getSerializedPreferenceValues();
     const changedPreferences = Object.fromEntries(
       Object.entries(this.preferences).filter(
-        ([key]) => preferenceValues[key] !== this.syncedPreferenceValues[key],
+        ([key]) =>
+          !LOCAL_ONLY_PREFERENCE_KEYS.some(
+            (localOnlyKey) => localOnlyKey === key,
+          ) && preferenceValues[key] !== this.syncedPreferenceValues[key],
       ),
     );
     if (!Object.keys(changedPreferences).length) return;
@@ -180,10 +190,9 @@ export class PreferencesService {
       ...preferences,
     } as Partial<AppPreferenceTypes>;
 
-    // We do not want to sync preferencesSync itself since that would cause issues with the user setting a local value to disable this feature
-    delete mutatedPreferences["global.preferencesSync"];
-    // We do not want to sync viewtype because it's different per-device based on screen size
-    delete mutatedPreferences["myRecipes.viewType"];
+    for (const key of LOCAL_ONLY_PREFERENCE_KEYS) {
+      delete mutatedPreferences[key];
+    }
 
     return mutatedPreferences;
   }
