@@ -55,7 +55,7 @@ export class MultiImageUploadComponent {
   @Output() imageUpdate = new EventEmitter<ImageSummary[]>();
   @Output() uploadingChange = new EventEmitter<boolean>();
 
-  pendingUploads: File[] = [];
+  pendingUploads: unknown[] = [];
 
   _images: ImageSummary[] = [];
   @Input()
@@ -184,6 +184,20 @@ export class MultiImageUploadComponent {
     loading.dismiss();
 
     this.imageUpdate.emit(this.images);
+  }
+
+  async trackUpload<T>(upload: Promise<T>): Promise<T> {
+    this.pendingUploads = [...this.pendingUploads, upload];
+    this.uploadingChange.emit(true);
+
+    try {
+      return await upload;
+    } finally {
+      this.pendingUploads = this.pendingUploads.filter(
+        (pendingUpload) => pendingUpload !== upload,
+      );
+      this.uploadingChange.emit(this.pendingUploads.length > 0);
+    }
   }
 
   reorderImage(image: ImageSummary, direction: number) {
