@@ -273,8 +273,12 @@
             <ion-select-option [value]="recipeLayoutOptions.SideBySide">
               {{ "pages.recipeDetails.layout.sideBySide" | translate }}
             </ion-select-option>
-            <ion-select-option [value]="recipeLayoutOptions.SideBySideEqual">
-              {{ "pages.recipeDetails.layout.sideBySideEqual" | translate }}
+            <ion-select-option
+              [value]="recipeLayoutOptions.SideBySideEqualWidth"
+            >
+              {{
+                "pages.recipeDetails.layout.sideBySideEqualWidth" | translate
+              }}
             </ion-select-option>
             <ion-select-option [value]="recipeLayoutOptions.Tabs">
               {{ "pages.recipeDetails.layout.tabs" | translate }}

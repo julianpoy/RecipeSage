@@ -300,7 +300,7 @@
   "pages.recipeDetails.layout.automatic": "Automatic",
   "pages.recipeDetails.layout.stacked": "Stacked",
   "pages.recipeDetails.layout.sideBySide": "Side by Side",
-  "pages.recipeDetails.layout.sideBySideEqual": "Side by Side (Equal Width)",
+  "pages.recipeDetails.layout.sideBySideEqualWidth": "Side by Side (Equal Width)",
   "pages.recipeDetails.layout.tabs": "Tabs",
   "pages.recipeDetails.noInstructions": "No Instructions",
   "pages.recipeDetails.nutrition": "Nutrition (per serving)",

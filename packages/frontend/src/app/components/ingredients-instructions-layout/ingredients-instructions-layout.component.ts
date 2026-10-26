@@ -64,12 +64,14 @@ export class IngredientsInstructionsLayoutComponent
   get isTwoColumn() {
     return (
       this.activeLayout === RecipeDetailsLayoutOptions.SideBySide ||
-      this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqual
+      this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqualWidth
     );
   }
 
-  get isEqualTwoColumn() {
-    return this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqual;
+  get isEqualWidthTwoColumn() {
+    return (
+      this.activeLayout === RecipeDetailsLayoutOptions.SideBySideEqualWidth
+    );
   }
 
   get showTabs() {

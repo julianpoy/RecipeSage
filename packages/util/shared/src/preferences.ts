@@ -99,7 +99,7 @@ export enum RecipeDetailsLayoutOptions {
   Automatic = "automatic",
   Stacked = "stacked",
   SideBySide = "sideBySide",
-  SideBySideEqual = "sideBySideEqual",
+  SideBySideEqualWidth = "sideBySideEqualWidth",
   Tabs = "tabs",
 }
 
