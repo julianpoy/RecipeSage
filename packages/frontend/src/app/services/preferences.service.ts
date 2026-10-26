@@ -103,7 +103,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
   };
 
-  private syncedPreferenceValues: Record<string, string> = {};
+  private syncedPreferenceStrings: Record<string, string> = {};
+  private remoteSaveQueue: Promise<void> = Promise.resolve();
 
   constructor() {
     this.load();
@@ -127,31 +128,42 @@ export class PreferencesService {
     // Do not sync remote preferences if not logged in
     if (!localStorage.getItem("token")) return;
 
-    const preferenceValues = this.getSerializedPreferenceValues();
+    this.remoteSaveQueue = this.remoteSaveQueue
+      .then(() => this.sendChangedPreferences())
+      .catch((e) => console.error(e));
+  }
+
+  saveAllToServer() {
+    this.syncedPreferenceStrings = {};
+    this.save();
+  }
+
+  private async sendChangedPreferences() {
+    const preferenceStrings = this.getPreferenceStrings();
     const changedPreferences = Object.fromEntries(
       Object.entries(this.preferences).filter(
         ([key]) =>
           !LOCAL_ONLY_PREFERENCE_KEYS.some(
             (localOnlyKey) => localOnlyKey === key,
-          ) && preferenceValues[key] !== this.syncedPreferenceValues[key],
+          ) && preferenceStrings[key] !== this.syncedPreferenceStrings[key],
       ),
     );
     if (!Object.keys(changedPreferences).length) return;
 
-    this.serverActionsService.users
-      .updatePreferences(changedPreferences, {
+    const response = await this.serverActionsService.users.updatePreferences(
+      changedPreferences,
+      {
         "*": () => {},
-      })
-      .then((response) => {
-        if (!response) return;
+      },
+    );
+    if (!response) return;
 
-        for (const key of Object.keys(changedPreferences)) {
-          this.syncedPreferenceValues[key] = preferenceValues[key];
-        }
-      });
+    for (const key of Object.keys(changedPreferences)) {
+      this.syncedPreferenceStrings[key] = preferenceStrings[key];
+    }
   }
 
-  private getSerializedPreferenceValues() {
+  private getPreferenceStrings() {
     return Object.fromEntries(
       Object.entries(this.preferences).map(([key, value]) => [
         key,
@@ -209,7 +221,7 @@ export class PreferencesService {
       console.error(e);
     }
 
-    this.syncedPreferenceValues = this.getSerializedPreferenceValues();
+    this.syncedPreferenceStrings = this.getPreferenceStrings();
 
     if (
       this.preferences[GlobalPreferenceKey.PreferencesSync] !==
@@ -233,7 +245,7 @@ export class PreferencesService {
           const previousTheme = this.preferences["global.theme"];
           const previousSplitPane = this.preferences["global.enableSplitPane"];
           Object.assign(this.preferences, filteredPreferences);
-          this.syncedPreferenceValues = this.getSerializedPreferenceValues();
+          this.syncedPreferenceStrings = this.getPreferenceStrings();
 
           this.save(true);
 

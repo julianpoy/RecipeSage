@@ -359,7 +359,7 @@ export class SettingsPage implements OnDestroy {
           text: local,
           handler: () => {
             this.preferences[GlobalPreferenceKey.PreferencesSync] = value;
-            this.preferencesService.save();
+            this.preferencesService.saveAllToServer();
           },
         },
         {
