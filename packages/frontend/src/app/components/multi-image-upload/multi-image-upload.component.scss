@@ -5,7 +5,6 @@
 }
 
 .recipe-image {
-  cursor: pointer;
   text-align: center;
 
   &:first-child {
@@ -32,6 +31,7 @@
     background-color: var(--rs-subtle-surface-color);
 
     &.add-image {
+      cursor: pointer;
       flex-direction: column;
       gap: 8px;
       color: var(--ion-color-primary);
@@ -60,6 +60,7 @@
       font-size: 1.25rem;
       background: var(--ion-background-color);
       border-radius: 100%;
+      cursor: pointer;
     }
 
     .contributor-hint {
@@ -100,6 +101,7 @@
     ion-icon {
       font-size: 1.75rem;
       margin: 0 8px;
+      cursor: pointer;
     }
 
     .hide-reorder {
