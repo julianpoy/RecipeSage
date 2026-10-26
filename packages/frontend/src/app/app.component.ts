@@ -54,6 +54,7 @@ import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 import { getRoutePattern } from "./utils/getRoutePattern";
 import { getElectronAPI } from "./utils/electron";
 import { showLocalNotification } from "./utils/showLocalNotification";
+import { getAppVersion } from "./utils/getAppVersion";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
@@ -175,7 +176,7 @@ export class AppComponent {
     return IS_NATIVE_IOS && !!this.isLoggedIn;
   }
 
-  version: number = (window as any).version;
+  version = getAppVersion();
 
   unsupportedBrowser: boolean =
     !!window.navigator.userAgent.match(/(MSIE|Trident)/);
@@ -520,7 +521,7 @@ export class AppComponent {
       this.inCookMode = currentPath.endsWith("/cook");
       this.inConversation =
         currentPath === RouteMap.AssistantPage.getPath() ||
-        currentPath.startsWith(`${RouteMap.MessagesPage.getPath()}/`);
+        currentPath.startsWith(RouteMap.MessageThreadPage.getPath(""));
 
       this.updateNativeTabBar();
 
