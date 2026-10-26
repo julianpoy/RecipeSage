@@ -17,6 +17,7 @@
   <multi-image-upload
     [images]="images"
     (imageUpdate)="markAsDirty()"
+    (uploadingChange)="imageUploading = $event"
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">

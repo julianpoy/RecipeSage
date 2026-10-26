@@ -75,6 +75,7 @@
               updatedProfileFields.profileImages = myProfile.profileImages;
               markAsDirty()
             "
+            (uploadingChange)="imageUploading = $event"
           ></multi-image-upload>
           <div
             class="profile-details"
@@ -308,7 +309,7 @@
     <div class="page-wrapper">
       <ion-button
         expand="block"
-        [disabled]="!isUpdatePending() || !inputIsValid()"
+        [disabled]="!isUpdatePending() || !inputIsValid() || imageUploading"
         (click)="save()"
       >
         {{ "pages.myProfile.save" | translate }}<br />

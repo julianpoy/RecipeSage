@@ -137,6 +137,7 @@ export class MyProfilePage {
 
   checkingHandleAvailable = false;
   isHandleAvailable = true;
+  imageUploading = false;
   handleInputTimeout?: NodeJS.Timeout;
 
   updatedProfileFields: Partial<ProfileForm> = {};
