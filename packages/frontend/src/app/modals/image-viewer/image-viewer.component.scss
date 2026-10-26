@@ -119,3 +119,64 @@ ion-content {
     background: #fff;
   }
 }
+
+ion-content.ios ion-ripple-effect {
+  display: none;
+}
+
+ion-content.md {
+  .controls::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    inset-inline: 0;
+    height: calc(var(--ion-safe-area-top, 0px) + 96px);
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
+
+  .control-button {
+    overflow: hidden;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .close {
+    top: calc(var(--ion-safe-area-top, 0px) + 8px);
+    inset-inline-start: calc(var(--rs-safe-area-left, 0px) + 4px);
+    width: 48px;
+    height: 48px;
+    background: transparent;
+  }
+
+  .previous,
+  .next {
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .page-dots {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    justify-content: center;
+    padding: 48px 0 calc(var(--ion-safe-area-bottom, 0px) + 24px);
+    border-radius: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .page-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.5);
+
+    &.active {
+      background: #fff;
+    }
+  }
+}

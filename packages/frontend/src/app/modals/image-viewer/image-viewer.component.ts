@@ -18,7 +18,7 @@ import {
 } from "@ionic/angular";
 import { Swiper } from "swiper/types";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonIcon, IonContent } from "@ionic/angular";
+import { IonIcon, IonContent, IonRippleEffect } from "@ionic/angular";
 import { chevronBack, chevronForward, close } from "ionicons/icons";
 import { addIcons } from "ionicons";
 
@@ -31,7 +31,7 @@ const DRAG_PROGRESS_DISTANCE = 400;
   selector: "image-viewer",
   templateUrl: "image-viewer.component.html",
   styleUrls: ["./image-viewer.component.scss"],
-  imports: [...SHARED_UI_IMPORTS, IonIcon, IonContent],
+  imports: [...SHARED_UI_IMPORTS, IonIcon, IonContent, IonRippleEffect],
   changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

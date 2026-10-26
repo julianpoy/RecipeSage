@@ -21,32 +21,35 @@
   <div class="controls">
     <button
       type="button"
-      class="control-button close"
+      class="control-button ion-activatable close"
       [attr.aria-label]="'generic.close' | translate"
       (click)="dismiss()"
     >
       <ion-icon name="close"></ion-icon>
+      <ion-ripple-effect></ion-ripple-effect>
     </button>
 
     @if (imageUrls.length > 1) {
       @if (slideNum() > 0) {
         <button
           type="button"
-          class="control-button previous"
+          class="control-button ion-activatable previous"
           [attr.aria-label]="'components.imageViewer.previous' | translate"
           (click)="slidePrev()"
         >
           <ion-icon name="chevron-back"></ion-icon>
+          <ion-ripple-effect></ion-ripple-effect>
         </button>
       }
       @if (slideNum() < imageUrls.length - 1) {
         <button
           type="button"
-          class="control-button next"
+          class="control-button ion-activatable next"
           [attr.aria-label]="'components.imageViewer.next' | translate"
           (click)="slideNext()"
         >
           <ion-icon name="chevron-forward"></ion-icon>
+          <ion-ripple-effect></ion-ripple-effect>
         </button>
       }
 
