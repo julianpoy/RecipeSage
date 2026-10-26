@@ -3,15 +3,12 @@
 
   <div class="labels">
     @for (userId of selectedCollaboratorIds; track userId) {
-      <button class="label">
-        <ion-icon
-          class="delete-label"
-          (click)="removeCollaborator(userId)"
-          name="trash-outline"
-          slot="start"
-        ></ion-icon>
-        {{ userProfilesById.get(userId)?.name || "--" }}
-      </button>
+      <ion-chip (click)="removeCollaborator(userId)">
+        <ion-label>
+          {{ userProfilesById.get(userId)?.name || "--" }}
+        </ion-label>
+        <ion-icon name="trash-outline" color="danger"></ion-icon>
+      </ion-chip>
     }
   </div>
 
