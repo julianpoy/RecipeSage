@@ -199,7 +199,7 @@
     "@nx/vitest": "24.0.0",
     "@nx/web": "24.0.0",
     "@reforged/maker-appimage": "^6.0.0",
-    "@sentry/cli": "3.6.2",
+    "@sentry/cli": "3.8.2",
     "@sentry/esbuild-plugin": "^11.9.0",
     "@swc-node/register": "~1.12.1",
     "@swc/core": "1.16.20",
