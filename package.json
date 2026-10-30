@@ -202,7 +202,7 @@
     "@sentry/cli": "3.6.2",
     "@sentry/esbuild-plugin": "^11.9.0",
     "@swc-node/register": "~1.12.1",
-    "@swc/core": "1.16.18",
+    "@swc/core": "1.16.20",
     "@swc/helpers": "0.5.23",
     "@types/body-parser": "^1.19.6",
     "@types/chrome": "^0.2.0",
