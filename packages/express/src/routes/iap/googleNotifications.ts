@@ -183,7 +183,7 @@ const processGoogleNotification = async (
 
   if (subscription.acknowledgementState === "ACKNOWLEDGEMENT_STATE_PENDING") {
     try {
-      await acknowledgeGoogleSubscription(purchaseToken);
+      await acknowledgeGoogleSubscription(purchaseToken, subscription);
     } catch (err) {
       Sentry.captureException(err);
       throw new InternalServerError("Could not acknowledge subscription");
