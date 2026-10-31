@@ -1,6 +1,6 @@
 import { ocrFormatRecipeModelSchema } from "../ml/chatFunctionsVercel";
 import { StandardizedRecipeImportEntry } from "../db";
-import { generateText, Output } from "ai";
+import { generateText, Output, type FilePart, type TextPart } from "ai";
 import { aiProvider } from "./vercel";
 import { AI_REQUEST_TIMEOUT_MS } from "./AI_REQUEST_TIMEOUT_MS";
 import { config } from "../general/config";
@@ -12,12 +12,20 @@ export enum VisionToRecipeInputType {
   Document,
 }
 
+const RECIPE_EXTRACTION_RULES =
+  " Put each ingredient with its amount in the ingredients, one per line. Put each preparation step in the instructions, in order. Some recipes write steps next to or between the ingredients they apply to. Those steps belong in the instructions, not the ingredients. Leave out marks and text that are not part of the recipe, such as page numbers, labels, or website navigation. If the images do not contain a recipe, leave all fields blank.";
+
 const prompts = {
   [VisionToRecipeInputType.Photo]:
-    "I took this photo of a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions.",
+    "I took this photo of a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions." +
+    RECIPE_EXTRACTION_RULES,
   [VisionToRecipeInputType.Document]:
-    "I scanned a document containing a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions.",
+    "I scanned a document containing a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions." +
+    RECIPE_EXTRACTION_RULES,
 } satisfies Record<VisionToRecipeInputType, string>;
+
+const OCR_TEXT_PROMPT =
+  "An OCR tool read this text from the same images. Use it to check the spelling of words that are hard to read in the images. The OCR text can contain errors and does not keep the layout, so use the images for the layout and the order of the recipe. Here's the OCR text:\n\n";
 
 /**
  * Converts an image to a recipe using function calling against GPT4O.
@@ -25,7 +33,12 @@ const prompts = {
 export const visionToRecipe = async (
   imageB64: (Uint8Array | ArrayBuffer | Buffer)[],
   inputType: VisionToRecipeInputType,
+  ocrText?: string,
 ) => {
+  const ocrTextParts: TextPart[] = ocrText
+    ? [{ type: "text", text: OCR_TEXT_PROMPT + ocrText }]
+    : [];
+
   const llmResponse = await withLLMRetryOptional(
     "vision_to_recipe",
     config.ai.model.vision,
@@ -44,13 +57,12 @@ export const visionToRecipe = async (
                 type: "text",
                 text: prompts[inputType],
               },
-              ...imageB64.map(
-                (el) =>
-                  ({
-                    type: "image",
-                    image: el,
-                  }) as const,
-              ),
+              ...imageB64.map((el): FilePart => ({
+                type: "file",
+                data: el,
+                mediaType: "image/jpeg",
+              })),
+              ...ocrTextParts,
             ],
           },
         ],
@@ -109,6 +121,7 @@ export const visionToRecipe = async (
         .split("\n")
         .map(markdownHeadersToRS)
         .join("\n"),
+      nutritionInfo: llmResponse.nutritionInfo || undefined,
     },
     labels: [],
     images: [],
