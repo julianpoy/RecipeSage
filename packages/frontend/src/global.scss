@@ -257,6 +257,10 @@ ion-content:not(:where(ion-menu *, ion-popover *)) {
   );
 }
 
+.ion-page:not(:has(ion-footer)) ion-content.md {
+  --internal-content-safe-area-padding-bottom: var(--ion-safe-area-bottom, 0px);
+}
+
 ion-app.ios-theme-vertical-bars {
   --rs-cooking-toolbar-bottom-space: max(
     0px,

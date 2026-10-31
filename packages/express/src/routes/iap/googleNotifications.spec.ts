@@ -157,7 +157,11 @@ describe("POST /iap/google/notifications", () => {
       undefined,
       expect.anything(),
     );
-    expect(acknowledgeGoogleSubscriptionMock).toHaveBeenCalledWith("token-1");
+    expect(acknowledgeGoogleSubscriptionMock).toHaveBeenCalledWith("token-1", {
+      acknowledgementState: "ACKNOWLEDGEMENT_STATE_PENDING",
+      subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+      lineItems: [{ productId: "premium-monthly", expiryTime: "2100-01-01" }],
+    });
     expect(storeNotificationEventCreateMock).toHaveBeenCalledWith({
       data: {
         platform: "GOOGLE",

@@ -83,6 +83,7 @@ export async function textfilesImportJobHandler(
         const recipe = await textToRecipe(
           recipeText,
           TextToRecipeInputType.Document,
+          getDocumentTitleFromFileName(documentPath),
         );
         if (recipe) {
           entry = {

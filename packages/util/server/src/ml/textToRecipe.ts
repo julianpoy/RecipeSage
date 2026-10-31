@@ -44,7 +44,7 @@ const prompts = {
   [TextToRecipeInputType.OCR]:
     "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Here's the OCR text:\n\n",
   [TextToRecipeInputType.Document]:
-    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Please include all recipe detail and do not summarize. Here's the document text:\n\n",
+    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present. Please include all recipe detail and do not summarize. Separate each ingredient and each instruction step with a newline character. Here's the document text:\n\n",
   [TextToRecipeInputType.Text]:
     "I have copied some recipe text from the internet. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Do not add or invent any information that is not present in the text. Here's the copied text:\n\n",
   [TextToRecipeInputType.Webpage]:
@@ -63,6 +63,7 @@ export const OCR_MAX_VALID_TEXT = 20000;
 export const textToRecipe = async (
   text: string,
   inputType: TextToRecipeInputType,
+  fallbackTitle?: string,
 ) => {
   metrics.convertTextToRecipe.inc();
 
@@ -111,7 +112,7 @@ export const textToRecipe = async (
 
   const entry: StandardizedRecipeImportEntry = {
     recipe: {
-      title: llmResponse.title || "Unnamed",
+      title: llmResponse.title?.trim() || fallbackTitle || "Unnamed",
       description: llmResponse.description || "",
       folder: "main",
       source: "",

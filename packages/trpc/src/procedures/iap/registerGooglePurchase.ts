@@ -1,6 +1,7 @@
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import * as Sentry from "@sentry/node";
 import { prisma } from "@recipesage/prisma";
 import {
   acknowledgeGoogleSubscription,
@@ -84,8 +85,9 @@ export const registerGooglePurchase = authenticatedProcedure
 
     if (subscription.acknowledgementState === "ACKNOWLEDGEMENT_STATE_PENDING") {
       try {
-        await acknowledgeGoogleSubscription(input.purchaseToken);
-      } catch {
+        await acknowledgeGoogleSubscription(input.purchaseToken, subscription);
+      } catch (err) {
+        Sentry.captureException(err);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Could not acknowledge the purchase",
