@@ -3,6 +3,7 @@ import { metrics } from "../general";
 import { extractTextFromPDF } from "../general/extractTextFromPDF";
 import { pdfToImage } from "../general/pdfToImage";
 import { ocrImagesToRecipe } from "./ocrImagesToRecipe";
+import { VisionToRecipeInputType } from "./visionToRecipe";
 import {
   OCR_MIN_VALID_TEXT,
   TextToRecipeInputType,
@@ -32,7 +33,7 @@ export const pdfToRecipe = async (pdf: Buffer | string, maxPages = 5) => {
         // Do nothing
       }
     }
-    return ocrImagesToRecipe(images);
+    return ocrImagesToRecipe(images, VisionToRecipeInputType.Document);
   }
 
   const recipe = await textToRecipe(text, TextToRecipeInputType.Document);
