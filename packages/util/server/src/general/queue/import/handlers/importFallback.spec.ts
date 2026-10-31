@@ -139,6 +139,24 @@ describe("textfiles import fallback", () => {
     expect(findByTitle("Structured").labels).not.toContain(UNFORMATTED);
   });
 
+  it("passes the file name to the LLM step as the fallback title", async () => {
+    fixtures = {
+      "Grandma Pancakes.txt":
+        "Mix the flour and the sugar together thoroughly.",
+    };
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "Grandma Pancakes" },
+      labels: [],
+      images: [],
+    });
+
+    await textfilesImportJobHandler(job, queueItem);
+
+    expect(textToRecipe.mock.calls[0][2]).toBe("Grandma Pancakes");
+    expect(finishArgs().partialCount).toBe(0);
+  });
+
   it("strips a byte order mark and surrounding whitespace before reaching the LLM", async () => {
     fixtures = {
       "Bommed.txt": "\uFEFF  Mix the flour and the sugar together.  \n",

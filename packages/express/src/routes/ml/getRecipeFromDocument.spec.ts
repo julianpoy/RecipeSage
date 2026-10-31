@@ -91,6 +91,7 @@ describe("POST /ml/getRecipeFromDocument", () => {
     expect(documentToRecipeMock).toHaveBeenCalledOnce();
     const filePath = documentToRecipeMock.mock.calls[0][0];
     expect(filePath).toMatch(/\.docx$/);
+    expect(documentToRecipeMock.mock.calls[0][1]).toBe("recipe.docx");
   });
 
   it("returns 400 when the file is missing", async () => {

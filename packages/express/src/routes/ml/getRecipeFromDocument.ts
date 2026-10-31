@@ -86,7 +86,7 @@ export const getRecipeFromDocumentHandler = defineHandler(
 
     let recognizedRecipe;
     try {
-      recognizedRecipe = await documentToRecipe(file.path);
+      recognizedRecipe = await documentToRecipe(file.path, file.originalname);
     } catch (e) {
       if (e instanceof ExtractTextFromDocumentError) {
         throw new BadRequestError("Failed to extract text from document");

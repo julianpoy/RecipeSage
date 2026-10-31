@@ -39,7 +39,7 @@ describe("documentToRecipe", () => {
     const { documentToRecipe } = await import("./documentToRecipe");
     const { TextToRecipeInputType } = await import("./textToRecipe");
 
-    const result = await documentToRecipe("/tmp/recipe.docx");
+    const result = await documentToRecipe("/tmp/recipe.docx", "Cookies.docx");
 
     expect(extractTextFromDocumentMock).toHaveBeenCalledWith(
       "/tmp/recipe.docx",
@@ -47,6 +47,7 @@ describe("documentToRecipe", () => {
     expect(textToRecipeMock).toHaveBeenCalledWith(
       "Cookies\n\nFlour, sugar",
       TextToRecipeInputType.Document,
+      "Cookies",
     );
     expect(result).toBe(recipe);
   });
@@ -56,7 +57,7 @@ describe("documentToRecipe", () => {
 
     const { documentToRecipe } = await import("./documentToRecipe");
 
-    await expect(documentToRecipe("/tmp/bad.docx")).rejects.toThrow(
+    await expect(documentToRecipe("/tmp/bad.docx", "bad.docx")).rejects.toThrow(
       "pandoc failed",
     );
     expect(textToRecipeMock).not.toHaveBeenCalled();
@@ -68,7 +69,7 @@ describe("documentToRecipe", () => {
 
     const { documentToRecipe } = await import("./documentToRecipe");
 
-    const result = await documentToRecipe("/tmp/short.md");
+    const result = await documentToRecipe("/tmp/short.md", "short.md");
     expect(result).toBeUndefined();
   });
 
@@ -97,12 +98,13 @@ describe("documentToRecipe", () => {
       const { documentToRecipe } = await import("./documentToRecipe");
       const { TextToRecipeInputType } = await import("./textToRecipe");
 
-      const result = await documentToRecipe(path);
+      const result = await documentToRecipe(path, "Pancakes.txt");
 
       expect(extractTextFromDocumentMock).not.toHaveBeenCalled();
       expect(textToRecipeMock).toHaveBeenCalledWith(
         "Pancakes\n\nFlour, milk\n\nMix and cook.\n",
         TextToRecipeInputType.Document,
+        "Pancakes",
       );
       expect(result).toBe(recipe);
     });

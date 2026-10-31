@@ -82,6 +82,26 @@ describe("textToRecipe", () => {
     resultSpy.mockRestore();
   });
 
+  it("uses the fallback title when the model finds no title", async () => {
+    generateTextMock.mockResolvedValue({
+      output: { title: "  ", ingredients: "2 eggs", instructions: "Mix" },
+      totalUsage: { totalTokens: 10 },
+    });
+
+    const withFallback = await textToRecipe(
+      SAMPLE_TEXT,
+      TextToRecipeInputType.Document,
+      "Grandma Pancakes",
+    );
+    const withoutFallback = await textToRecipe(
+      SAMPLE_TEXT,
+      TextToRecipeInputType.Document,
+    );
+
+    expect(withFallback?.recipe.title).toBe("Grandma Pancakes");
+    expect(withoutFallback?.recipe.title).toBe("Unnamed");
+  });
+
   it("propagates non-retryable errors", async () => {
     generateTextMock.mockRejectedValue(new Error("boom"));
 
