@@ -272,6 +272,46 @@ ion-app.ios-theme-vertical-bars.ios-theme-vertical-bars-left {
   --ios-theme-vertical-bars-safe-area-right: var(--rs-safe-area-right);
 }
 
+@mixin vertical-bars-centered-modal {
+  padding-left: var(--rs-safe-area-left);
+  padding-right: var(--rs-safe-area-right);
+
+  > * {
+    --rs-safe-area-left: 0px;
+    --rs-safe-area-right: 0px;
+    --ion-safe-area-left: 0px;
+    --ion-safe-area-right: 0px;
+  }
+}
+
+ion-app.ios-theme-vertical-bars {
+  ion-modal:is(.scaleRecipeModal, .alert-modal) {
+    @include vertical-bars-centered-modal;
+  }
+
+  @media only screen and (min-width: 768px) and (min-height: 600px) {
+    ion-modal {
+      @include vertical-bars-centered-modal;
+    }
+  }
+
+  ion-modal ion-footer {
+    padding-left: var(--rs-safe-area-left);
+    padding-right: var(--rs-safe-area-right);
+
+    &.ion-padding {
+      padding-left: calc(var(--ion-padding, 16px) + var(--rs-safe-area-left));
+      padding-right: calc(var(--ion-padding, 16px) + var(--rs-safe-area-right));
+    }
+  }
+
+  ion-toast {
+    left: var(--rs-safe-area-left);
+    right: var(--rs-safe-area-right);
+    width: auto;
+  }
+}
+
 ion-fab[vertical="bottom"] {
   margin-bottom: var(--ion-safe-area-bottom, 0);
 }
