@@ -110,6 +110,7 @@ export class HttpService {
             : undefined,
         },
         onUploadProgress: opts.listeners?.onUploadProgress,
+        timeout: 0,
       },
       path: opts.path,
       method: opts.method,
