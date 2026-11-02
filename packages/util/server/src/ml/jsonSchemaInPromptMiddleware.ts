@@ -8,7 +8,7 @@ export const jsonSchemaInPromptMiddleware: LanguageModelMiddleware = {
       return params;
     }
 
-    const instruction = `Respond with JSON that matches this JSON schema:\n${JSON.stringify(responseFormat.schema)}`;
+    const jsonSchemaPromptText = `Respond with JSON that matches this JSON schema:\n${JSON.stringify(responseFormat.schema)}`;
 
     const systemMessageIndex = prompt.findIndex(
       (message) => message.role === "system",
@@ -17,7 +17,7 @@ export const jsonSchemaInPromptMiddleware: LanguageModelMiddleware = {
     if (systemMessageIndex === -1) {
       return {
         ...params,
-        prompt: [{ role: "system", content: instruction }, ...prompt],
+        prompt: [{ role: "system", content: jsonSchemaPromptText }, ...prompt],
       };
     }
 
@@ -25,7 +25,10 @@ export const jsonSchemaInPromptMiddleware: LanguageModelMiddleware = {
       ...params,
       prompt: prompt.map((message, index) =>
         index === systemMessageIndex && message.role === "system"
-          ? { ...message, content: `${message.content}\n\n${instruction}` }
+          ? {
+              ...message,
+              content: `${message.content}\n\n${jsonSchemaPromptText}`,
+            }
           : message,
       ),
     };

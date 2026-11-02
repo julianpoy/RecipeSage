@@ -21,6 +21,11 @@ const reasoningMiddleware = (
   }),
 });
 
+const standardMiddleware = (disableReasoning: boolean | undefined) => [
+  reasoningMiddleware(disableReasoning),
+  jsonSchemaInPromptMiddleware,
+];
+
 export const aiProvider: (
   modelId: string,
   options?: {
@@ -53,10 +58,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: [
-            reasoningMiddleware(options?.disableReasoning),
-            jsonSchemaInPromptMiddleware,
-          ],
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "google": {
@@ -64,10 +66,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: [
-            reasoningMiddleware(options?.disableReasoning),
-            jsonSchemaInPromptMiddleware,
-          ],
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "openai": {
@@ -75,10 +74,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: [
-            reasoningMiddleware(options?.disableReasoning),
-            jsonSchemaInPromptMiddleware,
-          ],
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "anthropic": {
@@ -86,10 +82,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: [
-            reasoningMiddleware(options?.disableReasoning),
-            jsonSchemaInPromptMiddleware,
-          ],
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     default: {

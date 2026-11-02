@@ -47,8 +47,20 @@ export async function withLLMRetry<T>(
         retryTemperature(attempt),
         resultRecorder.onStepEnd,
       );
-      resultRecorder.record(isEmpty?.(result) ? "empty" : "ok");
-      return result;
+      if (!isEmpty || !isEmpty(result)) {
+        resultRecorder.record("ok");
+        return result;
+      }
+
+      attempt++;
+      resultRecorder.record("empty");
+
+      if (attempt >= MAX_ATTEMPTS) {
+        metrics.llmRetryExhausted.inc({ category, reason: "empty" });
+        return result;
+      }
+
+      metrics.llmRetryAttempt.inc({ category, reason: "empty" });
     } catch (err) {
       attempt++;
       const reason = retryReason(err);
@@ -61,7 +73,8 @@ export async function withLLMRetry<T>(
       }
 
       metrics.llmRetryAttempt.inc({ category, reason });
-      await setTimeout(RETRY_WAIT_MS);
     }
+
+    await setTimeout(RETRY_WAIT_MS);
   }
 }

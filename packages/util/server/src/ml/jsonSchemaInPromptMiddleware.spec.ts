@@ -29,7 +29,7 @@ const createMockModel = () =>
     },
   });
 
-const wrap = (model: MockLanguageModelV4) =>
+const wrapWithJsonSchemaMiddleware = (model: MockLanguageModelV4) =>
   wrapLanguageModel({ model, middleware: jsonSchemaInPromptMiddleware });
 
 describe("jsonSchemaInPromptMiddleware", () => {
@@ -37,7 +37,7 @@ describe("jsonSchemaInPromptMiddleware", () => {
     const model = createMockModel();
 
     await generateText({
-      model: wrap(model),
+      model: wrapWithJsonSchemaMiddleware(model),
       system: "Original system prompt",
       prompt: "Some text",
       output: Output.object({ schema }),
@@ -60,7 +60,7 @@ describe("jsonSchemaInPromptMiddleware", () => {
     const model = createMockModel();
 
     await generateText({
-      model: wrap(model),
+      model: wrapWithJsonSchemaMiddleware(model),
       prompt: "Some text",
       output: Output.object({ schema }),
     });
@@ -78,7 +78,7 @@ describe("jsonSchemaInPromptMiddleware", () => {
     const model = createMockModel();
 
     await generateText({
-      model: wrap(model),
+      model: wrapWithJsonSchemaMiddleware(model),
       system: "Original system prompt",
       prompt: "Some text",
     });

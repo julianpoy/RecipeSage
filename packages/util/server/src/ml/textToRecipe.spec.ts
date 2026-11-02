@@ -46,7 +46,7 @@ describe("textToRecipe", () => {
         totalUsage: { totalTokens: 10 },
       })
       .mockResolvedValue({
-        output: { title: "Pancakes" },
+        output: { title: "Pancakes", ingredients: "2 eggs" },
         totalUsage: { totalTokens: 10 },
       });
 
@@ -59,7 +59,7 @@ describe("textToRecipe", () => {
   it("records an empty result when the recipe has no ingredients and no instructions", async () => {
     const resultSpy = vi.spyOn(metrics.llmResult, "inc");
 
-    generateTextMock.mockResolvedValueOnce({
+    generateTextMock.mockResolvedValue({
       output: { title: "Pancakes", ingredients: "  ", instructions: null },
       totalUsage: { totalTokens: 10 },
     });
@@ -68,6 +68,12 @@ describe("textToRecipe", () => {
     expect(resultSpy).toHaveBeenLastCalledWith(
       expect.objectContaining({ category: "text_to_recipe", outcome: "empty" }),
     );
+
+    resultSpy.mockRestore();
+  });
+
+  it("records an ok result when the recipe has ingredients and no instructions", async () => {
+    const resultSpy = vi.spyOn(metrics.llmResult, "inc");
 
     generateTextMock.mockResolvedValueOnce({
       output: { title: "Pancakes", ingredients: "2 eggs", instructions: null },
@@ -80,6 +86,56 @@ describe("textToRecipe", () => {
     );
 
     resultSpy.mockRestore();
+  });
+
+  it("retries an empty recipe at a higher temperature and returns the recipe", async () => {
+    generateTextMock
+      .mockResolvedValueOnce({
+        output: { title: "", ingredients: "", instructions: "" },
+        totalUsage: { totalTokens: 10 },
+      })
+      .mockResolvedValue({
+        output: {
+          title: "Pancakes",
+          ingredients: "2 eggs",
+          instructions: "Mix",
+        },
+        totalUsage: { totalTokens: 10 },
+      });
+
+    const result = await textToRecipe(SAMPLE_TEXT, TextToRecipeInputType.Text);
+
+    expect(result?.recipe.title).toBe("Pancakes");
+    expect(generateTextMock).toHaveBeenCalledTimes(2);
+    expect(generateTextMock.mock.calls[0][0].temperature).toBe(0);
+    expect(generateTextMock.mock.calls[1][0].temperature).toBe(0.3);
+  });
+
+  it("returns undefined after 2 retries of an empty result", async () => {
+    generateTextMock.mockResolvedValue({
+      output: { title: "Pancakes", ingredients: "", instructions: "" },
+      totalUsage: { totalTokens: 10 },
+    });
+
+    const result = await textToRecipe(SAMPLE_TEXT, TextToRecipeInputType.Text);
+
+    expect(result).toBeUndefined();
+    expect(generateTextMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("retries an empty result from a webpage and then returns it", async () => {
+    generateTextMock.mockResolvedValue({
+      output: { title: "Pancakes", ingredients: "", instructions: "" },
+      totalUsage: { totalTokens: 10 },
+    });
+
+    const result = await textToRecipe(
+      SAMPLE_TEXT,
+      TextToRecipeInputType.Webpage,
+    );
+
+    expect(result?.recipe.title).toBe("Pancakes");
+    expect(generateTextMock).toHaveBeenCalledTimes(3);
   });
 
   it("uses the fallback title when the model finds no title", async () => {
