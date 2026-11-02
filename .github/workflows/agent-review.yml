@@ -12,19 +12,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  review:
+  remove-and-check-label:
     runs-on: ubuntu-latest
     if: github.event.label.name == 'agent-review'
-    environment: rs-agent-review
-    timeout-minutes: 60
     env:
-      MODEL: openrouter/deepseek/deepseek-v4.1-flash-1017
-      OPENCODE_VERSION: 1.19.4
-      PLAYWRIGHT_MCP_VERSION: 0.0.83
       PR_NUMBER: ${{ github.event.pull_request.number }}
-      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-      REVIEW_CONFIG_DIR: agent-review-config/.github/agent-review
-      COMPOSE_FILE: docker-compose.yml:agent-review-config/.github/agent-review/docker-compose.yml
     steps:
       - name: Remove label
         env:
@@ -42,6 +34,27 @@ jobs:
             exit 1
           fi
 
+  review:
+    needs: remove-and-check-label
+    name: ${{ matrix.review_type }}
+    runs-on: ubuntu-latest
+    environment: rs-agent-review
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        review_type: [code-review, browser-test]
+    env:
+      MODEL: openrouter/deepseek/deepseek-v4.1-flash-1017
+      OPENCODE_VERSION: 2.2.5
+      PLAYWRIGHT_MCP_VERSION: 0.0.84
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      REVIEW_TYPE: ${{ matrix.review_type }}
+      OPENCODE_DISABLE_PROJECT_CONFIG: "true"
+      REVIEW_CONFIG_DIR: agent-review-config/.github/agent-review
+      COMPOSE_FILE: docker-compose.yml:agent-review-config/.github/agent-review/docker-compose.yml
+    steps:
       - name: Checkout pull request
         uses: actions/checkout@v7
         with:
@@ -65,6 +78,8 @@ jobs:
           persist-credentials: false
 
       - name: Start stack
+        if: matrix.review_type == 'browser-test'
+        timeout-minutes: 25
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
@@ -74,13 +89,21 @@ jobs:
           docker compose run --rm --no-deps backend pnpm exec prisma generate
           docker compose up -d
 
-      - name: Install opencode and Playwright MCP
+      - name: Install opencode
         run: |
-          npm install --prefix "$RUNNER_TEMP/agent-tools" "opencode-ai@$OPENCODE_VERSION" "@playwright/mcp@$PLAYWRIGHT_MCP_VERSION"
+          npm install --prefix "$RUNNER_TEMP/agent-tools" "@opencode/cli@$OPENCODE_VERSION"
           echo "$RUNNER_TEMP/agent-tools/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - name: Install Playwright MCP
+        if: matrix.review_type == 'browser-test'
+        timeout-minutes: 10
+        run: |
+          npm install --prefix "$RUNNER_TEMP/agent-tools" "@playwright/mcp@$PLAYWRIGHT_MCP_VERSION"
           "$RUNNER_TEMP/agent-tools/node_modules/.bin/playwright" install --with-deps firefox webkit
 
       - name: Wait for stack
+        if: matrix.review_type == 'browser-test'
+        timeout-minutes: 35
         run: |
           timeout 900 bash -c 'until curl -sf --max-time 30 http://localhost/api/ > /dev/null; do sleep 10; done'
           docker compose exec -T backend pnpm exec prisma migrate deploy
@@ -97,6 +120,7 @@ jobs:
           gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message | "- " + gsub("\n"; "\n  ")' >> agent-review-output/pr.md
 
       - name: Get previous review
+        if: matrix.review_type == 'code-review'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -112,11 +136,28 @@ jobs:
             echo "PREVIOUS_HEAD_SHA=$PREVIOUS_HEAD_SHA" >> "$GITHUB_ENV"
           fi
 
-      - name: Run agent
+      - name: Set limits from pull request size
+        run: |
+          CHANGED_LINES=$(git diff --numstat HEAD^1 HEAD -- . ':!pnpm-lock.yaml' | awk '{ total += $1 + $2 } END { print total + 0 }')
+          SUBAGENT_STEPS=$((100 + CHANGED_LINES / 4))
+          if [ "$SUBAGENT_STEPS" -gt 500 ]; then
+            SUBAGENT_STEPS=500
+          fi
+          AGENT_TIMEOUT_MINUTES=$((30 + SUBAGENT_STEPS / 2))
+          echo "$CHANGED_LINES changed lines, $SUBAGENT_STEPS subagent steps, $AGENT_TIMEOUT_MINUTES minutes"
+          jq --argjson steps "$SUBAGENT_STEPS" '.agents |= map_values(.steps = $steps)' "$REVIEW_CONFIG_DIR/opencode-$REVIEW_TYPE.json" > "$RUNNER_TEMP/opencode.json"
+          echo "AGENT_TIMEOUT_MINUTES=$AGENT_TIMEOUT_MINUTES" >> "$GITHUB_ENV"
+          echo "OPENCODE_CONFIG=$RUNNER_TEMP/opencode.json" >> "$GITHUB_ENV"
+
+      - name: Run code review agent
+        if: matrix.review_type == 'code-review'
         env:
-          OPENCODE_CONFIG: ${{ env.REVIEW_CONFIG_DIR }}/opencode.json
-          OPENCODE_DISABLE_PROJECT_CONFIG: "true"
-          OPENCODE_ENABLE_EXA: "true"
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: timeout "${AGENT_TIMEOUT_MINUTES}m" opencode run --standalone --model "$MODEL" --auto "$(cat "$REVIEW_CONFIG_DIR/$REVIEW_TYPE-main-agent.md")"
+
+      - name: Run browser test agent
+        if: matrix.review_type == 'browser-test'
+        env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -125,23 +166,26 @@ jobs:
         run: |
           export S3_PREFIX="pr-$PR_NUMBER/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
           export S3_PUBLIC_URL="https://$S3_BUCKET.s3.$AWS_REGION.amazonaws.com/$S3_PREFIX"
-          opencode run --model "$MODEL" --auto "$(cat "$REVIEW_CONFIG_DIR/instructions.md")"
+          timeout "${AGENT_TIMEOUT_MINUTES}m" opencode run --standalone --model "$MODEL" --auto "$(cat "$REVIEW_CONFIG_DIR/$REVIEW_TYPE-main-agent.md")"
 
       - name: Post review
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          printf '\n<!-- agent-review head=%s -->\n' "$HEAD_SHA" >> agent-review-output/review.md
+          test -s agent-review-output/review.md
+          if [ "$REVIEW_TYPE" = "code-review" ]; then
+            printf '\n<!-- agent-review head=%s -->\n' "$HEAD_SHA" >> agent-review-output/review.md
+          fi
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file agent-review-output/review.md
 
       - name: Post failure
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "The agent review failed. The logs are at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "The agent $REVIEW_TYPE failed. The logs are at $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
       - name: Collect stack logs
-        if: always()
+        if: always() && matrix.review_type == 'browser-test'
         run: |
           mkdir -p agent-review-output
           docker compose logs --no-color > agent-review-output/stack.log 2>&1 || true
@@ -150,5 +194,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: agent-review-output
+          name: agent-review-output-${{ matrix.review_type }}
           path: agent-review-output

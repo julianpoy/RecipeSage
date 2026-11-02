@@ -1,0 +1,86 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "permissions": [
+    {
+      "action": "playwright-*",
+      "resource": "*",
+      "effect": "deny"
+    }
+  ],
+  "agents": {
+    "browser-tester-chrome": {
+      "mode": "subagent",
+      "description": "Does all browser tests of the test plan in Chrome and returns the results",
+      "permissions": [
+        {
+          "action": "playwright-chrome_*",
+          "resource": "*",
+          "effect": "allow"
+        }
+      ]
+    },
+    "browser-tester-firefox": {
+      "mode": "subagent",
+      "description": "Does the main flow of the test plan in Firefox and returns the results",
+      "permissions": [
+        {
+          "action": "playwright-firefox_*",
+          "resource": "*",
+          "effect": "allow"
+        }
+      ]
+    },
+    "browser-tester-webkit": {
+      "mode": "subagent",
+      "description": "Does the main flow of the test plan in WebKit and returns the results",
+      "permissions": [
+        {
+          "action": "playwright-webkit_*",
+          "resource": "*",
+          "effect": "allow"
+        }
+      ]
+    }
+  },
+  "mcp": {
+    "servers": {
+      "playwright-chrome": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "chrome",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/chrome"
+        ]
+      },
+      "playwright-firefox": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "firefox",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/firefox"
+        ]
+      },
+      "playwright-webkit": {
+        "type": "local",
+        "command": [
+          "playwright-mcp",
+          "--browser",
+          "webkit",
+          "--headless",
+          "--isolated",
+          "--output-dir",
+          "agent-review-output/playwright/webkit"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "websearch": {
+    "provider": "exa"
+  },
+  "agents": {
+    "code-reviewer": {
+      "mode": "subagent",
+      "description": "Reviews the code of the pull request and returns the findings"
+    }
+  }
+}
