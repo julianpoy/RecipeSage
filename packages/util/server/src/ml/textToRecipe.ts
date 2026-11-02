@@ -60,6 +60,11 @@ export const OCR_MIN_VALID_TEXT = 20;
 
 export const OCR_MAX_VALID_TEXT = 20000;
 
+const isBlankRecipe = (output: {
+  ingredients?: string | null;
+  instructions?: string | null;
+}) => !output.ingredients?.trim() && !output.instructions?.trim();
+
 export const textToRecipe = async (
   text: string,
   inputType: TextToRecipeInputType,
@@ -98,10 +103,12 @@ export const textToRecipe = async (
 
       return response.output;
     },
-    (output) => !output.ingredients?.trim() && !output.instructions?.trim(),
+    isBlankRecipe,
   );
 
   if (!llmResponse) return;
+  if (inputType !== TextToRecipeInputType.Webpage && isBlankRecipe(llmResponse))
+    return;
 
   const markdownHeadersToRS = (line: string) => {
     if (line.startsWith("#")) {

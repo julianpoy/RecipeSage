@@ -10,6 +10,7 @@ import {
   type Tool,
 } from "ai";
 import { config } from "../general/config";
+import { jsonSchemaInPromptMiddleware } from "./jsonSchemaInPromptMiddleware";
 
 const reasoningMiddleware = (
   disableReasoning: boolean | undefined,
@@ -19,6 +20,11 @@ const reasoningMiddleware = (
     reasoning: disableReasoning ? "none" : params.reasoning,
   }),
 });
+
+const standardMiddleware = (disableReasoning: boolean | undefined) => [
+  reasoningMiddleware(disableReasoning),
+  jsonSchemaInPromptMiddleware,
+];
 
 export const aiProvider: (
   modelId: string,
@@ -35,11 +41,16 @@ export const aiProvider: (
     case "openrouter": {
       const provider = createOpenRouter(commonConfig);
       return (modelId, options) =>
-        provider(modelId, {
-          provider: {
-            require_parameters: options?.requireParameters,
-          },
-          reasoning: options?.disableReasoning ? { effort: "none" } : undefined,
+        wrapLanguageModel({
+          model: provider(modelId, {
+            provider: {
+              require_parameters: options?.requireParameters,
+            },
+            reasoning: options?.disableReasoning
+              ? { effort: "none" }
+              : undefined,
+          }),
+          middleware: jsonSchemaInPromptMiddleware,
         });
     }
     case "vercel": {
@@ -47,7 +58,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: reasoningMiddleware(options?.disableReasoning),
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "google": {
@@ -55,7 +66,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: reasoningMiddleware(options?.disableReasoning),
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "openai": {
@@ -63,7 +74,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: reasoningMiddleware(options?.disableReasoning),
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     case "anthropic": {
@@ -71,7 +82,7 @@ export const aiProvider: (
       return (modelId, options) =>
         wrapLanguageModel({
           model: provider(modelId),
-          middleware: reasoningMiddleware(options?.disableReasoning),
+          middleware: standardMiddleware(options?.disableReasoning),
         });
     }
     default: {

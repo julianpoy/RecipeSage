@@ -154,12 +154,12 @@ export const metrics = {
 
   llmRetryAttempt: new client.Counter({
     name: "llm_retry_attempt",
-    help: "An LLM call returned an unusable response and is being retried. A sustained rise means a model or prompt is producing malformed output",
+    help: "An LLM call returned an unusable or empty response and is being retried. A sustained rise means a model or prompt is producing malformed or empty output",
     labelNames: ["category", "reason"],
   }),
   llmRetryExhausted: new client.Counter({
     name: "llm_retry_exhausted",
-    help: "An LLM call was still returning an unusable response on the final attempt and the error was rethrown to the caller",
+    help: "An LLM call was still returning an unusable response on the final attempt, so the error was rethrown or the empty result was returned to the caller",
     labelNames: ["category", "reason"],
   }),
 

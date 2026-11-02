@@ -253,6 +253,83 @@ describe("withLLMRetry", () => {
     resultSpy.mockRestore();
   });
 
+  it("retries an empty result at a higher temperature until one is not empty", async () => {
+    const attemptSpy = vi.spyOn(metrics.llmRetryAttempt, "inc");
+    const exhaustedSpy = vi.spyOn(metrics.llmRetryExhausted, "inc");
+
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce("")
+      .mockResolvedValueOnce("")
+      .mockResolvedValue("ok");
+    const result = await withLLMRetry(
+      "text_to_recipe",
+      "fake-model",
+      fn,
+      (value) => !value,
+    );
+
+    expect(result).toBe("ok");
+    expect(fn).toHaveBeenNthCalledWith(1, 0, expect.any(Function));
+    expect(fn).toHaveBeenNthCalledWith(2, 0.3, expect.any(Function));
+    expect(fn).toHaveBeenNthCalledWith(3, 0.6, expect.any(Function));
+    expect(attemptSpy).toHaveBeenCalledTimes(2);
+    expect(attemptSpy).toHaveBeenCalledWith({
+      category: "text_to_recipe",
+      reason: "empty",
+    });
+    expect(exhaustedSpy).not.toHaveBeenCalled();
+
+    attemptSpy.mockRestore();
+    exhaustedSpy.mockRestore();
+  });
+
+  it("returns the empty result after 2 retries without throwing", async () => {
+    const exhaustedSpy = vi.spyOn(metrics.llmRetryExhausted, "inc");
+
+    const fn = vi.fn().mockResolvedValue("");
+    const result = await withLLMRetry(
+      "vision_to_recipe",
+      "fake-model",
+      fn,
+      (value) => !value,
+    );
+
+    expect(result).toBe("");
+    expect(fn).toHaveBeenCalledTimes(3);
+    expect(exhaustedSpy).toHaveBeenCalledWith({
+      category: "vision_to_recipe",
+      reason: "empty",
+    });
+
+    exhaustedSpy.mockRestore();
+  });
+
+  it("shares the attempt limit between empty results and retried errors", async () => {
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce("")
+      .mockRejectedValueOnce(makeNoObjectError())
+      .mockResolvedValue("");
+    const result = await withLLMRetry(
+      "text_to_recipe",
+      "fake-model",
+      fn,
+      (value) => !value,
+    );
+
+    expect(result).toBe("");
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+
+  it("does not retry a falsy result when there is no isEmpty check", async () => {
+    const fn = vi.fn().mockResolvedValue("");
+    const result = await withLLMRetry("text_to_nutrition", "fake-model", fn);
+
+    expect(result).toBe("");
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
   it("records an empty outcome when isEmpty matches the result", async () => {
     const resultSpy = vi.spyOn(metrics.llmResult, "inc");
 
