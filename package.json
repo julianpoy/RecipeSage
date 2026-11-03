@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^4.0.90",
+    "@ai-sdk/anthropic": "^4.0.91",
     "@ai-sdk/google": "^4.0.107",
     "@ai-sdk/openai": "^4.0.104",
     "@angular/common": "22.2.3",
@@ -88,7 +88,7 @@
     "@trpc/client": "^11.18.0",
     "@trpc/server": "^11.18.0",
     "accept-language": "^3.0.20",
-    "ai": "^7.0.155",
+    "ai": "^7.0.156",
     "apple-signin-auth": "^2.1.0",
     "axios": "^1.20.0",
     "body-parser": "~2.4.0",
