@@ -49,55 +49,55 @@ importers:
         version: 3.1158.0
       '@capacitor-community/keep-awake':
         specifier: 8.0.1
-        version: 8.0.1(@capacitor/core@8.5.3)
+        version: 8.0.1(@capacitor/core@8.6.0)
       '@capacitor-firebase/messaging':
         specifier: 8.4.0
-        version: 8.4.0(@capacitor/core@8.5.3)(firebase@12.19.0)
+        version: 8.4.0(@capacitor/core@8.6.0)(firebase@12.19.0)
       '@capacitor/android':
-        specifier: 8.5.3
-        version: 8.5.3(@capacitor/core@8.5.3)
+        specifier: 8.6.0
+        version: 8.6.0(@capacitor/core@8.6.0)
       '@capacitor/app':
         specifier: ^8.1.1
-        version: 8.1.2(@capacitor/core@8.5.3)
+        version: 8.1.2(@capacitor/core@8.6.0)
       '@capacitor/browser':
         specifier: ^8.0.4
-        version: 8.0.5(@capacitor/core@8.5.3)
+        version: 8.0.5(@capacitor/core@8.6.0)
       '@capacitor/camera':
         specifier: ^8.2.3
-        version: 8.2.6(@capacitor/core@8.5.3)
+        version: 8.2.6(@capacitor/core@8.6.0)
       '@capacitor/clipboard':
         specifier: 8.0.1
-        version: 8.0.1(@capacitor/core@8.5.3)
+        version: 8.0.1(@capacitor/core@8.6.0)
       '@capacitor/core':
-        specifier: 8.5.3
-        version: 8.5.3
+        specifier: 8.6.0
+        version: 8.6.0
       '@capacitor/filesystem':
         specifier: ^8.1.3
-        version: 8.1.5(@capacitor/core@8.5.3)
+        version: 8.1.5(@capacitor/core@8.6.0)
       '@capacitor/ios':
-        specifier: 8.5.3
-        version: 8.5.3(@capacitor/core@8.5.3)
+        specifier: 8.6.0
+        version: 8.6.0(@capacitor/core@8.6.0)
       '@capacitor/share':
         specifier: 8.0.3
-        version: 8.0.3(@capacitor/core@8.5.3)
+        version: 8.0.3(@capacitor/core@8.6.0)
       '@capacitor/splash-screen':
         specifier: 8.0.2
-        version: 8.0.2(@capacitor/core@8.5.3)
+        version: 8.0.2(@capacitor/core@8.6.0)
       '@capawesome/capacitor-apple-sign-in':
         specifier: ^0.1.3
-        version: 0.1.4(@capacitor/core@8.5.3)
+        version: 0.1.4(@capacitor/core@8.6.0)
       '@capawesome/capacitor-file-picker':
         specifier: ^8.0.4
-        version: 8.1.1(@capacitor/core@8.5.3)
+        version: 8.1.1(@capacitor/core@8.6.0)
       '@capgo/capacitor-native-navigation':
         specifier: ^8.14.0
-        version: 8.14.0(@capacitor/core@8.5.3)
+        version: 8.14.0(@capacitor/core@8.6.0)
       '@capgo/native-purchases':
         specifier: ^8.7.0
-        version: 8.9.6(@capacitor/core@8.5.3)
+        version: 8.9.6(@capacitor/core@8.6.0)
       '@erkamyaman/capacitor-foldable':
         specifier: ^8.4.1
-        version: 8.4.1(@capacitor/core@8.5.3)
+        version: 8.4.1(@capacitor/core@8.6.0)
       '@fanoutio/grip':
         specifier: ^4.4.0
         version: 4.4.0
@@ -115,7 +115,7 @@ importers:
         version: 9.0.9(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/forms@22.2.3(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@22.2.3(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2))(@angular/router@22.2.3(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@22.2.3(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2))(rxjs@7.8.2)(zone.js@0.16.1)
       '@mindlib-capacitor/send-intent':
         specifier: ^8.0.6
-        version: 8.0.6(@capacitor/core@8.5.3)
+        version: 8.0.6(@capacitor/core@8.6.0)
       '@ngx-loading-bar/core':
         specifier: ^7.0.1
         version: 7.0.1(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(rxjs@7.8.2)
@@ -142,7 +142,7 @@ importers:
         version: 7.10.1(@opentelemetry/api@1.10.0)
       '@rdlabo/ionic-theme-ios27':
         specifier: 2.0.2
-        version: 2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.9)
+        version: 2.0.2(@capacitor/core@8.6.0)(@ionic/core@9.0.9)
       '@rdlabo/ionic-theme-md3':
         specifier: ^9.1.3
         version: 9.1.3(@ionic/core@9.0.9)
@@ -430,8 +430,8 @@ importers:
         specifier: ^0.9.9
         version: 0.9.12(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)
       '@capacitor/cli':
-        specifier: 8.5.3
-        version: 8.5.3
+        specifier: 8.6.0
+        version: 8.6.0
       '@electron-forge/cli':
         specifier: ^8.0.1
         version: 8.0.1(@types/react@19.3.0)
@@ -2262,10 +2262,10 @@ packages:
       firebase:
         optional: true
 
-  '@capacitor/android@8.5.3':
-    resolution: {integrity: sha512-ilH4gSSz3DrketMkzDVAvY9JsWJ//rCQnECLTdcFRO7xXDogwAbUvQAnIAbiqefwV/D1xfjEL4Gw1MJXEcaA9g==}
+  '@capacitor/android@8.6.0':
+    resolution: {integrity: sha512-6IJS0TCfV/F/8+324CCwYd3xL6r+TH0W7zzaxYzPz9IV3YWCNvsZDuCCPHUIBC5iASb9od827ddSJ6rz+9Pu1Q==}
     peerDependencies:
-      '@capacitor/core': ^8.5.0
+      '@capacitor/core': ^8.6.0
 
   '@capacitor/app@8.1.2':
     resolution: {integrity: sha512-uKBlsrXH0IdvUn69e/KKYbZ32A06pcrUdG8LWuZ/6y33YMXZXLEEdNSwl+jKS/SrsTWqnePs8EqSWaiQM3mUGA==}
@@ -2282,8 +2282,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/cli@8.5.3':
-    resolution: {integrity: sha512-/G6xwna+p4GS3lthSdWN3OThCH2F85O0Ukdy8rv3oAXvgEMeyFgPEIA3PMAS++IkHwUuBYBAKOQJnZfcrh1n0w==}
+  '@capacitor/cli@8.6.0':
+    resolution: {integrity: sha512-TyLo1v6AqK39inlB5Edm7eFc+dyk4r+Du5bbyD+cRm/u/3b+LkNIeyp5wwYp3ToO3rWiLs4T/PabXGADO0Rlxg==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -2292,18 +2292,18 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/core@8.5.3':
-    resolution: {integrity: sha512-oBE1oGuYE4ZzYYrulC75OuHdSsD6zLUy7d5o1tFwDLG4govGoubY15cxpiI5l0+q87Lm5p0bhbehMdzJg4aFag==}
+  '@capacitor/core@8.6.0':
+    resolution: {integrity: sha512-9F2zzuGYTJu+wqmQSEmqnFBfGrhC/njjMCfmxbvg9mq8xJT4wNh5pxbMFZxvW/yDhYJWPEBFQxeqzfo1gKrvxg==}
 
   '@capacitor/filesystem@8.1.5':
     resolution: {integrity: sha512-m1RkI8L83NJeppEKyRWioK3MDp2vjlA+QfUQcF8/xRlcXNC2HYxqoyYJ+K4M0EcVovy+g+4F24S05+bhK4Vgdg==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/ios@8.5.3':
-    resolution: {integrity: sha512-HnnV92Jl8+3x0JUloXUMjFcUsQI8wHFVsKwkLn72DfRZXYGZW11tQbmNOWOnRTljaU18FdI1b9ipT09SzzPDNw==}
+  '@capacitor/ios@8.6.0':
+    resolution: {integrity: sha512-Y2PE4zoBqMrSTWoVMJmX2byBznjn6egmATzoEUJiGVbVubkNpAvkF/tl0SBKDyP67ngyedTx1tQq5IGYIhby1A==}
     peerDependencies:
-      '@capacitor/core': ^8.5.0
+      '@capacitor/core': ^8.6.0
 
   '@capacitor/share@8.0.3':
     resolution: {integrity: sha512-gnvZBV1NPu2B8vd1UKncR56G15ueHd0aZLqgDov++t3SmTBG9Q0VrAZ1VnHn5stxlmglVaTb4RwopMgbpLzroA==}
@@ -11835,11 +11835,6 @@ packages:
     resolution: {integrity: sha512-Sc5u1VVln93y1Xnz4R+CunOZc7R9LUcTmhj7Rc7Eg3HVcf7rVn2FOoa812fe0W8p3jD7xeoGSYbfqCGGH2B6xw==}
     hasBin: true
 
-  uuid@7.0.3:
-    resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-    hasBin: true
-
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
@@ -12470,9 +12465,9 @@ packages:
     resolution: {integrity: sha512-c16PKLIRxBYpR3jSWsdS7SFp0COm5SOQdiFjY818dYFHJbMGuLBszpF07LBWmOS1uzrHa9VGdynsEgoeKy0oOQ==}
     engines: {node: '>=20'}
 
-  xcode@3.0.1:
-    resolution: {integrity: sha512-kCz5k7J7XbJtjABOvkc5lJmkiDh8VhjVCGNiqdKCscmVpdVUpEAyXv1xmCLkQJ5dsHqx3IPO4XW+NTDhU/fatA==}
-    engines: {node: '>=10.0.0'}
+  xcode@4.0.0:
+    resolution: {integrity: sha512-dDaoWzc9EP2fp9FS9PVZUkyvFxY4y1TOV9pcKaKLk++Ei/qb97XDFEVP7GnW7Osii/TzVABJ0jq2F+9/lq0TVA==}
+    engines: {node: '>=14.17.0'}
 
   xdg-basedir@5.1.0:
     resolution: {integrity: sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ==}
@@ -14712,33 +14707,33 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.5.3)':
+  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor-firebase/messaging@8.4.0(@capacitor/core@8.5.3)(firebase@12.19.0)':
+  '@capacitor-firebase/messaging@8.4.0(@capacitor/core@8.6.0)(firebase@12.19.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
     optionalDependencies:
       firebase: 12.19.0
 
-  '@capacitor/android@8.5.3(@capacitor/core@8.5.3)':
+  '@capacitor/android@8.6.0(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/app@8.1.2(@capacitor/core@8.5.3)':
+  '@capacitor/app@8.1.2(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/browser@8.0.5(@capacitor/core@8.5.3)':
+  '@capacitor/browser@8.0.5(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/camera@8.2.6(@capacitor/core@8.5.3)':
+  '@capacitor/camera@8.2.6(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/cli@8.5.3':
+  '@capacitor/cli@8.6.0':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -14756,53 +14751,53 @@ snapshots:
       semver: 7.8.5
       tar: 7.5.22
       tslib: 2.8.1
-      xcode: 3.0.1
+      xcode: 4.0.0
       xml2js: 0.6.2
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/clipboard@8.0.1(@capacitor/core@8.5.3)':
+  '@capacitor/clipboard@8.0.1(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/core@8.5.3':
+  '@capacitor/core@8.6.0':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/filesystem@8.1.5(@capacitor/core@8.5.3)':
+  '@capacitor/filesystem@8.1.5(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
       '@capacitor/synapse': 1.0.4
 
-  '@capacitor/ios@8.5.3(@capacitor/core@8.5.3)':
+  '@capacitor/ios@8.6.0(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/share@8.0.3(@capacitor/core@8.5.3)':
+  '@capacitor/share@8.0.3(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capacitor/splash-screen@8.0.2(@capacitor/core@8.5.3)':
+  '@capacitor/splash-screen@8.0.2(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
   '@capacitor/synapse@1.0.4': {}
 
-  '@capawesome/capacitor-apple-sign-in@0.1.4(@capacitor/core@8.5.3)':
+  '@capawesome/capacitor-apple-sign-in@0.1.4(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capawesome/capacitor-file-picker@8.1.1(@capacitor/core@8.5.3)':
+  '@capawesome/capacitor-file-picker@8.1.1(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capgo/capacitor-native-navigation@8.14.0(@capacitor/core@8.5.3)':
+  '@capgo/capacitor-native-navigation@8.14.0(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
-  '@capgo/native-purchases@8.9.6(@capacitor/core@8.5.3)':
+  '@capgo/native-purchases@8.9.6(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
   '@capsizecss/unpack@4.0.1':
     dependencies:
@@ -15187,9 +15182,9 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.5.3)':
+  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true
@@ -16336,10 +16331,10 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
 
-  '@mindlib-capacitor/send-intent@8.0.6(@capacitor/core@8.5.3)':
+  '@mindlib-capacitor/send-intent@8.0.6(@capacitor/core@8.6.0)':
     dependencies:
-      '@capacitor/cli': 8.5.3
-      '@capacitor/core': 8.5.3
+      '@capacitor/cli': 8.6.0
+      '@capacitor/core': 8.6.0
     transitivePeerDependencies:
       - supports-color
 
@@ -17413,22 +17408,22 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@rdlabo/capacitor-native-ui@2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.9)':
+  '@rdlabo/capacitor-native-ui@2.0.2(@capacitor/core@8.6.0)(@ionic/core@9.0.9)':
     dependencies:
       '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@9.0.9)
     optionalDependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
       '@ionic/core': 9.0.9
 
-  '@rdlabo/ionic-theme-ios27@2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.9)':
+  '@rdlabo/ionic-theme-ios27@2.0.2(@capacitor/core@8.6.0)(@ionic/core@9.0.9)':
     dependencies:
       '@ionic/core': 9.0.9
-      '@rdlabo/capacitor-native-ui': 2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.9)
+      '@rdlabo/capacitor-native-ui': 2.0.2(@capacitor/core@8.6.0)(@ionic/core@9.0.9)
       '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@9.0.9)
       '@stencil/core': 4.45.2
       ionicons: 8.1.0
     optionalDependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.0
 
   '@rdlabo/ionic-theme-md3@9.1.3(@ionic/core@9.0.9)':
     dependencies:
@@ -24949,8 +24944,6 @@ snapshots:
 
   uuid@14.0.3: {}
 
-  uuid@7.0.3: {}
-
   v8-compile-cache-lib@3.0.1: {}
 
   valibot@1.4.2(typescript@6.0.3):
@@ -25641,10 +25634,9 @@ snapshots:
       is-wsl: 3.1.1
       powershell-utils: 0.2.1
 
-  xcode@3.0.1:
+  xcode@4.0.0:
     dependencies:
       simple-plist: 1.3.1
-      uuid: 7.0.3
 
   xdg-basedir@5.1.0: {}
 
