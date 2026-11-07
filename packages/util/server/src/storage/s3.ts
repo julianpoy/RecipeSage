@@ -195,23 +195,28 @@ export const deleteObject = async (objectType: ObjectTypes, key: string) => {
 export const deleteObjects = async (
   objectType: ObjectTypes,
   keys: string[],
-) => {
-  const paginatedKeys = paginate(keys, DELETE_STORAGE_OBJECTS_LIMIT);
+): Promise<string[]> => {
+  const failedKeys: string[] = [];
 
-  await Promise.all(
-    paginatedKeys.map((keyPage) => {
-      return s3.send(
-        new DeleteObjectsCommand({
-          Bucket: ObjectTypesToBucket[objectType],
-          Delete: {
-            Objects: keyPage.map((key) => ({ Key: key })),
-          },
-        }),
-      );
-    }),
-  );
+  for (const keyPage of paginate(keys, DELETE_STORAGE_OBJECTS_LIMIT)) {
+    const response = await s3.send(
+      new DeleteObjectsCommand({
+        Bucket: ObjectTypesToBucket[objectType],
+        Delete: {
+          Objects: keyPage.map((key) => ({ Key: key })),
+          Quiet: true,
+        },
+      }),
+    );
 
-  return;
+    failedKeys.push(
+      ...(response.Errors ?? []).flatMap((error) =>
+        error.Key ? [error.Key] : [],
+      ),
+    );
+  }
+
+  return failedKeys;
 };
 
 export async function readStream(

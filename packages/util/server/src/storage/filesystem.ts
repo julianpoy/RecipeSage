@@ -120,8 +120,24 @@ export const deleteObject = async (
 export const deleteObjects = async (
   _objectType: ObjectTypes,
   keys: string[],
-): Promise<void> => {
-  await Promise.all(keys.map((key) => deleteObject(_objectType, key)));
+): Promise<string[]> => {
+  const results = await Promise.allSettled(
+    keys.map((key) => fs.unlink(join(FILESYSTEM_STORAGE_PATH, key))),
+  );
+
+  return keys.filter((_key, idx) => {
+    const result = results[idx];
+    if (result.status === "fulfilled") return false;
+
+    const isFileMissing =
+      result.reason instanceof Error &&
+      "code" in result.reason &&
+      result.reason.code === "ENOENT";
+    if (isFileMissing) return false;
+
+    console.warn(result.reason);
+    return true;
+  });
 };
 
 export async function readStream(

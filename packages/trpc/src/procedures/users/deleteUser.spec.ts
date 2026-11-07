@@ -16,9 +16,23 @@ vi.mock("apple-signin-auth", () => ({
   },
 }));
 
+const { addBulkMock } = vi.hoisted(() => ({
+  addBulkMock: vi.fn(),
+}));
+
+vi.mock("bullmq", async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  Queue: class {
+    addBulk = addBulkMock;
+    on = vi.fn();
+  },
+}));
+
 describe("deleteUser", () => {
   beforeEach(() => {
     revokeAuthorizationTokenMock.mockReset();
+    addBulkMock.mockReset();
+    addBulkMock.mockResolvedValue([]);
   });
 
   describe("apple auth token", () => {
@@ -111,7 +125,7 @@ describe("deleteUser", () => {
       expect(otherRecipe?.id).toEqual(recipe.id);
     });
 
-    test("deletes images used only by the caller's discover recipes", async ({
+    test("enqueues the caller's images for deletion", async ({
       trpc,
       user,
     }) => {
@@ -136,10 +150,11 @@ describe("deleteUser", () => {
 
       await trpc.users.deleteUser();
 
-      const deletedImage = await prisma.image.findUnique({
-        where: { id: image.id },
-      });
-      expect(deletedImage).toBeNull();
+      expect(addBulkMock).toHaveBeenCalledWith([
+        expect.objectContaining({
+          data: { imageIds: [image.id], imageOwnerUserId: null },
+        }),
+      ]);
     });
   });
 
@@ -148,6 +163,40 @@ describe("deleteUser", () => {
       await expect(anonymousTrpc.users.deleteUser()).rejects.toThrow(
         "Must be logged in",
       );
+    });
+
+    test("keeps the account when the image deletion cannot be enqueued", async ({
+      trpc,
+      user,
+    }) => {
+      const image = await prisma.image.create({
+        data: {
+          userId: user.id,
+          location: "https://example.com/image.jpg",
+          key: "example-key",
+          json: {},
+        },
+      });
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          recipeImages: {
+            createMany: {
+              data: [{ imageId: image.id, order: 0 }],
+            },
+          },
+        },
+      });
+      addBulkMock.mockRejectedValue(new Error("Connection is closed"));
+
+      await expect(trpc.users.deleteUser()).rejects.toThrow();
+
+      expect(
+        (await prisma.user.findUnique({ where: { id: user.id } }))?.id,
+      ).toEqual(user.id);
+      expect(
+        (await prisma.recipe.findUnique({ where: { id: recipe.id } }))?.id,
+      ).toEqual(recipe.id);
     });
   });
 });

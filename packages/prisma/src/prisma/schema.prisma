@@ -220,6 +220,7 @@ model AssistantMessage {
   recipe    Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([recipeId])
   @@map("AssistantMessages")
 }
 
@@ -251,6 +252,7 @@ model ProfileItem {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "profile_item_user_id")
+  @@index([recipeId], map: "profile_item_recipe_id")
   @@map("ProfileItems")
 }
 
@@ -426,6 +428,7 @@ model DiscoverRecipe {
   @@index([language], map: "discover_recipes_language")
   @@index([categories], type: Gin, map: "discover_recipes_categories_idx")
   @@index([tsv], type: Gin, map: "discover_recipes_tsv_idx")
+  @@index([sourceRecipeId], map: "discover_recipes_source_recipe_id")
   @@map("Discover_Recipes")
 }
 
@@ -486,6 +489,7 @@ model DiscoverRecipeSave {
   recipe           Recipe?        @relation(fields: [recipeId], references: [id], onDelete: SetNull)
 
   @@index([userId, discoverRecipeId], map: "discover_recipe__saves_user_id_discover_recipe_id")
+  @@index([discoverRecipeId], map: "discover_recipe__saves_discover_recipe_id")
   @@map("Discover_Recipe_Saves")
 }
 
@@ -504,6 +508,7 @@ model DiscoverRecipeReport {
   @@unique([discoverRecipeId, reporterId], map: "Discover_Recipe_Reports_discoverRecipeId_reporterId_uk")
   @@index([status, createdAt], map: "discover_recipe__reports_status_created_at")
   @@index([discoverRecipeId], map: "discover_recipe__reports_discover_recipe_id")
+  @@index([reporterId], map: "discover_recipe__reports_reporter_id")
   @@map("Discover_Recipe_Reports")
 }
 
@@ -662,6 +667,7 @@ model UserProfileImage {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([imageId])
   @@map("User_Profile_Images")
 }
 

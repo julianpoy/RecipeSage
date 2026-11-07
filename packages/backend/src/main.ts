@@ -13,6 +13,7 @@ import protocol from "http";
 import {
   config,
   Environment,
+  getImageDeletionQueueWorker,
   getJobQueueWorker,
 } from "@recipesage/util/server/general";
 
@@ -101,4 +102,5 @@ process.on("SIGINT", termHandler);
 
 if (config.environment === Environment.Selfhost) {
   getJobQueueWorker().run();
+  getImageDeletionQueueWorker().run();
 }

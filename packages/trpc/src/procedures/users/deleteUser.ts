@@ -1,7 +1,9 @@
 import { authenticatedProcedure } from "../../trpc";
 import { prisma } from "@recipesage/prisma";
-import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
-import { revokeAppleAuthTokens } from "@recipesage/util/server/general";
+import {
+  enqueueImageDeletion,
+  revokeAppleAuthTokens,
+} from "@recipesage/util/server/general";
 import { z } from "zod";
 
 export const deleteUser = authenticatedProcedure
@@ -22,8 +24,17 @@ export const deleteUser = authenticatedProcedure
       },
     });
 
-    const purgeFromStorage = await prisma.$transaction(
+    await prisma.$transaction(
       async (tx) => {
+        const images = await tx.image.findMany({
+          where: {
+            userId: ctx.session.userId,
+          },
+          select: {
+            id: true,
+          },
+        });
+
         await tx.recipe.deleteMany({
           where: {
             userId: ctx.session.userId,
@@ -40,27 +51,23 @@ export const deleteUser = authenticatedProcedure
           },
         });
 
-        const purgeFromStorage = await deleteHangingImagesForUser(
-          ctx.session.userId,
-          tx,
-        );
-
         await tx.user.delete({
           where: {
             id: ctx.session.userId,
           },
         });
 
-        return purgeFromStorage;
+        await enqueueImageDeletion(
+          images.map((image) => image.id),
+          null,
+        );
       },
       {
-        timeout: 60000,
+        timeout: 300000,
       },
     );
 
     await revokeAppleAuthTokens(appleAuthTokens);
-
-    await purgeFromStorage();
 
     return "Deleted";
   });

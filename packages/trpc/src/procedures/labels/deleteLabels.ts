@@ -2,6 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { deleteRecipesAndEnqueueImageDeletion } from "@recipesage/util/server/db";
 
 export const deleteLabels = authenticatedProcedure
   .meta({
@@ -48,26 +49,18 @@ export const deleteLabels = authenticatedProcedure
 
     await prisma.$transaction(
       async (tx) => {
-        if (input.includeAttachedRecipes) {
-          const recipeLabels = await tx.recipeLabel.findMany({
-            where: {
-              labelId: {
-                in: input.ids,
+        const recipeLabels = input.includeAttachedRecipes
+          ? await tx.recipeLabel.findMany({
+              where: {
+                labelId: {
+                  in: input.ids,
+                },
               },
-            },
-            select: {
-              recipeId: true,
-            },
-          });
-
-          await tx.recipe.deleteMany({
-            where: {
-              id: {
-                in: recipeLabels.map((label) => label.recipeId),
+              select: {
+                recipeId: true,
               },
-            },
-          });
-        }
+            })
+          : [];
 
         await tx.label.deleteMany({
           where: {
@@ -77,6 +70,16 @@ export const deleteLabels = authenticatedProcedure
             },
           },
         });
+
+        await deleteRecipesAndEnqueueImageDeletion(
+          ctx.session.userId,
+          {
+            id: {
+              in: recipeLabels.map((recipeLabel) => recipeLabel.recipeId),
+            },
+          },
+          tx,
+        );
       },
       {
         timeout: 60000,
