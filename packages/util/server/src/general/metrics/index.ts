@@ -82,6 +82,11 @@ export const metrics = {
       "result", // One of: 'hit' | 'miss'
     ],
   }),
+  clipFetch: new client.Counter({
+    name: "clip_fetch",
+    help: "A fetch of a page during a url clip. This can happen twice for a single clip when a direct fetch falls back to Scrapfly",
+    labelNames: ["source", "outcome"],
+  }),
   clipStartedProcessing: new client.Counter({
     name: "clip_started_processing",
     help: "A clip started with a given processor. This can happen multiple times for a single clip",
