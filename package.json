@@ -48,7 +48,7 @@
     "@aws-sdk/lib-storage": "^3.1158.0",
     "@aws-sdk/s3-request-presigner": "^3.1158.0",
     "@capacitor-community/keep-awake": "8.0.1",
-    "@capacitor-firebase/messaging": "8.4.0",
+    "@capacitor-firebase/messaging": "8.5.2",
     "@capacitor/android": "8.5.3",
     "@capacitor/app": "^8.1.1",
     "@capacitor/browser": "^8.0.4",
