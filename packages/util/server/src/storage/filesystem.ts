@@ -103,25 +103,28 @@ export const writeStream = async (
   return result;
 };
 
-// Delete a file from the filesystem
-export const deleteObject = async (
-  _objectType: ObjectTypes,
-  key: string,
-): Promise<void> => {
-  const fsLocation = join(FILESYSTEM_STORAGE_PATH, key);
-  try {
-    await fs.unlink(fsLocation);
-  } catch (e) {
-    console.warn(e);
-  }
-};
-
 // Delete multiple files from the filesystem
 export const deleteObjects = async (
   _objectType: ObjectTypes,
   keys: string[],
-): Promise<void> => {
-  await Promise.all(keys.map((key) => deleteObject(_objectType, key)));
+): Promise<string[]> => {
+  const results = await Promise.allSettled(
+    keys.map((key) => fs.unlink(join(FILESYSTEM_STORAGE_PATH, key))),
+  );
+
+  return keys.filter((_key, idx) => {
+    const result = results[idx];
+    if (result.status === "fulfilled") return false;
+
+    const isFileMissing =
+      result.reason instanceof Error &&
+      "code" in result.reason &&
+      result.reason.code === "ENOENT";
+    if (isFileMissing) return false;
+
+    console.warn(result.reason);
+    return true;
+  });
 };
 
 export async function readStream(
@@ -136,7 +139,6 @@ export default {
   getSignedDownloadUrl,
   writeBuffer,
   writeStream,
-  deleteObject,
   deleteObjects,
   readStream,
 } satisfies StorageProvider as StorageProvider;

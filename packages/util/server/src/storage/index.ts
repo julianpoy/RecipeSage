@@ -37,9 +37,7 @@ export interface StorageProvider {
     mimetype: string,
   ) => Promise<StorageObjectRecord>;
 
-  deleteObject: (objectType: ObjectTypes, key: string) => Promise<void>;
-
-  deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<void>;
+  deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<string[]>;
 
   readStream: (objectType: ObjectTypes, key: string) => Promise<Readable>;
 }
@@ -64,12 +62,9 @@ if (!storageProvider) throw new Error("Invalid STORAGE_TYPE");
 export const getSignedDownloadUrl = storageProvider.getSignedDownloadUrl;
 export const writeBuffer = storageProvider.writeBuffer;
 export const writeStream = storageProvider.writeStream;
-export const deleteObject = storageProvider.deleteObject;
 export const deleteObjects = storageProvider.deleteObjects;
 export const readStream = storageProvider.readStream;
 export * from "./image";
 export * from "./imageFetchError";
 export * from "./shared";
 export * from "./gunzipPromise";
-export * from "./deleteHangingImagesForUser";
-export * from "./deleteHangingImagesByIds";

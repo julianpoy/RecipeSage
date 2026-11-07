@@ -103,32 +103,28 @@ export const writeStream = async (
   };
 };
 
-// Delete an object from firebase storage
-export const deleteObject = async (
-  _objectType: ObjectTypes,
-  key: string,
-): Promise<void> => {
-  const bucket = getStorage().bucket(BUCKET);
-
-  await bucket.file(key).delete({
-    ignoreNotFound: true,
-  });
-};
-
 // Delete multiple objects from firebase storage
 export const deleteObjects = async (
   _objectType: ObjectTypes,
   keys: string[],
-): Promise<void> => {
+): Promise<string[]> => {
   const bucket = getStorage().bucket(BUCKET);
 
-  await Promise.all(
+  const results = await Promise.allSettled(
     keys.map((key) =>
       bucket.file(key).delete({
         ignoreNotFound: true,
       }),
     ),
   );
+
+  return keys.filter((_key, idx) => {
+    const result = results[idx];
+    if (result.status === "fulfilled") return false;
+
+    console.warn(result.reason);
+    return true;
+  });
 };
 
 export async function readStream(
@@ -143,7 +139,6 @@ export default {
   getSignedDownloadUrl,
   writeBuffer,
   writeStream,
-  deleteObject,
   deleteObjects,
   readStream,
 } satisfies StorageProvider as StorageProvider;

@@ -12,7 +12,24 @@ const createImage = (userId: string, key: string) =>
     },
   });
 
+const { addBulkMock } = vi.hoisted(() => ({
+  addBulkMock: vi.fn(),
+}));
+
+vi.mock("bullmq", async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  Queue: class {
+    addBulk = addBulkMock;
+    on = vi.fn();
+  },
+}));
+
 describe("deleteRecipesByLabelIds", () => {
+  beforeEach(() => {
+    addBulkMock.mockReset();
+    addBulkMock.mockResolvedValue([]);
+  });
+
   describe("success", () => {
     test("deletes every recipe carrying the label", async ({ trpc, user }) => {
       const label = await prisma.label.create({ data: labelFactory(user.id) });
@@ -36,7 +53,7 @@ describe("deleteRecipesByLabelIds", () => {
       ).toEqual(unlabelled.id);
     });
 
-    test("removes images that are no longer attached to anything", async ({
+    test("enqueues the deleted recipes' images for deletion", async ({
       trpc,
       user,
     }) => {
@@ -54,38 +71,39 @@ describe("deleteRecipesByLabelIds", () => {
 
       await trpc.recipes.deleteRecipesByLabelIds({ labelIds: [label.id] });
 
-      expect(
-        await prisma.image.findUnique({ where: { id: image.id } }),
-      ).toEqual(null);
+      expect(addBulkMock).toHaveBeenCalledWith([
+        expect.objectContaining({
+          data: { imageIds: [image.id], imageOwnerUserId: user.id },
+        }),
+      ]);
     });
+  });
 
-    test("keeps an image that is still attached to a surviving recipe", async ({
+  describe("error", () => {
+    test("keeps the recipes when the image deletion cannot be enqueued", async ({
       trpc,
       user,
     }) => {
       const label = await prisma.label.create({ data: labelFactory(user.id) });
-      const image = await createImage(user.id, "by-label-shared");
-      const deleted = await prisma.recipe.create({
+      const recipe = await prisma.recipe.create({
         data: recipeFactory(user.id),
       });
-      const kept = await prisma.recipe.create({
-        data: recipeFactory(user.id),
-      });
+      const image = await createImage(user.id, "by-label-rollback");
       await prisma.recipeLabel.create({
-        data: { labelId: label.id, recipeId: deleted.id },
+        data: { labelId: label.id, recipeId: recipe.id },
       });
       await prisma.recipeImage.create({
-        data: { recipeId: deleted.id, imageId: image.id, order: 0 },
+        data: { recipeId: recipe.id, imageId: image.id, order: 0 },
       });
-      await prisma.recipeImage.create({
-        data: { recipeId: kept.id, imageId: image.id, order: 0 },
-      });
+      addBulkMock.mockRejectedValue(new Error("Connection is closed"));
 
-      await trpc.recipes.deleteRecipesByLabelIds({ labelIds: [label.id] });
+      await expect(
+        trpc.recipes.deleteRecipesByLabelIds({ labelIds: [label.id] }),
+      ).rejects.toThrow();
 
       expect(
-        (await prisma.image.findUnique({ where: { id: image.id } }))?.id,
-      ).toEqual(image.id);
+        (await prisma.recipe.findUnique({ where: { id: recipe.id } }))?.id,
+      ).toEqual(recipe.id);
     });
   });
 });

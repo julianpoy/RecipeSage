@@ -1,9 +1,26 @@
 import { prisma } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
 import { recipeFactory } from "@recipesage/util/server/general";
-import { test } from "../../testutils";
+import { test, createLabelledRecipeWithImage } from "../../testutils";
+
+const { addBulkMock } = vi.hoisted(() => ({
+  addBulkMock: vi.fn(),
+}));
+
+vi.mock("bullmq", async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  Queue: class {
+    addBulk = addBulkMock;
+    on = vi.fn();
+  },
+}));
 
 describe("deleteLabel", () => {
+  beforeEach(() => {
+    addBulkMock.mockReset();
+    addBulkMock.mockResolvedValue([]);
+  });
+
   describe("success", () => {
     test("deletes a label", async ({ trpc, user }) => {
       const label = await prisma.label.create({
@@ -58,9 +75,49 @@ describe("deleteLabel", () => {
       });
       expect(deletedRecipe).toEqual(null);
     });
+
+    test("enqueues the attached recipes' images for deletion", async ({
+      trpc,
+      user,
+    }) => {
+      const { label, image } = await createLabelledRecipeWithImage(user.id);
+
+      await trpc.labels.deleteLabel({
+        id: label.id,
+        includeAttachedRecipes: true,
+      });
+
+      expect(addBulkMock).toHaveBeenCalledWith([
+        expect.objectContaining({
+          data: { imageIds: [image.id], imageOwnerUserId: user.id },
+        }),
+      ]);
+    });
   });
 
   describe("error", () => {
+    test("keeps the label and its recipes when the image deletion cannot be enqueued", async ({
+      trpc,
+      user,
+    }) => {
+      const { label, recipe } = await createLabelledRecipeWithImage(user.id);
+      addBulkMock.mockRejectedValue(new Error("Connection is closed"));
+
+      await expect(
+        trpc.labels.deleteLabel({
+          id: label.id,
+          includeAttachedRecipes: true,
+        }),
+      ).rejects.toThrow();
+
+      expect(
+        (await prisma.label.findUnique({ where: { id: label.id } }))?.id,
+      ).toEqual(label.id);
+      expect(
+        (await prisma.recipe.findUnique({ where: { id: recipe.id } }))?.id,
+      ).toEqual(recipe.id);
+    });
+
     test("throws when the label does not exist", async ({ trpc }) => {
       await expect(
         trpc.labels.deleteLabel({
