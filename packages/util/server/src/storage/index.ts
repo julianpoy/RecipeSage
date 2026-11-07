@@ -39,7 +39,7 @@ export interface StorageProvider {
 
   deleteObject: (objectType: ObjectTypes, key: string) => Promise<void>;
 
-  deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<void>;
+  deleteObjects: (objectType: ObjectTypes, keys: string[]) => Promise<string[]>;
 
   readStream: (objectType: ObjectTypes, key: string) => Promise<Readable>;
 }
@@ -71,5 +71,3 @@ export * from "./image";
 export * from "./imageFetchError";
 export * from "./shared";
 export * from "./gunzipPromise";
-export * from "./deleteHangingImagesForUser";
-export * from "./deleteHangingImagesByIds";
