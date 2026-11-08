@@ -70,6 +70,7 @@ export const cookbookJobMetaSchema = z.object({
   cookbookIntroduction: z.string().optional(),
   cookbookAuthor: z.string().optional(),
   cookbookIncludeToc: z.boolean().optional(),
+  cookbookIncludePageNumbers: z.boolean().optional(),
   cookbookIncludeImages: z.boolean().optional(),
   cookbookIncludeLabels: z.boolean().optional(),
   cookbookIncludeLastMade: z.boolean().optional(),

@@ -10,6 +10,7 @@ export interface CookbookOptions {
   introduction?: string;
   author?: string;
   includeToc: boolean;
+  includePageNumbers: boolean;
   includeImages: boolean;
   includeLabels: boolean;
   includeLastMade: boolean;
@@ -100,6 +101,17 @@ export const generateCookbookPDFStream = async (
 
   const docDefinition: TDocumentDefinitions = {
     content,
+    footer: options.includePageNumbers
+      ? (currentPage) =>
+          currentPage === 1
+            ? null
+            : {
+                text: String(currentPage),
+                alignment: "center",
+                fontSize: 9,
+                margin: [0, 12, 0, 0] satisfies Margins,
+              }
+      : undefined,
     defaultStyle: {
       font: "NotoSans",
       fontSize: 10,
