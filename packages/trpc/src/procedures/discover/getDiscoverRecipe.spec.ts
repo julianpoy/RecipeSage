@@ -29,6 +29,24 @@ describe("getDiscoverRecipe", () => {
       expect(response.isSaved).toEqual(false);
     });
 
+    test("removes html from the recipe text", async ({ user }) => {
+      const recipe = await prisma.discoverRecipe.create({
+        data: {
+          ...discoverRecipeFactory(user.id),
+          ingredients: 'salt & pepper <img src="https://example.com/a.png">',
+          instructions: 'Mix <img src="https://example.com/a.png">',
+          notes: "<b>Keeps</b> well",
+        },
+      });
+
+      const response = await anonymousTrpc.discover.getDiscoverRecipe({
+        id: recipe.id,
+      });
+      expect(response.ingredients).toEqual("salt &amp; pepper ");
+      expect(response.instructions).toEqual("Mix ");
+      expect(response.notes).toEqual("Keeps well");
+    });
+
     test("returns a pending recipe to its author", async ({ trpc, user }) => {
       const recipe = await prisma.discoverRecipe.create({
         data: {
