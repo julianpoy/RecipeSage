@@ -27,6 +27,12 @@ vi.mock("@recipesage/util/server/db", () => ({
 }));
 
 const RECIPE_ID = "b0a4c6d2-9d9e-4a2f-8b6a-2f1f4b3c9d10";
+const RECIPE = {
+  id: RECIPE_ID,
+  ingredients: "",
+  instructions: "",
+  notes: "",
+};
 
 const buildApp = async () => {
   const { recipesRouter } = await import("./index");
@@ -43,9 +49,8 @@ describe("GET /recipes/:recipeId/json-ld", () => {
   });
 
   it("returns the json-ld of the recipe with a 200", async () => {
-    const recipe = { id: RECIPE_ID };
     const jsonLd = { "@type": "Recipe", identifier: RECIPE_ID };
-    recipeFindUniqueMock.mockResolvedValue(recipe);
+    recipeFindUniqueMock.mockResolvedValue(RECIPE);
     recipeToJSONLDMock.mockReturnValue(jsonLd);
 
     const app = await buildApp();
@@ -53,11 +58,31 @@ describe("GET /recipes/:recipeId/json-ld", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(jsonLd);
-    expect(recipeToJSONLDMock).toHaveBeenCalledWith(recipe);
+    expect(recipeToJSONLDMock).toHaveBeenCalledWith(RECIPE);
+  });
+
+  it("decodes html entities in the recipe text", async () => {
+    recipeFindUniqueMock.mockResolvedValue({
+      ...RECIPE,
+      ingredients: "salt &amp; pepper",
+      instructions: "heat to &lt; 100",
+      notes: "keep &gt; 50",
+    });
+    recipeToJSONLDMock.mockReturnValue({});
+
+    const app = await buildApp();
+    await request(app).get(`/recipes/${RECIPE_ID}/json-ld`);
+
+    expect(recipeToJSONLDMock).toHaveBeenCalledWith({
+      ...RECIPE,
+      ingredients: "salt & pepper",
+      instructions: "heat to < 100",
+      notes: "keep > 50",
+    });
   });
 
   it("allows cross origin requests so the embed snippet works", async () => {
-    recipeFindUniqueMock.mockResolvedValue({ id: RECIPE_ID });
+    recipeFindUniqueMock.mockResolvedValue(RECIPE);
     recipeToJSONLDMock.mockReturnValue({});
 
     const app = await buildApp();

@@ -8,6 +8,7 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { ImageSummary } from "@recipesage/prisma";
+import { decodeBasicHtmlEntities } from "@recipesage/util/shared";
 
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
@@ -299,9 +300,9 @@ export class PublishDiscoverRecipePage {
       yield: source.yield,
       activeTime: source.activeTime,
       totalTime: source.totalTime,
-      ingredients: source.ingredients,
-      instructions: source.instructions,
-      notes: source.notes,
+      ingredients: decodeBasicHtmlEntities(source.ingredients),
+      instructions: decodeBasicHtmlEntities(source.instructions),
+      notes: decodeBasicHtmlEntities(source.notes),
       nutritionServingSize: source.nutritionServingSize,
       nutritionCalories: source.nutritionCalories,
       nutritionTotalFat: source.nutritionTotalFat,

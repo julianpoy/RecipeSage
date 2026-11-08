@@ -26,6 +26,7 @@ import {
 import fractionjs from "fraction.js";
 import { System } from "@recipesage/unitz-ts";
 import {
+  decodeBasicHtmlEntities,
   getAnchorMeasurement,
   parseIngredients,
   parseYieldCount,
@@ -133,7 +134,7 @@ export class ScaleRecipeComponent implements OnInit {
         if (!name) return null;
         return {
           index,
-          label: name,
+          label: decodeBasicHtmlEntities(name),
           qtyText: measurement.qtyText,
           qtyValue: measurement.qtyValue,
           unit: measurement.unit,
