@@ -10,9 +10,6 @@ commands:
       #       - dependency-cache-v3-{{ checksum "pnpm-lock.yaml" }}
       #       - dependency-cache-v3-
       - run:
-          name: enable-corepack
-          command: sudo corepack enable
-      - run:
           name: install-deps
           command: "pnpm install --frozen-lockfile"
       # - save_cache:
@@ -24,7 +21,7 @@ jobs:
   build_and_test:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -109,7 +106,7 @@ jobs:
   push_backend:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - setup_remote_docker:
@@ -127,7 +124,7 @@ jobs:
   push_backend_selfhost_amd64:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - setup_remote_docker:
@@ -179,7 +176,7 @@ jobs:
   push_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - aws-cli/setup
@@ -228,7 +225,7 @@ jobs:
   push_www:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - aws-cli/setup
@@ -259,7 +256,7 @@ jobs:
   build_frontend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - install-dependencies
@@ -282,7 +279,7 @@ jobs:
   push_frontend_selfhost_amd64:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - attach_workspace:
@@ -338,7 +335,7 @@ jobs:
   build_desktop_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - install-dependencies
@@ -360,10 +357,10 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "24.22"
+          node-version: "26.13"
       - run:
           name: enable-corepack
-          command: sudo corepack enable
+          command: npm install -g corepack@0.36.0 && corepack enable
       - run:
           name: install-packages
           command: pnpm install --frozen-lockfile
@@ -443,7 +440,7 @@ jobs:
   desktop_linux:
     resource_class: medium+
     docker:
-      - image: cimg/node:24.22
+      - image: cimg/node:26.13
     steps:
       - checkout
       - install-dependencies
@@ -485,11 +482,11 @@ jobs:
       - run:
           name: install-node
           command: |
-            nvm install 24.22
-            nvm use 24.22
+            nvm install 26.13
+            nvm use 26.13
       - run:
           name: enable-corepack
-          command: corepack enable
+          command: npm install -g corepack@0.36.0 && corepack enable
       - run:
           name: install-packages
           command: pnpm install --frozen-lockfile
@@ -527,6 +524,8 @@ jobs:
       - image: cimg/android:2026.08.1-node
     steps:
       - checkout
+      - node/install:
+          node-version: "26.13"
       - install-dependencies
       - run:
           name: build-frontend-for-android
@@ -557,10 +556,10 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "24.22"
+          node-version: "26.13"
       - run:
           name: enable-corepack
-          command: sudo corepack enable
+          command: npm install -g corepack@0.36.0 && corepack enable
       - run:
           name: install-packages
           command: pnpm install --frozen-lockfile
