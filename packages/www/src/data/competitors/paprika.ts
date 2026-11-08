@@ -178,7 +178,7 @@ export const paprika: CompetitorData = {
     },
     {
       title: "Open source",
-      body: "RecipeSage's code is on GitHub under the AGPL. You can export everything in standard formats.",
+      body: "RecipeSage's code is on GitHub under the AGPL for personal use. You can export everything in standard formats.",
     },
     {
       title: "Share your recipes with anyone",

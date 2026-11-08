@@ -161,7 +161,7 @@ export const notion: CompetitorData = {
     },
     {
       title: "Open source",
-      body: "RecipeSage's code is on GitHub under the AGPL, and you can self-host it. Export everything in standard formats any time.",
+      body: "RecipeSage's code is on GitHub under the AGPL for personal use, and you can self-host it. Export everything in standard formats any time.",
     },
     {
       title: "Turn your collection into a printable cookbook",

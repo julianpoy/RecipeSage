@@ -185,7 +185,7 @@ export const anylist: CompetitorData = {
     },
     {
       title: "Open source and self-hostable",
-      body: "RecipeSage is AGPL-licensed and you can run it on your own server. AnyList is closed source with no public API and the cloud is the only sync target.",
+      body: "RecipeSage is AGPL-licensed for personal use and you can run it on your own server. AnyList is closed source with no public API and the cloud is the only sync target.",
     },
     {
       title: "Cross-platform without Apple bias",

@@ -17,7 +17,7 @@ export const samsungFood: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. No ads, no Samsung account, no paywall. Open source under the AGPL.",
+      "Free forever. No ads, no Samsung account, no paywall. Open source under the AGPL for personal use.",
     competitor:
       "Free tier with ads. Samsung Food+ is $6.99/month or $59.99/year. Several core features require Samsung Food+.",
   },

@@ -45,7 +45,7 @@
   "pages.pricing.title": "Pricing",
   "pages.pricing.subtitle": "Free and open source, no gotchas.",
   "pages.pricing.intro.alwaysFree": "RecipeSage is completely free for everyone. No ads, no time-limited trial, and no features locked behind a paywall.",
-  "pages.pricing.intro.openSource": "RecipeSage is a hobby project I work on in my free time, alongside my other open source projects. The code is open source, so anyone can read it, fork it, or self-host their own copy.",
+  "pages.pricing.intro.openSource": "RecipeSage is a hobby project I work on in my free time, alongside my other open source projects. The code is open source, so anyone can read it, and you can fork it or self-host your own copy for personal use.",
   "pages.pricing.support.heading": "Supporting the project",
   "pages.pricing.support.body": "If you'd like to support the project, you can make a one-time or recurring contribution.",
   "pages.pricing.support.hosting": "Contributions are entirely optional and go toward server and image-hosting costs.",

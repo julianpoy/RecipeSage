@@ -17,7 +17,7 @@ export const cookbookmanager: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL for personal use.",
     competitor:
       "Free up to 20 recipes. CookBook Pro is $6.99/month or $39.99/year direct with a 14-day trial, or $9.99/month and $49.99/year via the App Store.",
   },

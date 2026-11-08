@@ -1,7 +1,7 @@
 {
   "name": "@recipesage/desktop",
   "version": "1.0.0",
-  "license": "SEE README",
+  "license": "SEE LICENSE IN LICENSE.md",
   "description": "RecipeSage Desktop Application",
   "main": ".vite/build/main.cjs",
   "private": true,

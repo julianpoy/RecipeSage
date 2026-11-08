@@ -17,7 +17,7 @@ export const bigoven: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever, unlimited recipes, no ads, no tracking. Open source under the AGPL.",
+      "Free forever, unlimited recipes, no ads, no tracking. Open source under the AGPL for personal use.",
     competitor:
       "Free up to 200 recipes with ads. BigOven Pro is $2.99/month or $24.99/year. BigOven's RecipeScan credit packs cost $9.99 to $59.99.",
   },

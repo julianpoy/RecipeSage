@@ -37,6 +37,7 @@ COPY prisma.config.ts prisma.config.ts
 COPY packages packages
 COPY scripts scripts
 COPY fonts fonts
+COPY LICENSE.md LICENSE.md
 
 # Prisma must be regenerated since schema is not present during install stage
 RUN pnpm exec prisma generate

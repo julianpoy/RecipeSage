@@ -17,7 +17,7 @@ export const cookmate: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL for personal use.",
     competitor:
       "Free up to 60 cloud recipes and 1 shopping list, with ads inside recipes. Premium is $1.99/month or $22.99/year on iOS, or 20 EUR/year.",
   },

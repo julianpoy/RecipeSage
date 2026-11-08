@@ -167,7 +167,7 @@ export const googleKeep: CompetitorData = {
     },
     {
       title: "Open source and self-hostable",
-      body: "RecipeSage is AGPL-licensed, you can run it on your own server, and you can export your whole library to JSON-LD, PDF, or text any time.",
+      body: "RecipeSage is AGPL-licensed for personal use, you can run it on your own server, and you can export your whole library to JSON-LD, PDF, or text any time.",
     },
     {
       title: "Turn your collection into a printable cookbook",

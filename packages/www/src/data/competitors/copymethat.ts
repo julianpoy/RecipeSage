@@ -17,7 +17,7 @@ export const copymethat: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL for personal use.",
     competitor:
       "Free up to 40 recipes. Premium is $1/month, $12/year, or $65 lifetime to lift the cap.",
   },
@@ -181,7 +181,7 @@ export const copymethat: CompetitorData = {
     },
     {
       title: "Open source",
-      body: "RecipeSage's source is on GitHub under the AGPL. CopyMeThat is closed-source proprietary software.",
+      body: "RecipeSage's source is on GitHub under the AGPL for personal use. CopyMeThat is closed-source proprietary software.",
     },
     {
       title: "Share your recipes with anyone",

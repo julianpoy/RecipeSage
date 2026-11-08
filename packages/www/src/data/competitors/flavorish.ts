@@ -17,7 +17,7 @@ export const flavorish: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall. Open source under the AGPL for personal use.",
     competitor:
       "Free with unlimited website imports and storage, but social imports, image imports, and AI generation require premium which is $4.99/month or $49.99/year.",
   },
@@ -148,7 +148,7 @@ export const flavorish: CompetitorData = {
     },
     {
       title: "Open source and self-hostable",
-      body: "RecipeSage's code is on GitHub under the AGPL and you can run it on your own server. Flavorish is closed source and runs on its own cloud.",
+      body: "RecipeSage's code is on GitHub under the AGPL for personal use, and you can run it on your own server. Flavorish is closed source and runs on its own cloud.",
     },
     {
       title: "Turn your collection into a printable cookbook",

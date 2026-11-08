@@ -55,6 +55,10 @@ module.exports = {
           from: path.resolve(__dirname, "../frontend/src/assets/i18n/*.json"),
           to: "i18n/[name][ext]",
         },
+        {
+          from: path.resolve(__dirname, "../../LICENSE.md"),
+          to: "LICENSE.md",
+        },
       ],
     }),
   ],

@@ -31,6 +31,7 @@
           "ng build --configuration=production",
           "tsx build-service-worker.ts",
           "workbox injectManifest",
+          "cp ../../LICENSE.md www/LICENSE.md",
           "tsx upload-sourcemaps.ts"
         ],
         "parallel": false
@@ -43,7 +44,8 @@
         "commands": [
           "tsx build-service-worker.ts",
           "ng build --configuration=selfhost",
-          "workbox injectManifest"
+          "workbox injectManifest",
+          "cp ../../LICENSE.md www/LICENSE.md"
         ],
         "parallel": false
       }
@@ -53,7 +55,11 @@
       "dependsOn": ["util-shared:build"],
       "options": {
         "cwd": "packages/frontend",
-        "command": "ng build --configuration=desktop"
+        "commands": [
+          "ng build --configuration=desktop",
+          "cp ../../LICENSE.md www/LICENSE.md"
+        ],
+        "parallel": false
       }
     },
     "typecheck": {

@@ -127,7 +127,7 @@ export const tandoor: CompetitorData = {
       feature: "Open source",
       recipesage: true,
       competitor: true,
-      note: "Both are AGPL. Tandoor adds the Commons Clause, which rules out selling the software or paid hosting of it by anyone other than the licensor.",
+      note: "RecipeSage is AGPL for personal use, and other use needs a separate license. Tandoor is AGPL with the Commons Clause, which rules out selling the software or paid hosting of it by anyone other than the licensor.",
     },
     { feature: "Self-hostable", recipesage: true, competitor: true },
   ],
@@ -201,7 +201,7 @@ export const tandoor: CompetitorData = {
     },
     {
       q: "I like self-hosting. Can I self-host RecipeSage too?",
-      a: "Yes. RecipeSage's code is on GitHub under the AGPL and you can run it on your own server. The difference is that you don't have to, since the hosted version at recipesage.com is free.",
+      a: "Yes. RecipeSage's code is on GitHub under the AGPL for personal use, and you can run it on your own server. The difference is that you don't have to, since the hosted version at recipesage.com is free.",
     },
     {
       q: "Is there a free alternative to Tandoor Recipes?",

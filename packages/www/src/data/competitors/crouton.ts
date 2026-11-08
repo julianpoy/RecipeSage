@@ -201,7 +201,7 @@ export const crouton: CompetitorData = {
     },
     {
       title: "Open source and self-hostable",
-      body: "RecipeSage's code is on GitHub under the AGPL and you can run it on your own server. Crouton is closed source and runs on Apple's iCloud infrastructure.",
+      body: "RecipeSage's code is on GitHub under the AGPL for personal use, and you can run it on your own server. Crouton is closed source and runs on Apple's iCloud infrastructure.",
     },
     {
       title: "Turn your collection into a printable cookbook",

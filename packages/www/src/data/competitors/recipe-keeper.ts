@@ -17,7 +17,7 @@ export const recipeKeeper: CompetitorData = {
   ],
   pricingSummary: {
     recipesage:
-      "Free forever. Unlimited recipes, no ads, no paywall, no per-device fees. Open source under the AGPL.",
+      "Free forever. Unlimited recipes, no ads, no paywall, no per-device fees. Open source under the AGPL for personal use.",
     competitor:
       "Free up to 20 recipes. Pro is a one-time upgrade purchased separately on each platform: around $19.99 iOS, $19.99 Android, $29.99 macOS, plus a separate purchase on Windows.",
   },
@@ -185,7 +185,7 @@ export const recipeKeeper: CompetitorData = {
     },
     {
       title: "Open source and self-hostable",
-      body: "RecipeSage's code is on GitHub under the AGPL, and exports use well-recognized standardized formats. Recipe Keeper is closed source with a proprietary undocumented .zip.",
+      body: "RecipeSage's code is on GitHub under the AGPL for personal use, and exports use well-recognized standardized formats. Recipe Keeper is closed source with a proprietary undocumented .zip.",
     },
   ],
   competitorWins: [
