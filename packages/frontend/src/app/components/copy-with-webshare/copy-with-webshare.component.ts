@@ -31,6 +31,7 @@ export class CopyWithWebshareComponent implements AfterViewInit {
 
   @Input() disableWebshare: boolean = false;
   @Input() hideInstructions: boolean = false;
+  @Input() multiline: boolean = false;
 
   private isNative = Capacitor.isNativePlatform();
   hasCopyAPI: boolean = this.isNative || !!document.execCommand;

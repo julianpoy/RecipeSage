@@ -9,9 +9,20 @@ import {
   ModalController,
   ToastController,
 } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
+import { System } from "@recipesage/unitz-ts";
+import {
+  applyDecimalNotation,
+  decodeBasicHtmlEntities,
+  inferRecipeNotation,
+  parseIngredients,
+  parseInstructions,
+  parseNotes,
+} from "@recipesage/util/shared";
 
 import { ServerActionsService } from "../../services/server-actions.service";
 import type { UserPublic, RecipeSummary } from "@recipesage/prisma";
+import type { UnitSystem } from "../../modals/scale-recipe/scale-recipe.component";
 import { LoadingService } from "../../services/loading.service";
 import {
   UtilService,
@@ -99,18 +110,25 @@ export class ShareModalPage {
   loadingService = inject(LoadingService);
   serverActionsService = inject(ServerActionsService);
   modalCtrl = inject(ModalController);
+  translate = inject(TranslateService);
 
   @Input({
     required: true,
   })
   recipe!: RecipeSummary;
+  @Input({
+    required: true,
+  })
+  scale!: string;
+  @Input() unitSystem: UnitSystem = "original";
 
   selectedUser?: UserPublic;
   recipientId?: string;
 
-  shareMethod = "account";
+  shareMethod = "link";
 
   recipeURL?: string;
+  recipeText?: string;
 
   enableJSONLD = true;
   embedHeight = "800";
@@ -152,11 +170,123 @@ export class ShareModalPage {
       this.recipeURL = `${origin}/api/share/recipe/${this.recipe.id}`;
 
       this.updateEmbed(true);
+      this.generateRecipeText();
     });
   }
 
   cancel() {
     this.modalCtrl.dismiss();
+  }
+
+  async generateRecipeText() {
+    const recipe = this.recipe;
+
+    const targetSystem =
+      this.unitSystem === "metric"
+        ? System.METRIC
+        : this.unitSystem === "imperial"
+          ? System.US
+          : undefined;
+    const decimalNotationMode = inferRecipeNotation(
+      recipe,
+      this.utilService.getCurrentLocale(),
+    );
+    const parseOptions = { targetSystem, decimalNotationMode };
+
+    const source = recipe.source.trim();
+    const activeTime = recipe.activeTime.trim();
+    const totalTime = recipe.totalTime.trim();
+    const yieldText = recipe.yield.trim();
+
+    const recipeDetailLines = [
+      source &&
+        (await this.translate
+          .get("pages.share.byText.source", { source })
+          .toPromise()),
+      recipe.url.trim(),
+      activeTime &&
+        (await this.translate
+          .get("pages.share.byText.activeTime", { activeTime })
+          .toPromise()),
+      totalTime &&
+        (await this.translate
+          .get("pages.share.byText.totalTime", { totalTime })
+          .toPromise()),
+      yieldText &&
+        (await this.translate
+          .get("pages.share.byText.yield", { yield: yieldText })
+          .toPromise()),
+    ].filter((line) => line);
+
+    const ingredients = parseIngredients(
+      decodeBasicHtmlEntities(recipe.ingredients),
+      this.scale,
+      parseOptions,
+    )
+      .map((ingredient) => ingredient.plaintextContent.trim())
+      .join("\n")
+      .trim();
+
+    const imageStepText = await this.translate
+      .get("pages.share.byText.imageStep")
+      .toPromise();
+
+    const instructions = parseInstructions(
+      decodeBasicHtmlEntities(recipe.instructions),
+      this.scale,
+      parseOptions,
+    )
+      .map((instruction) => {
+        const instructionText = instruction.plaintextContent.trim();
+        return instruction.isHeader
+          ? instructionText
+          : `${instruction.count}. ${instructionText || imageStepText}`;
+      })
+      .filter((line) => line)
+      .join("\n");
+
+    const notes = parseNotes(
+      decodeBasicHtmlEntities(recipe.notes),
+      this.scale,
+      parseOptions,
+    )
+      .map((note) => note.plaintextContent.trim())
+      .join("\n")
+      .trim();
+
+    const scaleDisplay = applyDecimalNotation(this.scale, decimalNotationMode);
+    const ingredientsHeading = await this.translate
+      .get(
+        this.scale === "1"
+          ? "pages.recipeDetails.ingredients"
+          : "printViews.recipe.ingredientsAtScale",
+        { scale: scaleDisplay },
+      )
+      .toPromise();
+    const scaleStatus = await this.translate
+      .get("pages.recipeDetails.scaleStatus", { scale: scaleDisplay })
+      .toPromise();
+    const instructionsHeading = await this.translate
+      .get("pages.recipeDetails.instructions")
+      .toPromise();
+    const notesHeading = await this.translate
+      .get("pages.recipeDetails.notes")
+      .toPromise();
+
+    const sections = [
+      [recipe.title.trim(), recipe.description.trim()]
+        .filter((line) => line)
+        .join("\n"),
+      recipeDetailLines.join("\n"),
+      this.scale !== "1" && !ingredients && (instructions || notes)
+        ? scaleStatus
+        : "",
+      ingredients && `${ingredientsHeading}\n${ingredients}`,
+      instructions && `${instructionsHeading}\n${instructions}`,
+      notes && `${notesHeading}\n${notes}`,
+    ];
+
+    this.recipeText = sections.filter((section) => section).join("\n\n");
   }
 
   updateEmbed(updateURL?: boolean) {

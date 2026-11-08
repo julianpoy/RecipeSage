@@ -710,6 +710,8 @@ export class RecipePage {
       component: ShareModalPage,
       componentProps: {
         recipe: this.recipe,
+        scale: this.scale,
+        unitSystem: this.unitSystem,
       },
     });
     shareModal.present();
