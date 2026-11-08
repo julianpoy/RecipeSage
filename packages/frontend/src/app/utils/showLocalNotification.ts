@@ -1,6 +1,6 @@
 import { getElectronAPI } from "./electron";
 
-const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
+const RS_LOGO_URL = "https://recipesage.com/app/assets/imgs/logo_green.png";
 
 export interface LocalNotification {
   title: string;
