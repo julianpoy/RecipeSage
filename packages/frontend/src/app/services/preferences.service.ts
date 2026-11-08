@@ -69,7 +69,7 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowRating]: false,
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]:
-      Math.min(window.innerWidth, window.innerHeight) < 440
+      Math.min(window.innerWidth, window.innerHeight) < 375
         ? MyRecipesViewTypeOptions.List
         : MyRecipesViewTypeOptions.Tiles,
     [MyRecipesPreferenceKey.SortBy]: MyRecipesSortOptions.TitleAsc,
