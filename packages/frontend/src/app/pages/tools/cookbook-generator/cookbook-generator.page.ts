@@ -94,6 +94,7 @@ export class CookbookGeneratorPage {
   introduction = "";
   author = "";
   includeToc = true;
+  includePageNumbers = false;
   includeImages = true;
   includeLabels = false;
   includeLastMade = false;
@@ -204,6 +205,7 @@ export class CookbookGeneratorPage {
         introduction: this.introduction.trim() || undefined,
         author: this.author.trim() || undefined,
         includeToc: this.includeToc,
+        includePageNumbers: this.includePageNumbers,
         includeImages: this.includeImages,
         includeLabels: this.includeLabels,
         includeLastMade: this.includeLastMade,

@@ -100,6 +100,7 @@ export const processCookbookJob = async (
       introduction: jobMeta.cookbookIntroduction,
       author: jobMeta.cookbookAuthor,
       includeToc: jobMeta.cookbookIncludeToc ?? false,
+      includePageNumbers: jobMeta.cookbookIncludePageNumbers ?? false,
       includeImages: jobMeta.cookbookIncludeImages ?? true,
       includeLabels: jobMeta.cookbookIncludeLabels ?? false,
       includeLastMade: jobMeta.cookbookIncludeLastMade ?? false,

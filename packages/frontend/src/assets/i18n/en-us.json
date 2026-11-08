@@ -1669,6 +1669,7 @@
   "pages.cookbook.field.author": "Author",
   "pages.cookbook.field.introduction": "Introduction",
   "pages.cookbook.field.toc": "Include table of contents",
+  "pages.cookbook.field.includePageNumbers": "Include page numbers",
   "pages.cookbook.field.includeImages": "Include images",
   "pages.cookbook.field.includeLabels": "Include recipe labels",
   "pages.cookbook.field.includeLastMade": "Include last made date",
