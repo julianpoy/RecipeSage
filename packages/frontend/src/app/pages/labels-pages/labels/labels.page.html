@@ -175,13 +175,13 @@
               </ion-item>
             }
           </ion-item-group>
+          <ion-note>
+            {{
+              "pages.labels.label.sectionDescription"
+                | translate: { count: labels.length }
+            }}
+          </ion-note>
         }
-        <ion-note>
-          {{
-            "pages.labels.label.sectionDescription"
-              | translate: { count: labels.length }
-          }}
-        </ion-note>
       </ion-list>
     }
     @if (!loading && (!searchText || filteredLabelGroups.length)) {
@@ -243,13 +243,13 @@
               </ion-item>
             }
           </ion-item-group>
+          <ion-note>
+            {{
+              "pages.labels.group.sectionDescription"
+                | translate: { count: labelGroups.length }
+            }}
+          </ion-note>
         }
-        <ion-note>
-          {{
-            "pages.labels.group.sectionDescription"
-              | translate: { count: labelGroups.length }
-          }}
-        </ion-note>
       </ion-list>
     }
 
