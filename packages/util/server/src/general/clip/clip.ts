@@ -1,8 +1,6 @@
 import { createHash } from "crypto";
 import * as Sentry from "@sentry/node";
 import { Prisma, prisma } from "@recipesage/prisma";
-import { fetchURL } from "../fetch";
-import { FetchTimeoutError } from "../FetchTimeoutError";
 import { StandardizedRecipeImportEntry } from "../../db";
 import { metrics } from "../metrics";
 import {
@@ -20,22 +18,14 @@ import { cleanRecipeFields } from "./cleanRecipeFields";
 import { htmlmetaparserToRecipe } from "./htmlmetaparserToRecipe";
 import { isRecipeGrounded } from "./isRecipeGrounded";
 import { normalizeClipUrl } from "./normalizeClipUrl";
+import { isBotChallengePage } from "./isBotChallengePage";
+import { fetchClipPage } from "./fetchClipPage";
 import type { Result } from "htmlmetaparser";
 
 const CLIP_CACHE_VERSION = 1;
 const NULL_CHAR = "\u0000";
 
 const hashUrl = (url: string) => createHash("sha256").update(url).digest();
-
-const isBotChallengePage = (html: string): boolean => {
-  const lower = html.toLowerCase();
-  return (
-    lower.includes("<title>just a moment...</title>") ||
-    lower.includes("<title>attention required!</title>") ||
-    lower.includes("<title>access denied</title>") ||
-    lower.includes("<title>client challenge</title>")
-  );
-};
 
 const isCompleteRecipe = (entry: StandardizedRecipeImportEntry): boolean =>
   !!(
@@ -68,20 +58,6 @@ const clipRecipeHtmlWithLLM = async (document: string, text: string) => {
 
   return textToRecipe(text, TextToRecipeInputType.Webpage);
 };
-
-export class ClipTimeoutError extends Error {
-  constructor() {
-    super();
-    this.name = "ClipTimeoutError";
-  }
-}
-
-export class ClipFetchError extends Error {
-  constructor() {
-    super();
-    this.name = "ClipFetchError";
-  }
-}
 
 export const clipUrl = async (
   url: string,
@@ -134,50 +110,7 @@ export const clipUrl = async (
     result: "miss",
   });
 
-  const response = await (async () => {
-    const timeout = parseInt(
-      process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "30000",
-    );
-
-    let _url = normalizedUrl;
-    if (process.env.SCRAPFLY_API_KEY) {
-      const params = new URLSearchParams({
-        asp: "true",
-        key: process.env.SCRAPFLY_API_KEY,
-        url: normalizedUrl,
-        proxified_response: "true",
-        lang: "en",
-      });
-
-      _url = `https://api.scrapfly.io/scrape?${params}`;
-    }
-
-    return fetchURL(_url, {
-      timeout,
-    });
-  })().catch((e) => {
-    if (e instanceof FetchTimeoutError) {
-      metrics.clipError.inc({
-        form: "url",
-        method: "timeout",
-      });
-      throw new ClipTimeoutError();
-    }
-    console.error(e);
-    metrics.clipError.inc({
-      form: "url",
-      method: "fetch",
-    });
-    throw new ClipFetchError();
-  });
-
-  if (!response.ok) {
-    metrics.clipError.inc({
-      form: "url",
-      method: "fetch",
-    });
-    throw new ClipFetchError();
-  }
+  const page = await fetchClipPage(normalizedUrl);
 
   const cacheResult = async (result: StandardizedRecipeImportEntry) => {
     await prisma.clipCache.upsert({
@@ -196,9 +129,8 @@ export const clipUrl = async (
     });
   };
 
-  if (response.headers.get("content-type") === "application/pdf") {
-    const pdfContent = await response.buffer();
-    const result = await pdfToRecipe(pdfContent).catch((e) => {
+  if (page.kind === "pdf") {
+    const result = await pdfToRecipe(page.body).catch((e) => {
       Sentry.captureException(e, {
         extra: {
           url,
@@ -237,9 +169,8 @@ export const clipUrl = async (
     return result;
   }
 
-  if (response.headers.get("content-type")?.startsWith("image/")) {
-    const imageContent = await response.buffer();
-    const result = await ocrImagesToRecipe([imageContent]).catch((e) => {
+  if (page.kind === "image") {
+    const result = await ocrImagesToRecipe([page.body]).catch((e) => {
       Sentry.captureException(e, {
         extra: {
           imageUrl: url,
@@ -279,11 +210,9 @@ export const clipUrl = async (
     return result;
   }
 
-  const htmlDocument = await response.text();
+  const result = await clipHtml(page.html, normalizedUrl, captureError);
 
-  const result = await clipHtml(htmlDocument, normalizedUrl, captureError);
-
-  if (isCompleteRecipe(result) && !isBotChallengePage(htmlDocument)) {
+  if (isCompleteRecipe(result) && !isBotChallengePage(page.html)) {
     await cacheResult(result);
   }
 
