@@ -1,4 +1,4 @@
-FROM node:24.22-alpine
+FROM node:26.13-alpine
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ COPY .npmrc .npmrc
 COPY pnpm-lock.yaml pnpm-lock.yaml
 COPY package.json package.json
 
-RUN corepack enable && corepack install
+RUN npm install -g corepack@0.36.0 && corepack enable && corepack install
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 
 COPY .prettierignore .prettierignore

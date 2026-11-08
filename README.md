@@ -119,7 +119,7 @@ Below are some notes for getting setup to contribute code.
 1. Install [Docker](https://docs.docker.com/get-docker/) and [Node](https://nodejs.org/en/)
 2. Clone this repo
 3. Create a `.env` file in the root of the repository using `example.env` as a template. These can be left as placeholders, but the dependent functionality will not work without a real key in place.
-4. Enable corepack so the pinned pnpm version is picked up: `corepack enable`
+4. Install and enable corepack so the pinned pnpm version is picked up: `npm install -g corepack@0.36.0 && corepack enable`
 5. Install dependencies by running `pnpm install` at the root of the repo.
 6. Start the Docker containers by running `docker compose up -d` in the cloned repo
 7. Run database migrations `docker compose exec backend pnpm exec prisma migrate dev`
