@@ -38,6 +38,13 @@
     &.hasActionButton {
       padding-right: 20px;
     }
+
+    &.multiline {
+      white-space: pre-wrap;
+      unicode-bidi: plaintext;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
   }
 
   button {

@@ -11,9 +11,11 @@
     </p>
   }
   <div class="codeBlock">
-    <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
-      {{ copyText }}
-    </div>
+    <div
+      class="code"
+      [ngClass]="{ hasActionButton: hasWebShareAPI, multiline: multiline }"
+      [textContent]="copyText"
+    ></div>
     @if (hasWebShareAPI) {
       <ion-button fill="clear" (click)="webShare()">
         <ion-icon name="share-outline" slot="icon-only"></ion-icon>

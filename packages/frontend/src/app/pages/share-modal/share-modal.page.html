@@ -26,21 +26,30 @@
           }
           <ion-label>
             <h2>{{ recipe.title }}</h2>
-            <p class="ion-text-wrap">
-              {{ "pages.share.description" | translate }}
-            </p>
+            @if (shareMethod === "account") {
+              <p class="ion-text-wrap">
+                {{ "pages.share.description" | translate }}
+              </p>
+            }
           </ion-label>
         </ion-item>
       </ion-item-group>
     </ion-list>
 
     <div class="share-method-container">
-      <ion-segment (ionChange)="shareMethodChanged($event)" value="account">
-        <ion-segment-button value="account">
-          {{ "pages.share.byAccount" | translate }}
-        </ion-segment-button>
+      <ion-segment
+        (ionChange)="shareMethodChanged($event)"
+        value="link"
+        scrollable="true"
+      >
         <ion-segment-button value="link">
           {{ "pages.share.byLink" | translate }}
+        </ion-segment-button>
+        <ion-segment-button value="text">
+          {{ "pages.share.byText" | translate }}
+        </ion-segment-button>
+        <ion-segment-button value="account">
+          {{ "pages.share.byAccount" | translate }}
         </ion-segment-button>
         <ion-segment-button value="embed">
           {{ "pages.share.byEmbed" | translate }}
@@ -56,6 +65,15 @@
             [webshareText]="recipe.title + ':'"
             [webshareURL]="recipeURL || ''"
             [copyText]="recipeURL || ''"
+          ></copy-with-webshare>
+        }
+        @case ("text") {
+          <copy-with-webshare
+            [webshareTitle]="recipe.title"
+            [webshareText]="recipeText || ''"
+            [copyText]="recipeText || ''"
+            [hideInstructions]="true"
+            [multiline]="true"
           ></copy-with-webshare>
         }
         @case ("embed") {
@@ -246,8 +264,7 @@
       <ion-icon name="send-outline" slot="start"></ion-icon>
       <ion-label> {{ "pages.share.send" | translate }} </ion-label>
     </ion-button>
-  }
-  @if (shareMethod === "link" || shareMethod === "embed") {
+  } @else {
     <ion-button expand="block" (click)="cancel()">
       <ion-icon name="close-outline" slot="start"></ion-icon>
       <ion-label> {{ "pages.share.close" | translate }} </ion-label>
