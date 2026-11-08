@@ -1,6 +1,7 @@
 import { DiscoverApprovalState, Prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { discoverPubliclyVisibleWhere } from "@recipesage/util/server/db";
+import { sanitizeRemoveHtmlFromString } from "@recipesage/util/server/general";
 
 const toPublicApprovalState = (approvalState: DiscoverApprovalState) =>
   approvalState === DiscoverApprovalState.SHADOWBANNED
@@ -240,9 +241,9 @@ export const prismaDiscoverRecipeToDetail = (
     yield: discoverRecipe.yield,
     activeTime: discoverRecipe.activeTime,
     totalTime: discoverRecipe.totalTime,
-    ingredients: discoverRecipe.ingredients,
-    instructions: discoverRecipe.instructions,
-    notes: discoverRecipe.notes,
+    ingredients: sanitizeRemoveHtmlFromString(discoverRecipe.ingredients),
+    instructions: sanitizeRemoveHtmlFromString(discoverRecipe.instructions),
+    notes: sanitizeRemoveHtmlFromString(discoverRecipe.notes),
     nutritionServingSize: discoverRecipe.nutritionServingSize,
     nutritionCalories: discoverRecipe.nutritionCalories,
     nutritionTotalFat: discoverRecipe.nutritionTotalFat,

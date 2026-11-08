@@ -18,6 +18,7 @@ import { UtilService } from "../../services/util.service";
 import {
   ShoppingListPreferenceKey,
   ParsedIngredient,
+  decodeBasicHtmlEntities,
   parseIngredients,
   inferIngredientsNotation,
   applyDecimalNotation,
@@ -57,7 +58,7 @@ export class SelectIngredientsComponent {
   }
 
   set ingredients(val: string) {
-    this._ingredients = val;
+    this._ingredients = decodeBasicHtmlEntities(val);
 
     this.selectedIngredients = [];
     this.ingredientBinders = {};

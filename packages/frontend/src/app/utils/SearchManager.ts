@@ -12,6 +12,7 @@ import {
   RSLocalDB,
 } from "./localDb";
 import type { RecipeSummary } from "@recipesage/prisma";
+import { decodeBasicHtmlEntities } from "@recipesage/util/shared";
 import { unaccent } from "./unaccent";
 
 /**
@@ -30,7 +31,7 @@ const SEARCH_DB_SAVE_TIMEOUT_SECONDS = 10;
  */
 const SEARCH_DB_SAVE_MAX_TIMEOUT_SECONDS = 120;
 
-const SEARCH_INDEX_VERSION = 2;
+const SEARCH_INDEX_VERSION = 3;
 
 const SEARCH_IDLE_SAVE_TIMEOUT_MS = 2000;
 
@@ -135,8 +136,8 @@ export class SearchManager {
       recipeTitle: recipe.title,
       title: recipe.title ?? "",
       description: recipe.description ?? "",
-      ingredients: recipe.ingredients ?? "",
-      notes: recipe.notes ?? "",
+      ingredients: decodeBasicHtmlEntities(recipe.ingredients ?? ""),
+      notes: decodeBasicHtmlEntities(recipe.notes ?? ""),
       source: recipe.source ?? "",
     };
   }

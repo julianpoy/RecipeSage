@@ -9,6 +9,7 @@ import {
   sortRecipeImages,
 } from "@recipesage/util/server/general";
 import { convertPrismaRecipeSummaryToRecipeSummary } from "@recipesage/util/server/db";
+import { decodeBasicHtmlEntities } from "@recipesage/util/shared";
 
 const schema = {
   params: z.object({
@@ -40,7 +41,12 @@ export const recipesJsonLdHandler = defineHandler(
 
     return {
       statusCode: 200,
-      data: recipeToJSONLD(sorted),
+      data: recipeToJSONLD({
+        ...sorted,
+        ingredients: decodeBasicHtmlEntities(sorted.ingredients),
+        instructions: decodeBasicHtmlEntities(sorted.instructions),
+        notes: decodeBasicHtmlEntities(sorted.notes),
+      }),
     };
   },
 );
