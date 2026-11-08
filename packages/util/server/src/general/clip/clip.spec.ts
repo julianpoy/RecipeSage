@@ -1,6 +1,23 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { Response } from "node-fetch";
 
 const textToRecipeMock = vi.fn();
+const fetchURLMock = vi.fn();
+const clipCacheFindUniqueMock = vi.fn();
+const clipCacheUpsertMock = vi.fn();
+
+vi.mock("../fetch", () => ({
+  fetchURL: (...args: unknown[]) => fetchURLMock(...args),
+}));
+
+vi.mock("@recipesage/prisma", () => ({
+  prisma: {
+    clipCache: {
+      findUnique: (...args: unknown[]) => clipCacheFindUniqueMock(...args),
+      upsert: (...args: unknown[]) => clipCacheUpsertMock(...args),
+    },
+  },
+}));
 
 vi.mock("../../ml", () => ({
   TextToRecipeInputType: {
@@ -360,5 +377,66 @@ describe("clipHtml text cleanup", () => {
 
     expect(textToRecipeMock).toHaveBeenCalledOnce();
     expect(result.recipe.instructions).toContain("broil until golden");
+  });
+});
+
+describe("clipUrl", () => {
+  const TARGET_URL = "https://example.com/recipe";
+  const SCRAPFLY_RECIPE_TITLE = "Scrapfly Soup";
+
+  const scrapflyRecipeHtml = () => {
+    const ingredients = [
+      "2 large carrots, peeled and diced",
+      "1 yellow onion, chopped",
+    ];
+    const instructions = "Simmer the carrots and onion in broth until tender.";
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      name: SCRAPFLY_RECIPE_TITLE,
+      recipeIngredient: ingredients,
+      recipeInstructions: instructions,
+    };
+    return `<html><body>
+      <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+      <h1>${SCRAPFLY_RECIPE_TITLE}</h1>
+      <p>${ingredients.join("</p><p>")}</p>
+      <p>${instructions}</p>
+      <p>${"This soup is a warm and simple meal for a cold day. ".repeat(12)}</p>
+    </body></html>`;
+  };
+
+  const htmlResponse = (html: string) =>
+    new Response(html, {
+      status: 200,
+      headers: { "content-type": "text/html" },
+    });
+
+  beforeEach(() => {
+    fetchURLMock.mockReset();
+    textToRecipeMock.mockReset();
+    clipCacheFindUniqueMock.mockReset();
+    clipCacheUpsertMock.mockReset();
+    clipCacheFindUniqueMock.mockResolvedValue(null);
+    clipCacheUpsertMock.mockResolvedValue(undefined);
+    vi.stubEnv("SCRAPFLY_API_KEY", "test-key");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("clips the Scrapfly page without calling the LLM on a short direct page", async () => {
+    fetchURLMock
+      .mockResolvedValueOnce(
+        htmlResponse("<html><body><p>Access blocked</p></body></html>"),
+      )
+      .mockResolvedValueOnce(htmlResponse(scrapflyRecipeHtml()));
+
+    const { clipUrl } = await import("./clip");
+    const result = await clipUrl(TARGET_URL);
+
+    expect(result.recipe.title).toBe(SCRAPFLY_RECIPE_TITLE);
+    expect(textToRecipeMock).not.toHaveBeenCalled();
   });
 });
