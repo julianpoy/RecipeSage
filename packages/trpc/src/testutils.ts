@@ -1,6 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import type { Session, User } from "@recipesage/prisma";
 import { faker } from "@faker-js/faker";
+import { labelFactory, recipeFactory } from "@recipesage/util/server/general";
 import { test as baseTest } from "vitest";
 import { appRouter } from "./index";
 import { createCallerFactory } from "./trpc";
@@ -99,4 +100,42 @@ export async function createSession(userId: string) {
       expires: tomorrow,
     },
   });
+}
+
+export async function createRecipeWithImage(userId: string) {
+  const image = await prisma.image.create({
+    data: {
+      userId,
+      location: "https://example.com/image.jpg",
+      key: faker.string.alphanumeric(20),
+      json: {},
+    },
+  });
+  const recipe = await prisma.recipe.create({
+    data: {
+      ...recipeFactory(userId),
+      recipeImages: {
+        createMany: {
+          data: [{ imageId: image.id, order: 0 }],
+        },
+      },
+    },
+  });
+
+  return { image, recipe };
+}
+
+export async function createLabelledRecipeWithImage(userId: string) {
+  const label = await prisma.label.create({
+    data: labelFactory(userId),
+  });
+  const { image, recipe } = await createRecipeWithImage(userId);
+  await prisma.recipeLabel.create({
+    data: {
+      recipeId: recipe.id,
+      labelId: label.id,
+    },
+  });
+
+  return { label, image, recipe };
 }

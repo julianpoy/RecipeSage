@@ -1,8 +1,25 @@
 import { prisma } from "@recipesage/prisma";
 import { recipeFactory } from "@recipesage/util/server/general";
-import { test } from "../../testutils";
+import { test, createRecipeWithImage } from "../../testutils";
+
+const { addBulkMock } = vi.hoisted(() => ({
+  addBulkMock: vi.fn(),
+}));
+
+vi.mock("bullmq", async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  Queue: class {
+    addBulk = addBulkMock;
+    on = vi.fn();
+  },
+}));
 
 describe("deleteRecipe", () => {
+  beforeEach(() => {
+    addBulkMock.mockReset();
+    addBulkMock.mockResolvedValue([]);
+  });
+
   describe("success", () => {
     test("deletes a recipe", async ({ trpc, user }) => {
       const recipe = await prisma.recipe.create({
@@ -22,72 +39,39 @@ describe("deleteRecipe", () => {
       expect(deletedRecipe).toEqual(null);
     });
 
-    test("removes an image that is no longer attached to anything", async ({
+    test("enqueues the recipe's images for deletion", async ({
       trpc,
       user,
     }) => {
-      const image = await prisma.image.create({
-        data: {
-          userId: user.id,
-          location: "https://example.com/image.jpg",
-          key: "example-key",
-          json: {},
-        },
-      });
-      const recipe = await prisma.recipe.create({
-        data: recipeFactory(user.id),
-      });
-      await prisma.recipeImage.create({
-        data: {
-          recipeId: recipe.id,
-          imageId: image.id,
-          order: 0,
-        },
-      });
+      const { image, recipe } = await createRecipeWithImage(user.id);
 
       await trpc.recipes.deleteRecipe({ id: recipe.id });
 
-      const remainingImage = await prisma.image.findUnique({
-        where: { id: image.id },
-      });
-      expect(remainingImage).toEqual(null);
-    });
-
-    test("keeps an image that is still attached to another recipe", async ({
-      trpc,
-      user,
-    }) => {
-      const image = await prisma.image.create({
-        data: {
-          userId: user.id,
-          location: "https://example.com/image.jpg",
-          key: "example-key",
-          json: {},
-        },
-      });
-      const recipe = await prisma.recipe.create({
-        data: recipeFactory(user.id),
-      });
-      const otherRecipe = await prisma.recipe.create({
-        data: recipeFactory(user.id),
-      });
-      await prisma.recipeImage.createMany({
-        data: [
-          { recipeId: recipe.id, imageId: image.id, order: 0 },
-          { recipeId: otherRecipe.id, imageId: image.id, order: 0 },
-        ],
-      });
-
-      await trpc.recipes.deleteRecipe({ id: recipe.id });
-
-      const remainingImage = await prisma.image.findUnique({
-        where: { id: image.id },
-      });
-      expect(remainingImage?.id).toEqual(image.id);
+      expect(addBulkMock).toHaveBeenCalledWith([
+        expect.objectContaining({
+          data: { imageIds: [image.id], imageOwnerUserId: user.id },
+        }),
+      ]);
     });
   });
 
   describe("error", () => {
+    test("keeps the recipe when the image deletion cannot be enqueued", async ({
+      trpc,
+      user,
+    }) => {
+      const { recipe } = await createRecipeWithImage(user.id);
+      addBulkMock.mockRejectedValue(new Error("Connection is closed"));
+
+      await expect(
+        trpc.recipes.deleteRecipe({ id: recipe.id }),
+      ).rejects.toThrow();
+
+      expect(
+        (await prisma.recipe.findUnique({ where: { id: recipe.id } }))?.id,
+      ).toEqual(recipe.id);
+    });
+
     test("throws when the recipe does not exist", async ({ trpc }) => {
       await expect(
         trpc.recipes.deleteRecipe({

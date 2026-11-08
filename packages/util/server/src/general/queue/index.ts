@@ -3,24 +3,27 @@ import * as Sentry from "@sentry/node";
 import type { JobQueueItem } from "./JobQueueItem";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { markJobFailed } from "../jobs/markJobFailed";
+import { getQueueRedisOptions } from "./getQueueRedisOptions";
 
 export * from "./JobQueueItem";
 export * from "./processWorkerJob";
+export * from "./imageDeletion/enqueueImageDeletion";
+export * from "./imageDeletion/getImageDeletionQueueWorker";
 
 const JOB_QUEUE_NAME = "rsJobQueue";
-const JOB_QUEUE_PREFIX = process.env.JOB_QUEUE_PREFIX || "rsJobQueue";
 
 let jobQueue: Queue<JobQueueItem, void> | undefined;
 export const getJobQueue = () => {
   if (jobQueue) return jobQueue;
 
+  const { connection, prefix } = getQueueRedisOptions();
+
   jobQueue = new Queue<JobQueueItem, void>(JOB_QUEUE_NAME, {
     connection: {
-      host: process.env.JOB_QUEUE_REDIS_HOST,
-      port: parseInt(process.env.JOB_QUEUE_REDIS_PORT || "6379"),
+      ...connection,
       enableOfflineQueue: false,
     },
-    prefix: JOB_QUEUE_PREFIX,
+    prefix,
   });
 
   jobQueue.on("error", (err) => {
@@ -51,11 +54,7 @@ export const getJobQueueWorker = () => {
 
   jobQueueWorker = new Worker<JobQueueItem, void>(JOB_QUEUE_NAME, WORKER_PATH, {
     autorun: false,
-    connection: {
-      host: process.env.JOB_QUEUE_REDIS_HOST,
-      port: parseInt(process.env.JOB_QUEUE_REDIS_PORT || "6379"),
-    },
-    prefix: JOB_QUEUE_PREFIX,
+    ...getQueueRedisOptions(),
     removeOnComplete: { count: 50 },
     removeOnFail: { count: 50 },
     concurrency: parseInt(process.env.JOB_QUEUE_CONCURRENCY || "1"),

@@ -3,10 +3,16 @@ import express from "express";
 import client from "prom-client";
 import { promisify } from "util";
 
-import { getJobQueueWorker } from "@recipesage/util/server/general";
+import {
+  getImageDeletionQueueWorker,
+  getJobQueueWorker,
+} from "@recipesage/util/server/general";
 
 const jobQueueWorker = getJobQueueWorker();
 jobQueueWorker.run();
+
+const imageDeletionQueueWorker = getImageDeletionQueueWorker();
+imageDeletionQueueWorker.run();
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000");
@@ -17,7 +23,8 @@ app.get("/metrics", async (_req, res) => {
 });
 
 app.get("/health", (_req, res) => {
-  if (jobQueueWorker.closing) res.status(500).send("Queue closing");
+  if (jobQueueWorker.closing || imageDeletionQueueWorker.closing)
+    res.status(500).send("Queue closing");
   else res.status(200).send("Healthy");
 });
 
@@ -30,6 +37,7 @@ const close = async () => {
 
   await Promise.allSettled([
     jobQueueWorker.close(),
+    imageDeletionQueueWorker.close(),
     promisify(server.close.bind(server))(),
   ]);
 

@@ -2,7 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { authenticatedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { deleteHangingImagesByIds } from "@recipesage/util/server/storage";
+import { deleteRecipesAndEnqueueImageDeletion } from "@recipesage/util/server/db";
 
 export const deleteRecipe = authenticatedProcedure
   .meta({
@@ -35,27 +35,20 @@ export const deleteRecipe = authenticatedProcedure
       });
     }
 
-    const recipeImages = await prisma.recipeImage.findMany({
-      where: {
-        recipeId: recipe.id,
+    await prisma.$transaction(
+      async (tx) => {
+        await deleteRecipesAndEnqueueImageDeletion(
+          ctx.session.userId,
+          {
+            id: recipe.id,
+          },
+          tx,
+        );
       },
-      select: {
-        imageId: true,
+      {
+        timeout: 60000,
       },
-    });
-
-    await prisma.recipe.delete({
-      where: {
-        id: recipe.id,
-      },
-    });
-
-    const purgeFromStorage = await deleteHangingImagesByIds(
-      ctx.session.userId,
-      recipeImages.map((recipeImage) => recipeImage.imageId),
     );
-
-    await purgeFromStorage();
 
     return "Ok";
   });
