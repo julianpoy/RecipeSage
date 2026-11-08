@@ -1,10 +1,8 @@
 import type { ImportJobSummary } from "@recipesage/prisma";
 
-import {
-  MAX_IMAGES,
-  type StandardizedRecipeImportEntry,
-} from "../../../../db/index";
+import type { StandardizedRecipeImportEntry } from "../../../../db/index";
 import { importJobFinishCommon } from "../../../index";
+import { deletePathsSilent } from "../../../deletePathsSilent";
 import {
   OCR_MIN_VALID_TEXT,
   ocrImagesToRecipe,
@@ -18,23 +16,20 @@ import {
   buildUnstructuredRecipeEntry,
   getUnformattedImportLabel,
 } from "./shared/unstructuredRecipeEntry";
+import { copyStringWithoutParentReference } from "./shared/copyStringWithoutParentReference";
 import {
   countNoteChunks,
   elementText,
   extractText,
   findChild,
   findChildren,
-  IMAGE_MIME_TYPES,
+  type NoteChunk,
   normalizeRecipeText,
-  PDF_MIME_TYPE,
   streamNoteChunks,
   type XmlElement,
 } from "./shared/enexParsing";
 import xmljs from "xml-js";
-import { mkdtempDisposable, writeFile } from "fs/promises";
-import { createReadStream } from "fs";
-import { randomUUID } from "crypto";
-import path from "path";
+import { mkdtempDisposable } from "fs/promises";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { debounceJobUpdateProgress } from "../../../jobs/updateJobProgress";
 import { IMPORT_JOB_STEP_COUNT } from "../processImportJob";
@@ -45,54 +40,22 @@ const CONCURRENT_NOTE_PROCESSING = 4;
 const MAX_COUNT_LIMIT = 500;
 const MAX_OCR_IMAGES = 3;
 
-const copyStringWithoutParentReference = (value: string) =>
-  Buffer.from(value, "utf8").toString("utf8");
-
-interface StagedResources {
-  pdfPaths: string[];
-  imagePaths: string[];
-}
-
-const stageResources = async (
-  note: XmlElement,
-  tempDir: string,
-): Promise<StagedResources> => {
-  const pdfPaths: string[] = [];
-  const imagePaths: string[] = [];
-  for (const resource of findChildren(note, "resource")) {
-    const base64 = elementText(findChild(resource, "data"));
-    if (!base64) continue;
-    const mime = elementText(findChild(resource, "mime")).trim().toLowerCase();
-    if (mime === PDF_MIME_TYPE) {
-      if (pdfPaths.length >= 1) continue;
-      const pdfPath = path.join(tempDir, randomUUID());
-      await writeFile(pdfPath, Buffer.from(base64, "base64"));
-      pdfPaths.push(pdfPath);
-    } else if (IMAGE_MIME_TYPES.has(mime)) {
-      if (imagePaths.length >= MAX_IMAGES) continue;
-      const imagePath = path.join(tempDir, randomUUID());
-      await writeFile(imagePath, Buffer.from(base64, "base64"));
-      imagePaths.push(imagePath);
-    }
-  }
-  return { pdfPaths, imagePaths };
-};
-
 interface ProcessedNote {
   entry: StandardizedRecipeImportEntry;
   failedToStructure: boolean;
 }
 
 const processNote = async (args: {
-  noteXml: string;
+  noteChunk: NoteChunk;
   importLabels: string[];
   unformattedLabel: string;
-  tempDir: string;
   jobId: string;
 }): Promise<ProcessedNote | undefined> => {
-  const { noteXml, importLabels, unformattedLabel, tempDir, jobId } = args;
+  const { noteChunk, importLabels, unformattedLabel, jobId } = args;
 
-  const parsedNote = xmljs.xml2js(noteXml, { compact: false }) as XmlElement;
+  const parsedNote = xmljs.xml2js(noteChunk.xml, {
+    compact: false,
+  }) as XmlElement;
   const note = findChild(parsedNote, "note");
   if (!note) return;
 
@@ -106,7 +69,7 @@ const processNote = async (args: {
     recipeText = normalizeRecipeText(extractText(enNote));
   }
 
-  const { pdfPaths, imagePaths } = await stageResources(note, tempDir);
+  const { pdfPaths, imagePaths } = noteChunk;
 
   const titleText = copyStringWithoutParentReference(
     elementText(findChild(note, "title")).trim(),
@@ -122,10 +85,7 @@ const processNote = async (args: {
     } else if (pdfPaths.length > 0) {
       recipe = await pdfToRecipe(pdfPaths[0]);
     } else if (imagePaths.length > 0) {
-      const streams = imagePaths
-        .slice(0, MAX_OCR_IMAGES)
-        .map((imagePath) => createReadStream(imagePath));
-      recipe = await ocrImagesToRecipe(streams);
+      recipe = await ocrImagesToRecipe(imagePaths.slice(0, MAX_OCR_IMAGES));
     }
   } catch (e) {
     Sentry.captureException(e, {
@@ -203,18 +163,18 @@ export async function enexImportJobHandler(
   let processedCount = 0;
   let partialCount = 0;
   let failedCount = 0;
-  let batch: string[] = [];
+  let batch: NoteChunk[] = [];
 
   const flushBatch = async () => {
     if (!batch.length) return;
     const results = await Promise.all(
-      batch.map(async (noteXml) => {
+      batch.map(async (noteChunk) => {
+        let result: ProcessedNote | undefined;
         try {
-          return await processNote({
-            noteXml,
+          result = await processNote({
+            noteChunk,
             importLabels,
             unformattedLabel,
-            tempDir: tempDir.path,
             jobId: job.id,
           });
         } catch (e) {
@@ -224,8 +184,13 @@ export async function enexImportJobHandler(
             },
           });
           failedCount++;
-          return undefined;
         }
+        await deletePathsSilent(
+          result
+            ? noteChunk.pdfPaths
+            : [...noteChunk.pdfPaths, ...noteChunk.imagePaths],
+        );
+        return result;
       }),
     );
     for (const result of results) {
@@ -243,11 +208,11 @@ export async function enexImportJobHandler(
     batch = [];
   };
 
-  for await (const noteXml of streamNoteChunks(
-    downloaded.filePath,
-    () => failedCount++,
-  )) {
-    batch.push(noteXml);
+  for await (const noteChunk of streamNoteChunks(downloaded.filePath, {
+    resourceDirectory: tempDir.path,
+    onSkippedNote: () => failedCount++,
+  })) {
+    batch.push(noteChunk);
     if (batch.length >= CONCURRENT_NOTE_PROCESSING) {
       await flushBatch();
     }

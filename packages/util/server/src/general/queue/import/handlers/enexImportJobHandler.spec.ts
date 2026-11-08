@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { mkdtemp, writeFile, rm } from "fs/promises";
+import { mkdtemp, writeFile, rm, readdir, stat } from "fs/promises";
 import { tmpdir } from "os";
 import path from "path";
 import { JobStatus, JobType, type ImportJobSummary } from "@recipesage/prisma";
 import type { StandardJobQueueItem } from "../../JobQueueItem";
 import { MAX_IMAGES } from "../../../../db/index";
+import { MAX_NOTE_BYTES } from "./shared/enexParsing";
 
 const importJobFinishCommon = vi.fn();
 const textToRecipe = vi.fn();
@@ -85,7 +86,7 @@ const queueItem: StandardJobQueueItem = {
 
 describe("enex import fallback", () => {
   beforeEach(() => {
-    importJobFinishCommon.mockClear();
+    importJobFinishCommon.mockReset();
     textToRecipe.mockReset();
   });
 
@@ -158,6 +159,108 @@ describe("enex import fallback", () => {
     expect(args.standardizedRecipeImportInput[0].images).toHaveLength(
       MAX_IMAGES,
     );
+  });
+
+  it("imports a note whose image is larger than MAX_NOTE_BYTES", async () => {
+    const imageBytes = Buffer.alloc(MAX_NOTE_BYTES, 3);
+    enexPath = await buildEnex([
+      makeNote(
+        "Big Photo",
+        "Knead the dough for ten minutes until smooth.",
+        `<resource><data encoding="base64">${imageBytes.toString("base64")}</data><mime>image/jpeg</mime></resource>`,
+      ),
+    ]);
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "LLM Title", ingredients: "flour", instructions: "" },
+      labels: [],
+      images: [],
+    });
+
+    let imageSize = 0;
+    importJobFinishCommon.mockImplementation(
+      async (args: {
+        standardizedRecipeImportInput: { images: string[] }[];
+      }) => {
+        const [imagePath] = args.standardizedRecipeImportInput[0].images;
+        imageSize = (await stat(imagePath)).size;
+      },
+    );
+
+    await enexImportJobHandler(job, queueItem);
+
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(args.failedCount).toBe(0);
+    expect(args.standardizedRecipeImportInput).toHaveLength(1);
+    expect(args.standardizedRecipeImportInput[0].images).toHaveLength(1);
+    expect(imageSize).toBe(imageBytes.length);
+  });
+
+  it("deletes resource files beyond MAX_IMAGES and of unsupported types", async () => {
+    const resources = [
+      ...Array.from({ length: MAX_IMAGES + 2 }, (_, index) =>
+        makeImageResource(index),
+      ),
+      `<resource><data encoding="base64">${Buffer.from("audio").toString(
+        "base64",
+      )}</data><mime>audio/wav</mime></resource>`,
+    ].join("");
+
+    enexPath = await buildEnex([
+      makeNote(
+        "Photos And Audio",
+        "Whisk the eggs with the cream until frothy.",
+        resources,
+      ),
+    ]);
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "LLM Title", ingredients: "eggs", instructions: "" },
+      labels: [],
+      images: [],
+    });
+
+    let filesInTempDirectory: string[] = [];
+    importJobFinishCommon.mockImplementation(
+      async (args: { importTempDirectory: string }) => {
+        filesInTempDirectory = await readdir(args.importTempDirectory);
+      },
+    );
+
+    await enexImportJobHandler(job, queueItem);
+
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(args.standardizedRecipeImportInput[0].images).toHaveLength(
+      MAX_IMAGES,
+    );
+    expect(filesInTempDirectory).toHaveLength(MAX_IMAGES);
+  });
+
+  it("deletes the resource files of a note that cannot be parsed", async () => {
+    enexPath = await buildEnex([
+      `<note><title>Broken${makeImageResource(0)}</note>`,
+      makeNote("Good", "Fold the egg whites gently into the batter."),
+    ]);
+
+    textToRecipe.mockResolvedValue({
+      recipe: { title: "LLM Title", ingredients: "eggs", instructions: "" },
+      labels: [],
+      images: [],
+    });
+
+    let filesInTempDirectory: string[] = [];
+    importJobFinishCommon.mockImplementation(
+      async (args: { importTempDirectory: string }) => {
+        filesInTempDirectory = await readdir(args.importTempDirectory);
+      },
+    );
+
+    await enexImportJobHandler(job, queueItem);
+
+    const args = importJobFinishCommon.mock.calls[0][0];
+    expect(args.failedCount).toBe(1);
+    expect(args.standardizedRecipeImportInput).toHaveLength(1);
+    expect(filesInTempDirectory).toEqual([]);
   });
 
   it("does not fail the job when every note fails", async () => {
