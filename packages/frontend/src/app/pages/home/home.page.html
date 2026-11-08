@@ -119,20 +119,7 @@
 <ion-content [fullscreen]="true">
   @if (preferences[preferenceKeys.ViewType] === "tiles" && recipes.length) {
     <div class="infinite-scrolling-container ion-content-scroll-host">
-      @if (getShouldShowLabelChips()) {
-        <div class="labelChips">
-          @for (label of labels; track label.id) {
-            <a
-              [ngClass]="{
-                selected: selectedLabels.indexOf(label.title) > -1,
-              }"
-              (click)="toggleLabel(label.title)"
-            >
-              {{ label.title }} ({{ label._count.recipeLabels }})
-            </a>
-          }
-        </div>
-      }
+      <ng-container [ngTemplateOutlet]="labelChips"></ng-container>
       <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
         <div
           class="recipe-group"
@@ -254,20 +241,7 @@
     recipes.length > 0
   ) {
     <div class="infinite-scrolling-container ion-content-scroll-host">
-      @if (getShouldShowLabelChips()) {
-        <div class="labelChips">
-          @for (label of labels; track label.id) {
-            <a
-              [ngClass]="{
-                selected: selectedLabels.indexOf(label.title) > -1,
-              }"
-              (click)="toggleLabel(label.title)"
-            >
-              {{ label.title }} ({{ label._count.recipeLabels }})
-            </a>
-          }
-        </div>
-      }
+      <ng-container [ngTemplateOutlet]="labelChips"></ng-container>
       <recipe-list-item
         *uiScroll="let recipe of datasource"
         [recipe]="recipe"
@@ -293,20 +267,7 @@
   }
   @if (!recipes.length) {
     <div>
-      @if (!recipes.length && getShouldShowLabelChips()) {
-        <div class="labelChips">
-          @for (label of labels; track label.id) {
-            <a
-              [ngClass]="{
-                selected: selectedLabels.indexOf(label.title) > -1,
-              }"
-              (click)="toggleLabel(label.title)"
-            >
-              {{ label.title }} ({{ label._count.recipeLabels }})
-            </a>
-          }
-        </div>
-      }
+      <ng-container [ngTemplateOutlet]="labelChips"></ng-container>
       @if (loading) {
         <null-state>
           <ion-spinner virtualSlot="header"></ion-spinner>
@@ -450,3 +411,46 @@
     </ion-fab>
   }
 </ion-content>
+
+<ng-template #labelChips>
+  @if (getShouldShowLabelChips()) {
+    <div class="labelChips">
+      @for (group of labelChipGroups; track group.title) {
+        @let isCollapsed = isLabelChipGroupCollapsed(group.title);
+        <div>
+          @if (shouldShowLabelChipGroupTitles) {
+            <button
+              type="button"
+              class="labelChipGroupTitle"
+              [attr.aria-expanded]="!isCollapsed"
+              (click)="toggleLabelChipGroup(group.title)"
+            >
+              {{
+                group.title ||
+                  ("pages.recipeDetails.labels.uncatLabels" | translate)
+              }}
+              <ion-icon
+                [name]="isCollapsed ? 'chevron-forward' : 'chevron-down'"
+                aria-hidden="true"
+              ></ion-icon>
+            </button>
+          }
+          <div class="labelChipGroupChips">
+            @for (label of group.labels; track label.id) {
+              @if (!isCollapsed || selectedLabels.indexOf(label.title) > -1) {
+                <a
+                  [ngClass]="{
+                    selected: selectedLabels.indexOf(label.title) > -1,
+                  }"
+                  (click)="toggleLabel(label.title)"
+                >
+                  {{ label.title }} ({{ label._count.recipeLabels }})
+                </a>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</ng-template>
