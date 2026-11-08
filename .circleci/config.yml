@@ -59,6 +59,9 @@ jobs:
           name: install-pandoc
           command: sudo apt-get update && sudo apt-get install -y pandoc
       - run:
+          name: install-poppler
+          command: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - run:
           name: install-libheif
           command: |
             sudo apt-get update && sudo apt-get install -y libheif-examples libheif-plugin-libde265

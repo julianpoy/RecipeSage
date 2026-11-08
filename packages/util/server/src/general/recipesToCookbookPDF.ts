@@ -106,7 +106,7 @@ export const generateCookbookPDFStream = async (
           currentPage === 1
             ? null
             : {
-                text: currentPage.toString(),
+                text: String(currentPage),
                 alignment: "center",
                 fontSize: 9,
                 margin: [0, 12, 0, 0] satisfies Margins,

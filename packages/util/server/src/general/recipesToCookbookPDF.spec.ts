@@ -61,7 +61,7 @@ describe("generateCookbookPDFStream", () => {
     user,
   };
 
-  const textOfPages = async (includePageNumbers: boolean) => {
+  const generateCookbookPageTexts = async (includePageNumbers: boolean) => {
     const stream = await generateCookbookPDFStream(
       [
         baseRecipe,
@@ -97,13 +97,13 @@ describe("generateCookbookPDFStream", () => {
   const lastLineOf = (page: string) => page.split("\n").at(-1)?.trim();
 
   it("prints page numbers on every page except the cover when enabled", async () => {
-    const pages = await textOfPages(true);
+    const pages = await generateCookbookPageTexts(true);
 
     expect(pages.map(lastLineOf)).toEqual(["My Cookbook", "2", "3", "4"]);
   });
 
   it("prints page numbers that match the table of contents", async () => {
-    const pages = await textOfPages(true);
+    const pages = await generateCookbookPageTexts(true);
 
     expect(pages[1]).toMatch(/First Recipe\W+3\b/);
     expect(pages[1]).toMatch(/Second Recipe\W+4\b/);
@@ -112,7 +112,7 @@ describe("generateCookbookPDFStream", () => {
   });
 
   it("does not print page numbers when disabled", async () => {
-    const lastLines = (await textOfPages(false)).map(lastLineOf);
+    const lastLines = (await generateCookbookPageTexts(false)).map(lastLineOf);
 
     expect(lastLines).toHaveLength(4);
     expect(lastLines).not.toContain("2");
