@@ -223,7 +223,7 @@
     "pages.contribute.manage": "Pentru a gestiona o contribuție recurentă existentă, faceți clic aici",
     "pages.contributeThankYou.title": "Mulțumesc!",
     "pages.downloadAndInstall.title": "Descarcă și instalează",
-    "pages.downloadAndInstall.subtitle": "Instalați RecipeSage pe fiecare dispozitiv pe care îl utilizați. Faceți clic pe tipul dispozitivului dvs. pentru a vedea instrucțiunile.",
+    "pages.downloadAndInstall.subtitle": "Instalați RecipeSage pe fiecare dispozitiv pe care îl utilizați.",
     "generic.submit": "Trimite",
     "generic.labeledPageTitle": "{{title}} - RecipeSage",
     "pages.recipeDetails.addToShoppingList": "Adaugă la lista de cumpărături",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Instrumente de bucătărie (foarte multe!)",
     "pages.welcome.description.features.tools.description": "Un convertor integrat pentru dimensiunile tăvilor, un convertor de măsurători, un instrument de căutare a temperaturilor de gătit, un calculator nutrițional și un instrument pentru căutarea rețetelor după ingredientele pe care le aveți la îndemână",
     "pages.welcome.description.features.apps.title": "Aplicații pentru orice dispozitiv",
-    "pages.welcome.description.features.apps.description": "Aplicații native pentru desktop pentru Windows, macOS și Linux, aplicații native pentru iOS și Android și o aplicație web care se instalează pe ecranul principal. Totul rămâne sincronizat.",
+    "pages.welcome.description.features.apps.description": "Aplicații desktop native pentru Windows, macOS și Linux, aplicații native pentru iOS și Android, precum și o aplicație web care funcționează în orice browser. Totul rămâne sincronizat.",
     "pages.welcome.description.features.editor.title": "Editor avansat de rețete",
     "pages.welcome.description.features.editor.description": "O bară de instrumente de formatare pentru ingrediente, instrucțiuni și note, cu antete de secțiune, text îngroșat, cursiv, subliniat și tabele",
     "pages.welcome.description.cta.api": "API public și documentat, pe care îl puteți utiliza dacă aveți cunoștințe tehnice",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Timp total: {{totalTime}}",
     "pages.share.byText.yield": "Cantitate obținută: {{yield}}",
     "pages.share.byText.imageStep": "[Imagine]",
-    "pages.cookbook.field.includePageNumbers": "Include numerele de pagină"
+    "pages.cookbook.field.includePageNumbers": "Include numerele de pagină",
+    "pages.downloadAndInstall.storeTrademarks": "Apple și sigla Apple sunt mărci comerciale ale Apple Inc. Google Play și sigla Google Play sunt mărci comerciale ale Google LLC.",
+    "pages.downloadAndInstall.ios.install": "Instalați din App Store",
+    "components.selectIngredients.edit": "Editați {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Editați ingredientul",
+    "components.selectIngredients.editIngredient.placeholder": "Ingredient...",
+    "components.selectIngredients.editIngredient.message": "Aceasta modifică doar ceea ce este adăugat la lista dvs. de cumpărături. Rețeta dvs. rămâne neschimbată.",
+    "pages.downloadAndInstall.ios.description": "Instalați aplicația RecipeSage din App Store."
 }

@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.3": "Vi har brug for din hjælp for at kunne holde det gratis og samtidig betale for serveromkostningerne.",
     "pages.contributeCancel.contribute": "Bidrag",
     "pages.downloadAndInstall.title": "Download og installer",
-    "pages.downloadAndInstall.subtitle": "Installer RecipeSage på alle de enheder, du bruger. Klik på din enhedstype for at se instruktioner.",
+    "pages.downloadAndInstall.subtitle": "Installer RecipeSage på alle de enheder, du bruger.",
     "pages.downloadAndInstall.bookmark.description": "Henter automatisk opskriftsindhold fra websider. Browserudvidelsen anbefales i stedet for dette bogmærke.",
     "pages.downloadAndInstall.android.title": "Android-enhed",
     "pages.downloadAndInstall.ios.title": "Apple-mobilenhed",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Køkkenværktøjer (rigtig mange!)",
     "pages.welcome.description.features.tools.description": "En indbygget konverter til formstørrelser, måleenhedskonverter, opslagsværktøj til tilberedningstemperaturer, ernæringsberegner og et værktøj til at søge i dine opskrifter efter de ingredienser, du har ved hånden",
     "pages.welcome.description.features.apps.title": "Apps til alle enheder",
-    "pages.welcome.description.features.apps.description": "Indbyggede skrivebordsapps til Windows, macOS og Linux, indbyggede apps til iOS og Android samt en webapp, der kan installeres på din startskærm. Alt forbliver synkroniseret.",
+    "pages.welcome.description.features.apps.description": "Indbyggede skrivebordsapps til Windows, macOS og Linux, indbyggede apps til iOS og Android samt en webapp, der fungerer i enhver browser. Alt holdes synkroniseret.",
     "pages.welcome.description.features.editor.title": "Avanceret opskriftseditor",
     "pages.welcome.description.features.editor.description": "En formateringsværktøjslinje til ingredienser, instruktioner og noter med sektionsoverskrifter, fed, kursiv, understregning og tabeller",
     "pages.welcome.description.cta.api": "Offentligt, dokumenteret API, som du kan bruge, hvis du er teknisk kyndig",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Samlet tid: {{totalTime}}",
     "pages.share.byText.yield": "Antal portioner: {{yield}}",
     "pages.share.byText.imageStep": "[Billede]",
-    "pages.cookbook.field.includePageNumbers": "Medtag sidetal"
+    "pages.cookbook.field.includePageNumbers": "Medtag sidetal",
+    "pages.downloadAndInstall.ios.install": "Installer fra App Store",
+    "pages.downloadAndInstall.storeTrademarks": "Apple og Apple-logoet er varemærker tilhørende Apple Inc. Google Play og Google Play-logoet er varemærker tilhørende Google LLC.",
+    "pages.downloadAndInstall.ios.description": "Installer RecipeSage-appen fra App Store.",
+    "components.selectIngredients.edit": "Rediger {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Rediger ingrediens",
+    "components.selectIngredients.editIngredient.message": "Dette ændrer kun, hvad der tilføjes til din indkøbsliste. Din opskrift forbliver den samme.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediens..."
 }

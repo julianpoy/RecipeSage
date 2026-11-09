@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.4": "Per favore, ripensaci: il tuo contributo è molto apprezzato!",
     "pages.contributeCancel.contribute": "Contribuisci",
     "pages.downloadAndInstall.title": "Download e Installazione",
-    "pages.downloadAndInstall.subtitle": "Installi RecipeSage su ogni dispositivo che utilizza. Fai clic sul tipo di dispositivo per visualizzare le istruzioni.",
+    "pages.downloadAndInstall.subtitle": "Installa RecipeSage su ogni dispositivo che utilizzi.",
     "pages.downloadAndInstall.android.title": "Dispositivo Android",
     "pages.downloadAndInstall.ios.title": "Dispositivo Mobile Apple",
     "pages.downloadAndInstall.desktop.title": "Computer o Portatili",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Strumenti da cucina (tantissimi!)",
     "pages.welcome.description.features.tools.description": "Un convertitore integrato per le dimensioni delle teglie, un convertitore di misure, uno strumento di ricerca delle temperature di cottura, un calcolatore nutrizionale e uno strumento per cercare le ricette in base agli ingredienti disponibili",
     "pages.welcome.description.features.apps.title": "App per ogni dispositivo",
-    "pages.welcome.description.features.apps.description": "App desktop native per Windows, macOS e Linux, app native per iOS e Android e un'app web installabile nella schermata iniziale. Tutto rimane sincronizzato.",
+    "pages.welcome.description.features.apps.description": "App desktop native per Windows, macOS e Linux, app native per iOS e Android e un'app web che funziona in qualsiasi browser. Tutto rimane sincronizzato.",
     "pages.welcome.description.features.editor.title": "Editor di ricette avanzato",
     "pages.welcome.description.features.editor.description": "Una barra degli strumenti di formattazione per ingredienti, istruzioni e note con intestazioni di sezione, grassetto, corsivo, sottolineato e tabelle",
     "pages.welcome.description.cta.api": "API pubblica e documentata che può utilizzare se dispone delle competenze tecniche necessarie",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Tempo totale: {{totalTime}}",
     "pages.share.byText.yield": "Resa: {{yield}}",
     "pages.share.byText.imageStep": "[Immagine]",
-    "pages.cookbook.field.includePageNumbers": "Includi i numeri di pagina"
+    "pages.cookbook.field.includePageNumbers": "Includi i numeri di pagina",
+    "pages.downloadAndInstall.ios.install": "Installa dall'App Store",
+    "pages.downloadAndInstall.ios.description": "Installa l'app RecipeSage dall'App Store.",
+    "pages.downloadAndInstall.storeTrademarks": "Apple e il logo Apple sono marchi di Apple Inc. Google Play e il logo Google Play sono marchi di Google LLC.",
+    "components.selectIngredients.editIngredient.header": "Modifica ingrediente",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
+    "components.selectIngredients.edit": "Modifica {{ingredient}}",
+    "components.selectIngredients.editIngredient.message": "Questo modifica solo ciò che viene aggiunto alla lista della spesa. La ricetta rimane invariata."
 }

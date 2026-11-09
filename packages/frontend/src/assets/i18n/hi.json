@@ -339,7 +339,7 @@
     "pages.contributeCancel.contribute": "योगदान करें",
     "pages.downloadAndInstall.tabTitle": "डाउनलोड और इंस्टॉल - RecipeSage",
     "pages.downloadAndInstall.title": "डाउनलोड और इंस्टॉल",
-    "pages.downloadAndInstall.subtitle": "आप जिन प्रत्येक उपकरणों का उपयोग करते हैं, उन पर RecipeSage इंस्टॉल करें। निर्देश देखने के लिए अपने उपकरण के प्रकार पर क्लिक करें।",
+    "pages.downloadAndInstall.subtitle": "आपके द्वारा उपयोग किए जाने वाले प्रत्येक उपकरण पर RecipeSage स्थापित करें।",
     "pages.downloadAndInstall.android.title": "Android डिवाइस",
     "pages.downloadAndInstall.ios.title": "Apple मोबाइल डिवाइस",
     "pages.downloadAndInstall.desktop.title": "डेस्कटॉप या लैपटॉप डिवाइस",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "रसोई के उपकरण (बहुत सारे!)",
     "pages.welcome.description.features.tools.description": "अंतर्निहित पैन आकार परिवर्तक, माप परिवर्तक, पकाने के तापमान की खोज का उपकरण, पोषण कैलकुलेटर, और आपके पास उपलब्ध सामग्रियों के आधार पर रेसिपी खोजने का उपकरण",
     "pages.welcome.description.features.apps.title": "हर उपकरण के लिए ऐप्स",
-    "pages.welcome.description.features.apps.description": "Windows, macOS और Linux के लिए मूल डेस्कटॉप ऐप्स, मूल iOS और Android ऐप्स, तथा एक वेब ऐप जो आपकी होम स्क्रीन पर इंस्टॉल होता है। सब कुछ सिंक में रहता है।",
+    "pages.welcome.description.features.apps.description": "Windows, macOS और Linux के लिए मूल डेस्कटॉप ऐप्स, मूल iOS और Android ऐप्स, और ऐसा वेब ऐप जो किसी भी ब्राउज़र में काम करता है। सब कुछ समन्वयित रहता है।",
     "pages.welcome.description.features.editor.title": "उन्नत रेसिपी संपादक",
     "pages.welcome.description.features.editor.description": "अनुभाग शीर्षकों, बोल्ड, इटैलिक, रेखांकन और तालिकाओं सहित सामग्री, निर्देशों और नोट्स के लिए एक स्वरूपण टूलबार",
     "pages.welcome.description.cta.api": "सार्वजनिक, प्रलेखित API जिसका उपयोग आप तकनीकी ज्ञान होने पर कर सकते हैं",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "कुल समय: {{totalTime}}",
     "pages.share.byText.yield": "परोसने की मात्रा: {{yield}}",
     "pages.share.byText.imageStep": "[छवि]",
-    "pages.cookbook.field.includePageNumbers": "पृष्ठ संख्याएँ शामिल करें"
+    "pages.cookbook.field.includePageNumbers": "पृष्ठ संख्याएँ शामिल करें",
+    "pages.downloadAndInstall.ios.description": "App Store से RecipeSage ऐप स्थापित करें।",
+    "components.selectIngredients.edit": "{{ingredient}} संपादित करें",
+    "components.selectIngredients.editIngredient.header": "सामग्री संपादित करें",
+    "components.selectIngredients.editIngredient.message": "इससे केवल आपकी खरीदारी सूची में जोड़ी जाने वाली सामग्री बदलती है। आपकी रेसिपी वैसी ही रहती है।",
+    "components.selectIngredients.editIngredient.placeholder": "सामग्री..।",
+    "pages.downloadAndInstall.ios.install": "App Store से स्थापित करें",
+    "pages.downloadAndInstall.storeTrademarks": "Apple और Apple लोगो, Apple Inc. के ट्रेडमार्क हैं। Google Play और Google Play लोगो, Google LLC के ट्रेडमार्क हैं।"
 }

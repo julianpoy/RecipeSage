@@ -843,7 +843,7 @@
     "pages.contributeCancel.cta.2": "Niestety RecipeSage otrzymuje niewiele wpłat, ponieważ jest stosunkowo małą platformą.",
     "pages.downloadAndInstall.tabTitle": "Pobierz i zainstaluj - RecipeSage",
     "pages.downloadAndInstall.title": "Pobierz i zainstaluj",
-    "pages.downloadAndInstall.subtitle": "Zainstaluj RecipeSage na każdym używanym urządzeniu. Kliknij typ urządzenia, aby wyświetlić instrukcje.",
+    "pages.downloadAndInstall.subtitle": "Zainstaluj RecipeSage na każdym używanym urządzeniu.",
     "pages.downloadAndInstall.android.title": "Urządzenie z systemem Android",
     "pages.downloadAndInstall.bookmark.instructions": "Przeciągnij ten link na pasek zakładek.",
     "pages.downloadAndInstall.bookmark.usage": "Kliknij zakładkę, aby zaimportować bieżącą stronę, na której się znajdujesz.",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Narzędzia kuchenne (całe mnóstwo!)",
     "pages.welcome.description.features.tools.description": "Wbudowany przelicznik rozmiarów form, przelicznik miar, narzędzie do sprawdzania temperatur gotowania, kalkulator wartości odżywczych oraz narzędzie do wyszukiwania przepisów według składników, które masz pod ręką",
     "pages.welcome.description.features.apps.title": "Aplikacje na każde urządzenie",
-    "pages.welcome.description.features.apps.description": "Natywne aplikacje komputerowe dla systemów Windows, macOS i Linux, natywne aplikacje na iOS i Android oraz aplikacja internetowa instalowana na ekranie głównym. Wszystko pozostaje zsynchronizowane.",
+    "pages.welcome.description.features.apps.description": "Natywne aplikacje komputerowe dla systemów Windows, macOS i Linux, natywne aplikacje na iOS i Androida oraz aplikacja internetowa działająca w każdej przeglądarce. Wszystko pozostaje zsynchronizowane.",
     "pages.welcome.description.features.editor.title": "Rozbudowany edytor przepisów",
     "pages.welcome.description.features.editor.description": "Pasek narzędzi formatowania dla składników, instrukcji i notatek, z nagłówkami sekcji, pogrubieniem, kursywą, podkreśleniem i tabelami",
     "pages.welcome.description.cta.api": "Publiczne, udokumentowane API, z którego możesz korzystać, jeśli masz wiedzę techniczną",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Łączny czas: {{totalTime}}",
     "pages.share.byText.yield": "Liczba porcji: {{yield}}",
     "pages.share.byText.imageStep": "[Obraz]",
-    "pages.cookbook.field.includePageNumbers": "Uwzględnij numery stron"
+    "pages.cookbook.field.includePageNumbers": "Uwzględnij numery stron",
+    "pages.downloadAndInstall.ios.description": "Zainstaluj aplikację RecipeSage z App Store.",
+    "pages.downloadAndInstall.ios.install": "Zainstaluj z App Store",
+    "pages.downloadAndInstall.storeTrademarks": "Apple i logo Apple są znakami towarowymi firmy Apple Inc. Google Play i logo Google Play są znakami towarowymi firmy Google LLC.",
+    "components.selectIngredients.edit": "Edytuj {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Edytuj składnik",
+    "components.selectIngredients.editIngredient.message": "Zmienia to tylko to, co zostanie dodane do Twojej listy zakupów. Twój przepis pozostanie bez zmian.",
+    "components.selectIngredients.editIngredient.placeholder": "Składnik..."
 }

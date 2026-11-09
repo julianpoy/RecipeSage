@@ -237,7 +237,7 @@
     "pages.contributeCancel.cta.2": "Infelizmente, o RecipeSage não recebe muitas contribuições, pois é uma plataforma relativamente pequena.",
     "pages.contributeCancel.cta.3": "Para manter tudo gratuito enquanto pagamos os custos do servidor, precisamos da sua ajuda.",
     "pages.downloadAndInstall.title": "Baixar e instalar",
-    "pages.downloadAndInstall.subtitle": "Instale o RecipeSage em todos os dispositivos que você usa. Clique no tipo do seu dispositivo para ver as instruções.",
+    "pages.downloadAndInstall.subtitle": "Instale o RecipeSage em todos os dispositivos que você usa.",
     "pages.downloadAndInstall.ios.title": "Dispositivo móvel Apple",
     "pages.downloadAndInstall.desktop.title": "Dispositivos desktop ou laptop",
     "pages.downloadAndInstall.bookmark": "Favorito de captura automática de receitas",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Ferramentas de cozinha (muitas delas!)",
     "pages.welcome.description.features.tools.description": "Um conversor integrado de tamanhos de formas, conversor de medidas, ferramenta de consulta de temperaturas de preparo, calculadora nutricional e uma ferramenta para pesquisar suas receitas pelos ingredientes que você tem à mão",
     "pages.welcome.description.features.apps.title": "Aplicativos para todos os dispositivos",
-    "pages.welcome.description.features.apps.description": "Aplicativos nativos para desktop no Windows, macOS e Linux, aplicativos nativos para iOS e Android e um aplicativo web que é instalado na sua tela inicial. Tudo permanece sincronizado.",
+    "pages.welcome.description.features.apps.description": "Aplicativos nativos para desktop no Windows, macOS e Linux, aplicativos nativos para iOS e Android e um aplicativo da web que funciona em qualquer navegador. Tudo permanece sincronizado.",
     "pages.welcome.description.features.editor.title": "Editor avançado de receitas",
     "pages.welcome.description.features.editor.description": "Uma barra de ferramentas de formatação para ingredientes, instruções e notas, com cabeçalhos de seção, negrito, itálico, sublinhado e tabelas",
     "pages.welcome.description.cta.api": "API pública e documentada que você pode usar se tiver conhecimentos técnicos",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Tempo total: {{totalTime}}",
     "pages.share.byText.yield": "Rendimento: {{yield}}",
     "pages.share.byText.imageStep": "[Imagem]",
-    "pages.cookbook.field.includePageNumbers": "Incluir números de página"
+    "pages.cookbook.field.includePageNumbers": "Incluir números de página",
+    "pages.downloadAndInstall.storeTrademarks": "Apple e o logotipo da Apple são marcas comerciais da Apple Inc. Google Play e o logotipo do Google Play são marcas comerciais da Google LLC.",
+    "components.selectIngredients.edit": "Editar {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Editar ingrediente",
+    "components.selectIngredients.editIngredient.message": "Isso altera apenas o que é adicionado à sua lista de compras. Sua receita permanece a mesma.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
+    "pages.downloadAndInstall.ios.description": "Instale o aplicativo RecipeSage pela App Store.",
+    "pages.downloadAndInstall.ios.install": "Instalar pela App Store"
 }

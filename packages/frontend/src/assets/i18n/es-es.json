@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.4": "Por favor, reconsidérelo: ¡Su contribución es realmente apreciada!",
     "pages.contributeCancel.contribute": "Contribuir",
     "pages.downloadAndInstall.title": "Descargar e Instalar",
-    "pages.downloadAndInstall.subtitle": "Instale RecipeSage en todos los dispositivos que utilice. Haga clic en su tipo de dispositivo para ver las instrucciones.",
+    "pages.downloadAndInstall.subtitle": "Instale RecipeSage en todos los dispositivos que utilice.",
     "pages.downloadAndInstall.android.title": "Dispositivo Android",
     "pages.downloadAndInstall.ios.title": "Dispositivo móvil Apple",
     "pages.downloadAndInstall.desktop.title": "Dispositivos de sobremesa o portátiles",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Herramientas de cocina (¡muchísimas!)",
     "pages.welcome.description.features.tools.description": "Un conversor integrado de tamaños de moldes, conversor de medidas, herramienta de consulta de temperaturas de cocción, calculadora nutricional y una herramienta para buscar sus recetas según los ingredientes que tenga a mano",
     "pages.welcome.description.features.apps.title": "Aplicaciones para todos los dispositivos",
-    "pages.welcome.description.features.apps.description": "Aplicaciones nativas de escritorio para Windows, macOS y Linux, aplicaciones nativas para iOS y Android y una aplicación web que se instala en la pantalla de inicio. Todo se mantiene sincronizado.",
+    "pages.welcome.description.features.apps.description": "Aplicaciones nativas de escritorio para Windows, macOS y Linux, aplicaciones nativas para iOS y Android, y una aplicación web que funciona en cualquier navegador. Todo se mantiene sincronizado.",
     "pages.welcome.description.features.editor.title": "Editor de recetas avanzado",
     "pages.welcome.description.features.editor.description": "Una barra de herramientas de formato para ingredientes, instrucciones y notas con encabezados de sección, negrita, cursiva, subrayado y tablas",
     "pages.welcome.description.cta.api": "API pública y documentada que puede utilizar si tiene conocimientos técnicos",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Tiempo total: {{totalTime}}",
     "pages.share.byText.yield": "Rendimiento: {{yield}}",
     "pages.share.byText.imageStep": "[Imagen]",
-    "pages.cookbook.field.includePageNumbers": "Incluir números de página"
+    "pages.cookbook.field.includePageNumbers": "Incluir números de página",
+    "pages.downloadAndInstall.ios.install": "Instalar desde la App Store",
+    "pages.downloadAndInstall.ios.description": "Instale la aplicación RecipeSage desde la App Store.",
+    "pages.downloadAndInstall.storeTrademarks": "Apple y el logotipo de Apple son marcas comerciales de Apple Inc. Google Play y el logotipo de Google Play son marcas comerciales de Google LLC.",
+    "components.selectIngredients.editIngredient.header": "Editar ingrediente",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
+    "components.selectIngredients.edit": "Editar {{ingredient}}",
+    "components.selectIngredients.editIngredient.message": "Esto solo cambia lo que se añade a su lista de compras. La receta seguirá siendo la misma."
 }

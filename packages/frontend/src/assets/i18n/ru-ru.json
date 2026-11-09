@@ -229,7 +229,7 @@
     "pages.contributeCancel.cta.4": "Пожалуйста, подумайте еще раз — ваш вклад действительно ценен!",
     "pages.contributeCancel.contribute": "Внести вклад",
     "pages.downloadAndInstall.title": "Загрузить и установить",
-    "pages.downloadAndInstall.subtitle": "Установите RecipeSage на каждое используемое вами устройство. Нажмите на тип вашего устройства, чтобы увидеть инструкции.",
+    "pages.downloadAndInstall.subtitle": "Установите RecipeSage на все устройства, которыми вы пользуетесь.",
     "pages.downloadAndInstall.android.title": "Устройство Android",
     "pages.downloadAndInstall.ios.title": "Мобильное устройство Apple",
     "pages.downloadAndInstall.desktop.title": "Настольные или портативные устройства",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Кухонные инструменты (их очень много!)",
     "pages.welcome.description.features.tools.description": "Встроенный конвертер размеров форм, конвертер единиц измерения, инструмент поиска температуры приготовления, калькулятор пищевой ценности и инструмент поиска рецептов по имеющимся у вас ингредиентам",
     "pages.welcome.description.features.apps.title": "Приложения для любого устройства",
-    "pages.welcome.description.features.apps.description": "Нативные настольные приложения для Windows, macOS и Linux, нативные приложения для iOS и Android, а также веб-приложение, которое можно установить на главный экран. Всё остаётся синхронизированным.",
+    "pages.welcome.description.features.apps.description": "Нативные приложения для компьютеров под управлением Windows, macOS и Linux, нативные приложения для iOS и Android, а также веб-приложение, работающее в любом браузере. Все данные синхронизируются.",
     "pages.welcome.description.features.editor.title": "Расширенный редактор рецептов",
     "pages.welcome.description.features.editor.description": "Панель форматирования для ингредиентов, инструкций и заметок с заголовками разделов, полужирным, курсивным и подчёркнутым текстом, а также таблицами",
     "pages.welcome.description.cta.api": "Открытый документированный API, которым можно воспользоваться при наличии технических навыков",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Общее время: {{totalTime}}",
     "pages.share.byText.yield": "Выход: {{yield}}",
     "pages.share.byText.imageStep": "[Изображение]",
-    "pages.cookbook.field.includePageNumbers": "Включать номера страниц"
+    "pages.cookbook.field.includePageNumbers": "Включать номера страниц",
+    "pages.downloadAndInstall.ios.description": "Установите приложение RecipeSage из App Store.",
+    "components.selectIngredients.edit": "Редактировать {{ingredient}}",
+    "components.selectIngredients.editIngredient.placeholder": "Ингредиент...",
+    "components.selectIngredients.editIngredient.header": "Редактировать ингредиент",
+    "components.selectIngredients.editIngredient.message": "Это изменяет только то, что добавляется в список покупок. Рецепт остаётся без изменений.",
+    "pages.downloadAndInstall.ios.install": "Установить из App Store",
+    "pages.downloadAndInstall.storeTrademarks": "Apple и логотип Apple являются товарными знаками Apple Inc. Google Play и логотип Google Play являются товарными знаками Google LLC."
 }

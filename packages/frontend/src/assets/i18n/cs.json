@@ -88,7 +88,7 @@
     "pages.contributeCancel.cta.2": "RecipeSage bohužel nezískává mnoho příspěvků, protože je poměrně malou platformou.",
     "pages.contributeCancel.cta.3": "Abychom mohli zachovat službu zdarma a zároveň hradit náklady na servery, potřebujeme vaši pomoc.",
     "pages.contributeCancel.contribute": "Přispět",
-    "pages.downloadAndInstall.subtitle": "Nainstalujte si RecipeSage na každé zařízení, které používáte. Kliknutím na typ zařízení zobrazíte pokyny.",
+    "pages.downloadAndInstall.subtitle": "Nainstalujte si RecipeSage na každé zařízení, které používáte.",
     "pages.labels.label.sectionTitle": "Vaše štítky",
     "pages.labels.label.selected": "Vybráno",
     "pages.labels.label.nullState.1": "Zatím nemáte žádné štítky.",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Kuchyňské nástroje (je jich spousta!)",
     "pages.welcome.description.features.tools.description": "Vestavěný převodník velikostí forem, převodník měrných jednotek, nástroj pro vyhledání teploty vaření, nutriční kalkulačka a nástroj pro vyhledávání receptů podle ingrediencí, které máte po ruce",
     "pages.welcome.description.features.apps.title": "Aplikace pro každé zařízení",
-    "pages.welcome.description.features.apps.description": "Nativní desktopové aplikace pro Windows, macOS a Linux, nativní aplikace pro iOS a Android a webová aplikace, kterou lze nainstalovat na domovskou obrazovku. Vše zůstává synchronizované.",
+    "pages.welcome.description.features.apps.description": "Nativní desktopové aplikace pro Windows, macOS a Linux, nativní aplikace pro iOS a Android a webová aplikace fungující v jakémkoli prohlížeči. Vše zůstává synchronizováno.",
     "pages.welcome.description.features.editor.title": "Pokročilý editor receptů",
     "pages.welcome.description.features.editor.description": "Panel nástrojů pro formátování ingrediencí, postupu a poznámek s nadpisy oddílů, tučným písmem, kurzívou, podtržením a tabulkami",
     "pages.welcome.description.cta.api": "Veřejné, zdokumentované API, které můžete používat, pokud jste technicky zdatní",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Celková doba: {{totalTime}}",
     "pages.share.byText.yield": "Počet porcí: {{yield}}",
     "pages.share.byText.imageStep": "[Obrázek]",
-    "pages.cookbook.field.includePageNumbers": "Zahrnout čísla stránek"
+    "pages.cookbook.field.includePageNumbers": "Zahrnout čísla stránek",
+    "pages.downloadAndInstall.ios.install": "Nainstalovat z obchodu App Store",
+    "pages.downloadAndInstall.storeTrademarks": "Apple a logo Apple jsou ochranné známky společnosti Apple Inc. Google Play a logo Google Play jsou ochranné známky společnosti Google LLC.",
+    "pages.downloadAndInstall.ios.description": "Nainstalujte aplikaci RecipeSage z obchodu App Store.",
+    "components.selectIngredients.edit": "Upravit {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Upravit ingredienci",
+    "components.selectIngredients.editIngredient.message": "Tím se změní pouze to, co se přidá do vašeho nákupního seznamu. Váš recept zůstane stejný.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingredience..."
 }

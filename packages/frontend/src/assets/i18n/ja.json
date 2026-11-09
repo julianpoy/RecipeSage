@@ -807,7 +807,7 @@
     "pages.contributeCancel.contribute": "貢献",
     "pages.downloadAndInstall.tabTitle": "ダウンロードとインストール - RecipeSage",
     "pages.downloadAndInstall.title": "ダウンロードしてインストール",
-    "pages.downloadAndInstall.subtitle": "使用するすべてのデバイスにRecipeSageをインストールしてください。お使いのデバイスの種類をクリックすると手順が表示されます。",
+    "pages.downloadAndInstall.subtitle": "使用するすべてのデバイスにRecipeSageをインストールしてください。",
     "pages.downloadAndInstall.android.title": "Android デバイス",
     "pages.downloadAndInstall.ios.title": "Apple モバイルデバイス",
     "pages.downloadAndInstall.desktop.title": "デスクトップまたはノートパソコン",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "キッチンツール（たくさんあります！）",
     "pages.welcome.description.features.tools.description": "型サイズ換算、計量換算、調理温度検索ツール、栄養計算機、手元にある材料からレシピを検索するツールを内蔵しています",
     "pages.welcome.description.features.apps.title": "すべてのデバイス向けアプリ",
-    "pages.welcome.description.features.apps.description": "Windows、macOS、Linux向けのネイティブデスクトップアプリ、iOSおよびAndroid向けのネイティブアプリ、ホーム画面にインストールできるウェブアプリを提供しています。すべてが同期されます。",
+    "pages.welcome.description.features.apps.description": "Windows、macOS、Linux向けのネイティブデスクトップアプリ、iOSおよびAndroid向けのネイティブアプリ、そしてあらゆるブラウザで動作するウェブアプリをご利用いただけます。すべてが同期されます。",
     "pages.welcome.description.features.editor.title": "高機能なレシピエディター",
     "pages.welcome.description.features.editor.description": "セクション見出し、太字、斜体、下線、表を使用して、材料、手順、メモを整形できるツールバー",
     "pages.welcome.description.cta.api": "技術的な知識があれば利用できる、公開され文書化されたAPI",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "合計時間: {{totalTime}}",
     "pages.share.byText.yield": "出来上がり量: {{yield}}",
     "pages.share.byText.imageStep": "[画像]",
-    "pages.cookbook.field.includePageNumbers": "ページ番号を含める"
+    "pages.cookbook.field.includePageNumbers": "ページ番号を含める",
+    "pages.downloadAndInstall.ios.install": "App Storeからインストール",
+    "pages.downloadAndInstall.storeTrademarks": "AppleおよびAppleロゴは、Apple Inc.の商標です。Google PlayおよびGoogle Playロゴは、Google LLCの商標です。",
+    "pages.downloadAndInstall.ios.description": "App StoreからRecipeSageアプリをインストールしてください。",
+    "components.selectIngredients.edit": "{{ingredient}}を編集",
+    "components.selectIngredients.editIngredient.header": "材料を編集",
+    "components.selectIngredients.editIngredient.message": "これは買い物リストに追加される内容のみを変更します。レシピ自体は変更されません。",
+    "components.selectIngredients.editIngredient.placeholder": "材料..."
 }

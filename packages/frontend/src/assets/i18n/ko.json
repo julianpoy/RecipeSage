@@ -339,7 +339,7 @@
     "pages.contributeCancel.contribute": "기여하기",
     "pages.downloadAndInstall.tabTitle": "다운로드 및 설치 - RecipeSage",
     "pages.downloadAndInstall.title": "다운로드 및 설치",
-    "pages.downloadAndInstall.subtitle": "사용하는 모든 기기에 RecipeSage를 설치하세요. 안내를 보려면 기기 유형을 클릭하세요.",
+    "pages.downloadAndInstall.subtitle": "사용하는 모든 기기에 RecipeSage를 설치하세요.",
     "pages.downloadAndInstall.android.title": "Android 기기",
     "pages.downloadAndInstall.ios.title": "Apple 모바일 기기",
     "pages.downloadAndInstall.desktop.title": "데스크톱 또는 노트북 기기",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "주방 도구(아주 많습니다!)",
     "pages.welcome.description.features.tools.description": "내장된 팬 크기 변환기, 단위 변환기, 조리 온도 조회 도구, 영양 계산기 및 보유한 재료로 레시피를 검색하는 도구",
     "pages.welcome.description.features.apps.title": "모든 기기용 앱",
-    "pages.welcome.description.features.apps.description": "Windows, macOS 및 Linux용 네이티브 데스크톱 앱, 네이티브 iOS 및 Android 앱, 그리고 홈 화면에 설치할 수 있는 웹 앱을 제공합니다. 모든 항목이 동기화된 상태로 유지됩니다.",
+    "pages.welcome.description.features.apps.description": "Windows, macOS 및 Linux용 네이티브 데스크톱 앱, 네이티브 iOS 및 Android 앱, 그리고 모든 브라우저에서 작동하는 웹 앱을 제공합니다. 모든 항목은 동기화된 상태로 유지됩니다.",
     "pages.welcome.description.features.editor.title": "풍부한 기능의 레시피 편집기",
     "pages.welcome.description.features.editor.description": "섹션 제목, 굵게, 기울임꼴, 밑줄 및 표 기능을 갖춘 재료, 조리법 및 메모용 서식 도구 모음",
     "pages.welcome.description.cta.api": "기술적 지식이 있는 경우 사용할 수 있는 공개 문서화된 API",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "총 소요 시간: {{totalTime}}",
     "pages.share.byText.yield": "분량: {{yield}}",
     "pages.share.byText.imageStep": "[이미지]",
-    "pages.cookbook.field.includePageNumbers": "페이지 번호 포함"
+    "pages.cookbook.field.includePageNumbers": "페이지 번호 포함",
+    "pages.downloadAndInstall.storeTrademarks": "Apple 및 Apple 로고는 Apple Inc.의 상표입니다. Google Play 및 Google Play 로고는 Google LLC의 상표입니다.",
+    "pages.downloadAndInstall.ios.description": "App Store에서 RecipeSage 앱을 설치하세요.",
+    "pages.downloadAndInstall.ios.install": "App Store에서 설치",
+    "components.selectIngredients.edit": "{{ingredient}} 편집",
+    "components.selectIngredients.editIngredient.header": "재료 편집",
+    "components.selectIngredients.editIngredient.message": "이는 장보기 목록에 추가되는 항목만 변경합니다. 레시피는 그대로 유지됩니다.",
+    "components.selectIngredients.editIngredient.placeholder": "재료..."
 }

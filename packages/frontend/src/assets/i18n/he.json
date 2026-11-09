@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.4": "אנא שקול מחדש - תרומתך מוערכת באמת!",
     "pages.contributeCancel.contribute": "תמיכה / תרומה",
     "pages.downloadAndInstall.title": "הורדה והתקנה",
-    "pages.downloadAndInstall.subtitle": "התקינו את RecipeSage בכל מכשיר שבו אתם משתמשים. לחצו על סוג המכשיר שלכם כדי לראות הוראות.",
+    "pages.downloadAndInstall.subtitle": "התקן את RecipeSage בכל מכשיר שבו אתה משתמש.",
     "pages.downloadAndInstall.android.title": "מכשיר נייד מסוג Android",
     "pages.downloadAndInstall.ios.title": "מכשיר נייד מסוג iPhone",
     "pages.downloadAndInstall.desktop.title": "מחשב שולחני או מחשב נייד",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "כלי מטבח (הרבה מהם!)",
     "pages.welcome.description.features.tools.description": "ממיר גדלי תבניות מובנה, ממיר מידות, כלי לחיפוש טמפרטורות בישול, מחשבון תזונה וכלי לחיפוש במתכונים שלכם לפי המרכיבים שיש לכם בהישג יד",
     "pages.welcome.description.features.apps.title": "אפליקציות לכל מכשיר",
-    "pages.welcome.description.features.apps.description": "אפליקציות שולחניות מקוריות עבור Windows, macOS ו-Linux, אפליקציות מקוריות ל-iOS ול-Android, ואפליקציית אינטרנט המותקנת במסך הבית שלכם. הכול נשאר מסונכרן.",
+    "pages.welcome.description.features.apps.description": "יישומי שולחן עבודה מקוריים עבור Windows, macOS ו-Linux, יישומים מקוריים ל-iOS ול-Android, ויישום אינטרנט שפועל בכל דפדפן. הכול נשאר מסונכרן.",
     "pages.welcome.description.features.editor.title": "עורך מתכונים עשיר",
     "pages.welcome.description.features.editor.description": "סרגל כלים לעיצוב מרכיבים, הוראות והערות, עם כותרות מקטעים, טקסט מודגש, נטוי, קו תחתון וטבלאות",
     "pages.welcome.description.cta.api": "API ציבורי ומתועד שבו תוכלו להשתמש אם יש לכם ידע טכני",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "זמן כולל: {{totalTime}}",
     "pages.share.byText.yield": "כמות: {{yield}}",
     "pages.share.byText.imageStep": "[תמונה]",
-    "pages.cookbook.field.includePageNumbers": "כלול מספרי עמודים"
+    "pages.cookbook.field.includePageNumbers": "כלול מספרי עמודים",
+    "pages.downloadAndInstall.ios.description": "התקן את יישום RecipeSage מ-App Store.",
+    "pages.downloadAndInstall.storeTrademarks": "Apple והלוגו של Apple הם סימנים מסחריים של Apple Inc. ‏Google Play והלוגו של Google Play הם סימנים מסחריים של Google LLC.",
+    "components.selectIngredients.edit": "עריכת {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "עריכת מרכיב",
+    "pages.downloadAndInstall.ios.install": "התקן מ-App Store",
+    "components.selectIngredients.editIngredient.placeholder": "מרכיב...",
+    "components.selectIngredients.editIngredient.message": "פעולה זו משנה רק את מה שמתווסף לרשימת הקניות שלך. המתכון שלך נשאר ללא שינוי."
 }

@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.4": "Будь ласка, зауважте - ми справді вдячні за Ваш внесок!",
     "pages.contributeCancel.contribute": "Внесок",
     "pages.downloadAndInstall.title": "Завантаження і встановлення",
-    "pages.downloadAndInstall.subtitle": "Установіть RecipeSage на кожному пристрої, яким користуєтеся. Натисніть тип свого пристрою, щоб переглянути інструкції.",
+    "pages.downloadAndInstall.subtitle": "Установіть RecipeSage на кожному пристрої, яким ви користуєтеся.",
     "pages.downloadAndInstall.android.title": "Пристрій Android",
     "pages.downloadAndInstall.ios.title": "Пристрій Apple Mobile",
     "pages.downloadAndInstall.desktop.title": "Настільний компьютер або ноутбук",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Кухонні інструменти (їх багато!)",
     "pages.welcome.description.features.tools.description": "Вбудований конвертер розмірів форм, конвертер одиниць вимірювання, інструмент пошуку температур приготування, калькулятор поживної цінності та інструмент для пошуку рецептів за наявними у вас інгредієнтами",
     "pages.welcome.description.features.apps.title": "Застосунки для кожного пристрою",
-    "pages.welcome.description.features.apps.description": "Нативні настільні застосунки для Windows, macOS та Linux, нативні застосунки для iOS і Android, а також вебзастосунок, який можна встановити на головний екран. Усе залишається синхронізованим.",
+    "pages.welcome.description.features.apps.description": "Нативні програми для настільних комп’ютерів з Windows, macOS і Linux, нативні програми для iOS та Android, а також вебпрограма, що працює в будь-якому браузері. Усе залишається синхронізованим.",
     "pages.welcome.description.features.editor.title": "Розширений редактор рецептів",
     "pages.welcome.description.features.editor.description": "Панель форматування для інгредієнтів, інструкцій і приміток із заголовками розділів, жирним, курсивним, підкресленим текстом і таблицями",
     "pages.welcome.description.cta.api": "Відкритий документований API, яким ви можете скористатися, якщо маєте технічні знання",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Загальний час: {{totalTime}}",
     "pages.share.byText.yield": "Вихід: {{yield}}",
     "pages.share.byText.imageStep": "[Зображення]",
-    "pages.cookbook.field.includePageNumbers": "Додати номери сторінок"
+    "pages.cookbook.field.includePageNumbers": "Додати номери сторінок",
+    "pages.downloadAndInstall.ios.install": "Установити з App Store",
+    "pages.downloadAndInstall.ios.description": "Установіть програму RecipeSage з App Store.",
+    "components.selectIngredients.editIngredient.placeholder": "Інгредієнт...",
+    "components.selectIngredients.edit": "Редагувати {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Редагувати інгредієнт",
+    "components.selectIngredients.editIngredient.message": "Це змінює лише те, що буде додано до вашого списку покупок. Ваш рецепт залишиться без змін.",
+    "pages.downloadAndInstall.storeTrademarks": "Apple і логотип Apple є товарними знаками Apple Inc. Google Play і логотип Google Play є товарними знаками Google LLC."
 }

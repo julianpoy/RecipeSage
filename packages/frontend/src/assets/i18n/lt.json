@@ -214,7 +214,7 @@
     "pages.homeSearchFilterPopover.optionsHidden": "Pastaba: kai kurios parinktys yra paslėptos, nes tai yra bendrinama kolekcija",
     "pages.notfound.title": "Puslapis nerastas",
     "pages.notfound.error.title": "Puslapis nerastas!",
-    "pages.downloadAndInstall.subtitle": "Įdiekite RecipeSage visuose naudojamuose įrenginiuose. Spustelėkite savo įrenginio tipą, kad pamatytumėte instrukcijas.",
+    "pages.downloadAndInstall.subtitle": "Įdiekite „RecipeSage“ visuose naudojamuose įrenginiuose.",
     "pages.notfound.error.message1": "Atrodo, kad puslapis, kurio ieškote, neegzistuoja.",
     "pages.notfound.error.message2": "Patikrinkite, ar teisingai įvedėte URL.",
     "pages.notfound.error.message3": "Jei vis dar kyla problemų arba jei kuri nors programos vieta nukreipė jus čia, susisiekite su manimi.",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Virtuvės įrankiai (daug jų!)",
     "pages.welcome.description.features.tools.description": "Įtaisytasis kepimo formų dydžių keitiklis, matavimo vienetų keitiklis, gaminimo temperatūros paieškos įrankis, maistinės vertės skaičiuoklė ir įrankis receptams ieškoti pagal turimus ingredientus",
     "pages.welcome.description.features.apps.title": "Programėlės kiekvienam įrenginiui",
-    "pages.welcome.description.features.apps.description": "Vietinės kompiuterio programėlės, skirtos Windows, macOS ir Linux, vietinės iOS ir Android programėlės bei žiniatinklio programėlė, kuri įdiegiama jūsų pagrindiniame ekrane. Viskas išlieka sinchronizuota.",
+    "pages.welcome.description.features.apps.description": "Vietinės darbalaukio programėlės, skirtos „Windows“, „macOS“ ir „Linux“, vietinės „iOS“ ir „Android“ programėlės bei žiniatinklio programėlė, veikianti bet kurioje naršyklėje. Viskas lieka sinchronizuota.",
     "pages.welcome.description.features.editor.title": "Išsamus receptų redaktorius",
     "pages.welcome.description.features.editor.description": "Ingredientų, instrukcijų ir pastabų formatavimo įrankių juosta su skyrių antraštėmis, pusjuodžiu, kursyvu, pabraukimu ir lentelėmis",
     "pages.welcome.description.cta.api": "Vieša, dokumentuota API, kurią galite naudoti, jei turite techninių žinių",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Bendras laikas: {{totalTime}}",
     "pages.share.byText.yield": "Išeiga: {{yield}}",
     "pages.share.byText.imageStep": "[Paveikslėlis]",
-    "pages.cookbook.field.includePageNumbers": "Įtraukti puslapių numerius"
+    "pages.cookbook.field.includePageNumbers": "Įtraukti puslapių numerius",
+    "pages.downloadAndInstall.ios.install": "Įdiegti iš „App Store“",
+    "pages.downloadAndInstall.storeTrademarks": "„Apple“ ir „Apple“ logotipas yra „Apple Inc.“ prekių ženklai. „Google Play“ ir „Google Play“ logotipas yra „Google LLC“ prekių ženklai.",
+    "components.selectIngredients.edit": "Redaguoti {{ingredient}}",
+    "pages.downloadAndInstall.ios.description": "Įdiekite „RecipeSage“ programėlę iš „App Store“.",
+    "components.selectIngredients.editIngredient.header": "Redaguoti ingredientą",
+    "components.selectIngredients.editIngredient.message": "Tai pakeičia tik tai, kas įtraukiama į jūsų pirkinių sąrašą. Jūsų receptas lieka nepakitęs.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingredientas..."
 }
