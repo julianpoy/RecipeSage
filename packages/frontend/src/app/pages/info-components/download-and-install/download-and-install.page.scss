@@ -21,54 +21,24 @@
   color: var(--ion-color-medium-shade, #5b5b5b);
 }
 
-.install-cta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  margin-bottom: 16px;
-  padding: 14px 16px;
-  text-align: start;
-  border: 1px solid var(--ion-color-primary);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--ion-color-primary) 8%, transparent);
-  color: var(--ion-text-color, #1f1f1f);
-  cursor: pointer;
+.store-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
 
-  &:hover {
-    background: color-mix(in srgb, var(--ion-color-primary) 14%, transparent);
+.store-badge {
+  align-self: flex-start;
+  margin-top: auto;
+
+  img {
+    display: block;
+    height: 48px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
   }
-
-  > ion-icon {
-    flex-shrink: 0;
-    font-size: 1.4rem;
-    color: var(--ion-color-primary);
-  }
-}
-
-.install-cta-text {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.install-cta-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.install-cta-note {
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: var(--ion-color-medium-shade, #5b5b5b);
-}
-
-.install-cta-arrow {
-  flex-shrink: 0;
-  font-size: 1rem;
-  color: var(--ion-color-medium-shade, #5b5b5b);
 }
 
 .platform-accordions {
@@ -116,69 +86,6 @@
   margin: 0 0 14px;
   font-size: 0.85rem;
   line-height: 1.5;
-  color: var(--ion-color-medium-shade, #5b5b5b);
-}
-
-.steps {
-  list-style: none;
-  counter-reset: step;
-  margin: 0;
-  padding: 0;
-
-  li {
-    counter-increment: step;
-    position: relative;
-    padding-inline-start: 34px;
-    margin-bottom: 12px;
-    font-size: 0.88rem;
-    line-height: 1.5;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &::before {
-      content: counter(step);
-      position: absolute;
-      inset-inline-start: 0;
-      top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--ion-color-primary);
-      color: var(--ion-color-primary-contrast, #ffffff);
-      font-size: 0.72rem;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-  }
-}
-
-.key-hint {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 5px;
-  border-radius: 6px;
-  background: var(--ion-color-step-100, #ededed);
-  vertical-align: middle;
-  font-weight: 600;
-  line-height: 1;
-
-  ion-icon {
-    font-size: 0.95rem;
-  }
-}
-
-.platform-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  line-height: 1.4;
   color: var(--ion-color-medium-shade, #5b5b5b);
 }
 
@@ -280,6 +187,16 @@
   }
 }
 
+.store-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+
+  > p {
+    margin-bottom: 14px;
+  }
+}
+
 .software-header {
   display: flex;
   align-items: center;
@@ -292,6 +209,7 @@
     color: var(--ion-color-medium-shade, #5b5b5b);
   }
 
+  h2,
   h3 {
     margin: 0;
     font-size: 0.95rem;
@@ -329,6 +247,13 @@
 .software-note {
   margin: 10px 0 0;
   font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium-shade, #5b5b5b);
+}
+
+.store-trademarks {
+  margin: 20px 0 0;
+  font-size: 0.72rem;
   line-height: 1.4;
   color: var(--ion-color-medium-shade, #5b5b5b);
 }

@@ -33,89 +33,55 @@
         {{ "pages.downloadAndInstall.subtitle" | translate }}
       </p>
 
-      @if (pwaPromptAvailable()) {
-        <button type="button" class="install-cta" (click)="showPWAPrompt()">
-          <ion-icon name="cloud-download-outline" aria-hidden="true"></ion-icon>
-          <span class="install-cta-text">
-            <span class="install-cta-title">{{
-              "pages.downloadAndInstall.thisDevice" | translate
-            }}</span>
-            <span class="install-cta-note">{{
-              "pages.downloadAndInstall.done" | translate
-            }}</span>
-          </span>
-          <ion-icon
-            class="install-cta-arrow"
-            name="chevron-forward-outline"
-            aria-hidden="true"
-          ></ion-icon>
-        </button>
-      }
+      <div class="store-cards">
+        <div class="software-card store-card">
+          <div class="software-header">
+            <ion-icon
+              name="phone-portrait-outline"
+              aria-hidden="true"
+            ></ion-icon>
+            <h2>{{ "pages.downloadAndInstall.ios.title" | translate }}</h2>
+          </div>
+          <p>{{ "pages.downloadAndInstall.ios.description" | translate }}</p>
+          <a
+            class="store-badge"
+            [href]="mobileAppStoreUrls.ios"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              [src]="appStoreBadgeUrl"
+              [alt]="'pages.downloadAndInstall.ios.install' | translate"
+            />
+          </a>
+        </div>
+
+        <div class="software-card store-card">
+          <div class="software-header">
+            <ion-icon
+              name="phone-portrait-outline"
+              aria-hidden="true"
+            ></ion-icon>
+            <h2>{{ "pages.downloadAndInstall.android.title" | translate }}</h2>
+          </div>
+          <p>
+            {{ "pages.downloadAndInstall.android.description" | translate }}
+          </p>
+          <a
+            class="store-badge"
+            [href]="mobileAppStoreUrls.android"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              [src]="googlePlayBadgeUrl"
+              [alt]="'pages.downloadAndInstall.android.install' | translate"
+            />
+          </a>
+        </div>
+      </div>
 
       <ion-accordion-group class="platform-accordions">
-        <ion-accordion value="android" class="platform-accordion">
-          <ion-item slot="header" lines="none" class="platform-header">
-            <ion-icon
-              name="logo-android"
-              slot="start"
-              aria-hidden="true"
-            ></ion-icon>
-            <ion-label>{{
-              "pages.downloadAndInstall.android.title" | translate
-            }}</ion-label>
-          </ion-item>
-          <div slot="content" class="platform-content">
-            <p class="platform-lead">
-              {{ "pages.downloadAndInstall.android.description" | translate }}
-            </p>
-            <div class="software-actions">
-              <a
-                class="pill-link"
-                href="https://play.google.com/store/apps/details?id=com.recipesage.app"
-                target="_blank"
-                rel="noopener"
-                >{{ "pages.downloadAndInstall.android.install" | translate }}</a
-              >
-            </div>
-          </div>
-        </ion-accordion>
-
-        <ion-accordion value="ios" class="platform-accordion">
-          <ion-item slot="header" lines="none" class="platform-header">
-            <ion-icon
-              name="logo-apple"
-              slot="start"
-              aria-hidden="true"
-            ></ion-icon>
-            <ion-label>{{
-              "pages.downloadAndInstall.ios.title" | translate
-            }}</ion-label>
-          </ion-item>
-          <div slot="content" class="platform-content">
-            <p class="platform-lead">
-              {{ "pages.downloadAndInstall.ios.instructionHeader" | translate }}
-            </p>
-            <ol class="steps">
-              <li>{{ "pages.downloadAndInstall.ios.step.1" | translate }}</li>
-              <li>
-                {{ "pages.downloadAndInstall.ios.step.2" | translate }}
-                <span
-                  class="key-hint"
-                  [attr.aria-label]="
-                    'pages.downloadAndInstall.icon.share' | translate
-                  "
-                >
-                  <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
-                </span>
-              </li>
-              <li>{{ "pages.downloadAndInstall.ios.step.3" | translate }}</li>
-            </ol>
-            <p class="platform-note">
-              {{ "pages.downloadAndInstall.done" | translate }}
-            </p>
-          </div>
-        </ion-accordion>
-
         <ion-accordion value="desktop" class="platform-accordion">
           <ion-item slot="header" lines="none" class="platform-header">
             <ion-icon
@@ -240,6 +206,10 @@
           {{ "pages.downloadAndInstall.bookmark.usage" | translate }}
         </p>
       </div>
+
+      <p class="store-trademarks">
+        {{ "pages.downloadAndInstall.storeTrademarks" | translate }}
+      </p>
     }
   </div>
 </ion-content>

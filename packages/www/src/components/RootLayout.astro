@@ -302,6 +302,10 @@ const finalStructuredData = structuredData ?? defaultStructuredData;
     </noscript>
 
     <script is:inline>
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+      });
+
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker

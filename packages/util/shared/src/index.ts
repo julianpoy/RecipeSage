@@ -26,4 +26,7 @@ export * from "./SHOPPING_LIST_CATEGORY_I18N";
 export * from "./getLanguageDirection";
 export * from "./discoverCategories";
 export * from "./desktopDownloads";
+export * from "./MOBILE_APP_STORE_URLS";
+export * from "./getAppStoreBadgeUrl";
+export * from "./getGooglePlayBadgeUrl";
 export * from "./matomo";
