@@ -157,7 +157,7 @@
     "pages.contribute.bonus.enabled": "Ingeschakeld",
     "pages.contributeThankYou.title": "Bedankt!",
     "pages.contributeCancel.title": "We hebben jouw hulp nodig!",
-    "pages.downloadAndInstall.subtitle": "Installeer RecipeSage op elk apparaat dat u gebruikt. Klik op uw apparaattype om de instructies te bekijken.",
+    "pages.downloadAndInstall.subtitle": "Installeer RecipeSage op elk apparaat dat u gebruikt.",
     "pages.downloadAndInstall.desktop.title": "Desktop of Laptop Apparaten",
     "pages.labelsPopover.options.unselectLabels": "Deselecteer Alle Labels",
     "pages.labels.label.sectionTitle": "Jouw Labels",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Keukenhulpmiddelen (heel veel!)",
     "pages.welcome.description.features.tools.description": "Een ingebouwde omrekenhulp voor bakvormgroottes, maatconversie, een hulpmiddel voor het opzoeken van kooktemperaturen, een voedingswaardecalculator en een hulpmiddel om uw recepten te doorzoeken op de ingrediënten die u bij de hand hebt",
     "pages.welcome.description.features.apps.title": "Apps voor elk apparaat",
-    "pages.welcome.description.features.apps.description": "Native desktopapps voor Windows, macOS en Linux, native apps voor iOS en Android, en een webapp die u op uw beginscherm kunt installeren. Alles blijft gesynchroniseerd.",
+    "pages.welcome.description.features.apps.description": "Native desktopapps voor Windows, macOS en Linux, native apps voor iOS en Android, en een webapp die in elke browser werkt. Alles blijft gesynchroniseerd.",
     "pages.welcome.description.features.editor.title": "Uitgebreide recepteditor",
     "pages.welcome.description.features.editor.description": "Een opmaakwerkbalk voor ingrediënten, instructies en notities met sectiekoppen, vetgedrukte, cursieve en onderstreepte tekst, en tabellen",
     "pages.welcome.description.cta.api": "Openbare, gedocumenteerde API die u kunt gebruiken als u technisch onderlegd bent",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Totale tijd: {{totalTime}}",
     "pages.share.byText.yield": "Opbrengst: {{yield}}",
     "pages.share.byText.imageStep": "[Afbeelding]",
-    "pages.cookbook.field.includePageNumbers": "Paginanummers opnemen"
+    "pages.cookbook.field.includePageNumbers": "Paginanummers opnemen",
+    "pages.downloadAndInstall.ios.install": "Installeren vanuit de App Store",
+    "pages.downloadAndInstall.ios.description": "Installeer de RecipeSage-app vanuit de App Store.",
+    "pages.downloadAndInstall.storeTrademarks": "Apple en het Apple-logo zijn handelsmerken van Apple Inc. Google Play en het Google Play-logo zijn handelsmerken van Google LLC.",
+    "components.selectIngredients.edit": "{{ingredient}} bewerken",
+    "components.selectIngredients.editIngredient.header": "Ingrediënt bewerken",
+    "components.selectIngredients.editIngredient.message": "Dit verandert alleen wat aan uw boodschappenlijst wordt toegevoegd. Uw recept blijft hetzelfde.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediënt..."
 }

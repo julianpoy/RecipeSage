@@ -339,7 +339,7 @@
     "pages.contributeCancel.contribute": "Bidra",
     "pages.downloadAndInstall.tabTitle": "Last ned og installer – RecipeSage",
     "pages.downloadAndInstall.title": "Last ned og installer",
-    "pages.downloadAndInstall.subtitle": "Installer RecipeSage på alle enheter du bruker. Klikk på enhetstypen din for å se instruksjoner.",
+    "pages.downloadAndInstall.subtitle": "Installer RecipeSage på alle enhetene du bruker.",
     "pages.downloadAndInstall.android.title": "Android-enhet",
     "pages.downloadAndInstall.ios.title": "Mobil Apple-enhet",
     "pages.downloadAndInstall.desktop.title": "Stasjonære eller bærbare enheter",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Kjøkkenverktøy (mange!)",
     "pages.welcome.description.features.tools.description": "En innebygd konverterer for formstørrelser, måleenhetskonverterer, oppslagsverktøy for tilberedningstemperaturer, næringskalkulator og et verktøy for å søke i oppskriftene dine etter ingrediensene du har tilgjengelig",
     "pages.welcome.description.features.apps.title": "Apper for alle enheter",
-    "pages.welcome.description.features.apps.description": "Innebygde skrivebordsapper for Windows, macOS og Linux, innebygde apper for iOS og Android samt en nettapp som installeres på hjemskjermen. Alt holdes synkronisert.",
+    "pages.welcome.description.features.apps.description": "Innebygde skrivebordsapper for Windows, macOS og Linux, innebygde apper for iOS og Android, samt en nettapp som fungerer i alle nettlesere. Alt holdes synkronisert.",
     "pages.welcome.description.features.editor.title": "Avansert oppskriftsredigerer",
     "pages.welcome.description.features.editor.description": "En formateringsverktøylinje for ingredienser, fremgangsmåte og notater med seksjonsoverskrifter, fet skrift, kursiv, understreking og tabeller",
     "pages.welcome.description.cta.api": "Offentlig, dokumentert API som du kan bruke hvis du er teknisk anlagt",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Total tid: {{totalTime}}",
     "pages.share.byText.yield": "Porsjoner: {{yield}}",
     "pages.share.byText.imageStep": "[Bilde]",
-    "pages.cookbook.field.includePageNumbers": "Inkluder sidetall"
+    "pages.cookbook.field.includePageNumbers": "Inkluder sidetall",
+    "pages.downloadAndInstall.storeTrademarks": "Apple og Apple-logoen er varemerker for Apple Inc. Google Play og Google Play-logoen er varemerker for Google LLC.",
+    "pages.downloadAndInstall.ios.description": "Installer RecipeSage-appen fra App Store.",
+    "pages.downloadAndInstall.ios.install": "Installer fra App Store",
+    "components.selectIngredients.edit": "Rediger {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Rediger ingrediens",
+    "components.selectIngredients.editIngredient.message": "Dette endrer bare hva som legges til i handlelisten din. Oppskriften din forblir den samme.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediens..."
 }

@@ -233,7 +233,7 @@
     "pages.contributeCancel.cta.4": "Bitte überlege es dir nochmal – dein Beitrag wird wirklich geschätzt!",
     "pages.contributeCancel.contribute": "Spenden",
     "pages.downloadAndInstall.title": "Herunterladen und installieren",
-    "pages.downloadAndInstall.subtitle": "Installiere RecipeSage auf beliebigen Geräten. Klicke auf deinen Gerätetyp, um eine Anleitung zu erhalten.",
+    "pages.downloadAndInstall.subtitle": "Installieren Sie RecipeSage auf jedem Gerät, das Sie verwenden.",
     "pages.downloadAndInstall.android.title": "Android-Gerät",
     "pages.downloadAndInstall.ios.title": "Mobiles Apple-Gerät",
     "pages.downloadAndInstall.desktop.title": "Desktop-Gerät oder Laptop",
@@ -2403,7 +2403,7 @@
     "pages.welcome.description.features.tools.title": "Smarte Tools fürs Kochen (jede Menge!)",
     "pages.welcome.description.features.tools.description": "Integrierter Umrechner für Backformgrößen und ‐maße, Nachschlagewerk für Gartemperaturen, Nährwertrechner sowie die Möglichkeit, deine Rezepte nach vorrätigen Zutaten zu durchsuchen.",
     "pages.welcome.description.features.apps.title": "Apps für jedes Gerät",
-    "pages.welcome.description.features.apps.description": "Native Desktop-Apps für Windows, macOS und Linux, native Apps für iOS und Android sowie eine Web-App, die du auf deinem Startbildschirm installieren kannst. Alles bleibt synchronisiert.",
+    "pages.welcome.description.features.apps.description": "Native Desktop-Apps für Windows, macOS und Linux, native Apps für iOS und Android sowie eine Web-App, die in jedem Browser funktioniert. Alles bleibt synchronisiert.",
     "pages.welcome.description.features.editor.title": "Markdown-Rezepteditor",
     "pages.welcome.description.features.editor.description": "Die Formatierungsleiste für Zutaten, Zubereitungsschritte und Notizen ermöglicht Abschnittsüberschriften, Fettdruck, Kursivschrift, Unterstreichung und Tabellen.",
     "pages.welcome.description.cta.api": "Öffentliche, dokumentierte API für technisch versierte Nutzer",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Gesamtzeit: {{totalTime}}",
     "pages.share.byText.yield": "Ergibt: {{yield}}",
     "pages.share.byText.imageStep": "[Bild]",
-    "pages.cookbook.field.includePageNumbers": "Seitenzahlen einschließen"
+    "pages.cookbook.field.includePageNumbers": "Seitenzahlen einschließen",
+    "pages.downloadAndInstall.ios.description": "Installieren Sie die RecipeSage-App aus dem App Store.",
+    "components.selectIngredients.editIngredient.placeholder": "Zutat...",
+    "components.selectIngredients.edit": "{{ingredient}} bearbeiten",
+    "components.selectIngredients.editIngredient.header": "Zutat bearbeiten",
+    "components.selectIngredients.editIngredient.message": "Dadurch wird nur geändert, was zu Ihrer Einkaufsliste hinzugefügt wird. Ihr Rezept bleibt unverändert.",
+    "pages.downloadAndInstall.ios.install": "Aus dem App Store installieren",
+    "pages.downloadAndInstall.storeTrademarks": "Apple und das Apple-Logo sind Marken von Apple Inc. Google Play und das Google-Play-Logo sind Marken von Google LLC."
 }

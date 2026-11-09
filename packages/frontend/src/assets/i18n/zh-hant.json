@@ -339,7 +339,7 @@
     "pages.contributeCancel.contribute": "贊助",
     "pages.downloadAndInstall.tabTitle": "下載並安裝 - RecipeSage",
     "pages.downloadAndInstall.title": "下載並安裝",
-    "pages.downloadAndInstall.subtitle": "在您使用的每一部裝置上安裝 RecipeSage。點選您的裝置類型以查看說明。",
+    "pages.downloadAndInstall.subtitle": "在您使用的每部裝置上安裝 RecipeSage。",
     "pages.downloadAndInstall.android.title": "Android 裝置",
     "pages.downloadAndInstall.ios.title": "Apple 行動裝置",
     "pages.downloadAndInstall.desktop.title": "桌上型電腦或筆記型電腦裝置",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "廚房工具（很多種！）",
     "pages.welcome.description.features.tools.description": "內建烤盤尺寸換算器、度量衡換算器、烹飪溫度查詢工具、營養計算器，以及依您手邊現有食材搜尋食譜的工具",
     "pages.welcome.description.features.apps.title": "適用於各種裝置的應用程式",
-    "pages.welcome.description.features.apps.description": "適用於 Windows、macOS 與 Linux 的原生桌面應用程式、原生 iOS 與 Android 應用程式，以及可安裝至主畫面的網頁應用程式。一切都會保持同步。",
+    "pages.welcome.description.features.apps.description": "提供適用於 Windows、macOS 和 Linux 的原生桌面應用程式、原生 iOS 和 Android 應用程式，以及可在任何瀏覽器中使用的網頁應用程式。一切內容都會保持同步。",
     "pages.welcome.description.features.editor.title": "功能豐富的食譜編輯器",
     "pages.welcome.description.features.editor.description": "提供食材、步驟與備註的格式工具列，支援段落標題、粗體、斜體、底線及表格",
     "pages.welcome.description.cta.api": "公開且有文件說明的 API，具備技術能力者可使用",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "總時間：{{totalTime}}",
     "pages.share.byText.yield": "份量：{{yield}}",
     "pages.share.byText.imageStep": "[圖片]",
-    "pages.cookbook.field.includePageNumbers": "包含頁碼"
+    "pages.cookbook.field.includePageNumbers": "包含頁碼",
+    "pages.downloadAndInstall.storeTrademarks": "Apple 與 Apple 標誌是 Apple Inc. 的商標。Google Play 與 Google Play 標誌是 Google LLC 的商標。",
+    "components.selectIngredients.edit": "編輯 {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "編輯食材",
+    "components.selectIngredients.editIngredient.message": "這只會變更新增至購物清單的內容。您的食譜將保持不變。",
+    "components.selectIngredients.editIngredient.placeholder": "食材…",
+    "pages.downloadAndInstall.ios.description": "請從 App Store 安裝 RecipeSage 應用程式。",
+    "pages.downloadAndInstall.ios.install": "從 App Store 安裝"
 }

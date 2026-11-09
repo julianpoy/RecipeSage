@@ -96,7 +96,7 @@
     "pages.people.sentInvites": "طلبات الصداقة المعلّقة (المرسلة)",
     "pages.app.oldBrowserAlert.message": "يبدو أنك تستخدم متصفحًا قديمًا غير مدعوم. قد لا تعمل بعض الوظائف أو قد تكون معطلة. يُرجى الانتقال إلى متصفح حديث مثل Firefox للاستفادة من الوظائف كاملة.",
     "pages.recipeDetails.units.mg": "{{value}} ملغ",
-    "pages.downloadAndInstall.subtitle": "ثبّت RecipeSage على كل جهاز تستخدمه. انقر على نوع جهازك لعرض الإرشادات.",
+    "pages.downloadAndInstall.subtitle": "ثبّت RecipeSage على كل جهاز تستخدمه.",
     "pages.import.recipeKeeper": "الاستيراد من ملف Recipe Keeper",
     "pages.import.jobs.subtitle": "تستمر عمليات الاستيراد في العمل حتى إذا أغلقت التطبيق بعد بدئها",
     "pages.recipeDetails.nutritionDietaryFiber": "الألياف الغذائية",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "أدوات المطبخ (الكثير منها!)",
     "pages.welcome.description.features.tools.description": "محوّل مدمج لأحجام القوالب، ومحوّل للقياسات، وأداة للبحث عن درجات حرارة الطهي، وحاسبة للقيم الغذائية، وأداة للبحث في وصفاتك بحسب المكوّنات المتوفرة لديك",
     "pages.welcome.description.features.apps.title": "تطبيقات لكل جهاز",
-    "pages.welcome.description.features.apps.description": "تطبيقات سطح مكتب أصلية لأنظمة Windows وmacOS وLinux، وتطبيقات أصلية لأنظمة iOS وAndroid، وتطبيق ويب يُثبَّت على الشاشة الرئيسية. يبقى كل شيء متزامنًا.",
+    "pages.welcome.description.features.apps.description": "تطبيقات سطح مكتب أصلية لأنظمة Windows وmacOS وLinux، وتطبيقات أصلية لأنظمة iOS وAndroid، وتطبيق ويب يعمل في أي متصفح. يبقى كل شيء متزامنًا.",
     "pages.welcome.description.features.editor.title": "محرر وصفات غني",
     "pages.welcome.description.features.editor.description": "شريط أدوات للتنسيق للمكوّنات والتعليمات والملاحظات، يتضمن عناوين الأقسام والنص العريض والمائل والتسطير والجداول",
     "pages.welcome.description.cta.api": "واجهة برمجة تطبيقات عامة وموثقة يمكنك استخدامها إذا كانت لديك خبرة تقنية",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "الوقت الإجمالي: {{totalTime}}",
     "pages.share.byText.yield": "الحصص: {{yield}}",
     "pages.share.byText.imageStep": "[صورة]",
-    "pages.cookbook.field.includePageNumbers": "تضمين أرقام الصفحات"
+    "pages.cookbook.field.includePageNumbers": "تضمين أرقام الصفحات",
+    "pages.downloadAndInstall.storeTrademarks": "Apple وشعار Apple علامتان تجاريتان لشركة Apple Inc. وGoogle Play وشعار Google Play علامتان تجاريتان لشركة Google LLC.",
+    "pages.downloadAndInstall.ios.description": "ثبّت تطبيق RecipeSage من App Store.",
+    "components.selectIngredients.edit": "تعديل {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "تعديل المكوّن",
+    "components.selectIngredients.editIngredient.placeholder": "المكوّن...",
+    "components.selectIngredients.editIngredient.message": "يغيّر هذا فقط ما يُضاف إلى قائمة التسوّق. تبقى وصفتك كما هي.",
+    "pages.downloadAndInstall.ios.install": "التثبيت من App Store"
 }

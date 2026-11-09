@@ -558,7 +558,7 @@
     "pages.contributeCancel.contribute": "Bidra",
     "pages.shoppingList.removeMultiple.message": "Detta tar permanent bort dessa artiklar från denna lista.",
     "pages.downloadAndInstall.title": "Ladda ned och installera",
-    "pages.downloadAndInstall.subtitle": "Installera RecipeSage på varje enhet du använder. Klicka på din enhetstyp för att se instruktioner.",
+    "pages.downloadAndInstall.subtitle": "Installera RecipeSage på alla enheter du använder.",
     "pages.shoppingLists.owner": "Du äger den här listan",
     "pages.downloadAndInstall.ios.title": "Apple-mobilenhet",
     "pages.downloadAndInstall.bookmark.usage": "Klicka på bokmärket för att importera den aktuella webbplatsen du befinner dig på.",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Köksverktyg (många!)",
     "pages.welcome.description.features.tools.description": "En inbyggd omvandlare för formstorlekar, måttomvandlare, verktyg för att slå upp tillagningstemperaturer, näringskalkylator och ett verktyg för att söka i dina recept efter de ingredienser du har hemma",
     "pages.welcome.description.features.apps.title": "Appar för alla enheter",
-    "pages.welcome.description.features.apps.description": "Inbyggda skrivbordsappar för Windows, macOS och Linux, inbyggda appar för iOS och Android samt en webbapp som kan installeras på hemskärmen. Allt förblir synkroniserat.",
+    "pages.welcome.description.features.apps.description": "Inbyggda skrivbordsappar för Windows, macOS och Linux, inbyggda appar för iOS och Android samt en webbapp som fungerar i alla webbläsare. Allt hålls synkroniserat.",
     "pages.welcome.description.features.editor.title": "Avancerad receptredigerare",
     "pages.welcome.description.features.editor.description": "Ett formateringsverktygsfält för ingredienser, instruktioner och anteckningar med avsnittsrubriker, fetstil, kursiv stil, understrykning och tabeller",
     "pages.welcome.description.cta.api": "Offentligt, dokumenterat API som du kan använda om du är tekniskt kunnig",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Total tid: {{totalTime}}",
     "pages.share.byText.yield": "Portioner: {{yield}}",
     "pages.share.byText.imageStep": "[Bild]",
-    "pages.cookbook.field.includePageNumbers": "Inkludera sidnummer"
+    "pages.cookbook.field.includePageNumbers": "Inkludera sidnummer",
+    "pages.downloadAndInstall.ios.install": "Installera från App Store",
+    "pages.downloadAndInstall.storeTrademarks": "Apple och Apple-logotypen är varumärken som tillhör Apple Inc. Google Play och Google Play-logotypen är varumärken som tillhör Google LLC.",
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediens...",
+    "components.selectIngredients.edit": "Redigera {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Redigera ingrediens",
+    "components.selectIngredients.editIngredient.message": "Detta ändrar endast vad som läggs till i din inköpslista. Ditt recept förblir oförändrat.",
+    "pages.downloadAndInstall.ios.description": "Installera RecipeSage-appen från App Store."
 }

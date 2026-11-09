@@ -212,7 +212,7 @@
     "pages.contributeCancel.cta.2": "Sajnos a RecipeSage kevés hozzájárulást kap, mivel viszonylag kis platform.",
     "pages.contributeCancel.cta.4": "Kérem, gondolja át újra – nagyra értékeljük hozzájárulását!",
     "pages.downloadAndInstall.title": "Letöltés és telepítés",
-    "pages.downloadAndInstall.subtitle": "Telepítse a RecipeSage-et minden eszközére, amelyet használ. Kattintson az eszköztípusára az útmutató megtekintéséhez.",
+    "pages.downloadAndInstall.subtitle": "Telepítse a RecipeSage alkalmazást minden használt eszközére.",
     "pages.downloadAndInstall.android.title": "Android készülék",
     "pages.downloadAndInstall.ios.title": "Apple készülék",
     "pages.downloadAndInstall.other": "Egyéb RecipeSage szoftverek",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Konyhai eszközök (rengeteg!)",
     "pages.welcome.description.features.tools.description": "Beépített sütőforma-méretátváltó, mértékegység-átváltó, sütési hőmérséklet kereső, tápérték-kalkulátor, valamint eszköz a receptek keresésére a kéznél lévő hozzávalók alapján",
     "pages.welcome.description.features.apps.title": "Alkalmazások minden eszközhöz",
-    "pages.welcome.description.features.apps.description": "Natív asztali alkalmazások Windowsra, macOS-re és Linuxra, natív iOS- és Android-alkalmazások, valamint egy webalkalmazás, amely telepíthető a kezdőképernyőre. Minden szinkronban marad.",
+    "pages.welcome.description.features.apps.description": "Natív asztali alkalmazások Windowsra, macOS-re és Linuxra, natív iOS- és Android-alkalmazások, valamint bármely böngészőben működő webalkalmazás. Minden szinkronban marad.",
     "pages.welcome.description.features.editor.title": "Sokoldalú receptszerkesztő",
     "pages.welcome.description.features.editor.description": "Formázási eszköztár a hozzávalókhoz, az elkészítési lépésekhez és a megjegyzésekhez szakaszcímekkel, félkövér, dőlt és aláhúzott formázással, valamint táblázatokkal",
     "pages.welcome.description.cta.api": "Nyilvános, dokumentált API, amelyet használhat, ha rendelkezik megfelelő műszaki ismeretekkel",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Teljes idő: {{totalTime}}",
     "pages.share.byText.yield": "Adag: {{yield}}",
     "pages.share.byText.imageStep": "[Kép]",
-    "pages.cookbook.field.includePageNumbers": "Oldalszámok feltüntetése"
+    "pages.cookbook.field.includePageNumbers": "Oldalszámok feltüntetése",
+    "pages.downloadAndInstall.ios.install": "Telepítés az App Store-ból",
+    "pages.downloadAndInstall.ios.description": "Telepítse a RecipeSage alkalmazást az App Store-ból.",
+    "pages.downloadAndInstall.storeTrademarks": "Az Apple és az Apple logója az Apple Inc. védjegyei. A Google Play és a Google Play logója a Google LLC védjegyei.",
+    "components.selectIngredients.edit": "{{ingredient}} szerkesztése",
+    "components.selectIngredients.editIngredient.header": "Hozzávaló szerkesztése",
+    "components.selectIngredients.editIngredient.message": "Ez csak azt módosítja, ami a bevásárlólistájához hozzáadódik. A receptje változatlan marad.",
+    "components.selectIngredients.editIngredient.placeholder": "Hozzávaló..."
 }

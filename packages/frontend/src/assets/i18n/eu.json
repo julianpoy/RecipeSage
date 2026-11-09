@@ -991,7 +991,7 @@
     "pages.contribute.yearlyMonthly.description": "Zure kontuari aplikatzen zaio zure ekarpen errepikaria aktibo dagoen bitartean",
     "pages.contribute.oneTime.description": "Zure kontuari urtebetez aplikatzen zaio.",
     "pages.contribute.bonus.feature.4": "Eguneko erabilera-kuota handiagoa errezetak erauzteko, OCR/irudi eta PDF ezagutzarako, URL eta testu-fitxategien inportazioetarako, eta nutrizio-informazioaren betetze automatikorako",
-    "pages.downloadAndInstall.subtitle": "Instalatu RecipeSage erabiltzen duzun gailu guztietan. Egin klik zure gailu motan jarraibideak ikusteko.",
+    "pages.downloadAndInstall.subtitle": "Instalatu RecipeSage erabiltzen duzun gailu guztietan.",
     "pages.downloadAndInstall.title": "Deskargatu eta instalatu",
     "pages.mealPlan.modal.moveConfirm.change": "Hautatu beste egun bat",
     "pages.mealPlanBulkPinModal.selectAll": "Hautatu guztiak",
@@ -2411,7 +2411,7 @@
     "pages.welcome.description.features.tools.title": "Sukaldeko tresnak (asko!)",
     "pages.welcome.description.features.tools.description": "Labeko ontzien neurriak bihurtzeko tresna integratua, neurri-bihurgailua, egosteko tenperaturak bilatzeko tresna, nutrizio-kalkulagailua eta eskura dituzun osagaien arabera errezetak bilatzeko tresna",
     "pages.welcome.description.features.apps.title": "Gailu guztietarako aplikazioak",
-    "pages.welcome.description.features.apps.description": "Windows, macOS eta Linux-erako mahaigaineko jatorrizko aplikazioak, iOS eta Android-erako jatorrizko aplikazioak eta hasierako pantailan instalatzen den web-aplikazio bat. Dena sinkronizatuta mantentzen da.",
+    "pages.welcome.description.features.apps.description": "Windows, macOS eta Linuxerako mahaigaineko aplikazio natiboak, iOS eta Androiderako aplikazio natiboak, eta edozein arakatzailetan funtzionatzen duen web-aplikazio bat. Dena sinkronizatuta mantentzen da.",
     "pages.import.flavorish": "Inportatu Flavorish fitxategitik",
     "pages.importFlavorish.tabTitle": "Inportatu Flavorish-etik - RecipeSage",
     "pages.importFlavorish.title": "Inportatu errezetak Flavorish fitxategitik",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Denbora osoa: {{totalTime}}",
     "pages.share.byText.yield": "Emaitza: {{yield}}",
     "pages.share.byText.imageStep": "[Irudia]",
-    "pages.cookbook.field.includePageNumbers": "Sartu orrialde-zenbakiak"
+    "pages.cookbook.field.includePageNumbers": "Sartu orrialde-zenbakiak",
+    "pages.downloadAndInstall.ios.description": "Instalatu RecipeSage aplikazioa App Store-tik.",
+    "pages.downloadAndInstall.ios.install": "Instalatu App Store-tik",
+    "pages.downloadAndInstall.storeTrademarks": "Apple eta Apple-ren logotipoa Apple Inc.-en marka komertzialak dira. Google Play eta Google Play-ren logotipoa Google LLC-ren marka komertzialak dira.",
+    "components.selectIngredients.editIngredient.header": "Editatu osagaia",
+    "components.selectIngredients.editIngredient.placeholder": "Osagaia...",
+    "components.selectIngredients.edit": "Editatu {{ingredient}}",
+    "components.selectIngredients.editIngredient.message": "Honek erosketa-zerrendara gehitzen dena baino ez du aldatzen. Zure errezetak berdin jarraitzen du."
 }

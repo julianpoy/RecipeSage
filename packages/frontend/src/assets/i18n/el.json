@@ -303,7 +303,7 @@
     "pages.contributeCancel.cta.4": "Παρακαλούμε να το ξανασκεφτείτε - η συνεισφορά σας εκτιμάται πραγματικά!",
     "pages.contributeCancel.contribute": "Συμβάλλετε",
     "pages.downloadAndInstall.title": "Λήψη & Εγκατάσταση",
-    "pages.downloadAndInstall.subtitle": "Εγκαταστήστε το RecipeSage σε κάθε συσκευή που χρησιμοποιείτε. Κάντε κλικ στον τύπο της συσκευής σας για να δείτε οδηγίες.",
+    "pages.downloadAndInstall.subtitle": "Εγκαταστήστε το RecipeSage σε κάθε συσκευή που χρησιμοποιείτε.",
     "pages.downloadAndInstall.android.title": "Συσκευή Android",
     "pages.downloadAndInstall.ios.title": "Κινητή συσκευή Apple",
     "pages.downloadAndInstall.desktop.title": "Συσκευές επιτραπέζιων υπολογιστών ή φορητών υπολογιστών",
@@ -2408,7 +2408,7 @@
     "pages.welcome.description.features.tools.title": "Εργαλεία κουζίνας (πάρα πολλά!)",
     "pages.welcome.description.features.tools.description": "Ενσωματωμένος μετατροπέας μεγέθους ταψιών, μετατροπέας μετρήσεων, εργαλείο αναζήτησης θερμοκρασίας μαγειρέματος, υπολογιστής διατροφικής αξίας και εργαλείο αναζήτησης των συνταγών σας βάσει των υλικών που έχετε διαθέσιμα",
     "pages.welcome.description.features.apps.title": "Εφαρμογές για κάθε συσκευή",
-    "pages.welcome.description.features.apps.description": "Εγγενείς εφαρμογές υπολογιστή για Windows, macOS και Linux, εγγενείς εφαρμογές για iOS και Android και μια διαδικτυακή εφαρμογή που εγκαθίσταται στην αρχική οθόνη σας. Όλα παραμένουν συγχρονισμένα.",
+    "pages.welcome.description.features.apps.description": "Εγγενείς εφαρμογές υπολογιστή για Windows, macOS και Linux, εγγενείς εφαρμογές για iOS και Android, καθώς και μια διαδικτυακή εφαρμογή που λειτουργεί σε κάθε πρόγραμμα περιήγησης. Όλα παραμένουν συγχρονισμένα.",
     "pages.welcome.description.features.editor.title": "Πλούσιος επεξεργαστής συνταγών",
     "pages.welcome.description.features.editor.description": "Μια γραμμή εργαλείων μορφοποίησης για υλικά, οδηγίες και σημειώσεις, με κεφαλίδες ενοτήτων, έντονα, πλάγια, υπογράμμιση και πίνακες",
     "pages.welcome.description.cta.api": "Δημόσιο, τεκμηριωμένο API που μπορείτε να χρησιμοποιήσετε εάν έχετε τεχνικές γνώσεις",
@@ -2568,5 +2568,12 @@
     "pages.share.byText.totalTime": "Συνολικός χρόνος: {{totalTime}}",
     "pages.share.byText.yield": "Μερίδες: {{yield}}",
     "pages.share.byText.imageStep": "[Εικόνα]",
-    "pages.cookbook.field.includePageNumbers": "Συμπερίληψη αριθμών σελίδων"
+    "pages.cookbook.field.includePageNumbers": "Συμπερίληψη αριθμών σελίδων",
+    "pages.downloadAndInstall.ios.description": "Εγκαταστήστε την εφαρμογή RecipeSage από το App Store.",
+    "pages.downloadAndInstall.storeTrademarks": "Η Apple και το λογότυπο Apple είναι εμπορικά σήματα της Apple Inc. Το Google Play και το λογότυπο Google Play είναι εμπορικά σήματα της Google LLC.",
+    "components.selectIngredients.edit": "Επεξεργασία {{ingredient}}",
+    "components.selectIngredients.editIngredient.header": "Επεξεργασία συστατικού",
+    "components.selectIngredients.editIngredient.placeholder": "Συστατικό...",
+    "components.selectIngredients.editIngredient.message": "Αυτό αλλάζει μόνο ό,τι προστίθεται στη λίστα αγορών σας. Η συνταγή σας παραμένει ίδια.",
+    "pages.downloadAndInstall.ios.install": "Εγκατάσταση από το App Store"
 }
