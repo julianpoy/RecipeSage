@@ -31,7 +31,10 @@
           "ng build --configuration=production",
           "tsx build-service-worker.ts",
           "workbox injectManifest",
-          "cp ../../LICENSE.md www/LICENSE.md",
+          {
+            "command": "cp ../../LICENSE.md www/LICENSE.md",
+            "forwardAllArgs": false
+          },
           "tsx upload-sourcemaps.ts"
         ],
         "parallel": false
