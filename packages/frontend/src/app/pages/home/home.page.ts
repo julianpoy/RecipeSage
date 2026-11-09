@@ -64,6 +64,8 @@ import {
 } from "@ionic/angular";
 import {
   addOutline,
+  chevronDown,
+  chevronForward,
   closeOutline,
   downloadOutline,
   funnelOutline,
@@ -80,6 +82,8 @@ const TILE_PADD = 20;
 const MOBILE_TWO_COLUMN_MIN_WIDTH = 375;
 const TWO_COLUMN_TILE_GUTTER = 32;
 const RESIZE_DEBOUNCE_MS = 150;
+const COLLAPSED_LABEL_CHIP_GROUPS_LOCALSTORAGE_KEY =
+  "myRecipes.collapsedLabelChipGroups";
 
 @Component({
   standalone: true,
@@ -134,6 +138,9 @@ export class HomePage implements OnDestroy {
   showBack: boolean = false;
 
   labels: LabelSummary[] = [];
+  labelChipGroups: { title: string; labels: LabelSummary[] }[] = [];
+  shouldShowLabelChipGroupTitles = false;
+  collapsedLabelChipGroups = this.loadCollapsedLabelChipGroups();
   selectedLabels: string[] = [];
 
   recipes: RecipeSummaryLite[] = [];
@@ -217,6 +224,8 @@ export class HomePage implements OnDestroy {
   constructor() {
     addIcons({
       addOutline,
+      chevronDown,
+      chevronForward,
       closeOutline,
       downloadOutline,
       funnelOutline,
@@ -491,8 +500,80 @@ export class HomePage implements OnDestroy {
   }
 
   resetAndLoadLabels() {
-    this.labels = [];
+    this.setLabels([]);
     return this.loadLabels();
+  }
+
+  private setLabels(labels: LabelSummary[]) {
+    this.labels = labels.sort((a, b) => a.title.localeCompare(b.title));
+
+    const labelsByGroupTitle = new Map<string, LabelSummary[]>();
+    for (const label of this.labels) {
+      const groupTitle = label.labelGroup?.title ?? "";
+      const groupLabels = labelsByGroupTitle.get(groupTitle) ?? [];
+      groupLabels.push(label);
+      labelsByGroupTitle.set(groupTitle, groupLabels);
+    }
+
+    this.labelChipGroups = Array.from(
+      labelsByGroupTitle,
+      ([title, groupLabels]) => ({ title, labels: groupLabels }),
+    ).sort((a, b) => a.title.localeCompare(b.title));
+    this.shouldShowLabelChipGroupTitles = this.labels.some(
+      (label) => label.labelGroup,
+    );
+  }
+
+  isLabelChipGroupCollapsed(groupTitle: string) {
+    return (
+      this.shouldShowLabelChipGroupTitles &&
+      this.collapsedLabelChipGroups.includes(groupTitle)
+    );
+  }
+
+  toggleLabelChipGroup(groupTitle: string) {
+    this.collapsedLabelChipGroups = this.collapsedLabelChipGroups.includes(
+      groupTitle,
+    )
+      ? this.collapsedLabelChipGroups.filter((title) => title !== groupTitle)
+      : [...this.collapsedLabelChipGroups, groupTitle];
+
+    try {
+      localStorage.setItem(
+        COLLAPSED_LABEL_CHIP_GROUPS_LOCALSTORAGE_KEY,
+        JSON.stringify(this.collapsedLabelChipGroups),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
+    this.resetScrollerAfterLabelChipsRender();
+  }
+
+  private resetScrollerAfterLabelChipsRender() {
+    const settings = this.datasource.settings;
+    if (!settings || !this.recipes.length) return;
+
+    setTimeout(() => {
+      settings.startIndex = this.datasource.adapter.firstVisible.$index ?? 0;
+      this.datasource.adapter.reset();
+    });
+  }
+
+  private loadCollapsedLabelChipGroups(): string[] {
+    try {
+      const serialized = localStorage.getItem(
+        COLLAPSED_LABEL_CHIP_GROUPS_LOCALSTORAGE_KEY,
+      );
+      const collapsedGroups: unknown = serialized ? JSON.parse(serialized) : [];
+
+      return Array.isArray(collapsedGroups)
+        ? collapsedGroups.filter((title) => typeof title === "string")
+        : [];
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
 
   async resetAndLoadRecipes(scrollToLastPosition?: boolean) {
@@ -608,7 +689,7 @@ export class HomePage implements OnDestroy {
       );
       if (!response) return;
 
-      this.labels = response.sort((a, b) => a.title.localeCompare(b.title));
+      this.setLabels(response);
     } else if (this.isIncludeFriendsEnabled()) {
       const response =
         await this.serverActionsService.labels.getAllVisibleLabels({
@@ -616,14 +697,14 @@ export class HomePage implements OnDestroy {
         });
       if (!response) return;
 
-      this.labels = response.sort((a, b) => a.title.localeCompare(b.title));
+      this.setLabels(response);
     } else {
       const response = await this.serverActionsService.labels.getLabels({
         401: () => {},
       });
       if (!response) return;
 
-      this.labels = response.sort((a, b) => a.title.localeCompare(b.title));
+      this.setLabels(response);
     }
   }
 

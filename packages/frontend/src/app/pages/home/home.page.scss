@@ -20,7 +20,37 @@ ion-title.ios.selection-title.has-bulk-actions {
 .labelChips {
   display: flex;
   flex-wrap: wrap;
-  padding: 2px 4px 8px;
+  gap: 0 16px;
+  padding: 2px 12px 8px;
+  line-height: 1.25;
+
+  .labelChipGroupTitle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding: 20px 4px 4px;
+    background: none;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: start;
+    color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.6);
+    overflow-wrap: anywhere;
+
+    &:hover {
+      color: var(--ion-text-color);
+    }
+
+    ion-icon {
+      flex-shrink: 0;
+    }
+  }
+
+  .labelChipGroupChips {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
   a {
     color: var(--ion-text-color);
