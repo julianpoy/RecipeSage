@@ -31,7 +31,9 @@
                 checked="true"
               >
                 <div class="ion-text-wrap">
-                  {{ ingredient.plaintextContent }}
+                  <ingredient-text
+                    [text]="ingredient.plaintextContent"
+                  ></ingredient-text>
                 </div>
               </ion-checkbox>
             </ion-item>

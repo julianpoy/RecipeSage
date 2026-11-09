@@ -38,6 +38,15 @@ describe("getShoppingListItemGroupTitles", () => {
     ]);
   });
 
+  it("groups lines that differ only by a note", () => {
+    expect(
+      groupTitlesFor(["1 cup butter, softened", "1 cup butter (cold)"]),
+    ).toEqual(["2 cups butter", "2 cups butter"]);
+    expect(
+      groupTitlesFor(["1 cup flour, plus more for dusting", "2 cups flour"]),
+    ).toEqual(["3 cups flour", "3 cups flour"]);
+  });
+
   it("leaves an unquantified line on its own", () => {
     expect(groupTitlesFor(["salt or pepper", "1 tsp salt"])).toEqual([
       "salt or pepper",

@@ -85,7 +85,7 @@ html(lang=language, dir=direction)
                 i= item.title
                 br
           else
-            div(class="setTitle")= groupTitle
+            div(class="setTitle")= itemsByGroupTitle[groupTitle][0].title
 
   if modifiers.groupSimilar && modifiers.groupCategories
     div(class="items")

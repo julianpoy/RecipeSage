@@ -6,6 +6,7 @@ import {
   getAnchorMeasurement,
   getTitleForIngredient,
   stripIngredient,
+  splitIngredientTextParts,
   parseIngredients,
   parseInstructions,
   parseNotes,
@@ -719,7 +720,7 @@ describe("parsers", () => {
         );
         expect(
           stripIngredient("2 cups flour or 250 g flour, plus more for dusting"),
-        ).toBe("flour plus more for dusting");
+        ).toBe("flour");
       });
 
       it("removes an approximation marker from every part", () => {
@@ -758,6 +759,231 @@ describe("parsers", () => {
         const result = stripIngredient("½ cup sugar");
         expect(result).toBe("sugar");
       });
+    });
+
+    describe("notes", () => {
+      it("removes a note after a comma or dash", () => {
+        expect(stripIngredient("1 onion, finely diced")).toBe("onion");
+        expect(stripIngredient("2 carrots - peeled and sliced")).toBe(
+          "carrots",
+        );
+        expect(stripIngredient("1 cup flour, plus more for dusting")).toBe(
+          "flour",
+        );
+      });
+
+      it("removes a note in any language", () => {
+        expect(stripIngredient("2 Zwiebeln, fein gehackt")).toBe("Zwiebeln");
+        expect(stripIngredient("1 cebolla, picada")).toBe("cebolla");
+      });
+
+      it("keeps a second ingredient that follows a comma", () => {
+        expect(stripIngredient("1 onion, diced or 2 shallots")).toBe(
+          "onion or shallots",
+        );
+        expect(stripIngredient("Salt, pepper")).toBe("Salt, pepper");
+        expect(stripIngredient("1 onion, diced, 2 carrots")).toBe(
+          "onion, diced, 2 carrots",
+        );
+      });
+
+      it("removes a note in full-width parentheses", () => {
+        expect(stripIngredient("2 洋葱（切碎）")).toBe("洋葱");
+      });
+    });
+  });
+
+  describe("splitIngredientTextParts", () => {
+    const notesFor = (ingredient: string): string[] =>
+      splitIngredientTextParts(ingredient)
+        .filter((part) => part.isNote)
+        .map((part) => part.text);
+
+    it("always keeps all of the text", () => {
+      for (const ingredient of [
+        "2 tomatoes, diced and seeded",
+        "2 apples (peeled), cored",
+        "1 (14 oz) can tomatoes (drained)",
+        "Salt, pepper",
+        "",
+      ]) {
+        expect(
+          splitIngredientTextParts(ingredient)
+            .map((part) => part.text)
+            .join(""),
+        ).toBe(ingredient);
+      }
+    });
+
+    it("marks the text after the first comma", () => {
+      expect(splitIngredientTextParts("2 tomatoes, diced, seeded")).toEqual([
+        { text: "2 tomatoes", isNote: false },
+        { text: ", diced, seeded", isNote: true },
+      ]);
+    });
+
+    it("marks the text after a spaced dash", () => {
+      expect(notesFor("2 carrots - peeled")).toEqual([" - peeled"]);
+      expect(notesFor("2 carrots – peeled")).toEqual([" – peeled"]);
+      expect(notesFor("2 carrots — peeled")).toEqual([" — peeled"]);
+    });
+
+    it("marks the text after a non-Latin comma", () => {
+      expect(notesFor("2 بصل، مفروم")).toEqual(["، مفروم"]);
+      expect(notesFor("2 洋葱，切碎")).toEqual(["，切碎"]);
+      expect(notesFor("2 玉ねぎ、みじん切り")).toEqual(["、みじん切り"]);
+    });
+
+    it("does not treat a range as a note", () => {
+      expect(notesFor("1 - 2 cups flour")).toEqual([]);
+      expect(notesFor("1 - 2 cups flour - sifted")).toEqual([" - sifted"]);
+      expect(notesFor("½ - 1 cup flour")).toEqual([]);
+    });
+
+    it("does not treat a decimal comma as a note", () => {
+      expect(notesFor("1,5 dl Milch")).toEqual([]);
+      expect(notesFor("1,5 dl Milch, warm")).toEqual([", warm"]);
+    });
+
+    it("needs the line to start with an amount before a comma counts", () => {
+      expect(notesFor("Salt, pepper")).toEqual([]);
+      expect(notesFor("2% milk, warm")).toEqual([]);
+      expect(notesFor("½ cup milk, warm")).toEqual([", warm"]);
+      expect(notesFor("~2 cups milk, warm")).toEqual([", warm"]);
+    });
+
+    it("needs an ingredient name before a comma counts", () => {
+      expect(notesFor("2 cups, sifted flour")).toEqual([]);
+    });
+
+    it("does not move on to a later comma when the first has no name before it", () => {
+      expect(notesFor("1 cup, packed, brown sugar")).toEqual([]);
+      expect(notesFor("2 cups, sifted flour, warm")).toEqual([]);
+    });
+
+    it("keeps a comma when another amount follows it", () => {
+      expect(notesFor("2 cups flour, 1 tsp salt")).toEqual([]);
+      expect(notesFor("1 onion, diced or 2 shallots")).toEqual([]);
+      expect(notesFor("1 cup flour, plus 2 tbsp")).toEqual([]);
+      expect(notesFor("1 onion, diced, 2 carrots")).toEqual([]);
+    });
+
+    it("recognizes a joining word in any case", () => {
+      expect(notesFor("1 onion, diced and 2 shallots")).toEqual([]);
+      expect(notesFor("1 onion, diced & 2 shallots")).toEqual([]);
+      expect(notesFor("1 onion, diced OR 2 shallots")).toEqual([]);
+    });
+
+    it("recognizes a joining word in other languages", () => {
+      expect(notesFor("1 cebolla, picada o 2 chalotas")).toEqual([]);
+      expect(notesFor("1 oignon, coupé ou 2 échalotes")).toEqual([]);
+      expect(notesFor("1 луковица, нарезанная или 2 шалота")).toEqual([]);
+      expect(notesFor("1 洋葱，切碎或2 个红葱")).toEqual([]);
+      expect(notesFor("1 洋葱，切碎或者2 个红葱")).toEqual([]);
+      expect(notesFor("1 洋葱，切碎与2 个红葱")).toEqual([]);
+      expect(notesFor("1 soğan, doğranmış ya da 2 arpacık")).toEqual([]);
+      expect(notesFor("1 양파, 다진 것 및 2 샬롯")).toEqual([]);
+      expect(notesFor("1 ceapă, tocată şi 2 morcovi")).toEqual([]);
+      expect(notesFor("1 цибуля, нарізана й 2 моркви")).toEqual([]);
+    });
+
+    it("keeps a line whole when a preposition is also a joining word", () => {
+      expect(notesFor("1 pollo, cortado en 8 trozos")).toEqual([]);
+      expect(notesFor("1 poulet, coupé en 8 morceaux")).toEqual([]);
+    });
+
+    it("allows a range inside a note", () => {
+      expect(notesFor("1 lb carrots, cut into 1 - 2 inch pieces")).toEqual([
+        ", cut into 1 - 2 inch pieces",
+      ]);
+    });
+
+    it("keeps a dash whole when it has no name before it and is not a range", () => {
+      expect(notesFor("1 cup - packed, brown sugar")).toEqual([]);
+      expect(notesFor("2 cups - sifted flour, warm")).toEqual([]);
+      expect(notesFor("1 - 2 cups flour, sifted")).toEqual([", sifted"]);
+    });
+
+    it("does not treat a non-Latin decimal comma as a note", () => {
+      expect(notesFor("1،5 كوب حليب، دافئ")).toEqual(["، دافئ"]);
+    });
+
+    it("gives the same result for a line with a newline", () => {
+      expect(notesFor("1 onion, diced\nor 2 shallots")).toEqual([]);
+      expect(splitIngredientTextParts("1 onion,\ndiced")).toEqual([
+        { text: "1 onion", isNote: false },
+        { text: ",\ndiced", isNote: true },
+      ]);
+    });
+
+    it("allows a note that holds a number or a joining word", () => {
+      expect(notesFor("1 lb chicken, cut into 1-inch pieces")).toEqual([
+        ", cut into 1-inch pieces",
+      ]);
+      expect(notesFor("1 cup flour, plus more for dusting")).toEqual([
+        ", plus more for dusting",
+      ]);
+    });
+
+    it("marks parentheses without an amount at the start", () => {
+      expect(notesFor("Salt (optional)")).toEqual(["(optional)"]);
+      expect(notesFor("2 apples (peeled)")).toEqual(["(peeled)"]);
+      expect(splitIngredientTextParts("2 apples (peeled) and cored")).toEqual([
+        { text: "2 apples ", isNote: false },
+        { text: "(peeled)", isNote: true },
+        { text: " and cored", isNote: false },
+      ]);
+    });
+
+    it("keeps parentheses directly after the first amount", () => {
+      expect(notesFor("1 (14 oz) can tomatoes")).toEqual([]);
+      expect(notesFor("1 cup (240 ml) water")).toEqual([]);
+      expect(notesFor("½ cup (120 ml) water")).toEqual([]);
+      expect(notesFor("1 can (14 oz) tomatoes (drained)")).toEqual([
+        "(drained)",
+      ]);
+    });
+
+    it("keeps a size in parentheses after a word that is not a known unit", () => {
+      expect(notesFor("1 taza (240 ml) de agua")).toEqual([]);
+      expect(notesFor("1 Dose (400 g) Tomaten")).toEqual([]);
+      expect(notesFor("1 box (16 oz) pasta")).toEqual([]);
+      expect(notesFor("1杯(240ml)水")).toEqual([]);
+      expect(notesFor("2 apples (peeled)")).toEqual(["(peeled)"]);
+      expect(notesFor("1 large apple (2 cups)")).toEqual(["(2 cups)"]);
+    });
+
+    it("marks a size in parentheses after a unit and a name", () => {
+      expect(notesFor("1 cup flour (120 g)")).toEqual(["(120 g)"]);
+      expect(notesFor("2 tbsp butter (30 g)")).toEqual(["(30 g)"]);
+    });
+
+    it("keeps only the first parentheses after the first amount", () => {
+      expect(notesFor("1 cup (240ml) (120g) flour")).toEqual(["(120g)"]);
+      expect(notesFor("1 (14oz) (400g) can tomatoes")).toEqual(["(400g)"]);
+    });
+
+    it("marks full-width parentheses", () => {
+      expect(notesFor("2 洋葱（切碎）")).toEqual(["（切碎）"]);
+      expect(notesFor("1 杯面粉（约120克，过筛）")).toEqual([
+        "（约120克，过筛）",
+      ]);
+    });
+
+    it("ignores a comma inside parentheses", () => {
+      expect(notesFor("1 cup flour (about 120 g, plus more)")).toEqual([
+        "(about 120 g, plus more)",
+      ]);
+    });
+
+    it("marks parentheses before a comma and leaves later ones in the note", () => {
+      expect(
+        splitIngredientTextParts("2 apples (red), cored (optional)"),
+      ).toEqual([
+        { text: "2 apples ", isNote: false },
+        { text: "(red)", isNote: true },
+        { text: ", cored (optional)", isNote: true },
+      ]);
     });
   });
 

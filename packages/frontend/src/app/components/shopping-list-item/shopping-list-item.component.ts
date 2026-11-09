@@ -38,6 +38,7 @@ import {
 import { addIcons } from "ionicons";
 import { AlertModalComponent } from "../alert-modal/alert-modal.component";
 import { TextInputComponent } from "../forms/text-input/text-input.component";
+import { IngredientTextComponent } from "../ingredient-text/ingredient-text.component";
 
 @Component({
   standalone: true,
@@ -49,6 +50,7 @@ import { TextInputComponent } from "../forms/text-input/text-input.component";
     ...SHARED_UI_IMPORTS,
     AlertModalComponent,
     TextInputComponent,
+    IngredientTextComponent,
     IonItem,
     IonCheckbox,
     IonButton,

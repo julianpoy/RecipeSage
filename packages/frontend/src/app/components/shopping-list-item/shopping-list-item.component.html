@@ -43,7 +43,7 @@
     (ionChange)="onComplete()"
   >
     <div class="ion-checkbox-label ion-text-wrap" dir="auto">
-      {{ title }}
+      <ingredient-text [text]="title"></ingredient-text>
       @if (recipeTitle) {
         <p>
           {{ "components.shoppingListItem.recipe" | translate }}
