@@ -35,9 +35,9 @@ All of your recipes in one place, and access them from any device.
 
 <img src="Assets/myrecipes.gif"></img>
 
-### Progressive Web App
+### Mobile Apps
 
-Feels native on every device, and can be installed to the homescreen.
+Feels native on every device, with apps on the [App Store](https://apps.apple.com/app/id6529549272) and [Google Play](https://play.google.com/store/apps/details?id=com.recipesage.app).
 
 <img src="Assets/recipe-mobile.gif"></img>
 

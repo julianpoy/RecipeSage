@@ -8,6 +8,9 @@ import {
   DESKTOP_RECOMMENDED_DOWNLOADS,
   getDesktopDownloadUrl,
 } from "../../../util/shared/src/desktopDownloads";
+import { getAppStoreBadgeUrl } from "../../../util/shared/src/getAppStoreBadgeUrl";
+import { getGooglePlayBadgeUrl } from "../../../util/shared/src/getGooglePlayBadgeUrl";
+import { MOBILE_APP_STORE_URLS } from "../../../util/shared/src/MOBILE_APP_STORE_URLS";
 import DesktopPlatformIcon from "./DesktopPlatformIcon.astro";
 import type { Translator } from "../i18n/translations";
 
@@ -16,9 +19,13 @@ const heroBg =
 
 interface Props {
   t: Translator;
+  locale: string;
 }
 
-const { t } = Astro.props;
+const { t, locale } = Astro.props;
+
+const appStoreBadgeUrl = getAppStoreBadgeUrl(locale);
+const googlePlayBadgeUrl = getGooglePlayBadgeUrl(locale);
 
 const bookmarklet =
   "javascript:(function(){location.href='https://recipesage.com/app/edit-recipe/new?autofill-url='+encodeURIComponent(location.href);})();";
@@ -44,71 +51,14 @@ const bookmarklet =
 </section>
 
 <article class="download-content">
-  <section class="platform">
-    <div class="platform-header">
-      <span class="platform-icon" aria-hidden="true">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
-          <path d="M12 18h.01"></path>
-        </svg>
-      </span>
-      <h2>{t("pages.downloadAndInstall.android.title")}</h2>
-    </div>
-    <p class="instruction-header">
-      {t("pages.downloadAndInstall.android.description")}
-    </p>
-    <p class="store-links">
-      <a
-        class="store-link"
-        href="https://play.google.com/store/apps/details?id=com.recipesage.app"
-        target="_blank"
-        rel="noopener">{t("pages.downloadAndInstall.android.install")}</a
-      >
-    </p>
-  </section>
-
-  <section class="platform">
-    <div class="platform-header">
-      <span class="platform-icon" aria-hidden="true">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
-          <path d="M12 18h.01"></path>
-        </svg>
-      </span>
-      <h2>{t("pages.downloadAndInstall.ios.title")}</h2>
-    </div>
-    <p class="instruction-header">
-      {t("pages.downloadAndInstall.ios.instructionHeader")}
-    </p>
-    <ol>
-      <li>{t("pages.downloadAndInstall.ios.step.1")}</li>
-      <li>
-        {t("pages.downloadAndInstall.ios.step.2")}
-        <span class="icon-hint" aria-label={t("pages.downloadAndInstall.icon.share")}>
+  <div class="store-cards">
+    <section class="platform store-card">
+      <div class="platform-header">
+        <span class="platform-icon" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="28"
+            height="28"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -116,15 +66,64 @@ const bookmarklet =
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="16 6 12 2 8 6"></polyline>
-            <line x1="12" x2="12" y1="2" y2="15"></line>
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+            <path d="M12 18h.01"></path>
           </svg>
         </span>
-      </li>
-      <li>{t("pages.downloadAndInstall.ios.step.3")}</li>
-    </ol>
-  </section>
+        <h2>{t("pages.downloadAndInstall.ios.title")}</h2>
+      </div>
+      <p class="instruction-header">
+        {t("pages.downloadAndInstall.ios.description")}
+      </p>
+      <a
+        class="store-badge"
+        href={MOBILE_APP_STORE_URLS.ios}
+        target="_blank"
+        rel="noopener"
+      >
+        <img
+          src={appStoreBadgeUrl}
+          alt={t("pages.downloadAndInstall.ios.install")}
+        />
+      </a>
+    </section>
+
+    <section class="platform store-card">
+      <div class="platform-header">
+        <span class="platform-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+            <path d="M12 18h.01"></path>
+          </svg>
+        </span>
+        <h2>{t("pages.downloadAndInstall.android.title")}</h2>
+      </div>
+      <p class="instruction-header">
+        {t("pages.downloadAndInstall.android.description")}
+      </p>
+      <a
+        class="store-badge"
+        href={MOBILE_APP_STORE_URLS.android}
+        target="_blank"
+        rel="noopener"
+      >
+        <img
+          src={googlePlayBadgeUrl}
+          alt={t("pages.downloadAndInstall.android.install")}
+        />
+      </a>
+    </section>
+  </div>
 
   <section class="platform">
     <div class="platform-header">
@@ -232,6 +231,10 @@ const bookmarklet =
       <p>{t("pages.downloadAndInstall.bookmark.usage")}</p>
     </div>
   </section>
+
+  <p class="store-trademarks">
+    {t("pages.downloadAndInstall.storeTrademarks")}
+  </p>
 </article>
 
 <script>
@@ -305,12 +308,38 @@ const bookmarklet =
     line-height: 1.65;
   }
 
+  .store-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .store-badge {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  .store-badge img {
+    display: block;
+    height: 48px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
   .platform {
     background: var(--surface);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 20px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .store-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
   }
 
   .platform-header {
@@ -338,32 +367,8 @@ const bookmarklet =
     margin: 0 0 12px;
   }
 
-  .platform ol {
-    margin: 0;
-    padding-inline-start: 20px;
-    color: var(--text);
-  }
-
-  .platform ol li {
-    margin-bottom: 8px;
-  }
-
-  .icon-hint {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.07);
-    margin-inline-start: 4px;
-    font-weight: 600;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .icon-hint {
-      background: rgba(255, 255, 255, 0.1);
-    }
+  .store-card .instruction-header {
+    margin-bottom: 18px;
   }
 
   .recommended-link {
@@ -469,5 +474,11 @@ const bookmarklet =
   .bookmarklet {
     color: var(--accent-text);
     cursor: grab;
+  }
+
+  .store-trademarks {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 24px 0 0;
   }
 </style>

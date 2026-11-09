@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import { Capacitor } from "@capacitor/core";
@@ -23,17 +17,14 @@ import {
   IonAccordionGroup,
 } from "@ionic/angular";
 import {
-  chevronForwardOutline,
-  cloudDownloadOutline,
   desktopOutline,
   downloadOutline,
   extensionPuzzleOutline,
   bookmarkOutline,
-  logoAndroid,
   logoApple,
   logoTux,
   logoWindows,
-  shareOutline,
+  phonePortraitOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import {
@@ -43,16 +34,15 @@ import {
   DESKTOP_PLATFORM_LABEL_KEYS,
   DESKTOP_RECOMMENDED_DOWNLOADS,
   detectDesktopPlatform,
+  getAppStoreBadgeUrl,
   getDesktopDownloadUrl,
+  getGooglePlayBadgeUrl,
+  MOBILE_APP_STORE_URLS,
   type DesktopPlatform,
 } from "@recipesage/util/shared";
 import { IS_DESKTOP } from "../../../../environments/environment";
-import {
-  clearInstallPrompt,
-  getInstallPrompt,
-} from "../../../utils/pwaInstallPrompt";
 import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
-import { RouteMap } from "../../../services/util.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
 
 @Component({
   standalone: true,
@@ -78,14 +68,15 @@ import { RouteMap } from "../../../services/util.service";
   ],
 })
 export class DownloadAndInstallPage {
-  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private utilService = inject(UtilService);
 
   showBack = false;
   defaultBackHref: string = RouteMap.MorePage.getPath();
 
   isNativeOrDesktopApp = Capacitor.isNativePlatform() || IS_DESKTOP;
   downloadPageUrl = "https://recipesage.com/download";
+  mobileAppStoreUrls = MOBILE_APP_STORE_URLS;
   platforms = DESKTOP_PLATFORMS;
   downloads = DESKTOP_DOWNLOADS;
   recommendedDownloads = DESKTOP_RECOMMENDED_DOWNLOADS;
@@ -98,46 +89,30 @@ export class DownloadAndInstallPage {
   };
   recommendedPlatform = detectDesktopPlatform(navigator.userAgent);
 
-  pwaPromptAvailable = signal(!!getInstallPrompt());
-
   downloadUrl = getDesktopDownloadUrl;
 
   constructor() {
     addIcons({
-      chevronForwardOutline,
-      cloudDownloadOutline,
       desktopOutline,
       downloadOutline,
       extensionPuzzleOutline,
       bookmarkOutline,
-      logoAndroid,
       logoApple,
       logoTux,
       logoWindows,
-      shareOutline,
+      phonePortraitOutline,
     });
 
     if (this.router.currentNavigation()?.extras.state?.showBack) {
       this.showBack = true;
     }
-
-    const onInstallPrompt = () => this.pwaPromptAvailable.set(true);
-    window.addEventListener("beforeinstallprompt", onInstallPrompt);
-    this.destroyRef.onDestroy(() =>
-      window.removeEventListener("beforeinstallprompt", onInstallPrompt),
-    );
   }
 
-  async showPWAPrompt() {
-    const installPrompt = getInstallPrompt();
-    if (!installPrompt) return;
+  get appStoreBadgeUrl() {
+    return getAppStoreBadgeUrl(this.utilService.getCurrentLocale());
+  }
 
-    await installPrompt.prompt();
-    const { outcome } = await installPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      clearInstallPrompt();
-      this.pwaPromptAvailable.set(false);
-    }
+  get googlePlayBadgeUrl() {
+    return getGooglePlayBadgeUrl(this.utilService.getCurrentLocale());
   }
 }
