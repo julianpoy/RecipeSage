@@ -63,7 +63,8 @@
                 slot="end"
                 fill="clear"
                 [attr.aria-label]="
-                  'components.selectIngredients.edit' | translate
+                  'components.selectIngredients.edit'
+                    | translate: { ingredient: ingredient.plaintextContent }
                 "
                 (click)="showEditIngredientInput(i)"
               >
