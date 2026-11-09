@@ -1,3 +1,26 @@
+<alert-modal
+  [(isOpen)]="isEditIngredientModalOpen"
+  header="{{
+    'components.selectIngredients.editIngredient.header' | translate
+  }}"
+  message="{{
+    'components.selectIngredients.editIngredient.message' | translate
+  }}"
+  [focusInputOnOpen]="true"
+  (confirmed)="submitEditIngredient()"
+>
+  <ng-template>
+    <text-input
+      [(ngModel)]="editIngredientInput"
+      [maxlength]="titleLengthLimit"
+      placeholder="{{
+        'components.selectIngredients.editIngredient.placeholder' | translate
+      }}"
+      autocapitalize="on"
+    ></text-input>
+  </ng-template>
+</alert-modal>
+
 <div>
   @if (scaledIngredients && scaledIngredients.length > 0) {
     <div>
@@ -36,6 +59,16 @@
                   ></ingredient-text>
                 </div>
               </ion-checkbox>
+              <ion-button
+                slot="end"
+                fill="clear"
+                [attr.aria-label]="
+                  'components.selectIngredients.edit' | translate
+                "
+                (click)="showEditIngredientInput(i)"
+              >
+                <ion-icon slot="icon-only" icon="create-outline"></ion-icon>
+              </ion-button>
             </ion-item>
           }
         </ion-item-group>

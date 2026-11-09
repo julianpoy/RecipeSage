@@ -3,6 +3,7 @@
   role="alertdialog"
   [attr.aria-label]="header"
   [isOpen]="isOpen"
+  (didPresent)="onDidPresent()"
   (didDismiss)="onDidDismiss()"
 >
   <ng-template>
