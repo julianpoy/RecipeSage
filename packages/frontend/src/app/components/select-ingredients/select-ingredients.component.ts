@@ -22,11 +22,24 @@ import {
   parseIngredients,
   inferIngredientsNotation,
   applyDecimalNotation,
+  SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT,
   type DecimalNotation,
 } from "@recipesage/util/shared";
 import { System } from "@recipesage/unitz-ts";
 import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
-import { IonItem, IonCheckbox, IonList, IonItemGroup } from "@ionic/angular";
+import {
+  IonItem,
+  IonCheckbox,
+  IonList,
+  IonItemGroup,
+  IonButton,
+  IonIcon,
+} from "@ionic/angular";
+import { addIcons } from "ionicons";
+import { createOutline } from "ionicons/icons";
+import { AlertModalComponent } from "../alert-modal/alert-modal.component";
+import { TextInputComponent } from "../forms/text-input/text-input.component";
+import { IngredientTextComponent } from "../ingredient-text/ingredient-text.component";
 
 @Component({
   standalone: true,
@@ -34,7 +47,18 @@ import { IonItem, IonCheckbox, IonList, IonItemGroup } from "@ionic/angular";
   templateUrl: "select-ingredients.component.html",
   styleUrls: ["./select-ingredients.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [...SHARED_UI_IMPORTS, IonItem, IonCheckbox, IonList, IonItemGroup],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    AlertModalComponent,
+    TextInputComponent,
+    IngredientTextComponent,
+    IonItem,
+    IonCheckbox,
+    IonList,
+    IonItemGroup,
+    IonButton,
+    IonIcon,
+  ],
 })
 export class SelectIngredientsComponent {
   private modalCtrl = inject(ModalController);
@@ -48,6 +72,15 @@ export class SelectIngredientsComponent {
   scale: string = "1";
   unitSystem: UnitSystem = "original";
   decimalNotationMode: DecimalNotation = ".";
+  editedTextByIngredientIndex = new Map<number, string>();
+  isEditIngredientModalOpen = false;
+  editIngredientIndex = 0;
+  editIngredientInput = "";
+  titleLengthLimit = SHOPPING_LIST_ITEMS_TITLE_LENGTH_LIMIT;
+
+  constructor() {
+    addIcons({ createOutline });
+  }
 
   _ingredients!: string;
   @Input({
@@ -62,6 +95,7 @@ export class SelectIngredientsComponent {
 
     this.selectedIngredients = [];
     this.ingredientBinders = {};
+    this.editedTextByIngredientIndex.clear();
 
     this.applyScale(true);
   }
@@ -145,7 +179,14 @@ export class SelectIngredientsComponent {
     this.scaledIngredients = parseIngredients(this._ingredients, this.scale, {
       targetSystem,
       decimalNotationMode: this.decimalNotationMode,
-    }).filter((e) => !e.isHeader);
+    })
+      .filter((e) => !e.isHeader)
+      .map((ingredient, index) => {
+        const editedText = this.editedTextByIngredientIndex.get(index);
+        return editedText === undefined
+          ? ingredient
+          : { ...ingredient, plaintextContent: editedText };
+      });
 
     this.selectedIngredients = [];
     for (let i = 0; i < (this.scaledIngredients || []).length; i++) {
@@ -156,6 +197,25 @@ export class SelectIngredientsComponent {
     }
 
     this.selectedIngredientsChange.emit(this.selectedIngredients);
+  }
+
+  showEditIngredientInput(i: number) {
+    this.editIngredientIndex = i;
+    this.editIngredientInput = this.scaledIngredients[i].plaintextContent;
+    this.isEditIngredientModalOpen = true;
+  }
+
+  submitEditIngredient() {
+    const editedText = this.editIngredientInput.trim();
+    if (!editedText) return;
+
+    this.isEditIngredientModalOpen = false;
+    const currentText =
+      this.scaledIngredients[this.editIngredientIndex].plaintextContent;
+    if (editedText === currentText) return;
+
+    this.editedTextByIngredientIndex.set(this.editIngredientIndex, editedText);
+    this.applyScale();
   }
 
   toggleIngredient(i: number) {

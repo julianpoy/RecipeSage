@@ -2397,6 +2397,10 @@
   "components.selectIngredients.toggleAll": "Select/Deselect All",
   "components.selectIngredients.scale": "{{scale}}x scale (click to change)",
   "components.selectIngredients.null": "This recipe has no ingredients.",
+  "components.selectIngredients.edit": "Edit {{ingredient}}",
+  "components.selectIngredients.editIngredient.header": "Edit Ingredient",
+  "components.selectIngredients.editIngredient.message": "This only changes what is added to your shopping list. Your recipe stays the same.",
+  "components.selectIngredients.editIngredient.placeholder": "Ingredient...",
 
   "components.selectLabel.change": "Click to change",
   "components.selectLabel.select": "Click to select",

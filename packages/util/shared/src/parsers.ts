@@ -252,7 +252,7 @@ const fillerWordsRegexp =
  * Matches inline notes within parenthesis.
  * For example: "1 cup tomato sauce (see sauce section)".
  */
-const notesRegexp = /\(.*?\)/;
+const notesRegexp = /\(.*?\)|（.*?）/;
 
 /** The "~" marker a scaled measurement carries: "~2 cups". */
 const leadingApproximationRegexp = /^~\s*/;
@@ -565,12 +565,155 @@ const stripIngredientParts = (
     });
 };
 
+export interface IngredientTextPart {
+  text: string;
+  isNote: boolean;
+}
+
+interface TextSpan {
+  start: number;
+  end: number;
+}
+
+const noteDelimiterRegexp = /,\s+|[،，、](?!\d)\s*|\s[-–—]\s+/g;
+
+const noteDashDelimiterRegexp = /\s[-–—]\s+/;
+
+const noteJoiningWordRegexp =
+  /\s(?:[+|&]|a|albo|and|arba|eller|en|et|eta|e|ed|edo|és|i|ir|ja|lub|nebo|o|og|och|of|oder|or|oraz|ou|oppure|plus|sau|și|şi|tai|und|u|vagy|ve|veya|ya da|y|і|й|и|или|либо|та|чи|або|και|ή|और|या|एवं|तथा|अथवा|או|أو|او|또는|혹은|그리고|및)\s|或者|[和或及と与與]|または|もしくは|および|か|\s[وו]\s*/;
+
+const noteClauseSeparatorRegexp = new RegExp(
+  `,\\s+|[،，、]\\s*|${noteJoiningWordRegexp.source}`,
+  "i",
+);
+
+const matchLeadingMeasurement = (
+  text: string,
+): { cleanedText: string; measurement: string } | null => {
+  const cleanedText = replaceFractionsInText(text)
+    .trim()
+    .replace(leadingApproximationRegexp, "");
+  const match = cleanedText.match(new RegExp(measurementQuantityRegExp, "i"));
+  if (!match || isMeasurementAPercentage(cleanedText, match[0])) return null;
+  return { cleanedText, measurement: match[0].trim() };
+};
+
+const startsWithMeasurement = (text: string): boolean =>
+  matchLeadingMeasurement(text) !== null;
+
+const isParentheticalKeptAfterFirstMeasurement = (
+  textBefore: string,
+  parenthetical: string,
+): boolean => {
+  const match = matchLeadingMeasurement(textBefore);
+  if (!match) return false;
+
+  const textAfterMeasurement = match.cleanedText
+    .slice(match.measurement.length)
+    .trim();
+  if (!textAfterMeasurement) return true;
+
+  const measurementHasNoUnit =
+    match.measurement.replace(leadingMeasurementRegexp, "") === "";
+  return (
+    measurementHasNoUnit &&
+    !/\s/.test(textAfterMeasurement) &&
+    startsWithMeasurement(parenthetical.slice(1, -1))
+  );
+};
+
+const findTrailingNoteStart = (
+  ingredient: string,
+  parentheticals: TextSpan[],
+): number | null => {
+  if (!startsWithMeasurement(ingredient)) return null;
+
+  for (const delimiter of ingredient.matchAll(noteDelimiterRegexp)) {
+    const start = delimiter.index;
+    const isInsideParenthetical = parentheticals.some(
+      (span) => start >= span.start && start < span.end,
+    );
+    if (isInsideParenthetical) continue;
+
+    const note = ingredient.slice(start + delimiter[0].length);
+
+    const { parts } = splitIntoJoinedParts(ingredient.slice(0, start));
+    if (stripIngredientParts(parts).length === 0) {
+      const isDashInRange =
+        noteDashDelimiterRegexp.test(delimiter[0]) &&
+        startsWithMeasurement(note);
+      if (isDashInRange) continue;
+      return null;
+    }
+
+    const noteNamesAnotherMeasurement = ` ${stripNotes(note)}`
+      .split(noteClauseSeparatorRegexp)
+      .some(startsWithMeasurement);
+    return noteNamesAnotherMeasurement ? null : start;
+  }
+
+  return null;
+};
+
+export const splitIngredientTextParts = (
+  ingredient: string,
+): IngredientTextPart[] => {
+  const textWithoutNewlines = stripNewlines(ingredient);
+  const parentheticals = [
+    ...textWithoutNewlines.matchAll(new RegExp(notesRegexp, "g")),
+  ].map((match) => ({
+    start: match.index,
+    end: match.index + match[0].length,
+  }));
+  const trailingNoteStart = findTrailingNoteStart(
+    textWithoutNewlines,
+    parentheticals,
+  );
+  const mainTextEndIndex = trailingNoteStart ?? ingredient.length;
+
+  const parts: IngredientTextPart[] = [];
+  let nextPartStart = 0;
+  for (const [index, { start, end }] of parentheticals.entries()) {
+    if (start >= mainTextEndIndex) break;
+    const isKeptAtFullStrength =
+      index === 0 &&
+      isParentheticalKeptAfterFirstMeasurement(
+        textWithoutNewlines.slice(0, start),
+        textWithoutNewlines.slice(start, end),
+      );
+    if (isKeptAtFullStrength) continue;
+    parts.push(
+      { text: ingredient.slice(nextPartStart, start), isNote: false },
+      { text: ingredient.slice(start, end), isNote: true },
+    );
+    nextPartStart = end;
+  }
+  parts.push({
+    text: ingredient.slice(nextPartStart, mainTextEndIndex),
+    isNote: false,
+  });
+  parts.push({
+    text: ingredient.slice(mainTextEndIndex),
+    isNote: true,
+  });
+
+  return parts.filter((part) => part.text.length > 0);
+};
+
+const getIngredientTextWithoutNotes = (ingredient: string): string =>
+  splitIngredientTextParts(ingredient)
+    .filter((part) => !part.isNote)
+    .map((part) => part.text)
+    .join("");
+
 /**
  * As best we can, removes anything but the singular ingredient name itself.
  * 3 apples, blended => apples
  */
 export const stripIngredient = (ingredient: string): string => {
-  const { parts, joiningWords } = splitIntoJoinedParts(ingredient);
+  const { parts, joiningWords } = splitIntoJoinedParts(
+    getIngredientTextWithoutNotes(ingredient),
+  );
   const names = stripIngredientParts(parts);
 
   return names
