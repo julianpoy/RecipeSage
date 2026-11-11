@@ -416,12 +416,10 @@
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
   "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide:",
-  "pages.contact.discord": "For any issues, bugs, or feature suggestions, you can reach out to me via our Discord: ",
-  "pages.contact.discord.link": "Discord Link",
-  "pages.contact.github": "While Discord is preferred, you can also report things directly on GitHub (slower response time): ",
-  "pages.contact.github.link": "GitHub Link",
-  "pages.contact.cantUseDiscord": "I can't use Discord and the documentation doesn't answer the issue/question I have",
-  "pages.contact.emailMe": "I'm slow to respond to email (sorry!):",
+  "pages.contact.intro": "For any issues, bugs, or feature suggestions, you can reach me any of these ways:",
+  "pages.contact.discordOption": "Discord (preferred):",
+  "pages.contact.githubOption": "GitHub:",
+  "pages.contact.emailOption": "Email:",
 
   "pages.contact.socialTitle": "Social Media",
 

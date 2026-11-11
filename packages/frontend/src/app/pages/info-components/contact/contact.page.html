@@ -19,34 +19,28 @@
       <a href="https://docs.recipesage.com">https://docs.recipesage.com</a>
     </p>
 
+    <p>{{ "pages.contact.intro" | translate }}</p>
+
     <p>
-      {{ "pages.contact.discord" | translate }}
+      {{ "pages.contact.discordOption" | translate }}
       <a href="https://discord.gg/yCfzBft" target="_blank">
-        {{ "pages.contact.discord.link" | translate }}
+        https://discord.gg/yCfzBft
       </a>
     </p>
 
     <p>
-      {{ "pages.contact.github" | translate }}
+      {{ "pages.contact.githubOption" | translate }}
       <a href="https://github.com/julianpoy/recipesage/issues" target="_blank">
-        {{ "pages.contact.github.link" | translate }}
+        https://github.com/julianpoy/recipesage/issues
       </a>
     </p>
 
-    @if (!showEmail) {
-      <p>
-        <a (click)="$event.preventDefault(); revealEmail()" href="">
-          {{ "pages.contact.cantUseDiscord" | translate }}
-        </a>
-      </p>
-    } @else {
-      <p>
-        {{ "pages.contact.emailMe" | translate }}
-        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          julian&#64;recipesage.com
-        </a>
-      </p>
-    }
+    <p>
+      {{ "pages.contact.emailOption" | translate }}
+      <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+        julian&#64;recipesage.com
+      </a>
+    </p>
 
     <br />
     <p>
