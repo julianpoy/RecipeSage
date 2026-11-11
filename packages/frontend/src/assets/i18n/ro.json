@@ -206,8 +206,6 @@
     "pages.aboutDetails.social": "Rețele sociale",
     "pages.contact.title": "Contactează-mă",
     "pages.contact.subtitle": "Informații de contact",
-    "pages.contact.discord": "Pentru orice probleme, erori sau sugestii de funcționalități, mă puteți contacta prin Discordul nostru: ",
-    "pages.contact.discord.link": "Link Discord",
     "pages.contact.socialTitle": "Rețele sociale",
     "pages.contribute.title": "Contribuie",
     "pages.contribute.subtitle": "Contribuie la RecipeSage",
@@ -1079,8 +1077,6 @@
     "pages.recipeDetails.units.kcal": "{{value}} kcal",
     "pages.recipeDetails.units.g": "{{value}} g",
     "pages.account.credits.usageValue": "{{used}} / {{limit}} credite de gătit utilizate astăzi",
-    "pages.contact.github": "Deși Discord este preferat, puteți raporta lucrurile și direct pe GitHub (timp de răspuns mai lent): ",
-    "pages.contact.github.link": "Link GitHub",
     "pages.contribute.yearly": "Anual",
     "pages.contribute.yearlyMonthly": "Lunar și anual",
     "pages.contribute.yearlyMonthly.description": "Se aplică contului dumneavoastră atât timp cât contribuția recurentă este activă.",
@@ -1208,8 +1204,6 @@
     "pages.importCopymethat.title": "Importați rețete din exportul CopyMeThat",
     "pages.shoppingListCategoryOrderModal.label": "Ordinea categoriilor",
     "pages.shoppingListCategoryOrderModal.placeholder": "Titlurile categoriilor, fiecare pe propria linie",
-    "pages.contact.cantUseDiscord": "Nu pot folosi Discord, iar instrucțiunile nu răspund la problema/întrebarea pe care o am",
-    "pages.contact.emailMe": "Răspund mai greu la e-mail (îmi pare rău!):",
     "pages.app.nav.tools": "Instrumente și asistență",
     "pages.welcome.description.features.browserExtension.title": "Extensie de browser pentru Firefox și Chrome",
     "pages.welcome.demoVideo.label": "Demo import automat RecipeSage",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Editați ingredientul",
     "components.selectIngredients.editIngredient.placeholder": "Ingredient...",
     "components.selectIngredients.editIngredient.message": "Aceasta modifică doar ceea ce este adăugat la lista dvs. de cumpărături. Rețeta dvs. rămâne neschimbată.",
-    "pages.downloadAndInstall.ios.description": "Instalați aplicația RecipeSage din App Store."
+    "pages.downloadAndInstall.ios.description": "Instalați aplicația RecipeSage din App Store.",
+    "pages.contact.intro": "Pentru orice problemă, eroare sau sugestie de funcționalitate, mă puteți contacta prin oricare dintre următoarele metode:",
+    "pages.contact.discordOption": "Discord (preferat):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-mail"
 }

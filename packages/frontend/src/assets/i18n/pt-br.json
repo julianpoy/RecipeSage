@@ -221,7 +221,6 @@
     "pages.editRecipe.nutritionInvalid": "Um ou mais campos nutricionais têm valores inválidos. Os campos nutricionais aceitam apenas números e decimais.",
     "pages.contact.subtitle": "Informações de contato",
     "pages.contact.pleaseUserGuide": "Para quaisquer dúvidas, consulte o guia do usuário:",
-    "pages.contact.discord.link": "Link do Discord",
     "pages.editRecipe.clipURL.header": "Preencher receita automaticamente a partir da URL",
     "pages.contribute.monthly": "Mensal",
     "pages.contribute.custom": "Personalizado",
@@ -495,9 +494,6 @@
     "pages.aboutDetails.1.2": "O RecipeSage é um dos meus hobbies, e trabalho nele no meu tempo livre, juntamente com muitos outros projetos. Não é o meu trabalho e não vivo disso, mas trabalhar no projeto me traz muita alegria.",
     "pages.aboutDetails.2.2": "Acredito em software de código aberto e quero que o RecipeSage seja gratuito. Todos devem poder acessar e usar este software, e nunca quero submeter os usuários do RecipeSage a anúncios nem cobrar para que possam usar o aplicativo.",
     "pages.contact.title": "Entre em contato comigo",
-    "pages.contact.discord": "Para quaisquer problemas, bugs ou sugestões de recursos, você pode entrar em contato comigo pelo nosso Discord: ",
-    "pages.contact.github": "Embora o Discord seja preferencial, você também pode relatar problemas diretamente no GitHub (tempo de resposta mais lento): ",
-    "pages.contact.github.link": "Link do GitHub",
     "pages.contribute.purpose": "No entanto, à medida que o RecipeSage cresce, os custos de hospedagem de servidores e imagens começam a se acumular.",
     "pages.contribute.oneTime": "Uma única vez",
     "pages.contribute.action": "Contribua!",
@@ -1221,8 +1217,6 @@
     "pages.jobs.status.success": "Concluído. Clique para baixar.",
     "pages.jobs.status.fail": "Falhou.",
     "pages.welcome.description.features.browserExtension.title": "Extensão do navegador para Firefox e Chrome",
-    "pages.contact.cantUseDiscord": "Não posso usar o Discord e a documentação não responde ao meu problema/pergunta",
-    "pages.contact.emailMe": "Demoro para responder a e-mails (desculpe!):",
     "pages.measurementConverter.searchPlaceholder": "Pesquisar ingredientes",
     "pages.measurementConverter.noResults": "Nenhum ingrediente corresponde à sua pesquisa.",
     "pages.editRecipe.clipDocument.message": "Escolha um arquivo de documento (PDF, DOCX, RTF, ODT, Markdown, HTML, OrgMode ou texto simples), e o RecipeSage tentará extrair os detalhes da receita.",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.message": "Isso altera apenas o que é adicionado à sua lista de compras. Sua receita permanece a mesma.",
     "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
     "pages.downloadAndInstall.ios.description": "Instale o aplicativo RecipeSage pela App Store.",
-    "pages.downloadAndInstall.ios.install": "Instalar pela App Store"
+    "pages.downloadAndInstall.ios.install": "Instalar pela App Store",
+    "pages.contact.intro": "Para quaisquer problemas, erros ou sugestões de recursos, você pode entrar em contato comigo por qualquer uma destas formas:",
+    "pages.contact.discordOption": "Discord (preferencial):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-mail"
 }

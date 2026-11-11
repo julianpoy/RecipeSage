@@ -296,10 +296,6 @@
     "pages.contact.title": "聯絡我",
     "pages.contact.subtitle": "聯絡資訊",
     "pages.contact.pleaseUserGuide": "如有任何問題，請參閱使用者指南：",
-    "pages.contact.discord": "如有任何問題、錯誤或功能建議，您可以透過我們的 Discord 與我聯繫： ",
-    "pages.contact.discord.link": "Discord 連結",
-    "pages.contact.github": "雖然較建議使用 Discord，但您也可以直接在 GitHub 上回報事項（回應時間較慢）： ",
-    "pages.contact.github.link": "GitHub 連結",
     "pages.contact.socialTitle": "社群媒體",
     "pages.contribute.tabTitle": "贊助 - RecipeSage",
     "pages.contribute.title": "贊助",
@@ -1259,8 +1255,6 @@
     "pages.extensionAuth.invalidRequest.title": "無效的登入請求",
     "pages.extensionAuth.invalidRequest.message": "此頁面供 RecipeSage 瀏覽器擴充功能用於登入。請開啟擴充功能並再試一次。",
     "pages.homeSearchFilterPopover.filterByNutrition": "按營養篩選",
-    "pages.contact.cantUseDiscord": "我無法使用 Discord，且文件未能解答我的問題／疑問",
-    "pages.contact.emailMe": "我回覆電子郵件較慢（抱歉！）：",
     "pages.downloadAndInstall.extension.installFirefox": "安裝 Firefox 版",
     "pages.downloadAndInstall.extension.installChrome": "安裝 Chrome 版",
     "pages.mealPlan.modal.noRecipesNutrition.header": "沒有食譜",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.message": "這只會變更新增至購物清單的內容。您的食譜將保持不變。",
     "components.selectIngredients.editIngredient.placeholder": "食材…",
     "pages.downloadAndInstall.ios.description": "請從 App Store 安裝 RecipeSage 應用程式。",
-    "pages.downloadAndInstall.ios.install": "從 App Store 安裝"
+    "pages.downloadAndInstall.ios.install": "從 App Store 安裝",
+    "pages.contact.intro": "如有任何問題、錯誤或功能建議，您可透過以下任一方式聯絡我：",
+    "pages.contact.discordOption": "Discord（建議優先使用）：",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "電子郵件"
 }

@@ -966,8 +966,6 @@
     "pages.aboutDetails.2.3": "Als u wilt bijdragen om de ontwikkeling te ondersteunen, zou ik dat zeer waarderen. Servers beheren en afbeeldingen hosten is kostbaar. Als dank geeft bijdragen u meer van de onderdelen waarvan de exploitatie het duurst is, zoals afbeeldingen met hoge resolutie en meerdere afbeeldingen per recept, onbeperkte berichten van de kookassistent en een hogere dagelijkse limiet voor importen.",
     "pages.aboutDetails.contribute": "Bijdragerpagina",
     "pages.aboutDetails.social": "Social media",
-    "pages.contact.discord": "Voor problemen, bugs of suggesties voor functies kunt u contact met mij opnemen via onze Discord: ",
-    "pages.contact.discord.link": "Discord-link",
     "pages.importImages.title": "Importeer recepten uit afbeeldingsbestanden",
     "sync.notification.title": "Offlinesynchronisatie voltooid",
     "sync.notification.body": "Je gegevens zijn gecached voor offlinegebruik, en worden automatisch actueel gehouden.",
@@ -1092,8 +1090,6 @@
     "pages.recipeDetails.lastMadeAt": "Laatst gemaakt",
     "pages.recipeDetailsPopover.setLastMadeToday": "Markeren als vandaag gemaakt",
     "pages.about.metaDescription": "Maak kennis met de ontwikkelaar achter RecipeSage en krijg hulp via Discord, GitHub en de gebruikershandleiding.",
-    "pages.contact.github": "Hoewel Discord de voorkeur heeft, kunt u zaken ook rechtstreeks op GitHub melden (tragere reactietijd): ",
-    "pages.contact.github.link": "GitHub-link",
     "pages.contribute.yearlyMonthly": "Maandelijks en jaarlijks",
     "pages.contribute.yearlyMonthly.description": "Geldt voor uw account zolang uw terugkerende bijdrage actief is",
     "pages.contribute.bonus.feature.4": "Hogere dagelijkse gebruikslimiet voor het clippen van recepten, OCR-/beeld- en PDF-herkenning, import van URL's en tekstbestanden, en automatisch invullen van voedingswaarden",
@@ -1298,8 +1294,6 @@
     "components.recurrenceEditor.ordinal.5": "vijfde",
     "components.recurrenceEditor.monthlyOnNthWeekday": "Maandelijks op de {{ordinal}} {{weekday}}",
     "components.recurrenceEditor.ends": "Eindigt",
-    "pages.contact.cantUseDiscord": "Ik kan Discord niet gebruiken en de documentatie beantwoordt mijn probleem/vraag niet",
-    "pages.contact.emailMe": "Ik reageer langzaam op e-mails (sorry!):",
     "components.recurrenceEditor.preview.truncated": "Beperkt tot {{count}} items (max. {{max}}).",
     "components.recurrenceEditor.preview.empty": "Deze regel levert geen items op. Controleer uw instellingen.",
     "pages.mealPlan.modal.noRecipesNutrition.header": "Geen recepten",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "{{ingredient}} bewerken",
     "components.selectIngredients.editIngredient.header": "Ingrediënt bewerken",
     "components.selectIngredients.editIngredient.message": "Dit verandert alleen wat aan uw boodschappenlijst wordt toegevoegd. Uw recept blijft hetzelfde.",
-    "components.selectIngredients.editIngredient.placeholder": "Ingrediënt..."
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediënt...",
+    "pages.contact.intro": "Voor problemen, bugs of suggesties voor functies kunt u mij op een van de volgende manieren bereiken:",
+    "pages.contact.discordOption": "Discord (voorkeur):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-mail"
 }

@@ -952,8 +952,6 @@
     "pages.aboutDetails.2.2": "Jeg tror på open source-software, og jeg ønsker, at RecipeSage skal være gratis at bruge. Alle skal kunne få adgang til og bruge denne software, og jeg vil aldrig udsætte RecipeSage-brugere for reklamer eller opkræve betaling for at kunne bruge appen.",
     "pages.aboutDetails.contribute": "Bidrag side",
     "pages.aboutDetails.social": "Sociale medier",
-    "pages.contact.discord": "Ved problemer, fejl eller forslag til funktioner kan du kontakte mig via vores Discord: ",
-    "pages.contact.discord.link": "Discord Link",
     "pages.import.jobs.status.fail.emptyFile": "Den indsendte import indeholder ikke nogen genkendelige opskrifter.",
     "pages.import.jobs.status.fail.badCredentials": "De indsendte legitimationsoplysninger er forkerte.",
     "pages.import.pdfs": "Import fra PDF'er",
@@ -1137,8 +1135,6 @@
     "pages.recipeDetails.nutritionOtherDetails": "Andre ernæringsoplysninger",
     "pages.recipeDetails.units.g": "{{value}} g",
     "pages.recipeDetails.units.mg": "{{value}} mg",
-    "pages.contact.github": "Selvom Discord foretrækkes, kan du også rapportere ting direkte på GitHub (langsommere svartid): ",
-    "pages.contact.github.link": "GitHub-link",
     "pages.labels.loading": "Indlæser dine etiketter...",
     "pages.mealPlan.loading": "Indlæser madplan...",
     "pages.mealPlan.list.empty": "Der er ikke planlagt nogen måltider. Tryk på knappen + for at tilføje et.",
@@ -1277,8 +1273,6 @@
     "pages.extensionAuth.unofficialWarning.body": "Fortsæt kun, hvis du selv har installeret denne udvidelse og har tillid til den. Ellers kan dette være et forsøg på at overtage din konto.",
     "pages.extensionAuth.invalidRequest.title": "Ugyldig loginanmodning",
     "pages.homeSearchFilterPopover.filterByNutrition": "Filtrer efter ernæring",
-    "pages.contact.cantUseDiscord": "Jeg kan ikke bruge Discord, og dokumentationen besvarer ikke det problem/spørgsmål, jeg har",
-    "pages.contact.emailMe": "Jeg er langsom til at svare på e-mail (beklager!):",
     "pages.editRecipe.clipDocument.message": "Vælg en dokumentfil (PDF, DOCX, RTF, ODT, Markdown, HTML, OrgMode eller almindelig tekst), så forsøger RecipeSage at udtrække opskriftsoplysningerne.",
     "pages.tools.cookbook.subtitle": "Generér en udskriftsvenlig PDF-kogebog ud fra dine opskrifter",
     "pages.tools.nutritionCalculator.subtitle": "Læg næringsindholdet fra flere opskrifter sammen, og skalér efter portioner",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "Rediger {{ingredient}}",
     "components.selectIngredients.editIngredient.header": "Rediger ingrediens",
     "components.selectIngredients.editIngredient.message": "Dette ændrer kun, hvad der tilføjes til din indkøbsliste. Din opskrift forbliver den samme.",
-    "components.selectIngredients.editIngredient.placeholder": "Ingrediens..."
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediens...",
+    "pages.contact.intro": "Ved problemer, fejl eller forslag til funktioner kan du kontakte mig på en af følgende måder:",
+    "pages.contact.discordOption": "Discord (foretrækkes):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-Mail"
 }

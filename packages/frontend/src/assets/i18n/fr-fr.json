@@ -955,8 +955,6 @@
     "pages.aboutDetails.2.3": "Si vous souhaitez contribuer à soutenir le développement, je vous en serais très reconnaissant. L'exploitation des serveurs et l'hébergement des images sont coûteux. Pour vous remercier, contribuer vous donne davantage accès aux fonctionnalités les plus coûteuses à exploiter, telles que les images haute résolution et plusieurs images par recette, des messages illimités à l'assistant de cuisine et une limite quotidienne d'importations plus élevée.",
     "pages.aboutDetails.contribute": "Page de contribution",
     "pages.aboutDetails.social": "Réseaux sociaux",
-    "pages.contact.discord": "Pour tout problème, bug ou suggestion de fonctionnalité, veuillez me contacter via notre Discord : ",
-    "pages.contact.discord.link": "Lien Discord",
     "pages.import.jobs.status.fail.emptyFile": "L'importation soumise ne contient aucune recette reconnaissable.",
     "pages.import.jobs.status.fail.badCredentials": "Les identifiants soumis sont incorrects.",
     "pages.import.pdfs": "Importer depuis des fichiers PDF",
@@ -1113,8 +1111,6 @@
     "pages.recipeDetails.units.g": "{{value}} g",
     "pages.recipeDetails.units.mg": "{{value}} mg",
     "pages.recipeDetails.units.mcg": "{{value}} mcg",
-    "pages.contact.github": "Bien que Discord soit préféré, vous pouvez aussi signaler les problèmes directement sur GitHub (réponse plus lente) : ",
-    "pages.contact.github.link": "Lien vers GitHub",
     "pages.contribute.bonus.feature.4": "Limite quotidienne augmentée pour : extraction de recettes, reconnaissance OCR/image et PDF, importations d'URL et fichiers texte, et remplissage automatique nutritionnel",
     "pages.mealPlan.list.empty": "Aucun repas programmé. Cliquez sur le bouton + pour en ajouter un.",
     "pages.mealPlan.list.noUpcoming": "Pas de repas planifié. Utilisez + pour ajouter votre prochain repas.",
@@ -1851,8 +1847,6 @@
     "pages.recipeDetails.publishToDiscover": "Publier sur Discover",
     "pages.discover.tabTitle": "Les recettes de Discover - Recipesage",
     "pages.discover.title": "Discover",
-    "pages.contact.cantUseDiscord": "Je n'arrive pas à utiliser Discord et la documentation ne répond pas à ma question/mon problème",
-    "pages.contact.emailMe": "Je ne suis pas très rapide pour répondre aux e-mails (désolé !) :",
     "pages.labels.searchPlaceholder": "Recherche par labels et catégories",
     "pages.searchByIngredients.info.title": "Cuisinez avec ce que vous avez déjà",
     "pages.searchByIngredients.info.body1": "Listez vos ingrédients (frigo, congélateur, placard) et trouvez les recettes qui en utilisent le plus possible.",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Modifier l’ingrédient",
     "components.selectIngredients.editIngredient.message": "Cela ne modifie que ce qui est ajouté à votre liste de courses. Votre recette reste inchangée.",
     "components.selectIngredients.editIngredient.placeholder": "Ingrédient…",
-    "pages.downloadAndInstall.storeTrademarks": "Apple et le logo Apple sont des marques déposées d’Apple Inc. Google Play et le logo Google Play sont des marques déposées de Google LLC."
+    "pages.downloadAndInstall.storeTrademarks": "Apple et le logo Apple sont des marques déposées d’Apple Inc. Google Play et le logo Google Play sont des marques déposées de Google LLC.",
+    "pages.contact.intro": "Pour tout problème, bug ou suggestion de fonctionnalité, vous pouvez me contacter par l’un des moyens suivants :",
+    "pages.contact.discordOption": "Discord (préféré) :",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Email"
 }

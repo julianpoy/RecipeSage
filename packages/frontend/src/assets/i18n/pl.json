@@ -824,10 +824,6 @@
     "pages.aboutDetails.1.1": "Zajmuję się tworzeniem oprogramowania w południowej Kalifornii. Dużo pracuję nad kodem open source i spędzam wiele czasu nad małymi projektami.",
     "pages.aboutDetails.1.2": "RecipeSage jest jednym z moich hobby i pracuję nad nim w wolnym czasie, obok wielu innych projektów. Nie jest to moja praca i nie utrzymuję się z tego, ale praca nad tym projektem sprawia mi wiele radości.",
     "pages.aboutDetails.2.2": "Jestem zwolennikiem oprogramowania open source i chcę, aby RecipeSage był dostępny bezpłatnie. Każdy powinien mieć dostęp do tego oprogramowania i móc z niego korzystać, a ja nigdy nie chcę narażać użytkowników RecipeSage na reklamy ani pobierać opłat za możliwość korzystania z aplikacji.",
-    "pages.contact.discord": "W sprawie wszelkich problemów, błędów lub sugestii dotyczących funkcji możesz skontaktować się ze mną przez nasz Discord: ",
-    "pages.contact.discord.link": "Link do Discorda",
-    "pages.contact.github": "Choć preferowany jest Discord, możesz również zgłaszać sprawy bezpośrednio w serwisie GitHub (dłuższy czas odpowiedzi): ",
-    "pages.contact.github.link": "Link do GitHuba",
     "pages.contact.socialTitle": "Media społecznościowe",
     "pages.contribute.mission": "Moim celem jest utrzymanie RecipeSage jako narzędzia dostępnego dla każdego, bez obciążania korzystania z niego reklamami.",
     "pages.contribute.yearlyMonthly": "Miesięcznie i rocznie",
@@ -1292,8 +1288,6 @@
     "pages.measurementConverter.ingredients.coconutToasted": "Kokos (prażony)",
     "pages.measurementConverter.ingredients.coconutDesiccated": "Kokos (niesłodzony, suszony)",
     "pages.welcome.description.features.browserExtension.title": "Rozszerzenie przeglądarki dla Firefoksa i Chrome",
-    "pages.contact.cantUseDiscord": "Nie mogę korzystać z Discorda, a dokumentacja nie odpowiada na mój problem/pytanie",
-    "pages.contact.emailMe": "Odpowiadam na e-maile z opóźnieniem (przepraszam!):",
     "pages.measurementConverter.ingredients.coconutLargeFlakes": "Kokos (niesłodzony, duże płatki)",
     "pages.measurementConverter.ingredients.coconutShredded": "Kokos (niesłodzony, wiórki)",
     "pages.measurementConverter.ingredients.flaxMeal": "Mąka lniana",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "Edytuj {{ingredient}}",
     "components.selectIngredients.editIngredient.header": "Edytuj składnik",
     "components.selectIngredients.editIngredient.message": "Zmienia to tylko to, co zostanie dodane do Twojej listy zakupów. Twój przepis pozostanie bez zmian.",
-    "components.selectIngredients.editIngredient.placeholder": "Składnik..."
+    "components.selectIngredients.editIngredient.placeholder": "Składnik...",
+    "pages.contact.intro": "W przypadku jakichkolwiek problemów, błędów lub sugestii dotyczących funkcji możesz skontaktować się ze mną na jeden z następujących sposobów:",
+    "pages.contact.discordOption": "Discord (preferowany):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-mail"
 }

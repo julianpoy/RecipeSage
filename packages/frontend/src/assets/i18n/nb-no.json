@@ -296,10 +296,6 @@
     "pages.contact.title": "Kontakt meg",
     "pages.contact.subtitle": "Kontaktinformasjon",
     "pages.contact.pleaseUserGuide": "Hvis du har spørsmål, kan du se brukerveiledningen:",
-    "pages.contact.discord": "Ved problemer, feil eller forslag til funksjoner kan du kontakte meg via vår Discord: ",
-    "pages.contact.discord.link": "Discord-lenke",
-    "pages.contact.github": "Selv om Discord foretrekkes, kan du også rapportere ting direkte på GitHub (lengre responstid): ",
-    "pages.contact.github.link": "GitHub-lenke",
     "pages.contact.socialTitle": "Sosiale medier",
     "pages.contribute.tabTitle": "Bidra – RecipeSage",
     "pages.contribute.title": "Bidra",
@@ -1227,8 +1223,6 @@
     "errors.creditsLimitReached.title": "Beklager, grensen er nådd",
     "generic.moreInfo": "Mer informasjon",
     "pages.welcome.description.features.browserExtension.title": "Nettleserutvidelse for Firefox og Chrome",
-    "pages.contact.cantUseDiscord": "Jeg kan ikke bruke Discord, og dokumentasjonen besvarer ikke problemet/spørsmålet jeg har",
-    "pages.contact.emailMe": "Jeg er treg med å svare på e-post (beklager!):",
     "pages.app.nav.tools": "Verktøy og hjelpemidler",
     "pages.recipeDetails.untitled": "Uten tittel",
     "pages.measurementConverter.title": "Målekonverterer",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "Rediger {{ingredient}}",
     "components.selectIngredients.editIngredient.header": "Rediger ingrediens",
     "components.selectIngredients.editIngredient.message": "Dette endrer bare hva som legges til i handlelisten din. Oppskriften din forblir den samme.",
-    "components.selectIngredients.editIngredient.placeholder": "Ingrediens..."
+    "components.selectIngredients.editIngredient.placeholder": "Ingrediens...",
+    "pages.contact.intro": "Ved problemer, feil eller forslag til nye funksjoner kan du kontakte meg på en av følgende måter:",
+    "pages.contact.discordOption": "Discord (foretrukket):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-post"
 }

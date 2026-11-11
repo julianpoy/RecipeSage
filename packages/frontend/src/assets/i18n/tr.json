@@ -600,10 +600,6 @@
     "pages.contact.title": "Benimle İletişime Geçin",
     "pages.contact.subtitle": "İletişim Bilgileri",
     "pages.contact.pleaseUserGuide": "Herhangi bir sorunuz için lütfen kullanıcı kılavuzuna başvurun:",
-    "pages.contact.discord": "Herhangi bir sorun, hata veya özellik önerisi için bana Discord sunucumuz üzerinden ulaşabilirsiniz: ",
-    "pages.contact.discord.link": "Discord Bağlantısı",
-    "pages.contact.github": "Discord tercih edilse de, konuları doğrudan GitHub üzerinden de bildirebilirsiniz (yanıt süresi daha yavaş olabilir): ",
-    "pages.contact.github.link": "GitHub Bağlantısı",
     "pages.contact.socialTitle": "Sosyal Medya",
     "pages.contribute.tabTitle": "Katkıda Bulun - RecipeSage",
     "pages.contribute.title": "Katkıda Bulun",
@@ -1319,8 +1315,6 @@
     "pages.www.nav.language": "Dil",
     "pages.extensionAuth.unofficialWarning.title": "Bunun resmî RecipeSage uzantısı olduğunu doğrulayamadık.",
     "pages.extensionAuth.invalidRequest.message": "Bu sayfa, RecipeSage tarayıcı uzantısı tarafından oturum açmak için kullanılır. Uzantıyı açın ve yeniden deneyin.",
-    "pages.contact.cantUseDiscord": "Discord'u kullanamıyorum ve belgeler, yaşadığım sorunu/soruyu yanıtlamıyor",
-    "pages.contact.emailMe": "E-postalara yanıt vermem yavaş oluyor (üzgünüm!):",
     "pages.mealPlan.modal.noRecipesNutrition.header": "Tarif Yok",
     "pages.mealPlan.modal.noRecipesNutrition.message": "Seçili günlerde tarif yok. Yalnızca tarif olan öğün öğelerinin hesaplanacak besin değerleri vardır.",
     "pages.mealPlan.modal.manualEntriesNutrition.header": "Manuel Girişler Atlanacak",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "{{ingredient}} öğesini düzenle",
     "components.selectIngredients.editIngredient.header": "Malzemeyi Düzenle",
     "components.selectIngredients.editIngredient.message": "Bu işlem yalnızca alışveriş listenize eklenenleri değiştirir. Tarifiniz aynı kalır.",
-    "components.selectIngredients.editIngredient.placeholder": "Malzeme..."
+    "components.selectIngredients.editIngredient.placeholder": "Malzeme...",
+    "pages.contact.intro": "Her türlü sorun, hata veya özellik önerisi için bana şu yollardan herhangi biriyle ulaşabilirsiniz:",
+    "pages.contact.discordOption": "Discord (tercihen):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-posta"
 }

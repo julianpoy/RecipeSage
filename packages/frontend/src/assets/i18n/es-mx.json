@@ -296,10 +296,6 @@
     "pages.contact.title": "Contácteme",
     "pages.contact.subtitle": "Información de contacto",
     "pages.contact.pleaseUserGuide": "Para cualquier pregunta, consulte la guía del usuario:",
-    "pages.contact.discord": "Para cualquier problema, error o sugerencia de función, puedes contactarme a través de nuestro Discord: ",
-    "pages.contact.discord.link": "Enlace de Discord",
-    "pages.contact.github": "Aunque se prefiere Discord, también puedes reportar cosas directamente en GitHub (tiempo de respuesta más lento): ",
-    "pages.contact.github.link": "Enlace de GitHub",
     "pages.contact.socialTitle": "Redes sociales",
     "pages.contribute.tabTitle": "Contribuir - RecipeSage",
     "pages.contribute.title": "Contribuir",
@@ -1715,7 +1711,6 @@
     "pages.welcome.description.features.browserExtension.title": "Extensión de navegador para Firefox y Chrome",
     "pages.app.nav.tools": "Herramientas y asistentes",
     "pages.recipeDetails.untitled": "Sin título",
-    "pages.contact.emailMe": "Tardo en responder correos electrónicos (¡lo siento!):",
     "components.recurrenceEditor.monthlyOnNthWeekday": "Mensualmente el {{ordinal}} {{weekday}}",
     "webextension.inject.nutrition.cholesterol": "Colesterol (mg)",
     "webextension.inject.nutrition.sodium": "Sodio (mg)",
@@ -1746,7 +1741,6 @@
     "pages.extensionAuth.invalidRequest.title": "Solicitud de inicio de sesión no válida",
     "pages.extensionAuth.invalidRequest.message": "Esta página se utiliza para que la extensión de navegador de RecipeSage inicie sesión. Abra la extensión e inténtelo de nuevo.",
     "pages.downloadAndInstall.extension.installChrome": "Instalar para Chrome",
-    "pages.contact.cantUseDiscord": "No puedo usar Discord y la documentación no responde al problema o pregunta que tengo",
     "pages.downloadAndInstall.extension.installFirefox": "Instalar para Firefox",
     "pages.mealPlan.modal.manualEntriesNutrition.header": "Se omitirán las entradas manuales",
     "pages.mealPlan.modal.manualEntriesNutrition.message": "Algunos de los elementos de comida seleccionados son entradas manuales, no recetas. No tienen datos nutricionales y se omitirán.",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.message": "Esto solo cambia lo que se agrega a su lista de compras. Su receta permanece igual.",
     "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
     "pages.downloadAndInstall.ios.install": "Instalar desde la App Store",
-    "pages.downloadAndInstall.storeTrademarks": "Apple y el logotipo de Apple son marcas comerciales de Apple Inc. Google Play y el logotipo de Google Play son marcas comerciales de Google LLC."
+    "pages.downloadAndInstall.storeTrademarks": "Apple y el logotipo de Apple son marcas comerciales de Apple Inc. Google Play y el logotipo de Google Play son marcas comerciales de Google LLC.",
+    "pages.contact.intro": "Para cualquier problema, error o sugerencia de función, puede comunicarse conmigo de cualquiera de estas maneras:",
+    "pages.contact.discordOption": "Discord (preferido):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Correo electrónico"
 }

@@ -296,10 +296,6 @@
     "pages.contact.title": "मुझसे संपर्क करें",
     "pages.contact.subtitle": "संपर्क जानकारी",
     "pages.contact.pleaseUserGuide": "किसी भी प्रश्न के लिए, कृपया उपयोगकर्ता मार्गदर्शिका देखें:",
-    "pages.contact.discord": "किसी भी समस्या, बग या सुविधा संबंधी सुझावों के लिए, आप हमारे Discord के माध्यम से मुझसे संपर्क कर सकते हैं: ",
-    "pages.contact.discord.link": "Discord लिंक",
-    "pages.contact.github": "हालाँकि Discord को प्राथमिकता दी जाती है, आप सीधे GitHub पर भी चीज़ों की रिपोर्ट कर सकते हैं (प्रतिक्रिया समय धीमा होगा): ",
-    "pages.contact.github.link": "GitHub लिंक",
     "pages.contact.socialTitle": "सोशल मीडिया",
     "pages.contribute.tabTitle": "योगदान करें - RecipeSage",
     "pages.contribute.title": "योगदान करें",
@@ -2055,8 +2051,6 @@
     "pages.homeSearchFilterPopover.filterByNutrition": "पोषण के अनुसार फ़िल्टर करें",
     "pages.app.nav.tools": "उपकरण और सहायक",
     "pages.recipeDetails.untitled": "शीर्षकहीन",
-    "pages.contact.cantUseDiscord": "मैं Discord का उपयोग नहीं कर सकता/सकती और दस्तावेज़ीकरण मेरी समस्या/प्रश्न का उत्तर नहीं देता",
-    "pages.contact.emailMe": "मैं ईमेल का उत्तर देने में धीमा हूँ (क्षमा करें!):",
     "pages.cookingTemperatures.items.chocolateWhiteWork.label": "सफेद चॉकलेट (कार्य तापमान)",
     "pages.panBakewareConverter.batterType.label": "आप क्या बेक कर रहे हैं?",
     "pages.panBakewareConverter.units.liters": "L",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.message": "इससे केवल आपकी खरीदारी सूची में जोड़ी जाने वाली सामग्री बदलती है। आपकी रेसिपी वैसी ही रहती है।",
     "components.selectIngredients.editIngredient.placeholder": "सामग्री..।",
     "pages.downloadAndInstall.ios.install": "App Store से स्थापित करें",
-    "pages.downloadAndInstall.storeTrademarks": "Apple और Apple लोगो, Apple Inc. के ट्रेडमार्क हैं। Google Play और Google Play लोगो, Google LLC के ट्रेडमार्क हैं।"
+    "pages.downloadAndInstall.storeTrademarks": "Apple और Apple लोगो, Apple Inc. के ट्रेडमार्क हैं। Google Play और Google Play लोगो, Google LLC के ट्रेडमार्क हैं।",
+    "pages.contact.intro": "किसी भी समस्या, बग या सुविधा संबंधी सुझाव के लिए, आप निम्न में से किसी भी माध्यम से मुझसे संपर्क कर सकते हैं:",
+    "pages.contact.discordOption": "Discord (वांछित):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "ईमेल"
 }

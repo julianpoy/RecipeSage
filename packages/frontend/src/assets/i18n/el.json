@@ -272,8 +272,6 @@
     "pages.contact.title": "Επικοινωνήστε μαζί μου",
     "pages.contact.subtitle": "Πληροφορίες επικοινωνίας",
     "pages.contact.pleaseUserGuide": "Για τυχόν απορίες, ανατρέξτε στον οδηγό χρήσης:",
-    "pages.contact.discord": "Για τυχόν προβλήματα, σφάλματα ή προτάσεις λειτουργιών, μπορείτε να επικοινωνήσετε μαζί μου μέσω του Discord μας: ",
-    "pages.contact.discord.link": "Σύνδεσμος Discord",
     "pages.contact.socialTitle": "Social Media",
     "pages.contribute.title": "Συμβάλλετε",
     "pages.contribute.subtitle": "Συμβάλλετε στο RecipeSage",
@@ -1105,8 +1103,6 @@
     "pages.recipeDetails.nutritionCalcium": "Ασβέστιο",
     "pages.recipeDetails.nutritionIron": "Σίδηρος",
     "pages.recipeDetails.nutritionPotassium": "Κάλιο",
-    "pages.contact.github": "Παρότι προτιμάται το Discord, μπορείτε επίσης να αναφέρετε ζητήματα απευθείας στο GitHub (με πιο αργό χρόνο απόκρισης): ",
-    "pages.contact.github.link": "Σύνδεσμος GitHub",
     "pages.mealPlan.list.empty": "Δεν έχουν προγραμματιστεί γεύματα. Πατήστε το κουμπί + για να προσθέσετε ένα.",
     "pages.mealPlanMealOrderModal.description": "Πατήστε ένα δείγμα χρώματος για να αλλάξετε το χρώμα, σύρετε για να αναδιατάξετε ή προσθέστε μια νέα επιλογή χρησιμοποιώντας την κενή γραμμή παρακάτω. Οι προεπιλεγμένοι τύποι γευμάτων δεν μπορούν να μετονομαστούν ή να αφαιρεθούν.",
     "pages.mealPlanMealOrderModal.entryPlaceholder": "Όνομα γεύματος",
@@ -1232,8 +1228,6 @@
     "webextension.settings.reset": "Έγινε επαναφορά στις προεπιλογές.",
     "webextension.inject.nutrition.cholesterol": "Χοληστερόλη (mg)",
     "webextension.inject.nutrition.sodium": "Νάτριο (mg)",
-    "pages.contact.cantUseDiscord": "Δεν μπορώ να χρησιμοποιήσω το Discord και η τεκμηρίωση δεν απαντά στο πρόβλημα/ερώτημα που έχω",
-    "pages.contact.emailMe": "Αργώ να απαντήσω σε email (συγγνώμη!):",
     "emails.passwordReset.subject": "Επαναφορά κωδικού πρόσβασης RecipeSage",
     "emails.passwordReset.greeting": "Γεια σας,",
     "emails.passwordReset.intro": "Κάποιος ζήτησε πρόσφατα έναν σύνδεσμο επαναφοράς κωδικού πρόσβασης για τον λογαριασμό RecipeSage που σχετίζεται με αυτήν τη διεύθυνση email.",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Επεξεργασία συστατικού",
     "components.selectIngredients.editIngredient.placeholder": "Συστατικό...",
     "components.selectIngredients.editIngredient.message": "Αυτό αλλάζει μόνο ό,τι προστίθεται στη λίστα αγορών σας. Η συνταγή σας παραμένει ίδια.",
-    "pages.downloadAndInstall.ios.install": "Εγκατάσταση από το App Store"
+    "pages.downloadAndInstall.ios.install": "Εγκατάσταση από το App Store",
+    "pages.contact.intro": "Για τυχόν ζητήματα, σφάλματα ή προτάσεις για νέες δυνατότητες, μπορείτε να επικοινωνήσετε μαζί μου με έναν από τους εξής τρόπους:",
+    "pages.contact.discordOption": "Discord (προτιμώμενο):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Email"
 }
