@@ -281,8 +281,6 @@
     "pages.contact.title": "お問い合わせ",
     "pages.contact.subtitle": "連絡先情報",
     "pages.contact.pleaseUserGuide": "ご質問がある場合は、ユーザーガイドを参照してください。",
-    "pages.contact.discord": "問題、不具合、または機能の提案がある場合は、Discord からご連絡ください: ",
-    "pages.contact.discord.link": "Discordリンク",
     "pages.contact.socialTitle": "ソーシャルメディア",
     "pages.contribute.tabTitle": "貢献 - RecipeSage",
     "pages.contribute.mission": "私の目標は、広告でユーザー体験に負担をかけずに、RecipeSage を誰でも利用できるようにすることです。",
@@ -980,8 +978,6 @@
     "pages.recipeDetails.nutritionPotassium": "カリウム",
     "pages.recipeDetails.nutritionOtherDetails": "その他の栄養情報",
     "pages.recipeDetails.labels.uncatLabels": "一般",
-    "pages.contact.github": "Discordが推奨ですが、GitHub上で直接報告することもできます（対応は遅くなります）: ",
-    "pages.contact.github.link": "GitHubリンク",
     "pages.contribute.bonus.enabled": "有効",
     "pages.mealPlan.tabTitle": "献立 - RecipeSage",
     "pages.mealPlan.modal.copy.message": "選択した日の食事項目を、選択した日から始まる一連の日にコピーします。コピー先の日をクリックしてください。",
@@ -1305,8 +1301,6 @@
     "pages.extensionAuth.invalidRequest.title": "無効なサインイン要求",
     "pages.extensionAuth.invalidRequest.message": "このページは、RecipeSage ブラウザー拡張機能がサインインするために使用されます。拡張機能を開いて、もう一度お試しください。",
     "pages.homeSearchFilterPopover.filterByNutrition": "栄養情報で絞り込み",
-    "pages.contact.cantUseDiscord": "Discordを利用できず、ドキュメントにも私の問題／質問に対する回答がありません",
-    "pages.contact.emailMe": "メールへの返信が遅くなります（申し訳ありません）：",
     "pages.downloadAndInstall.extension.installFirefox": "Firefox用にインストール",
     "pages.mealPlan.modal.noRecipesNutrition.header": "レシピがありません",
     "pages.mealPlan.modal.noRecipesNutrition.message": "選択した日にはレシピが含まれていません。栄養計算の対象となるのは、レシピである食事項目のみです。",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "{{ingredient}}を編集",
     "components.selectIngredients.editIngredient.header": "材料を編集",
     "components.selectIngredients.editIngredient.message": "これは買い物リストに追加される内容のみを変更します。レシピ自体は変更されません。",
-    "components.selectIngredients.editIngredient.placeholder": "材料..."
+    "components.selectIngredients.editIngredient.placeholder": "材料...",
+    "pages.contact.intro": "問題、不具合、機能の提案については、以下のいずれかの方法でご連絡いただけます：",
+    "pages.contact.discordOption": "Discord（推奨）：",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "メールアドレス"
 }

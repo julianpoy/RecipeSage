@@ -964,8 +964,6 @@
     "pages.aboutDetails.2.3": "Если вы хотите внести вклад в поддержку разработки, я был бы очень признателен. Содержание серверов и хранение изображений обходятся дорого. В знак благодарности взнос даёт вам больше возможностей, связанных с наиболее затратными компонентами: например, изображения высокого разрешения и несколько изображений для каждого рецепта, неограниченное количество сообщений помощнику по приготовлению блюд и более высокий дневной лимит импорта.",
     "pages.aboutDetails.contribute": "Страница внесения вклада",
     "pages.aboutDetails.social": "Социальные сети",
-    "pages.contact.discord": "По любым проблемам, ошибкам или предложениям по функциям вы можете связаться со мной через наш Discord: ",
-    "pages.contact.discord.link": "Ссылка на Discord",
     "pages.import.jobs.status.fail.emptyFile": "Представленный импорт не содержит никаких распознанных рецептов.",
     "pages.import.jobs.status.fail.badCredentials": "Предоставленные учетные данные неверны.",
     "pages.import.pdfs": "Импорт из PDF-файлов",
@@ -1148,8 +1146,6 @@
     "pages.recipeDetails.units.g": "{{value}} г",
     "pages.recipeDetails.units.mg": "{{value}} мг",
     "pages.recipeDetails.units.mcg": "{{value}} мкг",
-    "pages.contact.github": "Хотя предпочтительным каналом является Discord, вы также можете сообщать о проблемах непосредственно на GitHub (ответ может занять больше времени): ",
-    "pages.contact.github.link": "Ссылка на GitHub",
     "pages.editRecipe.input.nutrition": "Пищевая ценность (на порцию)",
     "pages.editRecipe.input.nutritionPolyunsaturatedFat": "Полиненасыщенные жиры (г)",
     "pages.editRecipe.input.nutritionVitaminD": "Витамин D (мкг)",
@@ -1229,8 +1225,6 @@
     "pages.extensionAuth.invalidRequest.title": "Неверный запрос на вход",
     "pages.extensionAuth.invalidRequest.message": "Эта страница используется браузерным расширением RecipeSage для входа в систему. Откройте расширение и повторите попытку.",
     "pages.homeSearchFilterPopover.filterByNutrition": "Фильтр по питанию",
-    "pages.contact.cantUseDiscord": "Я не могу использовать Discord, и документация не отвечает на возникшую у меня проблему/вопрос",
-    "pages.contact.emailMe": "Я медленно отвечаю на электронные письма (извините!):",
     "pages.editRecipe.clipDocument.header": "Автозаполнение рецепта из документа",
     "pages.editRecipe.clipDocument.message": "Выберите файл документа (PDF, DOCX, RTF, ODT, Markdown, HTML, OrgMode или обычный текст), и RecipeSage попытается извлечь детали рецепта.",
     "pages.editRecipe.clipDocument.choose": "Выбрать файл",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Редактировать ингредиент",
     "components.selectIngredients.editIngredient.message": "Это изменяет только то, что добавляется в список покупок. Рецепт остаётся без изменений.",
     "pages.downloadAndInstall.ios.install": "Установить из App Store",
-    "pages.downloadAndInstall.storeTrademarks": "Apple и логотип Apple являются товарными знаками Apple Inc. Google Play и логотип Google Play являются товарными знаками Google LLC."
+    "pages.downloadAndInstall.storeTrademarks": "Apple и логотип Apple являются товарными знаками Apple Inc. Google Play и логотип Google Play являются товарными знаками Google LLC.",
+    "pages.contact.intro": "По любым вопросам, сообщениям об ошибках или предложениям по новым функциям вы можете связаться со мной любым из следующих способов:",
+    "pages.contact.discordOption": "Discord (предпочтительно):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Электронная почта"
 }

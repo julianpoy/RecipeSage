@@ -846,8 +846,6 @@
     "pages.aboutDetails.2.title": "¿Por qué cree RecipeSage?",
     "pages.aboutDetails.2.1": "He creado RecipeSage para almacenar recetas para mi familia y para mi. Luego de intentar con varios programas de recetas en línea, sentí que lo mejor sería crear uno que funcionará exactamente como quisiésemos mis parientes, mi madre, mi novia (¡hoy mi esposa!) y yo.",
     "pages.aboutDetails.social": "Redes Sociales",
-    "pages.contact.discord": "Para cualquier problema, error o sugerencia de funciones, puede ponerse en contacto conmigo a través de nuestro Discord: ",
-    "pages.contact.discord.link": "Enlace a Discord",
     "pages.assistant.messageSize": "Tu mensaje es muy largo. Envía uno más corto, por favor.",
     "pages.editRecipe.input.labels.noItems": "No hay etiquetas, Escribe para crear una etiqueta",
     "pages.editRecipe.input.labels.noItemsGroup": "No hay etiquetas en esta categoría. Escribe para crear una etiqueta",
@@ -1116,8 +1114,6 @@
     "pages.recipeDetails.nutritionSaturatedFat": "Grasa saturada",
     "pages.recipeDetails.lastMadeAt": "Última preparación",
     "pages.recipeDetails.lastMadeAtUpdated": "La fecha de última preparación se actualizó a hoy",
-    "pages.contact.github": "Aunque se prefiere Discord, también puede informar de problemas directamente en GitHub (tiempo de respuesta más lento): ",
-    "pages.contact.github.link": "Enlace de GitHub",
     "pages.contribute.yearlyMonthly": "Mensual y anual",
     "pages.editRecipe.input.nutritionPolyunsaturatedFat": "Grasas poliinsaturadas (g)",
     "pages.editRecipe.input.nutritionMonounsaturatedFat": "Grasas monoinsaturadas (g)",
@@ -1297,8 +1293,6 @@
     "pages.extensionAuth.invalidRequest.title": "Solicitud de inicio de sesión no válida",
     "pages.extensionAuth.invalidRequest.message": "Esta página es utilizada por la extensión de navegador RecipeSage para iniciar sesión. Abra la extensión e inténtelo de nuevo.",
     "pages.homeSearchFilterPopover.filterByNutrition": "Filtrar por nutrición",
-    "pages.contact.cantUseDiscord": "No puedo usar Discord y la documentación no responde al problema o la pregunta que tengo",
-    "pages.contact.emailMe": "Tardo en responder a los correos electrónicos (¡lo siento!):",
     "pages.downloadAndInstall.extension.installFirefox": "Instalar para Firefox",
     "pages.downloadAndInstall.extension.installChrome": "Instalar para Chrome",
     "pages.mealPlan.modal.noRecipesNutrition.header": "No hay recetas",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Editar ingrediente",
     "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
     "components.selectIngredients.edit": "Editar {{ingredient}}",
-    "components.selectIngredients.editIngredient.message": "Esto solo cambia lo que se añade a su lista de compras. La receta seguirá siendo la misma."
+    "components.selectIngredients.editIngredient.message": "Esto solo cambia lo que se añade a su lista de compras. La receta seguirá siendo la misma.",
+    "pages.contact.intro": "Para cualquier problema, error o sugerencia de funciones, puede ponerse en contacto conmigo de cualquiera de estas formas:",
+    "pages.contact.discordOption": "Discord (preferido):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Correo electrónico"
 }

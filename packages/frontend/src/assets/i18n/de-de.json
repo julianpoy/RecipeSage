@@ -851,8 +851,6 @@
     "pages.aboutDetails.2.3": "Wenn Sie die Entwicklung mit einem Beitrag unterstützen möchten, würde ich mich sehr darüber freuen. Der Betrieb von Servern und das Hosting von Bildern sind kostspielig. Als Dank erhalten Sie durch einen Beitrag mehr von den Bereichen, deren Betrieb am meisten kostet, etwa hochauflösende und mehrere Bilder pro Rezept, unbegrenzte Nachrichten an den Kochassistenten und ein höheres tägliches Kontingent für Importe.",
     "pages.aboutDetails.contribute": "Spendenseite",
     "pages.aboutDetails.social": "Social Media",
-    "pages.contact.discord": "Kontaktiere mich bei Problemen, Bugs oder Feature-Vorschlägen über unseren Discord-Server: ",
-    "pages.contact.discord.link": "Discord-Link",
     "pages.updateMealPlanModal.update": "Aktualisieren",
     "pages.updateMealPlanModal.updateAndShare": "Aktualisieren und teilen",
     "pages.assistant.welcome.4": "Dabei zählen nur die von dir gesendete Nachrichten zum täglichen Nutzungsbudget, jedoch nicht auf die Antworten des Assistenten.",
@@ -1129,8 +1127,6 @@
     "pages.recipeDetails.units.g": "{{value}} g",
     "pages.recipeDetails.units.mg": "{{value}} mg",
     "pages.recipeDetails.units.mcg": "{{value}} μg",
-    "pages.contact.github": "Ich bevorzuge Discord, aber du kannst Fehler auch direkt auf GitHub melden (langsamere Antwortzeit): ",
-    "pages.contact.github.link": "GitHub-Link",
     "pages.contribute.bonus.feature.4": "höheres tägliches Nutzungsbudget für Scannen von Rezepten, OCR/Bild‑ und PDF-Erkennung, URL‑ und Textdatei-Importen und automatisches Ausfüllen von Nährwerten",
     "pages.editRecipe.input.nutrition": "Nährwert (pro Portion)",
     "pages.editRecipe.input.nutritionServingSize": "Portionsgrösse",
@@ -1379,8 +1375,6 @@
     "webextension.inject.missingTitleBody": "Rezepttitel ist erforderlich.",
     "webextension.inject.saveFailedBody": "Beim Speichern des Rezepts ist ein Fehler aufgetreten. Versuche es erneut.",
     "webextension.inject.duplicateConfirm": "Du hast bereits ein Rezept von dieser Seite gespeichert. Klicke auf \"OK\", um eine Kopie zu speichern, oder zum Überspringen auf \"Abbrechen\".",
-    "pages.contact.cantUseDiscord": "Ich kann Discord nicht verwenden und die Dokumentation hilft nicht bei meinem Problem/meiner Frage",
-    "pages.contact.emailMe": "Ich brauche eine Weile, um E‑Mails zu beantworten (sorry!):",
     "pages.import.mela": "Aus Mela-Datei importieren",
     "pages.import.crouton": "Aus Crouton-Datei importieren",
     "pages.importMela.tabTitle": "Aus Mela importieren – RecipeSage",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Zutat bearbeiten",
     "components.selectIngredients.editIngredient.message": "Dadurch wird nur geändert, was zu Ihrer Einkaufsliste hinzugefügt wird. Ihr Rezept bleibt unverändert.",
     "pages.downloadAndInstall.ios.install": "Aus dem App Store installieren",
-    "pages.downloadAndInstall.storeTrademarks": "Apple und das Apple-Logo sind Marken von Apple Inc. Google Play und das Google-Play-Logo sind Marken von Google LLC."
+    "pages.downloadAndInstall.storeTrademarks": "Apple und das Apple-Logo sind Marken von Apple Inc. Google Play und das Google-Play-Logo sind Marken von Google LLC.",
+    "pages.contact.intro": "Bei Problemen, Fehlern oder Funktionsvorschlägen können Sie mich auf folgende Arten erreichen:",
+    "pages.contact.discordOption": "Discord (bevorzugt):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-Mail"
 }

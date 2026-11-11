@@ -296,10 +296,6 @@
     "pages.contact.title": "문의하기",
     "pages.contact.subtitle": "연락처 정보",
     "pages.contact.pleaseUserGuide": "질문이 있으시면 사용자 가이드를 참조해 주십시오:",
-    "pages.contact.discord": "문제, 버그 또는 기능 제안이 있으시면 Discord를 통해 저에게 연락하실 수 있습니다: ",
-    "pages.contact.discord.link": "Discord 링크",
-    "pages.contact.github": "Discord가 선호되지만, GitHub에서 직접 보고하실 수도 있습니다(응답 시간이 더 느릴 수 있음): ",
-    "pages.contact.github.link": "GitHub 링크",
     "pages.contact.socialTitle": "소셜 미디어",
     "pages.contribute.tabTitle": "기여하기 - RecipeSage",
     "pages.contribute.title": "기여하기",
@@ -1208,8 +1204,6 @@
     "generic.options": "옵션",
     "generic.submit": "제출",
     "generic.labeledPageTitle": "{{title}} - RecipeSage",
-    "pages.contact.cantUseDiscord": "Discord를 사용할 수 없고 문서에서도 제가 가진 문제/질문에 대한 답을 찾을 수 없습니다",
-    "pages.contact.emailMe": "이메일 답변이 늦습니다(죄송합니다!):",
     "errors.creditsLimitReached.title": "죄송합니다. 한도에 도달했습니다",
     "generic.moreInfo": "추가 정보",
     "components.recurrenceEditor.repeat": "반복",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "{{ingredient}} 편집",
     "components.selectIngredients.editIngredient.header": "재료 편집",
     "components.selectIngredients.editIngredient.message": "이는 장보기 목록에 추가되는 항목만 변경합니다. 레시피는 그대로 유지됩니다.",
-    "components.selectIngredients.editIngredient.placeholder": "재료..."
+    "components.selectIngredients.editIngredient.placeholder": "재료...",
+    "pages.contact.intro": "문제, 버그 또는 기능 제안이 있으시면 다음 방법 중 하나로 연락하실 수 있습니다:",
+    "pages.contact.discordOption": "Discord(권장):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "이메일"
 }

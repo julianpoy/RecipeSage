@@ -1097,10 +1097,6 @@
     "pages.aboutDetails.contribute": "贡献页面",
     "pages.aboutDetails.social": "社交媒体",
     "pages.contact.tabTitle": "联系我 - RecipeSage",
-    "pages.contact.discord": "如有任何问题、错误或功能建议，您可以通过我们的 Discord 联系我： ",
-    "pages.contact.discord.link": "Discord 链接",
-    "pages.contact.github": "虽然首选使用 Discord，但您也可以直接在 GitHub 上报告问题（响应时间较慢）： ",
-    "pages.contact.github.link": "GitHub 链接",
     "pages.contribute.tabTitle": "贡献 - RecipeSage",
     "pages.contribute.bonus.feature.4": "更高的每日使用额度，适用于食谱剪藏、OCR/图像和 PDF 识别、URL 和文本文件导入，以及营养信息自动填充",
     "pages.downloadAndInstall.tabTitle": "下载与安装 - RecipeSage",
@@ -1258,8 +1254,6 @@
     "pages.extensionAuth.invalidRequest.title": "无效的登录请求",
     "pages.extensionAuth.invalidRequest.message": "此页面供 RecipeSage 浏览器扩展用于登录。请打开扩展并重试。",
     "pages.homeSearchFilterPopover.filterByNutrition": "按营养筛选",
-    "pages.contact.cantUseDiscord": "我无法使用 Discord，且文档未能解答我的问题/疑问",
-    "pages.contact.emailMe": "我回复电子邮件较慢（抱歉！）：",
     "pages.downloadAndInstall.extension.installChrome": "为 Chrome 安装",
     "pages.mealPlan.modal.noRecipesNutrition.header": "没有食谱",
     "pages.mealPlan.modal.noRecipesNutrition.message": "所选日期不包含任何食谱。只有作为食谱的餐食项目才有营养信息可供计算。",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "编辑食材",
     "components.selectIngredients.editIngredient.message": "这只会更改添加到购物清单中的内容。您的食谱保持不变。",
     "components.selectIngredients.editIngredient.placeholder": "食材...",
-    "pages.downloadAndInstall.ios.description": "从 App Store 安装 RecipeSage 应用。"
+    "pages.downloadAndInstall.ios.description": "从 App Store 安装 RecipeSage 应用。",
+    "pages.contact.intro": "如有任何问题、错误或功能建议，您可以通过以下任一方式联系我：",
+    "pages.contact.discordOption": "Discord（首选）：",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Email"
 }

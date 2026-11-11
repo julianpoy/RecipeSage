@@ -1027,8 +1027,6 @@
     "pages.aboutDetails.tabTitle": "Mais sobre mim e o RecipeSage",
     "pages.aboutDetails.1.2": "O RecipeSage é um dos meus passatempos, e trabalho nele no meu tempo livre, juntamente com muitos outros projetos. Não é o meu trabalho e não ganho a vida com ele, mas trabalhar neste projeto traz-me muita alegria.",
     "pages.contact.tabTitle": "Contacte-me - RecipeSage",
-    "pages.contact.discord": "Para quaisquer problemas, erros ou sugestões de funcionalidades, pode contactar-me através do nosso Discord: ",
-    "pages.contact.discord.link": "Ligação do Discord",
     "pages.contributeThankYou.tabTitle": "Obrigado - RecipeSage",
     "pages.downloadAndInstall.bookmark.usage": "Clique no marcador para importar o site atual em que se encontra.",
     "pages.editRecipe.input.nutritionAddedSugars": "Açúcares adicionados (g)",
@@ -1093,8 +1091,6 @@
     "pages.legal.tabTitle": "Informação legal, acordos e isenções de responsabilidade - RecipeSage",
     "pages.legal.title": "Informação legal, acordos e isenções de responsabilidade",
     "pages.about.tabTitle": "Sobre e apoio - RecipeSage",
-    "pages.contact.github": "Embora seja preferível usar o Discord, também pode comunicar problemas diretamente no GitHub (tempo de resposta mais lento): ",
-    "pages.contact.github.link": "Ligação do GitHub",
     "pages.recipeDetails.linkedRecipes": "Receitas associadas",
     "pages.contributeCancel.tabTitle": "Contribuir - RecipeSage",
     "pages.newLabelItemModal.badLabelMessage": "O seu título contém caracteres inválidos",
@@ -1443,8 +1439,6 @@
     "pages.nutritionCalculator.recipes.loading": "A carregar receitas...",
     "pages.nutritionCalculator.recipes.empty": "Ainda não foram adicionadas receitas. Utilize Adicionar receita ou Adicionar etiqueta para começar a calcular os valores nutricionais.",
     "pages.welcome.description.features.browserExtension.title": "Extensão de navegador para Firefox e Chrome",
-    "pages.contact.cantUseDiscord": "Não consigo utilizar o Discord e a documentação não responde ao problema/pergunta que tenho",
-    "pages.contact.emailMe": "Demoro a responder a e-mails (desculpe!):",
     "pages.editRecipe.clipDocument.header": "Preencher automaticamente a receita a partir de um documento",
     "pages.editRecipe.clipDocument.message": "Escolha um ficheiro de documento (PDF, DOCX, RTF, ODT, Markdown, HTML, OrgMode ou texto simples) e o RecipeSage tentará extrair os detalhes da receita.",
     "pages.editRecipe.clipDocument.choose": "Escolher ficheiro",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.editIngredient.header": "Editar ingrediente",
     "components.selectIngredients.editIngredient.message": "Isto apenas altera o que é adicionado à sua lista de compras. A sua receita mantém-se igual.",
     "components.selectIngredients.editIngredient.placeholder": "Ingrediente...",
-    "pages.downloadAndInstall.ios.description": "Instale a aplicação RecipeSage a partir da App Store."
+    "pages.downloadAndInstall.ios.description": "Instale a aplicação RecipeSage a partir da App Store.",
+    "pages.contact.intro": "Para quaisquer problemas, erros ou sugestões de funcionalidades, pode contactar-me através de qualquer um destes meios:",
+    "pages.contact.discordOption": "Discord (preferido):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "Email"
 }

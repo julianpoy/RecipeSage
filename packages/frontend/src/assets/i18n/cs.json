@@ -75,9 +75,6 @@
     "pages.aboutDetails.2.2": "Věřím v open source software a chci, aby bylo RecipeSage možné používat zdarma. Každý by měl mít možnost k tomuto softwaru přistupovat a používat jej a nikdy nechci uživatele RecipeSage vystavovat reklamám ani jim účtovat poplatky za možnost aplikaci používat.",
     "pages.aboutDetails.2.3": "Pokud byste chtěli přispět na podporu vývoje, velmi bych to ocenil. Provoz serverů a hostování obrázků je nákladné. Jako poděkování vám příspěvek poskytne více funkcí, jejichž provoz je nejnákladnější, například obrázky ve vysokém rozlišení a více obrázků na recept, neomezený počet zpráv kuchařského asistenta a vyšší denní limit importů.",
     "pages.aboutDetails.contribute": "Stránka s příspěvky",
-    "pages.contact.discord.link": "Odkaz na Discord",
-    "pages.contact.github": "Ačkoli je preferován Discord, můžete věci hlásit také přímo na GitHubu (pomalejší doba odezvy): ",
-    "pages.contact.github.link": "Odkaz na GitHub",
     "pages.contribute.bonus.feature.4": "Vyšší denní limit využití pro ukládání receptů, OCR/rozpoznávání obrázků a PDF, importy z URL a textových souborů a automatické doplňování nutričních hodnot",
     "pages.contribute.bonus.reason": "Vše, co potřebujete k ukládání, plánování a vaření svých receptů, je pro všechny zdarma. Přispívání je vždy zcela dobrovolné.",
     "pages.contribute.cta.1": "RecipeSage jsem původně vytvořil pro svou vlastní rodinu, abychom měli kde uchovávat recepty, které rádi sdílíme. Od té doby se RecipeSage rozrostl v plnohodnotný open source projekt.",
@@ -858,7 +855,6 @@
     "pages.contact.title": "Kontaktujte mě",
     "pages.contact.subtitle": "Kontaktní údaje",
     "pages.contact.pleaseUserGuide": "V případě jakýchkoli dotazů se prosím podívejte do uživatelské příručky:",
-    "pages.contact.discord": "V případě jakýchkoli problémů, chyb nebo návrhů funkcí mě můžete kontaktovat prostřednictvím našeho Discordu: ",
     "pages.contribute.custom": "Vlastní",
     "pages.contribute.action": "Přispějte!",
     "pages.contribute.bonus.title": "Jako poděkování za pomoc s pokrytím nákladů na části RecipeSage, jejichž provoz je nejnákladnější, budete moci:",
@@ -1914,8 +1910,6 @@
     "webextension.inject.pleaseLoginBody": "Zdá se, že jste odhlášeni. Kliknutím na ikonu RecipeSage se prosím znovu přihlaste.",
     "webextension.inject.recipeSavedTitle": "Recept uložen!",
     "pages.welcome.description.features.browserExtension.title": "Rozšíření prohlížeče pro Firefox a Chrome",
-    "pages.contact.cantUseDiscord": "Nemohu používat Discord a dokumentace neodpovídá na problém/dotaz, který mám",
-    "pages.contact.emailMe": "Na e-maily odpovídám pomalu (omlouvám se!):",
     "components.recurrenceEditor.unit.week": "týden/týdny",
     "webextension.action.signInSuccessful": "Nyní jste přihlášeni. Chcete-li tento web uložit, klikněte znovu na ikonu RecipeSage.",
     "webextension.action.fetchFailed": "Nepodařilo se načíst obsah stránky.",
@@ -2575,5 +2569,9 @@
     "components.selectIngredients.edit": "Upravit {{ingredient}}",
     "components.selectIngredients.editIngredient.header": "Upravit ingredienci",
     "components.selectIngredients.editIngredient.message": "Tím se změní pouze to, co se přidá do vašeho nákupního seznamu. Váš recept zůstane stejný.",
-    "components.selectIngredients.editIngredient.placeholder": "Ingredience..."
+    "components.selectIngredients.editIngredient.placeholder": "Ingredience...",
+    "pages.contact.intro": "V případě jakýchkoli potíží, chyb či návrhů na funkce mě můžete kontaktovat některým z těchto způsobů:",
+    "pages.contact.discordOption": "Discord (preferovaný):",
+    "pages.contact.githubOption": "GitHub",
+    "pages.contact.emailOption": "E-mail"
 }
