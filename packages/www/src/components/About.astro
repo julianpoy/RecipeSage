@@ -54,18 +54,25 @@ const { t } = Astro.props;
           >https://docs.recipesage.com</a
         >
       </li>
+      <li>{t("pages.contact.intro")}</li>
       <li>
-        {t("pages.contact.discord")}
+        {t("pages.contact.discordOption")}
         <a href="https://discord.gg/yCfzBft" target="_blank" rel="noopener"
-          >{t("pages.contact.discord.link")}</a
+          >https://discord.gg/yCfzBft</a
         >
       </li>
       <li>
-        {t("pages.contact.github")}
+        {t("pages.contact.githubOption")}
         <a
           href="https://github.com/julianpoy/recipesage/issues"
           target="_blank"
-          rel="noopener">{t("pages.contact.github.link")}</a
+          rel="noopener">https://github.com/julianpoy/recipesage/issues</a
+        >
+      </li>
+      <li>
+        {t("pages.contact.emailOption")}
+        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support"
+          >julian@recipesage.com</a
         >
       </li>
     </ul>
