@@ -37,6 +37,7 @@ export enum SupportedLanguages {
   NB_NO = "nb-no", // Norwegian Bokmål, Norway
   TR = "tr", // Turkish
   ZH_HANT = "zh-hant", // Chinese (Traditional)
+  SI = "si",
 }
 
 export enum SupportedFontSize {
