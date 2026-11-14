@@ -33,6 +33,7 @@ const defaultLocality: Record<string, SupportedLanguages> = {
   ko: SupportedLanguages.KO,
   nb: SupportedLanguages.NB_NO,
   tr: SupportedLanguages.TR,
+  si: SupportedLanguages.SI,
   "zh-tw": SupportedLanguages.ZH_HANT,
   "zh-hk": SupportedLanguages.ZH_HANT,
   "zh-mo": SupportedLanguages.ZH_HANT,
