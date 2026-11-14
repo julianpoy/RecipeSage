@@ -229,7 +229,7 @@
     "@vitest/eslint-plugin": "^1.6.27",
     "@vitest/ui": "5.1.0",
     "angular-eslint": "22.6.0",
-    "astro": "^7.2.8",
+    "astro": "^7.4.7",
     "astro-eslint-parser": "^3.2.0",
     "copy-webpack-plugin": "^14.0.0",
     "electron": "^45.0.0",
