@@ -2572,6 +2572,6 @@
     "components.selectIngredients.editIngredient.placeholder": "Hozzávaló...",
     "pages.contact.intro": "Bármilyen probléma, hiba vagy funkciójavaslat esetén az alábbi módokon érhet el:",
     "pages.contact.discordOption": "Discord (előnyben részesített):",
-    "pages.contact.githubOption": "GitHub",
-    "pages.contact.emailOption": "Email"
+    "pages.contact.githubOption": "GitHub:",
+    "pages.contact.emailOption": "E-mail:"
 }
