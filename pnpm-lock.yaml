@@ -49,55 +49,55 @@ importers:
         version: 3.1168.0
       '@capacitor-community/keep-awake':
         specifier: 8.0.1
-        version: 8.0.1(@capacitor/core@8.5.3)
+        version: 8.0.1(@capacitor/core@8.6.2)
       '@capacitor-firebase/messaging':
         specifier: 8.5.2
-        version: 8.5.2(@capacitor/core@8.5.3)(firebase@12.19.0)
+        version: 8.5.2(@capacitor/core@8.6.2)(firebase@12.19.0)
       '@capacitor/android':
-        specifier: 8.5.3
-        version: 8.5.3(@capacitor/core@8.5.3)
+        specifier: 8.6.2
+        version: 8.6.2(@capacitor/core@8.6.2)
       '@capacitor/app':
         specifier: ^8.1.1
-        version: 8.1.2(@capacitor/core@8.5.3)
+        version: 8.1.2(@capacitor/core@8.6.2)
       '@capacitor/browser':
         specifier: ^8.0.4
-        version: 8.0.5(@capacitor/core@8.5.3)
+        version: 8.0.5(@capacitor/core@8.6.2)
       '@capacitor/camera':
         specifier: ^8.2.3
-        version: 8.2.6(@capacitor/core@8.5.3)
+        version: 8.2.6(@capacitor/core@8.6.2)
       '@capacitor/clipboard':
         specifier: 8.0.1
-        version: 8.0.1(@capacitor/core@8.5.3)
+        version: 8.0.1(@capacitor/core@8.6.2)
       '@capacitor/core':
-        specifier: 8.5.3
-        version: 8.5.3
+        specifier: 8.6.2
+        version: 8.6.2
       '@capacitor/filesystem':
         specifier: ^8.1.3
-        version: 8.1.5(@capacitor/core@8.5.3)
+        version: 8.1.5(@capacitor/core@8.6.2)
       '@capacitor/ios':
-        specifier: 8.5.3
-        version: 8.5.3(@capacitor/core@8.5.3)
+        specifier: 8.6.2
+        version: 8.6.2(@capacitor/core@8.6.2)
       '@capacitor/share':
         specifier: 8.0.3
-        version: 8.0.3(@capacitor/core@8.5.3)
+        version: 8.0.3(@capacitor/core@8.6.2)
       '@capacitor/splash-screen':
         specifier: 8.0.2
-        version: 8.0.2(@capacitor/core@8.5.3)
+        version: 8.0.2(@capacitor/core@8.6.2)
       '@capawesome/capacitor-apple-sign-in':
-        specifier: ^0.1.3
-        version: 0.1.4(@capacitor/core@8.5.3)
+        specifier: ^0.1.5
+        version: 0.1.5(@capacitor/core@8.6.2)
       '@capawesome/capacitor-file-picker':
         specifier: ^8.0.4
-        version: 8.1.1(@capacitor/core@8.5.3)
+        version: 8.1.1(@capacitor/core@8.6.2)
       '@capgo/capacitor-native-navigation':
         specifier: ^8.14.0
-        version: 8.14.0(@capacitor/core@8.5.3)
+        version: 8.14.0(@capacitor/core@8.6.2)
       '@capgo/native-purchases':
         specifier: ^8.7.0
-        version: 8.9.6(@capacitor/core@8.5.3)
+        version: 8.9.6(@capacitor/core@8.6.2)
       '@erkamyaman/capacitor-foldable':
         specifier: ^8.4.1
-        version: 8.4.1(@capacitor/core@8.5.3)
+        version: 8.4.1(@capacitor/core@8.6.2)
       '@fanoutio/grip':
         specifier: ^4.4.0
         version: 4.4.0
@@ -115,7 +115,7 @@ importers:
         version: 9.0.10(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(@angular/forms@22.2.4(@angular/common@22.2.4(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2))(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(@angular/platform-browser@22.2.4(@angular/common@22.2.4(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2))(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3)))(rxjs@7.8.2))(@angular/router@22.2.4(@angular/common@22.2.4(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2))(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(@angular/platform-browser@22.2.4(@angular/common@22.2.4(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2))(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3)))(rxjs@7.8.2))(rxjs@7.8.2)(zone.js@0.16.3)
       '@mindlib-capacitor/send-intent':
         specifier: ^8.0.6
-        version: 8.0.6(@capacitor/core@8.5.3)
+        version: 8.0.6(@capacitor/core@8.6.2)
       '@ngx-loading-bar/core':
         specifier: ^7.0.1
         version: 7.0.1(@angular/common@22.2.4(@angular/core@22.2.4(@angular/compiler@22.2.4)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2))(rxjs@7.8.2)
@@ -142,7 +142,7 @@ importers:
         version: 7.10.1(@opentelemetry/api@1.10.0)
       '@rdlabo/ionic-theme-ios27':
         specifier: 2.0.2
-        version: 2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.10)
+        version: 2.0.2(@capacitor/core@8.6.2)(@ionic/core@9.0.10)
       '@rdlabo/ionic-theme-md3':
         specifier: ^9.1.3
         version: 9.1.3(@ionic/core@9.0.10)
@@ -430,8 +430,8 @@ importers:
         specifier: ^0.9.9
         version: 0.9.12(@emnapi/runtime@2.0.0-beta.2)(prettier@3.9.10)(typescript@6.0.3)
       '@capacitor/cli':
-        specifier: 8.5.3
-        version: 8.5.3
+        specifier: 8.6.2
+        version: 8.6.2
       '@electron-forge/cli':
         specifier: ^8.0.1
         version: 8.0.1(@types/react@19.3.0)
@@ -2332,10 +2332,10 @@ packages:
       firebase:
         optional: true
 
-  '@capacitor/android@8.5.3':
-    resolution: {integrity: sha512-ilH4gSSz3DrketMkzDVAvY9JsWJ//rCQnECLTdcFRO7xXDogwAbUvQAnIAbiqefwV/D1xfjEL4Gw1MJXEcaA9g==}
+  '@capacitor/android@8.6.2':
+    resolution: {integrity: sha512-dWXnXmOVTtxU91n5h11MzoQ7PAMjyzU1qguw0mBJZiwSuhGvLKTG/IlsQ75H8qeE0a1acV2f573x15wYvyzuVA==}
     peerDependencies:
-      '@capacitor/core': ^8.5.0
+      '@capacitor/core': ^8.6.0
 
   '@capacitor/app@8.1.2':
     resolution: {integrity: sha512-uKBlsrXH0IdvUn69e/KKYbZ32A06pcrUdG8LWuZ/6y33YMXZXLEEdNSwl+jKS/SrsTWqnePs8EqSWaiQM3mUGA==}
@@ -2352,8 +2352,8 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/cli@8.5.3':
-    resolution: {integrity: sha512-/G6xwna+p4GS3lthSdWN3OThCH2F85O0Ukdy8rv3oAXvgEMeyFgPEIA3PMAS++IkHwUuBYBAKOQJnZfcrh1n0w==}
+  '@capacitor/cli@8.6.2':
+    resolution: {integrity: sha512-3HeNPX3cEWBSljJT0sJviZCxXRoToTLAufhUcIJh+JMj1xOhLFZpuj8oFRnJ0kNYAf7DIBHQDmilIXloK9+YYg==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -2362,18 +2362,18 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/core@8.5.3':
-    resolution: {integrity: sha512-oBE1oGuYE4ZzYYrulC75OuHdSsD6zLUy7d5o1tFwDLG4govGoubY15cxpiI5l0+q87Lm5p0bhbehMdzJg4aFag==}
+  '@capacitor/core@8.6.2':
+    resolution: {integrity: sha512-UEb9crRuqEAe2Iu2eGOEuQ8rLQxpwg7ZZIpl17UJoytEpnV1e4oXXW0K7yYS2NsCOGmJjyLeKjNlgG7tkAoX8g==}
 
   '@capacitor/filesystem@8.1.5':
     resolution: {integrity: sha512-m1RkI8L83NJeppEKyRWioK3MDp2vjlA+QfUQcF8/xRlcXNC2HYxqoyYJ+K4M0EcVovy+g+4F24S05+bhK4Vgdg==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/ios@8.5.3':
-    resolution: {integrity: sha512-HnnV92Jl8+3x0JUloXUMjFcUsQI8wHFVsKwkLn72DfRZXYGZW11tQbmNOWOnRTljaU18FdI1b9ipT09SzzPDNw==}
+  '@capacitor/ios@8.6.2':
+    resolution: {integrity: sha512-YnVm0lRA1mQWK0SKd2bdJIOG+PXRRDDdndZ1+nGqeiob+QmHZmb4wWo5gVpWhoHO37pGi2qzH5w5WGvfKrs+Gg==}
     peerDependencies:
-      '@capacitor/core': ^8.5.0
+      '@capacitor/core': ^8.6.0
 
   '@capacitor/share@8.0.3':
     resolution: {integrity: sha512-gnvZBV1NPu2B8vd1UKncR56G15ueHd0aZLqgDov++t3SmTBG9Q0VrAZ1VnHn5stxlmglVaTb4RwopMgbpLzroA==}
@@ -2388,8 +2388,8 @@ packages:
   '@capacitor/synapse@1.0.4':
     resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
 
-  '@capawesome/capacitor-apple-sign-in@0.1.4':
-    resolution: {integrity: sha512-B6aEtGCJ4WDe71LFdBkSeHQQ1aluJCNFHE7oMAZlB1f37oD0i6mYEoWMCKtAY4RGmR//el/SY8Sed9JIZ1+eXA==}
+  '@capawesome/capacitor-apple-sign-in@0.1.5':
+    resolution: {integrity: sha512-53anfdKMU+092mKj1Sy9YuKulnGVso0Dxhjjxeinjl1yeWxFXNKHTSzTYAoMMQ/Tt095If1rBpzMdACnlaWeFw==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -3578,6 +3578,9 @@ packages:
   '@isaacs/fs-minipass@4.0.1':
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
     engines: {node: '>=18.0.0'}
+
+  '@isaacs/nonrecursive-glob-match@1.1.0':
+    resolution: {integrity: sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==}
 
   '@istanbuljs/schema@0.1.6':
     resolution: {integrity: sha512-+Sg6GCR/wy1oSmQDFq4LQDAhm3ETKnorxN+y5nbLULOR3P0c14f2Wurzj3/xqPXtasLFfHd5iRFQ7AJt4KH2cw==}
@@ -6881,6 +6884,10 @@ packages:
     resolution: {integrity: sha512-1pHv8LX9CpKut1Zp4EXey7Z8OfH11ONNH6Dhi2WDUt31VVZFXZzKwXcysBgqSumFCmR+0dqjMK5v5JiFHzi0+g==}
     engines: {node: 20 || >=22}
 
+  balanced-match@4.0.4:
+    resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
+    engines: {node: 18 || 20 || >=22}
+
   base32-encode@1.2.0:
     resolution: {integrity: sha512-cHFU8XeRyx0GgmoWi5qHMCVRiqU6J3MHWxVgun7jggCBUpVzm1Ir7M9dYr2whjSNc3tFeXfQ/oZjQu/4u55h9A==}
 
@@ -6981,11 +6988,15 @@ packages:
   brace-expansion@1.1.21:
     resolution: {integrity: sha512-9zeA+KLZNNzglF2TPKRQEDyx6Yby7daAkuy8MiPzpXPsYDWi/DRM8jmwUDxokQjYqBpv5DgPiwD4h4ZZSy1Ujw==}
 
-  brace-expansion@2.1.7:
-    resolution: {integrity: sha512-uZbew1NqdmPDTMJ8ah1y+b+9QEJrfkXFk3RcTQw3X0jW/xRUvFKsg1CfQdSYGdTbXZWExtU3J3ccxtnfw1Fi0g==}
+  brace-expansion@2.1.8:
+    resolution: {integrity: sha512-BnlDzDYQoplTsZSvPi86CNzmbcb07X8ufR8fk1zivaiEJlXJkiq1MQyDCVmlWcsWbj6aWXqHnrwwevbrm/Saig==}
 
   brace-expansion@5.0.12:
     resolution: {integrity: sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==}
+    engines: {node: 20 || >=22}
+
+  brace-expansion@5.0.13:
+    resolution: {integrity: sha512-Vh3dmFbc4wZeox7M9I/0L9GfFd83Su4+yCck/OF9Gi/P/dAHn0RT7X4K9R7gMNMhDck3DvhR6QXsnQdjjgwNvQ==}
     engines: {node: 20 || >=22}
 
   braces@3.0.3:
@@ -8504,6 +8515,14 @@ packages:
     resolution: {integrity: sha512-Wjlyrolmm8uDpm/ogGyXZXb1Z+Ca2B8NbJwqBVg0axK9GbBeoS7yGV6vjXnYdGm6X53iehEuxxbyiKp8QmN4Vw==}
     engines: {node: 18 || 20 || >=22}
 
+  glob@13.0.7:
+    resolution: {integrity: sha512-wfsFgXQ8A3SEI9XGf7Nl3Y9l7ffSrGh7SUCT7vU/2CzYPep9kjxAn1S40F9OPKxAMGCVl7HtNlJhrCJUeUq83g==}
+    engines: {node: 18 || 20 || >=22}
+
+  glob@14.0.6:
+    resolution: {integrity: sha512-OwXjVP2svY5EyLY75Vek96C8qK43gqrt4xsZ+qSILdnaEiJPXkd62mcfUSNx/TQErQRdu5uM5kF67sfONragKw==}
+    engines: {node: 18 || 20 || >=22}
+
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
@@ -9726,6 +9745,10 @@ packages:
     resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
     engines: {node: 18 || 20 || >=22}
 
+  minimatch@11.0.8:
+    resolution: {integrity: sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==}
+    engines: {node: 20 || >=22}
+
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
 
@@ -9879,8 +9902,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  native-run@2.0.3:
-    resolution: {integrity: sha512-U1PllBuzW5d1gfan+88L+Hky2eZx+9gv3Pf6rNBxKbORxi7boHzqiA6QFGSnqMem4j0A9tZ08NMIs5+0m/VS1Q==}
+  native-run@2.1.0:
+    resolution: {integrity: sha512-JhEph/fyMwBHmMLiZ1OZX8X92+N1gt5+/ecLtgeRbyDHIyIW7EDt0A3kBZu594y1P4yKDr1CIHe+DDYQ7ZlKjg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -10276,6 +10299,10 @@ packages:
 
   path-scurry@2.0.2:
     resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==}
+    engines: {node: 18 || 20 || >=22}
+
+  path-scurry@3.0.0:
+    resolution: {integrity: sha512-1pTbQqH1wIwMi/eleQ5leFTTCkzFsPcgXNjwOA8YGGW/W4/kHT3dssE7Z6NH+zuqNLOzOB0uaD61yl7cAcVhgg==}
     engines: {node: 18 || 20 || >=22}
 
   path-to-regexp@8.4.2:
@@ -10905,8 +10932,8 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rimraf@6.1.3:
-    resolution: {integrity: sha512-LKg+Cr2ZF61fkcaK1UdkH2yEBBKnYjTyWzTJT6KNPcSPaiT7HSdhtMXQuN5wkTX0Xu72KQ1l8S42rlmexS2hSA==}
+  rimraf@6.1.4:
+    resolution: {integrity: sha512-Fk3reQDVPZUMbEm7Zwxz03BWQMW3V5buSk9aU8OckTrO8A1nQtbqvYsAantGNermwsIsXcuOBqcoJ3HuMELctw==}
     engines: {node: 20 || >=22}
     hasBin: true
 
@@ -11284,8 +11311,8 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
-  slice-ansi@10.0.0:
-    resolution: {integrity: sha512-2rOYDG420YH3p2PbRAu6LdYnGuMZldshqZS2qqFh/WEzAytVo7b8n1HhubLtRunvqjao74MmGfW4sY4ex0YvpQ==}
+  slice-ansi@10.0.1:
+    resolution: {integrity: sha512-CJKEH3zwVX4bOnE+bFbmh+JK/YMT9VAazqBsVBTesnYKXlNtz6oVmrhNp1jHrxHzscuUkWiKZpzNzFraZcrorg==}
     engines: {node: '>=22'}
 
   slice-ansi@4.0.0:
@@ -11560,8 +11587,8 @@ packages:
     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
     engines: {node: '>=6'}
 
-  tar@7.5.22:
-    resolution: {integrity: sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==}
+  tar@7.5.23:
+    resolution: {integrity: sha512-lkukzdoGngZHJZXxW4S/E4Fp9ghTDlyZXrQGRNoJ/LXvDKcXUTq2sg5yQe74po7Voea6n/IN09+wE/QvJMiifA==}
     engines: {node: '>=18'}
 
   tdigest@0.1.3:
@@ -12067,11 +12094,6 @@ packages:
 
   uuid@14.0.3:
     resolution: {integrity: sha512-Sc5u1VVln93y1Xnz4R+CunOZc7R9LUcTmhj7Rc7Eg3HVcf7rVn2FOoa812fe0W8p3jD7xeoGSYbfqCGGH2B6xw==}
-    hasBin: true
-
-  uuid@7.0.3:
-    resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -12660,9 +12682,9 @@ packages:
     resolution: {integrity: sha512-c16PKLIRxBYpR3jSWsdS7SFp0COm5SOQdiFjY818dYFHJbMGuLBszpF07LBWmOS1uzrHa9VGdynsEgoeKy0oOQ==}
     engines: {node: '>=20'}
 
-  xcode@3.0.1:
-    resolution: {integrity: sha512-kCz5k7J7XbJtjABOvkc5lJmkiDh8VhjVCGNiqdKCscmVpdVUpEAyXv1xmCLkQJ5dsHqx3IPO4XW+NTDhU/fatA==}
-    engines: {node: '>=10.0.0'}
+  xcode@4.0.0:
+    resolution: {integrity: sha512-dDaoWzc9EP2fp9FS9PVZUkyvFxY4y1TOV9pcKaKLk++Ei/qb97XDFEVP7GnW7Osii/TzVABJ0jq2F+9/lq0TVA==}
+    engines: {node: '>=14.17.0'}
 
   xdg-basedir@5.1.0:
     resolution: {integrity: sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ==}
@@ -15554,33 +15576,33 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.5.3)':
+  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor-firebase/messaging@8.5.2(@capacitor/core@8.5.3)(firebase@12.19.0)':
+  '@capacitor-firebase/messaging@8.5.2(@capacitor/core@8.6.2)(firebase@12.19.0)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
     optionalDependencies:
       firebase: 12.19.0
 
-  '@capacitor/android@8.5.3(@capacitor/core@8.5.3)':
+  '@capacitor/android@8.6.2(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/app@8.1.2(@capacitor/core@8.5.3)':
+  '@capacitor/app@8.1.2(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/browser@8.0.5(@capacitor/core@8.5.3)':
+  '@capacitor/browser@8.0.5(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/camera@8.2.6(@capacitor/core@8.5.3)':
+  '@capacitor/camera@8.2.6(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/cli@8.5.3':
+  '@capacitor/cli@8.6.2':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -15590,61 +15612,61 @@ snapshots:
       env-paths: 2.2.1
       fs-extra: 11.4.1
       kleur: 4.1.5
-      native-run: 2.0.3
+      native-run: 2.1.0
       open: 8.4.2
       plist: 3.1.1
       prompts: 2.4.2
-      rimraf: 6.1.3
+      rimraf: 6.1.4
       semver: 7.8.5
-      tar: 7.5.22
-      tslib: 2.8.1
-      xcode: 3.0.1
+      tar: 7.5.23
+      tslib: 2.9.1
+      xcode: 4.0.0
       xml2js: 0.6.2
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/clipboard@8.0.1(@capacitor/core@8.5.3)':
+  '@capacitor/clipboard@8.0.1(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/core@8.5.3':
+  '@capacitor/core@8.6.2':
     dependencies:
-      tslib: 2.8.1
+      tslib: 2.9.1
 
-  '@capacitor/filesystem@8.1.5(@capacitor/core@8.5.3)':
+  '@capacitor/filesystem@8.1.5(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
       '@capacitor/synapse': 1.0.4
 
-  '@capacitor/ios@8.5.3(@capacitor/core@8.5.3)':
+  '@capacitor/ios@8.6.2(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/share@8.0.3(@capacitor/core@8.5.3)':
+  '@capacitor/share@8.0.3(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capacitor/splash-screen@8.0.2(@capacitor/core@8.5.3)':
+  '@capacitor/splash-screen@8.0.2(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
   '@capacitor/synapse@1.0.4': {}
 
-  '@capawesome/capacitor-apple-sign-in@0.1.4(@capacitor/core@8.5.3)':
+  '@capawesome/capacitor-apple-sign-in@0.1.5(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capawesome/capacitor-file-picker@8.1.1(@capacitor/core@8.5.3)':
+  '@capawesome/capacitor-file-picker@8.1.1(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capgo/capacitor-native-navigation@8.14.0(@capacitor/core@8.5.3)':
+  '@capgo/capacitor-native-navigation@8.14.0(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
-  '@capgo/native-purchases@8.9.6(@capacitor/core@8.5.3)':
+  '@capgo/native-purchases@8.9.6(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
   '@capsizecss/unpack@4.0.1':
     dependencies:
@@ -15861,7 +15883,7 @@ snapshots:
 
   '@electron/asar@4.3.1':
     dependencies:
-      glob: 13.0.6
+      glob: 13.0.7
       minimatch: 10.2.6
 
   '@electron/get@5.1.0':
@@ -16045,9 +16067,9 @@ snapshots:
       tslib: 2.9.1
     optional: true
 
-  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.5.3)':
+  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true
@@ -17013,6 +17035,8 @@ snapshots:
     dependencies:
       minipass: 7.1.3
 
+  '@isaacs/nonrecursive-glob-match@1.1.0': {}
+
   '@istanbuljs/schema@0.1.6': {}
 
   '@jest/diff-sequences@30.0.1': {}
@@ -17229,10 +17253,10 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
 
-  '@mindlib-capacitor/send-intent@8.0.6(@capacitor/core@8.5.3)':
+  '@mindlib-capacitor/send-intent@8.0.6(@capacitor/core@8.6.2)':
     dependencies:
-      '@capacitor/cli': 8.5.3
-      '@capacitor/core': 8.5.3
+      '@capacitor/cli': 8.6.2
+      '@capacitor/core': 8.6.2
     transitivePeerDependencies:
       - supports-color
 
@@ -18312,22 +18336,22 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@rdlabo/capacitor-native-ui@2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.10)':
+  '@rdlabo/capacitor-native-ui@2.0.2(@capacitor/core@8.6.2)(@ionic/core@9.0.10)':
     dependencies:
       '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@9.0.10)
     optionalDependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
       '@ionic/core': 9.0.10
 
-  '@rdlabo/ionic-theme-ios27@2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.10)':
+  '@rdlabo/ionic-theme-ios27@2.0.2(@capacitor/core@8.6.2)(@ionic/core@9.0.10)':
     dependencies:
       '@ionic/core': 9.0.10
-      '@rdlabo/capacitor-native-ui': 2.0.2(@capacitor/core@8.5.3)(@ionic/core@9.0.10)
+      '@rdlabo/capacitor-native-ui': 2.0.2(@capacitor/core@8.6.2)(@ionic/core@9.0.10)
       '@rdlabo/ionic-theme-utils': 0.1.5(@ionic/core@9.0.10)
       '@stencil/core': 4.45.2
       ionicons: 8.1.0
     optionalDependencies:
-      '@capacitor/core': 8.5.3
+      '@capacitor/core': 8.6.2
 
   '@rdlabo/ionic-theme-md3@9.1.3(@ionic/core@9.0.10)':
     dependencies:
@@ -20156,6 +20180,8 @@ snapshots:
 
   balanced-match@4.0.3: {}
 
+  balanced-match@4.0.4: {}
+
   base32-encode@1.2.0:
     dependencies:
       to-data-view: 1.1.0
@@ -20267,13 +20293,17 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.1.7:
+  brace-expansion@2.1.8:
     dependencies:
       balanced-match: 1.0.2
 
   brace-expansion@5.0.12:
     dependencies:
       balanced-match: 4.0.3
+
+  brace-expansion@5.0.13:
+    dependencies:
+      balanced-match: 4.0.4
 
   braces@3.0.3:
     dependencies:
@@ -20502,7 +20532,7 @@ snapshots:
 
   cli-truncate@6.2.0:
     dependencies:
-      slice-ansi: 10.0.0
+      slice-ansi: 10.0.1
       string-width: 8.3.0
 
   cli-width@3.0.0: {}
@@ -21990,6 +22020,18 @@ snapshots:
       minipass: 7.1.3
       path-scurry: 2.0.2
 
+  glob@13.0.7:
+    dependencies:
+      minimatch: 10.2.6
+      minipass: 7.1.3
+      path-scurry: 2.0.2
+
+  glob@14.0.6:
+    dependencies:
+      minimatch: 11.0.8
+      minipass: 7.1.3
+      path-scurry: 3.0.0
+
   glob@7.2.3:
     dependencies:
       fs.realpath: 1.0.0
@@ -23228,13 +23270,18 @@ snapshots:
     dependencies:
       brace-expansion: 5.0.12
 
+  minimatch@11.0.8:
+    dependencies:
+      '@isaacs/nonrecursive-glob-match': 1.1.0
+      brace-expansion: 5.0.13
+
   minimatch@3.1.5:
     dependencies:
       brace-expansion: 1.1.21
 
   minimatch@5.1.9:
     dependencies:
-      brace-expansion: 2.1.7
+      brace-expansion: 2.1.8
 
   minimist-options@4.1.0:
     dependencies:
@@ -23373,7 +23420,7 @@ snapshots:
 
   nanoid@3.3.20: {}
 
-  native-run@2.0.3:
+  native-run@2.1.0:
     dependencies:
       '@ionic/utils-fs': 3.1.7
       '@ionic/utils-terminal': 2.3.5
@@ -23476,7 +23523,7 @@ snapshots:
       nopt: 9.0.0
       proc-log: 6.1.0
       semver: 7.8.5
-      tar: 7.5.22
+      tar: 7.5.23
       tinyglobby: 0.2.17
       undici: 6.29.1
       which: 6.0.1
@@ -23945,6 +23992,11 @@ snapshots:
   path-parse@1.0.7: {}
 
   path-scurry@2.0.2:
+    dependencies:
+      lru-cache: 11.5.3
+      minipass: 7.1.3
+
+  path-scurry@3.0.0:
     dependencies:
       lru-cache: 11.5.3
       minipass: 7.1.3
@@ -24613,9 +24665,9 @@ snapshots:
       glob: 7.2.3
     optional: true
 
-  rimraf@6.1.3:
+  rimraf@6.1.4:
     dependencies:
-      glob: 13.0.6
+      glob: 14.0.6
       package-json-from-dist: 1.0.1
 
   robust-predicates@3.0.3: {}
@@ -25116,7 +25168,7 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-  slice-ansi@10.0.0:
+  slice-ansi@10.0.1:
     dependencies:
       ansi-styles: 7.0.0
       string-width: 8.3.0
@@ -25413,7 +25465,7 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  tar@7.5.22:
+  tar@7.5.23:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -25878,8 +25930,6 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@14.0.3: {}
-
-  uuid@7.0.3: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
@@ -26543,10 +26593,9 @@ snapshots:
       is-wsl: 3.1.1
       powershell-utils: 0.2.1
 
-  xcode@3.0.1:
+  xcode@4.0.0:
     dependencies:
       simple-plist: 1.3.1
-      uuid: 7.0.3
 
   xdg-basedir@5.1.0: {}
 
