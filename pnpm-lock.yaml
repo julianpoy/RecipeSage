@@ -162,11 +162,11 @@ importers:
         specifier: ^11.10.0
         version: 11.10.0(rollup@4.65.0)(webpack@5.112.2)
       '@trpc/client':
-        specifier: ^11.24.0
-        version: 11.24.0(@trpc/server@11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^11.28.0
+        version: 11.28.0(@trpc/server@11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(typescript@6.0.3)
       '@trpc/server':
-        specifier: ^11.24.0
-        version: 11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
+        specifier: ^11.28.0
+        version: 11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
       accept-language:
         specifier: ^3.0.20
         version: 3.0.20
@@ -334,7 +334,7 @@ importers:
         version: 14.3.0
       trpc-to-openapi:
         specifier: ^3.3.0
-        version: 3.3.3(@trpc/server@11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7)
+        version: 3.3.3(@trpc/server@11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7)
       ts-dedent:
         specifier: ^2.2.0
         version: 2.3.0
@@ -5952,14 +5952,14 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@trpc/client@11.24.0':
-    resolution: {integrity: sha512-D9zoHnF/LGL5SpVnDaSO3b9ymF0jgfnawxtU7HkDjVbcmXeWiAGnJT6fD2UTfEmP63+i57VE49RQqRO0Ig7WJg==}
+  '@trpc/client@11.28.0':
+    resolution: {integrity: sha512-uaj/19rUZKcUkQHAw8mBpjHeR5N/SJyCEy1HPPOC0fpgfV7Zz3cXbz/L9Tqhy+0YMlHwb0PuFGEo2krNjV+Sng==}
     peerDependencies:
-      '@trpc/server': 11.24.0
+      '@trpc/server': 11.28.0
       typescript: '>=5.7.2'
 
-  '@trpc/server@11.24.0':
-    resolution: {integrity: sha512-CxpaiIY58ItaLpGxwYTxHHYx5evRAJ4B2Eq94axvg28nwihDgjQIUiLG8T49DZ/t4R2tPHHdeLkF6t0kyjD5YQ==}
+  '@trpc/server@11.28.0':
+    resolution: {integrity: sha512-jj/JplNMKCyNZChmOxYRVnN4vNsS1zvLEnFfPkuvoYmrouKMuFNi4zaIMn1lDx6yyuuru/e5+rjcrBrIGc3p4g==}
     peerDependencies:
       '@types/aws-lambda': '*'
       '@types/express': '*'
@@ -19033,12 +19033,12 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.1.0
 
-  '@trpc/client@11.24.0(@trpc/server@11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(typescript@6.0.3)':
+  '@trpc/client@11.28.0(@trpc/server@11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
-      '@trpc/server': 11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
+      '@trpc/server': 11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
       typescript: 6.0.3
 
-  '@trpc/server@11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)':
+  '@trpc/server@11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
     optionalDependencies:
@@ -25685,9 +25685,9 @@ snapshots:
 
   trough@2.2.0: {}
 
-  trpc-to-openapi@3.3.3(@trpc/server@11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7):
+  trpc-to-openapi@3.3.3(@trpc/server@11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7):
     dependencies:
-      '@trpc/server': 11.24.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
+      '@trpc/server': 11.28.0(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3)
       co-body: 6.2.0
       h3: 1.15.11
       openapi3-ts: 4.6.2
