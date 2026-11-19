@@ -63,7 +63,7 @@
     "@capawesome/capacitor-file-picker": "^8.0.4",
     "@capgo/capacitor-native-navigation": "^8.14.0",
     "@capgo/native-purchases": "^8.7.0",
-    "@erkamyaman/capacitor-foldable": "^8.4.1",
+    "@erkamyaman/capacitor-foldable": "^8.5.1",
     "@fanoutio/grip": "^4.4.0",
     "@fanoutio/serve-grip": "^4.2.0",
     "@google-cloud/vision": "^6.2.0",
