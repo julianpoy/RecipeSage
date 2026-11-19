@@ -96,8 +96,8 @@ importers:
         specifier: ^8.7.0
         version: 8.9.6(@capacitor/core@8.6.2)
       '@erkamyaman/capacitor-foldable':
-        specifier: ^8.4.1
-        version: 8.4.1(@capacitor/core@8.6.2)
+        specifier: ^8.5.1
+        version: 8.5.1(@capacitor/core@8.6.2)
       '@fanoutio/grip':
         specifier: ^4.4.0
         version: 4.4.0
@@ -2630,8 +2630,8 @@ packages:
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
 
-  '@erkamyaman/capacitor-foldable@8.4.1':
-    resolution: {integrity: sha512-mFJCVeqDFx9V0L/zlGA+eVSVqqb4tcpf9etDlw6bNRk8NwWtg5KmH9gj+2lJ737nU4wfhpzM263wVMfFc91nag==}
+  '@erkamyaman/capacitor-foldable@8.5.1':
+    resolution: {integrity: sha512-WDEjkj5S4HzJu5sarBz4LRA2M75vMma7mijE+M7HtlRYWcM5dGNkZD4QacyA5HSbOvgrNn32mwpUHQicVnoOlg==}
     peerDependencies:
       '@capacitor/core': ^8.0.0
 
@@ -16068,7 +16068,7 @@ snapshots:
       tslib: 2.9.1
     optional: true
 
-  '@erkamyaman/capacitor-foldable@8.4.1(@capacitor/core@8.6.2)':
+  '@erkamyaman/capacitor-foldable@8.5.1(@capacitor/core@8.6.2)':
     dependencies:
       '@capacitor/core': 8.6.2
 
