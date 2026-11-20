@@ -2563,15 +2563,15 @@
     "pages.share.byText.yield": "Ergibt: {{yield}}",
     "pages.share.byText.imageStep": "[Bild]",
     "pages.cookbook.field.includePageNumbers": "Seitenzahlen einschließen",
-    "pages.downloadAndInstall.ios.description": "Installieren Sie die RecipeSage-App aus dem App Store.",
-    "components.selectIngredients.editIngredient.placeholder": "Zutat...",
+    "pages.downloadAndInstall.ios.description": "Installiere die RecipeSage-App aus dem App Store.",
+    "components.selectIngredients.editIngredient.placeholder": "Zutat …",
     "components.selectIngredients.edit": "{{ingredient}} bearbeiten",
     "components.selectIngredients.editIngredient.header": "Zutat bearbeiten",
-    "components.selectIngredients.editIngredient.message": "Dadurch wird nur geändert, was zu Ihrer Einkaufsliste hinzugefügt wird. Ihr Rezept bleibt unverändert.",
+    "components.selectIngredients.editIngredient.message": "Dadurch wird nur geändert, was zu deiner Einkaufsliste hinzugefügt wird. Das Rezept bleibt unverändert.",
     "pages.downloadAndInstall.ios.install": "Aus dem App Store installieren",
     "pages.downloadAndInstall.storeTrademarks": "Apple und das Apple-Logo sind Marken von Apple Inc. Google Play und das Google-Play-Logo sind Marken von Google LLC.",
-    "pages.contact.intro": "Bei Problemen, Fehlern oder Funktionsvorschlägen können Sie mich auf folgende Arten erreichen:",
+    "pages.contact.intro": "Bei Problemen, Bugs oder Funktionsvorschlägen kannst du mich so erreichen:",
     "pages.contact.discordOption": "Discord (bevorzugt):",
-    "pages.contact.githubOption": "GitHub",
-    "pages.contact.emailOption": "E-Mail"
+    "pages.contact.githubOption": "GitHub:",
+    "pages.contact.emailOption": "E‑Mail:"
 }
