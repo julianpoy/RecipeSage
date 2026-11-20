@@ -65,7 +65,7 @@
     "@capgo/native-purchases": "^8.7.0",
     "@erkamyaman/capacitor-foldable": "^8.5.1",
     "@fanoutio/grip": "^4.4.0",
-    "@fanoutio/serve-grip": "^4.2.0",
+    "@fanoutio/serve-grip": "^4.3.0",
     "@google-cloud/vision": "^6.2.0",
     "@googleapis/androidpublisher": "^42.2.0",
     "@ionic/angular": "^9.0.11",

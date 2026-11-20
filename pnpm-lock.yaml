@@ -102,8 +102,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.0
       '@fanoutio/serve-grip':
-        specifier: ^4.2.0
-        version: 4.2.0(hono@4.13.13)
+        specifier: ^4.3.0
+        version: 4.3.0(hono@4.13.13)
       '@google-cloud/vision':
         specifier: ^6.2.0
         version: 6.2.0
@@ -2867,10 +2867,10 @@ packages:
     resolution: {integrity: sha512-AeW0oVRfeugbuXP4o5fSBmOh2vbaMk6XyjNjidL6amsiirtChHOYtN6YVRXYbSFOU1ntniZt9DE8bs2gM3I4kg==}
     engines: {node: '>= 16'}
 
-  '@fanoutio/serve-grip@4.2.0':
-    resolution: {integrity: sha512-kMrEDGywfUBRE5F0eE/xyJRyaSzc9h0FfDWyt2MGQlGOWNDGKTkhGnDaoJ8SNOe+g+7GLEs/DwloiKzDiBkbmg==}
+  '@fanoutio/serve-grip@4.3.0':
+    resolution: {integrity: sha512-+LZLZP42y4D0T0kni34sFr3FVgVv1Szb/iphJ7PdSLqJiyAE5japYb4Lt95KmYVv+kmiYjQ7ACn4XUbRtzAs4w==}
     peerDependencies:
-      '@fastly/js-compute': ^3.0.0
+      '@fastly/js-compute': ^3.0.0 || ^4.0.0
       hono: ^4.0.0
     peerDependenciesMeta:
       '@fastly/js-compute':
@@ -16389,7 +16389,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fanoutio/serve-grip@4.2.0(hono@4.13.13)':
+  '@fanoutio/serve-grip@4.3.0(hono@4.13.13)':
     dependencies:
       '@fanoutio/grip': 4.4.0
       callable-instance: 2.0.0
