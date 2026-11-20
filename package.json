@@ -94,7 +94,7 @@
     "body-parser": "~2.4.0",
     "bullmq": "^6.5.2",
     "cheerio": "^1.1.2",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "compression": "^1.8.2",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.48.0",
