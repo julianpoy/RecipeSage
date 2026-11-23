@@ -34,9 +34,9 @@
     ]
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^4.0.105",
-    "@ai-sdk/google": "^4.0.121",
-    "@ai-sdk/openai": "^4.0.118",
+    "@ai-sdk/anthropic": "^4.0.106",
+    "@ai-sdk/google": "^4.0.122",
+    "@ai-sdk/openai": "^4.0.121",
     "@angular/common": "22.2.6",
     "@angular/core": "22.2.6",
     "@angular/forms": "22.2.6",
@@ -88,7 +88,7 @@
     "@trpc/client": "^11.28.2",
     "@trpc/server": "^11.28.2",
     "accept-language": "^3.0.20",
-    "ai": "^7.0.173",
+    "ai": "^7.0.176",
     "apple-signin-auth": "^2.1.0",
     "axios": "^1.20.0",
     "body-parser": "~2.4.0",
