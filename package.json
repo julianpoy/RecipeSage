@@ -88,7 +88,7 @@
     "@trpc/client": "^11.29.4",
     "@trpc/server": "^11.29.4",
     "accept-language": "^3.0.20",
-    "ai": "^7.0.176",
+    "ai": "^7.0.177",
     "apple-signin-auth": "^2.1.0",
     "axios": "^1.20.0",
     "body-parser": "~2.4.0",
