@@ -1902,6 +1902,7 @@
   "pages.settings.startPage.manageLabels": "Manage Labels",
   "pages.settings.startPage.mealPlans": "Meal Plans",
   "pages.settings.startPage.shoppingLists": "Shopping Lists",
+  "pages.settings.startPage.lastOpenedPage": "Last Opened Page",
   "pages.settings.theme": "Theme",
   "pages.settings.theme.default": "System Default",
   "pages.settings.theme.light": "Light",
