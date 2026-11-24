@@ -130,6 +130,9 @@ export class CookPage {
     this.scale = this.recipeCompletionTrackerService.getRecipeScale(
       this.recipeId,
     );
+    this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
+      this.recipeId,
+    );
   }
 
   ionViewWillEnter() {
@@ -299,6 +302,10 @@ export class CookPage {
     }
     if (data.unitSystem) {
       this.unitSystem = data.unitSystem;
+      this.recipeCompletionTrackerService.setRecipeUnitSystem(
+        this.recipeId,
+        this.unitSystem,
+      );
     }
     this.applyScale();
   }
