@@ -24,13 +24,12 @@ export const appRoutes: Routes = [
 
       const startPage =
         inject(PreferencesService).preferences[GlobalPreferenceKey.StartPage];
-
-      if (startPage === StartPageOptions.LastOpenedPage) {
-        const lastRoute = inject(LastRouteService).get();
-        if (lastRoute) return inject(Router).parseUrl(lastRoute);
-      }
-
       switch (startPage) {
+        case StartPageOptions.LastOpenedPage: {
+          const lastRoute = inject(LastRouteService).get();
+          if (lastRoute) return inject(Router).parseUrl(lastRoute);
+          return RouteMap.HomePage.getPath("main");
+        }
         case StartPageOptions.ManageLabels:
           return RouteMap.LabelsPage.getPath();
         case StartPageOptions.MealPlans:

@@ -267,6 +267,9 @@ export class DiscoverRecipePage {
       this.recipeCompletionTrackerService.getRecipeScale(
         this.discoverRecipeId,
       ) || "1";
+    this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
+      this.discoverRecipeId,
+    );
   }
 
   ionViewWillEnter() {
@@ -404,6 +407,10 @@ export class DiscoverRecipePage {
     }
     if (data.unitSystem) {
       this.unitSystem = data.unitSystem;
+      this.recipeCompletionTrackerService.setRecipeUnitSystem(
+        this.discoverRecipeId,
+        this.unitSystem,
+      );
     }
     this.applyScale();
   }

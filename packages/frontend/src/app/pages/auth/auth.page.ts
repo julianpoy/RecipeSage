@@ -28,6 +28,7 @@ import { SignInWithAppleComponent } from "../../components/sign-in-with-apple/si
 import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
 import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
 import { WebsocketService } from "../../services/websocket.service";
+import { LastRouteService } from "../../services/last-route.service";
 import { TextInputComponent } from "../../components/forms/text-input/text-input.component";
 import {
   IonHeader,
@@ -78,6 +79,7 @@ export class AuthPage {
   private messagingService = inject(MessagingService);
   private swCommunicationService = inject(SwCommunicationService);
   private websocketService = inject(WebsocketService);
+  private lastRouteService = inject(LastRouteService);
   private alertCtrl = inject(AlertController);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -233,6 +235,7 @@ export class AuthPage {
     const lastUserId = await appIdbStorageManager.getLastSessionUserId();
     if (lastUserId !== response.userId) {
       await appIdbStorageManager.deleteAllData();
+      this.lastRouteService.clear();
     }
     await appIdbStorageManager.setSession(response);
     this.swCommunicationService.triggerFullCacheSync();
@@ -277,6 +280,7 @@ export class AuthPage {
     const lastUserId = await appIdbStorageManager.getLastSessionUserId();
     if (lastUserId !== session.userId) {
       await appIdbStorageManager.deleteAllData();
+      this.lastRouteService.clear();
     }
     await appIdbStorageManager.setSession(session);
     this.swCommunicationService.triggerFullCacheSync();

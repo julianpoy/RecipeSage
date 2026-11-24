@@ -7,17 +7,12 @@ const COMPLETION_TRACKER_LOCALSTORAGE_KEY = "completionTracker";
 const COMPLETION_TRACKER_LOCALSTORAGE_VERSION = "1";
 const COMPLETION_TRACKER_EXPIRY_DAYS = 3;
 
-const UNIT_SYSTEMS: UnitSystem[] = ["original", "metric", "imperial"];
-
-const isUnitSystem = (value: unknown): value is UnitSystem =>
-  UNIT_SYSTEMS.some((unitSystem) => unitSystem === value);
-
 @Injectable({
   providedIn: "root",
 })
 export class RecipeCompletionTrackerService {
   scaleByRecipeId: { [key: string]: string } = {};
-  unitSystemByRecipeId: { [key: string]: string } = {};
+  unitSystemByRecipeId: { [key: string]: UnitSystem } = {};
   ingredientCompletionByRecipeId: { [key: string]: number[] } = {};
   instructionCompletionByRecipeId: { [key: string]: number[] } = {};
   lastTouchedByRecipeId: { [key: string]: number } = {};
@@ -99,8 +94,7 @@ export class RecipeCompletionTrackerService {
   }
 
   getRecipeUnitSystem(recipeId: string): UnitSystem {
-    const unitSystem = this.unitSystemByRecipeId[recipeId];
-    return isUnitSystem(unitSystem) ? unitSystem : "original";
+    return this.unitSystemByRecipeId[recipeId] || "original";
   }
 
   toggleIngredientComplete(recipeId: string, idx: number): void {
