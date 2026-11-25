@@ -27,7 +27,6 @@ x-common-env: &common-env
   GROCERY_CATEGORIZER_URL: http://grocery-categorizer:8000/
   OTEL_LOG_LEVEL: info
   FIREBASE_CREDENTIALS_PATH: /app/.credentials/firebase.json
-  NX_DAEMON: "true"
   API_PUBLIC_BASE_URL: https://example.com
 
 services:
