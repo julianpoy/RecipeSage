@@ -263,13 +263,6 @@ export class DiscoverRecipePage {
       throw new Error("No discoverRecipeId was provided");
     }
     this.discoverRecipeId = discoverRecipeId;
-    this.scale =
-      this.recipeCompletionTrackerService.getRecipeScale(
-        this.discoverRecipeId,
-      ) || "1";
-    this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
-      this.discoverRecipeId,
-    );
   }
 
   ionViewWillEnter() {
@@ -277,6 +270,12 @@ export class DiscoverRecipePage {
     if (snapshotId && snapshotId !== this.discoverRecipeId) {
       this.applyRouteParams();
     }
+    this.scale = this.recipeCompletionTrackerService.getRecipeScale(
+      this.discoverRecipeId,
+    );
+    this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
+      this.discoverRecipeId,
+    );
     this.recipe = undefined;
     this.ingredients = undefined;
     this.instructions = undefined;

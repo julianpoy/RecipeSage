@@ -127,15 +127,15 @@ export class CookPage {
       throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
+  }
+
+  ionViewWillEnter() {
     this.scale = this.recipeCompletionTrackerService.getRecipeScale(
       this.recipeId,
     );
     this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
       this.recipeId,
     );
-  }
-
-  ionViewWillEnter() {
     this.recipe = null;
     this.ingredients = undefined;
     this.instructions = undefined;

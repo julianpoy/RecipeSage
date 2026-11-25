@@ -15,7 +15,12 @@ const EXCLUDED_PATH_PREFIXES = [
   RouteMap.ContributeThankYouPage.getPath(),
 ];
 
-const EXCLUDED_QUERY_PARAMS = ["token"];
+const EXCLUDED_QUERY_PARAMS = [
+  "token",
+  "autofill-url",
+  "sharetarget-text",
+  "sharetarget-title",
+];
 
 @Injectable({
   providedIn: "root",

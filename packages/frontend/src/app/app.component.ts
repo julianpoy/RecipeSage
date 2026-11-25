@@ -520,7 +520,7 @@ export class AppComponent {
       this.updateIsLoggedIn();
       this.updateNavList();
 
-      const currentPath = event.url.split("?")[0];
+      const currentPath = event.urlAfterRedirects.split("?")[0];
       this.inCookMode = currentPath.endsWith("/cook");
       this.inConversation =
         currentPath === RouteMap.AssistantPage.getPath() ||
