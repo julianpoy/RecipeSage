@@ -52,6 +52,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
+      - /app/packages/frontend/.angular
     command: pnpm exec nx start frontend
     environment:
       - ENVIRONMENT=development
@@ -68,6 +69,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
+      - /app/packages/www/.astro
     command: pnpm exec nx dev www -- --ignore-lock
     environment:
       - ENVIRONMENT=development
