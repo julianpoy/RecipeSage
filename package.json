@@ -4,7 +4,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "scripts": {
     "prepare": "husky",
-    "postinstall": "[ -f 'packages/prisma/src/prisma/schema.prisma' ] && prisma generate || echo 'Prisma schema does not exist'"
+    "postinstall": "[ ! -f 'packages/prisma/src/prisma/schema.prisma' ] && echo 'Prisma schema does not exist' || prisma generate"
   },
   "private": true,
   "packageManager": "pnpm@10.33.1",
