@@ -142,6 +142,28 @@ describe("GET /print/shoppingList/:shoppingListId", () => {
     expect(locals.categoryTitles).toEqual(["Uncategorized"]);
   });
 
+  it("does not print completed items", async () => {
+    shoppingListFindUniqueMock.mockResolvedValue({
+      id: "list-id",
+      title: "Groceries",
+      categoryOrder: null,
+      items: [
+        item("Apples", "::produce"),
+        { ...item("Milk", "::dairy"), completed: true },
+      ],
+    });
+
+    const app = await buildApp();
+    const response = await request(app)
+      .get("/print/shoppingList/list-id")
+      .query({ version: "1" })
+      .set("Authorization", "Bearer token");
+
+    expect(response.status).toBe(200);
+    const locals = renderedLocals[0];
+    expect(locals.groupTitles).toEqual(["Apples"]);
+  });
+
   it("returns not found when the caller has no access", async () => {
     shoppingListFindUniqueMock.mockResolvedValue({
       id: "list-id",
