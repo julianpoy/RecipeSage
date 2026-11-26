@@ -39,6 +39,12 @@ export interface EncryptedOutput {
   iv: string; // base64
   key: string; // base64 (RSA-wrapped AES key)
   ct: string; // base64 (ciphertext || tag)
+  kid?: number;
+}
+
+export interface RSAPublicKey {
+  id: number;
+  pem: string;
 }
 
 /** Import RSA public key (SPKI PEM, RSA-OAEP SHA-256) */
@@ -65,9 +71,9 @@ async function genAesKey(): Promise<CryptoKey> {
  */
 export async function encryptBlobWithRSAKey(
   u8arr: Uint8Array<ArrayBufferLike>,
-  rsaPublicKeyPem: string,
+  rsaPublicKey: RSAPublicKey,
 ): Promise<EncryptedOutput> {
-  const pubKey = await importRsaPublicKey(rsaPublicKeyPem);
+  const pubKey = await importRsaPublicKey(rsaPublicKey.pem);
   const aesKey = await genAesKey();
 
   // Random 12-byte IV for GCM
@@ -95,6 +101,7 @@ export async function encryptBlobWithRSAKey(
     iv: ab2b64(initializationVector.buffer),
     key: ab2b64(wrappedKey),
     ct: ab2b64(ciphertext),
+    kid: rsaPublicKey.id,
   };
 }
 
@@ -103,9 +110,9 @@ export async function encryptBlobWithRSAKey(
  */
 export async function encryptUtf8WithRSAKey(
   utf8String: string,
-  rsaPublicKeyPem: string,
+  rsaPublicKey: RSAPublicKey,
 ): Promise<EncryptedOutput> {
   const bytes = new TextEncoder().encode(utf8String);
 
-  return encryptBlobWithRSAKey(bytes, rsaPublicKeyPem);
+  return encryptBlobWithRSAKey(bytes, rsaPublicKey);
 }
