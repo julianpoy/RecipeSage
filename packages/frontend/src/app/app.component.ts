@@ -61,6 +61,7 @@ import { VersionCheckService } from "./services/versioncheck.service";
 import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DeepLinkService } from "./services/deep-link.service";
 import { ShareReceiverService } from "./services/share-receiver.service";
+import { LastRouteService } from "./services/last-route.service";
 import { DebugStoreService } from "./services/debugStore.service";
 import { setLocalDbUpgradeMessages } from "./utils/localDb/localDbUpgradeMessages";
 import {
@@ -150,6 +151,7 @@ export class AppComponent {
   private nativePrintTutorialService = inject(NativePrintTutorialService);
   private deepLinkService = inject(DeepLinkService);
   private shareReceiverService = inject(ShareReceiverService);
+  private lastRouteService = inject(LastRouteService);
   debugStoreService = inject(DebugStoreService);
 
   @ViewChild(IonRouterOutlet) private routerOutlet?: IonRouterOutlet;
@@ -501,6 +503,7 @@ export class AppComponent {
     this.deepLinkService.init();
     this.shareReceiverService.init();
     this.nativeTabBarService.init();
+    this.lastRouteService.init();
 
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "visible") return;
@@ -517,7 +520,7 @@ export class AppComponent {
       this.updateIsLoggedIn();
       this.updateNavList();
 
-      const currentPath = event.url.split("?")[0];
+      const currentPath = event.urlAfterRedirects.split("?")[0];
       this.inCookMode = currentPath.endsWith("/cook");
       this.inConversation =
         currentPath === RouteMap.AssistantPage.getPath() ||

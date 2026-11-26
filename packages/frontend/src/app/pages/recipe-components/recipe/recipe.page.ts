@@ -229,8 +229,6 @@ export class RecipePage {
       throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
-    this.scale =
-      this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || "1";
   }
 
   ionViewWillEnter() {
@@ -238,6 +236,13 @@ export class RecipePage {
     if (snapshotRecipeId && snapshotRecipeId !== this.recipeId) {
       this.applyRouteParams();
     }
+
+    this.scale = this.recipeCompletionTrackerService.getRecipeScale(
+      this.recipeId,
+    );
+    this.unitSystem = this.recipeCompletionTrackerService.getRecipeUnitSystem(
+      this.recipeId,
+    );
 
     this.recipe = null;
     this.recipeLinkUrl = "";
@@ -489,6 +494,10 @@ export class RecipePage {
     }
     if (data.unitSystem) {
       this.unitSystem = data.unitSystem;
+      this.recipeCompletionTrackerService.setRecipeUnitSystem(
+        this.recipeId,
+        this.unitSystem,
+      );
     }
     this.applyScale();
   }

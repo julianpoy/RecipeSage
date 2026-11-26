@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 import { deletePropertiesInObjectByReference } from "../utils/deletePropertiesInObjectByReference";
+import type { UnitSystem } from "../modals/scale-recipe/scale-recipe.component";
 
 const COMPLETION_TRACKER_LOCALSTORAGE_KEY = "completionTracker";
 const COMPLETION_TRACKER_LOCALSTORAGE_VERSION = "1";
@@ -11,6 +12,7 @@ const COMPLETION_TRACKER_EXPIRY_DAYS = 3;
 })
 export class RecipeCompletionTrackerService {
   scaleByRecipeId: { [key: string]: string } = {};
+  unitSystemByRecipeId: { [key: string]: UnitSystem } = {};
   ingredientCompletionByRecipeId: { [key: string]: number[] } = {};
   instructionCompletionByRecipeId: { [key: string]: number[] } = {};
   lastTouchedByRecipeId: { [key: string]: number } = {};
@@ -24,6 +26,7 @@ export class RecipeCompletionTrackerService {
         const parsed = JSON.parse(savedValue);
 
         this.scaleByRecipeId = parsed.scaleByRecipeId || {};
+        this.unitSystemByRecipeId = parsed.unitSystemByRecipeId || {};
         this.ingredientCompletionByRecipeId =
           parsed.ingredientCompletionByRecipeId || {};
         this.instructionCompletionByRecipeId =
@@ -45,6 +48,7 @@ export class RecipeCompletionTrackerService {
       if (this.lastTouchedByRecipeId[key] < expiryDate) {
         delete this.lastTouchedByRecipeId[key];
         delete this.scaleByRecipeId[key];
+        delete this.unitSystemByRecipeId[key];
         delete this.ingredientCompletionByRecipeId[key];
         delete this.instructionCompletionByRecipeId[key];
       }
@@ -53,6 +57,11 @@ export class RecipeCompletionTrackerService {
     Object.keys(this.scaleByRecipeId).forEach((key) => {
       if (!this.lastTouchedByRecipeId[key]) {
         delete this.scaleByRecipeId[key];
+      }
+    });
+    Object.keys(this.unitSystemByRecipeId).forEach((key) => {
+      if (!this.lastTouchedByRecipeId[key]) {
+        delete this.unitSystemByRecipeId[key];
       }
     });
     Object.keys(this.ingredientCompletionByRecipeId).forEach((key) => {
@@ -76,6 +85,16 @@ export class RecipeCompletionTrackerService {
 
   getRecipeScale(recipeId: string): string {
     return this.scaleByRecipeId[recipeId] || "1";
+  }
+
+  setRecipeUnitSystem(recipeId: string, unitSystem: UnitSystem): void {
+    this.unitSystemByRecipeId[recipeId] = unitSystem;
+    this.lastTouchedByRecipeId[recipeId] = Date.now();
+    this.save();
+  }
+
+  getRecipeUnitSystem(recipeId: string): UnitSystem {
+    return this.unitSystemByRecipeId[recipeId] || "original";
   }
 
   toggleIngredientComplete(recipeId: string, idx: number): void {
@@ -115,6 +134,7 @@ export class RecipeCompletionTrackerService {
       COMPLETION_TRACKER_LOCALSTORAGE_KEY,
       JSON.stringify({
         scaleByRecipeId: this.scaleByRecipeId,
+        unitSystemByRecipeId: this.unitSystemByRecipeId,
         ingredientCompletionByRecipeId: this.ingredientCompletionByRecipeId,
         instructionCompletionByRecipeId: this.instructionCompletionByRecipeId,
         lastTouchedByRecipeId: this.lastTouchedByRecipeId,
@@ -125,6 +145,7 @@ export class RecipeCompletionTrackerService {
 
   reset() {
     deletePropertiesInObjectByReference(this.scaleByRecipeId);
+    deletePropertiesInObjectByReference(this.unitSystemByRecipeId);
     deletePropertiesInObjectByReference(this.ingredientCompletionByRecipeId);
     deletePropertiesInObjectByReference(this.instructionCompletionByRecipeId);
     deletePropertiesInObjectByReference(this.lastTouchedByRecipeId);

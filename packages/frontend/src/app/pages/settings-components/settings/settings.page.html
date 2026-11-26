@@ -131,6 +131,9 @@
             <ion-select-option [value]="startPageOptions.ShoppingLists">
               {{ "pages.settings.startPage.shoppingLists" | translate }}
             </ion-select-option>
+            <ion-select-option [value]="startPageOptions.LastOpenedPage">
+              {{ "pages.settings.startPage.lastOpenedPage" | translate }}
+            </ion-select-option>
           </ion-select>
         </ion-item>
         @if (isLoggedIn) {

@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { Routes } from "@angular/router";
+import { Router, Routes } from "@angular/router";
 import { Capacitor } from "@capacitor/core";
 import { GlobalPreferenceKey, StartPageOptions } from "@recipesage/util/shared";
 
@@ -7,6 +7,7 @@ import { IS_DESKTOP } from "../environments/environment";
 import { getIsElectron } from "./utils/electron";
 import { AuthType, RouteMap, UtilService } from "./services/util.service";
 import { PreferencesService } from "./services/preferences.service";
+import { LastRouteService } from "./services/last-route.service";
 import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.service";
 
 export const appRoutes: Routes = [
@@ -24,6 +25,11 @@ export const appRoutes: Routes = [
       const startPage =
         inject(PreferencesService).preferences[GlobalPreferenceKey.StartPage];
       switch (startPage) {
+        case StartPageOptions.LastOpenedPage: {
+          const lastRoute = inject(LastRouteService).get();
+          if (lastRoute) return inject(Router).parseUrl(lastRoute);
+          return RouteMap.HomePage.getPath("main");
+        }
         case StartPageOptions.ManageLabels:
           return RouteMap.LabelsPage.getPath();
         case StartPageOptions.MealPlans:

@@ -109,6 +109,7 @@ export enum StartPageOptions {
   ManageLabels = "manageLabels",
   MealPlans = "mealPlans",
   ShoppingLists = "shoppingLists",
+  LastOpenedPage = "lastOpenedPage",
 }
 
 export enum ShoppingListSortOptions {
