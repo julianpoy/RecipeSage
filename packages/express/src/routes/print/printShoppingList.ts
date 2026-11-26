@@ -69,7 +69,7 @@ export const printShoppingListHandler = defineHandler(
     const language = getRequestLanguage(req);
 
     const itemSummaries = getShoppingListItemGroupTitles(
-      shoppingList.items,
+      shoppingList.items.filter((item) => !item.completed),
       language,
     ) satisfies ShoppingListItemSummary[];
     const categoryTitlesToi18n: Record<string, string> = Object.fromEntries(
