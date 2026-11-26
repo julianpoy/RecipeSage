@@ -19,6 +19,7 @@
       type="overlay"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0,
+        timersToolbarOpen: timerService.timers.length > 0,
       }"
     >
       <ion-header>
@@ -77,11 +78,20 @@
       [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0,
+        timersToolbarOpen: timerService.timers.length > 0,
       }"
     ></ion-router-outlet>
 
     @if (cookingToolbarService.pinnedRecipes.length > 0) {
       <cooking-toolbar></cooking-toolbar>
+    }
+
+    @if (timerService.timers.length > 0) {
+      <timers-toolbar
+        [class.aboveCookingToolbar]="
+          cookingToolbarService.pinnedRecipes.length > 0
+        "
+      ></timers-toolbar>
     }
   </ion-split-pane>
 </ion-app>

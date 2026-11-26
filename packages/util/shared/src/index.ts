@@ -5,6 +5,8 @@ export * from "./capitalizeEachWord";
 export * from "./Capabilities";
 export * from "./SubscriptionPlatform";
 export * from "./parsers";
+export * from "./findTimersInText";
+export * from "./wrapTimersInHtml";
 export * from "./decimalNotation";
 export * from "./handles";
 export * from "./units";

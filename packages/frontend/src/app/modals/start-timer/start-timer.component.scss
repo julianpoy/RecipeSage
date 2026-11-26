@@ -1,0 +1,20 @@
+ion-title.ios {
+  position: static;
+  padding-inline: 20px 8px;
+}
+
+ion-title.md {
+  font-size: 1rem;
+}
+
+ion-note.prompt {
+  margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+ion-input[type="number"] {
+  text-align: end;
+}

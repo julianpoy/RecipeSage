@@ -31,6 +31,9 @@ import {
   parseNotes,
 } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
+import { TimerService } from "../../../services/timer.service";
+import { getClickedInstructionTimer } from "../../../utils/getClickedInstructionTimer";
+import { StartTimerComponent } from "../../../modals/start-timer/start-timer.component";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { AddRecipeToMealPlanModalPage } from "../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page";
@@ -139,6 +142,7 @@ export class RecipePage {
   private translate = inject(TranslateService);
   private serverActionsService = inject(ServerActionsService);
   private titleService = inject(Title);
+  timerService = inject(TimerService);
 
   defaultBackHref: string = RouteMap.HomePage.getPath("main");
 
@@ -403,6 +407,8 @@ export class RecipePage {
         return wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
       case "enterCookMode":
         return this.enterCookMode();
+      case "newTimer":
+        return this.openNewTimer();
       case "addToShoppingList":
         return this.addRecipeToShoppingList();
       case "addToMealPlan":
@@ -435,13 +441,44 @@ export class RecipePage {
     }
   }
 
-  instructionClicked(_: Event, instruction: ParsedInstruction, idx: number) {
+  async instructionClicked(
+    event: Event,
+    instruction: ParsedInstruction,
+    idx: number,
+  ) {
     if (instruction.isHeader) return;
+
+    const timer = getClickedInstructionTimer(event, instruction);
+    if (timer) {
+      const modal = await this.modalCtrl.create({
+        component: StartTimerComponent,
+        componentProps: {
+          durationSeconds: timer.seconds,
+          step: instruction.count,
+          recipeTitle: this.recipe?.title,
+        },
+        cssClass: "startTimerModal",
+      });
+      modal.present();
+      return;
+    }
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.recipeId,
       idx,
     );
+  }
+
+  async openNewTimer() {
+    const modal = await this.modalCtrl.create({
+      component: StartTimerComponent,
+      componentProps: {
+        durationSeconds: 0,
+        recipeTitle: this.recipe?.title,
+      },
+      cssClass: "startTimerModal",
+    });
+    modal.present();
   }
 
   ingredientClicked(_: Event, ingredient: ParsedIngredient, idx: number) {
@@ -529,7 +566,12 @@ export class RecipePage {
     this.instructions = parseInstructions(
       this.recipe.instructions,
       this.scale,
-      { targetSystem, decimalNotationMode, images: this.getInlineImageRefs() },
+      {
+        targetSystem,
+        decimalNotationMode,
+        images: this.getInlineImageRefs(),
+        detectTimers: this.timerService.isSupported,
+      },
     );
     if (this.recipe.notes && this.recipe.notes.length > 0) {
       this.notes = parseNotes(this.recipe.notes, this.scale, {

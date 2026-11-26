@@ -18,6 +18,10 @@
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		6645C4EBC5EDB2F67D6D3D47 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E5C48C3C12ED52A811C9A643 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
+		A7E1000000000000000000A2 /* TimerAlarmPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E1000000000000000000A1 /* TimerAlarmPlugin.swift */; };
+		A7E1000000000000000000B2 /* AppBridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E1000000000000000000B1 /* AppBridgeViewController.swift */; };
+		A7E1000000000000000000C2 /* timer_alarm.wav in Resources */ = {isa = PBXBuildFile; fileRef = A7E1000000000000000000C1 /* timer_alarm.wav */; };
+		A7E1000000000000000000D2 /* AlarmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E1000000000000000000D1 /* AlarmKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		AABB00000000000000000002 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AABB00000000000000000001 /* GoogleService-Info.plist */; };
 		AABB00000000000000000004 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AABB00000000000000000003 /* PrivacyInfo.xcprivacy */; };
 		C33882A2D00991BC784660D7 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DBC6DAC96722A6048C4A11 /* ShareViewController.swift */; };
@@ -60,6 +64,10 @@
 		69DBC6DAC96722A6048C4A11 /* ShareViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		90F3BF1AA39F412561249B30 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		9582B6822FE993A50072D4E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		A7E1000000000000000000A1 /* TimerAlarmPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerAlarmPlugin.swift; sourceTree = "<group>"; };
+		A7E1000000000000000000B1 /* AppBridgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBridgeViewController.swift; sourceTree = "<group>"; };
+		A7E1000000000000000000C1 /* timer_alarm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = timer_alarm.wav; sourceTree = "<group>"; };
+		A7E1000000000000000000D1 /* AlarmKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlarmKit.framework; path = System/Library/Frameworks/AlarmKit.framework; sourceTree = SDKROOT; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
 		AABB00000000000000000001 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AABB00000000000000000003 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -74,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */,
+				A7E1000000000000000000D2 /* AlarmKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				90F3BF1AA39F412561249B30 /* Foundation.framework */,
+				A7E1000000000000000000D1 /* AlarmKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -128,6 +138,9 @@
 			isa = PBXGroup;
 			children = (
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
+				A7E1000000000000000000B1 /* AppBridgeViewController.swift */,
+				A7E1000000000000000000A1 /* TimerAlarmPlugin.swift */,
+				A7E1000000000000000000C1 /* timer_alarm.wav */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
@@ -246,6 +259,7 @@
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				AABB00000000000000000002 /* GoogleService-Info.plist in Resources */,
 				AABB00000000000000000004 /* PrivacyInfo.xcprivacy in Resources */,
+				A7E1000000000000000000C2 /* timer_alarm.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +287,8 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
+				A7E1000000000000000000A2 /* TimerAlarmPlugin.swift in Sources */,
+				A7E1000000000000000000B2 /* AppBridgeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

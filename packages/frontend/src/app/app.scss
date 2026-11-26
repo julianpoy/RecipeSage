@@ -25,6 +25,17 @@ ion-menu.cookingToolbarOpen {
   height: calc(100% - 60px - var(--rs-cooking-toolbar-bottom-space, 0px));
 }
 
+ion-router-outlet.timersToolbarOpen,
+ion-menu.timersToolbarOpen {
+  --ion-safe-area-bottom: 0px;
+  height: calc(100% - 52px - var(--rs-cooking-toolbar-bottom-space, 0px));
+}
+
+ion-router-outlet.cookingToolbarOpen.timersToolbarOpen,
+ion-menu.cookingToolbarOpen.timersToolbarOpen {
+  height: calc(100% - 112px - var(--rs-cooking-toolbar-bottom-space, 0px));
+}
+
 .ion-checkbox-label,
 .ion-radio-label {
   line-height: 24px;
@@ -433,14 +444,16 @@ ion-button.md {
   }
 }
 
-.scaleRecipeModal {
+.scaleRecipeModal,
+.startTimerModal {
   --width: min(400px, calc(100% - 32px));
   --max-width: 400px;
   --max-height: min(640px, calc(100% - 64px));
   --border-radius: 28px;
 }
 
-ion-modal.modal-default.show-modal ~ ion-modal.modal-default.scaleRecipeModal {
+ion-modal.modal-default.show-modal ~ ion-modal.modal-default.scaleRecipeModal,
+ion-modal.modal-default.show-modal ~ ion-modal.modal-default.startTimerModal {
   --backdrop-opacity: var(--ion-backdrop-opacity, 0.4);
   --box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
 }

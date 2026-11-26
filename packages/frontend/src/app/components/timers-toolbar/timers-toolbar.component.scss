@@ -1,0 +1,76 @@
+.container {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  box-sizing: border-box;
+  height: calc(52px + var(--rs-cooking-toolbar-bottom-space, 0px));
+
+  padding: 0 calc(10px + var(--ion-safe-area-right, 0px))
+    var(--rs-cooking-toolbar-bottom-space, 0px)
+    calc(10px + var(--ion-safe-area-left, 0px));
+
+  display: flex;
+  align-items: center;
+
+  background: var(--ion-background-color);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+:host(.aboveCookingToolbar) .container {
+  bottom: calc(60px + var(--rs-cooking-toolbar-bottom-space, 0px));
+  height: 52px;
+  padding-bottom: 0;
+}
+
+.timer-icon {
+  flex-shrink: 0;
+  width: 40px;
+  font-size: 25px;
+  color: var(--ion-text-color);
+}
+
+.item-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  max-width: 220px;
+  padding-inline-start: 12px;
+
+  border-radius: 20px;
+  background: var(--ion-color-light);
+  color: var(--ion-color-light-contrast);
+
+  ion-button {
+    color: inherit;
+  }
+}
+
+.item.finished {
+  background: var(--ion-color-danger);
+  color: var(--ion-color-danger-contrast);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+}
+
+.remaining {
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}

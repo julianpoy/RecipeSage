@@ -371,6 +371,7 @@
   "pages.recipeDetailsPopover.makeACopy": "Make a Copy",
   "pages.recipeDetailsPopover.setLastMadeToday": "Mark as Made Today",
   "pages.recipeDetailsPopover.enterCookMode": "Enter Cook Mode",
+  "pages.recipeDetailsPopover.newTimer": "New Timer",
   "pages.recipeDetailsPopover.dangerZone": "Danger Zone",
   "pages.recipeDetailsPopover.delete": "Delete Recipe",
 
@@ -381,6 +382,7 @@
   "pages.app.localDbUpgrade.notRefreshed": "The app will not work correctly until it is refreshed",
   "pages.cook.notFound": "This recipe is no longer available. It may have been deleted or is no longer shared with you.",
   "pages.cook.backToRecipes": "Back to my recipes",
+  "pages.cook.newTimer": "New Timer",
 
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
@@ -2332,6 +2334,18 @@
   "pages.shareProfileModal.errorLoadingProfileUrl": "Error loading profile url",
 
   "components.cookingToolbar.clear": "Clear All Pinned Recipes?",
+  "components.timersToolbar.done": "Done",
+  "components.timersToolbar.stop": "Stop Timer",
+  "components.timersToolbar.stopHeader": "Stop This Timer?",
+  "components.startTimer.title": "Start a Timer",
+  "components.startTimer.name": "Name",
+  "components.startTimer.defaultLabel": "Timer",
+  "components.startTimer.stepLabel": "Step {{step}}: {{recipeTitle}}",
+  "components.startTimer.duration": "Time",
+  "components.startTimer.hours": "Hours",
+  "components.startTimer.minutes": "Minutes",
+  "components.startTimer.seconds": "Seconds",
+  "components.startTimer.start": "Start",
 
   "components.rating.label": "Rating: {{rating}} out of 5",
 
@@ -2593,6 +2607,20 @@
 
   "services.versionCheck.outOfDate.header": "App is out of date",
   "services.versionCheck.outOfDate.message": "The cached app version is very old. The app will restart to update.",
+  "services.timer.channelName": "Timers",
+  "services.timer.notificationBody": "Your timer is done.",
+  "services.timer.notificationBodyRecipe": "Your timer for {{recipeTitle}} is done.",
+  "services.timer.notificationsDisabledHeader": "Notifications Are Off",
+  "services.timer.notificationsDisabledMessage": "Your timer is running, but RecipeSage cannot alert you when it is done. To get an alert, turn on notifications for RecipeSage in your phone settings.",
+  "services.timer.exactAlarmHeader": "Your Timer May Be Late",
+  "services.timer.exactAlarmMessage": "Your phone can delay the timer alert by a few minutes. To get the alert on time, allow RecipeSage to set alarms and reminders.",
+  "services.timer.notNow": "Not Now",
+  "services.timer.openSettings": "Open Settings",
+  "services.timer.stop": "Stop",
+  "services.timer.alarmsDisabledHeader": "Alarms Are Off",
+  "services.timer.alarmsDisabledMessage": "Your timer is running, but RecipeSage cannot ring when it is done. To hear your timer, allow alarms for RecipeSage in your phone settings.",
+  "services.timer.silentModeHeader": "Turn Off Silent Mode",
+  "services.timer.silentModeMessage": "Your version of iOS cannot play timer sounds when your phone is in silent mode. To hear your timer, turn off silent mode.",
 
   "errors.offline": "A connectivity error occurred. While offline, you're only able to do read-only actions, and view content if your device has it cached locally.",
   "errors.unexpected": "An unexpected error occurred and the app may not work correctly. Please reload the app and try again. If this continues to occur, please contact me.",

@@ -76,6 +76,15 @@
     </ion-label>
   </ion-item>
 
+  @if (timerService.isSupported) {
+    <ion-item (click)="closeWithAction('newTimer')" button [detail]="false">
+      <ion-icon name="timer-outline" slot="start"></ion-icon>
+      <ion-label>
+        {{ "pages.recipeDetailsPopover.newTimer" | translate }}
+      </ion-label>
+    </ion-item>
+  }
+
   @if (recipe.userId === me?.id && recipe.folder === "inbox") {
     <div>
       <ion-item lines="none">

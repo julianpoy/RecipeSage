@@ -7,6 +7,7 @@ import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(TimerAlarmPlugin.class);
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("google.message_id")) {
