@@ -27,7 +27,6 @@ x-common-env: &common-env
   GROCERY_CATEGORIZER_URL: http://grocery-categorizer:8000/
   OTEL_LOG_LEVEL: info
   FIREBASE_CREDENTIALS_PATH: /app/.credentials/firebase.json
-  NX_DAEMON: "true"
   API_PUBLIC_BASE_URL: https://example.com
 
 services:
@@ -52,6 +51,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
+      - /app/packages/frontend/.angular
     command: pnpm exec nx start frontend
     environment:
       - ENVIRONMENT=development
@@ -68,6 +68,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
+      - /app/packages/www/.astro
     command: pnpm exec nx dev www -- --ignore-lock
     environment:
       - ENVIRONMENT=development

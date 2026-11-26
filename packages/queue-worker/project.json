@@ -33,7 +33,10 @@
       "configurations": {
         "development": {
           "skipTypeCheck": true,
-          "watch": true
+          "watch": true,
+          // In watch mode, generatePackageJson watches package.json through the nx daemon, which starts the daemon even when it is disabled.
+          // The daemon uses CPU while idle (https://github.com/nrwl/nx/issues/37112), so development builds skip it.
+          "generatePackageJson": false
         },
         "production": {}
       }

@@ -123,6 +123,13 @@ Below are some notes for getting setup to contribute code.
 7. Run database migrations `docker compose exec backend pnpm exec prisma migrate dev`
 8. RecipeSage should be running on `localhost` on port `80`
 
+#### Using Nix
+
+If you use Nix, the repo includes a flake with a dev shell that provides the correct versions of Node and corepack, so you can skip installing Node and corepack (steps 1 and 4).
+
+- Run `nix develop` to enter the dev shell, or use [direnv](https://direnv.net/) with [nix-direnv](https://github.com/nix-community/nix-direnv) and run `direnv allow` once to load it automatically when you enter the repo.
+- You'll still need Docker. On NixOS, set `virtualisation.docker.enable = true;` and add your user to the `docker` group.
+
 #### Notes about the repo
 
 1. The repo uses the monorepo management tool [nx](https://nx.dev/nx-api). You'll find things divided up in the `packages` directory.

@@ -1,6 +1,7 @@
 {
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "useDaemonProcess": false,
   "pluginsConfig": {
     "@nx/js": {
       "analyzeSourceFiles": true
