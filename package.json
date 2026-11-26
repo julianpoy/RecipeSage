@@ -142,6 +142,7 @@
     "showdown": "^2.1.0",
     "stripe": "23.0.1",
     "swiper": "^14.1.0",
+    "switch-chinese": "^1.0.16",
     "trpc-to-openapi": "^3.3.0",
     "ts-dedent": "^2.2.0",
     "tsconfig-paths": "^4.2.0",

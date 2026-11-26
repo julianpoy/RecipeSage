@@ -20,6 +20,10 @@ RUN apk add --no-cache libheif-tools
 # dev watch script
 RUN apk add --no-cache inotify-tools
 
+RUN apk add --no-cache curl
+COPY scripts/download-fonts.sh scripts/fonts.sha256 scripts/
+RUN sh scripts/download-fonts.sh fonts
+
 COPY .npmrc .npmrc
 COPY pnpm-lock.yaml pnpm-lock.yaml
 COPY package.json package.json
@@ -35,7 +39,6 @@ COPY nx.json nx.json
 COPY prisma.config.ts prisma.config.ts
 COPY packages packages
 COPY scripts scripts
-COPY fonts fonts
 COPY LICENSE.md LICENSE.md
 
 # Prisma must be regenerated since schema is not present during install stage

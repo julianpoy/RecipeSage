@@ -3,6 +3,8 @@ import { RecipeSummary } from "@recipesage/prisma";
 import { setTimeout } from "node:timers/promises";
 import { PassThrough } from "stream";
 import { pdfmake, recipeToPDFMakeSchema } from "./recipeSummariesToPDF";
+import { getCJKPDFFont } from "./getCJKPDFFont";
+import { applyCJKPDFFont } from "./applyCJKPDFFont";
 
 export interface CookbookOptions {
   title: string;
@@ -27,9 +29,9 @@ export const generateCookbookPDFStream = async (
   options: CookbookOptions,
   onProgress?: (processedCount: number) => void,
 ): Promise<PassThrough> => {
-  const content: Content[] = [];
+  const pagesBeforeRecipes: Content[] = [];
 
-  content.push({
+  pagesBeforeRecipes.push({
     text: options.title,
     fontSize: 30,
     bold: true,
@@ -37,7 +39,7 @@ export const generateCookbookPDFStream = async (
     margin: [0, 180, 0, 0] satisfies Margins,
   });
   if (options.subtitle) {
-    content.push({
+    pagesBeforeRecipes.push({
       text: options.subtitle,
       fontSize: 16,
       alignment: "center",
@@ -45,7 +47,7 @@ export const generateCookbookPDFStream = async (
     });
   }
   if (options.author) {
-    content.push({
+    pagesBeforeRecipes.push({
       text: options.byAuthorTemplate.replace("{{author}}", options.author),
       fontSize: 12,
       italics: true,
@@ -55,18 +57,18 @@ export const generateCookbookPDFStream = async (
   }
 
   if (options.introduction) {
-    content.push({
+    pagesBeforeRecipes.push({
       text: options.introductionLabel,
       fontSize: 18,
       bold: true,
       pageBreak: "before",
       margin: [0, 0, 0, 8] satisfies Margins,
     });
-    content.push({ text: options.introduction });
+    pagesBeforeRecipes.push({ text: options.introduction });
   }
 
   if (options.includeToc) {
-    content.push({
+    pagesBeforeRecipes.push({
       toc: {
         title: {
           text: options.contentsLabel,
@@ -78,6 +80,19 @@ export const generateCookbookPDFStream = async (
       pageBreak: "before",
     });
   }
+
+  const pagesBeforeRecipesCJKFont = getCJKPDFFont(
+    [
+      options.title,
+      options.subtitle,
+      options.introduction,
+      options.author,
+    ].join("\n"),
+    options.language,
+  );
+  const content: Content[] = pagesBeforeRecipes.map((item) =>
+    applyCJKPDFFont(item, pagesBeforeRecipesCJKFont),
+  );
 
   let processedCount = 0;
   for (const recipe of recipes) {
