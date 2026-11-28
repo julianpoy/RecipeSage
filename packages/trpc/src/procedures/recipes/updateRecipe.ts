@@ -22,20 +22,20 @@ export const updateRecipe = authenticatedProcedure
   .input(
     z.object({
       id: z.uuid(),
-      title: z.string().trim().min(1).max(254),
-      description: z.string(),
-      yield: z.string(),
-      activeTime: z.string(),
-      totalTime: z.string(),
-      source: z.string(),
-      url: z.string(),
-      notes: z.string(),
-      ingredients: z.string(),
-      instructions: z.string(),
-      rating: z.number().min(1).max(5).nullable(),
-      folder: z.union([z.literal("main"), z.literal("inbox")]),
-      labelIds: z.array(z.uuid()),
-      imageIds: z.array(z.uuid()),
+      title: z.string().trim().min(1).max(254).optional(),
+      description: z.string().optional(),
+      yield: z.string().optional(),
+      activeTime: z.string().optional(),
+      totalTime: z.string().optional(),
+      source: z.string().optional(),
+      url: z.string().optional(),
+      notes: z.string().optional(),
+      ingredients: z.string().optional(),
+      instructions: z.string().optional(),
+      rating: z.number().min(1).max(5).nullable().optional(),
+      folder: z.union([z.literal("main"), z.literal("inbox")]).optional(),
+      labelIds: z.array(z.uuid()).optional(),
+      imageIds: z.array(z.uuid()).optional(),
       lastMadeAt: z
         .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -69,6 +69,16 @@ export const updateRecipe = authenticatedProcedure
     }),
   )
   .mutation(async ({ ctx, input }) => {
+    const hasPropertyToUpdate = Object.entries(input).some(
+      ([key, value]) => key !== "id" && value !== undefined,
+    );
+    if (!hasPropertyToUpdate) {
+      throw new TRPCError({
+        message: "You must specify at least one property to update",
+        code: "BAD_REQUEST",
+      });
+    }
+
     const initialRecipe = await prisma.recipe.findUnique({
       where: {
         id: input.id,
@@ -97,23 +107,24 @@ export const updateRecipe = authenticatedProcedure
       _existingLinkedRecipeIds.map((link) => link.linkedRecipeId),
     );
 
-    const labelIds = input.labelIds || [];
-    const doesNotOwnAssignedLabel = !!(await prisma.label.findFirst({
-      where: {
-        id: {
-          in: input.labelIds,
+    if (input.labelIds) {
+      const doesNotOwnAssignedLabel = !!(await prisma.label.findFirst({
+        where: {
+          id: {
+            in: input.labelIds,
+          },
+          userId: {
+            not: ctx.session.userId,
+          },
         },
-        userId: {
-          not: ctx.session.userId,
-        },
-      },
-    }));
+      }));
 
-    if (doesNotOwnAssignedLabel) {
-      throw new TRPCError({
-        message: "You do not own one of the specified label ids",
-        code: "FORBIDDEN",
-      });
+      if (doesNotOwnAssignedLabel) {
+        throw new TRPCError({
+          message: "You do not own one of the specified label ids",
+          code: "FORBIDDEN",
+        });
+      }
     }
 
     if (input.linkedRecipeIds) {
@@ -161,29 +172,30 @@ export const updateRecipe = authenticatedProcedure
       }
     }
 
-    const recipeLabels = labelIds.map((labelId) => ({
+    const recipeLabels = input.labelIds?.map((labelId) => ({
       labelId,
     }));
 
-    const imageIds = input.imageIds || [];
-    const recipeImages = imageIds.map((imageId, idx) => ({
+    const recipeImages = input.imageIds?.map((imageId, idx) => ({
       imageId,
       order: idx,
     }));
 
-    const multipleImagesEnabled = await userHasCapability(
-      ctx.session.userId,
-      Capabilities.MultipleImages,
-    );
-    if (multipleImagesEnabled) {
-      recipeImages.splice(MULTIPLE_IMAGES_UNLOCKED_LIMIT);
-    } else {
-      // We don't want to break user's experience for:
-      // 1. Multiple images has expired, so they're updating a recipe they created when it was valid
-      // 2. This recipe was shared to them via another user who has multiple images enabled, and they're making adjustments to the recipe
-      // In this case we allow just as many images as were originally on the recipe, to a minimum of 1.
-      const allowedCount = Math.max(1, initialRecipe.recipeImages.length);
-      recipeImages.splice(allowedCount);
+    if (recipeImages) {
+      const multipleImagesEnabled = await userHasCapability(
+        ctx.session.userId,
+        Capabilities.MultipleImages,
+      );
+      if (multipleImagesEnabled) {
+        recipeImages.splice(MULTIPLE_IMAGES_UNLOCKED_LIMIT);
+      } else {
+        // We don't want to break user's experience for:
+        // 1. Multiple images has expired, so they're updating a recipe they created when it was valid
+        // 2. This recipe was shared to them via another user who has multiple images enabled, and they're making adjustments to the recipe
+        // In this case we allow just as many images as were originally on the recipe, to a minimum of 1.
+        const allowedCount = Math.max(1, initialRecipe.recipeImages.length);
+        recipeImages.splice(allowedCount);
+      }
     }
 
     return prisma.$transaction(async (tx) => {
@@ -234,17 +246,21 @@ export const updateRecipe = authenticatedProcedure
         }
       }
 
-      await tx.recipeLabel.deleteMany({
-        where: {
-          recipeId: input.id,
-        },
-      });
+      if (recipeLabels) {
+        await tx.recipeLabel.deleteMany({
+          where: {
+            recipeId: input.id,
+          },
+        });
+      }
 
-      await tx.recipeImage.deleteMany({
-        where: {
-          recipeId: input.id,
-        },
-      });
+      if (recipeImages) {
+        await tx.recipeImage.deleteMany({
+          where: {
+            recipeId: input.id,
+          },
+        });
+      }
 
       const recipe = await tx.recipe.update({
         where: {
@@ -283,17 +299,23 @@ export const updateRecipe = authenticatedProcedure
           nutritionPotassium: input.nutritionPotassium,
           nutritionOtherDetails: input.nutritionOtherDetails,
           folder: input.folder,
-          lastMadeAt: input.lastMadeAt ? new Date(input.lastMadeAt) : null,
-          recipeLabels: {
-            createMany: {
-              data: recipeLabels,
-            },
-          },
-          recipeImages: {
-            createMany: {
-              data: recipeImages,
-            },
-          },
+          lastMadeAt: input.lastMadeAt
+            ? new Date(input.lastMadeAt)
+            : input.lastMadeAt,
+          recipeLabels: recipeLabels
+            ? {
+                createMany: {
+                  data: recipeLabels,
+                },
+              }
+            : undefined,
+          recipeImages: recipeImages
+            ? {
+                createMany: {
+                  data: recipeImages,
+                },
+              }
+            : undefined,
         },
       });
 
