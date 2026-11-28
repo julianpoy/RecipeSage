@@ -24,6 +24,7 @@
           "ai",
           "@ai-sdk/*"
         ],
+        "excludeFromExternal": ["switch-chinese"],
         "main": "packages/backend/src/main.ts",
         "tsConfig": "packages/backend/tsconfig.json",
         "assets": [

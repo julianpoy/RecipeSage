@@ -27,6 +27,7 @@
           "ai",
           "@ai-sdk/*"
         ],
+        "excludeFromExternal": ["switch-chinese"],
         "generatePackageJson": true,
         "esbuildConfig": "packages/queue-worker/esbuild.config.js"
       },
