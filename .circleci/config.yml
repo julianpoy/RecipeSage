@@ -56,6 +56,9 @@ jobs:
       - checkout
       - install-dependencies
       - run:
+          name: download-fonts
+          command: sh scripts/download-fonts.sh fonts
+      - run:
           name: install-pandoc
           command: sudo apt-get update && sudo apt-get install -y pandoc
       - run:

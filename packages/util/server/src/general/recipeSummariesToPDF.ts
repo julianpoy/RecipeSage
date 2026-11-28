@@ -20,12 +20,34 @@ import { setTimeout } from "node:timers/promises";
 import { translate } from "./translate";
 import { getNutritionDisplayRows } from "./getNutritionDisplayRows";
 import { formatDateUTCLocalized } from "./formatDateUTCLocalized";
+import { CJK_PDF_FONTS, getCJKPDFFont } from "./getCJKPDFFont";
+import { applyCJKPDFFont } from "./applyCJKPDFFont";
 
 // DefinitelyTyped hasn't been updated for pdfmake 0.3.x yet.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const pdfmake = _pdfmake as any;
 
+const CJK_FONT_PATHS = {
+  regular: path.resolve(
+    config.fonts.path,
+    "Noto_Sans_CJK/NotoSansCJK-Regular.ttc",
+  ),
+  bold: path.resolve(config.fonts.path, "Noto_Sans_CJK/NotoSansCJK-Bold.ttc"),
+};
+
 const FONTS = {
+  // We unpack this here because we're using a .ttc rather than a .ttf like below
+  ...Object.fromEntries(
+    Object.values(CJK_PDF_FONTS).map((family) => [
+      family,
+      {
+        normal: [CJK_FONT_PATHS.regular, `${family}-Regular`],
+        bold: [CJK_FONT_PATHS.bold, `${family}-Bold`],
+        italics: [CJK_FONT_PATHS.regular, `${family}-Regular`],
+        bolditalics: [CJK_FONT_PATHS.bold, `${family}-Bold`],
+      },
+    ]),
+  ),
   NotoSans: {
     normal: path.resolve(config.fonts.path, "Noto_Sans/NotoSans-Regular.ttf"),
     bold: path.resolve(config.fonts.path, "Noto_Sans/NotoSans-Bold.ttf"),
@@ -39,7 +61,10 @@ const FONTS = {
 
 pdfmake.addFonts(FONTS);
 
-const allowedFontPaths = new Set(Object.values(FONTS.NotoSans));
+const allowedFontPaths = new Set([
+  ...Object.values(FONTS.NotoSans),
+  ...Object.values(CJK_FONT_PATHS),
+]);
 
 pdfmake.setUrlAccessPolicy(() => false);
 pdfmake.setLocalAccessPolicy((filePath: string) =>
@@ -641,7 +666,18 @@ export const recipeToPDFMakeSchema = async (
     }
   }
 
-  return schema;
+  const cjkFont = getCJKPDFFont(
+    [
+      recipe.title,
+      recipe.description,
+      recipe.ingredients,
+      recipe.instructions,
+      recipe.notes,
+    ].join("\n"),
+    options.language,
+  );
+
+  return applyCJKPDFFont(schema, cjkFont);
 };
 
 export async function* recipeAsyncIteratorToPDF(

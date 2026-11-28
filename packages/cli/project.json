@@ -24,6 +24,7 @@
           "ai",
           "@ai-sdk/*"
         ],
+        "excludeFromExternal": ["switch-chinese"],
         "main": "packages/cli/src/main.ts",
         "tsConfig": "packages/cli/tsconfig.json",
         "generatePackageJson": true,

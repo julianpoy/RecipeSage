@@ -306,6 +306,28 @@ describe("generateCookbookPDFStream", () => {
     });
   });
 
+  describe("CJK text", () => {
+    it("prints Chinese text when the language is English", async () => {
+      const chineseRecipe: RecipeSummary = {
+        ...baseRecipe,
+        title: "番茄炒蛋",
+        ingredients: "鹽少許\n雞蛋三顆",
+        instructions: "Scramble the 雞蛋",
+      };
+
+      const pages = await generateCookbookPageTexts(
+        { title: "我的食譜", language: "en-us" },
+        [chineseRecipe],
+      );
+
+      expect(pages[0]).toBe("我的食譜");
+      expect(pages[1]).toMatch(/番茄炒蛋\W+3\b/);
+      expect(pages[2]).toContain("番茄炒蛋");
+      expect(pages[2]).toContain("鹽少許");
+      expect(pages[2]).toContain("Scramble the 雞蛋");
+    });
+  });
+
   describe("recipe options", () => {
     it.each([
       {

@@ -332,6 +332,9 @@ importers:
       swiper:
         specifier: ^14.1.0
         version: 14.3.0
+      switch-chinese:
+        specifier: ^1.0.16
+        version: 1.0.16
       trpc-to-openapi:
         specifier: ^3.3.0
         version: 3.3.3(@trpc/server@11.29.4(@types/express@5.0.6)(@types/ws@8.18.2)(typescript@6.0.3))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7)
@@ -11798,6 +11801,10 @@ packages:
   swiper@14.3.0:
     resolution: {integrity: sha512-qw0Xv1+sylM8KCQxWxV2iYAK2G6XjFGPZ/8F1baEsY8DK4A3sTnLx6jUJ0G71rDbVQ05JHMWkcWmJ5NvlxZO0w==}
     engines: {node: '>= 4.7.0'}
+
+  switch-chinese@1.0.16:
+    resolution: {integrity: sha512-brvL5V+QnMt3Elb9XjTM65jIubVn9ih4a40P1XdQgWgZDvHM/RJRKqBdlQhxt6YDXFfzPlQpyY0Fi0m0nGv+Jg==}
+    engines: {node: '>=12.0.0'}
 
   sync-child-process@1.1.0:
     resolution: {integrity: sha512-1LMf/x0kU0CKFSesh5DfYktvj1KhiqYi5LAh5HU2G4SkKk1TGDhsMFBOL47g/E+mNfYpgs365pVNlIYOIHPvlQ==}
@@ -25880,6 +25887,8 @@ snapshots:
       sax: 1.6.1
 
   swiper@14.3.0: {}
+
+  switch-chinese@1.0.16: {}
 
   sync-child-process@1.1.0:
     dependencies:
