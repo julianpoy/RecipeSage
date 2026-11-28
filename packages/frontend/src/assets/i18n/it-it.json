@@ -2572,6 +2572,6 @@
     "components.selectIngredients.editIngredient.message": "Questo modifica solo ciò che viene aggiunto alla lista della spesa. La ricetta rimane invariata.",
     "pages.contact.intro": "Per eventuali problemi, bug o suggerimenti di funzionalità, puoi contattarmi in uno di questi modi:",
     "pages.contact.discordOption": "Discord (preferito):",
-    "pages.contact.githubOption": "GitHub",
-    "pages.contact.emailOption": "E-mail"
+    "pages.contact.githubOption": "GitHub:",
+    "pages.contact.emailOption": "E-mail:"
 }
