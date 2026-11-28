@@ -81,9 +81,196 @@ describe("updateRecipe", () => {
       });
       expect(recipeImage?.imageId).toEqual(image.id);
     });
+
+    test("updates only the provided fields", async ({ trpc, user }) => {
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          nutritionCalories: 250,
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        id: recipe.id,
+        lastMadeAt: "2026-11-27",
+      });
+
+      const updatedRecipe = await prisma.recipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+      });
+      expect(updatedRecipe.lastMadeAt).toEqual(new Date("2026-11-27"));
+      expect(updatedRecipe).toEqual({
+        ...recipe,
+        lastMadeAt: updatedRecipe.lastMadeAt,
+        updatedAt: updatedRecipe.updatedAt,
+      });
+    });
+
+    test("keeps labels and images when their ids are omitted", async ({
+      trpc,
+      user,
+    }) => {
+      const label = await prisma.label.create({
+        data: {
+          title: "salads",
+          userId: user.id,
+          labelGroupId: null,
+        },
+      });
+      const image = await prisma.image.create({
+        data: {
+          location: "somehosting.com/1",
+          userId: user.id,
+          key: "someKey",
+          json: {},
+        },
+      });
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          recipeLabels: {
+            createMany: {
+              data: [{ labelId: label.id }],
+            },
+          },
+          recipeImages: {
+            createMany: {
+              data: [{ imageId: image.id, order: 0 }],
+            },
+          },
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        id: recipe.id,
+        folder: "inbox",
+      });
+
+      const updatedRecipe = await prisma.recipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+        include: {
+          recipeLabels: true,
+          recipeImages: true,
+        },
+      });
+      expect(updatedRecipe.folder).toEqual("inbox");
+      expect(
+        updatedRecipe.recipeLabels.map((recipeLabel) => recipeLabel.labelId),
+      ).toEqual([label.id]);
+      expect(
+        updatedRecipe.recipeImages.map((recipeImage) => recipeImage.imageId),
+      ).toEqual([image.id]);
+    });
+
+    test("removes labels and images when their ids are empty", async ({
+      trpc,
+      user,
+    }) => {
+      const label = await prisma.label.create({
+        data: {
+          title: "salads",
+          userId: user.id,
+          labelGroupId: null,
+        },
+      });
+      const image = await prisma.image.create({
+        data: {
+          location: "somehosting.com/1",
+          userId: user.id,
+          key: "someKey",
+          json: {},
+        },
+      });
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          recipeLabels: {
+            createMany: {
+              data: [{ labelId: label.id }],
+            },
+          },
+          recipeImages: {
+            createMany: {
+              data: [{ imageId: image.id, order: 0 }],
+            },
+          },
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        id: recipe.id,
+        labelIds: [],
+        imageIds: [],
+      });
+
+      const updatedRecipe = await prisma.recipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+        include: {
+          recipeLabels: true,
+          recipeImages: true,
+        },
+      });
+      expect(updatedRecipe.recipeLabels).toEqual([]);
+      expect(updatedRecipe.recipeImages).toEqual([]);
+    });
+
+    test("keeps lastMadeAt when omitted", async ({ trpc, user }) => {
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          lastMadeAt: new Date("2026-11-27"),
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        id: recipe.id,
+        title: "marmalade",
+      });
+
+      const updatedRecipe = await prisma.recipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+      });
+      expect(updatedRecipe.lastMadeAt).toEqual(new Date("2026-11-27"));
+    });
+
+    test("clears lastMadeAt when set to null", async ({ trpc, user }) => {
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          lastMadeAt: new Date("2026-11-27"),
+        },
+      });
+
+      await trpc.recipes.updateRecipe({
+        id: recipe.id,
+        lastMadeAt: null,
+      });
+
+      const updatedRecipe = await prisma.recipe.findUniqueOrThrow({
+        where: { id: recipe.id },
+      });
+      expect(updatedRecipe.lastMadeAt).toBeNull();
+    });
   });
 
   describe("error", () => {
+    test("throws when no property to update is given", async ({
+      trpc,
+      user,
+    }) => {
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+        },
+      });
+
+      await expect(
+        trpc.recipes.updateRecipe({
+          id: recipe.id,
+        }),
+      ).rejects.toThrow("You must specify at least one property to update");
+    });
+
     test("throws when the recipe does not exist", async ({ trpc, user }) => {
       await expect(
         trpc.recipes.updateRecipe({

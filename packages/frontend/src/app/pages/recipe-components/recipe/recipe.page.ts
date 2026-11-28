@@ -646,20 +646,6 @@ export class RecipePage {
 
     const response = await this.serverActionsService.recipes.updateRecipe({
       id: this.recipe.id,
-      title: this.recipe.title,
-      description: this.recipe.description,
-      yield: this.recipe.yield,
-      activeTime: this.recipe.activeTime,
-      totalTime: this.recipe.totalTime,
-      source: this.recipe.source,
-      url: this.recipe.url,
-      notes: decodeBasicHtmlEntities(this.recipe.notes),
-      ingredients: decodeBasicHtmlEntities(this.recipe.ingredients),
-      instructions: decodeBasicHtmlEntities(this.recipe.instructions),
-      rating: this.recipe.rating || null,
-      folder: this.recipe.folder as "main" | "inbox",
-      imageIds: this.recipe.recipeImages.map((ri) => ri.image.id),
-      labelIds: this.recipe.recipeLabels.map((rl) => rl.label.id),
       lastMadeAt,
     });
 
@@ -734,24 +720,7 @@ export class RecipePage {
 
     const response = await this.serverActionsService.recipes.updateRecipe({
       id: this.recipe.id,
-      title: this.recipe.title,
-      description: this.recipe.description,
-      yield: this.recipe.yield,
-      activeTime: this.recipe.activeTime,
-      totalTime: this.recipe.totalTime,
-      source: this.recipe.source,
-      url: this.recipe.url,
-      notes: decodeBasicHtmlEntities(this.recipe.notes),
-      ingredients: decodeBasicHtmlEntities(this.recipe.ingredients),
-      instructions: decodeBasicHtmlEntities(this.recipe.instructions),
-      rating: this.recipe.rating || null,
       folder: folderName,
-      labelIds: this.recipe.recipeLabels.map(
-        (recipeLabel) => recipeLabel.label.id,
-      ),
-      imageIds: this.recipe.recipeImages.map(
-        (recipeImage) => recipeImage.imageId,
-      ),
     });
 
     loading.dismiss();
