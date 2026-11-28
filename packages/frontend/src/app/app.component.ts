@@ -45,6 +45,7 @@ import {
   SupportedLanguages,
 } from "@recipesage/util/shared";
 import { CookingToolbarService } from "./services/cooking-toolbar.service";
+import { TimerService } from "./services/timer.service";
 import { EventName, EventService } from "./services/event.service";
 import { Title } from "@angular/platform-browser";
 import { TRPCService } from "./services/trpc.service";
@@ -57,6 +58,7 @@ import { showLocalNotification } from "./utils/showLocalNotification";
 import { getAppVersion } from "./utils/getAppVersion";
 import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
 import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
+import { TimersToolbarComponent } from "./components/timers-toolbar/timers-toolbar.component";
 import { VersionCheckService } from "./services/versioncheck.service";
 import { NativePrintTutorialService } from "./services/native-print-tutorial.service";
 import { DeepLinkService } from "./services/deep-link.service";
@@ -107,6 +109,7 @@ import { addIcons } from "ionicons";
   imports: [
     ...SHARED_UI_IMPORTS,
     CookingToolbarComponent,
+    TimersToolbarComponent,
     NgxLoadingBar,
     IonApp,
     IonSplitPane,
@@ -147,6 +150,7 @@ export class AppComponent {
   private nativeTabBarService = inject(NativeTabBarService);
   private titleService = inject(Title);
   cookingToolbarService = inject(CookingToolbarService);
+  timerService = inject(TimerService);
   private versionCheckService = inject(VersionCheckService);
   private nativePrintTutorialService = inject(NativePrintTutorialService);
   private deepLinkService = inject(DeepLinkService);

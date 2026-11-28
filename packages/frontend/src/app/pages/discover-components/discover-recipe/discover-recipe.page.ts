@@ -13,6 +13,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { RouteMap, UtilService } from "../../../services/util.service";
 import { LoadingService } from "../../../services/loading.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
+import { TimerService } from "../../../services/timer.service";
+import { getClickedInstructionTimer } from "../../../utils/getClickedInstructionTimer";
+import { StartTimerComponent } from "../../../modals/start-timer/start-timer.component";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
 import { WakeLockService } from "../../../services/wakelock.service";
 import { FullscreenService } from "../../../services/fullscreen.service";
@@ -129,6 +132,7 @@ export class DiscoverRecipePage {
   private serverActionsService = inject(ServerActionsService);
   cookingToolbarService = inject(CookingToolbarService);
   utilService = inject(UtilService);
+  timerService = inject(TimerService);
 
   defaultBackHref = RouteMap.DiscoverPage.getPath();
   categoryLabelKeys = DISCOVER_CATEGORY_LABEL_KEYS;
@@ -225,8 +229,28 @@ export class DiscoverRecipePage {
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
   }
 
-  instructionClicked(instruction: ParsedInstruction, idx: number) {
+  async instructionClicked(
+    event: Event,
+    instruction: ParsedInstruction,
+    idx: number,
+  ) {
     if (instruction.isHeader) return;
+
+    const timer = getClickedInstructionTimer(event, instruction);
+    if (timer) {
+      const modal = await this.modalCtrl.create({
+        component: StartTimerComponent,
+        componentProps: {
+          durationSeconds: timer.seconds,
+          step: instruction.count,
+          recipeTitle: this.recipe?.title,
+        },
+        cssClass: "startTimerModal",
+      });
+      modal.present();
+      return;
+    }
+
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.discoverRecipeId,
       idx,
@@ -348,7 +372,12 @@ export class DiscoverRecipePage {
     this.instructions = parseInstructions(
       this.recipe.instructions,
       this.scale,
-      { targetSystem, decimalNotationMode, images: imageRefs },
+      {
+        targetSystem,
+        decimalNotationMode,
+        images: imageRefs,
+        detectTimers: this.timerService.isSupported,
+      },
     );
     if (this.recipe.notes && this.recipe.notes.length > 0) {
       this.notes = parseNotes(this.recipe.notes, this.scale, {

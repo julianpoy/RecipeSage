@@ -1,0 +1,29 @@
+<div class="container">
+  <ion-icon name="timer-outline" class="timer-icon"></ion-icon>
+  <div class="item-container">
+    @for (timer of timerService.timers; track timer.id) {
+      <div class="item" [ngClass]="{ finished: isFinished(timer) }">
+        <div class="details">
+          <span class="label" dir="auto">{{ timer.label }}</span>
+          @if (isFinished(timer)) {
+            <span class="remaining">
+              {{ "components.timersToolbar.done" | translate }}
+            </span>
+          } @else {
+            <span class="remaining" dir="ltr">
+              {{ formatRemaining(timer) }}
+            </span>
+          }
+        </div>
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="removeTimer(timer)"
+          [attr.aria-label]="'components.timersToolbar.stop' | translate"
+        >
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+        </ion-button>
+      </div>
+    }
+  </div>
+</div>

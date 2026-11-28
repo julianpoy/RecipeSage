@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "components.startTimer.title" | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="close()"
+        [attr.aria-label]="'generic.close' | translate"
+      >
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="grouped-content">
+  <ion-list inset="true">
+    <ion-note class="prompt">
+      {{ "components.startTimer.name" | translate }}
+    </ion-note>
+    <ion-item-group>
+      <ion-item>
+        <ion-input
+          [attr.aria-label]="'components.startTimer.name' | translate"
+          [placeholder]="'components.startTimer.defaultLabel' | translate"
+          [(ngModel)]="label"
+          dir="auto"
+        ></ion-input>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-note class="prompt">
+      {{ "components.startTimer.duration" | translate }}
+    </ion-note>
+    <ion-item-group>
+      <ion-item>
+        <ion-input
+          type="number"
+          inputmode="numeric"
+          min="0"
+          labelPlacement="start"
+          [label]="'components.startTimer.hours' | translate"
+          [(ngModel)]="hours"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          type="number"
+          inputmode="numeric"
+          min="0"
+          labelPlacement="start"
+          [label]="'components.startTimer.minutes' | translate"
+          [(ngModel)]="minutes"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          type="number"
+          inputmode="numeric"
+          min="0"
+          labelPlacement="start"
+          [label]="'components.startTimer.seconds' | translate"
+          [(ngModel)]="seconds"
+        ></ion-input>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button
+    expand="block"
+    [disabled]="totalSeconds <= 0 || starting"
+    (click)="start()"
+  >
+    {{ "components.startTimer.start" | translate }}
+  </ion-button>
+</ion-footer>

@@ -289,7 +289,7 @@ ion-app.ios-theme-vertical-bars.ios-theme-vertical-bars-left {
 }
 
 ion-app.ios-theme-vertical-bars {
-  ion-modal:is(.scaleRecipeModal, .alert-modal) {
+  ion-modal:is(.scaleRecipeModal, .startTimerModal, .alert-modal) {
     @include vertical-bars-centered-modal;
   }
 

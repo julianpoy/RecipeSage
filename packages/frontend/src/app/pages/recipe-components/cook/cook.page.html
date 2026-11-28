@@ -80,9 +80,20 @@
           }
         </div>
 
-        <h2 class="section-title" instructionsHeader>
-          {{ "pages.recipeDetails.instructions" | translate }}
-        </h2>
+        <div class="instructions-header" instructionsHeader>
+          <h2 class="section-title">
+            {{ "pages.recipeDetails.instructions" | translate }}
+          </h2>
+          @if (timerService.isSupported) {
+            <ion-button
+              fill="clear"
+              (click)="openNewTimer()"
+              [attr.aria-label]="'pages.cook.newTimer' | translate"
+            >
+              <ion-icon slot="icon-only" name="timer-outline"></ion-icon>
+            </ion-button>
+          }
+        </div>
         <div instructionsContent>
           @for (
             instruction of instructions;

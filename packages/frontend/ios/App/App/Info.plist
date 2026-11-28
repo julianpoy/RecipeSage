@@ -43,6 +43,8 @@
 	<string>To pick recipe photos from your library</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>To save recipe photos to your library</string>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>To ring when your cooking timers are done</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

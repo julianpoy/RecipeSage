@@ -12,6 +12,7 @@ import {
 } from "@recipesage/util/shared";
 import { WakeLockService } from "../../../services/wakelock.service";
 import { CookingToolbarService } from "../../../services/cooking-toolbar.service";
+import { TimerService } from "../../../services/timer.service";
 import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 import {
@@ -41,6 +42,7 @@ import {
   printOutline,
   restaurantOutline,
   shareOutline,
+  timerOutline,
   trashOutline,
 } from "ionicons/icons";
 import { addIcons } from "ionicons";
@@ -59,6 +61,7 @@ export type RecipeDetailsPopoverActionTypes =
   | "edit"
   | "updateWakeLock"
   | "enterCookMode"
+  | "newTimer"
   | "setLastMadeToday"
   | "publishToDiscover";
 
@@ -84,6 +87,7 @@ export class RecipeDetailsPopoverPage {
   private preferencesService = inject(PreferencesService);
   private wakeLockService = inject(WakeLockService);
   cookingToolbarService = inject(CookingToolbarService);
+  timerService = inject(TimerService);
   private featureFlagService = inject(FeatureFlagService);
   private popoverCtrl = inject(PopoverController);
 
@@ -122,6 +126,7 @@ export class RecipeDetailsPopoverPage {
       printOutline,
       restaurantOutline,
       shareOutline,
+      timerOutline,
       trashOutline,
     });
     this.wakeLockCapable = this.wakeLockService.isCapable;

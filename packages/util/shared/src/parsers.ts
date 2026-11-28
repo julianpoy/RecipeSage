@@ -2,6 +2,7 @@ import _FractionJS from "fraction.js";
 import FractionJSModule from "fraction.js";
 import { System, Core, Value } from "@recipesage/unitz-ts";
 import { unitNames, parseUnit } from "./units";
+import { wrapTimersInHtml } from "./wrapTimersInHtml";
 import {
   type DecimalNotation,
   resolveDecimalNotation,
@@ -1068,6 +1069,10 @@ export interface ParseContentOptions extends ParseMeasurementOptions {
   images?: InlineImageRef[];
 }
 
+export interface ParseInstructionsOptions extends ParseContentOptions {
+  detectTimers?: boolean;
+}
+
 const measurementSpansInBraces = (text: string): string[] =>
   [...text.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
 
@@ -1159,6 +1164,11 @@ export interface ParsedIngredient {
   isRtl: boolean;
 }
 
+export interface ParsedTimer {
+  seconds: number;
+  text: string;
+}
+
 export interface ParsedInstruction {
   content: string;
   plaintextContent: string;
@@ -1167,6 +1177,7 @@ export interface ParsedInstruction {
   complete: boolean;
   count: number;
   isRtl: boolean;
+  timers: ParsedTimer[];
 }
 
 export const parseIngredients = (
@@ -1489,7 +1500,7 @@ const scaleBracesInText = (
 export const parseInstructions = (
   instructions: string,
   scale: string,
-  options: ParseContentOptions,
+  options: ParseInstructionsOptions,
 ): {
   content: string;
   plaintextContent: string;
@@ -1498,8 +1509,9 @@ export const parseInstructions = (
   count: number;
   complete: boolean;
   isRtl: boolean;
+  timers: ParsedTimer[];
 }[] => {
-  const { targetSystem, images, decimalNotationMode } = options;
+  const { targetSystem, images, decimalNotationMode, detectTimers } = options;
 
   const scaleFrac = new FractionJS(
     localeToPlainNumber(scale, decimalNotationMode),
@@ -1558,20 +1570,26 @@ export const parseInstructions = (
         count: 0,
         complete: false,
         isRtl: isRtlText(plainHeader, true),
+        timers: [],
       };
     } else {
       const content = convertEscapedLineContinuations(plainLine, false);
+      const htmlContent = applyInlineFormattingWithImages(
+        convertEscapedLineContinuations(htmlLine, true),
+        images,
+      );
+      const timerContent = detectTimers
+        ? wrapTimersInHtml(htmlContent, "instructionTimer")
+        : { html: htmlContent, timers: [] };
       return {
         content,
         plaintextContent: stripInlineFormatting(stripImageTokens(content)),
-        htmlContent: applyInlineFormattingWithImages(
-          convertEscapedLineContinuations(htmlLine, true),
-          images,
-        ),
+        htmlContent: timerContent.html,
         isHeader: false,
         count: stepCount++,
         complete: false,
         isRtl: isRtlText(plainLine, true),
+        timers: timerContent.timers,
       };
     }
   });

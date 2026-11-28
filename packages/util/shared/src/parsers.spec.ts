@@ -2113,6 +2113,62 @@ describe("parsers", () => {
       });
     });
 
+    describe("timers", () => {
+      const parseWithTimers = (instructions: string, scale = "1") =>
+        parseInstructions(instructions, scale, {
+          decimalNotationMode: ".",
+          detectTimers: true,
+        });
+
+      it("does not detect timers unless asked", () => {
+        const result = parseInstructionsAuto("Bake for 30 minutes", "1");
+        expect(result[0].timers).toEqual([]);
+        expect(result[0].htmlContent).toBe("Bake for 30 minutes");
+      });
+
+      it("wraps times in instructions", () => {
+        const result = parseWithTimers("Bake for 30 minutes");
+        expect(result[0].timers).toEqual([
+          { seconds: 1800, text: "30 minutes" },
+        ]);
+        expect(result[0].htmlContent).toBe(
+          'Bake for <span class="instructionTimer">30 minutes</span>',
+        );
+      });
+
+      it("does not scale times outside braces", () => {
+        const result = parseWithTimers("Bake for 30 minutes", "2");
+        expect(result[0].timers).toEqual([
+          { seconds: 1800, text: "30 minutes" },
+        ]);
+      });
+
+      it("uses the scaled value of a time in braces", () => {
+        const result = parseWithTimers("Bake for {30 minutes}", "2");
+        expect(result[0].timers).toEqual([
+          { seconds: 3600, text: "60 minutes" },
+        ]);
+      });
+
+      it("uses the scaled value when only the number is in braces", () => {
+        const result = parseWithTimers("Bake {30} minutes", "1/2");
+        expect(result[0].timers).toEqual([
+          { seconds: 900, text: "15 minutes" },
+        ]);
+        expect(result[0].htmlContent).toBe(
+          'Bake <span class="instructionTimer"><b class="instructionMeasurement">15</b> minutes</span>',
+        );
+      });
+
+      it("does not detect timers in headers", () => {
+        const result = parseWithTimers("[Bake 30 minutes]\nBake 10 minutes");
+        expect(result[0].timers).toEqual([]);
+        expect(result[1].timers).toEqual([
+          { seconds: 600, text: "10 minutes" },
+        ]);
+      });
+    });
+
     describe("metric/imperial conversion", () => {
       it("converts brace measurement to metric", () => {
         const result = parseInstructionsAuto("Add {2 cups} flour", "1", {

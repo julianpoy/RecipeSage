@@ -22,6 +22,9 @@ import {
   parseNotes,
 } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
+import { TimerService } from "../../../services/timer.service";
+import { getClickedInstructionTimer } from "../../../utils/getClickedInstructionTimer";
+import { StartTimerComponent } from "../../../modals/start-timer/start-timer.component";
 import {
   ScaleRecipeComponent,
   type UnitSystem,
@@ -43,7 +46,7 @@ import {
   IonSpinner,
   IonLabel,
 } from "@ionic/angular";
-import { alertCircleOutline, closeOutline } from "ionicons/icons";
+import { alertCircleOutline, closeOutline, timerOutline } from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { resolveStorageLocation } from "../../../utils/resolveStorageLocation";
 
@@ -91,6 +94,7 @@ export class CookPage {
   private translate = inject(TranslateService);
   private titleService = inject(Title);
   utilService = inject(UtilService);
+  timerService = inject(TimerService);
 
   wakeLockRequest: null | {
     release: () => void;
@@ -109,7 +113,7 @@ export class CookPage {
   unitSystem: UnitSystem = "original";
 
   constructor() {
-    addIcons({ alertCircleOutline, closeOutline });
+    addIcons({ alertCircleOutline, closeOutline, timerOutline });
     this.applyRouteParams();
   }
 
@@ -252,7 +256,12 @@ export class CookPage {
     this.instructions = parseInstructions(
       this.recipe.instructions,
       this.scale,
-      { targetSystem, decimalNotationMode, images: this.getInlineImageRefs() },
+      {
+        targetSystem,
+        decimalNotationMode,
+        images: this.getInlineImageRefs(),
+        detectTimers: this.timerService.isSupported,
+      },
     );
     if (this.recipe.notes && this.recipe.notes.length > 0) {
       this.notes = parseNotes(this.recipe.notes, this.scale, {
@@ -310,13 +319,44 @@ export class CookPage {
     this.applyScale();
   }
 
-  instructionClicked(_: Event, instruction: ParsedInstruction, idx: number) {
+  async instructionClicked(
+    event: Event,
+    instruction: ParsedInstruction,
+    idx: number,
+  ) {
     if (instruction.isHeader) return;
+
+    const timer = getClickedInstructionTimer(event, instruction);
+    if (timer) {
+      const modal = await this.modalCtrl.create({
+        component: StartTimerComponent,
+        componentProps: {
+          durationSeconds: timer.seconds,
+          step: instruction.count,
+          recipeTitle: this.recipe?.title,
+        },
+        cssClass: "startTimerModal",
+      });
+      modal.present();
+      return;
+    }
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.recipeId,
       idx,
     );
+  }
+
+  async openNewTimer() {
+    const modal = await this.modalCtrl.create({
+      component: StartTimerComponent,
+      componentProps: {
+        durationSeconds: 0,
+        recipeTitle: this.recipe?.title,
+      },
+      cssClass: "startTimerModal",
+    });
+    modal.present();
   }
 
   ingredientClicked(_: Event, ingredient: ParsedIngredient, idx: number) {

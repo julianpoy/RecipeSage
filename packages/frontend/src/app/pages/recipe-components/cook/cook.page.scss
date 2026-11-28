@@ -26,6 +26,16 @@ ingredients-instructions-layout {
   margin-bottom: 12px;
 }
 
+.instructions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+}
+
 .ingredient {
   margin: 0;
   padding: 10px 0;
@@ -99,4 +109,12 @@ ingredients-instructions-layout {
     margin-top: 4px;
     max-width: 320px;
   }
+}
+
+:host ::ng-deep .instructionTimer {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
 }

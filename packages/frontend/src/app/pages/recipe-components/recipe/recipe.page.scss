@@ -270,3 +270,11 @@ h2.recipeTitle {
     background: rgba(var(--ion-color-danger-rgb), 0.2);
   }
 }
+
+:host ::ng-deep .instructionTimer {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}

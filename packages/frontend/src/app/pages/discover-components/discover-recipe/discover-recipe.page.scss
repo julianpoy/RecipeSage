@@ -179,3 +179,11 @@ h2.recipeTitle {
   font-style: italic;
   color: var(--ion-text-color);
 }
+
+:host ::ng-deep .instructionTimer {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
